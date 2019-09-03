@@ -1,0 +1,30 @@
+################################################################################
+#
+# gridgenGeoJSON.meta - example of a DGGRID metafile that generates a high 
+#     resolution grid for testing using a mixed aperture ISEA
+#     projection and clipped to a small area in Corvallis, Oregon. The output
+#     grid is in GeoJSON format.
+#
+# Matt Gregory, 11/4/13
+#
+################################################################################
+
+# specify the operation
+dggrid_operation GENERATE_GRID
+
+# specify the DGG
+dggs_type ISEA43H
+dggs_num_aperture_4_res 6 
+dggs_res_spec 16
+
+# control the generation
+clip_subset_type SHAPEFILE
+clip_region_files inputfiles/corvallis
+geodetic_densify 0.0
+
+# specify the output
+cell_output_type GEOJSON
+cell_output_file_name outputfiles/corvallis_cell
+point_output_type GEOJSON
+point_output_file_name outputfiles/corvallis_point
+densification 3

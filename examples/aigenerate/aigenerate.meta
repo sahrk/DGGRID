@@ -1,0 +1,29 @@
+################################################################################
+#
+# aigenerate.meta - example of a DGGRID metafile that generates a resolution 
+#     6 ISEA3H grid for the state of Oregon (with a 100 mile buffer) with
+#     ArcInfo Generate file format output 
+#
+# Kevin Sahr, 05/22/13
+#
+################################################################################
+
+# specify the operation
+dggrid_operation GENERATE_GRID
+
+# specify a ISEA3H; override the default resolution
+dggs_type ISEA3H
+dggs_res_spec 6
+
+# control grid generation
+clip_subset_type SHAPEFILE
+clip_region_files ./inputfiles/orbuff.shp
+update_frequency 10000000
+
+# specify the output
+cell_output_type AIGEN
+cell_output_file_name ./outputfiles/orCells
+densification 5
+
+point_output_type AIGEN
+point_output_file_name ./outputfiles/orPts

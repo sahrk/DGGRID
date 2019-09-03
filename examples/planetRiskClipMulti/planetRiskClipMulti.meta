@@ -1,0 +1,33 @@
+################################################################################
+#
+# planetRiskClipMulti.meta - example of a DGGRID metafile that generates a resolution 
+#     14 PlanetRisk grid for a polygons over the Alexandria and Tysons
+#     Corner offices of Culmen International, the White House, the Reflecting
+#     Pool, and the Pentagon.
+#
+# Kevin Sahr, 07/15/19
+#
+################################################################################
+
+# specify the operation
+dggrid_operation GENERATE_GRID
+
+# specify a PLANETRISK grid and resolution (11 is ~1.0 km^2)
+dggs_type PLANETRISK
+dggs_res_spec 14 
+
+# control grid generation
+clip_subset_type GDAL
+clip_region_files ./inputfiles/WashingtonDC.geojson ./inputfiles/culmenUSA.geojson
+
+# specify the output
+cell_output_type KML
+cell_output_file_name ./outputfiles/culmenCells
+densification 0
+
+# output neighbors and children
+neighbor_output_type TEXT
+neighbor_output_file_name outputfiles/neighbors
+children_output_type TEXT
+children_output_file_name outputfiles/children
+

@@ -1,0 +1,31 @@
+################################################################################
+#
+# aigenerate.meta - example of a DGGRID metafile that generates a resolution 
+#     9 ISEA7H grid. The clipping and output files all use GDAL-readable file 
+#     formats.
+#
+# Kevin Sahr, 08/29/19
+#
+################################################################################
+
+# specify the operation
+dggrid_operation GENERATE_GRID
+
+# specify the DGG
+dggs_type ISEA7H
+dggs_res_spec 9
+
+# control grid generation
+clip_subset_type GDAL
+# gdal uses the file extension to determine the file format
+clip_region_files inputfiles/corvallis.shp
+
+# specify the output
+cell_output_type GDAL
+# for output the format needs to be explicit
+cell_output_gdal_format KML
+cell_output_file_name ./outputfiles/corvallisCells.kml
+
+point_output_type GDAL
+point_output_gdal_format GeoJSON
+point_output_file_name ./outputfiles/corvallisPts.geojson

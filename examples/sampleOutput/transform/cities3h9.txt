@@ -1,0 +1,15 @@
+10803,49900 Corvallis
+10642,42300 Aloha
+10642,41700 Tigard
+10803,41400 Albany
+10642,35700 LakeOswego
+10723,32600 Keizer
+10723,26800 MacMinnville
+10642,26100 OregonCity
+11370,23300 GrantsPass
+10642,23100 Tualatin
+10642,22500 WestLinn
+10642,20700 Milwaukie
+10805,20600 CitrusPark
+10723,20400 Woodburn
+11127,20300 Roseburg

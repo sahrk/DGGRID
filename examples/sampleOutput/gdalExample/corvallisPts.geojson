@@ -1,0 +1,18 @@
+{
+"type": "FeatureCollection",
+"name": ".\/outputfiles\/corvallisPts.geojson",
+"features": [
+{ "type": "Feature", "properties": { "Name": "22090054" }, "geometry": { "type": "Point", "coordinates": [ -123.294732599793718, 44.577975943933893 ] } },
+{ "type": "Feature", "properties": { "Name": "22094856" }, "geometry": { "type": "Point", "coordinates": [ -123.279917428236431, 44.578004004992003 ] } },
+{ "type": "Feature", "properties": { "Name": "22097257" }, "geometry": { "type": "Point", "coordinates": [ -123.288471109418353, 44.568300854306734 ] } },
+{ "type": "Feature", "properties": { "Name": "22099658" }, "geometry": { "type": "Point", "coordinates": [ -123.297022066135241, 44.55859678485114 ] } },
+{ "type": "Feature", "properties": { "Name": "22099659" }, "geometry": { "type": "Point", "coordinates": [ -123.265102323290463, 44.578028940260872 ] } },
+{ "type": "Feature", "properties": { "Name": "22102060" }, "geometry": { "type": "Point", "coordinates": [ -123.273658334451198, 44.568327542095609 ] } },
+{ "type": "Feature", "properties": { "Name": "22104460" }, "geometry": { "type": "Point", "coordinates": [ -123.282211621119458, 44.558625227036742 ] } },
+{ "type": "Feature", "properties": { "Name": "22106861" }, "geometry": { "type": "Point", "coordinates": [ -123.290762184665098, 44.54892199370876 ] } },
+{ "type": "Feature", "properties": { "Name": "22106862" }, "geometry": { "type": "Point", "coordinates": [ -123.258845627929873, 44.568351104074353 ] } },
+{ "type": "Feature", "properties": { "Name": "22109263" }, "geometry": { "type": "Point", "coordinates": [ -123.26740124248451, 44.558650540999501 ] } },
+{ "type": "Feature", "properties": { "Name": "22111663" }, "geometry": { "type": "Point", "coordinates": [ -123.275954133887538, 44.548949061532916 ] } },
+{ "type": "Feature", "properties": { "Name": "22116466" }, "geometry": { "type": "Point", "coordinates": [ -123.26114615132964, 44.54897300111098 ] } }
+]
+}

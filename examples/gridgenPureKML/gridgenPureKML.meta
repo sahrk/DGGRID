@@ -1,0 +1,31 @@
+################################################################################
+#
+# gridgenPureKML.meta - example of a DGGRID metafile that generates a 
+#     resolution 5 ISEA aperture 3 grid for the whole earth. Output is in 
+#     KML format.
+#
+# Kevin Sahr, 05/23/13
+# Revised November 11, 2014
+#
+################################################################################
+
+# specify the operation
+dggrid_operation GENERATE_GRID
+
+# specify the DGG
+dggs_type ISEA3H
+dggs_res_spec 5
+
+# control the generation
+clip_subset_type WHOLE_EARTH
+geodetic_densify 0.0
+
+# specify the output
+cell_output_type KML
+cell_output_file_name outputfiles/isea3h5
+point_output_type KML
+point_output_file_name outputfiles/isea3h5p
+kml_default_width 2
+kml_default_color ff0000ff
+densification 3
+precision 6

@@ -1,0 +1,30 @@
+################################################################################
+#
+# isea7hGen.meta - example of a DGGRID metafile that generates a 
+#     resolution 3 ISEA aperture 7 grid for the whole earth. Output is in 
+#     KML format.
+#
+# Kevin Sahr, 08/28/19
+#
+################################################################################
+
+# specify the operation
+dggrid_operation GENERATE_GRID
+
+# specify the DGG
+dggs_type ISEA7H
+dggs_res_spec 3
+
+# control the generation
+clip_subset_type WHOLE_EARTH
+geodetic_densify 0.0
+
+# specify the output
+cell_output_type KML
+cell_output_file_name outputfiles/isea7h3
+point_output_type KML
+point_output_file_name outputfiles/isea7h3p
+kml_default_width 2
+kml_default_color ff0000ff
+densification 3
+precision 6

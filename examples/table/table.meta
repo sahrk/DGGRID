@@ -1,0 +1,16 @@
+################################################################################
+#
+# table.meta - example of a DGGRID metafile that outputs a table of grid 
+#     characteristics for a mixed aperture DGG.
+#
+# Kevin Sahr, 01/14/13
+#
+################################################################################
+
+# specify the operation
+dggrid_operation OUTPUT_STATS
+
+# specify the DGG
+dggs_type ISEA43H
+dggs_num_aperture_4_res 5
+dggs_res_spec 15

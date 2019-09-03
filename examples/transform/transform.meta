@@ -1,0 +1,32 @@
+################################################################################
+################################################################################
+#
+# transform.meta - example of a dggrid meta-file which performs address
+#                  conversion
+#
+# Determine the cells in which some Oregon cities are located in resolution 8 
+# an ISEA3H DGGS.
+#
+# Created by Kevin Sahr, November 11, 2001
+# Revised by Kevin Sahr, June 20, 2003
+# Revised by Kevin Sahr, October 20, 2014
+# Revised by Kevin Sahr, November 11, 2014
+#
+################################################################################
+
+# specify the operation
+dggrid_operation TRANSFORM_POINTS
+
+# specify the DGG
+dggs_type ISEA3H
+dggs_res_spec 9
+
+# specify bin controls
+input_file_name inputfiles/20k.txt
+input_address_type GEO
+input_delimiter " "
+
+# specify the output
+output_file_name outputfiles/cities3h9.txt
+output_address_type SEQNUM
+output_delimiter ","

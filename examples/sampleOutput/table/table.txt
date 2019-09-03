@@ -1,0 +1,43 @@
+** executing DGGRID version 7.0b0 **
+type sizes: big int: 64 bits / big double: 128 bits
+
+** loading meta file table.meta...
+* using parameter values:
+dggrid_operation OUTPUT_STATS (user set)
+dggs_type ISEA43H (user set)
+dggs_topology HEXAGON (user set)
+dggs_proj ISEA (user set)
+dggs_aperture_type MIXED43 (user set)
+dggs_num_aperture_4_res 5 (user set)
+proj_datum WGS84_AUTHALIC_SPHERE (default)
+dggs_orient_specify_type SPECIFIED (user set)
+dggs_num_placements 1 (user set)
+dggs_orient_output_file_name grid.meta (default)
+dggs_vert0_lon 11.25 (user set)
+dggs_vert0_lat 58.2825 (user set)
+dggs_vert0_azimuth 0 (user set)
+dggs_res_specify_type SPECIFIED (user set)
+dggs_res_spec 15 (user set)
+rng_type RAND (default)
+precision 7 (default)
+verbosity 0 (default)
+
+Earth Radius: 6,371.0071809
+
+Res     # Cells        Area (km^2)      CLS (km)
+  0          12 51,006,562.1724089 8,199.5003701
+  1          42 12,751,640.5431022 4,046.3595508
+  2         162  3,187,910.1357756 2,016.7939273
+  3         642    796,977.5339439 1,007.6071980
+  4       2,562    199,244.3834860   503.7051390
+  5      10,242     49,811.0958715   251.8402701
+  6      30,722     16,603.6986238   145.3984700
+  7      92,162      5,534.5662079    83.9455421
+  8     276,482      1,844.8554026    48.4659229
+  9     829,442        614.9518009    27.9818024
+ 10   2,488,322        204.9839336    16.1552990
+ 11   7,464,962         68.3279779     9.3272658
+ 12  22,394,882         22.7759926     5.3850993
+ 13  67,184,642          7.5919975     3.1090885
+ 14 201,553,922          2.5306658     1.7950331
+ 15 604,661,762          0.8435553     1.0363628

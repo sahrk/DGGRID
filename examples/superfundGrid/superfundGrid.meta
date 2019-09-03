@@ -1,0 +1,27 @@
+################################################################################
+#
+# superfundGrid.meta - example of a DGGRID metafile that generates a resolution 
+#     5 Superfund_500m grid for the state of Oregon (with a 100 mile buffer); 
+#     also demonstrates breaking up output into multiple files
+#
+# Kevin Sahr, 01/14/13
+#
+################################################################################
+
+# specify the operation
+dggrid_operation GENERATE_GRID
+
+# specify a Superfund_500m DGG; override the default resolution
+dggs_type SUPERFUND
+dggs_res_spec 5
+
+# control grid generation
+clip_subset_type SHAPEFILE
+clip_region_files ./inputfiles/orbuff.shp
+update_frequency 10000000
+
+# specify the output
+cell_output_type SHAPEFILE
+cell_output_file_name ./outputfiles/orgrid
+densification 3
+max_cells_per_output_file 500

@@ -1,0 +1,15 @@
+################################################################################
+#
+# planetRiskTable.meta - example of outputting a table of statistics for the
+#      first 20 resolutions of the PlanetRisk grid.
+#
+# Kevin Sahr, 7/14/19
+#
+################################################################################
+
+# specify the operation
+dggrid_operation OUTPUT_STATS
+
+# specify the DGG
+dggs_type PLANETRISK
+dggs_res_spec 20

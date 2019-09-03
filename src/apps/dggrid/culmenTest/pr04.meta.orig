@@ -1,0 +1,44 @@
+################################################################################
+#
+# pr4.meta - generates the PlanetRisk grid 
+#
+# Kevin Sahr, 12/08/14
+#
+################################################################################
+
+# specify the operation
+dggrid_operation GENERATE_GRID
+
+# specify the DGG
+dggs_type ISEA3H
+dggs_aperture_type SEQUENCE
+dggs_aperture_sequence 433347777777
+dggs_res_spec 4
+
+# control the generation
+clip_subset_type WHOLE_EARTH
+#clip_subset_type AIGEN
+#clip_region_files inputfiles/dcsqr.gen
+geodetic_densify 0.0
+
+# specify the output
+cell_output_type KML
+cell_output_file_name outputfiles/pr04h
+point_output_type KML
+point_output_file_name outputfiles/pr04p
+#max_cells_per_output_file 10000
+kml_default_width 2
+kml_default_color ff0000ff
+kml_name PlanetRisk Res 4 
+planetrisk_point_output_type PRTEXT
+planetrisk_point_output_file_name outputfiles/pr04
+planetrisk_cell_output_type PRTEXT
+planetrisk_cell_output_file_name outputfiles/pr04
+planetrisk_neighbor_output_type PRTEXT
+planetrisk_neighbor_output_file_name outputfiles/pr04
+planetrisk_children_output_type PRTEXT
+planetrisk_children_output_file_name outputfiles/pr04
+
+densification 0
+precision 6
+verbosity 0

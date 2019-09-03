@@ -1,0 +1,42 @@
+** executing DGGRID version 7.0b0 **
+type sizes: big int: 64 bits / big double: 128 bits
+
+** loading meta file binvals.meta...
+* using parameter values:
+dggrid_operation BIN_POINT_VALS (user set)
+dggs_type ISEA3H (user set)
+dggs_topology HEXAGON (user set)
+dggs_proj ISEA (user set)
+dggs_aperture_type PURE (user set)
+dggs_aperture 3 (user set)
+proj_datum WGS84_AUTHALIC_SPHERE (default)
+dggs_orient_specify_type SPECIFIED (user set)
+dggs_num_placements 1 (user set)
+dggs_orient_output_file_name grid.meta (default)
+dggs_vert0_lon 11.25 (user set)
+dggs_vert0_lat 58.2825 (user set)
+dggs_vert0_azimuth 0 (user set)
+dggs_res_specify_type SPECIFIED (user set)
+dggs_res_spec 9 (user set)
+rng_type RAND (default)
+precision 7 (default)
+verbosity 0 (default)
+bin_method ARITHMETIC_MEAN (default)
+bin_coverage PARTIAL (user set)
+input_files inputfiles/20k.txt inputfiles/50k.txt inputfiles/100k.txt inputfiles/200k.txt (user set)
+input_delimiter " " (user set)
+output_file_name outputfiles/popval3h9.txt (user set)
+output_address_type SEQNUM (user set)
+output_delimiter "," (user set)
+cell_output_control OUTPUT_OCCUPIED (user set)
+
+Res 9 DGG Statistics (calculated in projection space):
+ total #cells: 196,832
+ intercell distance: 50.2768905 km
+ cell area: 2,591.4018276 km^2
+ characteristic length scale: 57.4411078 km
+
+determing quad bounds...
+binning values...
+
+** binning complete **

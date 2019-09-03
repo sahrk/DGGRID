@@ -1,0 +1,48 @@
+** executing DGGRID version 7.0b0 **
+type sizes: big int: 64 bits / big double: 128 bits
+
+** loading meta file planetRiskTable.meta...
+* using parameter values:
+dggrid_operation OUTPUT_STATS (user set)
+dggs_type PLANETRISK (user set)
+dggs_topology HEXAGON (user set)
+dggs_proj ISEA (user set)
+dggs_aperture_type SEQUENCE (user set)
+dggs_aperture_sequence 43334777777777777777777 (user set)
+proj_datum WGS84_AUTHALIC_SPHERE (default)
+dggs_orient_specify_type SPECIFIED (user set)
+dggs_num_placements 1 (user set)
+dggs_orient_output_file_name grid.meta (default)
+dggs_vert0_lon 11.25 (user set)
+dggs_vert0_lat 58.2825 (user set)
+dggs_vert0_azimuth 0 (user set)
+dggs_res_specify_type SPECIFIED (user set)
+dggs_res_spec 20 (user set)
+rng_type RAND (default)
+precision 7 (default)
+verbosity 0 (default)
+
+Earth Radius: 6,371.0071809
+
+Res                # Cells        Area (km^2)      CLS (km)
+  0                     12 51,006,562.1724089 8,199.5003701
+  1                     42 12,751,640.5431022 4,046.3595508
+  2                    122  4,250,546.8477007 2,329.6061345
+  3                    362  1,416,848.9492336 1,343.7488417
+  4                  1,082    472,282.9830779   775.5740181
+  5                  4,322    118,070.7457695   387.7421098
+  6                 30,242     16,867.2493956   146.5478955
+  7                211,682      2,409.6070565    55.3896364
+  8              1,481,762        344.2295795    20.9353006
+  9             10,372,322         49.1756542     7.9127991
+ 10             72,606,242          7.0250935     2.9907569
+ 11            508,243,682          1.0035848     1.1303999
+ 12          3,557,705,762          0.1433693     0.4272510
+ 13         24,903,940,322          0.0204813     0.1614857
+ 14        174,327,582,242          0.0029259     0.0610359
+ 15      1,220,293,075,682          0.0004180     0.0230694
+ 16      8,542,051,529,762          0.0000597     0.0087194
+ 17     59,794,360,708,322          0.0000085     0.0032956
+ 18    418,560,524,958,242          0.0000012     0.0012456
+ 19  2,929,923,674,707,682          0.0000002     0.0004708
+ 20 20,509,465,722,953,762          0.0000000     0.0001779

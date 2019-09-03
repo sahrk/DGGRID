@@ -1,0 +1,38 @@
+################################################################################
+################################################################################
+#
+# binvals.meta - example of a dggrid meta-file which performs point value
+#                binning
+#
+# Determine the average population of large Oregon cities in the cells of 
+# resolution 9 of an ISEA3H DGGS.
+#
+# Created by Kevin Sahr, November 11, 2001
+# Revised by Kevin Sahr, June 20, 2003
+# Revised by Kevin Sahr, October 20, 2014
+# Revised by Kevin Sahr, November 11, 2014
+#
+################################################################################
+
+# specify the operation
+dggrid_operation BIN_POINT_VALS
+
+# specify the DGG
+
+dggs_type ISEA3H
+dggs_res_spec 9
+
+# specify bin controls
+
+bin_coverage PARTIAL
+input_files inputfiles/20k.txt inputfiles/50k.txt inputfiles/100k.txt inputfiles/200k.txt
+input_delimiter " "
+
+# specify the output
+
+output_file_name outputfiles/popval3h9.txt
+output_address_type SEQNUM
+output_delimiter ","
+output_count TRUE
+cell_output_control OUTPUT_OCCUPIED
+

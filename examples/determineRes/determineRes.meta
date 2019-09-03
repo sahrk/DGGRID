@@ -1,0 +1,26 @@
+################################################################################
+#
+# gridgenMixed.meta - example of a DGGRID metafile that generates a grid for
+#     the entire earth with a cell area of approximately 120,000km^2.
+#
+# Kevin Sahr, 01/14/13
+#
+################################################################################
+
+# specify the operation
+dggrid_operation GENERATE_GRID
+
+# specify the DGG
+dggs_type ISEA43H
+dggs_num_aperture_4_res 2
+dggs_res_specify_type CELL_AREA
+dggs_res_specify_area 120000.0
+dggs_res_specify_rnd_down TRUE
+
+# control the generation
+clip_subset_type WHOLE_EARTH
+
+# specify the output
+cell_output_type KML
+cell_output_file_name outputfiles/earth120k
+densification 1
