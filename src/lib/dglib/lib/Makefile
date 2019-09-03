@@ -3,9 +3,8 @@ SRCS = $(wildcard *.cpp)
 OBJS = $(SRCS:.cpp=.o)
 DEPS = $(SRCS:.cpp=.depends)
 include ../../../MakeIncludes
-PROJ4LIBDIR = ../../proj4lib
 SHAPELIBDIR = ../../shapelib
-INCDIRS = -I../include -I$(PROJ4LIBDIR)/include -I$(SHAPELIBDIR)/include -I$(GDAL_HDR_DIR)
+INCDIRS = -I../include -I$(SHAPELIBDIR)/include -I$(GDAL_HDR_DIR)
 CCFLAGS = ${INCDIRS} ${ADD_CPP_FLAGS} 
 
 .PHONY: clean all
