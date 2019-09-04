@@ -39,6 +39,8 @@ Denis White.
 
 __DGGRID__ was made possible in part by funding from the __US Environmental Protection Agency__, __PlanetRisk, Inc.__, and __Culmen International__.
 
+## Dependencies
+
 __DGGRID__ requires the following external library (not included):
 
 - The Open Source Geospatial Foundation’s GDAL translator library for raster and vector geospatial data formats (see http://www.gdal.org)
