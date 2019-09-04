@@ -6,7 +6,7 @@ __DGGRID__ version 7.0 released September 1, 2019
 
 __Southern Terra Cognita Laboratory__  
 www.discreteglobalgrids.org  
-Kevin Sahr, Director
+[Kevin Sahr](https://inside.sou.edu/cs/kevinsahr.html), Director
 
 __DGGRID__ is a command-line application designed to generate and manipulate 
 icosahedral discrete global grids (DGGs).
