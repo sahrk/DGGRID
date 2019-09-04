@@ -4,8 +4,7 @@
 
 __DGGRID__ version 7.0 released September 1, 2019  
 
-Southern Terra Cognita Laboratory 
-
+__Southern Terra Cognita Laboratory__ 
 www.discreteglobalgrids.org  
 Kevin Sahr, Director
 
