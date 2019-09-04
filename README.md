@@ -32,7 +32,7 @@ You should have received a copy of the GNU Affero General Public License along w
 
 ## Credits
 
-__DGGRID__ was primarily written in C++ by Kevin Sahr. See the file `CHANGELOG.md` 
+__DGGRID__ was primarily written in C++ by [Kevin Sahr](https://inside.sou.edu/cs/kevinsahr.html). See the file `CHANGELOG.md` 
 for additional contributors. 
 
 The original __DGGRID__ specifications were developed by (in alphabetical order): 
