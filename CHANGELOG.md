@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 All changes are by Kevin Sahr, unless otherwise noted.
 
+## [7.01] - 2019-08-05
+### Added 
+- added DgInterleaveToQ2DIConverter, though not yet wired-up to handle INTERLEAVE input
+
 ## [7.0] - 2019-08-01
 ### Added
 - added PLANETRISK choice to parameter dggs_type 
