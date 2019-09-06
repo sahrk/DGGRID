@@ -534,7 +534,7 @@ cout << "inter " << inter << endl;
 
 ////////////////////////////////////////////////////////////////////////////////
 DgInterleaveToQ2DIConverter::DgInterleaveToQ2DIConverter            
-                (const DgRF<DgInterleaveCoord, long long int>& from)
+                (const DgRF<DgInterleaveCoord, long long int>& from,
                  const DgRF<DgQ2DICoord, long long int>& to)
         : DgConverter<DgInterleaveCoord, long long int, DgQ2DICoord, long long int> (from, to),
           pIDGG_ (NULL), effRes_ (0), effRadix_ (0)
