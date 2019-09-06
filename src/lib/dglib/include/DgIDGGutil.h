@@ -434,6 +434,30 @@ class DgQ2DItoInterleaveConverter :
    protected:
 
       const DgIDGGBase* pIDGG_;
+      int effRes_;
+      int effRadix_;
+
+};
+
+////////////////////////////////////////////////////////////////////////////////
+class DgInterleaveToQ2DIConverter : 
+        public DgConverter<DgInterleaveCoord, long long int, DgQ2DICoord, long long int>
+{
+   public:
+
+      DgInterleaveToQ2DIConverter (const DgRF<DgInterleaveCoord, long long int>& from,
+                                   const DgRF<DgQ2DICoord, long long int>& to);
+
+      const DgIDGGBase& IDGG (void) const { return *pIDGG_; }
+
+      virtual DgQ2DICoord convertTypedAddress 
+                                (const DgInterleaveCoord& addIn) const;
+
+   protected:
+
+      const DgIDGGBase* pIDGG_;
+      int effRes_;
+      int effRadix_;
 
 };
 

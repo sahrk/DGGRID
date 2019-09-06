@@ -143,6 +143,22 @@ class DgRadixString {
 
       const string& digits (void) const { return digits_; }
 
+      long long int value (void) const {
+
+         long long int val = 0;
+         int exponent = 1;
+         for (int index = digits().size() - 1;
+              index >= 0; index--) {
+
+            int d = digits()[index] - '0'; // convert digit to int
+            val += d * exponent;
+cout << " ==== d: " << d << " exp: " << exponent << " val: " << val << endl;
+            exponent *= base();
+         }
+
+         return val;
+      }
+
       // set methods
 
       void setBase (unsigned int baseIn) { base_ = baseIn; }
