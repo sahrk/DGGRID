@@ -6,6 +6,8 @@ All changes are by Kevin Sahr, unless otherwise noted.
 ## [7.01] - 2019-08-05
 ### Added 
 - added DgInterleaveToQ2DIConverter, though not yet wired-up to handle INTERLEAVE input
+### Changed
+- refactored quadclip gnomonic bounds check
 
 ## [7.0] - 2019-08-01
 ### Added
