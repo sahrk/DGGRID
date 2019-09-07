@@ -274,20 +274,18 @@ void createClipRegions (GridGenParam& dp, const DgIDGGBase& dgg,
                quadInt[qc.quadNum()] = true;
             }
 
-            // also test for possible arc crossings
+            // test for vertices over 90' from the an intersected
+            // quad center point, which will make the gnomonic fail
 
             DgPolygon quadVec2(v);
-            for (int q = 1; q < 11; q++)
-            {
-               const DgGeoCoord& cp = clipRegions[q].gnomProj().proj0();
-               bool allGood = true;
-               for (int i = 0; i < quadVec2.size(); i++) 
-               {
-                  if (DgGeoCoord::gcDist(
-                       *dgg.geoRF().getAddress(quadVec2[i]), cp, false) > 90.0)
-                  {
-                     if (quadInt[q]) // problem!
-                     {
+            for (int q = 1; q < 11; q++) {
+               if (quadInt[q]) {
+                  const DgGeoCoord& cp = clipRegions[q].gnomProj().proj0();
+                  bool allGood = true;
+                  for (int i = 0; i < quadVec2.size(); i++) {
+                     if (DgGeoCoord::gcDist(
+                       *dgg.geoRF().getAddress(quadVec2[i]), cp, false) > 90.0) {
+
                         cerr << "ERROR: polygon intersects quad #" 
                           << dgg::util::to_string(q) << " but a vertex of that polygon is "
                           << "more than 90' from the quad center." << endl;
@@ -295,17 +293,15 @@ void createClipRegions (GridGenParam& dp, const DgIDGGBase& dgg,
                         cerr << v << endl;
                         report("break-up polygon or reorient grid", 
                                 DgBase::Fatal);
+                        allGood = false;
+
+                        break;
                      }
-
-                     allGood = false;
-
-                     break;
                   }
-               }
 
-               if (allGood) {
-                  if (dp.megaVerbose) cout << "intersects quad " << q << endl;
-                  quadInt[q] = true;
+                  if (allGood) {
+                     if (dp.megaVerbose) cout << "intersects quad " << q << endl;
+                  }
                }
             }
 
