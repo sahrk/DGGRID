@@ -180,7 +180,7 @@ void createClipRegions (GridGenParam& dp, const DgIDGGBase& dgg,
 
       if (dp.megaVerbose)
 	  cout << " -> " << v0 << endl;
-
+  
       // finally store the boundary as a clipper polygon
       ClipperLib::Path contour;
       for (int i = 0; i < v0.size(); i++)
