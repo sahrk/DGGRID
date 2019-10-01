@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 All changes are by Kevin Sahr, unless otherwise noted.
 
+## [7.03] - 2019-10-01
+### Added
+- point binning grid generation; currently undocumented
+
 ## [7.02] - 2019-09-30
 ### Fixed
 - fixed a bug in dggrid evalCell that caused quad overages to fail
