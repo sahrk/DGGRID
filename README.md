@@ -2,7 +2,7 @@
 
 ## General Information
 
-__DGGRID__ version 7.0 released September 1, 2019  
+__DGGRID__ version 7.02 released September 30, 2019  
 
 __Southern Terra Cognita Laboratory__  
 www.discreteglobalgrids.org  
@@ -54,5 +54,6 @@ code):
 
 - George Marsaglia’s multiply-with-carry “Mother-of-all-RNGs” pseudo-random number generation function.
 
+- The gnomonic projection code is adapted from Gerald Evenden’s PROJ.4 library.
 
 

@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 All changes are by Kevin Sahr, unless otherwise noted.
 
+## [7.02] - 2019-09-30
+### Fixed
+- fixed a bug in dggrid evalCell that caused quad overages to fail
+- removed (for now) my failed attempt at optimizing the gnomonic quad bounds code; put back PROJ4
+
 ## [7.01] - 2019-08-05
 ### Added 
 - added DgInterleaveToQ2DIConverter, though not yet wired-up to handle INTERLEAVE input
