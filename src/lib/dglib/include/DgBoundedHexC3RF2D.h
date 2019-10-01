@@ -44,10 +44,8 @@ class DgBoundedHexC3RF2D : public DgBoundedRF2D {
       virtual DgIVec2D& incrementAddress (DgIVec2D& add) const;
       virtual DgIVec2D& decrementAddress (DgIVec2D& add) const;
 
-      virtual bool validAddress (const DgIVec2D& add) const
-          { return add.i() >= lowerLeft().i() && add.i() <= upperRight().i() &&
-                   add.j() >= lowerLeft().j() && add.j() <= upperRight().j() &&
-                   !((add.i() - 3 * add.j()) % 7); }
+      virtual bool validAddressPattern (const DgIVec2D& add) const
+          { return !((add.i() - 3 * add.j()) % 7); }
 
       virtual unsigned long long int seqNumAddress (const DgIVec2D& add) const;
 

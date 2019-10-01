@@ -370,7 +370,8 @@ bool evalCell (GridGenParam& dp,  const DgIDGGBase& dgg, const DgContCartRF& cc1
                const DgDiscRF2D& grid, DgQuadClipRegion& clipRegion,
                const DgIVec2D& add2D)
 {
-   if (!dgg.bndRF().bnd2D().validAddress(add2D))
+   // skip any sub-frequence cells
+   if (!dgg.bndRF().bnd2D().validAddressPattern(add2D))
     return false;
 
    dp.nCellsTested++;

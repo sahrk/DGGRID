@@ -39,10 +39,8 @@ class DgBoundedHexC3C2RF2D : public DgBoundedHexC3RF2D {
                 unsigned long long int size = 0)
          : DgBoundedHexC3RF2D (rf, lowerLeft, upperRight, size) { }
                     
-      virtual bool validAddress (const DgIVec2D& add) const
-          { return add.i() >= lowerLeft().i() && add.i() <= upperRight().i() &&
-                   add.j() >= lowerLeft().j() && add.j() <= upperRight().j() &&
-                   !((add.i() - 3 * add.j()) % 7) && !((add.i() + add.j()) % 3); }
+      virtual bool validAddressPattern (const DgIVec2D& add) const
+          { return !((add.i() - 3 * add.j()) % 7) && !((add.i() + add.j()) % 3); }
 
       virtual unsigned long long int seqNumAddress (const DgIVec2D& add) const;
 

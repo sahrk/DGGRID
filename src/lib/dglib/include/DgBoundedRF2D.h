@@ -44,9 +44,13 @@ class DgBoundedRF2D : public DgBoundedRF<DgIVec2D, DgDVec2D, long double> {
       virtual DgIVec2D& incrementAddress (DgIVec2D& add) const;
       virtual DgIVec2D& decrementAddress (DgIVec2D& add) const;
 
+      virtual bool validAddressPattern (const DgIVec2D& add) const
+                     { return true; }
+
       virtual bool validAddress (const DgIVec2D& add) const
           { return add.i() >= lowerLeft().i() && add.i() <= upperRight().i() &&
-                   add.j() >= lowerLeft().j() && add.j() <= upperRight().j(); }
+                   add.j() >= lowerLeft().j() && add.j() <= upperRight().j()
+                   && validAddressPattern(add); }
 
       const DgIVec2D& lowerLeft  (void) const { return lowerLeft_; }
       const DgIVec2D& upperRight (void) const { return upperRight_; }

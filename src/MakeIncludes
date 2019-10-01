@@ -1,10 +1,13 @@
 # MakeIncludes
-# Version 7.0 - Kevin Sahr, 7/14/19
+# Version 7.01 - Kevin Sahr, 9/30/19
 
+### these GDAL location variables must be correctly set ###
 # location of GDAL header files
 GDAL_HDR_DIR = /opt/local/include
 # location of libgdal.a
 GDAL_LIB = /opt/local/lib/libgdal.dylib
+
+### most users won't need to change anything below ###
 
 # compilers
 CCOMP = gcc 
@@ -14,18 +17,17 @@ CPPCOMP = g++
 DEBUG_CC_FLAGS = -g -O0 -Wall -fno-inline -fno-eliminate-unused-debug-types 
 SHIP_CC_FLAGS = -O3
 
-# choose which to use
+# choose which to use; comment out the one you don't want
 ADD_CC_FLAGS = $(SHIP_CC_FLAGS)
 #ADD_CC_FLAGS = $(DEBUG_CC_FLAGS)
 
-# add any extra C++ flags
+### the variables below are used by the Makefiles ###
+# any extra C++ flags
 ADD_CPP_FLAGS = $(ADD_CC_FLAGS) -std=c++11
 
-# additional include search paths
+# external include search paths 
 ADD_INC_DIRS = -I$(GDAL_HDR_DIR)
 
-# libraries to link when linking a standard dglib executable
-LOCAL_LIBS = $(DGLIBDIR)/lib/dglib.a \
-        $(SHPLIBDIR)/lib/shapelib.a
-ADD_LD_LIBS= $(LOCAL_LIBS) $(GDAL_LIB)
+# external libraries to link when linking a standard dglib executable
+ADD_LD_LIBS= $(GDAL_LIB)
 

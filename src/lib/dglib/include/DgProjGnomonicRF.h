@@ -44,9 +44,9 @@ class DgProjGnomonicRF : public DgGeoProjRF {
       DgProjGnomonicRF (DgRFNetwork& networkIn, 
                       const string& nameIn = "GnomonicRF",
                       const DgGeoCoord& proj0In = DgGeoCoord(M_ZERO, M_ZERO),
-                      long double localUpAzimuthIn = 0.0L);
-
-      long double localUpAzimuth (void) const { return localUpAzimuth_; }
+                      long double x0In = M_ZERO, long double y0In = M_ZERO,
+                      long double k0In = M_ONE, long double to_meterIn = M_ONE,
+                      long double fr_meterIn = M_ONE);
 
       // pure virtual methods
 
@@ -61,8 +61,6 @@ class DgProjGnomonicRF : public DgGeoProjRF {
       long double sinph0_;
       long double cosph0_;
       int mode_;
-
-      long double localUpAzimuth_;
 
 }; // class DgProjGnomonicRF
 

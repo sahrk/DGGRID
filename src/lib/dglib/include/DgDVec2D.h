@@ -160,7 +160,7 @@ DgDVec2D::rotate (long double degrees)
 ////////////////////////////////////////////////////////////////////////////////
 inline DgDVec2D::operator string (void) const
 {
-   const char* fmtStr = "%.25LF";
+   const char* fmtStr = "%.9LF";
    return "(" + dgg::util::to_string(x_, fmtStr) + ", " 
           + dgg::util::to_string(y_, fmtStr) + ")";
 
