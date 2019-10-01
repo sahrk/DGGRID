@@ -527,6 +527,7 @@ DgGridPList::DgGridPList (void)
    choices.push_back(new string("SHAPEFILE"));
    choices.push_back(new string("GDAL"));
    choices.push_back(new string("SEQNUMS"));
+   choices.push_back(new string("POINTS"));
    insertParam(new DgStringChoiceParam("clip_subset_type", "WHOLE_EARTH", 
                &choices));
    dgg::util::release(choices);

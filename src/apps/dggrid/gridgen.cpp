@@ -66,7 +66,8 @@ using namespace std;
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 GridGenParam::GridGenParam (DgParamList& plist)
-      : MainParam(plist), wholeEarth (false), seqToPoly(false), useGDAL (false),
+      : MainParam(plist), wholeEarth (false), seqToPoly(false), pointClip (false),
+        useGDAL (false),
         clipAIGen (false), clipGDAL(false), clipShape(false),
         nRandPts (0), clipRandPts (false), nDensify (1),
         nudge (0.001), ptsRand (0), doPointInPoly (true), 
@@ -101,6 +102,8 @@ GridGenParam::GridGenParam (DgParamList& plist)
                      DgBase::Fatal);
 
          seqToPoly = true;
+      } else if (dummy == "POINTS") {
+         pointClip = true;
       } else
          ::report("Unrecognised value for 'clip_subset_type'", DgBase::Fatal);
 
@@ -1050,6 +1053,50 @@ void genGrid (GridGenParam& dp)
           ::report("genGrid(): Invalid SEQNUM found.", DgBase::Fatal);
         }
 
+        dp.nCellsAccepted++;
+        outputStatus(dp);
+
+        DgPolygon verts(dgg);
+        dgg.setVertices(*loc, verts, dp.nDensify);
+
+        outputCellAdd2D(dp, *dggs, dgg, *loc, verts, deg);
+
+        delete loc;
+      }
+
+   } else if (dp.pointClip) {
+      dp.nCellsAccepted = 0;
+
+      set<DgQ2DICoord> cells; // To ensure each cell is printed only output once
+
+      // read-in and bin the points
+      for (unsigned long fc = 0; fc < dp.regionFiles.size(); fc++) {
+         DgInLocFile* pRegionFile = new DgInAIGenFile(dgg.geoRF(), &dp.regionFiles[fc]);
+         DgInLocFile& regionFile = *pRegionFile;
+
+         DgLocList points;
+         regionFile >> points;
+         regionFile.close();
+         delete pRegionFile;
+   
+         if (dp.megaVerbose) cout << "input: " << points << endl;
+
+         dgg.convert(&points);
+   
+         if (dp.megaVerbose) cout << " -> " << points << endl;
+
+         list<DgLocBase*>::const_iterator it;
+         for (it = points.begin(); it != points.end(); it++) {
+           DgQ2DICoord q2di = *(dgg.getAddress(*(static_cast<const DgLocation*>(*it))));
+           cells.insert(q2di);
+         }
+      }
+
+      // generate the cells
+      for(set<DgQ2DICoord>::iterator i=cells.begin(); i!=cells.end(); i++){
+        DgLocation* loc = dgg.makeLocation(*i);
+
+        dp.nCellsTested++;
         dp.nCellsAccepted++;
         outputStatus(dp);
 

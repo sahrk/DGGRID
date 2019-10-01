@@ -166,6 +166,7 @@ class GridGenParam : public MainParam {
 
       bool wholeEarth;       // generate entire grid?
       bool seqToPoly;        // whether user wants polys from seqnum
+      bool pointClip;        // whether user wants to generate using points
       bool useGDAL;          // use GDAL for either input or output
       bool clipAIGen;        // clip using AIGen files (or Shapefiles)
       bool clipGDAL;         // clip using GDAL files
