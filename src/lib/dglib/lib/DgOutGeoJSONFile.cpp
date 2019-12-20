@@ -67,10 +67,10 @@ void DgOutGeoJSONFile::postamble()
 {
    DgOutGeoJSONFile& o(*this);   
 
-   // Delete the comma from the last feature 
+   // Delete the comma and newline from the last feature 
    long pos = o.tellp();
-   o.seekp(pos - 1);
-   o << "]}";
+   o.seekp(pos - 2);
+   o << "]}\n";
    o.flush();
 }
 
@@ -109,7 +109,7 @@ DgOutGeoJSONFile::insert (DgLocation& loc, const string* label)
 
    o.insert(rf().getVecLocation(loc));
 
-   o << "}},";
+   o << "}},\n";
    o.flush();
 
    return *this;
@@ -142,7 +142,7 @@ DgOutGeoJSONFile::insert (DgLocVector& vec, const string* label,
    // rewrite first vertex:
    o.insert(rf().getVecAddress(*v[0]));
 
-   o << "]]}},";
+   o << "]]}},\n";
    o.flush();
 
    return *this;
@@ -175,7 +175,7 @@ DgOutGeoJSONFile::insert (DgPolygon& poly, const string* label,
    // rewrite first vertex:
    o.insert(rf().getVecAddress(*v[0]));
 
-   o << "]]}},";
+   o << "]]}},\n";
    o.flush();
 
    return *this;
