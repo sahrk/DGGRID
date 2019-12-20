@@ -5,7 +5,7 @@ All changes are by Kevin Sahr, unless otherwise noted.
 
 ## [7.04] - 2019-12-21
 ### Fixed
-- added newlines after features in GeoJSON output files including updating the examples
+- added newlines after features in GeoJSON output files and updated examples accordingly
 ### Changed
 - deleted some extraneous files
 
