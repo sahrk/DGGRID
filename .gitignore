@@ -33,6 +33,10 @@
 *.app
 src/apps/appex/appex
 src/apps/dggrid/dggrid
+src/apps/dgglife/dgglife
+src/apps/liferfs/liferfs
+src/apps/oglhier/oglhier
+src/apps/oglhierdgg/oglhierdgg
 
 # examples output files
 examples*/*/outputfiles/*
@@ -41,8 +45,12 @@ examples*/*/outputfiles/*
 # miscellaneous
 g
 gg
+g2
+g1
+out
 JUNK
 junk
 .*.swp
 .DS_Store
+.gdb_history
 
