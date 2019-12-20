@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 All changes are by Kevin Sahr, unless otherwise noted.
 
+## [7.04] - 2019-12-21
+### Fixed
+- added newlines after features in GeoJSON output files 
+
 ## [7.03] - 2019-10-01
 ### Added
 - point binning grid generation; currently undocumented
