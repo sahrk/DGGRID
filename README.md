@@ -2,7 +2,7 @@
 
 ## General Information
 
-__DGGRID__ version 7.02 released September 30, 2019  
+__DGGRID__ version 7.05 released January 27, 2020  
 
 __Southern Terra Cognita Laboratory__  
 www.discreteglobalgrids.org  

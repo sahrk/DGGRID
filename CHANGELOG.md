@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 All changes are by Kevin Sahr, unless otherwise noted.
 
+## [7.05] - 2020-01-27
+### Fixed
+- GDAL output files now correctly repeat the first/last polygon vertex
+
 ## [7.04] - 2019-12-21
 ### Fixed
 - added newlines after features in GeoJSON output files and updated examples accordingly
