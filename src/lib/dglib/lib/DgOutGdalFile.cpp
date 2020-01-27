@@ -186,10 +186,10 @@ DgOutGdalFile::insert (DgLocVector& vec, const string* label,
 
 	//Fill linearRing with points
 	vector<DgAddressBase *>& v = vec.addressVec();
-    for(vector<DgAddressBase *>::iterator i = v.begin(); v.end() != i; ++i) {
+	for(vector<DgAddressBase *>::iterator i = v.begin(); v.end() != i; ++i) {
 		DgDVec2D pt = rf().getVecAddress(*(*i));
-        linearRing->addPoint(pt.x(), pt.y());
-    }
+       		linearRing->addPoint(pt.x(), pt.y());
+	}
 
 	//Create an OGRPolygon and attach ring to it
 	OGRPolygon polygon;
@@ -248,6 +248,10 @@ DgOutGdalFile::insert (DgPolygon& poly, const string* label,
 		DgDVec2D pt = rf().getVecAddress(*(*i));
         linearRing->addPoint(pt.x(), pt.y());
     }
+
+        // add the first point to the end
+	DgDVec2D pt = rf().getVecAddress(*v[0]);
+        linearRing->addPoint(pt.x(), pt.y());
 	
 	//Create an OGRPolygon and attach ring to it
 	OGRPolygon polygon;

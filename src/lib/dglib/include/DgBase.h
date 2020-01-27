@@ -34,7 +34,7 @@
 using namespace std;
 
 #define DGDEBUG         0
-#define DGGRID_VERSION  "7.04" 
+#define DGGRID_VERSION  "7.05" 
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgBase {
