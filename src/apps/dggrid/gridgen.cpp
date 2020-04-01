@@ -1021,9 +1021,9 @@ void genGrid (GridGenParam& dp)
       set<unsigned long int> seqnums; //To ensure each cell is printed once
 
       // read-in the sequence numbers
-      for (int i = 0; i < dp.regionFiles.size(); i++)
+      for (const auto &regionfile: dp.regionFiles)
       {
-         DgInputStream fin(dp.regionFiles[i].c_str(), "", DgBase::Fatal);
+         DgInputStream fin(regionfile.c_str(), "", DgBase::Fatal);
          //unsigned long int seqnum;
          const int maxLine = 1000;
          char buff[maxLine];
