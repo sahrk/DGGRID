@@ -965,7 +965,7 @@ double findunit(char *unit)
    };
 
    double unitfactor=0;
-   for (j = 0; j < NKEYS; j++) {
+   for (unsigned int j = 0; j < NKEYS; j++) {
     if (strncasecmp2(unit, unitkeytab[j].name, 0) == 0) unitfactor=unitkeytab[j].value;
    }
    return(unitfactor);
