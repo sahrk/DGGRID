@@ -416,7 +416,6 @@ bool evalCell (GridGenParam& dp,  const DgIDGGBase& dgg, const DgContCartRF& cc1
    grid.setVertices(add2D, verts);
 
    cc1.convert(loc);
-   DgDVec2D cp = *cc1.getAddress(*loc);
    delete loc;
 
    cc1.convert(verts);
