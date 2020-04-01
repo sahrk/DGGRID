@@ -105,7 +105,6 @@ DgInGDALFile::extract (DgPolygon& poly)
        // Get the polygon stored in Geometry, with special handling for MultiPolygon
        OGRGeometry* oGeometry = oFeature_->GetGeometryRef();
        OGRwkbGeometryType geomType = wkbFlatten((oGeometry->getGeometryType()));
-       OGRMultiPolygon* oMultiPolygon;
        if (oGeometry != NULL && geomType == wkbPolygon) {
            oPolygon = (OGRPolygon*) oGeometry;
        } else if (geomType == wkbMultiPolygon || geomType == wkbGeometryCollection) {
