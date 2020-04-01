@@ -104,8 +104,6 @@ DgHexIDGG::initialize (void)
    int parentIsClassI = 1;
    int parentIsClassIII = 0;
    long double parentScaleFac = 1.0;
-   long double parentRotRads = 0.0;
-   long long int parentMaxD = 1;
    unsigned long long int parentNCells = 1;
 
    // get actual parent values if there is a parent grid
@@ -116,8 +114,6 @@ DgHexIDGG::initialize (void)
       parentIsClassI = parentIDGG.isClassI();
       parentIsClassIII = parentIDGG.isClassIII();
       parentScaleFac = parentIDGG.scaleFac();
-      parentRotRads = parentIDGG.rotRads();
-      parentMaxD = parentIDGG.maxD();
       parentNCells = parentIDGG.gridStats().nCells();
    }
 
