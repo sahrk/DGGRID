@@ -2415,7 +2415,7 @@ SHPReadObject( SHPHandle psSHP, int hEntity )
             psShape->panPartType == NULL)
         {
             snprintf(szErrorMsg, sizeof(szErrorMsg),
-                    "Not enough memory to allocate requested memory (nPoints=%u, nParts=%u) for shape %d. "
+                    "Insufficient memory for allocation (nPoints=%u, nParts=%u) for shape %d. "
                     "Probably broken SHP file", nPoints, nParts, hEntity );
             szErrorMsg[sizeof(szErrorMsg)-1] = '\0';
             psSHP->sHooks.Error( szErrorMsg );
