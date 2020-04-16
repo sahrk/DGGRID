@@ -2,6 +2,12 @@
 # Version 7.01 - Kevin Sahr, 9/30/19
 
 ### these GDAL location variables must be correctly set ###
+# Users have reported problems building with gdal libraries
+# installed by other software systems. If you have problems
+# we advise installing the library directly from gdal.org
+# (on MacOS we recommend installing via MacPorts.org or 
+# brew.sh).
+
 # location of GDAL header files
 GDAL_HDR_DIR = /opt/local/include
 # location of libgdal.a
@@ -29,5 +35,5 @@ ADD_CPP_FLAGS = $(ADD_CC_FLAGS) -std=c++11
 ADD_INC_DIRS = -I$(GDAL_HDR_DIR)
 
 # external libraries to link when linking a standard dglib executable
-ADD_LD_LIBS= $(GDAL_LIB)
+ADD_LD_LIBS= $(GDAL_LIB) 
 
