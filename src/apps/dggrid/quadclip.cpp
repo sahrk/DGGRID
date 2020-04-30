@@ -373,10 +373,10 @@ void createClipRegions (GridGenParam& dp, const DgIDGGBase& dgg,
                ////// now convert back to Snyder and add to the clipRegions
 
                DgQuadClipRegion& cr = clipRegions[q];
-               for (unsigned int i = 0; i < solution.size(); i++)
+               for (size_t i = 0; i < solution.size(); i++)
                {
                   DgPolygon locv(cr.gnomProj());
-                  for (unsigned int j = 0; j < solution[i].size(); j++)
+                  for (size_t j = 0; j < solution[i].size(); j++)
                   {
                      DgDVec2D p0 = 
                         DgDVec2D(dp.invClipperFactor*solution[i][j].X,
