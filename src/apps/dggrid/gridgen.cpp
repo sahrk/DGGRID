@@ -416,7 +416,6 @@ bool evalCell (GridGenParam& dp,  const DgIDGGBase& dgg, const DgContCartRF& cc1
    grid.setVertices(add2D, verts);
 
    cc1.convert(loc);
-   DgDVec2D cp = *cc1.getAddress(*loc);
    delete loc;
 
    cc1.convert(verts);
@@ -1021,9 +1020,9 @@ void genGrid (GridGenParam& dp)
       set<unsigned long int> seqnums; //To ensure each cell is printed once
 
       // read-in the sequence numbers
-      for (int i = 0; i < dp.regionFiles.size(); i++)
+      for (const auto &regionfile: dp.regionFiles)
       {
-         DgInputStream fin(dp.regionFiles[i].c_str(), "", DgBase::Fatal);
+         DgInputStream fin(regionfile.c_str(), "", DgBase::Fatal);
          //unsigned long int seqnum;
          const int maxLine = 1000;
          char buff[maxLine];
@@ -1035,7 +1034,7 @@ void genGrid (GridGenParam& dp)
            if (fin.eof()) break;
 
            unsigned long int sNum;
-           if (sscanf(buff, "%ld", &sNum) != 1)
+           if (sscanf(buff, "%lu", &sNum) != 1)
              ::report("doTransform(): invalid SEQNUM " + string(buff), DgBase::Fatal);
 
            seqnums.insert(sNum);

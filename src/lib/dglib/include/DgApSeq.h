@@ -130,15 +130,15 @@ class DgApSeq : public DgBase {
             {
                seqVec_.clear();
                //copy(apSeq.begin(), apSeq.end(), seqVec_.begin());
-               for (int i = 0; i < apSeq.size(); i++)
-                  addAperture(apSeq[i]);
+               for(auto &a: apSeq)
+                  addAperture(a);
             }
 
       void setApSeq (const string& seqStr)
             {
                seqVec_.clear();
-               for (int i = 0; i < seqStr.length(); i++)
-                  addAperture(DgAperture(seqStr[i]));
+               for (auto &ss: seqStr)
+                  addAperture(DgAperture(ss));
             }
 
       void addAperture (const DgAperture& ap) { seqVec_.push_back(ap); }

@@ -132,7 +132,7 @@ DgColor::set (const std::string& name, int setComponentsFlag)
    name_ = name;
    if (!setComponentsFlag) return;
 
-   int red, green, blue;
+   unsigned int red, green, blue;
    const char* colStr = name.c_str();
    if (name.length() == 7 && colStr[0] == '#')
    {
