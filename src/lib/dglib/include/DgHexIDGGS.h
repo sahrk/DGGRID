@@ -30,12 +30,12 @@
 
 #include <cmath>
 
-#include "DgIDGGSBase.h"
+#include "DgIDGGS.h"
 #include "DgHexIDGG.h"
 #include "DgApSeq.h"
 
 ////////////////////////////////////////////////////////////////////////////////
-class DgHexIDGGS : public DgIDGGSBase {
+class DgHexIDGGS : public DgIDGGS {
 
    public:
 
@@ -43,10 +43,12 @@ class DgHexIDGGS : public DgIDGGSBase {
                const DgGeoSphRF& backFrame,
                const DgGeoCoord& vert0,
                long double azDegs, unsigned int aperture = 4, int nRes = 1,
-               const string& gridTopo = string("HEXAGON"),
                const string& name = "IDGGS", 
                const string& projType = "ISEA", 
-               const DgApSeq& apSeq = DgApSeq::defaultApSeq);
+               const DgApSeq& apSeq = DgApSeq::defaultApSeq,
+               bool isApSeq = false,
+               bool isMixed43 = false, int numAp4 = 0,
+               bool isSuperfund = false);
 
       // copy constructor and operator= not implemented
 

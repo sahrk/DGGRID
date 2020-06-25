@@ -40,7 +40,7 @@ DgInGDALFile::DgInGDALFile (const DgRFBase& rfIn, const string* fileNameIn,
                               DgReportLevel failLevel)
     : DgInLocTextFile (rfIn, fileNameIn, false, failLevel),
       forcePolyLine_ (false), forceCells_ (false),
-      gdalDataset_ (NULL), curLayer_ (0), oFeature_ (NULL), 
+      gdalDataset_ (NULL), oFeature_ (NULL), 
       insideMultiPoly_ (false), multiPolyIndex_ (0), numMultiPolyGeometries_ (0)
 {
     if (rfIn.vecAddress(DgDVec2D(0.0L, 0.0L)) == 0) {

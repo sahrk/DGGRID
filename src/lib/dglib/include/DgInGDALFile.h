@@ -63,7 +63,6 @@ private:
     bool forceCells_;
 
     GDALDataset* gdalDataset_;
-    int curLayer_;
     OGRFeature* oFeature_;
     bool insideMultiPoly_;
     int multiPolyIndex_;

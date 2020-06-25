@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file.
 
 All changes are by Kevin Sahr, unless otherwise noted.
 
+## [7.07] - 2020-06-24
+### Fixed
+- invalid gridStats in hexagon DGGS when not created using the factory
+method makeRF(); hex DGGS are now all sub-classes of DgHexIDGGS
+- fix inappropriately escaped bracket (r-barnes)
+- remove unused instance variable curLayer_ from DgInGDALFile
+
 ## [7.06] - 2020-04-10
 ### Added
 - a warning in MakeIncludes about potential gdal building issues 

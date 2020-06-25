@@ -27,20 +27,20 @@
 
 #include "DgRF.h"
 #include "DgLocVector.h"
-#include "DgIDGGS.h"
+#include "DgHexIDGGS.h"
 #include "DgIVec2D.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-class DgIDGGS3H : public DgIDGGS {
+class DgIDGGS3H : public DgHexIDGGS {
 
    public:
 
       DgIDGGS3H (DgRFNetwork& networkIn, const DgGeoSphRF& backFrameIn,
                const DgGeoCoord& vert0, long double azDegs, int nResIn = 1,
                const string& nameIn = "ISEA3H", const string& projType = "ISEA")
-         : DgIDGGS (networkIn, backFrameIn, vert0, azDegs, 3, nResIn,
-                "HEXAGON", nameIn, projType, false, 0, false) 
+         : DgHexIDGGS (networkIn, backFrameIn, vert0, azDegs, 3, nResIn,
+                nameIn, projType)
            { frequency_ = sqrtl(aperture()); }
 
       DgIDGGS3H (const DgIDGGS3H& rf);

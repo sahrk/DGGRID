@@ -55,29 +55,22 @@ DgIDGGS::makeRF (DgRFNetwork& network, const DgGeoSphRF& backFrame,
 
    if (gridTopo == "HEXAGON")
    {
-      if (!isMixed43In)
-      {
-         if (apertureIn == 4)
+      if (defaultName) {
+         if (!isMixed43In)
          {
-            if (defaultName) theName = projTypeIn + string("4H");
-            dg0 = new DgIDGGS4H(network, backFrame, vert0, azDegs, nRes, 
-                          theName, projTypeIn);
-         }
-         else if (apertureIn == 3)
-         {
-            if (defaultName) theName = projTypeIn + string("3H");
-            dg0 = new DgIDGGS3H(network, backFrame, vert0, azDegs, nRes, 
-                          theName, projTypeIn);
+            if (apertureIn == 4) 
+               theName = projTypeIn + string("4H");
+            else if (apertureIn == 3) 
+               theName = projTypeIn + string("3H");
+            else 
+               report(apErrStr, DgBase::Fatal);
          }
          else
-            report(apErrStr, DgBase::Fatal);
+            theName = projTypeIn + string("43H");
       }
-      else
-      {
-         if (defaultName) theName = projTypeIn + string("43H");
-         dg0 = new DgIDGGS43H(network, backFrame, vert0, azDegs, nRes, theName,
-                        projTypeIn, numAp4In, isSuperfundIn);
-      }
+
+      dg0 = new DgHexIDGGS(network, backFrame, vert0, azDegs, apertureIn, nRes,
+              theName, projTypeIn, apSeqIn, isApSeqIn, isMixed43In, numAp4In, isSuperfundIn);
    }
    else if (gridTopo == "DIAMOND")
    {
@@ -127,24 +120,29 @@ DgIDGGS::DgIDGGS (DgRFNetwork& network, const DgGeoSphRF& backFrame,
    
    undefLoc_ = makeLocation(undefAddress());
 
-   // create the DGGs
+   // create the DGGs for non-hex DGGS; the grids for hex DGGS are created
+   // in DgHexIDGGS.cpp
 
-   for (int i = 0; i < nRes; i++)
-   {
-      if (!isSuperfund)
-         (*grids_)[i] = new DgIDGG(this, backFrame, vert0, azDegs, aperture, i,
-            "DDG", gridTopo, projType, isMixed43, numAp4, isSuperfund);
-      else
-         (*grids_)[i] = new DgIDGG(this, backFrame, vert0, azDegs, aperture, i,
-            "DDG", gridTopo, projType, isMixed43, numAp4, isSuperfund,
-            actualRes2sfRes(i));
+   if (gridTopo == "HEXAGON") {
+         isAligned_ = true;
+         isCongruent_ = false;
+   } else {
+      for (int i = 0; i < nRes; i++) {
+         if (!isSuperfund)
+            (*grids_)[i] = new DgIDGG(this, backFrame, vert0, azDegs, aperture, i,
+               "DDG", gridTopo, projType, isMixed43, numAp4, isSuperfund);
+         else
+            (*grids_)[i] = new DgIDGG(this, backFrame, vert0, azDegs, aperture, i,
+               "DDG", gridTopo, projType, isMixed43, numAp4, isSuperfund,
+               actualRes2sfRes(i));
 
-      new Dg2WayResAddConverter<DgQ2DICoord, DgGeoCoord, long double> 
+         new Dg2WayResAddConverter<DgQ2DICoord, DgGeoCoord, long double> 
                                                    (*this, *(grids()[i]), i);
-   }
 
-   isAligned_ = idgg(0).isAligned();
-   isCongruent_ = idgg(0).isCongruent();
+         isAligned_ = idgg(0).isAligned();
+         isCongruent_ = idgg(0).isCongruent();
+      }
+   }
 
 } // DgIDGGS::DgIDGGS
 
