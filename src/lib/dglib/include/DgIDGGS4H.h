@@ -27,21 +27,21 @@
 
 #include "DgRF.h"
 #include "DgLocVector.h"
-#include "DgIDGGS.h"
+#include "DgHexIDGGS.h"
 #include "DgIVec2D.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-class DgIDGGS4H : public DgIDGGS {
+class DgIDGGS4H : public DgHexIDGGS {
 
    public:
 
       DgIDGGS4H (DgRFNetwork& networkIn, const DgGeoSphRF& backFrameIn,
                const DgGeoCoord& vert0, long double azDegs, int nResIn = 1,
                const string& nameIn = "ISEA4H", const string& projType = "ISEA")
-         : DgIDGGS (networkIn, backFrameIn, vert0, azDegs, 4, nResIn,
-                "HEXAGON", nameIn, projType, false, 0, false) 
-           { frequency_ = sqrt(aperture()); }
+         : DgHexIDGGS (networkIn, backFrameIn, vert0, azDegs, 4, nResIn,
+                nameIn, projType)
+           { frequency_ = sqrtl(aperture()); }
 
       DgIDGGS4H (const DgIDGGS4H& rf);
 

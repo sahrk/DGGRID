@@ -27,12 +27,12 @@
 
 #include "DgRF.h"
 #include "DgLocVector.h"
-#include "DgIDGGS.h"
+#include "DgHexIDGGS.h"
 #include "DgIVec2D.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-class DgIDGGS43H : public DgIDGGS {
+class DgIDGGS43H : public DgHexIDGGS {
 
    public:
 
@@ -40,8 +40,9 @@ class DgIDGGS43H : public DgIDGGS {
              const DgGeoCoord& vert0, long double azDegs, int nResIn = 1,
              const string& nameIn = "ISEA43H", const string& projType = "ISEA",
              int numAp4 = 0, bool isSuperfund = false)
-         : DgIDGGS (networkIn, backFrameIn, vert0, azDegs, 3, nResIn,
-                "HEXAGON", nameIn, projType, true, numAp4, isSuperfund)
+         : DgHexIDGGS (networkIn, backFrameIn, vert0, azDegs, 3, nResIn,
+                nameIn, projType, DgApSeq::defaultApSeq, false, true, 
+                numAp4, isSuperfund)
          { frequency_ = sqrtl(aperture()); }
 
       DgIDGGS43H (const DgIDGGS43H& rf);

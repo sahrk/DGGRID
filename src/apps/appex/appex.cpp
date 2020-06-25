@@ -49,6 +49,7 @@ int main (int argc, char* argv[])
 
    // get the resolution 7 dgg from the dggs
    const DgIDGG& dgg = idggs.idgg(7);
+   cout << dgg.gridStats() << endl;
 
    //////// now use the DGG /////////
 

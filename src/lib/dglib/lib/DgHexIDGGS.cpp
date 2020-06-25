@@ -36,17 +36,33 @@
 ////////////////////////////////////////////////////////////////////////////////
 DgHexIDGGS::DgHexIDGGS (DgRFNetwork& network, const DgGeoSphRF& backFrame,
                   const DgGeoCoord& vert0, long double azDegs, 
-                  unsigned int aperture, int nRes, const string& gridTopo, 
-                  const string& nameIn, const string& projType, 
-                  const DgApSeq& apSeqIn)
-        : DgIDGGSBase (network, backFrame, vert0, azDegs, nRes, aperture, nameIn, 
-                       gridTopo, projType, 0),
-          apSeq_ (apSeqIn)
+                  unsigned int aperture, int nRes, 
+                  const string& name, const string& projType, 
+                  const DgApSeq& apSeq, bool isApSeq,
+                  bool isMixed43, int numAp4, bool isSuperfund)
+        : DgIDGGS (network, backFrame, vert0, azDegs, aperture, nRes, 
+                       "HEXAGON", name, projType, isMixed43, numAp4,
+                       isSuperfund, isApSeq, apSeq),
+          apSeq_ (apSeq)
 {
-   if (gridTopo != "HEXAGON")
-      report("DgHexIDGGS::DgHexIDGGS must have HEXAGON topology", DgBase::Fatal);
-
-   if (nRes > apSeq().nRes() + 1) // remember +1 resolution for res 0
+   if (!isApSeq) // need to build the apSeq
+   {  
+      int r;
+         
+      if (isMixed43)
+      {  
+         for (r = 0; r < numAp4; r++)
+            apSeq_.addAperture(DgAperture(4));
+            
+         for (; r < nRes - 1; r++)
+            apSeq_.addAperture(DgAperture(3));
+      }
+      else
+         for (r = 0; r < nRes - 1; r++)
+            apSeq_.addAperture(DgAperture((aperture == 3) ? 3 : 4));
+   }
+         
+   if (nRes > apSeq_.nRes() + 1) // remember +1 resolution for res 0
       report("DgHexIDGGS::DgHexIDGGS res " + dgg::util::to_string(nRes) +
              " exceeds aperture sequence string length", DgBase::Fatal);
    
@@ -57,15 +73,15 @@ DgHexIDGGS::DgHexIDGGS (DgRFNetwork& network, const DgGeoSphRF& backFrame,
    // create the DGGs
 
    // make res 0 ap 4 so it will be Class I
-   (*grids_)[0] = new DgHexIDGG(*this, 4, 0, name() + dgg::util::to_string(0, 2));
+   (*grids_)[0] = new DgHexIDGG(*this, 4, 0, name + dgg::util::to_string(0, 2));
    //cout << "========================\nRES 0: " << hexIdgg(0);
 
    for (int r = 1; r < nRes; r++)
    {
-      int ap = apSeq().getAperture(r).aperture();
+      int ap = apSeq_.getAperture(r).aperture();
 
       (*grids_)[r] = new DgHexIDGG(*this, ap, r, 
-                                   name() + dgg::util::to_string(r, 2));
+                                   name + dgg::util::to_string(r, 2));
    //cout << "========================\nRES " << r << ": " << hexIdgg(r);
    }
 

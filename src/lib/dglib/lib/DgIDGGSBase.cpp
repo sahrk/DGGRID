@@ -39,40 +39,14 @@ DgIDGGSBase::makeRF (DgRFNetwork& network, const DgGeoSphRF& backFrame,
 {
    const DgIDGGSBase* dg0 = NULL;
 
-   if (gridTopo == "HEXAGON")
-   {
-      DgApSeq apSeq = apSeqIn;
-
-      if (!isApSeqIn) // need to build an apSeq
-      {
-         int r;
-
-         if (isMixed43In)
-         {
-            for (r = 0; r < numAp4In; r++)
-               apSeq.addAperture(DgAperture(4));
-
-            for (; r < nResIn - 1; r++)
-               apSeq.addAperture(DgAperture(3));
-         }
-         else
-            for (r = 0; r < nResIn - 1; r++)
-               apSeq.addAperture(DgAperture((apertureIn == 3) ? 3 : 4));
-      }
-         
-      //cout << "\nNEW HEX GRIDS: nResIn: " << nResIn << " apSeq: " << apSeq << endl;
+   if (gridTopo == "HEXAGON") 
       dg0 = new DgHexIDGGS(network, backFrame, vert0, azDegs, apertureIn, nResIn,
-              gridTopo, name, projTypeIn, apSeq); 
-
-      //cout << "\nIN MAKERF\n";
-      //cout << *dg0 << endl;
-   }
+            name, projTypeIn, apSeqIn, isApSeqIn, isMixed43In, numAp4In, 
+            isSuperfundIn); 
    else
-   {
       dg0 = DgIDGGS::makeRF(network, backFrame, vert0, azDegs, 
             apertureIn, nResIn, gridTopo, name, projTypeIn, isMixed43In, 
             numAp4In, isSuperfundIn);
-   }
 
    return dg0;
 
