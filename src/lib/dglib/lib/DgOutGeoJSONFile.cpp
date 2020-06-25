@@ -99,7 +99,7 @@ DgOutGeoJSONFile::insert (DgLocation& loc, const string* label)
    rf().convert(&loc);
 
    o << "{\"type\":\"Feature\",";
-   o << "\"properties\":\{";
+   o << "\"properties\":{";
    if (label)
       o << "\"name\":" << *label;
    o << "},";
@@ -124,7 +124,7 @@ DgOutGeoJSONFile::insert (DgLocVector& vec, const string* label,
    rf().convert(vec);
 
    o << "{\"type\":\"Feature\",";
-   o << "\"properties\":\{";
+   o << "\"properties\":{";
    if (label)
       o << "\"name\":" << *label;
    o << "},";
@@ -157,7 +157,7 @@ DgOutGeoJSONFile::insert (DgPolygon& poly, const string* label,
    rf().convert(poly);
 
    o << "{\"type\":\"Feature\",";
-   o << "\"properties\":\{";
+   o << "\"properties\":{";
    if (label)
       o << "\"name\":" << *label;
    o << "},";
