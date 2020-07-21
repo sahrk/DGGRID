@@ -110,6 +110,11 @@ class DgLocVector : public DgLocBase {
    friend class DgConverterBase;
    friend class DgPoly;
 
+// USE_NUCELL is set in MakeIncludes
+#ifdef USE_NUCELL
+   friend class NuCellVector;
+#endif
+
 };
 
 ////////////////////////////////////////////////////////////////////////////////

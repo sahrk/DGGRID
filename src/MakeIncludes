@@ -1,19 +1,46 @@
 # MakeIncludes
 # Version 7.01 - Kevin Sahr, 9/30/19
 
-### these GDAL location variables must be correctly set ###
+### build with GDAL?
+# set to TRUE or FALSE
+BUILD_WITH_GDAL = TRUE
+#BUILD_WITH_GDAL = FALSE
+
+### if BUILD_WITH_GDAL these GDAL location variables must 
+### be correctly set
 # Users have reported problems building with gdal libraries
 # installed by other software systems. If you have problems
 # we advise installing the library directly from gdal.org
 # (on MacOS we recommend installing via MacPorts.org or 
 # brew.sh).
 
-# location of GDAL header files
-GDAL_HDR_DIR = /opt/local/include
-# location of libgdal.a
-GDAL_LIB = /opt/local/lib/libgdal.dylib
+ifeq ($(BUILD_WITH_GDAL),TRUE)
+   ### these GDAL location variables must be correctly set ###
+   # location of GDAL header files
+   GDAL_HDR_DIR = /opt/local/include
+   # location of libgdal.a
+   GDAL_LIB = /opt/local/lib/libgdal.dylib
+
+   # this flag sets the conditional compilation
+   GDAL_FLAG = -DUSE_GDAL
+
+   # format the locations for use in building
+   #GDAL_ADD_INC = -I$(GDAL_HDR_DIR)
+else
+   # not using GDAL, leave blank
+   GDAL_HDR_DIR =
+   GDAL_LIB =
+   GDAL_FLAG =
+   GDAL_ADD_INC =
+endif
 
 ### most users won't need to change anything below ###
+
+### flag NULIB settings
+## these are for future capabilities
+# set to TRUE or FALSE
+#NUCELL_FLAG = -DUSE_NUCELL
+NUCELL_FLAG =
 
 # compilers
 CCOMP = gcc 
@@ -29,7 +56,7 @@ ADD_CC_FLAGS = $(SHIP_CC_FLAGS)
 
 ### the variables below are used by the Makefiles ###
 # any extra C++ flags
-ADD_CPP_FLAGS = $(ADD_CC_FLAGS) -std=c++11
+ADD_CPP_FLAGS = $(ADD_CC_FLAGS) $(GDAL_FLAG) $(NUCELL_FLAG) -std=c++11
 
 # external include search paths 
 ADD_INC_DIRS = -I$(GDAL_HDR_DIR)

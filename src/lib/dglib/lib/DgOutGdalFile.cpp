@@ -24,6 +24,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+// USE_GDAL is set in MakeIncludes
+#ifdef USE_GDAL
+
 #include <sstream>
 #include <iostream>
 
@@ -282,3 +285,6 @@ DgOutGdalFile::insert (DgPolygon& poly, const string* label,
 	OGRFeature::DestroyFeature( feature );
     return *this;
 }
+
+#endif
+

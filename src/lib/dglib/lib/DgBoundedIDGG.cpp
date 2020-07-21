@@ -35,8 +35,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgBoundedIDGG::DgBoundedIDGG (const DgIDGGBase& IDGGin)
-   : DgBoundedRF<DgQ2DICoord, DgGeoCoord, long double> (IDGGin, IDGGin.firstAdd(), 
-          IDGGin.lastAdd(), IDGGin.undefAddress(), false), IDGG_ (IDGGin), 
+   : DgBoundedRF<DgQ2DICoord, DgGeoCoord, long double> (IDGGin, IDGGin.firstAdd(),
+          IDGGin.lastAdd(), IDGGin.undefAddress(), false), IDGG_ (IDGGin),
           bnd2D_ (0)
 {
 //cout << "********** DgBoundedIDGG::DgBoundedIDGG" << endl;
@@ -48,6 +48,9 @@ DgBoundedIDGG::DgBoundedIDGG (const DgIDGGBase& IDGGin)
       offsetPerQuad_ = (idgg().gridStats().nCells() - 2) / 10;
    else
    {
+      setFirstAdd(DgQ2DICoord(1, DgIVec2D(0, 0)));
+      setLastAdd(DgQ2DICoord(10, DgIVec2D(idgg().maxI(), idgg().maxJ())));
+
       if (idgg().gridTopo() == "TRIANGLE")
          offsetPerQuad_ = idgg().mag() * (idgg().maxJ() + 1);
       else

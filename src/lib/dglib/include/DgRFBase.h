@@ -41,6 +41,7 @@ class DgLocation;
 class DgLocVector;
 class DgDistanceBase;
 class DgAddressBase;
+class NuCell;
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgRFBase {
@@ -77,6 +78,12 @@ class DgRFBase {
 
       virtual DgLocation* createLocation (const DgLocation& loc,
                                           bool convert = false) const = 0;
+
+// USE_NUCELL is set in MakeIncludes
+#ifdef USE_NUCELL
+      virtual NuCell* createCell (const NuCell& cell,
+                                          bool convert = false) const = 0;
+#endif
 
       void setName (const string& nameIn) { name_ = nameIn; }
       
@@ -195,6 +202,7 @@ class DgRFBase {
    friend class DgConverterBase;
    friend class DgRFNetwork;
    friend class DgIdentityConverter;
+   friend class NuCell;
 };
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -36,6 +36,7 @@ using namespace std;
 
 class DgConverterBase;
 class DgLocation;
+class NuCell;
 
 ////////////////////////////////////////////////////////////////////////////////
 template <class A, class D> class DgRF : public DgRFBase {
@@ -54,6 +55,11 @@ template <class A, class D> class DgRF : public DgRFBase {
 
       virtual DgLocation* createLocation (const DgLocation& loc,
                                           bool convert = false) const;
+
+// USE_NUCELL is set in MakeIncludes
+#ifdef USE_NUCELL
+      virtual NuCell* createCell (const NuCell& cell, bool convert = false) const;
+#endif
 
       virtual DgLocation* makeLocation (const A& addIn) const;
 

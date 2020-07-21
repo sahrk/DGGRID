@@ -73,6 +73,8 @@ class DgDiscRFS2D : public DgDiscRFS<DgIVec2D, DgDVec2D, long double> {
 
    protected:
 
+      void createSubConverters (void);
+
       // remind users of the pure virtual functions remaining from above
 
       virtual void setAddParents (const DgResAdd<DgIVec2D>& add,

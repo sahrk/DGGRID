@@ -35,6 +35,8 @@
 using namespace std;
 
 class DgDistanceBase;
+class NuCell;
+class NuCellVector;
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgLocation : public DgLocBase {
@@ -91,17 +93,19 @@ class DgLocation : public DgLocBase {
 
       virtual void convertTo (const DgRFBase& rf) { rf.convert(this); }
 
-   private:
-
       DgLocation (const DgRFBase& rfIn, DgAddressBase* addIn) 
          : DgLocBase (rfIn),
            address_ (addIn) {}
+
+   protected:
 
       DgAddressBase* address_;
 
    friend class DgRFBase;
    friend class DgConverterBase;
    friend class DgLocVector;
+   friend class NuCell;
+   friend class DgCellVector;
 
 };
 

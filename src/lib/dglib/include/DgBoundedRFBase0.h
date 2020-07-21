@@ -18,31 +18,31 @@
 *******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
-// DgBoundedRFBase.h: DgBoundedRFBase class definitions
+// DgBoundedRFBase0.h: DgBoundedRFBase0 class definitions
 //
-// Version 7.0 - Kevin Sahr, 12/14/14
-// Version 6.1 - Kevin Sahr, 5/23/13
+// Kevin Sahr, 7/20/20
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef DGBOUNDEDRFBASE_H
-#define DGBOUNDEDRFBASE_H
+#ifndef DGBOUNDEDRFBASE0_H
+#define DGBOUNDEDRFBASE0_H
 
-#include "DgBoundedRFBase0.h"
 #include "DgDiscRF.h"
 
 class DgLocation;
 class DgPolygon;
 
 ////////////////////////////////////////////////////////////////////////////////
-template<class B, class DB> class DgBoundedRFBase : public DgBoundedRFBase0 {
+class DgBoundedRFBase0 {
 
    public:
+   
+      virtual ~DgBoundedRFBase0 (void) { }
       
-      // new abstract methods
-      virtual const DgRF<B, DB>& backFrame (void) const = 0;
-
-      // abstract methods from above
+      const DgRFBase& rf (void) const { return rf_; }
+      
+      operator const DgRFBase& (void) const { return rf(); }
+      
       virtual bool validLocation (const DgLocation& loc, 
                                   bool convert = true) const = 0;
 
@@ -51,12 +51,38 @@ template<class B, class DB> class DgBoundedRFBase : public DgBoundedRFBase0 {
                        
       virtual DgLocation& decrementLocation (DgLocation& loc, 
                                              bool convert = true) const = 0; 
+                                     
+      const DgLocation& first (void) const { return first_; }
+      const DgLocation& last  (void) const { return last_; }
+      const DgLocation& end   (void) const { return end_; }
+
+      unsigned long long int size (void) const { return size_; }
+      bool validSize (void) const { return validSize_; }
+
+      bool zeroBased (void) const { return zeroBased_; }
+      void setZeroBased (bool zBasedIn) { zeroBased_ = zBasedIn; }
 
       virtual unsigned long long int seqNum (const DgLocation& loc,
                                         bool convert = true) const = 0; 
 
+      virtual bool lessThan (const DgLocation& loc1, 
+                     const DgLocation& loc2, bool convert = true) const
+                 { return (seqNum(loc1, convert) < seqNum(loc2, convert)); }
+
+      virtual operator string (void) const
+      {
+         string s = "=== DgBoundedRFBase0: size: " + dgg::util::to_string(size());
+         s += " zeroBased: " + dgg::util::to_string(zeroBased());
+         s += "\n   -- first: " + first().asString();
+         s += "\n   -- last: " + last().asString();
+
+         return s;
+      } 
+
       virtual DgLocation* locFromSeqNum (unsigned long long int sNum) const = 0;
       
+      // provide a generic interface to the discrete grid functionality
+
       virtual string dist2str (const long long int& dist) const = 0;
       virtual long double dist2dbl (const long long int& dist) const = 0;
 
@@ -85,12 +111,31 @@ template<class B, class DB> class DgBoundedRFBase : public DgBoundedRFBase0 {
 
    protected:
 
-      DgBoundedRFBase (const DgRFBase& rfIn, const DgLocation& firstIn, 
+      DgBoundedRFBase0 (const DgRFBase& rfIn, const DgLocation& firstIn, 
                        const DgLocation& lastIn, const DgLocation& endIn,
                        bool zBasedIn = true)
-         : DgBoundedRFBase0(rfIn, firstIn, lastIn, endIn, zBasedIn) { }
+         : size_(0), validSize_(false), rf_ (rfIn), 
+	   first_ (firstIn), last_ (lastIn), end_ (endIn),
+	   zeroBased_ (zBasedIn) {}
+         
+   protected:
+
+      unsigned long long int size_;
+      bool validSize_;
+   
+      const DgRFBase& rf_;
+      DgLocation first_;
+      DgLocation last_;
+      DgLocation end_;
+
+      bool zeroBased_; // seq starts with 0 (or 1)?
 
 }; 
+
+////////////////////////////////////////////////////////////////////////////////
+template<class B, class DB> inline
+ostream& operator<< (ostream& stream, const DgBoundedRFBase0& rfIn)
+{ return stream << "Bnd-" << rfIn.rf(); }
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
