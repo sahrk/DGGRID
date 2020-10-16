@@ -22,9 +22,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <cstdlib>
+#include <dglib/DgBase.h>
 
-#include "DgBase.h"
+#include <cstdlib>
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -40,7 +40,7 @@ void report (const string& message, DgBase::DgReportLevel level)
 // followed by a newline and flush. If level is Warning, "WARNING" is
 // printed to stderr followed by the message, newline, and flush. If level
 // is Fatal, "FATAL ERROR" is printed to stderr, followed by the message,
-// newline, and flush, and then the program is exited. 
+// newline, and flush, and then the program is exited.
 //
 ////////////////////////////////////////////////////////////////////////////////
 {
@@ -96,7 +96,7 @@ DgBase::testArgEqual (int argc, int expected, const string& message,
       ::report(message, level);
       return false;
    }
-   else 
+   else
    {
       return true;
    }
@@ -106,7 +106,7 @@ DgBase::testArgEqual (int argc, int expected, const string& message,
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 bool
-DgBase::testArgEqual (int argc, char* argv[], int expected, 
+DgBase::testArgEqual (int argc, char* argv[], int expected,
                       const string& message)
 {
    if ((argc - 1) != expected)
@@ -119,7 +119,7 @@ DgBase::testArgEqual (int argc, char* argv[], int expected,
 
       return false;
    }
-   else 
+   else
    {
       return true;
    }
@@ -137,7 +137,7 @@ DgBase::testArgMin (int argc, int minExpected, const string& message,
       ::report(message, level);
       return false;
    }
-   else 
+   else
    {
       return true;
    }
@@ -147,7 +147,7 @@ DgBase::testArgMin (int argc, int minExpected, const string& message,
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 bool
-DgBase::testArgMin (int argc, char* argv[], int minExpected, 
+DgBase::testArgMin (int argc, char* argv[], int minExpected,
                      const string& message)
 {
    if ((argc - 1) < minExpected)
@@ -160,7 +160,7 @@ DgBase::testArgMin (int argc, char* argv[], int minExpected,
 
       return false;
    }
-   else 
+   else
    {
       return true;
    }

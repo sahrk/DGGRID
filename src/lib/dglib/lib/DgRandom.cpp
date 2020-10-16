@@ -23,7 +23,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "DgRandom.h"
+#include <dglib/DgRandom.h>
 
 static double Mother (unsigned long *pSeed);
 

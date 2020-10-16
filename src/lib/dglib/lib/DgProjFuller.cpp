@@ -25,7 +25,7 @@
 #include <cmath>
 #include <climits>
 
-#include "DgProjFuller.h"
+#include <dglib/DgProjFuller.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 DgProjFullerInv::DgProjFullerInv (const DgRF<DgProjTriCoord, long double>& from,

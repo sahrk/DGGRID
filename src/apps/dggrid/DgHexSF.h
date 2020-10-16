@@ -29,7 +29,7 @@
 
 #include <string>
 #include <iostream>
-#include "DgIVec3D.h"
+#include <dglib/DgIVec3D.h>
 
 using namespace std;
 

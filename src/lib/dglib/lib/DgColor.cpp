@@ -25,9 +25,9 @@
 #include <cstdio>
 #include <vector>
 
-#include "DgBase.h"
-#include "DgColor.h"
-#include "DgUtil.h"
+#include <dglib/DgBase.h>
+#include <dglib/DgColor.h>
+#include <dglib/DgUtil.h>
 
 const float DgColor::undefColor = -1.0;
 

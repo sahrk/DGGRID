@@ -24,8 +24,8 @@
 
 #include <cmath>
 
-#include "DgProjGnomonicRF.h"
-#include "DgEllipsoidRF.h"
+#include <dglib/DgProjGnomonicRF.h>
+#include <dglib/DgEllipsoidRF.h>
 #include "proj4.h"
 
 #define EPS10 1.e-10L

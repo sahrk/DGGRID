@@ -27,12 +27,12 @@
 #include <fstream>
 #include <sys/stat.h>
 
-#include "DgOutShapefile.h"
-#include "DgLocList.h"
-#include "DgPolygon.h"
-#include "DgLocation.h"
-#include "DgCell.h"
-#include "DgGeoSphRF.h"
+#include <dglib/DgOutShapefile.h>
+#include <dglib/DgLocList.h>
+#include <dglib/DgPolygon.h>
+#include <dglib/DgLocation.h>
+#include <dglib/DgCell.h>
+#include <dglib/DgGeoSphRF.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

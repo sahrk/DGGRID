@@ -30,18 +30,19 @@
 #ifndef DGGRID_H
 #define DGGRID_H
 
+#include <dglib/DgParamList.h>
+#include <dglib/DgEllipsoidRF.h>
+#include <dglib/DgRandom.h>
+#include <dglib/DgOutLocFile.h>
+#include <dglib/DgIDGG.h>
+#include <dglib/DgInShapefileAtt.h>
+#include <dglib/DgApSeq.h>
+#include "util.h"
+#include <dglib/DgRunningStats.h>
+#include <dglib/DgGridTopo.h>
+
 #include <iostream>
 #include <set>
-#include "DgParamList.h"
-#include "DgEllipsoidRF.h"
-#include "DgRandom.h"
-#include "DgOutLocFile.h"
-#include "DgIDGG.h"
-#include "DgInShapefileAtt.h"
-#include "DgApSeq.h"
-#include "util.h"
-#include "DgRunningStats.h"
-#include "DgGridTopo.h"
 
 using namespace std;
 
@@ -97,7 +98,7 @@ void doTable (MainParam& dp, DgGridPList& plist);
 ////////////////////////////////////////////////////////////////////////////////
 //// the parameter structures ////
 // no attempt to be subtle here; these contain the "global" parameters for
-// the specified dggrid operation 
+// the specified dggrid operation
 
 // common parameters
 
@@ -116,7 +117,7 @@ class MainParam {
       string operation;             // operation for dggrid to perform
       string dggsType;              // preset DGGS type
       dgg::topo::DgGridTopology gridTopo;      // Diamond/Hexagon/Triangle
-      dgg::topo::DgGridMetric   gridMetric;    // D4/D8 
+      dgg::topo::DgGridMetric   gridMetric;    // D4/D8
       int aperture;      // aperture
       string projType;              // projection type
       int res;           // resolution (may be adjusted)
@@ -127,13 +128,13 @@ class MainParam {
       int numGrids;      // number of grids to generate
       int curGrid;       // grid counter
       bool lastGrid;                    // last grid?
-      DgGeoCoord vert0;                 // placement vert 
+      DgGeoCoord vert0;                 // placement vert
       long double azimuthDegs;               // orientation azimuth
       long double earthRadius;               // earth radius in km
       string datum;               // datum used to determine the earthRadius
       int precision;     // number of digits after decimal pt to output
       int verbosity;     // debugging info verbosity
-      bool megaVerbose;                 // 
+      bool megaVerbose;                 //
       bool useMother;                   // use Mother RNG?
       string metaOutFileNameBase;
       string metaOutFileName;
@@ -156,7 +157,7 @@ class MainParam {
 // grid generation parameter structure
 
 class GridGenParam : public MainParam {
-   
+
    public:
 
       GridGenParam (DgParamList& plist);
@@ -223,15 +224,15 @@ class GridGenParam : public MainParam {
 
       DgRunningStats runStats;
 
-      bool concatPtOut;         
-      char formatStr[50];         
-      bool useEnumLbl;         
-      unsigned long long int nCellsTested; 
-      unsigned long long int nCellsAccepted;         
-      unsigned long long int nCellsOutputToFile; // cells output to current file 
+      bool concatPtOut;
+      char formatStr[50];
+      bool useEnumLbl;
+      unsigned long long int nCellsTested;
+      unsigned long long int nCellsAccepted;
+      unsigned long long int nCellsOutputToFile; // cells output to current file
       unsigned long int nOutputFile; // # of current output file
 
-      unsigned long int updateFreq; // how often to output updates         
+      unsigned long int updateFreq; // how often to output updates
       unsigned long int maxCellsPerFile; // max cells in a single output file
       unsigned long int outFirstSeqNum;  // start generating with this seqnum
       unsigned long int outLastSeqNum;   //  generate through this one
@@ -240,7 +241,7 @@ class GridGenParam : public MainParam {
 
       bool buildShapeFileAttributes; // create fields for shapefile output
       bool buildClipFileAttributes;  // use clipping shape files (vs. others)
-     
+
       int shapefileDefaultInt;
       long double shapefileDefaultDouble;
       string shapefileDefaultString;
@@ -257,11 +258,11 @@ class GridGenParam : public MainParam {
 // bin point values parameter structure
 
 class BinValsParam : public MainParam {
-   
+
    public:
 
       BinValsParam (DgParamList& plist);
-     
+
       ~BinValsParam ();
 
       void dump (void);   // output to cout
@@ -285,7 +286,7 @@ class BinValsParam : public MainParam {
 // bin point presence parameter structure
 
 class BinPresenceParam : public MainParam {
-   
+
    public:
 
       BinPresenceParam (DgParamList& plist);
@@ -315,7 +316,7 @@ class BinPresenceParam : public MainParam {
 // transform addresses parameter structure
 
 class TransformParam : public MainParam {
-   
+
    public:
 
       TransformParam (DgParamList& plist);

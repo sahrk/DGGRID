@@ -22,15 +22,15 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <cmath>
+#include <dglib/DgGridTopo.h>
 
-#include "DgGridTopo.h"
+#include <cmath>
 
 namespace dgg { namespace topo {
 
-static const string topoStrings[] = 
+static const string topoStrings[] =
                { "HEXAGON", "TRIANGLE", "SQUARE", "DIAMOND", "INVALID" };
-static const string metricStrings[] = 
+static const string metricStrings[] =
                { "D3", "D4", "D6", "D8", "INVALID" };
 
 DgGridTopology stringToGridTopology (const string& str) {

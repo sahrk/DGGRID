@@ -24,9 +24,9 @@
 
 #include <cfloat>
 
-#include "DgBase.h"
-#include "DgDVec2D.h"
-#include "DgDVec3D.h"
+#include <dglib/DgBase.h>
+#include <dglib/DgDVec2D.h>
+#include <dglib/DgDVec3D.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 

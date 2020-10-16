@@ -22,8 +22,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "DgDmdD4Grid2D.h"
-#include "DgPolygon.h"
+#include <dglib/DgDmdD4Grid2D.h>
+#include <dglib/DgPolygon.h>
 
 const long double DgDmdD4Grid2D::yOff_ = M_SQRT3 / 4.0L;
 const long double DgDmdD4Grid2D::yOff2_ = yOff_ * 2.0L;

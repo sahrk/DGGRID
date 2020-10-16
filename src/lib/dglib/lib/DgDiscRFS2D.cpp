@@ -25,24 +25,24 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include <dglib/DgDiscRFS2D.h>
+#include <dglib/DgDmdD4Grid2DS.h>
+#include <dglib/DgDmdD8Grid2DS.h>
+#include <dglib/DgHexGrid2DS.h>
+#include <dglib/DgSeriesConverter.h>
+#include <dglib/DgSqrD4Grid2DS.h>
+#include <dglib/DgSqrD8Grid2DS.h>
+#include <dglib/DgTriGrid2DS.h>
+
 #include <vector>
 
-#include "DgDiscRFS2D.h"
-#include "DgDmdD4Grid2DS.h"
-#include "DgDmdD8Grid2DS.h"
-#include "DgHexGrid2DS.h"
-#include "DgSqrD4Grid2DS.h"
-#include "DgSqrD8Grid2DS.h"
-#include "DgTriGrid2DS.h"
-#include "DgSeriesConverter.h"
-
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-DgDiscRFS2D* 
+DgDiscRFS2D*
 DgDiscRFS2D::makeRF (DgRFNetwork& net, const DgRF<DgDVec2D, long double>& cc0,
    int nRes, unsigned int aperture, dgg::topo::DgGridTopology gridTopo,
-   dgg::topo::DgGridMetric gridMetric, bool isCongruent, bool isAligned, 
-   const string& name, bool isMixed43, int numAp4, bool isSuperfund, 
+   dgg::topo::DgGridMetric gridMetric, bool isCongruent, bool isAligned,
+   const string& name, bool isMixed43, int numAp4, bool isSuperfund,
    bool isApSeq, const DgApSeq& apSeq)
 {
    DgDiscRFS2D* dg0 = 0;
@@ -69,7 +69,7 @@ DgDiscRFS2D::makeRF (DgRFNetwork& net, const DgRF<DgDVec2D, long double>& cc0,
       dg0 = DgTriGrid2DS::makeRF(net, cc0, nRes, aperture, isCongruent,
                              isAligned, "Tri2DS");
    } else {
-      report("DgDiscRFS2D::makeRF() invalid or unimplemented grid topology/metric: " 
+      report("DgDiscRFS2D::makeRF() invalid or unimplemented grid topology/metric: "
         + to_string(gridTopo) + "/" + to_string(gridMetric), DgBase::Fatal);
    }
 
@@ -85,7 +85,7 @@ DgDiscRFS2D::createSubConverters (void) {
 
    vector<const DgConverterBase*> sc;
    for (int i = 0; i < nRes(); i++)
-   {  
+   {
       // create converter grids[i] -> backFrame
       sc.push_back(network().getConverter(*grids()[i], grids()[i]->backFrame()));
       sc.push_back(network().getConverter(grids()[i]->backFrame(), backFrame()));

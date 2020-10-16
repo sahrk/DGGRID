@@ -24,7 +24,7 @@
 
 #include <cmath>
 
-#include "DgUtil.h"
+#include <dglib/DgUtil.h>
 
 namespace dgg { namespace util {
 

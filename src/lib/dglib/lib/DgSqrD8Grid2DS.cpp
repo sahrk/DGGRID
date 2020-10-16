@@ -24,10 +24,10 @@
 
 #include <cmath>
 
-#include "DgContCartRF.h"
-#include "DgDiscRF.h"
-#include "DgSqrD8Grid2D.h"
-#include "DgSqrD8Grid2DS.h"
+#include <dglib/DgContCartRF.h>
+#include <dglib/DgDiscRF.h>
+#include <dglib/DgSqrD8Grid2D.h>
+#include <dglib/DgSqrD8Grid2DS.h>
 
 using namespace dgg::topo;
 

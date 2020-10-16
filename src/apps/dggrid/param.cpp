@@ -25,10 +25,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "dggrid.h"
-#include "DgIDGGSBase.h"
-#include "DgEllipsoidRF.h"
-#include "DgSuperfund.h"
-#include "DgOutKMLfile.h"
+#include <dglib/DgIDGGSBase.h>
+#include <dglib/DgEllipsoidRF.h>
+#include <dglib/DgSuperfund.h>
+#include <dglib/DgOutKMLfile.h>
 
 using namespace dgg::topo;
 

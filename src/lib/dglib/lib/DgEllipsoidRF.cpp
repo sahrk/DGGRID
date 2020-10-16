@@ -22,9 +22,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "DgEllipsoidRF.h"
-#include "DgGeoSphRF.h"
-#include "DgPolygon.h"
+#include <dglib/DgEllipsoidRF.h>
+#include <dglib/DgGeoSphRF.h>
+#include <dglib/DgPolygon.h>
 
 const DgGeoCoord DgGeoCoord::undefGeoCoord(LDBL_MAX, LDBL_MAX);
 const long double DgGeoCoord::tolerance = 0.0000000005L;

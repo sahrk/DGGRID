@@ -25,12 +25,12 @@
 #include <sstream>
 #include <iostream>
 
-#include "DgOutKMLfile.h"
-#include "DgLocList.h"
-#include "DgPolygon.h"
-#include "DgLocation.h"
-#include "DgCell.h"
-#include "DgGeoSphRF.h"
+#include <dglib/DgOutKMLfile.h>
+#include <dglib/DgLocList.h>
+#include <dglib/DgPolygon.h>
+#include <dglib/DgLocation.h>
+#include <dglib/DgCell.h>
+#include <dglib/DgGeoSphRF.h>
 
 DgOutKMLfile::DgOutKMLfile(const DgGeoSphDegRF& rf, const std::string& filename, 
     int precision, bool isPointFile, const string& colorIn, int widthIn, 

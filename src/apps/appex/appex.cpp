@@ -27,7 +27,7 @@
 
 using namespace std;
 
-#include "DgIDGGS4H.h"
+#include <dglib/DgIDGGS4H.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 int main (int argc, char* argv[])

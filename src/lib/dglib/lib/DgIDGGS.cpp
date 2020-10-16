@@ -25,13 +25,13 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "DgIDGGS.h"
-#include "DgIDGGS3H.h"
-#include "DgIDGGS43H.h"
-#include "DgIDGGS4H.h"
-#include "DgIDGGS4D.h"
-#include "DgIDGGS4T.h"
-#include "DgSuperfund.h"
+#include <dglib/DgIDGGS.h>
+#include <dglib/DgIDGGS3H.h>
+#include <dglib/DgIDGGS43H.h>
+#include <dglib/DgIDGGS4H.h>
+#include <dglib/DgIDGGS4D.h>
+#include <dglib/DgIDGGS4T.h>
+#include <dglib/DgSuperfund.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 const DgIDGGS*

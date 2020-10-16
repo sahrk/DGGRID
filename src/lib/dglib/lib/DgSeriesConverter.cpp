@@ -27,9 +27,9 @@
 
 using namespace std;
 
-#include "DgBase.h"
-#include "DgString.h"
-#include "DgSeriesConverter.h"
+#include <dglib/DgBase.h>
+#include <dglib/DgString.h>
+#include <dglib/DgSeriesConverter.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 DgSeriesConverter::DgSeriesConverter 

@@ -24,39 +24,39 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <cmath>
-#include <climits>
-#include <cfloat>
+#include <dglib/DgBoundedIDGG.h>
+#include <dglib/DgDmdD4Grid2D.h>
+#include <dglib/DgDmdD4Grid2DS.h>
+#include <dglib/DgDmdD8Grid2D.h>
+#include <dglib/DgDmdD8Grid2DS.h>
+#include <dglib/DgDmdIDGG.h>
+#include <dglib/DgIDGGS4D.h>
+#include <dglib/DgRadixString.h>
+#include <dglib/DgSeriesConverter.h>
 
-#include "DgDmdIDGG.h"
-#include "DgIDGGS4D.h"
-#include "DgDmdD4Grid2D.h"
-#include "DgDmdD8Grid2D.h"
-#include "DgDmdD4Grid2DS.h"
-#include "DgDmdD8Grid2DS.h"
-#include "DgSeriesConverter.h"
-#include "DgRadixString.h"
-#include "DgBoundedIDGG.h"
+#include <cfloat>
+#include <climits>
+#include <cmath>
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgDmdIDGG::DgDmdIDGG (const DgIDGGS4D& dggs, unsigned int aperture,
-              int res, const string& name, DgGridMetric gridMetric, 
+              int res, const string& name, DgGridMetric gridMetric,
               unsigned int precision)
-   : DgIDGGBase (&dggs, dggs.geoRF(), aperture, res, name, Diamond, gridMetric, 
+   : DgIDGGBase (&dggs, dggs.geoRF(), aperture, res, name, Diamond, gridMetric,
                  precision),
 	   scaleFac_ (1.0L)
-{ 
+{
    initialize();
 
 } // DgDmdIDGG::DgDmdIDGG
 
 ////////////////////////////////////////////////////////////////////////////////
 DgDmdIDGG::DgDmdIDGG (const DgDmdIDGG& rfIn)
-   : DgIDGGBase (rfIn.dggs(), rfIn.geoRF(), rfIn.aperture(), rfIn.res(), 
+   : DgIDGGBase (rfIn.dggs(), rfIn.geoRF(), rfIn.aperture(), rfIn.res(),
                  rfIn.name(), Diamond, rfIn.gridMetric(), rfIn.precision()),
 	scaleFac_ (rfIn.scaleFac())
-{ 
+{
    initialize();
 
 } // DgDmdIDGG::DgDmdIDGG
@@ -65,8 +65,8 @@ DgDmdIDGG::DgDmdIDGG (const DgDmdIDGG& rfIn)
 DgDmdIDGG::~DgDmdIDGG (void) { }
 
 ////////////////////////////////////////////////////////////////////////////////
-const DgIDGGS4D& 
-DgDmdIDGG::dmdDggs (void) const 
+const DgIDGGS4D&
+DgDmdIDGG::dmdDggs (void) const
 { return *(static_cast<const DgIDGGS4D*>(dggs())); }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -75,16 +75,16 @@ DgDmdIDGG::initialize (void)
 {
    // verify parameter validity
 
-   string apErrStr = string("DgDmdIDGG::initialize(): invalid aperture " + 
-             dgg::util::to_string(aperture()) + string(" for grid topo ") + 
+   string apErrStr = string("DgDmdIDGG::initialize(): invalid aperture " +
+             dgg::util::to_string(aperture()) + string(" for grid topo ") +
              to_string(gridTopo()));
 
    if (gridTopo() != Diamond)
-      report("DgDmdIDGG::initialize(): invalid grid topo " + 
+      report("DgDmdIDGG::initialize(): invalid grid topo " +
              to_string(gridTopo()), DgBase::Fatal);
 
    if (aperture() != 4) report(apErrStr, DgBase::Fatal);
- 
+
    // create some internal data structures
    setUndefLoc(makeLocation(undefAddress()));
    sphIcosa_ = new DgSphIcosa(vert0(), azDegs());
@@ -104,7 +104,7 @@ DgDmdIDGG::initialize (void)
       parentNCells = parentIDGG.gridStats().nCells();
    }
 
-   // set-up local network to scale so that quad (and consequently dmd) edge 
+   // set-up local network to scale so that quad (and consequently dmd) edge
    // length is 1.0
    ccFrame_ = DgContCartRF::makeRF(locNet_, name() + "CC1");
    if (gridMetric() == D4)
@@ -150,8 +150,8 @@ DgDmdIDGG::initialize (void)
       // a = globeArea / (#cells - 2);
       gridStats_.setCellAreaKM(DgGeoSphRF::totalAreaKM() / gridStats_.nCells());
 
-   gridStats_.setCLS(2.0L * 2.0L * DgGeoSphRF::earthRadiusKM() * 
-                     asinl(sqrt(gridStats_.cellAreaKM() / M_PI) / 
+   gridStats_.setCLS(2.0L * 2.0L * DgGeoSphRF::earthRadiusKM() *
+                     asinl(sqrt(gridStats_.cellAreaKM() / M_PI) /
                      (2.0L * DgGeoSphRF::earthRadiusKM())));
 
 } // DgDmdIDGG::initialize

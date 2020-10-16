@@ -13,8 +13,9 @@ icosahedral discrete global grids (DGGs).
 
 Two directories should be included herein:
 
-- `src`: contains complete source code for __DGGRID__ (see `README.MAKE` for 
-     instructions on building the application and source code documentation)
+- `src`: contains complete source code for __DGGRID__ (see 
+     [INSTALL.md](INSTALL.md) for instructions on building the application 
+     and source code documentation)
 
 - `examples`: contains examples of using __DGGRID__ with pre-computed outputs
 

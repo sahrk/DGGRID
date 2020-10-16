@@ -24,10 +24,10 @@
 
 #include <climits>
 
-#include "DgBoundedRFS2D.h"
-#include "DgBoundedHexC2RF2D.h"
-#include "DgDiscRFS2D.h"
-#include "DgTriGrid2DS.h"
+#include <dglib/DgBoundedRFS2D.h>
+#include <dglib/DgBoundedHexC2RF2D.h>
+#include <dglib/DgDiscRFS2D.h>
+#include <dglib/DgTriGrid2DS.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

@@ -22,9 +22,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "DgBase.h"
-#include "DgString.h"
-#include "DgConverterBase.h"
+#include <dglib/DgBase.h>
+#include <dglib/DgString.h>
+#include <dglib/DgConverterBase.h>
 
 bool DgConverterBase::isTraceOn_ = false;
 ostream* DgConverterBase::traceStream_ = &cout;

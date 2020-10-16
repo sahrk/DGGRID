@@ -25,7 +25,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "DgInputStream.h"
+#include <dglib/DgInputStream.h>
 
 string DgInputStream::defaultDirectory_;
 

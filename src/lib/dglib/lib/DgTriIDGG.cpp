@@ -24,16 +24,16 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <cmath>
-#include <climits>
-#include <cfloat>
+#include <dglib/DgBoundedIDGG.h>
+#include <dglib/DgIDGGS4T.h>
+#include <dglib/DgRadixString.h>
+#include <dglib/DgSeriesConverter.h>
+#include <dglib/DgTriGrid2DS.h>
+#include <dglib/DgTriIDGG.h>
 
-#include "DgTriIDGG.h"
-#include "DgIDGGS4T.h"
-#include "DgTriGrid2DS.h"
-#include "DgSeriesConverter.h"
-#include "DgRadixString.h"
-#include "DgBoundedIDGG.h"
+#include <cfloat>
+#include <climits>
+#include <cmath>
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -41,18 +41,18 @@ DgTriIDGG::DgTriIDGG (const DgIDGGS4T& dggs, unsigned int aperture,
               int res, const string& name, unsigned int precision)
    : DgIDGGBase (&dggs, dggs.geoRF(), aperture, res, name, Triangle, D3, precision),
 	   scaleFac_ (1.0L)
-{ 
+{
    initialize();
 
 } // DgTriIDGG::DgTriIDGG
 
 ////////////////////////////////////////////////////////////////////////////////
 DgTriIDGG::DgTriIDGG (const DgTriIDGG& rfIn)
-   : DgIDGGBase (rfIn.dggs(), rfIn.geoRF(), rfIn.aperture(), 
+   : DgIDGGBase (rfIn.dggs(), rfIn.geoRF(), rfIn.aperture(),
                  rfIn.res(), rfIn.name(), rfIn.gridTopo(), rfIn.gridMetric(),
                  rfIn.precision()),
 	scaleFac_ (rfIn.scaleFac())
-{ 
+{
    initialize();
 
 } // DgTriIDGG::DgTriIDGG
@@ -61,8 +61,8 @@ DgTriIDGG::DgTriIDGG (const DgTriIDGG& rfIn)
 DgTriIDGG::~DgTriIDGG (void) { }
 
 ////////////////////////////////////////////////////////////////////////////////
-const DgIDGGS4T& 
-DgTriIDGG::triDggs (void) const 
+const DgIDGGS4T&
+DgTriIDGG::triDggs (void) const
 { return *(static_cast<const DgIDGGS4T*>(dggs())); }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -71,12 +71,12 @@ DgTriIDGG::initialize (void)
 {
    // verify parameter validity
 
-   string apErrStr = string("DgTriIDGG::initialize(): invalid aperture " + 
-                         dgg::util::to_string(aperture()) + 
+   string apErrStr = string("DgTriIDGG::initialize(): invalid aperture " +
+                         dgg::util::to_string(aperture()) +
                          string(" for grid topo ") + to_string(gridTopo()));
 
    if (gridTopo() != Triangle) {
-      report("DgTriIDGG::initialize(): invalid grid topo " + to_string(gridTopo()), 
+      report("DgTriIDGG::initialize(): invalid grid topo " + to_string(gridTopo()),
              DgBase::Fatal);
 
       if (aperture() != 4) report(apErrStr, DgBase::Fatal);
@@ -101,7 +101,7 @@ DgTriIDGG::initialize (void)
       parentNCells = parentIDGG.gridStats().nCells();
    }
 
-   // set-up local network to scale so that quad (and consequently tri) edge 
+   // set-up local network to scale so that quad (and consequently tri) edge
    // length is 1.0
    ccFrame_ = DgContCartRF::makeRF(locNet_, name() + "CC1");
    grid2DS_ = DgTriGrid2DS::makeRF(locNet_, ccFrame(), res() + 1, 4, true, false, name() + string("H2DS"));
@@ -144,8 +144,8 @@ DgTriIDGG::initialize (void)
    // a = globeArea / #cells
    gridStats_.setCellAreaKM(DgGeoSphRF::totalAreaKM() / gridStats_.nCells());
 
-   gridStats_.setCLS(2.0L * 2.0L * DgGeoSphRF::earthRadiusKM() * 
-                     asinl(sqrt(gridStats_.cellAreaKM() / M_PI) / 
+   gridStats_.setCLS(2.0L * 2.0L * DgGeoSphRF::earthRadiusKM() *
+                     asinl(sqrt(gridStats_.cellAreaKM() / M_PI) /
                      (2.0L * DgGeoSphRF::earthRadiusKM())));
 
 } // DgTriIDGG::initialize

@@ -25,21 +25,21 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include <dglib/DgContCartRF.h>
+#include <dglib/DgHexC2Grid2D.h>
+#include <dglib/DgHexC1Grid2D.h>
+#include <dglib/DgPolygon.h>
+#include <dglib/DgSeriesConverter.h>
+
 #include <cmath>
 
-#include "DgContCartRF.h"
-#include "DgHexC2Grid2D.h"
-#include "DgHexC1Grid2D.h"
-#include "DgPolygon.h"
-#include "DgSeriesConverter.h"
-
 ////////////////////////////////////////////////////////////////////////////////
-DgHexC2Grid2D::DgHexC2Grid2D (DgRFNetwork& networkIn, 
+DgHexC2Grid2D::DgHexC2Grid2D (DgRFNetwork& networkIn,
              const DgRF<DgDVec2D, long double>& ccFrameIn, const string& nameIn)
          : DgDiscRF2D (networkIn, ccFrameIn, nameIn, Hexagon, D3,
                  M_1_SQRT3, M_1_SQRT3, M_SQRT3_2, 1.0L)
-{ 
-   area_ = c(); 
+{
+   area_ = c();
 
    // create the surrogate hex grid: a class I hex grid rotated 30 degrees
 
@@ -162,7 +162,7 @@ DgHexC2Grid2D::setAddNeighborsBdry2 (const DgIVec2D& add, DgLocVector& vec) cons
 } // void DgHexC2Grid2D::setAddNeighborsBdry2
 
 ////////////////////////////////////////////////////////////////////////////////
-DgIVec2D 
+DgIVec2D
 DgHexC2Grid2D::quantify (const DgDVec2D& point) const
 {
    DgLocation* tmpLoc = backFrame().makeLocation(point);
@@ -180,7 +180,7 @@ DgHexC2Grid2D::quantify (const DgDVec2D& point) const
 } // DgIVec2D DgHexC2Grid2D::quantify
 
 ////////////////////////////////////////////////////////////////////////////////
-DgDVec2D 
+DgDVec2D
 DgHexC2Grid2D::invQuantify (const DgIVec2D& add) const
 {
    DgLocation* tmpLoc = substrate().makeLocation(add);

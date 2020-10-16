@@ -24,13 +24,13 @@
 
 #include <sstream>
 
-#include "DgInShapefileAtt.h"
-#include "DgLocList.h"
-#include "DgPolygon.h"
-#include "DgPolygon.h"
-#include "DgLocation.h"
-#include "DgCell.h"
-#include "DgContCartRF.h"
+#include <dglib/DgInShapefileAtt.h>
+#include <dglib/DgLocList.h>
+#include <dglib/DgPolygon.h>
+#include <dglib/DgPolygon.h>
+#include <dglib/DgLocation.h>
+#include <dglib/DgCell.h>
+#include <dglib/DgContCartRF.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 DgInShapefileAtt::DgInShapefileAtt (const DgGeoSphRF& geoRFIn,

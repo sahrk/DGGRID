@@ -27,10 +27,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "DgBase.h"
-#include "DgCell.h"
-#include "DgLocation.h"
-#include "DgPolygon.h"
+#include <dglib/DgBase.h>
+#include <dglib/DgCell.h>
+#include <dglib/DgLocation.h>
+#include <dglib/DgPolygon.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 void 

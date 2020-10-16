@@ -33,14 +33,14 @@
 using namespace std;
 
 #include "dggrid.h"
-#include "DgIDGGBase.h"
-#include "DgIDGGSBase.h"
-#include "DgIDGG.h"
-#include "DgBoundedIDGG.h"
-#include "DgInputStream.h"
-#include "DgOutputStream.h"
-#include "DgCell.h"
-#include "DgOutAIGenFile.h"
+#include <dglib/DgIDGGBase.h>
+#include <dglib/DgIDGGSBase.h>
+#include <dglib/DgIDGG.h>
+#include <dglib/DgBoundedIDGG.h>
+#include <dglib/DgInputStream.h>
+#include <dglib/DgOutputStream.h>
+#include <dglib/DgCell.h>
+#include <dglib/DgOutAIGenFile.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

@@ -25,12 +25,12 @@
 #include <sstream>
 #include <iostream>
 
-#include "DgOutGeoJSONFile.h"
-#include "DgLocList.h"
-#include "DgPolygon.h"
-#include "DgLocation.h"
-#include "DgCell.h"
-#include "DgGeoSphRF.h"
+#include <dglib/DgOutGeoJSONFile.h>
+#include <dglib/DgLocList.h>
+#include <dglib/DgPolygon.h>
+#include <dglib/DgLocation.h>
+#include <dglib/DgCell.h>
+#include <dglib/DgGeoSphRF.h>
 
 DgOutGeoJSONFile::DgOutGeoJSONFile(const DgGeoSphDegRF& rf,
     const std::string& filename, int precision, bool isPointFile,
