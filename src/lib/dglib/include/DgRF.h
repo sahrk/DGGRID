@@ -55,7 +55,7 @@ template <class A, class D> class DgRF : public DgRFBase {
       virtual DgLocation* createLocation (const DgLocation& loc,
                                           bool convert = false) const;
 
-      virtual DgLocation* makeLocation (const A& addIn) const;
+      virtual std::unique_ptr<DgLocation> makeLocation (const A& addIn) const;
 
       virtual DgDistanceBase* distance (const DgLocation& loc1, 
                                         const DgLocation& loc2,

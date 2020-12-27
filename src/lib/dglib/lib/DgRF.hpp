@@ -32,7 +32,7 @@
 #include "DgConverter.h"
 
 ////////////////////////////////////////////////////////////////////////////////
-template<class A, class D> 
+template<class A, class D>
 DgRF<A, D>::~DgRF (void)
 {
    // virtual destructor
@@ -71,7 +71,7 @@ DgRF<A, D>::createLocation (const DgLocation& loc, bool conv) const
 } // DgLocation* DgRF<A>::createLocation
 
 ////////////////////////////////////////////////////////////////////////////////
-template<class A, class D> DgLocation*
+template<class A, class D> std::unique_ptr<DgLocation>
 DgRF<A, D>::makeLocation (const A& addIn) const
 {
    return buildLocation(new DgAddress<A>(addIn));
@@ -92,7 +92,7 @@ DgRF<A, D>::getAddress (const DgLocation& loc) const
 
    if (loc.address())
    {
-      return (&(static_cast<const DgAddress<A>*>(loc.address()))->address()); 
+      return (&(static_cast<const DgAddress<A>*>(loc.address()))->address());
    }
    else
    {
@@ -102,12 +102,12 @@ DgRF<A, D>::getAddress (const DgLocation& loc) const
 } // const A* DgRF<A>::getAddress
 
 ////////////////////////////////////////////////////////////////////////////////
-template<class A, class D> void 
+template<class A, class D> void
 DgRF<A, D>::buildLocVector (DgLocVector* vec, const vector<A*> inVec) const
 {
    vec->clearAddress();
    vec->resize(inVec.size());
-   for (unsigned int i = 0; i < vec->size(); i++) 
+   for (unsigned int i = 0; i < vec->size(); i++)
    {
       vec->vec_[i] = new DgAddress<A>(*inVec[i]);
    }
@@ -193,7 +193,7 @@ DgRF<A, D>::getDistance (const DgDistanceBase& dist) const
              DgBase::Fatal);
    }
 
-   return ((static_cast<const DgDistance<D>&>(dist)).distance()); 
+   return ((static_cast<const DgDistance<D>&>(dist)).distance());
 
 } // D DgRF<A, D>::getDistance
 
@@ -205,7 +205,7 @@ DgRF<A, D>::toString (const DgLocation& loc) const
 
    if (loc.rf() != *this)
    {
-      report("DgRF<A, D>::toString(" + loc.asString() + 
+      report("DgRF<A, D>::toString(" + loc.asString() +
              ") location not from this rf", DgBase::Fatal);
       return str;
    }
@@ -234,7 +234,7 @@ DgRF<A, D>::toString (const DgLocation& loc, char delimiter) const
 
    if (loc.rf() != *this)
    {
-      report("DgRF<A, D>::toString(" + loc.asString() + 
+      report("DgRF<A, D>::toString(" + loc.asString() +
              ") location not from this rf", DgBase::Fatal);
       return str;
    }
@@ -265,9 +265,7 @@ DgRF<A, D>::fromString (DgLocation& loc, const char* str, char delimiter) const
                DgBase::Fatal);
    }
 
-   DgLocation* tloc = makeLocation(add);
-   loc = *tloc;
-   delete tloc;
+   loc = *makeLocation(add);
 
    return tmp;
 
@@ -281,7 +279,7 @@ DgRF<A, D>::toString (const DgLocVector& locVec) const
 
    if (locVec.rf() != *this)
    {
-      report("DgRF<A, D>::toString(" + locVec.asString() + 
+      report("DgRF<A, D>::toString(" + locVec.asString() +
              ") location vector not from this rf", DgBase::Fatal);
       return str;
    }
@@ -307,7 +305,7 @@ DgRF<A, D>::toString (const DgLocVector& locVec, char delimiter) const
 
    if (locVec.rf() != *this)
    {
-      report("DgRF<A, D>::toString(" + locVec.asString() + 
+      report("DgRF<A, D>::toString(" + locVec.asString() +
              ") location vector not from this rf", DgBase::Fatal);
       return str;
    }
@@ -331,7 +329,7 @@ DgRF<A, D>::toAddressString (const DgLocation& loc) const
 
    if (loc.rf() != *this)
    {
-      report("DgRF<A, D>::toAddressString(" + loc.asString() + 
+      report("DgRF<A, D>::toAddressString(" + loc.asString() +
              ") location not from this rf", DgBase::Fatal);
       return str;
    }
@@ -358,7 +356,7 @@ DgRF<A, D>::toAddressString (const DgLocation& loc, char delimiter) const
 
    if (loc.rf() != *this)
    {
-      report("DgRF<A, D>::toAddressString(" + loc.asString() + 
+      report("DgRF<A, D>::toAddressString(" + loc.asString() +
              ") location not from this rf", DgBase::Fatal);
       return str;
    }
@@ -385,7 +383,7 @@ DgRF<A, D>::toAddressString (const DgLocVector& locVec) const
 
    if (locVec.rf() != *this)
    {
-      report("DgRF<A, D>::toAddressString(" + locVec.asString() + 
+      report("DgRF<A, D>::toAddressString(" + locVec.asString() +
              ") location vector not from this rf", DgBase::Fatal);
       return str;
    }
@@ -411,7 +409,7 @@ DgRF<A, D>::toAddressString (const DgLocVector& locVec, char delimiter) const
 
    if (locVec.rf() != *this)
    {
-      report("DgRF<A, D>::toAddressString(" + locVec.asString() + 
+      report("DgRF<A, D>::toAddressString(" + locVec.asString() +
              ") location vector not from this rf", DgBase::Fatal);
       return str;
    }
@@ -435,12 +433,12 @@ DgRF<A, D>::toString (const DgDistanceBase& dist) const
 
    if (dist.rf() != *this)
    {
-      report("DgRF<A, D>::toString(" + dist.asString() + 
+      report("DgRF<A, D>::toString(" + dist.asString() +
              ") distance not from this rf", DgBase::Fatal);
       return str;
    }
 
-   str = name() + "{" + 
+   str = name() + "{" +
          dist2str((static_cast<const DgDistance<D>&>(dist)).distance()) + "}";
 
    return str;
@@ -453,7 +451,7 @@ DgRF<A, D>::toDouble (const DgDistanceBase& dist) const
 {
    if (dist.rf() != *this)
    {
-      report("DgRF<A, D>::toDouble(" + dist.asString() + 
+      report("DgRF<A, D>::toDouble(" + dist.asString() +
              ") distance not from this rf", DgBase::Fatal);
       return -1;
    }
@@ -463,13 +461,13 @@ DgRF<A, D>::toDouble (const DgDistanceBase& dist) const
 } // long double DgRF<A, D>::toDouble
 
 ////////////////////////////////////////////////////////////////////////////////
-template <class A, class D> 
+template <class A, class D>
 unsigned long long int
 DgRF<A, D>::toInt (const DgDistanceBase& dist) const
 {
    if (dist.rf() != *this)
    {
-      report("DgRF<A, D>::toInt(" + dist.asString() + 
+      report("DgRF<A, D>::toInt(" + dist.asString() +
              ") distance not from this rf", DgBase::Fatal);
       return 0;
    }
@@ -485,7 +483,7 @@ DgRF<A, D>::jumpRF (DgLocation* loc)
    const DgRF<A, D>* newRF = dynamic_cast<const DgRF<A, D>*>(&loc->rf());
    if (!newRF)
    {
-      report("DgRF<A, D>::jumpTo(" + loc->asString() + 
+      report("DgRF<A, D>::jumpTo(" + loc->asString() +
              ") does not match type of " + name(), DgBase::Fatal);
    }
 
@@ -495,4 +493,3 @@ DgRF<A, D>::jumpRF (DgLocation* loc)
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-

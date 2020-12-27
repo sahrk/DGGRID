@@ -57,11 +57,11 @@ int main (int argc, char* argv[])
 
    // first create a DgLocation in geoRF coordinates
    DgGeoCoord geoAddress(-122.7083, 42.1947, false);
-   DgLocation* thePt = geoRF.makeLocation(geoAddress);
+   std::unique_ptr<DgLocation> thePt = geoRF.makeLocation(geoAddress);
    cout << "the point " << *thePt << endl;
 
    // converting the point location to the dgg RF determines which cell it's in
-   dgg.convert(thePt);
+   dgg.convert(thePt.get());
    cout << "* lies in cell " << *thePt << endl;
 
    // we can get the cell's vertices, which are defined in geoRF
@@ -71,25 +71,25 @@ int main (int argc, char* argv[])
    cout << "* with cell boundary:\n" << verts << endl;
 
    // we can get the cell's center point by converting the cell back to geoRF
-   geoRF.convert(thePt);
+   geoRF.convert(thePt.get());
    cout << "* and cell center point:" << *thePt << endl;
 
    // we can extract the coordinates into primitive data types
    const DgGeoCoord& centCoord = *geoRF.getAddress(*thePt);
    double latRads = centCoord.lat();
    double lonRads = centCoord.lon();
-   cout << "* center point lon,lat in radians: " 
+   cout << "* center point lon,lat in radians: "
         << lonRads << ", " << latRads << endl;
 
    const DgGeoCoord& firstVert = *geoRF.getAddress(verts[0]);
    double latDegs = firstVert.latDegs();
    double lonDegs = firstVert.lonDegs();
-   cout << "* first boundary vertex lon,lat in degrees: " 
+   cout << "* first boundary vertex lon,lat in degrees: "
         << lonDegs << ", " << latDegs << endl;
 
    return 0;
 
-} // main 
+} // main
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

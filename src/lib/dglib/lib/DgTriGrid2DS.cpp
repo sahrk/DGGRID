@@ -31,13 +31,13 @@
 #include "DgTriGrid2DS.h"
 
 ////////////////////////////////////////////////////////////////////////////////
-DgTriGrid2DS::DgTriGrid2DS (DgRFNetwork& networkIn, 
-               const DgRF<DgDVec2D, long double>& backFrameIn, int nResIn, 
+DgTriGrid2DS::DgTriGrid2DS (DgRFNetwork& networkIn,
+               const DgRF<DgDVec2D, long double>& backFrameIn, int nResIn,
                unsigned int apertureIn, bool isCongruentIn, bool isAlignedIn,
                const string& nameIn)
-        : DgDiscRFS2D (networkIn, backFrameIn, nResIn, apertureIn, 
-                       isCongruentIn, isAlignedIn, nameIn) 
-{ 
+        : DgDiscRFS2D (networkIn, backFrameIn, nResIn, apertureIn,
+                       isCongruentIn, isAlignedIn, nameIn)
+{
    if (!isCongruent())
    {
       report("DgTriGrid2DS::DgTriGrid2DS() only congruent triangle grid "
@@ -68,8 +68,8 @@ DgTriGrid2DS::DgTriGrid2DS (DgRFNetwork& networkIn,
 
       DgContCartRF* ccRF = new DgContCartRF(network(), newName + string("bf"));
 
-      new Dg2WayContAffineConverter(backFrame(), *ccRF, (long double) fac, 0.0, 
-                                    trans); 
+      new Dg2WayContAffineConverter(backFrame(), *ccRF, (long double) fac, 0.0,
+                                    trans);
 
       (*grids_)[i] = new DgTriGrid2D(network(), *ccRF, newName);
       new Dg2WayResAddConverter<DgIVec2D, DgDVec2D, long double>
@@ -81,7 +81,7 @@ DgTriGrid2DS::DgTriGrid2DS (DgRFNetwork& networkIn,
 } // DgTriGrid2DS::DgTriGrid2DS
 
 ////////////////////////////////////////////////////////////////////////////////
-DgTriGrid2DS::DgTriGrid2DS (const DgTriGrid2DS& rf) 
+DgTriGrid2DS::DgTriGrid2DS (const DgTriGrid2DS& rf)
   : DgDiscRFS2D (rf)
 {
    report("DgTriGrid2DS::operator=() not implemented yet", DgBase::Fatal);
@@ -91,8 +91,8 @@ DgTriGrid2DS::DgTriGrid2DS (const DgTriGrid2DS& rf)
 ////////////////////////////////////////////////////////////////////////////////
 DgTriGrid2DS::~DgTriGrid2DS (void)
 {
-   for (unsigned long i = 0; i < grids().size(); i++) 
-    delete (*grids_)[i]; 
+   for (unsigned long i = 0; i < grids().size(); i++)
+    delete (*grids_)[i];
 
    delete grids_;
 
@@ -109,20 +109,18 @@ DgTriGrid2DS::operator= (const DgTriGrid2DS& rf)
 } // DgTriGrid2DS& DgTriGrid2DS::operator=
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgTriGrid2DS::setAddParents (const DgResAdd<DgIVec2D>& add, 
+void
+DgTriGrid2DS::setAddParents (const DgResAdd<DgIVec2D>& add,
                                DgLocVector& vec) const
 {
 //cout << "   setAddParents: " << add << endl;
    if (isCongruent())
    {
-      DgLocation* tmpLoc = makeLocation(add);
-      grids()[add.res() - 1]->convert(tmpLoc);
-      convert(tmpLoc);
+      std::unique_ptr<DgLocation> tmpLoc = makeLocation(add);
+      grids()[add.res() - 1]->convert(tmpLoc.get());
+      convert(tmpLoc.get());
 
       vec.push_back(*tmpLoc);
-
-      delete tmpLoc;
    }
    else
    {
@@ -133,8 +131,8 @@ DgTriGrid2DS::setAddParents (const DgResAdd<DgIVec2D>& add,
 } // void DgTriGrid2DS::setAddParents
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgTriGrid2DS::setAddInteriorChildren (const DgResAdd<DgIVec2D>& add, 
+void
+DgTriGrid2DS::setAddInteriorChildren (const DgResAdd<DgIVec2D>& add,
                                         DgLocVector& vec) const
 {
    if (isCongruent())
@@ -154,7 +152,7 @@ DgTriGrid2DS::setAddInteriorChildren (const DgResAdd<DgIVec2D>& add,
             for (long long int j = 0; j <= maxJ; j++)
             {
                v.push_back(new DgAddress< DgResAdd<DgIVec2D> >(
-                           DgResAdd<DgIVec2D>(DgIVec2D(lowerLeft.i() + i, 
+                           DgResAdd<DgIVec2D>(DgIVec2D(lowerLeft.i() + i,
                                 lowerLeft.j() + j), add.res() + 1)));
             }
             maxJ += 2;
@@ -171,7 +169,7 @@ DgTriGrid2DS::setAddInteriorChildren (const DgResAdd<DgIVec2D>& add,
             for (long long int j = 0; j <= maxJ; j++)
             {
                v.push_back(new DgAddress< DgResAdd<DgIVec2D> >(
-                           DgResAdd<DgIVec2D>(DgIVec2D(upperRight.i() - i, 
+                           DgResAdd<DgIVec2D>(DgIVec2D(upperRight.i() - i,
                                 upperRight.j() - j), add.res() + 1)));
             }
             maxJ += 2;
@@ -184,12 +182,12 @@ DgTriGrid2DS::setAddInteriorChildren (const DgResAdd<DgIVec2D>& add,
              "systems implemented", DgBase::Fatal);
    }
 //cout << vec << endl;
-   
+
 } // void DgTriGrid2DS::setAddInteriorChildren
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgTriGrid2DS::setAddBoundaryChildren (const DgResAdd<DgIVec2D>& add, 
+void
+DgTriGrid2DS::setAddBoundaryChildren (const DgResAdd<DgIVec2D>& add,
                                         DgLocVector& vec) const
 {
    if (isCongruent())
@@ -205,8 +203,8 @@ DgTriGrid2DS::setAddBoundaryChildren (const DgResAdd<DgIVec2D>& add,
 } // void DgTriGrid2DS::setAddBoundaryChildren
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgTriGrid2DS::setAddAllChildren (const DgResAdd<DgIVec2D>& add, 
+void
+DgTriGrid2DS::setAddAllChildren (const DgResAdd<DgIVec2D>& add,
                                    DgLocVector& vec) const
 {
    setAddInteriorChildren(add, vec);

@@ -47,11 +47,11 @@ class DgDiscRF2D : public DgDiscRF<DgIVec2D, DgDVec2D, long double> {
                   long double rIn = 1.0L, long double cIn = 1.0L, long double areaIn = 1.0L)
          : DgDiscRF<DgIVec2D, DgDVec2D, long double> 
                        (networkIn, ccFrameIn, nameIn, eIn, rIn, cIn, areaIn)
-           { undefLoc_ = makeLocation(undefAddress()); }
+           {}
 
       DgDiscRF2D (const DgDiscRF2D& grd) 
            : DgDiscRF<DgIVec2D, DgDVec2D, long double> (grd)
-           { undefLoc_ = makeLocation(undefAddress()); }
+           {}
 
       DgDiscRF2D& operator= (const DgDiscRF2D& grd)
            { DgDiscRF<DgIVec2D, DgDVec2D, long double>::operator=(grd); 

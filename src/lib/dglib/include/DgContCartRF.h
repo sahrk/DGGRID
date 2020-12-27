@@ -30,18 +30,20 @@
 #include "Dg2WayConverter.h"
 #include "DgDVec2D.h"
 
+#include <memory>
+
 ////////////////////////////////////////////////////////////////////////////////
 class DgContCartRF : public DgRF<DgDVec2D, long double> {
 
    public:
 
       DgContCartRF (DgRFNetwork& networkIn, const string& nameIn = "ContCart")
-         : DgRF<DgDVec2D, long double> (networkIn, nameIn) 
-           { undefLoc_ = makeLocation(undefAddress()); }
+         : DgRF<DgDVec2D, long double> (networkIn, nameIn)
+           {}
 
       DgContCartRF (const DgContCartRF& rf)
-         : DgRF<DgDVec2D, long double>(rf) 
-           { undefLoc_ = makeLocation(undefAddress()); }
+         : DgRF<DgDVec2D, long double>(rf)
+           {}
 
       DgContCartRF& operator= (const DgContCartRF& rf)
          { DgRF<DgDVec2D, long double>::operator=(rf); return *this; }
@@ -53,10 +55,10 @@ class DgContCartRF : public DgRF<DgDVec2D, long double> {
                        { return string(add); }
 
       virtual string add2str (const DgDVec2D& add, char delimiter) const
-                  { return dgg::util::to_string(add.x(), formatStr()) + delimiter + 
+                  { return dgg::util::to_string(add.x(), formatStr()) + delimiter +
 			   dgg::util::to_string(add.y(), formatStr()); }
 
-      virtual const char* str2add (DgDVec2D* add, const char* str, 
+      virtual const char* str2add (DgDVec2D* add, const char* str,
                                    char delimiter) const
                   {    if (!add) add = new DgDVec2D();
                        return add->fromString(str, delimiter); }
@@ -79,7 +81,7 @@ class DgContCartRF : public DgRF<DgDVec2D, long double> {
       virtual DgAddressBase* vecAddress (const DgDVec2D& v) const
                     { return new DgAddress<DgDVec2D>(v); }
 
-      virtual DgLocation* vecLocation (const DgDVec2D& v) const
+      virtual std::unique_ptr<DgLocation> vecLocation (const DgDVec2D& v) const
                     { return makeLocation(v); }
 
       virtual DgDVec2D getVecAddress (const DgAddressBase& add) const

@@ -136,21 +136,18 @@ DgDmdD4Grid2DS::setAddParents (const DgResAdd<DgIVec2D>& add,
 //cout << "   setAddParents: " << add << endl;
    if (isCongruent() || radix() == 3)
    {
-      DgLocation* tmpLoc = makeLocation(add);
-      grids()[add.res() - 1]->convert(tmpLoc);
-      convert(tmpLoc);
+      std::unique_ptr<DgLocation> tmpLoc = makeLocation(add);
+      grids()[add.res() - 1]->convert(tmpLoc.get());
+      convert(tmpLoc.get());
 
       vec.push_back(*tmpLoc);
-
-      delete tmpLoc;
    }
    else // must be aligned aperture 4
    {
       // vertices lie in parents
 
-      DgLocation* tmpLoc = makeLocation(add);
+      std::unique_ptr<DgLocation> tmpLoc = makeLocation(add);
       DgPolygon* verts = makeVertices(*tmpLoc);
-      delete tmpLoc;
 
 //cout << "   verts 1: " << *verts << endl;
 
@@ -208,11 +205,9 @@ DgDmdD4Grid2DS::setAddInteriorChildren (const DgResAdd<DgIVec2D>& add,
    {
       // only center square is interior
 
-      DgLocation* tmpLoc = makeLocation(add);
-      grids()[add.res() + 1]->convert(tmpLoc);
+      std::unique_ptr<DgLocation> tmpLoc = makeLocation(add);
+      grids()[add.res() + 1]->convert(tmpLoc.get());
       vec.push_back(*tmpLoc);
-
-      delete tmpLoc;
    }
    
 } // void DgDmdD4Grid2DS::setAddInteriorChildren
@@ -228,19 +223,17 @@ DgDmdD4Grid2DS::setAddBoundaryChildren (const DgResAdd<DgIVec2D>& add,
    }
    else // must be aligned aperture 4
    {
-      DgLocation* tmpLoc = makeLocation(add);
+      std::unique_ptr<DgLocation> tmpLoc = makeLocation(add);
 
       // D8 neighbors is what we want
 
       DgDmdD8Grid2D d8(network(), grids()[add.res() + 1]->backFrame(),
                        "dummyD8");
-      d8.convert(tmpLoc);
+      d8.convert(tmpLoc.get());
       d8.setNeighbors(*tmpLoc, vec);
 
       grids()[add.res() + 1]->convert(vec);
       convert(vec);
-
-      delete tmpLoc;
    }
 
 } // void DgDmdD4Grid2DS::setAddBoundaryChildren

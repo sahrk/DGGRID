@@ -25,7 +25,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef DGDISCRFS2D_H 
+#ifndef DGDISCRFS2D_H
 #define DGDISCRFS2D_H
 
 #include <cmath>
@@ -40,35 +40,35 @@ class DgDiscRFS2D : public DgDiscRFS<DgIVec2D, DgDVec2D, long double> {
 
    public:
 
-      static DgDiscRFS2D* makeRF (DgRFNetwork& network, 
+      static DgDiscRFS2D* makeRF (DgRFNetwork& network,
                    const DgRF<DgDVec2D, long double>& backFrame,
                    int nRes = 1, unsigned int aperture = 4,
                    bool isCongruent = true, bool isAligned = false,
-                   const string& name = "DiscRFS2D", 
+                   const string& name = "DiscRFS2D",
                    const string geometry = "sqr8", bool isMixed43 = false,
                    int numAp4 = 0, bool isSuperfund = false,
                    bool isApSeq = false, const DgApSeq& apSeq = DgApSeq::defaultApSeq);
 
-      DgDiscRFS2D (DgRFNetwork& network, 
+      DgDiscRFS2D (DgRFNetwork& network,
                    const DgRF<DgDVec2D, long double>& backFrame,
                    int nRes = 1, unsigned int aperture = 4,
                    bool isCongruent = true, bool isAligned = false,
                    const string& name = "DiscRFS2D")
-        : DgDiscRFS<DgIVec2D, DgDVec2D, long double> 
-              (network, backFrame, nRes, aperture, 
+        : DgDiscRFS<DgIVec2D, DgDVec2D, long double>
+              (network, backFrame, nRes, aperture,
                                isCongruent, isAligned, name)
-           { undefLoc_ = makeLocation(undefAddress()); }
+           {}
 
-      DgDiscRFS2D (const DgDiscRFS2D& grd) 
-        : DgDiscRFS<DgIVec2D, DgDVec2D, long double> (grd) 
-           { undefLoc_ = makeLocation(undefAddress()); }
+      DgDiscRFS2D (const DgDiscRFS2D& grd)
+        : DgDiscRFS<DgIVec2D, DgDVec2D, long double> (grd)
+           {}
 
       DgDiscRFS2D& operator= (const DgDiscRFS2D& grd)
-           { DgDiscRFS<DgIVec2D, DgDVec2D, long double>::operator=(grd); 
+           { DgDiscRFS<DgIVec2D, DgDVec2D, long double>::operator=(grd);
                return *this; }
 
-      virtual const DgResAdd<DgIVec2D>& undefAddress (void) const 
-           { static DgResAdd<DgIVec2D> undef(DgIVec2D::undefDgIVec2D, -1); 
+      virtual const DgResAdd<DgIVec2D>& undefAddress (void) const
+           { static DgResAdd<DgIVec2D> undef(DgIVec2D::undefDgIVec2D, -1);
              return undef; }
 
    protected:

@@ -33,16 +33,16 @@
 #include "DgPolygon.h"
 
 ////////////////////////////////////////////////////////////////////////////////
-DgHexC2Grid2D::DgHexC2Grid2D (DgRFNetwork& networkIn, 
+DgHexC2Grid2D::DgHexC2Grid2D (DgRFNetwork& networkIn,
              const DgRF<DgDVec2D, long double>& ccFrameIn, const string& nameIn)
-         : DgDiscRF2D (networkIn, ccFrameIn, nameIn, M_1_SQRT3, M_1_SQRT3, 
+         : DgDiscRF2D (networkIn, ccFrameIn, nameIn, M_1_SQRT3, M_1_SQRT3,
                        M_SQRT3_2, 1.0L)
-{ 
-   area_ = c(); 
+{
+   area_ = c();
 
    // create the surrogate hex grid: a class I hex grid rotated 30 degrees
 
-   DgContCartRF* surCCRF = new DgContCartRF(network(), 
+   DgContCartRF* surCCRF = new DgContCartRF(network(),
                               nameIn + string("SurBF"));
 
    // version 6.4 and previous rotated by 30.0L
@@ -52,7 +52,7 @@ DgHexC2Grid2D::DgHexC2Grid2D (DgRFNetwork& networkIn,
    // create the substrate hex grid: a class I hex one aperture 3 resolution
    // finer
 
-   DgContCartRF* subCCRF = new DgContCartRF(network(), 
+   DgContCartRF* subCCRF = new DgContCartRF(network(),
                               nameIn + string("SubBF"));
 
    new Dg2WayContAffineConverter(backFrame(), *subCCRF, M_SQRT3);
@@ -64,17 +64,14 @@ DgHexC2Grid2D::DgHexC2Grid2D (DgRFNetwork& networkIn,
 long long int
 DgHexC2Grid2D::dist (const DgIVec2D& add1, const DgIVec2D& add2) const
 {
-   DgLocation* loc1 = substrate().makeLocation(add1);
-   DgLocation* loc2 = substrate().makeLocation(add2);
+   std::unique_ptr<DgLocation> loc1 = substrate().makeLocation(add1);
+   std::unique_ptr<DgLocation> loc2 = substrate().makeLocation(add2);
 
-   surrogate().convert(loc1);
-   surrogate().convert(loc2);
+   surrogate().convert(loc1.get());
+   surrogate().convert(loc2.get());
 
    long long int d = surrogate().dist(*(surrogate().getAddress(*loc1)),
                             *(surrogate().getAddress(*loc2)));
-
-   delete loc1;
-   delete loc2;
 
    return d;
 
@@ -84,12 +81,11 @@ DgHexC2Grid2D::dist (const DgIVec2D& add1, const DgIVec2D& add2) const
 void
 DgHexC2Grid2D::setAddVertices (const DgIVec2D& add, DgPolygon& vec) const
 {
-   DgLocation* tmpLoc = substrate().makeLocation(add);
+   std::unique_ptr<DgLocation> tmpLoc = substrate().makeLocation(add);
    surrogate().setVertices(*tmpLoc, vec);
 
    backFrame().convert(vec);
 
-   delete tmpLoc;
 
 } // void DgHexC2Grid2D::setAddVertices
 
@@ -97,13 +93,12 @@ DgHexC2Grid2D::setAddVertices (const DgIVec2D& add, DgPolygon& vec) const
 void
 DgHexC2Grid2D::setAddNeighbors (const DgIVec2D& add, DgLocVector& vec) const
 {
-   DgLocation* tmpLoc = substrate().makeLocation(add);
+   std::unique_ptr<DgLocation> tmpLoc = substrate().makeLocation(add);
 
    DgLocVector tmpVec;
    surrogate().setNeighbors(*tmpLoc, tmpVec);
    substrate().convert(tmpVec);
 
-   delete tmpLoc;
 
    vector<DgAddressBase*>& v = vec.addressVec();
    for (long long int i = 0; i < tmpVec.size(); i++)
@@ -118,13 +113,12 @@ DgHexC2Grid2D::setAddNeighbors (const DgIVec2D& add, DgLocVector& vec) const
 void
 DgHexC2Grid2D::setAddNeighborsBdry2 (const DgIVec2D& add, DgLocVector& vec) const
 {
-   DgLocation* tmpLoc = substrate().makeLocation(add);
+   std::unique_ptr<DgLocation> tmpLoc = substrate().makeLocation(add);
 
    DgLocVector tmpVec;
    surrogate().setNeighborsBdry2(*tmpLoc, tmpVec);
    substrate().convert(tmpVec);
 
-   delete tmpLoc;
 
    vector<DgAddressBase*>& v = vec.addressVec();
    for (long long int i = 0; i < tmpVec.size(); i++)
@@ -136,34 +130,31 @@ DgHexC2Grid2D::setAddNeighborsBdry2 (const DgIVec2D& add, DgLocVector& vec) cons
 } // void DgHexC2Grid2D::setAddNeighborsBdry2
 
 ////////////////////////////////////////////////////////////////////////////////
-DgIVec2D 
+DgIVec2D
 DgHexC2Grid2D::quantify (const DgDVec2D& point) const
 {
-   DgLocation* tmpLoc = backFrame().makeLocation(point);
+   std::unique_ptr<DgLocation> tmpLoc = backFrame().makeLocation(point);
 
-   surrogate().convert(tmpLoc);  // to quantify
+   surrogate().convert(tmpLoc.get());  // to quantify
 
-   substrate().convert(tmpLoc);  // to set "correct" address
+   substrate().convert(tmpLoc.get());  // to set "correct" address
 
    DgIVec2D add(*(substrate().getAddress(*tmpLoc)));
 
-   delete tmpLoc;
 
    return add;
 
 } // DgIVec2D DgHexC2Grid2D::quantify
 
 ////////////////////////////////////////////////////////////////////////////////
-DgDVec2D 
+DgDVec2D
 DgHexC2Grid2D::invQuantify (const DgIVec2D& add) const
 {
-   DgLocation* tmpLoc = substrate().makeLocation(add);
+   std::unique_ptr<DgLocation> tmpLoc = substrate().makeLocation(add);
 
-   backFrame().convert(tmpLoc);
+   backFrame().convert(tmpLoc.get());
 
    DgDVec2D point(*(backFrame().getAddress(*tmpLoc)));
-
-   delete tmpLoc;
 
    return point;
 

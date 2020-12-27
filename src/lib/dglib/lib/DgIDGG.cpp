@@ -41,31 +41,31 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-DgIDGG::DgIDGG (const DgIDGGSBase* dggs, const DgGeoSphRF& geoRF, const DgGeoCoord& vert0, 
+DgIDGG::DgIDGG (const DgIDGGSBase* dggs, const DgGeoSphRF& geoRF, const DgGeoCoord& vert0,
        long double azDegs, unsigned int aperture, int res, const string& name,
-       const string& gridTopo, const string& projType, bool isMixed43, 
+       const string& gridTopo, const string& projType, bool isMixed43,
        int numAp4, bool isSuperfund, int sfRes, bool isApSeq, const DgApSeq& apSeq,
        unsigned int precision)
    : DgIDGGBase (dggs, geoRF, aperture, res, name, precision),
-     geoRF_(geoRF), vert0_(vert0), azDegs_(azDegs), gridTopo_(gridTopo), 
-     projType_(projType), isApSeq_ (isApSeq), apSeq_ (apSeq), isMixed43_(isMixed43), 
+     geoRF_(geoRF), vert0_(vert0), azDegs_(azDegs), gridTopo_(gridTopo),
+     projType_(projType), isApSeq_ (isApSeq), apSeq_ (apSeq), isMixed43_(isMixed43),
      numAp4_(numAp4), isSuperfund_(isSuperfund), sfRes_ (sfRes)
-{ 
+{
    initialize();
 
 } // DgIDGG::DgIDGG
 
 ////////////////////////////////////////////////////////////////////////////////
 DgIDGG::DgIDGG (const DgIDGG& rfIn)
-   : DgIDGGBase (NULL, rfIn.geoRF(), rfIn.aperture(), 
+   : DgIDGGBase (NULL, rfIn.geoRF(), rfIn.aperture(),
                  rfIn.res(), rfIn.name(), rfIn.precision()),
-        geoRF_(rfIn.geoRF()), vert0_(rfIn.vert0()), 
-        azDegs_(rfIn.azDegs()), gridTopo_(rfIn.gridTopo()), 
+        geoRF_(rfIn.geoRF()), vert0_(rfIn.vert0()),
+        azDegs_(rfIn.azDegs()), gridTopo_(rfIn.gridTopo()),
         projType_ (rfIn.projType()), isApSeq_ (rfIn.isApSeq()),
         apSeq_ (rfIn.apSeq()),
-        isMixed43_(rfIn.isMixed43()), numAp4_(rfIn.numAp4()), 
+        isMixed43_(rfIn.isMixed43()), numAp4_(rfIn.numAp4()),
         isSuperfund_(rfIn.isSuperfund()), sfRes_(rfIn.sfRes())
-{ 
+{
    initialize();
 
 } // DgIDGG::DgIDGG
@@ -79,13 +79,13 @@ DgIDGG::initialize (void)
 
    // verify parameter validity
 
-   string apErrStr = string("DgIDGG::initialize(): invalid aperture " + 
-                         dgg::util::to_string(aperture()) + 
+   string apErrStr = string("DgIDGG::initialize(): invalid aperture " +
+                         dgg::util::to_string(aperture()) +
                          string(" for grid topo ") + gridTopo());
 
    if (gridTopo() == "HEXAGON")
    {
-      if (aperture() != 3 && aperture() != 4 && aperture() != 7) 
+      if (aperture() != 3 && aperture() != 4 && aperture() != 7)
          report(apErrStr, DgBase::Fatal);
    }
    else if (gridTopo() == "TRIANGLE" || gridTopo() == "DIAMOND")
@@ -93,7 +93,7 @@ DgIDGG::initialize (void)
       if (aperture() != 4) report(apErrStr, DgBase::Fatal);
    }
    else
-      report("DgIDGG::initialize(): invalid grid topo " + gridTopo(), 
+      report("DgIDGG::initialize(): invalid grid topo " + gridTopo(),
              DgBase::Fatal);
 
    if (isMixed43())
@@ -101,7 +101,6 @@ DgIDGG::initialize (void)
 
    // create some internal data structures
 
-   undefLoc_ = makeLocation(undefAddress());
    sphIcosa_ = new DgSphIcosa(vert0(), azDegs());
 
    // setup some parameters
@@ -164,7 +163,7 @@ DgIDGG::initialize (void)
       maxI_ = maxD();
       maxJ_ = maxD();
       mag_ = maxD() + 1;
-      if (gridTopo() == "TRIANGLE") 
+      if (gridTopo() == "TRIANGLE")
       {
          isAligned_ = true; // only for aperture 4
          isCongruent_ = true;
@@ -179,24 +178,24 @@ DgIDGG::initialize (void)
       lastAdd_ = DgQ2DICoord(10, DgIVec2D(maxI(), maxJ()));
    }
 
-   // set-up local network to scale so that quad (and consequently tri) edge 
+   // set-up local network to scale so that quad (and consequently tri) edge
    // length is 1.0
 
    ccFrame_ = new DgContCartRF(locNet_, name() + "CC1");
 
    if (gridTopo() == "DIAMOND")
    {
-      grid2DS_ = new DgDmdD4Grid2DS(locNet_, ccFrame(), res() + 1, aperture(), 
+      grid2DS_ = new DgDmdD4Grid2DS(locNet_, ccFrame(), res() + 1, aperture(),
                                     isCongruent(), isAligned());
    }
    else if (gridTopo() == "HEXAGON")
    {
-      grid2DS_ = new DgHexGrid2DS(locNet_, ccFrame(), allocRes() + 1, aperture(), 
+      grid2DS_ = new DgHexGrid2DS(locNet_, ccFrame(), allocRes() + 1, aperture(),
         isCongruent(), isAligned(), "H2DS", isMixed43(), numAp4(), isSuperfund());
    }
    else if (gridTopo() == "TRIANGLE")
    {
-      grid2DS_ = new DgTriGrid2DS(locNet_, ccFrame(), res() + 1, aperture(), 
+      grid2DS_ = new DgTriGrid2DS(locNet_, ccFrame(), res() + 1, aperture(),
                                   isCongruent(), isAligned());
    }
 
@@ -230,7 +229,7 @@ DgIDGG::initialize (void)
    {
       // a = globeArea / ((#cells - 12) + (12 * 5/6))
       //   = globeArea / (#cells - 2);
-      gridStats_.setCellAreaKM(DgGeoSphRF::totalAreaKM() / 
+      gridStats_.setCellAreaKM(DgGeoSphRF::totalAreaKM() /
                        (gridStats_.nCells() - 2));
    }
    else if (gridTopo() == "DIAMOND")
@@ -238,8 +237,8 @@ DgIDGG::initialize (void)
    else if (gridTopo() == "TRIANGLE")
       gridStats_.setCellAreaKM(DgGeoSphRF::totalAreaKM() / gridStats_.nCells());
 
-   gridStats_.setCLS(2.0L * 2.0L * DgGeoSphRF::earthRadiusKM() * 
-                     asinl(sqrtl(gridStats_.cellAreaKM() / M_PI) / 
+   gridStats_.setCLS(2.0L * 2.0L * DgGeoSphRF::earthRadiusKM() *
+                     asinl(sqrtl(gridStats_.cellAreaKM() / M_PI) /
                      (2.0L * DgGeoSphRF::earthRadiusKM())));
 
 } // DgIDGG::initialize

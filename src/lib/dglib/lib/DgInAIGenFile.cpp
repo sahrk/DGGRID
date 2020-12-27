@@ -48,7 +48,7 @@ static void fixSciNotation (char* string)
 ////////////////////////////////////////////////////////////////////////////////
 DgInAIGenFile::DgInAIGenFile (const DgRFBase& rfIn, const string* fileNameIn,
                         DgReportLevel failLevel)
-   : DgInLocTextFile (rfIn, fileNameIn, false, failLevel), 
+   : DgInLocTextFile (rfIn, fileNameIn, false, failLevel),
      forcePolyLine_ (false), forceCells_ (false)
 {
    if (rfIn.vecAddress(DgDVec2D(0.0L, 0.0L)) == 0)
@@ -82,7 +82,7 @@ DgInAIGenFile::extract (DgLocVector& vec)
    {
       getline(nextLine, maxLine);
 
-      if (string(nextLine) == string("END")) 
+      if (string(nextLine) == string("END"))
        break;
 
       fixSciNotation(nextLine);
@@ -119,7 +119,7 @@ DgInAIGenFile::extract (DgPolygon& poly)
    while (!eof())
    {
       getline(nextLine, maxLine);
-      if (string(nextLine) == string("END")) 
+      if (string(nextLine) == string("END"))
       {
          poly.addressVec().erase(poly.addressVec().end() - 1);
 
@@ -167,9 +167,8 @@ DgInAIGenFile::extract (DgCell& cell)
 
    iss >> x >> y;
    if (iss.fail()) x = y = 0.0L;
-   DgLocation* tmpLoc = rf().vecLocation(DgDVec2D(x, y));
+   std::unique_ptr<DgLocation> tmpLoc = rf().vecLocation(DgDVec2D(x, y));
    cell.setNode(*tmpLoc);
-   delete tmpLoc;
 
    if (!isPointFile())
    {
@@ -177,7 +176,7 @@ DgInAIGenFile::extract (DgCell& cell)
       while (!eof())
       {
          getline(nextLine, maxLine);
-         if (string(nextLine) == string("END")) 
+         if (string(nextLine) == string("END"))
          {
             poly->addressVec().erase(poly->addressVec().end() - 1);
 
@@ -204,8 +203,8 @@ DgInLocFile&
 DgInAIGenFile::extract (DgLocList& list)
 //
 // Determine whether the file is a point or polygon/polyline file. If it's
-// a point file, read-in the points. If not, get the sets which constitute 
-// me. If the last point in a set is the same as the first, assume it's a 
+// a point file, read-in the points. If not, get the sets which constitute
+// me. If the last point in a set is the same as the first, assume it's a
 // polygon. Otherwise, make it a polyline.
 //
 ////////////////////////////////////////////////////////////////////////////////
@@ -231,12 +230,12 @@ DgInAIGenFile::extract (DgLocList& list)
 
    iss >> tmp;
 
-   if (tmp[0] == 'E') 
+   if (tmp[0] == 'E')
    {
       setIsPointFile(true);
    }
    else
-   { 
+   {
       // try to get values
 
       long double x, y;
@@ -275,17 +274,17 @@ DgInAIGenFile::extract (DgLocList& list)
             if (this->eof())
             {
                // determine whether it's a polygon
-   
+
                if (!forcePolyLine() && vec->size() > 2 &&
                    rf().getVecAddress(*(vec->addressVec().front())) ==
                    rf().getVecAddress(*(vec->addressVec().back())))
                {
                   vec->addressVec().erase(vec->addressVec().end() - 1);
-   
+
                   DgPolygon* poly = new DgPolygon(*vec);
 
                   list.push_back(poly);
-   
+
                   //vec->destroy();
                   delete vec;
                }
@@ -373,9 +372,7 @@ DgInAIGenFile::extract (DgLocation& loc)
       v = DgDVec2D::undefDgDVec2D;
    }
 
-   DgLocation* tmpLoc = rf().vecLocation(v);
-   loc = *tmpLoc;
-   delete tmpLoc;
+   loc = *rf().vecLocation(v);
 
    return *this;
 

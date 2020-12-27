@@ -42,7 +42,7 @@ using namespace std;
 BinValsParam::BinValsParam (DgParamList& plist)
       : MainParam(plist), wholeEarth (true), outFile (0), outSeqNum (false),
         inputDelimiter (' '), outputDelimiter (' '), outputAllCells (true)
-{ 
+{
       /////// fill state variables from the parameter list //////////
 
       string dummy;
@@ -58,7 +58,7 @@ BinValsParam::BinValsParam (DgParamList& plist)
 
       string inFileStr;
       getParamValue(plist, "input_files", inFileStr, false);
-  
+
       char* names = new char[inFileStr.length() + 1];
       inFileStr.copy(names, string::npos);
       names[inFileStr.length()] = 0;
@@ -112,7 +112,7 @@ BinValsParam::BinValsParam (DgParamList& plist)
 } // BinValsParam::BinValsParam
 
 ////////////////////////////////////////////////////////////////////////////////
-BinValsParam::~BinValsParam() 
+BinValsParam::~BinValsParam()
 {
 } // BinValsParam::~BinValsParam()
 
@@ -123,7 +123,7 @@ void BinValsParam::dump (void)
    MainParam::dump();
 
    cout << "BEGIN BINVALS PARAMETER DUMP" << endl;
-   
+
    cout << " wholeEarth: " << wholeEarth << endl;
    cout << " outFileNameBase: " << outFileNameBase << endl;
    cout << " outFileName: " << outFileName << endl;
@@ -188,14 +188,14 @@ void binValsGlobal (BinValsParam& dp)
    else if (dp.outAddType == "INTERLEAVE") pOutRF = &dgg.intRF();
    else if (dp.outAddType == "PLANE") pOutRF = &dgg.planeRF();
    else if (dp.outAddType == "Q2DI") pOutRF = &dgg;
-   else if (dp.outAddType == "SEQNUM") 
+   else if (dp.outAddType == "SEQNUM")
    {
       dp.outSeqNum = true;
       pOutRF = &dgg;
    }
    else
    {
-      ::report("binValsGlobal(): invalid output_address_type " + 
+      ::report("binValsGlobal(): invalid output_address_type " +
                dp.outAddType, DgBase::Fatal);
    }
 
@@ -204,7 +204,7 @@ void binValsGlobal (BinValsParam& dp)
    // create an array to store the values
 
    Val* vals = new Val[dgg.bndRF().size()];
-   for (unsigned long int i = 0; i < dgg.bndRF().size(); i++) 
+   for (unsigned long int i = 0; i < dgg.bndRF().size(); i++)
    {
       vals[i].nVals = 0;
       vals[i].val = 0.0;
@@ -230,15 +230,14 @@ void binValsGlobal (BinValsParam& dp)
          result = sscanf(buff, dp.inFormatStr.c_str(), &lon, &lat, &val);
          if (result != 3)
          {
-            ::report("binValsGlobal(): invalid format in file " + 
+            ::report("binValsGlobal(): invalid format in file " +
                      dp.inputFiles[fc], DgBase::Fatal);
          }
 
-         DgLocation* tloc = geoRF.makeLocation(DgGeoCoord(lon, lat, false));
-         dgg.convert(tloc);
+         std::unique_ptr<DgLocation> tloc(geoRF.makeLocation(DgGeoCoord(lon, lat, false)));
+         dgg.convert(tloc.get());
          long int sNum = dgg.bndRF().seqNum(*tloc);
          long int ndx = sNum - 1;
-         delete tloc;
 
          vals[ndx].nVals++;
          vals[ndx].val += val;
@@ -249,14 +248,14 @@ void binValsGlobal (BinValsParam& dp)
 
    ///// calculate the averages /////
 
-   for (unsigned long int i = 0; i < dgg.bndRF().size(); i++) 
+   for (unsigned long int i = 0; i < dgg.bndRF().size(); i++)
    {
       if (vals[i].nVals > 0) vals[i].val /= vals[i].nVals;
    }
 
    ///// output the values /////
 
-   for (unsigned long int i = 0; i < dgg.bndRF().size(); i++) 
+   for (unsigned long int i = 0; i < dgg.bndRF().size(); i++)
    {
       if (!dp.outputAllCells && vals[i].nVals <= 0) continue;
       unsigned long int sNum = i + 1;
@@ -264,11 +263,10 @@ void binValsGlobal (BinValsParam& dp)
          *dp.outFile << sNum << dp.outputDelimiter << vals[i].val << endl;
       else
       {
-         DgLocation* tloc = dgg.bndRF().locFromSeqNum(sNum);
-         outRF.convert(tloc);
+         std::unique_ptr<DgLocation> tloc(dgg.bndRF().locFromSeqNum(sNum));
+         outRF.convert(tloc.get());
          *dp.outFile << tloc->asString(dp.outputDelimiter)
                         << dp.outputDelimiter << vals[i].val << endl;
-         delete tloc;
       }
    }
 
@@ -319,14 +317,14 @@ void binValsPartial (BinValsParam& dp)
    else if (dp.outAddType == "INTERLEAVE") pOutRF = &dgg.intRF();
    else if (dp.outAddType == "PLANE") pOutRF = &dgg.planeRF();
    else if (dp.outAddType == "Q2DI") pOutRF = &dgg;
-   else if (dp.outAddType == "SEQNUM") 
+   else if (dp.outAddType == "SEQNUM")
    {
       dp.outSeqNum = true;
       pOutRF = &dgg;
    }
    else
    {
-      ::report("binValsPartial(): invalid output_address_type " + 
+      ::report("binValsPartial(): invalid output_address_type " +
                dp.outAddType, DgBase::Fatal);
    }
 
@@ -366,12 +364,12 @@ void binValsPartial (BinValsParam& dp)
          result = sscanf(buff, dp.inFormatStr.c_str(), &lon, &lat, &val);
          if (result != 3)
          {
-            ::report("binValsPartial(): invalid format in file " + 
+            ::report("binValsPartial(): invalid format in file " +
                       dp.inputFiles[fc], DgBase::Fatal);
          }
 
-         DgLocation* tloc = geoRF.makeLocation(DgGeoCoord(lon, lat, false));
-         dgg.convert(tloc);
+         std::unique_ptr<DgLocation> tloc(geoRF.makeLocation(DgGeoCoord(lon, lat, false)));
+         dgg.convert(tloc.get());
 
          int q = dgg.getAddress(*tloc)->quadNum();
          const DgIVec2D& coord = dgg.getAddress(*tloc)->coord();
@@ -383,7 +381,6 @@ void binValsPartial (BinValsParam& dp)
          if (coord.j() < qv.offset.j()) qv.offset.setJ(coord.j());
          if (coord.j() > qv.upperRight.j()) qv.upperRight.setJ(coord.j());
 
-         delete tloc;
       }
 
       inFile.close();
@@ -395,7 +392,7 @@ void binValsPartial (BinValsParam& dp)
    {
       QuadVals& qv = qvals[q];
       if (!qv.isUsed) continue;
-      
+
       qv.upperRight = qv.upperRight - qv.offset; // make relative
 
       qv.numI = qv.upperRight.i() + 1;
@@ -404,7 +401,7 @@ void binValsPartial (BinValsParam& dp)
       for (int i = 0; i < qv.numI; i++)
       {
          qv.vals[i] = new Val[qv.numJ];
-         
+
          for (int j = 0; j < qv.numJ; j++)
          {
             qv.vals[i][j].nVals = 0;
@@ -430,17 +427,16 @@ void binValsPartial (BinValsParam& dp)
          result = sscanf(buff, dp.inFormatStr.c_str(), &lon, &lat, &val);
          if (result != 3)
          {
-            ::report("binValsPartial(): invalid format in file " + 
+            ::report("binValsPartial(): invalid format in file " +
                       dp.inputFiles[fc], DgBase::Fatal);
          }
 
-         DgLocation* tloc = geoRF.makeLocation(DgGeoCoord(lon, lat, false));
-         dgg.convert(tloc);
+         std::unique_ptr<DgLocation> tloc(geoRF.makeLocation(DgGeoCoord(lon, lat, false)));
+         dgg.convert(tloc.get());
 
          int q = dgg.getAddress(*tloc)->quadNum();
          QuadVals& qv = qvals[q];
          DgIVec2D coord = dgg.getAddress(*tloc)->coord() - qv.offset;
-         delete tloc;
 
          qv.vals[coord.i()][coord.j()].nVals++;
          qv.vals[coord.i()][coord.j()].val += val;
@@ -460,7 +456,7 @@ void binValsPartial (BinValsParam& dp)
       {
          for (int j = 0; j < qv.numJ; j++)
          {
-            if (qv.vals[i][j].nVals > 0) 
+            if (qv.vals[i][j].nVals > 0)
                qv.vals[i][j].val /= qv.vals[i][j].nVals;
          }
       }
@@ -470,11 +466,11 @@ void binValsPartial (BinValsParam& dp)
 
    if (dp.outputAllCells)
    {
-      for (unsigned long int i = 0; i < dgg.bndRF().size(); i++) 
+      for (unsigned long int i = 0; i < dgg.bndRF().size(); i++)
       {
          unsigned long int sNum = i + 1;
-         DgLocation* tloc = dgg.bndRF().locFromSeqNum(sNum);
-         
+         std::unique_ptr<DgLocation> tloc(dgg.bndRF().locFromSeqNum(sNum));
+
          double val = 0.0;
 
          // check to see if there is a value for this cell
@@ -485,23 +481,22 @@ void binValsPartial (BinValsParam& dp)
          {
             DgIVec2D coord = dgg.getAddress(*tloc)->coord() - qv.offset;
             if (coord.i() >= 0 && coord.j() >= 0 &&
-                coord.i() <= qv.upperRight.i() && 
-                coord.j() <= qv.upperRight.j()) 
+                coord.i() <= qv.upperRight.i() &&
+                coord.j() <= qv.upperRight.j())
               val = qv.vals[coord.i()][coord.j()].val;
          }
-            
+
          // output the value
 
          if (dp.outSeqNum)
             *dp.outFile << sNum << dp.outputDelimiter << val << endl;
          else
          {
-            outRF.convert(tloc);
+            outRF.convert(tloc.get());
             *dp.outFile << tloc->asString(dp.outputDelimiter)
                         << dp.outputDelimiter << val << endl;
          }
 
-         delete tloc;
       }
    }
    else
@@ -519,8 +514,8 @@ void binValsPartial (BinValsParam& dp)
                if (val == 0.0) continue;
 
                DgIVec2D coord(qv.offset.i() + i, qv.offset.j() + j);
-               
-               DgLocation* tloc = dgg.makeLocation(DgQ2DICoord(q, coord));
+
+               std::unique_ptr<DgLocation> tloc(dgg.makeLocation(DgQ2DICoord(q, coord)));
 
                if (dp.outSeqNum)
                {
@@ -529,24 +524,23 @@ void binValsPartial (BinValsParam& dp)
                }
                else
                {
-                  outRF.convert(tloc);
+                  outRF.convert(tloc.get());
                   *dp.outFile << tloc->asString(dp.outputDelimiter)
                               << dp.outputDelimiter << val << endl;
                }
 
-               delete tloc;
             }
          }
       }
    }
-   
+
    ///// clean-up /////
 
    for (int q = 0; q < 12; q++)
    {
       QuadVals& qv = qvals[q];
       if (!qv.isUsed) continue;
-      
+
       for (int i = 0; i < qv.numI; i++)
       {
          delete [] qv.vals[i];
@@ -591,17 +585,17 @@ void doBinVals (BinValsParam& dp, DgGridPList& plist)
       // first get the grid placement
 
       dp.outFileName = dp.outFileNameBase;
-      dp.metaOutFileName = dp.metaOutFileNameBase; 
+      dp.metaOutFileName = dp.metaOutFileNameBase;
 
       orientGrid(dp, plist);
 
-      if (dp.numGrids > 1) 
+      if (dp.numGrids > 1)
       {
          string suffix = string(".") + dgg::util::to_string(dp.curGrid, 4);
          dp.metaOutFileName = dp.metaOutFileName + suffix;
          dp.outFileName = dp.outFileName + suffix;
       }
-      
+
       /////// open the output file as applicable //////
 
       dp.outFile = new ofstream();
@@ -609,7 +603,7 @@ void doBinVals (BinValsParam& dp, DgGridPList& plist)
       dp.outFile->setf(ios::fixed, ios::floatfield);
       dp.outFile->precision(dp.precision);
 
-      if (dp.numGrids > 1 || dp.placeRandom) 
+      if (dp.numGrids > 1 || dp.placeRandom)
       {
          ofstream metaOutFile;
          metaOutFile.open(dp.metaOutFileName.c_str());

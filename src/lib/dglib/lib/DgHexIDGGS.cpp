@@ -35,25 +35,25 @@
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgHexIDGGS::DgHexIDGGS (DgRFNetwork& network, const DgGeoSphRF& backFrame,
-                  const DgGeoCoord& vert0, long double azDegs, 
-                  unsigned int aperture, int nRes, 
-                  const string& name, const string& projType, 
+                  const DgGeoCoord& vert0, long double azDegs,
+                  unsigned int aperture, int nRes,
+                  const string& name, const string& projType,
                   const DgApSeq& apSeq, bool isApSeq,
                   bool isMixed43, int numAp4, bool isSuperfund)
-        : DgIDGGS (network, backFrame, vert0, azDegs, aperture, nRes, 
+        : DgIDGGS (network, backFrame, vert0, azDegs, aperture, nRes,
                        "HEXAGON", name, projType, isMixed43, numAp4,
                        isSuperfund, isApSeq, apSeq),
           apSeq_ (apSeq)
 {
    if (!isApSeq) // need to build the apSeq
-   {  
+   {
       int r;
-         
+
       if (isMixed43)
-      {  
+      {
          for (r = 0; r < numAp4; r++)
             apSeq_.addAperture(DgAperture(4));
-            
+
          for (; r < nRes - 1; r++)
             apSeq_.addAperture(DgAperture(3));
       }
@@ -61,12 +61,11 @@ DgHexIDGGS::DgHexIDGGS (DgRFNetwork& network, const DgGeoSphRF& backFrame,
          for (r = 0; r < nRes - 1; r++)
             apSeq_.addAperture(DgAperture((aperture == 3) ? 3 : 4));
    }
-         
+
    if (nRes > apSeq_.nRes() + 1) // remember +1 resolution for res 0
       report("DgHexIDGGS::DgHexIDGGS res " + dgg::util::to_string(nRes) +
              " exceeds aperture sequence string length", DgBase::Fatal);
-   
-   undefLoc_ = makeLocation(undefAddress());
+
    isAligned_ = 1;
    isCongruent_ = 0;
 
@@ -80,13 +79,13 @@ DgHexIDGGS::DgHexIDGGS (DgRFNetwork& network, const DgGeoSphRF& backFrame,
    {
       int ap = apSeq_.getAperture(r).aperture();
 
-      (*grids_)[r] = new DgHexIDGG(*this, ap, r, 
+      (*grids_)[r] = new DgHexIDGG(*this, ap, r,
                                    name + dgg::util::to_string(r, 2));
    //cout << "========================\nRES " << r << ": " << hexIdgg(r);
    }
 
    for (int r = 0; r < nRes; r++)
-      new Dg2WayResAddConverter<DgQ2DICoord, DgGeoCoord, long double> 
+      new Dg2WayResAddConverter<DgQ2DICoord, DgGeoCoord, long double>
                                                    (*this, *(grids()[r]), r);
 
 } // DgHexIDGGS::DgHexIDGGS
@@ -100,8 +99,8 @@ DgHexIDGGS::DgHexIDGGS (DgRFNetwork& network, const DgGeoSphRF& backFrame,
 ////////////////////////////////////////////////////////////////////////////////
 DgHexIDGGS::~DgHexIDGGS (void)
 {
-   for (unsigned long i = 0; i < grids().size(); i++) 
-    delete (*grids_)[i]; 
+   for (unsigned long i = 0; i < grids().size(); i++)
+    delete (*grids_)[i];
 
    delete grids_;
 
@@ -109,14 +108,13 @@ DgHexIDGGS::~DgHexIDGGS (void)
 */
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgHexIDGGS::setAddParents (const DgResAdd<DgQ2DICoord>& add, 
+void
+DgHexIDGGS::setAddParents (const DgResAdd<DgQ2DICoord>& add,
                              DgLocVector& vec) const
 {
    DgPolygon verts;
-   DgLocation* tmpLoc = grids()[add.res()]->makeLocation(add.address());
+   std::unique_ptr<DgLocation> tmpLoc = grids()[add.res()]->makeLocation(add.address());
    grids()[add.res()]->setVertices(*tmpLoc, verts);
-   delete tmpLoc;
 
    // vertices lie in parents
 
@@ -142,43 +140,39 @@ DgHexIDGGS::setAddParents (const DgResAdd<DgQ2DICoord>& add,
 } // void DgHexIDGGS::setAddParents
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgHexIDGGS::setAddInteriorChildren (const DgResAdd<DgQ2DICoord>& add, 
+void
+DgHexIDGGS::setAddInteriorChildren (const DgResAdd<DgQ2DICoord>& add,
                                         DgLocVector& vec) const
 {
    // single center hex at next res
    DgLocVector verts;
-   DgLocation* centerLoc = grids()[add.res()]->makeLocation(add.address());
-   grids()[add.res() + 1]->convert(centerLoc);
+   std::unique_ptr<DgLocation> centerLoc = grids()[add.res()]->makeLocation(add.address());
+   grids()[add.res() + 1]->convert(centerLoc.get());
    vec.push_back(*centerLoc);
-
-   delete centerLoc;
 
 } // void DgHexIDGGS::setAddInteriorChildren
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgHexIDGGS::setAddBoundaryChildren (const DgResAdd<DgQ2DICoord>& add, 
+void
+DgHexIDGGS::setAddBoundaryChildren (const DgResAdd<DgQ2DICoord>& add,
                                         DgLocVector& vec) const
 {
    const DgHexIDGG& dgg = hexIdgg(add.res());
    const DgHexIDGG& dggr = hexIdgg(add.res() + 1);
 
    // the neighbors of the center hex at next res
-   DgLocation* centerLoc = dgg.makeLocation(add.address());
-   dggr.convert(centerLoc);
-   const DgQ2DICoord& centerAdd = 
+   std::unique_ptr<DgLocation> centerLoc = dgg.makeLocation(add.address());
+   dggr.convert(centerLoc.get());
+   const DgQ2DICoord& centerAdd =
        *dggr.getAddress(*centerLoc);
 
    dggr.setAddNeighbors(centerAdd, vec);
 
-   delete centerLoc;
-
 } // void DgHexIDGGS::setAddBoundaryChildren
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgHexIDGGS::setAddBoundary2Children (const DgResAdd<DgQ2DICoord>& add, 
+void
+DgHexIDGGS::setAddBoundary2Children (const DgResAdd<DgQ2DICoord>& add,
                                         DgLocVector& vec) const
 {
    const DgHexIDGG& dgg = hexIdgg(add.res());
@@ -187,20 +181,18 @@ DgHexIDGGS::setAddBoundary2Children (const DgResAdd<DgQ2DICoord>& add,
       return;
 
    // the neighbors of the center hex at next res
-   DgLocation* centerLoc = dgg.makeLocation(add.address());
-   dggr.convert(centerLoc);
-   const DgQ2DICoord& centerAdd = 
+   std::unique_ptr<DgLocation> centerLoc = dgg.makeLocation(add.address());
+   dggr.convert(centerLoc.get());
+   const DgQ2DICoord& centerAdd =
        *dggr.getAddress(*centerLoc);
 
    dggr.setAddNeighborsBdry2(centerAdd, vec);
 
-   delete centerLoc;
-
 } // void DgHexIDGGS::setAddBoundary2Children
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgHexIDGGS::setAddAllChildren (const DgResAdd<DgQ2DICoord>& add, 
+void
+DgHexIDGGS::setAddAllChildren (const DgResAdd<DgQ2DICoord>& add,
                                    DgLocVector& vec) const
 {
    setAddInteriorChildren(add, vec);
@@ -217,4 +209,3 @@ DgHexIDGGS::setAddAllChildren (const DgResAdd<DgQ2DICoord>& add,
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-

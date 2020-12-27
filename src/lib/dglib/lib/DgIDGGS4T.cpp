@@ -34,7 +34,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-DgIDGGS4T::DgIDGGS4T (const DgIDGGS4T& rf) 
+DgIDGGS4T::DgIDGGS4T (const DgIDGGS4T& rf)
   : DgIDGGS (rf)
 {
    report("DgIDGGS4T::operator=() not implemented yet", DgBase::Fatal);
@@ -59,20 +59,18 @@ DgIDGGS4T::operator= (const DgIDGGS4T& rf)
 } // DgIDGGS4T& DgIDGGS4T::operator=
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgIDGGS4T::setAddParents (const DgResAdd<DgQ2DICoord>& add, 
+void
+DgIDGGS4T::setAddParents (const DgResAdd<DgQ2DICoord>& add,
                                DgLocVector& vec) const
 {
 //cout << "   setAddParents: " << add << endl;
    if (isCongruent())
    {
-      DgLocation* tmpLoc = makeLocation(add);
-      grids()[add.res() - 1]->convert(tmpLoc);
-      convert(tmpLoc);
+      std::unique_ptr<DgLocation> tmpLoc = makeLocation(add);
+      grids()[add.res() - 1]->convert(tmpLoc.get());
+      convert(tmpLoc.get());
 
       vec.push_back(*tmpLoc);
-
-      delete tmpLoc;
    }
    else
    {
@@ -83,8 +81,8 @@ DgIDGGS4T::setAddParents (const DgResAdd<DgQ2DICoord>& add,
 } // void DgIDGGS4T::setAddParents
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgIDGGS4T::setAddInteriorChildren (const DgResAdd<DgQ2DICoord>& add, 
+void
+DgIDGGS4T::setAddInteriorChildren (const DgResAdd<DgQ2DICoord>& add,
                                         DgLocVector& vec) const
 {
    if (isCongruent())
@@ -137,12 +135,12 @@ DgIDGGS4T::setAddInteriorChildren (const DgResAdd<DgQ2DICoord>& add,
              "systems implemented", DgBase::Fatal);
    }
 //cout << vec << endl;
-   
+
 } // void DgIDGGS4T::setAddInteriorChildren
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgIDGGS4T::setAddBoundaryChildren (const DgResAdd<DgQ2DICoord>& add, 
+void
+DgIDGGS4T::setAddBoundaryChildren (const DgResAdd<DgQ2DICoord>& add,
                                         DgLocVector& vec) const
 {
    if (isCongruent())
@@ -158,8 +156,8 @@ DgIDGGS4T::setAddBoundaryChildren (const DgResAdd<DgQ2DICoord>& add,
 } // void DgIDGGS4T::setAddBoundaryChildren
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgIDGGS4T::setAddAllChildren (const DgResAdd<DgQ2DICoord>& add, 
+void
+DgIDGGS4T::setAddAllChildren (const DgResAdd<DgQ2DICoord>& add,
                                    DgLocVector& vec) const
 {
    setAddInteriorChildren(add, vec);

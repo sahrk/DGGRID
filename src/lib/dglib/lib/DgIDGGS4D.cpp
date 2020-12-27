@@ -33,7 +33,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-DgIDGGS4D::DgIDGGS4D (const DgIDGGS4D& rf) 
+DgIDGGS4D::DgIDGGS4D (const DgIDGGS4D& rf)
   : DgIDGGS (rf)
 {
    report("DgIDGGS4D::operator=() not implemented yet", DgBase::Fatal);
@@ -58,28 +58,24 @@ DgIDGGS4D::operator= (const DgIDGGS4D& rf)
 } // DgIDGGS4D& DgIDGGS4D::operator=
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgIDGGS4D::setAddParents (const DgResAdd<DgQ2DICoord>& add, 
+void
+DgIDGGS4D::setAddParents (const DgResAdd<DgQ2DICoord>& add,
                                DgLocVector& vec) const
 {
 //cout << "   setAddParents: " << add << endl;
    if (isCongruent() || radix() == 3)
    {
-      DgLocation* tmpLoc = makeLocation(add);
-      grids()[add.res() - 1]->convert(tmpLoc);
-      convert(tmpLoc);
+      std::unique_ptr<DgLocation> tmpLoc = makeLocation(add);
+      grids()[add.res() - 1]->convert(tmpLoc.get());
+      convert(tmpLoc.get());
 
       vec.push_back(*tmpLoc);
-
-      delete tmpLoc;
    }
    else // must be aligned aperture 4
    {
       // vertices lie in parents
 
-      DgLocation* tmpLoc = makeLocation(add);
-      DgPolygon* verts = makeVertices(*tmpLoc);
-      delete tmpLoc;
+      DgPolygon* verts = makeVertices(*makeLocation(add));
 
 //cout << "   verts 1: " << *verts << endl;
 
@@ -92,10 +88,10 @@ DgIDGGS4D::setAddParents (const DgResAdd<DgQ2DICoord>& add,
       {
          bool found = false;
 
-         for (int j = 0; j < vec.size(); j++) 
+         for (int j = 0; j < vec.size(); j++)
          {
 //cout << "  " << i << " " << j << " " << (*verts)[i] << " " << vec[j];
-            if ((*verts)[i] == vec[j]) 
+            if ((*verts)[i] == vec[j])
             {
 //cout << " YES" << endl;
                found = true;
@@ -103,7 +99,7 @@ DgIDGGS4D::setAddParents (const DgResAdd<DgQ2DICoord>& add,
             }
 //cout << " NO" << endl;
          }
-         
+
          if (!found) vec.push_back((*verts)[i]);
       }
 //cout << "   parents: " << vec << endl;
@@ -114,8 +110,8 @@ DgIDGGS4D::setAddParents (const DgResAdd<DgQ2DICoord>& add,
 } // void DgIDGGS4D::setAddParents
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgIDGGS4D::setAddInteriorChildren (const DgResAdd<DgQ2DICoord>& add, 
+void
+DgIDGGS4D::setAddInteriorChildren (const DgResAdd<DgQ2DICoord>& add,
                                         DgLocVector& vec) const
 {
    if (isCongruent() || radix() == 3)
@@ -129,7 +125,7 @@ DgIDGGS4D::setAddInteriorChildren (const DgResAdd<DgQ2DICoord>& add,
          {
             v.push_back(new DgAddress< DgResAdd<DgQ2DICoord> >(
              DgResAdd<DgQ2DICoord>(DgQ2DICoord(add.address().quadNum(),
-                       DgIVec2D(lowerLeft.i() + i, lowerLeft.j() + j)), 
+                       DgIVec2D(lowerLeft.i() + i, lowerLeft.j() + j)),
                                add.res() + 1)));
          }
       }
@@ -146,12 +142,12 @@ DgIDGGS4D::setAddInteriorChildren (const DgResAdd<DgQ2DICoord>& add,
       delete tmpLoc;
 */
    }
-   
+
 } // void DgIDGGS4D::setAddInteriorChildren
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgIDGGS4D::setAddBoundaryChildren (const DgResAdd<DgQ2DICoord>& add, 
+void
+DgIDGGS4D::setAddBoundaryChildren (const DgResAdd<DgQ2DICoord>& add,
                                         DgLocVector& vec) const
 {
    if (isCongruent() || radix() == 3)
@@ -180,8 +176,8 @@ DgIDGGS4D::setAddBoundaryChildren (const DgResAdd<DgQ2DICoord>& add,
 } // void DgIDGGS4D::setAddBoundaryChildren
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgIDGGS4D::setAddAllChildren (const DgResAdd<DgQ2DICoord>& add, 
+void
+DgIDGGS4D::setAddAllChildren (const DgResAdd<DgQ2DICoord>& add,
                                    DgLocVector& vec) const
 {
    setAddInteriorChildren(add, vec);

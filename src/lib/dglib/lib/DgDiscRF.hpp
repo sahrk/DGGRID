@@ -27,9 +27,9 @@
 template<class A, class B, class DB> void
 DgDiscRF<A, B, DB>::setVertices (const DgLocation& loc, DgPolygon& vec) const
 {
-   vec.clearAddress(); 
+   vec.clearAddress();
    backFrame().convert(vec);
-   
+
    if (loc.rf() == *this)
    {
       setAddVertices(*(this->getAddress(loc)), vec);
@@ -57,9 +57,9 @@ DgDiscRF<A, B, DB>::setVertices (const DgLocation& loc, const DgRFBase& rf,
 template<class A, class B, class DB> void
 DgDiscRF<A, B, DB>::setNeighbors (const DgLocation& loc, DgLocVector& vec) const
 {
-   vec.clearAddress(); 
+   vec.clearAddress();
    this->convert(vec);
-   
+
    if (loc.rf() == *this)
    {
       setAddNeighbors(*(this->getAddress(loc)), vec);
@@ -77,9 +77,9 @@ DgDiscRF<A, B, DB>::setNeighbors (const DgLocation& loc, DgLocVector& vec) const
 template<class A, class B, class DB> void
 DgDiscRF<A, B, DB>::setNeighborsBdry2 (const DgLocation& loc, DgLocVector& vec) const
 {
-   vec.clearAddress(); 
+   vec.clearAddress();
    this->convert(vec);
-   
+
    if (loc.rf() == *this)
    {
       setAddNeighborsBdry2(*(this->getAddress(loc)), vec);
@@ -124,11 +124,7 @@ DgDiscRF<A, B, DB>::setPoint (const DgLocation& loc, const DgRFBase& rf,
 template<class A, class B, class DB> void
 DgDiscRF<A, B, DB>::setAddPoint (const A& add, DgLocation& pt) const
 {
-   DgLocation* tmpLoc = backFrame().makeLocation(invQuantify(add));
-
-   pt = *tmpLoc;
-
-   delete tmpLoc;
+   pt = *backFrame().makeLocation(invQuantify(add));
 
 } // void DgDiscRF<A, B, DB>::setPoint
 

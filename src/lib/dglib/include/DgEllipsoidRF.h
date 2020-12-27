@@ -25,12 +25,13 @@
 #ifndef DGELLIPSOIDRF_H
 #define DGELLIPSOIDRF_H
 
-#include <climits>
-#include <iostream>
-
 #include "DgConstants.h"
 #include "DgGeoDatumRF.h"
 #include "DgDVec2D.h"
+
+#include <climits>
+#include <iostream>
+#include <memory>
 
 using namespace std;
 
@@ -62,7 +63,7 @@ class DgGeoCoord : public DgDVec2D {
       static long double geoTriArea (const DgGeoCoord& g1, const DgGeoCoord& g2,
                                 const DgGeoCoord& g3);
 
-      static long double geoPolyArea (const DgPolygon& poly, 
+      static long double geoPolyArea (const DgPolygon& poly,
                                  const DgGeoCoord center);
 
       DgGeoCoord (void) { }
@@ -70,10 +71,10 @@ class DgGeoCoord : public DgDVec2D {
       DgGeoCoord (const DgGeoCoord& coord) { *this = coord; }
 
       DgGeoCoord (const DgDVec2D& coord, bool rads = true)
-        { if (rads) *this = coord; else *this = coord * M_PI_180; } 
+        { if (rads) *this = coord; else *this = coord * M_PI_180; }
 
-      DgGeoCoord (long double lon, long double lat, bool rads = true) 
-        { if (rads) *this = DgDVec2D(lon, lat); 
+      DgGeoCoord (long double lon, long double lat, bool rads = true)
+        { if (rads) *this = DgDVec2D(lon, lat);
           else *this = DgDVec2D(lon * M_PI_180, lat * M_PI_180); }
 
       DgGeoCoord (const GeoCoord& coord)
@@ -86,7 +87,7 @@ class DgGeoCoord : public DgDVec2D {
            { DgDVec2D::operator=(coord); return *this; }
 
       operator string (void) const
-           { return "(" + dgg::util::to_string(lonDegs()) + ", " + 
+           { return "(" + dgg::util::to_string(lonDegs()) + ", " +
 		   dgg::util::to_string(latDegs()) + ")"; }
 
       long double lat (void) const { return y(); } // latitude in radians
@@ -144,15 +145,13 @@ class DgEllipsoidRF : public DgGeoDatumRF<DgGeoCoord, long double> {
                  e_ (ell.e()), es_ (ell.es()), as_ (ell.as()), bs_ (ell.bs()),
                  ra_ (ell.ra()), one_es_ (ell.one_es()),
                  rone_es_ (ell.rone_es())
-           { undefLoc_ = makeLocation(undefAddress()); }
+           {}
 
-      DgEllipsoidRF (DgRFNetwork& networkIn, const string& nameIn, 
+      DgEllipsoidRF (DgRFNetwork& networkIn, const string& nameIn,
                    long double aIn, long double bIn)
                : DgGeoDatumRF<DgGeoCoord, long double> (networkIn, nameIn),
                  a_ (aIn), b_ (bIn)
-                { 
-                   undefLoc_ = makeLocation(undefAddress());
-
+                {
                    f_ = (a() - b()) / a();
                    as_ = a() * a();
                    bs_ = b() * b();
@@ -161,7 +160,7 @@ class DgEllipsoidRF : public DgGeoDatumRF<DgGeoCoord, long double> {
                    ra_ = 1.0L / a();
                    one_es_ = 1.0L - es();
                    rone_es_ = 1.0L / one_es();
-                }  
+                }
 
       DgEllipsoidRF& operator= (const DgEllipsoidRF& ell)
                {
@@ -251,13 +250,13 @@ class DgEllipsoidRF : public DgGeoDatumRF<DgGeoCoord, long double> {
       virtual DgAddressBase* vecAddress (const DgDVec2D& v) const
                     { return new DgAddress<DgGeoCoord>(DgGeoCoord(v, false)); }
 
-      virtual DgLocation* vecLocation (const DgDVec2D& v) const
+      virtual std::unique_ptr<DgLocation> vecLocation (const DgDVec2D& v) const
                     { return makeLocation(DgGeoCoord(v, false)); }
 
       virtual DgDVec2D getVecAddress (const DgAddressBase& add) const
-         { 
-            const DgGeoCoord& g = 
-                  static_cast< const DgAddress<DgGeoCoord> &>(add).address(); 
+         {
+            const DgGeoCoord& g =
+                  static_cast< const DgAddress<DgGeoCoord> &>(add).address();
             return DgDVec2D(g.lonDegs(), g.latDegs());
          }
 
@@ -268,7 +267,7 @@ class DgEllipsoidRF : public DgGeoDatumRF<DgGeoCoord, long double> {
       // distance in km; not currently defined (except for DgGeoSphRF)
 
       virtual long double dist (const DgGeoCoord& add1, const DgGeoCoord& add2) const
-         { return 1.0L; } 
+         { return 1.0L; }
 
       virtual string add2str (const DgGeoCoord& add) const
                        { return string(add); }
@@ -277,7 +276,7 @@ class DgEllipsoidRF : public DgGeoDatumRF<DgGeoCoord, long double> {
                 { return dgg::util::to_string(add.lonDegs(), formatStr()) + delimiter +
                          dgg::util::to_string(add.latDegs(), formatStr()); }
 
-      virtual const char* str2add (DgGeoCoord* add, const char* str, 
+      virtual const char* str2add (DgGeoCoord* add, const char* str,
                                    char delimiter) const;
 
       virtual string dist2str (const long double& dist) const
@@ -291,7 +290,7 @@ class DgEllipsoidRF : public DgGeoDatumRF<DgGeoCoord, long double> {
 
    private:
 
-      long double a_; // semi-major axis in meters 
+      long double a_; // semi-major axis in meters
 
       long double b_; // semi-minor axis in meters
 
@@ -318,14 +317,14 @@ inline ostream&
 operator<< (ostream& stream, const DgEllipsoidRF& ell)
 {
    return stream << "a: " << ell.a() << " " << "b: " << ell.b() << " "
-                 << "f: " << ell.f() << " " << "e: " << ell.e(); 
+                 << "f: " << ell.f() << " " << "e: " << ell.e();
 
 } // ostream& operator<<
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-/*  
-   Below are typedefs, defines, and function prototypes for vector and 
+/*
+   Below are typedefs, defines, and function prototypes for vector and
    spherical trig routines.
 
    By Lian Song and Kevin Sahr.
@@ -368,7 +367,7 @@ typedef struct Vec3D {
 
 typedef struct SphTri {
 
-   long long int code; 
+   long long int code;
    GeoCoord verts[3];  /* vertices in degrees */
    long double   edges[3];  /* edges opposite to verts in central angle degrees */
    long double   angles[3]; /* interior angles in degrees corresponding to verts */
@@ -382,20 +381,20 @@ typedef struct PlaneTri {
 
    long long int code;
    long long int direction; /* 0: up, 1: down */
-   Vec2D    points[3]; /* points in plane triangle in km */ 
-   Vec2D    cenpoint;  /* central point of plane triangle in km */ 
- 
+   Vec2D    points[3]; /* points in plane triangle in km */
+   Vec2D    cenpoint;  /* central point of plane triangle in km */
+
 } PlaneTri;
 
 typedef struct SCtri {
 
   long long int code;
   GeoCoord verts[3]; /* vertices in radius*/
-  GeoCoord poles[3];  
+  GeoCoord poles[3];
   long double edges[3];
   long double area;
   long double perimeter;
-  long double sclat[3]; 
+  long double sclat[3];
          /* latitude from pole of small circle v1v2 in radius */
 /*  long double   darea[3];
      area surounded by great circle and small circle of two points.
@@ -416,7 +415,7 @@ typedef struct PreCompGeo {
 
 } PreCompGeo;
 
-/* pre-computed info corresponding to a spherical triangle 
+/* pre-computed info corresponding to a spherical triangle
    (for use in finding if a point lies in the triangle) */
 
 typedef struct PreCompInTri {
@@ -493,7 +492,7 @@ void planeTriInit (PlaneTri* tri); /* initialize with UNDEFVAL values */
 void sphTriSolve (SphTri* tri);
 
 /* calculate the center point of a sphere triangle */
-GeoCoord sphTricenpoint(GeoCoord sp[3]); 
+GeoCoord sphTricenpoint(GeoCoord sp[3]);
 
 /* sphere functions */
 
@@ -502,29 +501,29 @@ GeoCoord xyzll(const Vec3D& v); /* transform a point from xyz to latlon */
 Vec3D llxyz(const GeoCoord& sv); /* transform a point from latlon to xyz */
 
 /* calculate the chord distance */
-long double chorddist(const GeoCoord& ll1,const GeoCoord& ll2); 
+long double chorddist(const GeoCoord& ll1,const GeoCoord& ll2);
 
 /* calculate the sphere distance */
-long double spheredist(const GeoCoord& ll1,const GeoCoord& ll2); 
+long double spheredist(const GeoCoord& ll1,const GeoCoord& ll2);
 
-/* decide if pt is in sphere triangle */ 
-int ptinsphTri(const GeoCoord& pt, GeoCoord sTri[3]); 
+/* decide if pt is in sphere triangle */
+int ptinsphTri(const GeoCoord& pt, GeoCoord sTri[3]);
 
 /* return the middle point of the great circle */
-GeoCoord GCmidpoint(const GeoCoord& pp1, const GeoCoord& pp2); 
+GeoCoord GCmidpoint(const GeoCoord& pp1, const GeoCoord& pp2);
 
 /* return intersect point of two great circle */
-GeoCoord GCintersect(const GeoCoord& sv11, const GeoCoord& sv12, 
+GeoCoord GCintersect(const GeoCoord& sv11, const GeoCoord& sv12,
                      const GeoCoord& sv21, const GeoCoord& sv22, int sign);
 
 /* return latitude of a point with known longtitude on great circle */
 long double GCptlat(long double lon, const GeoCoord& sv1, const GeoCoord& sv2);
 
 /* return azimuth from pt1 to pt2 */
-long double Azimuth(const GeoCoord& pt1, const GeoCoord& pt2); 
+long double Azimuth(const GeoCoord& pt1, const GeoCoord& pt2);
 
 /* return Geopoint that have great-circle-distance d along azimuth az from pt */
-GeoCoord GCdaz(const GeoCoord& pt, long double d, long double az); 
+GeoCoord GCdaz(const GeoCoord& pt, long double d, long double az);
 
 /******************************************************************************/
 

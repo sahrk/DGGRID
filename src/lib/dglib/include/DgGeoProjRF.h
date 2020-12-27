@@ -26,6 +26,7 @@
 #define DGGEOPROJRF_H
 
 #include <iostream>
+#include <memory>
 
 #include "DgConstants.h"
 #include "DgGeoDatumRF.h"
@@ -125,7 +126,7 @@ class DgGeoProjRF : public DgGeoDatumRF<DgDVec2D, long double> {
       virtual DgAddressBase* vecAddress (const DgDVec2D& v) const
                     { return new DgAddress<DgDVec2D>(v); }
 
-      virtual DgLocation* vecLocation (const DgDVec2D& v) const
+      virtual std::unique_ptr<DgLocation> vecLocation (const DgDVec2D& v) const
                     { return makeLocation(v); }
 
       virtual DgDVec2D getVecAddress (const DgAddressBase& add) const

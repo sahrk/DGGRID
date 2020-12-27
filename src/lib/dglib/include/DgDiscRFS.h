@@ -41,7 +41,7 @@ template<class A> class DgResAdd {
 
    public:
 
-      DgResAdd (void) : res_ (0) { }
+      DgResAdd (void) : res_ (0), address_(A()) { }
 
       DgResAdd (const DgResAdd& add) { *this = add; }
 

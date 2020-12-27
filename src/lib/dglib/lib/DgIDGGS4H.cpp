@@ -35,7 +35,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-DgIDGGS4H::DgIDGGS4H (const DgIDGGS4H& rf) 
+DgIDGGS4H::DgIDGGS4H (const DgIDGGS4H& rf)
   : DgHexIDGGS (rf)
 {
    report("DgIDGGS4H::operator=() not implemented yet", DgBase::Fatal);
@@ -60,14 +60,13 @@ DgIDGGS4H::operator= (const DgIDGGS4H& rf)
 } // DgIDGGS4H& DgIDGGS4H::operator=
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgIDGGS4H::setAddParents (const DgResAdd<DgQ2DICoord>& add, 
+void
+DgIDGGS4H::setAddParents (const DgResAdd<DgQ2DICoord>& add,
                              DgLocVector& vec) const
 {
    DgPolygon verts;
-   DgLocation* tmpLoc = grids()[add.res()]->makeLocation(add.address());
+   std::unique_ptr<DgLocation> tmpLoc = grids()[add.res()]->makeLocation(add.address());
    grids()[add.res()]->setVertices(*tmpLoc, verts);
-   delete tmpLoc;
 
    // edge midpoints lie in parents
 
@@ -79,13 +78,11 @@ DgIDGGS4H::setAddParents (const DgResAdd<DgQ2DICoord>& add,
       DgDVec2D pt2 = *(grids()[add.res()]->backFrame().getAddress(
                                            verts[(i + 1) % verts.size()]));
 
-      DgLocation* tmpLoc = 
+      std::unique_ptr<DgLocation> tmpLoc =
          grids()[add.res()]->backFrame().makeLocation(
                                            DgDVec2D::midPoint(pt1, pt2));
 
       midPts.push_back(*tmpLoc);
-
-      delete tmpLoc;
    }
 
    grids()[add.res() - 1]->convert(midPts);
@@ -110,28 +107,25 @@ DgIDGGS4H::setAddParents (const DgResAdd<DgQ2DICoord>& add,
 } // void DgIDGGS4H::setAddParents
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgIDGGS4H::setAddInteriorChildren (const DgResAdd<DgQ2DICoord>& add, 
+void
+DgIDGGS4H::setAddInteriorChildren (const DgResAdd<DgQ2DICoord>& add,
                                         DgLocVector& vec) const
 {
    DgLocVector verts;
-   DgLocation* tmpLoc = grids()[add.res()]->makeLocation(add.address());
-   grids()[add.res() + 1]->convert(tmpLoc);
+   std::unique_ptr<DgLocation> tmpLoc = grids()[add.res()]->makeLocation(add.address());
+   grids()[add.res() + 1]->convert(tmpLoc.get());
    vec.push_back(*tmpLoc);
-
-   delete tmpLoc;
 
 } // void DgIDGGS4H::setAddInteriorChildren
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgIDGGS4H::setAddBoundaryChildren (const DgResAdd<DgQ2DICoord>& add, 
+void
+DgIDGGS4H::setAddBoundaryChildren (const DgResAdd<DgQ2DICoord>& add,
                                         DgLocVector& vec) const
 {
    DgPolygon verts;
-   DgLocation* tmpLoc = grids()[add.res()]->makeLocation(add.address());
+   std::unique_ptr<DgLocation> tmpLoc = grids()[add.res()]->makeLocation(add.address());
    grids()[add.res()]->setVertices(*tmpLoc, verts);
-   delete tmpLoc;
 
    // edge midpoints lie in children
 
@@ -142,13 +136,11 @@ DgIDGGS4H::setAddBoundaryChildren (const DgResAdd<DgQ2DICoord>& add,
 
       DgDVec2D pt2 = *(grids()[add.res()]->backFrame().getAddress(
                                            verts[(i + 1) % verts.size()]));
-      DgLocation* tmpLoc = 
+      std::unique_ptr<DgLocation> tmpLoc =
          grids()[add.res()]->backFrame().makeLocation(
                                               DgDVec2D::midPoint(pt1, pt2));
 
       midPts.push_back(*tmpLoc);
-
-      delete tmpLoc;
    }
 
    grids()[add.res() + 1]->convert(midPts);
@@ -173,8 +165,8 @@ DgIDGGS4H::setAddBoundaryChildren (const DgResAdd<DgQ2DICoord>& add,
 } // void DgIDGGS4H::setAddBoundaryChildren
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgIDGGS4H::setAddAllChildren (const DgResAdd<DgQ2DICoord>& add, 
+void
+DgIDGGS4H::setAddAllChildren (const DgResAdd<DgQ2DICoord>& add,
                                    DgLocVector& vec) const
 {
    setAddInteriorChildren(add, vec);

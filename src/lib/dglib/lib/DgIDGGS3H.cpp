@@ -35,7 +35,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-DgIDGGS3H::DgIDGGS3H (const DgIDGGS3H& rf) 
+DgIDGGS3H::DgIDGGS3H (const DgIDGGS3H& rf)
   : DgHexIDGGS (rf)
 {
    report("DgIDGGS3H::operator=() not implemented yet", DgBase::Fatal);
@@ -60,14 +60,13 @@ DgIDGGS3H::operator= (const DgIDGGS3H& rf)
 } // DgIDGGS3H& DgIDGGS3H::operator=
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgIDGGS3H::setAddParents (const DgResAdd<DgQ2DICoord>& add, 
+void
+DgIDGGS3H::setAddParents (const DgResAdd<DgQ2DICoord>& add,
                              DgLocVector& vec) const
 {
    DgPolygon verts;
-   DgLocation* tmpLoc = grids()[add.res()]->makeLocation(add.address());
+   std::unique_ptr<DgLocation> tmpLoc = grids()[add.res()]->makeLocation(add.address());
    grids()[add.res()]->setVertices(*tmpLoc, verts);
-   delete tmpLoc;
 
    // vertices lie in parents
 
@@ -93,28 +92,25 @@ DgIDGGS3H::setAddParents (const DgResAdd<DgQ2DICoord>& add,
 } // void DgIDGGS3H::setAddParents
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgIDGGS3H::setAddInteriorChildren (const DgResAdd<DgQ2DICoord>& add, 
+void
+DgIDGGS3H::setAddInteriorChildren (const DgResAdd<DgQ2DICoord>& add,
                                         DgLocVector& vec) const
 {
    DgLocVector verts;
-   DgLocation* tmpLoc = grids()[add.res()]->makeLocation(add.address());
-   grids()[add.res() + 1]->convert(tmpLoc);
+   std::unique_ptr<DgLocation> tmpLoc = grids()[add.res()]->makeLocation(add.address());
+   grids()[add.res() + 1]->convert(tmpLoc.get());
    vec.push_back(*tmpLoc);
-
-   delete tmpLoc;
 
 } // void DgIDGGS3H::setAddInteriorChildren
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgIDGGS3H::setAddBoundaryChildren (const DgResAdd<DgQ2DICoord>& add, 
+void
+DgIDGGS3H::setAddBoundaryChildren (const DgResAdd<DgQ2DICoord>& add,
                                         DgLocVector& vec) const
 {
    DgPolygon verts;
-   DgLocation* tmpLoc = grids()[add.res()]->makeLocation(add.address());
+   std::unique_ptr<DgLocation> tmpLoc = grids()[add.res()]->makeLocation(add.address());
    grids()[add.res()]->setVertices(*tmpLoc, verts);
-   delete tmpLoc;
 
    // vertices lie in children
 
@@ -140,8 +136,8 @@ DgIDGGS3H::setAddBoundaryChildren (const DgResAdd<DgQ2DICoord>& add,
 } // void DgIDGGS3H::setAddBoundaryChildren
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgIDGGS3H::setAddAllChildren (const DgResAdd<DgQ2DICoord>& add, 
+void
+DgIDGGS3H::setAddAllChildren (const DgResAdd<DgQ2DICoord>& add,
                                    DgLocVector& vec) const
 {
    setAddInteriorChildren(add, vec);

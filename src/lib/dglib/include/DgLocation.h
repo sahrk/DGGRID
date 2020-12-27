@@ -43,9 +43,13 @@ class DgLocation : public DgLocBase {
 
       DgLocation (void) : address_ (0) { }
 
-      DgLocation (const DgLocation& loc) 
-         : DgLocBase (loc.rf()), 
-           address_ (loc.rf().createAddress(*loc.address())) { } 
+      DgLocation (const DgLocation& loc)
+         : DgLocBase (loc.rf()),
+           address_ (loc.rf().createAddress(*loc.address())) { }
+
+      DgLocation (const DgRFBase& rfIn, DgAddressBase* addIn)
+         : DgLocBase (rfIn),
+           address_ (addIn) {}
 
       DgLocation (const DgRFBase& rfIn) : DgLocBase (rfIn), address_ (0) { }
 
@@ -60,14 +64,14 @@ class DgLocation : public DgLocBase {
       bool operator!= (const DgLocation& loc) const
             { return !operator==(loc); }
 
-      DgDistanceBase* distance (const DgLocation& loc, 
+      DgDistanceBase* distance (const DgLocation& loc,
                                 bool convert = false) const
                { return rf().distance(*this, loc, convert); }
 
-      virtual string asString (void) const 
+      virtual string asString (void) const
                { return rf().toString(*this); }
 
-      virtual string asString (char delimiter) const 
+      virtual string asString (char delimiter) const
                { return rf().toString(*this, delimiter); }
 
       virtual string asAddressString (void) const
@@ -76,12 +80,10 @@ class DgLocation : public DgLocBase {
       virtual string asAddressString (char delimiter) const
                { return rf().toAddressString(*this, delimiter); }
 
-      virtual const char* fromString (const char* str, char delimiter) 
+      virtual const char* fromString (const char* str, char delimiter)
                { return rf().fromString(*this, str, delimiter); }
 
       const DgAddressBase*  address  (void) const { return address_; }
-
-      bool isUndefined (void) const { return operator==(rf().undefLoc()); }
 
       void setNullAddress (void) { address_ = 0; }
 
@@ -93,10 +95,6 @@ class DgLocation : public DgLocBase {
 
    private:
 
-      DgLocation (const DgRFBase& rfIn, DgAddressBase* addIn) 
-         : DgLocBase (rfIn),
-           address_ (addIn) {}
-
       DgAddressBase* address_;
 
    friend class DgRFBase;
@@ -106,13 +104,13 @@ class DgLocation : public DgLocBase {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-inline DgLocation& 
+inline DgLocation&
 DgLocation::operator= (const DgLocation& loc)
 {
    if (this != &loc)
    {
       delete address_;
-      
+
       rf_ = &loc.rf();
       address_ = loc.rf().createAddress(*loc.address());
    }

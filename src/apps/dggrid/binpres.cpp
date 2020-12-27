@@ -41,7 +41,7 @@ using namespace std;
 BinPresenceParam::BinPresenceParam (DgParamList& plist)
       : MainParam(plist), wholeEarth (true), outFile (0), outSeqNum (false),
         inputDelimiter (' '), outputDelimiter (' '), outputAllCells (true)
-{ 
+{
       /////// fill state variables from the parameter list //////////
 
       string dummy;
@@ -55,7 +55,7 @@ BinPresenceParam::BinPresenceParam (DgParamList& plist)
 
       string inFileStr;
       getParamValue(plist, "input_files", inFileStr, false);
-  
+
       char* names = new char[inFileStr.length() + 1];
       inFileStr.copy(names, string::npos);
       names[inFileStr.length()] = 0;
@@ -122,7 +122,7 @@ void BinPresenceParam::dump (void)
    MainParam::dump();
 
    cout << "BEGIN BINPRESENCE PARAMETER DUMP" << endl;
-   
+
    cout << " wholeEarth: " << wholeEarth << endl;
    cout << " outFileNameBase: " << outFileNameBase << endl;
    cout << " outFileName: " << outFileName << endl;
@@ -144,7 +144,7 @@ void BinPresenceParam::dump (void)
    cout << " inFormatStr: " << inFormatStr << endl;
    cout << " outputAllCells: " << outputAllCells << endl;
    cout << " outputCount: " << ((outputCount) ? "true" : "false") << endl;
-   
+
    cout << "END BINPRESENCE PARAMETER DUMP" << endl;
 
 } // void BinPresenceParam::dump
@@ -176,14 +176,14 @@ void binPresGlobal (BinPresenceParam& dp)
    else if (dp.outAddType == "INTERLEAVE") pOutRF = &dgg.intRF();
    else if (dp.outAddType == "PLANE") pOutRF = &dgg.planeRF();
    else if (dp.outAddType == "Q2DI") pOutRF = &dgg;
-   else if (dp.outAddType == "SEQNUM") 
+   else if (dp.outAddType == "SEQNUM")
    {
       dp.outSeqNum = true;
       pOutRF = &dgg;
    }
    else
    {
-      ::report("binPresGlobal(): invalid output_address_type " + 
+      ::report("binPresGlobal(): invalid output_address_type " +
                dp.outAddType, DgBase::Fatal);
    }
 
@@ -194,7 +194,7 @@ void binPresGlobal (BinPresenceParam& dp)
    int nClasses = dp.inputFiles.size();
    //bool** vals = new (bool (*[dgg.bndRF().size()]));
    bool** vals = new bool*[dgg.bndRF().size()];
-   for (unsigned long int i = 0; i < dgg.bndRF().size(); i++) 
+   for (unsigned long int i = 0; i < dgg.bndRF().size(); i++)
    {
       vals[i] = new bool[nClasses];
       for (int j = 0; j < nClasses; j++) vals[i][j] = false;
@@ -220,15 +220,14 @@ void binPresGlobal (BinPresenceParam& dp)
          result = sscanf(buff, dp.inFormatStr.c_str(), &lon, &lat);
          if (result != 2)
          {
-            ::report("binPresGlobal(): invalid format in file " + 
+            ::report("binPresGlobal(): invalid format in file " +
                      dp.inputFiles[fc], DgBase::Fatal);
          }
 
-         DgLocation* tloc = geoRF.makeLocation(DgGeoCoord(lon, lat, false));
-         dgg.convert(tloc);
+         std::unique_ptr<DgLocation> tloc(geoRF.makeLocation(DgGeoCoord(lon, lat, false)));
+         dgg.convert(tloc.get());
          long int sNum = dgg.bndRF().seqNum(*tloc);
          long int ndx = sNum - 1;
-         delete tloc;
 
          vals[ndx][fc] = true;
       }
@@ -238,7 +237,7 @@ void binPresGlobal (BinPresenceParam& dp)
 
    ///// output the values /////
 
-   for (unsigned long int i = 0; i < dgg.bndRF().size(); i++) 
+   for (unsigned long int i = 0; i < dgg.bndRF().size(); i++)
    {
       int count = 0;
       for (int j = 0; j < nClasses; j++) if (vals[i][j]) count++;
@@ -250,15 +249,14 @@ void binPresGlobal (BinPresenceParam& dp)
          *dp.outFile << sNum << dp.outputDelimiter;
       else
       {
-         DgLocation* tloc = dgg.bndRF().locFromSeqNum(sNum);
-         outRF.convert(tloc);
+         std::unique_ptr<DgLocation> tloc(dgg.bndRF().locFromSeqNum(sNum));
+         outRF.convert(tloc.get());
          *dp.outFile << tloc->asString(dp.outputDelimiter)
                      << dp.outputDelimiter;
-         delete tloc;
       }
 
       if (dp.outputCount) *dp.outFile << count << dp.outputDelimiter;
-      for (int j = 0; j < nClasses; j++) 
+      for (int j = 0; j < nClasses; j++)
          *dp.outFile << ((vals[i][j]) ? 1 : 0);
       *dp.outFile << endl;
    }
@@ -311,14 +309,14 @@ void binPresPartial (BinPresenceParam& dp)
    else if (dp.outAddType == "INTERLEAVE") pOutRF = &dgg.intRF();
    else if (dp.outAddType == "PLANE") pOutRF = &dgg.planeRF();
    else if (dp.outAddType == "Q2DI") pOutRF = &dgg;
-   else if (dp.outAddType == "SEQNUM") 
+   else if (dp.outAddType == "SEQNUM")
    {
       dp.outSeqNum = true;
       pOutRF = &dgg;
    }
    else
    {
-      ::report("binPresPartial(): invalid output_address_type " + 
+      ::report("binPresPartial(): invalid output_address_type " +
                dp.outAddType, DgBase::Fatal);
    }
 
@@ -358,12 +356,12 @@ void binPresPartial (BinPresenceParam& dp)
          result = sscanf(buff, dp.inFormatStr.c_str(), &lon, &lat);
          if (result != 2)
          {
-            ::report("binPresPartial(): invalid format in file " + 
+            ::report("binPresPartial(): invalid format in file " +
                       dp.inputFiles[fc], DgBase::Fatal);
          }
 
-         DgLocation* tloc = geoRF.makeLocation(DgGeoCoord(lon, lat, false));
-         dgg.convert(tloc);
+         std::unique_ptr<DgLocation> tloc(geoRF.makeLocation(DgGeoCoord(lon, lat, false)));
+         dgg.convert(tloc.get());
 
          int q = dgg.getAddress(*tloc)->quadNum();
          const DgIVec2D& coord = dgg.getAddress(*tloc)->coord();
@@ -375,7 +373,6 @@ void binPresPartial (BinPresenceParam& dp)
          if (coord.j() < qv.offset.j()) qv.offset.setJ(coord.j());
          if (coord.j() > qv.upperRight.j()) qv.upperRight.setJ(coord.j());
 
-         delete tloc;
       }
 
       inFile.close();
@@ -388,7 +385,7 @@ void binPresPartial (BinPresenceParam& dp)
    {
       QuadVals& qv = qvals[q];
       if (!qv.isUsed) continue;
-      
+
       qv.upperRight = qv.upperRight - qv.offset; // make relative
 
       qv.numI = qv.upperRight.i() + 1;
@@ -397,7 +394,7 @@ void binPresPartial (BinPresenceParam& dp)
       for (int i = 0; i < qv.numI; i++)
       {
          qv.vals[i] = new bool*[qv.numJ];
-         
+
          for (int j = 0; j < qv.numJ; j++)
          {
             qv.vals[i][j] = new bool[nClasses];
@@ -423,17 +420,16 @@ void binPresPartial (BinPresenceParam& dp)
          result = sscanf(buff, dp.inFormatStr.c_str(), &lon, &lat);
          if (result != 2)
          {
-            ::report("binPresPartial(): invalid format in file " + 
+            ::report("binPresPartial(): invalid format in file " +
                       dp.inputFiles[fc], DgBase::Fatal);
          }
 
-         DgLocation* tloc = geoRF.makeLocation(DgGeoCoord(lon, lat, false));
-         dgg.convert(tloc);
+         std::unique_ptr<DgLocation> tloc(geoRF.makeLocation(DgGeoCoord(lon, lat, false)));
+         dgg.convert(tloc.get());
 
          int q = dgg.getAddress(*tloc)->quadNum();
          QuadVals& qv = qvals[q];
          DgIVec2D coord = dgg.getAddress(*tloc)->coord() - qv.offset;
-         delete tloc;
 
          qv.vals[coord.i()][coord.j()][fc] = true;
       }
@@ -450,11 +446,11 @@ void binPresPartial (BinPresenceParam& dp)
       for (int i = 0; i < nClasses; i++) dummy[i] = false;
 
       bool* vvec;
-      for (unsigned long int i = 0; i < dgg.bndRF().size(); i++) 
+      for (unsigned long int i = 0; i < dgg.bndRF().size(); i++)
       {
          unsigned long int sNum = i + 1;
-         DgLocation* tloc = dgg.bndRF().locFromSeqNum(sNum);
-         
+         std::unique_ptr<DgLocation> tloc(dgg.bndRF().locFromSeqNum(sNum));
+
          // check to see if there is a value for this cell
          count = 0;
          vvec = dummy;
@@ -464,25 +460,24 @@ void binPresPartial (BinPresenceParam& dp)
          {
             DgIVec2D coord = dgg.getAddress(*tloc)->coord() - qv.offset;
             if (coord.i() >= 0 && coord.j() >= 0 &&
-                coord.i() <= qv.upperRight.i() && 
-                coord.j() <= qv.upperRight.j()) 
+                coord.i() <= qv.upperRight.i() &&
+                coord.j() <= qv.upperRight.j())
             {
               vvec = qv.vals[coord.i()][coord.j()];
-              for (int k = 0; k < nClasses; k++) if (vvec[k]) count++; 
+              for (int k = 0; k < nClasses; k++) if (vvec[k]) count++;
             }
          }
-            
+
          // output the value
 
          if (dp.outSeqNum)
             *dp.outFile << sNum << dp.outputDelimiter;
          else
          {
-            DgLocation* tloc = dgg.bndRF().locFromSeqNum(sNum);
-            outRF.convert(tloc);
+            std::unique_ptr<DgLocation> tloc(dgg.bndRF().locFromSeqNum(sNum));
+            outRF.convert(tloc.get());
             *dp.outFile << tloc->asString(dp.outputDelimiter)
                         << dp.outputDelimiter;
-            delete tloc;
          }
 
          if (dp.outputCount) *dp.outFile << count << dp.outputDelimiter;
@@ -490,7 +485,6 @@ void binPresPartial (BinPresenceParam& dp)
             *dp.outFile << ((vvec[k]) ? 1 : 0);
          *dp.outFile << endl;
 
-         delete tloc;
       }
       delete [] dummy;
    }
@@ -510,7 +504,7 @@ void binPresPartial (BinPresenceParam& dp)
                if (count == 0) continue;
 
                DgIVec2D coord(qv.offset.i() + i, qv.offset.j() + j);
-               DgLocation* tloc = dgg.makeLocation(DgQ2DICoord(q, coord));
+               std::unique_ptr<DgLocation> tloc(dgg.makeLocation(DgQ2DICoord(q, coord)));
 
                if (dp.outSeqNum)
                {
@@ -519,11 +513,10 @@ void binPresPartial (BinPresenceParam& dp)
                }
                else
                {
-                  outRF.convert(tloc);
+                  outRF.convert(tloc.get());
                   *dp.outFile << tloc->asString(dp.outputDelimiter)
                               << dp.outputDelimiter;
                }
-               delete tloc;
 
                if (dp.outputCount) *dp.outFile << count << dp.outputDelimiter;
                for (int k = 0; k < nClasses; k++)
@@ -533,7 +526,7 @@ void binPresPartial (BinPresenceParam& dp)
          }
       }
    }
-   
+
 
    ///// clean-up /////
 
@@ -541,7 +534,7 @@ void binPresPartial (BinPresenceParam& dp)
    {
       QuadVals& qv = qvals[q];
       if (!qv.isUsed) continue;
-      
+
       for (int i = 0; i < qv.numI; i++)
       {
          for (int j = 0; j < qv.numJ; j++) delete [] qv.vals[i][j];
@@ -565,17 +558,17 @@ void doBinPresence (BinPresenceParam& dp, DgGridPList& plist)
       // first get the grid placement
 
       dp.outFileName = dp.outFileNameBase;
-      dp.metaOutFileName = dp.metaOutFileNameBase; 
+      dp.metaOutFileName = dp.metaOutFileNameBase;
 
       orientGrid(dp, plist);
 
-      if (dp.numGrids > 1) 
+      if (dp.numGrids > 1)
       {
          string suffix = string(".") + dgg::util::to_string(dp.curGrid, 4);
          dp.metaOutFileName = dp.metaOutFileName + suffix;
          dp.outFileName = dp.outFileName + suffix;
       }
-      
+
       /////// open the output file as applicable //////
 
       dp.outFile = new ofstream();
@@ -583,7 +576,7 @@ void doBinPresence (BinPresenceParam& dp, DgGridPList& plist)
       dp.outFile->setf(ios::fixed, ios::floatfield);
       dp.outFile->precision(dp.precision);
 
-      if (dp.numGrids > 1 || dp.placeRandom) 
+      if (dp.numGrids > 1 || dp.placeRandom)
       {
          ofstream metaOutFile;
          metaOutFile.open(dp.metaOutFileName.c_str());

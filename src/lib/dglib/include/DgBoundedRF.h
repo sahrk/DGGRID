@@ -33,32 +33,32 @@ class DgLocation;
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-template<class A, class B, class DB> class DgBoundedRF 
+template<class A, class B, class DB> class DgBoundedRF
                                          : public DgBoundedRFBase<B, DB> {
 
    public:
 
-      DgBoundedRF<A, B, DB> (const DgDiscRF<A, B, DB>& rfIn, 
-                             const A& firstAddIn, 
+      DgBoundedRF<A, B, DB> (const DgDiscRF<A, B, DB>& rfIn,
+                             const A& firstAddIn,
                              const A& lastAddIn, const A& endAddIn,
                              bool zBasedIn = true);
-                          
+
       const DgDiscRF<A, B, DB>& discRF (void) const { return discRF_; }
 
-      virtual bool validLocation (const DgLocation& loc, 
+      virtual bool validLocation (const DgLocation& loc,
                                   bool convert = true) const;
 
-      virtual DgLocation& incrementLocation (DgLocation& loc, 
+      virtual DgLocation& incrementLocation (DgLocation& loc,
                                              bool convert = true) const;
-                       
-      virtual DgLocation& decrementLocation (DgLocation& loc, 
-                                             bool convert = true) const; 
+
+      virtual DgLocation& decrementLocation (DgLocation& loc,
+                                             bool convert = true) const;
 
       virtual unsigned long long int seqNum (const DgLocation& loc,
                                         bool convert = true) const;
 
-      virtual DgLocation* locFromSeqNum (unsigned long long int sNum) const;
-                                             
+      virtual std::unique_ptr<DgLocation> locFromSeqNum (unsigned long long int sNum) const;
+
       const A& firstAdd (void) const { return firstAdd_; }
       const A& lastAdd  (void) const { return lastAdd_; }
       const A& endAdd   (void) const { return endAdd_; }
@@ -84,7 +84,7 @@ template<class A, class B, class DB> class DgBoundedRF
                                                        DgLocation& point) const
                    { discRF().setPoint(loc, rf, point); }
 
-      virtual void setPoint (const A& add, const DgRFBase& rf, 
+      virtual void setPoint (const A& add, const DgRFBase& rf,
                                                        DgLocation& point) const
                    { discRF().setPoint(add, rf, point); }
 
@@ -98,14 +98,14 @@ template<class A, class B, class DB> class DgBoundedRF
                                                         DgPolygon& vec) const
                    { discRF().setVertices(loc, rf, vec); }
 
-      virtual void setVertices (const A& add, const DgRFBase& rf, 
+      virtual void setVertices (const A& add, const DgRFBase& rf,
                                                         DgPolygon& vec) const
                    { discRF().setVertices(add, rf, vec); }
 
       virtual void setNeighbors (const DgLocation& loc, DgLocVector& vec) const
                    { discRF().setNeighbors(loc, vec); }
 
-      virtual void setNeighbors (const A& add, const DgRFBase& rf, 
+      virtual void setNeighbors (const A& add, const DgRFBase& rf,
                                                         DgLocVector& vec) const
                    { discRF().setNeighbors(add, rf, vec); }
 
@@ -127,7 +127,7 @@ template<class A, class B, class DB> class DgBoundedRF
       // pure virtual functions that must be defined by sub-classes
 
       virtual bool validAddress (const A& add) const = 0;
-      
+
       virtual A& incrementAddress (A& add) const = 0;
       virtual A& decrementAddress (A& add) const = 0;
 
@@ -137,7 +137,7 @@ template<class A, class B, class DB> class DgBoundedRF
 
       virtual bool lessThanAddress (const A& a1, const A& a2) const
                       { return (seqNumAddress(a1) < seqNumAddress(a2)); }
-                                             
+
    protected:
 
       void setFirstAdd (const A& firstAddIn) { firstAdd_ = firstAddIn; }
@@ -147,11 +147,11 @@ template<class A, class B, class DB> class DgBoundedRF
    private:
 
       const DgDiscRF<A, B, DB>& discRF_;
-         
+
       A firstAdd_;
       A lastAdd_;
       A endAdd_;
-      
+
 };
 
 #include "../lib/DgBoundedRF.hpp"

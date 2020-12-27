@@ -22,10 +22,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <list>
-
-using namespace std;
-
 #include "DgBase.h"
 #include "DgRFBase.h"
 #include "DgLocBase.h"
@@ -33,26 +29,29 @@ using namespace std;
 #include "DgLocVector.h"
 #include "DgConverterBase.h"
 
+#include <list>
+#include <memory>
+
+using namespace std;
+
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgRFBase::~DgRFBase (void)
 {
-   /* JFW: We don't delete connectTo and connectFrom (we don't really own them);
-   for that matter, I'm not sure we actually ever touch undefLoc_, below: */
-   delete undefLoc_;
+   //JFW: We don't delete connectTo and connectFrom (we don't really own them)
 
 } // DgRFBase::~DgRFBase
 
 ////////////////////////////////////////////////////////////////////////////////
-DgLocation* 
-DgRFBase::convert (DgLocation* loc) const
+DgLocation*
+DgRFBase::convert (DgLocation *const loc) const
 {
    if (loc->rf_ == 0)
    {
       loc->rf_ = this;
       return loc;
    }
-   
+
    if (network() != loc->rf().network())
    {
       report("DgRFBase::convert() from/to network mismatch",
@@ -67,7 +66,7 @@ DgRFBase::convert (DgLocation* loc) const
       loc->rf_ = this;
       return loc;
    }
-   
+
    // if we're here we need to convert
 
    const DgConverterBase* conv = network().getConverter(loc->rf(), *this);
@@ -82,7 +81,7 @@ DgRFBase::convert (DgLocation* loc) const
 } // DgLocation* DgRFBase::convert
 
 ////////////////////////////////////////////////////////////////////////////////
-DgLocVector& 
+DgLocVector&
 DgRFBase::convert (DgLocVector& vec) const
 {
    if (vec.rf_ == 0)
@@ -90,7 +89,7 @@ DgRFBase::convert (DgLocVector& vec) const
       vec.rf_ = this;
       return vec;
    }
-   
+
    if (network() != vec.rf().network())
    {
       report("DgRFBase::convert() from/to network mismatch",
@@ -105,7 +104,7 @@ DgRFBase::convert (DgLocVector& vec) const
       vec.rf_ = this;
       return vec;
    }
-   
+
    // if we're here we need to convert
 
    const DgConverterBase* conv = network().getConverter(vec.rf(), *this);
@@ -120,7 +119,7 @@ DgRFBase::convert (DgLocVector& vec) const
    {
       DgAddressBase* addIn = v[i];
 
-      if (addIn) 
+      if (addIn)
        v[i] = conv->createConvertedAddress(*addIn);
 
       delete addIn;
@@ -134,7 +133,7 @@ DgRFBase::convert (DgLocVector& vec) const
 } // DgLocVector& DgRFBase::convert
 
 ////////////////////////////////////////////////////////////////////////////////
-DgLocation* 
+DgLocation*
 DgRFBase::createLocation (void) const
 {
    return new DgLocation(*this, 0);
@@ -142,10 +141,10 @@ DgRFBase::createLocation (void) const
 } // DgLocation* DgRFBase::createLocation
 
 ////////////////////////////////////////////////////////////////////////////////
-DgLocation* 
+std::unique_ptr<DgLocation>
 DgRFBase::buildLocation (DgAddressBase* addIn) const
 {
-   return new DgLocation(*this, addIn);
+   return std::make_unique<DgLocation>(*this, addIn);
 
 } // DgLocation* DgRFBase::buildLocation
 
@@ -201,7 +200,7 @@ DgRFBase::traceToGround (ostream& stream) const
    list<const DgRFBase*>::iterator it = rev.begin();
    for (; it != rev.end(); it++) stream << "  => " << (*it)->name() << "\n";
 
-   return stream << " => " << name() << " }" << endl;  
+   return stream << " => " << name() << " }" << endl;
 
 } // void DgRFBase::traceToGround
 
@@ -239,4 +238,3 @@ DgRFBase::toAddressString (const DgLocBase& lb, char delimiter) const
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-

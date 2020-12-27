@@ -32,7 +32,7 @@
 #include "DgPolygon.h"
 
 ////////////////////////////////////////////////////////////////////////////////
-template<class A, class B, class DB> 
+template<class A, class B, class DB>
 class DgDiscRF : public DgRF<A, long long int> {
 
    public:
@@ -41,16 +41,16 @@ class DgDiscRF : public DgRF<A, long long int> {
 
          public:
 
-            DgQuantConverter (const DgRF<B, DB>& fromFrame, 
+            DgQuantConverter (const DgRF<B, DB>& fromFrame,
                               const DgDiscRF<A, B, DB>& toFrame)
-               : DgConverter<B, DB, A, long long int> 
-                       (static_cast< const DgRF<B, DB>& >(fromFrame), 
+               : DgConverter<B, DB, A, long long int>
+                       (static_cast< const DgRF<B, DB>& >(fromFrame),
                         static_cast< const DgRF<A, long long int>& >(toFrame)) { }
 
             virtual A convertTypedAddress (const B& addIn) const
-              { return 
+              { return
                    static_cast<const DgDiscRF<A, B, DB>&>(
-                                  this->toFrame()).quantify(addIn); 
+                                  this->toFrame()).quantify(addIn);
 	      }
 
       };
@@ -64,9 +64,9 @@ class DgDiscRF : public DgRF<A, long long int> {
                : DgConverter<A, long long int, B, DB> (fromFrame, toFrame) { }
 
             virtual B convertTypedAddress (const A& addIn) const
-             { return 
+             { return
                   static_cast<const DgDiscRF<A, B, DB>&>(
-                                         this->fromFrame()).invQuantify(addIn); 
+                                         this->fromFrame()).invQuantify(addIn);
 	     }
 
       };
@@ -79,25 +79,25 @@ class DgDiscRF : public DgRF<A, long long int> {
         { new DgQuantConverter(backFrame(), *this);
           new DgInvQuantConverter(*this, backFrame()); }
 
-      DgDiscRF (const DgDiscRF<A, B, DB>& rf) : DgRF<A, long long int> (rf), 
+      DgDiscRF (const DgDiscRF<A, B, DB>& rf) : DgRF<A, long long int> (rf),
           backFrame_ (&rf.backFrame()), e_ (rf.e()), r_ (rf.r()),
           c_ (rf.c()), area_ (rf.area())
         { new DgQuantConverter(backFrame(), *this);
-          new DgInvQuantConverter(*this, backFrame()); 
+          new DgInvQuantConverter(*this, backFrame());
 	}
 
       DgDiscRF& operator= (const DgDiscRF<A, B, DB>& rf)
-          { 
+          {
              if (&rf != this)
              {
-                DgRF<A, long long int>::operator=(rf); 
+                DgRF<A, long long int>::operator=(rf);
                 e_ = rf.e();
                 r_ = rf.r();
                 c_ = rf.c();
                 area_ = rf.area();
                 backFrame_ = &rf.backFrame();
              }
-             return *this; 
+             return *this;
           }
 
       // get methods
@@ -117,22 +117,22 @@ class DgDiscRF : public DgRF<A, long long int> {
       void setArea (long double areaIn) { area_ = areaIn; }
 
       // misc methods
-      
+
       virtual string dist2str (const long long int& dist) const { return dgg::util::to_string(dist); }
       virtual long double dist2dbl (const long long int& dist) const { return (long double) dist; }
-      virtual unsigned long long int dist2int (const long long int& dist) const 
+      virtual unsigned long long int dist2int (const long long int& dist) const
                          { return static_cast<unsigned long long int>(dist); }
 
       virtual void setPoint (const DgLocation& loc, DgLocation& point) const;
 
       virtual void setPoint (const DgLocation& loc, const DgRFBase& rf,
-                                                   DgLocation& point) const; 
-      virtual void setPoint (const A& add, const DgRFBase& rf, 
+                                                   DgLocation& point) const;
+      virtual void setPoint (const A& add, const DgRFBase& rf,
                              DgLocation& point) const
                { setAddPoint(add, point); rf.convert(&point); }
 
       virtual void setPoint (const A& add, DgLocation& pt) const
-                    { pt.clearAddress(); backFrame().convert(&pt); 
+                    { pt.clearAddress(); backFrame().convert(&pt);
                       setAddPoint(add, pt); }
 
       virtual void setVertices (const DgLocation& loc, DgPolygon& vec) const;
@@ -140,17 +140,17 @@ class DgDiscRF : public DgRF<A, long long int> {
       virtual void setVertices (const DgLocation& loc, const DgRFBase& rf,
                                                        DgPolygon& vec) const;
 
-      virtual void setVertices (const A& add, const DgRFBase& rf, 
+      virtual void setVertices (const A& add, const DgRFBase& rf,
                                                         DgPolygon& vec) const
                { setAddVertices(add, vec); rf.convert(vec); }
 
       virtual void setVertices  (const A& add, DgPolygon& vec) const
-               { vec.clearAddress(); backFrame().convert(vec); 
+               { vec.clearAddress(); backFrame().convert(vec);
                  setAddVertices(add, vec); }
 
       virtual void setNeighbors (const DgLocation& loc, DgLocVector& vec) const;
 
-      virtual void setNeighbors (const A& add, const DgRFBase& rf, 
+      virtual void setNeighbors (const A& add, const DgRFBase& rf,
                                                         DgLocVector& vec) const
                { setAddNeighbors(add, vec); rf.convert(vec); }
 
@@ -184,7 +184,7 @@ class DgDiscRF : public DgRF<A, long long int> {
       // second order boundary neighbors (for aperture 7 hex grids only)
       virtual void setNeighborsBdry2 (const DgLocation& loc, DgLocVector& vec) const;
 
-      virtual void setNeighborsBdry2 (const A& add, const DgRFBase& rf, 
+      virtual void setNeighborsBdry2 (const A& add, const DgRFBase& rf,
                                                         DgLocVector& vec) const
                { setAddNeighborsBdry2(add, vec); rf.convert(vec); }
 
@@ -205,13 +205,13 @@ class DgDiscRF : public DgRF<A, long long int> {
       }
 
       // remind users of the pure virtual functions remaining from above
-      
+
       virtual string add2str (const A& add) const = 0;
       virtual string add2str (const A& add, char delimiter) const = 0;
 
       virtual long long int dist (const A& add1, const A& add2) const = 0;
 
-      virtual const char* str2add (A* add, const char* str, char delimiter) 
+      virtual const char* str2add (A* add, const char* str, char delimiter)
                                                                       const = 0;
 
       virtual const A& undefAddress (void) const = 0;
