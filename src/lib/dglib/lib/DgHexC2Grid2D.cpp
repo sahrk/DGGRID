@@ -46,7 +46,7 @@ DgHexC2Grid2D::DgHexC2Grid2D (DgRFNetwork& networkIn,
                               nameIn + string("SurBF"));
 
    // version 6.4 and previous rotated by 30.0L
-   new Dg2WayContAffineConverter(backFrame(), *surCCRF, 1.0L, -30.0L);
+   Dg2WayContAffineConverter(backFrame(), *surCCRF, 1.0L, -30.0L);
    surrogate_ = new DgHexC1Grid2D(network(), *surCCRF, nameIn + string("Sur"));
 
    // create the substrate hex grid: a class I hex one aperture 3 resolution
@@ -55,7 +55,7 @@ DgHexC2Grid2D::DgHexC2Grid2D (DgRFNetwork& networkIn,
    DgContCartRF* subCCRF = new DgContCartRF(network(), 
                               nameIn + string("SubBF"));
 
-   new Dg2WayContAffineConverter(backFrame(), *subCCRF, M_SQRT3);
+   Dg2WayContAffineConverter(backFrame(), *subCCRF, M_SQRT3);
    substrate_ = new DgHexC1Grid2D(network(), *subCCRF, nameIn + string("Sub"));
 
 } // DgHexC2Grid2D::DgHexC2Grid2D

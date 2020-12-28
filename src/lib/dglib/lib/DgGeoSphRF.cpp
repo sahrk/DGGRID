@@ -35,7 +35,7 @@ long double DgGeoSphRF::earthRadiusKM_ = DEFAULT_RADIUS_KM;
 long double DgGeoSphRF::icosaEdgeRads_ = M_ATAN2;
 long double DgGeoSphRF::icosaEdgeDegs_ = icosaEdgeRads_ * M_180_PI;
 long double DgGeoSphRF::icosaEdgeKM_ = icosaEdgeRads_ * earthRadiusKM_;
-long double DgGeoSphRF::totalAreaKM_ = 
+long double DgGeoSphRF::totalAreaKM_ =
                       4.0L * M_PI * earthRadiusKM_ * earthRadiusKM_;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -85,7 +85,7 @@ DgGeoSphRF::densify (DgPolygon& p, long double maxDist, bool rads)
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-DgGeoCoord 
+DgGeoCoord
 DgGeoSphRF::midPoint (const DgGeoCoord& p1, const DgGeoCoord& p2)
 /*
    Return midpoint of great circle connecting two points.
@@ -100,15 +100,15 @@ DgGeoSphRF::midPoint (const DgGeoCoord& p1, const DgGeoCoord& p2)
    pp2.lat = p2.lat();
 
    GeoCoord ans = GCmidpoint(pp1, pp2);
-   
+
    return DgGeoCoord(ans.lon, ans.lat);
 
 } // DgGeoCoord DgGeoSphRF::midPoint
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-long double 
-DgGeoSphRF::azimuth (const DgGeoCoord& p1, const DgGeoCoord& p2, 
+long double
+DgGeoSphRF::azimuth (const DgGeoCoord& p1, const DgGeoCoord& p2,
                      bool returnRads)
 /*
    Return azimuth from p1 to p2.
@@ -123,7 +123,7 @@ DgGeoSphRF::azimuth (const DgGeoCoord& p1, const DgGeoCoord& p2,
    pp2.lat = p2.lat();
 
    long double ans = Azimuth(pp1, pp2);
-   
+
    if (!returnRads) ans *= M_180_PI;
    return ans;
 
@@ -131,11 +131,11 @@ DgGeoSphRF::azimuth (const DgGeoCoord& p1, const DgGeoCoord& p2,
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-DgGeoCoord 
+DgGeoCoord
 DgGeoSphRF::travelGC (const DgGeoCoord& p0, long double distance, long double azimuth,
                       bool inputRads)
 /*
-   Return point that is distance from p0 along azimuth. 
+   Return point that is distance from p0 along azimuth.
 
    Works by calling Lian Song's routine Azimuth.
 */
@@ -151,7 +151,7 @@ DgGeoSphRF::travelGC (const DgGeoCoord& p0, long double distance, long double az
    }
 
    GeoCoord ans = GCdaz(pp0, distance, azimuth);
-   
+
    return DgGeoCoord(ans.lon, ans.lat);
 
 } // long double DgGeoSphRF::azimuth
@@ -160,6 +160,5 @@ DgGeoSphRF::travelGC (const DgGeoCoord& p0, long double distance, long double az
 DgGeoSphDegRF::DgGeoSphDegRF (const DgGeoSphRF& geoRFin, const string& nameIn)
          : DgContCartRF (geoRFin.network(), nameIn), geoRF_ (geoRFin)
 {
-   new DgDegRadConverter(geoRFin, *this);
+   DgDegRadConverter(geoRFin, *this);
 }
-

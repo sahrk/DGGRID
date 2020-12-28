@@ -51,10 +51,10 @@ DgHexC3Grid2D::DgHexC3Grid2D (DgRFNetwork& networkIn,
    if (!isClassI)
       rotDegs *= -30.0L;
 
-   new Dg2WayContAffineConverter(backFrame(), *surCCRF, 1.0L, rotDegs);
+   Dg2WayContAffineConverter(backFrame(), *surCCRF, 1.0L, rotDegs);
    surrogate_ = new DgHexC1Grid2D(network(), *surCCRF, nameIn + string("Sur"));
 */
-   new Dg2WayContAffineConverter(backFrame(), *surCCRF, 1.0L, rotDegs);
+   Dg2WayContAffineConverter(backFrame(), *surCCRF, 1.0L, rotDegs);
    if (isClassI)
       surrogate_ = new DgHexC1Grid2D(network(), *surCCRF, nameIn + string("Sur"));
    else

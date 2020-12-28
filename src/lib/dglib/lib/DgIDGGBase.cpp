@@ -92,26 +92,26 @@ DgIDGGBase::str2add (DgQ2DICoord* add, const char* str, char delimiter) const
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-DgIDGGBase::DgIDGGBase (const DgIDGGSBase* dggs, const DgGeoSphRF& geoRF, 
-                        unsigned int aperture, int res, const string& name, 
+DgIDGGBase::DgIDGGBase (const DgIDGGSBase* dggs, const DgGeoSphRF& geoRF,
+                        unsigned int aperture, int res, const string& name,
                         unsigned int precision)
    : DgDiscRF<DgQ2DICoord, DgGeoCoord, long double>(geoRF.network(), geoRF, name),
      dggs_ (dggs), sphIcosa_(0), aperture_(aperture), res_(res),
      precision_(precision), grid2D_(0), grid2DS_(0), ccFrame_(0),
      projTriRF_(0), vertexRF_(0), q2ddRF_(0), bndRF_(0), intRF_(0), planeRF_(0)
-{ 
+{
    //initialize();
 
 } // DgIDGGBase::DgIDGGBase
 
 ////////////////////////////////////////////////////////////////////////////////
 DgIDGGBase::DgIDGGBase (const DgIDGGBase& rfIn)
-   : DgDiscRF<DgQ2DICoord, DgGeoCoord, long double> (rfIn), 
-        dggs_ (NULL), sphIcosa_(0), aperture_(rfIn.aperture()), 
-        res_(rfIn.res()), precision_(rfIn.precision()), 
-        grid2D_(0), grid2DS_(0), ccFrame_(0), projTriRF_(0), 
+   : DgDiscRF<DgQ2DICoord, DgGeoCoord, long double> (rfIn),
+        dggs_ (NULL), sphIcosa_(0), aperture_(rfIn.aperture()),
+        res_(rfIn.res()), precision_(rfIn.precision()),
+        grid2D_(0), grid2DS_(0), ccFrame_(0), projTriRF_(0),
         vertexRF_(0), q2ddRF_(0), bndRF_(0), intRF_(0), planeRF_(0)
-{ 
+{
    //initialize();
 
 } // DgIDGGBase::DgIDGGBase
@@ -148,7 +148,7 @@ DgIDGGBase::createConverters (void)
 
    // create the intermediate RFs
 
-   projTriRF_ = new DgProjTriRF(network(), name() + string("projTri"), 
+   projTriRF_ = new DgProjTriRF(network(), name() + string("projTri"),
                 sphIcosa_);
    vertexRF_ = new DgVertex2DDRF(network(), name() + string("vertex"));
    q2ddRF_ = new DgQ2DDRF(network(), name() + string("q2dd"));
@@ -158,20 +158,20 @@ DgIDGGBase::createConverters (void)
    // create the converters; for convenience use where they are in overall
    // sequence for name
 
-   DgIcosaProj* icosaProj = NULL; 
+   std::unique_ptr<DgIcosaProj> icosaProj;
    if (projType() == "ISEA")
-      icosaProj = new DgProjISEA(geoRF(), projTriRF());
+      icosaProj.reset(new DgProjISEA(geoRF(), projTriRF()));
    else if (projType() == "FULLER")
-      icosaProj = new DgProjFuller(geoRF(), projTriRF());
+      icosaProj.reset(new DgProjFuller(geoRF(), projTriRF()));
    else
-      report("DgIDGGBase::initialize(): invalid projection type " + projType(), 
+      report("DgIDGGBase::initialize(): invalid projection type " + projType(),
              DgBase::Fatal);
 
    const DgConverterBase* c1to2 = &(icosaProj->forward());
    const DgConverterBase* c2to3 = new DgProjTriToVertex2DD(projTriRF(), vertexRF());
    const DgConverterBase* c3to4 = new DgVertex2DDToQ2DDConverter(vertexRF(), q2ddRF());
    const DgConverterBase* c4to5 = new DgQ2DDtoIConverter(q2ddRF(), *this);
-   
+
    const DgConverterBase* c5to4 = new DgQ2DItoDConverter(*this, q2ddRF());
    const DgConverterBase* c4to3 = new DgQ2DDtoVertex2DDConverter(q2ddRF(), vertexRF());
    const DgConverterBase* c3to2 = new DgVertex2DDtoProjTri(vertexRF(), projTriRF());
@@ -188,14 +188,14 @@ DgIDGGBase::createConverters (void)
    sc.push_back(c2to3);
    sc.push_back(c3to4);
    sc.push_back(c4to5);
-   new DgSeriesConverter(sc, true);
+   DgSeriesConverter(sc, true);
    sc.resize(0);
-   
+
    sc.push_back(c5to4);
    sc.push_back(c4to3);
    sc.push_back(c3to2);
    sc.push_back(c2to1);
-   new DgSeriesConverter(sc, true);
+   DgSeriesConverter(sc, true);
    sc.resize(0);
 
    //// now fill in the other connections; begin with from vertexRF and then
@@ -204,13 +204,13 @@ DgIDGGBase::createConverters (void)
    // vertexRF -> geoRF
    sc.push_back(c3to2);
    sc.push_back(c2to1);
-   new DgSeriesConverter(sc, true);
+   DgSeriesConverter(sc, true);
    sc.resize(0);
 
    // vertexRF -> Q2DI
    sc.push_back(c3to4);
    sc.push_back(c4to5);
-   new DgSeriesConverter(sc, true);
+   DgSeriesConverter(sc, true);
    sc.resize(0);
 
    // vertexRF -> projTriRF is c3to2 above
@@ -218,7 +218,7 @@ DgIDGGBase::createConverters (void)
    // vertexRF -> planeRF
    sc.push_back(c3to2);
    sc.push_back(toPlane);
-   new DgSeriesConverter(sc, true);
+   DgSeriesConverter(sc, true);
    sc.resize(0);
 
    // vertexRF -> Q2DD is c3to4 above
@@ -227,17 +227,17 @@ DgIDGGBase::createConverters (void)
    sc.push_back(c3to4);
    sc.push_back(c4to5);
    sc.push_back(toInt);
-   new DgSeriesConverter(sc, true);
+   DgSeriesConverter(sc, true);
    sc.resize(0);
 
    /// now do from projTriRF
-   
+
    // projTriRF -> geoRF is c2to1 above
 
    // projTriRF -> Q2DI
    sc.push_back(c2to3);
    sc.push_back(network().getConverter(vertexRF(), *this));
-   new DgSeriesConverter(sc, true);
+   DgSeriesConverter(sc, true);
    sc.resize(0);
 
    // projTriRF -> vertexRF is c2to3 above
@@ -246,13 +246,13 @@ DgIDGGBase::createConverters (void)
    // projTriRF -> Q2DD
    sc.push_back(c2to3);
    sc.push_back(c3to4);
-   new DgSeriesConverter(sc, true);
+   DgSeriesConverter(sc, true);
    sc.resize(0);
 
    // projTriRF -> intRF
    sc.push_back(c2to3);
    sc.push_back(network().getConverter(vertexRF(), intRF()));
-   new DgSeriesConverter(sc, true);
+   DgSeriesConverter(sc, true);
    sc.resize(0);
 
    /// do from Q2DD
@@ -260,7 +260,7 @@ DgIDGGBase::createConverters (void)
    // Q2DD -> geoRF
    sc.push_back(c4to3);
    sc.push_back(network().getConverter(vertexRF(), geoRF()));
-   new DgSeriesConverter(sc, true);
+   DgSeriesConverter(sc, true);
    sc.resize(0);
 
    // Q2DD -> Q2DI is c4to5 above
@@ -269,19 +269,19 @@ DgIDGGBase::createConverters (void)
    // Q2DD -> projTriRF
    sc.push_back(c4to3);
    sc.push_back(network().getConverter(vertexRF(), projTriRF()));
-   new DgSeriesConverter(sc, true);
+   DgSeriesConverter(sc, true);
    sc.resize(0);
 
    // Q2DD -> planeRF
    sc.push_back(c4to3);
    sc.push_back(network().getConverter(vertexRF(), planeRF()));
-   new DgSeriesConverter(sc, true);
+   DgSeriesConverter(sc, true);
    sc.resize(0);
 
    // Q2DD -> intRF
    sc.push_back(c4to3);
    sc.push_back(network().getConverter(vertexRF(), intRF()));
-   new DgSeriesConverter(sc, true);
+   DgSeriesConverter(sc, true);
    sc.resize(0);
 
    /// do from Q2DI
@@ -291,19 +291,19 @@ DgIDGGBase::createConverters (void)
    // Q2DI -> vertexRF
    sc.push_back(c5to4);
    sc.push_back(c4to3);
-   new DgSeriesConverter(sc, true);
+   DgSeriesConverter(sc, true);
    sc.resize(0);
 
    // Q2DI -> projTriRF
    sc.push_back(c5to4);
    sc.push_back(network().getConverter(q2ddRF(), projTriRF()));
-   new DgSeriesConverter(sc, true);
+   DgSeriesConverter(sc, true);
    sc.resize(0);
 
    // Q2DI -> planeRF
    sc.push_back(c5to4);
    sc.push_back(network().getConverter(q2ddRF(), planeRF()));
-   new DgSeriesConverter(sc, true);
+   DgSeriesConverter(sc, true);
    sc.resize(0);
 
    // Q2DI -> Q2DD is c5to4 above
@@ -316,7 +316,7 @@ DgIDGGBase::createConverters (void)
    // geoRF -> vertexRF
    sc.push_back(c1to2);
    sc.push_back(c2to3);
-   new DgSeriesConverter(sc, true);
+   DgSeriesConverter(sc, true);
    sc.resize(0);
 
    // geoRF -> projTriRF is c1to2 above
@@ -324,39 +324,39 @@ DgIDGGBase::createConverters (void)
    // geoRF -> planeRF
    sc.push_back(network().getConverter(geoRF(), vertexRF()));
    sc.push_back(network().getConverter(vertexRF(), planeRF()));
-   new DgSeriesConverter(sc, true);
+   DgSeriesConverter(sc, true);
    sc.resize(0);
 
    // geoRF -> Q2DD
    sc.push_back(c1to2);
    sc.push_back(c2to3);
    sc.push_back(c3to4);
-   new DgSeriesConverter(sc, true);
+   DgSeriesConverter(sc, true);
    sc.resize(0);
 
    // geoRF -> intRF
    sc.push_back(network().getConverter(geoRF(), *this));
    sc.push_back(toInt);
-   new DgSeriesConverter(sc, true);
+   DgSeriesConverter(sc, true);
    sc.resize(0);
 
 } // DgIDGGBase::createConverters
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgIDGGBase::setVertices (const DgLocation& loc, DgPolygon& vec, 
+void
+DgIDGGBase::setVertices (const DgLocation& loc, DgPolygon& vec,
                      int densify) const
 {
    vec.clearAddress();
    backFrame().convert(vec);
-  
+
    DgLocation tLoc(loc);
 //cout << "*** " << loc << endl;
    convert(&tLoc);
 //cout << "**** " << tLoc << endl;
 
    setAddVertices(*getAddress(tLoc), vec, densify);
-   
+
 } // void DgDiscRF::setVertices
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -378,7 +378,7 @@ DgIDGGBase::setAddVertices (const DgQ2DICoord& add, DgPolygon& vec,
    // densify
    vec.densify(densify);
 //cout << "C: " << vec << endl;
-   
+
    // kludge to jump nets and add the quad number
 
    DgPolygon tmpVec(q2ddRF());
@@ -439,7 +439,7 @@ DgIDGGBase::setAddVertices (const DgQ2DICoord& add, DgPolygon& vec,
 } // DgIDGGBase::setAddVertices
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
+void
 DgIDGGBase::setAddNeighbors (const DgQ2DICoord& add,
                                    DgLocVector& vec) const
 {
@@ -474,7 +474,7 @@ DgIDGGBase::setAddNeighbors (const DgQ2DICoord& add,
             }
          }
       }
-      
+
       if (keeper)
       {
          DgLocation* tmpLoc = this->makeLocation(c2di);
@@ -489,7 +489,7 @@ DgIDGGBase::setAddNeighbors (const DgQ2DICoord& add,
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
+void
 DgIDGGBase::setAddNeighborsBdry2 (const DgQ2DICoord& add,
                                    DgLocVector& vec) const
 {
@@ -524,7 +524,7 @@ DgIDGGBase::setAddNeighborsBdry2 (const DgQ2DICoord& add,
             }
          }
       }
-      
+
       if (keeper)
       {
          DgLocation* tmpLoc = this->makeLocation(c2di);
