@@ -30,6 +30,10 @@
 #include "DgLocVector.h"
 #include "DgDistance.h"
 #include "DgConverter.h"
+// USE_NUCELL is set in MakeIncludes
+#ifdef USE_NUCELL
+#include "NuCell.h"
+#endif
 
 ////////////////////////////////////////////////////////////////////////////////
 template<class A, class D> 
@@ -70,11 +74,47 @@ DgRF<A, D>::createLocation (const DgLocation& loc, bool conv) const
 
 } // DgLocation* DgRF<A>::createLocation
 
+// USE_NUCELL is set in MakeIncludes
+#ifdef USE_NUCELL
+////////////////////////////////////////////////////////////////////////////////
+template<class A, class D> NuCell*
+DgRF<A, D>::createCell (const NuCell& cell, bool conv) const
+{
+   if (cell.rf() == *this)
+   {
+      return new NuCell(cell);
+   }
+   else if (cell.rf().network() != network())
+   {
+      report("DgRF<A, D>::getConverter() cell not in this network",
+             DgBase::Fatal);
+      return 0;
+   }
+   else if (conv)
+   {
+      NuCell* newCell = new NuCell(cell);
+      convert(newCell);
+
+      return newCell;
+   }
+   else
+   {
+      report("DgRF<A, D>::getConverter() cell not from this rf"
+             " and conversion not specified",
+             DgBase::Fatal);
+      return 0;
+   }
+
+} // NuCell* DgRF<A>::createCell
+#endif
+
 ////////////////////////////////////////////////////////////////////////////////
 template<class A, class D> DgLocation*
 DgRF<A, D>::makeLocation (const A& addIn) const
 {
-   return buildLocation(new DgAddress<A>(addIn));
+   DgLocation* loc = buildLocation(new DgAddress<A>(addIn));
+   //cout << "makeLocation: " << *loc << endl;
+   return loc;
 
 } // DgLocation* DgRF<A>::makeLocation
 
@@ -100,6 +140,15 @@ DgRF<A, D>::getAddress (const DgLocation& loc) const
    }
 
 } // const A* DgRF<A>::getAddress
+
+////////////////////////////////////////////////////////////////////////////////
+// deletes old address
+template<class A, class D> void 
+DgRF<A, D>::forceAddress (DgLocation* loc, const A& addIn) const {
+   if (loc->address_)
+      loc->clearAddress();
+   loc->address_ = new DgAddress<A>(addIn);
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 template<class A, class D> void 

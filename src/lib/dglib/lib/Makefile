@@ -5,7 +5,8 @@ DEPS = $(SRCS:.cpp=.depends)
 include ../../../MakeIncludes
 SHAPELIBDIR = ../../shapelib
 PROJ4LIBDIR = ../../proj4lib
-INCDIRS = -I../include -I$(SHAPELIBDIR)/include -I$(GDAL_HDR_DIR) -I$(PROJ4LIBDIR)/include
+NULIBDIR = ../../nulib
+INCDIRS = -I../include -I$(SHAPELIBDIR)/include -I$(PROJ4LIBDIR)/include -I$(NULIBDIR)/include $(ADD_INC_DIRS)
 CCFLAGS = ${INCDIRS} ${ADD_CPP_FLAGS} 
 
 .PHONY: clean all

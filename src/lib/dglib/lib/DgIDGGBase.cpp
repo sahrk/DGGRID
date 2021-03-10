@@ -16,6 +16,7 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 *******************************************************************************/
+
 ////////////////////////////////////////////////////////////////////////////////
 //
 // DgIDGGBase.cpp: DgIDGGBase class implementation
@@ -30,6 +31,7 @@
 #include <cfloat>
 
 #include "DgIDGGBase.h"
+#include "DgIDGGSBase.h"
 #include "DgDmdD4Grid2DS.h"
 #include "DgHexGrid2DS.h"
 #include "DgTriGrid2DS.h"
@@ -38,6 +40,13 @@
 #include "DgBoundedIDGG.h"
 #include "DgProjISEA.h"
 #include "DgProjFuller.h"
+
+////////////////////////////////////////////////////////////////////////////////
+const DgGeoSphRF& DgIDGGBase::geoRF    (void) const { return dggs()->geoRF(); }
+const DgGeoCoord& DgIDGGBase::vert0    (void) const { return dggs()->vert0(); }
+long double       DgIDGGBase::azDegs   (void) const { return dggs()->azDegs(); }
+const string&     DgIDGGBase::projType (void) const { return dggs()->projType(); }
+const string&     DgIDGGBase::gridTopo (void) const { return dggs()->gridTopo(); }
 
 ////////////////////////////////////////////////////////////////////////////////
 const DgQuadEdgeCells DgIDGGBase::edgeTable_[12] = {
@@ -445,8 +454,9 @@ DgIDGGBase::setAddNeighbors (const DgQ2DICoord& add,
 {
    DgLocVector ngh2d(grid2D());
    grid2D().setAddNeighbors(add.coord(), ngh2d);
-//cout << " >> DgIDGGBase::setAddNeighbors:  ngh2d: " << endl;
-//cout << ngh2d << endl;
+//cout << " >> DgIDGGBase::setAddNeighbors center: " << add << endl;
+//cout << "  ngh2d: " << ngh2d << endl;
+//cout << " isCongruent: " << (isCongruent() ? "yes" : "no");
 
    int q = add.quadNum();
    DgLocVector ngh2dNoDup(*this);
@@ -483,10 +493,17 @@ DgIDGGBase::setAddNeighbors (const DgQ2DICoord& add,
       }
    }
 
+//cout << "ngh2dNoDup: " << ngh2dNoDup << endl;
    // now build the vector; the push_back will take care of converting
    for (int i = 0; i < ngh2dNoDup.size(); i++)
       vec.push_back(ngh2dNoDup[i]);
+
+//cout << "final neigh vec for add: " << add << endl;
+//cout << vec << endl;
+//cout << "-------" << endl;
+
 }
+
 
 ////////////////////////////////////////////////////////////////////////////////
 void 
@@ -533,12 +550,14 @@ DgIDGGBase::setAddNeighborsBdry2 (const DgQ2DICoord& add,
       }
    }
 
+//cout << "ngh2dNoDup: " << ngh2dNoDup << endl;
    // now build the vector; the push_back will take care of converting
    for (int i = 0; i < ngh2dNoDup.size(); i++)
       vec.push_back(ngh2dNoDup[i]);
 
-} // DgIDGGBase::setAddNeighborsBdry2
+//cout << "vec: " << vec << endl;
 
+} // DgIDGGBase::setAddNeighborsBdry2
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

@@ -27,6 +27,7 @@
 
 #include "DgRF.h"
 #include "DgLocVector.h"
+#include "DgDmdIDGG.h"
 #include "DgIDGGS.h"
 #include "DgIVec2D.h"
 
@@ -38,22 +39,22 @@ class DgIDGGS4D : public DgIDGGS {
 
       DgIDGGS4D (DgRFNetwork& networkIn, const DgGeoSphRF& backFrameIn,
                const DgGeoCoord& vert0, long double azDegs, int nResIn = 1,
-               const string& nameIn = "ISEA4D", const string& projType = "ISEA")
-         : DgIDGGS (networkIn, backFrameIn, vert0, azDegs, 4, nResIn,
-                "DIAMOND", nameIn, projType, false, 0, false) 
-           { radix_ = (int) sqrt(aperture()); }
+               const string& nameIn = "ISEA4D", const string& projType = "ISEA",
+               bool isD4 = true);
 
       DgIDGGS4D (const DgIDGGS4D& rf);
 
      ~DgIDGGS4D (void);
 
+      // copy constructor and operator= not implemented
       DgIDGGS4D& operator= (const DgIDGGS4D& rf);
 
-      int radix (void) const { return radix_; }
+      const DgDmdIDGG& dmdIdgg (int res) const
+             { return static_cast<const DgDmdIDGG&>(idggBase(res)); }
+
+      bool isD4 (void) const { return isD4_; }
 
    protected:
-
-      int radix_;
 
       // pure virtual functions from DgDiscRFS
 
@@ -68,6 +69,10 @@ class DgIDGGS4D : public DgIDGGS {
 
       virtual void setAddAllChildren (const DgResAdd<DgQ2DICoord>& add,
                                       DgLocVector& vec) const;
+
+   private:
+
+      bool isD4_;
 
 };
 

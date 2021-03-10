@@ -18,44 +18,39 @@
 *******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
-// DgHexIDGG.h: DgHexIDGG class definitions
+// DgTriIDGG.h: DgTriIDGG class definitions
 //
-// Version 7.0 - Kevin Sahr, 11/16/14
-// Version 6.1 - Kevin Sahr, 5/23/13
+// Kevin Sahr, 8/11/20
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef DGHEXIDGG_H 
-#define DGHEXIDGG_H
+#ifndef DGTRIIDGG_H 
+#define DGTRIIDGG_H
 
 #include "DgIDGGBase.h"
 
-class DgHexIDGGS;
+class DgIDGGS4T;
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 //
 //  Icosahedral DGG class.
 //
-class DgHexIDGG : public DgIDGGBase {
-
-   //using DgDiscRF<DgQ2DICoord, DgGeoCoord, long double>::setVertices;
+class DgTriIDGG : public DgIDGGBase {
 
    public:
 
-      DgHexIDGG (const DgHexIDGGS& dggs, unsigned int aperture = 4,
-              int res = 0, const string& name = "HexIDGG", 
+      DgTriIDGG (const DgIDGGS4T& dggs, unsigned int aperture = 4,
+              int res = 0, const string& name = "TriIDGG", 
               unsigned int precision = DEFAULT_PRECISION);
 
-      DgHexIDGG (const DgHexIDGG& grd);
+      DgTriIDGG (const DgTriIDGG& grd);
 
-      virtual ~DgHexIDGG (void);
+      virtual ~DgTriIDGG (void);
 
-      const DgHexIDGGS& hexDggs (void) const;
+      const DgIDGGS4T& triDggs (void) const;
 
       long double scaleFac (void) const { return scaleFac_; }
-      long double rotRads  (void) const { return rotRads_; }
-      long double rotDegs  (void) const { return 180.0L * rotRads_ / M_PI; }
  
    protected:
 
@@ -64,7 +59,6 @@ class DgHexIDGG : public DgIDGGBase {
    private:
 
       long double scaleFac_;
-      long double rotRads_;
 };
 
 ////////////////////////////////////////////////////////////////////////////////

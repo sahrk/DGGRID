@@ -31,7 +31,6 @@
 #include "DgContCartRF.h"
 #include "DgDmdD4Grid2D.h"
 #include "DgDmdD4Grid2DS.h"
-#include "DgDmdD8Grid2D.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 DgDmdD4Grid2DS::DgDmdD4Grid2DS (DgRFNetwork& networkIn, 
@@ -230,12 +229,12 @@ DgDmdD4Grid2DS::setAddBoundaryChildren (const DgResAdd<DgIVec2D>& add,
    {
       DgLocation* tmpLoc = makeLocation(add);
 
-      // D8 neighbors is what we want
+      // D4 neighbors is what we want
 
-      DgDmdD8Grid2D d8(network(), grids()[add.res() + 1]->backFrame(),
-                       "dummyD8");
-      d8.convert(tmpLoc);
-      d8.setNeighbors(*tmpLoc, vec);
+      DgDmdD4Grid2D d4(network(), grids()[add.res() + 1]->backFrame(),
+                       "dummyD4");
+      d4.convert(tmpLoc);
+      d4.setNeighbors(*tmpLoc, vec);
 
       grids()[add.res() + 1]->convert(vec);
       convert(vec);

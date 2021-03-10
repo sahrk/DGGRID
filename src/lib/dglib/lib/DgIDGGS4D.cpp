@@ -30,6 +30,42 @@
 #include "DgContCartRF.h"
 #include "DgDiscRF.h"
 #include "DgIDGGS4D.h"
+#include "DgDmdIDGG.h"
+#include "DgDmdD4Grid2D.h"
+#include "DgDmdD8Grid2D.h"
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+DgIDGGS4D::DgIDGGS4D (DgRFNetwork& network, const DgGeoSphRF& backFrame,
+               const DgGeoCoord& vert0, long double azDegs, int nRes,
+               const string& name, const string& projType, bool isD4)
+        : DgIDGGS (network, backFrame, vert0, azDegs, 4, nRes, 
+                       "DIAMOND", name, projType),
+             isD4_ (isD4)
+{
+//cout << " DgIDGGS4D isD4_: " << ((isD4_) ? "true" : "false") << endl;
+   const int aperture = 4;
+
+   undefLoc_ = makeLocation(undefAddress());
+   isAligned_ = 1;
+   isCongruent_ = 1;
+
+   // create the DGGs
+
+   (*grids_)[0] = new DgDmdIDGG(*this, aperture, 0, name + dgg::util::to_string(0, 2), isD4_);
+   //cout << "========================\nRES 0: " << dmdIdgg(0);
+
+   for (int r = 1; r < nRes; r++)
+   {
+      (*grids_)[r] = new DgDmdIDGG(*this, aperture, r, name + dgg::util::to_string(r, 2), isD4_);
+   //cout << "========================\nRES " << r << ": " << dmdIdgg(r);
+   }
+
+   for (int r = 0; r < nRes; r++)
+      new Dg2WayResAddConverter<DgQ2DICoord, DgGeoCoord, long double> 
+                                                   (*this, *(grids()[r]), r);
+
+} // DgDmdIDGGS::DgDmdIDGGS
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -63,8 +99,7 @@ DgIDGGS4D::setAddParents (const DgResAdd<DgQ2DICoord>& add,
                                DgLocVector& vec) const
 {
 //cout << "   setAddParents: " << add << endl;
-   if (isCongruent() || radix() == 3)
-   {
+   //if (isCongruent()) {
       DgLocation* tmpLoc = makeLocation(add);
       grids()[add.res() - 1]->convert(tmpLoc);
       convert(tmpLoc);
@@ -72,6 +107,7 @@ DgIDGGS4D::setAddParents (const DgResAdd<DgQ2DICoord>& add,
       vec.push_back(*tmpLoc);
 
       delete tmpLoc;
+/*
    }
    else // must be aligned aperture 4
    {
@@ -110,6 +146,7 @@ DgIDGGS4D::setAddParents (const DgResAdd<DgQ2DICoord>& add,
 
       delete verts;
    }
+*/
 
 } // void DgIDGGS4D::setAddParents
 
@@ -118,14 +155,14 @@ void
 DgIDGGS4D::setAddInteriorChildren (const DgResAdd<DgQ2DICoord>& add, 
                                         DgLocVector& vec) const
 {
-   if (isCongruent() || radix() == 3)
-   {
-      const DgIVec2D& lowerLeft = add.address().coord() * radix();
+   if (isCongruent()) {
+      const int radix = 2;
+      const DgIVec2D& lowerLeft = add.address().coord() * radix;
 
       vector<DgAddressBase*>& v = vec.addressVec();
-      for (int i = 0; i < radix(); i++)
+      for (int i = 0; i < radix; i++)
       {
-         for (int j = 0; j < radix(); j++)
+         for (int j = 0; j < radix; j++)
          {
             v.push_back(new DgAddress< DgResAdd<DgQ2DICoord> >(
              DgResAdd<DgQ2DICoord>(DgQ2DICoord(add.address().quadNum(),
@@ -134,9 +171,9 @@ DgIDGGS4D::setAddInteriorChildren (const DgResAdd<DgQ2DICoord>& add,
          }
       }
    }
+/*
    else // must be aligned aperture 4
    {
-/*
       // only center square is interior
 
       DgLocation* tmpLoc = makeLocation(add);
@@ -144,8 +181,8 @@ DgIDGGS4D::setAddInteriorChildren (const DgResAdd<DgQ2DICoord>& add,
       vec.push_back(*tmpLoc);
 
       delete tmpLoc;
-*/
    }
+*/
    
 } // void DgIDGGS4D::setAddInteriorChildren
 
@@ -154,13 +191,12 @@ void
 DgIDGGS4D::setAddBoundaryChildren (const DgResAdd<DgQ2DICoord>& add, 
                                         DgLocVector& vec) const
 {
-   if (isCongruent() || radix() == 3)
-   {
+   if (isCongruent()) {
       // no boundary children in this topology; leave vec empty
    }
+/*
    else // must be aligned aperture 4
    {
-/*
       DgLocation* tmpLoc = makeLocation(add);
 
       // D8 neighbors is what we want
@@ -174,8 +210,8 @@ DgIDGGS4D::setAddBoundaryChildren (const DgResAdd<DgQ2DICoord>& add,
       convert(vec);
 
       delete tmpLoc;
-*/
    }
+*/
 
 } // void DgIDGGS4D::setAddBoundaryChildren
 

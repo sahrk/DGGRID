@@ -81,8 +81,11 @@ DgOutLocFile::makeOutLocFile (const string& type, const string& fileName,
       else if (!type.compare("SHAPEFILE"))
          file = new DgOutShapefile(*geoRF, fileName, precision, isPointFile, 
                                     shapefileIdLen, failLevelIn);
+// USE_GDAL is set in MakeIncludes
+#ifdef USE_GDAL
       else if (!type.compare("GDAL"))
          file = new DgOutGdalFile(*geoRF, fileName, gdalDriver, precision, isPointFile, failLevelIn);
+#endif
       else if (type.compare("NONE"))
          ::report("DgOutLocFile::makeOutLoc(): invalid file type " + type, 
                                  failLevelIn);
@@ -154,4 +157,4 @@ DgOutLocFile::insert (DgCell& cell)
 
 } // DgOutLocFile& DgOutLocFile::insert
 
-////////////////////////////////////////////////////////////////////////////////
+

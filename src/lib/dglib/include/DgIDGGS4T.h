@@ -27,6 +27,7 @@
 
 #include "DgRF.h"
 #include "DgLocVector.h"
+#include "DgTriIDGG.h"
 #include "DgIDGGS.h"
 #include "DgIVec2D.h"
 
@@ -38,22 +39,20 @@ class DgIDGGS4T : public DgIDGGS {
 
       DgIDGGS4T (DgRFNetwork& networkIn, const DgGeoSphRF& backFrameIn,
                const DgGeoCoord& vert0, long double azDegs, int nResIn = 1,
-               const string& nameIn = "ISEA4T", const string& projType = "ISEA")
-         : DgIDGGS (networkIn, backFrameIn, vert0, azDegs, 4, nResIn,
-               "TRIANGLE", nameIn, projType, false, 0, false) 
-           { radix_ = (int) sqrt(aperture()); }
+               const string& nameIn = "ISEA4T", const string& projType = "ISEA");
 
       DgIDGGS4T (const DgIDGGS4T& rf);
 
      ~DgIDGGS4T (void);
 
+      // copy constructor and operator= not implemented
       DgIDGGS4T& operator= (const DgIDGGS4T& rf);
 
-      int radix (void) const { return radix_; }
+      const DgTriIDGG& triIdgg (int res) const
+             { return static_cast<const DgTriIDGG&>(idggBase(res)); }
+
 
    protected:
-
-      int radix_;
 
       // pure virtual functions from DgDiscRFS
 

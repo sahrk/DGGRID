@@ -18,44 +18,41 @@
 *******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
-// DgHexIDGG.h: DgHexIDGG class definitions
+// DgDmdIDGG.h: DgDmdIDGG class definitions
 //
-// Version 7.0 - Kevin Sahr, 11/16/14
-// Version 6.1 - Kevin Sahr, 5/23/13
+// Kevin Sahr, 8/11/20
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef DGHEXIDGG_H 
-#define DGHEXIDGG_H
+#ifndef DGDMDIDGG_H 
+#define DGDMDIDGG_H
 
 #include "DgIDGGBase.h"
 
-class DgHexIDGGS;
+class DgIDGGS4D;
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 //
 //  Icosahedral DGG class.
 //
-class DgHexIDGG : public DgIDGGBase {
-
-   //using DgDiscRF<DgQ2DICoord, DgGeoCoord, long double>::setVertices;
+class DgDmdIDGG : public DgIDGGBase {
 
    public:
 
-      DgHexIDGG (const DgHexIDGGS& dggs, unsigned int aperture = 4,
-              int res = 0, const string& name = "HexIDGG", 
-              unsigned int precision = DEFAULT_PRECISION);
+      DgDmdIDGG (const DgIDGGS4D& dggs, unsigned int aperture = 4,
+              int res = 0, const string& name = "DmdIDGG", 
+              bool isD4 = true, unsigned int precision = DEFAULT_PRECISION);
 
-      DgHexIDGG (const DgHexIDGG& grd);
+      DgDmdIDGG (const DgDmdIDGG& grd);
 
-      virtual ~DgHexIDGG (void);
+      virtual ~DgDmdIDGG (void);
 
-      const DgHexIDGGS& hexDggs (void) const;
+      const DgIDGGS4D& dmdDggs (void) const;
 
       long double scaleFac (void) const { return scaleFac_; }
-      long double rotRads  (void) const { return rotRads_; }
-      long double rotDegs  (void) const { return 180.0L * rotRads_ / M_PI; }
+
+      bool isD4 (void) const { return isD4_; }
  
    protected:
 
@@ -64,7 +61,7 @@ class DgHexIDGG : public DgIDGGBase {
    private:
 
       long double scaleFac_;
-      long double rotRads_;
+      bool isD4_;
 };
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -33,8 +33,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 DgBoundedIDGGS::DgBoundedIDGGS (const DgIDGGS& rf)
    : DgBoundedRF< DgResAdd<DgQ2DICoord>, DgGeoCoord, long double > (rf, 
-                  DgResAdd<DgQ2DICoord> (DgQ2DICoord(0, 0), 0),
-                  DgResAdd<DgQ2DICoord> (DgQ2DICoord(0, 0), 0), 
+                  DgResAdd<DgQ2DICoord> (DgQ2DICoord(0, DgIVec2D(0, 0)), 0),
+                  DgResAdd<DgQ2DICoord> (DgQ2DICoord(0, DgIVec2D(0, 0)), 0), 
                   rf.undefAddress()), IDGGS_ (rf)
 { 
    // allocate the grids
@@ -44,12 +44,13 @@ DgBoundedIDGGS::DgBoundedIDGGS (const DgIDGGS& rf)
    for (int i = 0; i < IDGGS().nRes(); i++)
       (*grids_)[i] = new DgBoundedIDGG(rf.idgg(i));
 
+   // set the correct first address
+   setFirstAdd(DgResAdd<DgQ2DICoord>((*grids_)[0]->firstAdd(), 0));
+
    // set the correct last address
 
    int maxRes = IDGGS().nRes() - 1;
-   DgResAdd<DgQ2DICoord> last((*grids_)[maxRes]->lastAdd(), maxRes);
-
-   setLastAdd(last);
+   setLastAdd(DgResAdd<DgQ2DICoord>((*grids_)[maxRes]->lastAdd(), maxRes));
 
    // set the size
 

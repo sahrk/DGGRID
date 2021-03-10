@@ -24,6 +24,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+// USE_GDAL is set in MakeIncludes
+#ifdef USE_GDAL
+
 #ifndef DGOUTGDALFILE_H
 #define DGOUTGDALFILE_H
 
@@ -92,3 +95,6 @@ private:
 };
 
 #endif
+
+#endif
+

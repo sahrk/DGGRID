@@ -31,6 +31,7 @@
 
 #include "DgIDGG.h"
 #include "DgDmdD4Grid2DS.h"
+#include "DgDmdD8Grid2DS.h"
 #include "DgHexGrid2DS.h"
 #include "DgTriGrid2DS.h"
 //#include "DgSeriesConverter.h"
@@ -83,16 +84,12 @@ DgIDGG::initialize (void)
                          dgg::util::to_string(aperture()) + 
                          string(" for grid topo ") + gridTopo());
 
-   if (gridTopo() == "HEXAGON")
-   {
+   if (gridTopo() == "HEXAGON") {
       if (aperture() != 3 && aperture() != 4 && aperture() != 7) 
          report(apErrStr, DgBase::Fatal);
-   }
-   else if (gridTopo() == "TRIANGLE" || gridTopo() == "DIAMOND")
-   {
+   } else if (gridTopo() == "TRIANGLE" || DgIDGG::isDiamondTopo(gridTopo())) {
       if (aperture() != 4) report(apErrStr, DgBase::Fatal);
-   }
-   else
+   } else
       report("DgIDGG::initialize(): invalid grid topo " + gridTopo(), 
              DgBase::Fatal);
 
@@ -110,8 +107,9 @@ DgIDGG::initialize (void)
    radix_ = (int) sqrtl((long double) aperture());
    allocRes_ = res();
 
-   if (gridTopo() == "HEXAGON")
-   {
+   if (gridTopo() == "HEXAGON") {
+      report("DgIDGG::initialize(): HEXAGON grid should use DgHexIDGG", DgBase::Fatal);
+/*
       isAligned_ = true;
       isCongruent_ = false;
 
@@ -157,9 +155,8 @@ DgIDGG::initialize (void)
       mag_ = maxD() + 1;
       firstAdd_ = DgQ2DICoord(0, DgIVec2D(0, 0));
       lastAdd_ = DgQ2DICoord(11, DgIVec2D(0, 0));
-   }
-   else
-   {
+*/
+   } else {
       maxD_ = (long long int) pow((long double) radix(), res()) - 1;
       maxI_ = maxD();
       maxJ_ = maxD();
@@ -170,7 +167,7 @@ DgIDGG::initialize (void)
          isCongruent_ = true;
          maxJ_ = (mag() * 2) - 1;
       }
-      else // topo is DIAMOND
+      else // topo must be DIAMOND
       {
          isAligned_ = false;
          isCongruent_ = true;
@@ -184,21 +181,15 @@ DgIDGG::initialize (void)
 
    ccFrame_ = new DgContCartRF(locNet_, name() + "CC1");
 
-   if (gridTopo() == "DIAMOND")
-   {
+   if (gridTopo() == "DIAMOND" || gridTopo() == "DIAMOND4D4")
       grid2DS_ = new DgDmdD4Grid2DS(locNet_, ccFrame(), res() + 1, aperture(), 
                                     isCongruent(), isAligned());
-   }
-   else if (gridTopo() == "HEXAGON")
-   {
-      grid2DS_ = new DgHexGrid2DS(locNet_, ccFrame(), allocRes() + 1, aperture(), 
-        isCongruent(), isAligned(), "H2DS", isMixed43(), numAp4(), isSuperfund());
-   }
+   else if (gridTopo() == "DIAMOND4D8")
+      grid2DS_ = new DgDmdD8Grid2DS(locNet_, ccFrame(), res() + 1, aperture(), 
+                                    isCongruent(), isAligned());
    else if (gridTopo() == "TRIANGLE")
-   {
       grid2DS_ = new DgTriGrid2DS(locNet_, ccFrame(), res() + 1, aperture(), 
                                   isCongruent(), isAligned());
-   }
 
    createConverters();
 
@@ -209,31 +200,9 @@ DgIDGG::initialize (void)
 
    long double tmpLen = DgGeoSphRF::icosaEdgeKM();
    if (gridTopo() == "TRIANGLE") tmpLen /= M_SQRT3;
-   if (!isMixed43())
-      gridStats_.setCellDistKM(tmpLen / pow(sqrtl((long double) aperture()), res()));
-   else // mixed43
-   {
-      if (res() < numAp4())
-      {
-         tmpLen = tmpLen / pow((long double) 2.0, (long double) res());
-      }
-      else
-      {
-         tmpLen = tmpLen / pow((long double) 2.0, (long double) numAp4());
-         if (res() > numAp4())
-            tmpLen = tmpLen / pow(M_SQRT3, (long double) (res() - numAp4()));
-      }
-      gridStats_.setCellDistKM(tmpLen);
-   }
+   gridStats_.setCellDistKM(tmpLen / pow(sqrtl((long double) aperture()), res()));
 
-   if (gridTopo() == "HEXAGON")
-   {
-      // a = globeArea / ((#cells - 12) + (12 * 5/6))
-      //   = globeArea / (#cells - 2);
-      gridStats_.setCellAreaKM(DgGeoSphRF::totalAreaKM() / 
-                       (gridStats_.nCells() - 2));
-   }
-   else if (gridTopo() == "DIAMOND")
+   if (DgIDGG::isDiamondTopo(gridTopo()))
       gridStats_.setCellAreaKM(DgGeoSphRF::totalAreaKM() / gridStats_.nCells());
    else if (gridTopo() == "TRIANGLE")
       gridStats_.setCellAreaKM(DgGeoSphRF::totalAreaKM() / gridStats_.nCells());

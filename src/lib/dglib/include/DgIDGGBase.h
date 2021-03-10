@@ -53,11 +53,11 @@ class DgIDGGBase : public DgDiscRF<DgQ2DICoord, DgGeoCoord, long double> {
 
       const DgIDGGSBase* dggs (void) const { return dggs_; }
 
-      virtual const DgGeoSphRF& geoRF    (void) const = 0;
-      virtual const DgGeoCoord& vert0    (void) const = 0;
-      virtual long double       azDegs   (void) const = 0;
-      virtual const string&     gridTopo (void) const = 0;
-      virtual const string&     projType (void) const = 0;
+      const DgGeoSphRF& geoRF    (void) const;
+      const DgGeoCoord& vert0    (void) const;
+      long double       azDegs   (void) const;
+      const string&     projType (void) const;
+      const string&     gridTopo (void) const;
 
       unsigned int  aperture    (void) const { return aperture_; }
       int           res         (void) const { return res_; }
@@ -124,8 +124,7 @@ class DgIDGGBase : public DgDiscRF<DgQ2DICoord, DgGeoCoord, long double> {
       // not have defined these yet
 
       virtual long long int dist (const DgQ2DICoord& add1, 
-                                       const DgQ2DICoord& add2) const
-           {
+                                       const DgQ2DICoord& add2) const {
               report(string("DgIDGGBase::dist() this method has not been defined "
                      "for DgIDGGBase ") + this->name(), DgBase::Fatal);
 

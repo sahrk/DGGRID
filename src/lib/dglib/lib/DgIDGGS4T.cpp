@@ -30,7 +30,39 @@
 #include "DgContCartRF.h"
 #include "DgDiscRF.h"
 #include "DgIDGGS4T.h"
+#include "DgTriIDGG.h"
 #include "DgTriGrid2D.h"
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+DgIDGGS4T::DgIDGGS4T (DgRFNetwork& network, const DgGeoSphRF& backFrame,
+               const DgGeoCoord& vert0, long double azDegs, int nRes,
+               const string& name, const string& projType)
+        : DgIDGGS (network, backFrame, vert0, azDegs, 4, nRes, 
+                       "TRIANGLE", name, projType)
+{
+   const int aperture = 4;
+
+   undefLoc_ = makeLocation(undefAddress());
+   isAligned_ = 1;
+   isCongruent_ = 1;
+
+   // create the DGGs
+
+   (*grids_)[0] = new DgTriIDGG(*this, aperture, 0, name + dgg::util::to_string(0, 2));
+   //cout << "========================\nRES 0: " << triIdgg(0);
+
+   for (int r = 1; r < nRes; r++)
+   {
+      (*grids_)[r] = new DgTriIDGG(*this, aperture, r, name + dgg::util::to_string(r, 2));
+   //cout << "========================\nRES " << r << ": " << triIdgg(r);
+   }
+
+   for (int r = 0; r < nRes; r++)
+      new Dg2WayResAddConverter<DgQ2DICoord, DgGeoCoord, long double> 
+                                                   (*this, *(grids()[r]), r);
+
+} // DgTriIDGGS::DgTriIDGGS
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -87,6 +119,8 @@ void
 DgIDGGS4T::setAddInteriorChildren (const DgResAdd<DgQ2DICoord>& add, 
                                         DgLocVector& vec) const
 {
+   const int radix = 2;
+
    if (isCongruent())
    {
 //cout << "Children: " << add << " " << lowerLeft << endl;
@@ -95,11 +129,11 @@ DgIDGGS4T::setAddInteriorChildren (const DgResAdd<DgQ2DICoord>& add,
 
       if (DgTriGrid2D::isUp(add.address().coord()))
       {
-         const DgIVec2D lowerLeft((add.address().coord().i() * radix()),
-                                  (add.address().coord().j() * radix()));
+         const DgIVec2D lowerLeft((add.address().coord().i() * radix),
+                                  (add.address().coord().j() * radix));
 
          long long int maxJ = 0;
-         for (int i = 0; i < radix(); i++)
+         for (int i = 0; i < radix; i++)
          {
             for (long long int j = 0; j <= maxJ; j++)
             {
@@ -114,11 +148,11 @@ DgIDGGS4T::setAddInteriorChildren (const DgResAdd<DgQ2DICoord>& add,
       else // down pointing
       {
          const DgIVec2D upperRight(
-                         (add.address().coord().i() * radix() + radix() - 1),
-                         (add.address().coord().j() * radix() + radix() - 1));
+                         (add.address().coord().i() * radix + radix - 1),
+                         (add.address().coord().j() * radix + radix - 1));
 
          long long int maxJ = 0;
-         for (int i = 0; i < radix(); i++)
+         for (int i = 0; i < radix; i++)
          {
             for (long long int j = 0; j <= maxJ; j++)
             {

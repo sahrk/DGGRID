@@ -72,16 +72,24 @@ DgIDGGS::makeRF (DgRFNetwork& network, const DgGeoSphRF& backFrame,
       dg0 = new DgHexIDGGS(network, backFrame, vert0, azDegs, apertureIn, nRes,
               theName, projTypeIn, apSeqIn, isApSeqIn, isMixed43In, numAp4In, isSuperfundIn);
    }
-   else if (gridTopo == "DIAMOND")
-   {
-      if (apertureIn == 4)
-      {
-         if (defaultName) theName = projTypeIn + string("4D");
-         dg0 = new DgIDGGS4D(network, backFrame, vert0, azDegs, nRes, 
-                       theName, projTypeIn);
-      }
-      else
+   else if (DgIDGG::isDiamondTopo(gridTopo)) {
+
+      if (apertureIn != 4)
             report(apErrStr, DgBase::Fatal);
+
+      // assume D4
+      string nameSuffix = string("4D4");
+      bool isD4 = true;
+      if (gridTopo == "DIAMOND4D8") {
+         nameSuffix = string("4D8");
+         isD4 = false;
+      }   
+
+//cout << " makeRF isD4: " << ((isD4) ? "true" : "false") << endl;
+
+      if (defaultName) theName = projTypeIn + nameSuffix;
+      dg0 = new DgIDGGS4D(network, backFrame, vert0, azDegs, nRes, 
+                       theName, projTypeIn, isD4);
    }
    else if (gridTopo == "TRIANGLE")
    {

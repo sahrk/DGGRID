@@ -25,6 +25,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include <vector>
+
 #include "DgDiscRFS2D.h"
 #include "DgDmdD4Grid2DS.h"
 #include "DgDmdD8Grid2DS.h"
@@ -32,6 +34,7 @@
 #include "DgSqrD4Grid2DS.h"
 #include "DgSqrD8Grid2DS.h"
 #include "DgTriGrid2DS.h"
+#include "DgSeriesConverter.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -60,7 +63,7 @@ DgDiscRFS2D::makeRF (DgRFNetwork& net, const DgRF<DgDVec2D, long double>& cc0,
    else if (geometry == "dmd4")
    {
       dg0 = new DgDmdD4Grid2DS(net, cc0, nRes, aperture, isCongruent,
-                               isAligned, "DmdD82DS");
+                               isAligned, "DmdD42DS");
    }
    else if (geometry == "hex")
    {
@@ -79,9 +82,33 @@ DgDiscRFS2D::makeRF (DgRFNetwork& net, const DgRF<DgDVec2D, long double>& cc0,
             geometry, DgBase::Fatal);
    }
 
+   dg0->createSubConverters();
+
    return dg0;
 
 } // DgDiscRFS2D* DgDiscRFS2D::makeRF
+
+////////////////////////////////////////////////////////////////////////////////
+void
+DgDiscRFS2D::createSubConverters (void) {
+
+   vector<const DgConverterBase*> sc;
+   for (int i = 0; i < nRes(); i++)
+   {  
+      // create converter grids[i] -> backFrame
+      sc.push_back(network().getConverter(*grids()[i], grids()[i]->backFrame()));
+      sc.push_back(network().getConverter(grids()[i]->backFrame(), backFrame()));
+      new DgSeriesConverter(sc, true);
+      sc.resize(0);
+
+      // create converter backFrame -> grids[i]
+      sc.push_back(network().getConverter(backFrame(), grids()[i]->backFrame()));
+      sc.push_back(network().getConverter(grids()[i]->backFrame(), *grids()[i]));
+      new DgSeriesConverter(sc, true);
+      sc.resize(0);
+   }
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

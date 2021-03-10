@@ -31,6 +31,7 @@
 #include "DgHexC1Grid2D.h"
 #include "DgHexC2Grid2D.h"
 #include "DgPolygon.h"
+#include "DgSeriesConverter.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 DgHexC3Grid2D::DgHexC3Grid2D (DgRFNetwork& networkIn, 
@@ -71,6 +72,33 @@ DgHexC3Grid2D::DgHexC3Grid2D (DgRFNetwork& networkIn,
 
    new Dg2WayContAffineConverter(backFrame(), *subCCRF, scaleFac);
    substrate_ = new DgHexC1Grid2D(network(), *subCCRF, nameIn + string("Sub"));
+
+   // connect the surrogate to the substrate
+   vector<const DgConverterBase*> sc;
+   sc.push_back(network().getConverter(*surrogate_, *surCCRF));
+   sc.push_back(network().getConverter(*surCCRF, backFrame()));
+   new DgSeriesConverter(sc, true);
+   sc.resize(0);
+
+   sc.push_back(network().getConverter(*surrogate_, *surCCRF));
+   sc.push_back(network().getConverter(*surCCRF, backFrame()));
+   sc.push_back(network().getConverter(backFrame(), *subCCRF));
+   sc.push_back(network().getConverter(*subCCRF, *substrate_));
+   new DgSeriesConverter(sc, true);
+   sc.resize(0);
+
+   // connect the substrate to the surrogate
+   sc.push_back(network().getConverter(*substrate_, *subCCRF));
+   sc.push_back(network().getConverter(*subCCRF, backFrame()));
+   new DgSeriesConverter(sc, true);
+   sc.resize(0);
+
+   sc.push_back(network().getConverter(*substrate_, *subCCRF));
+   sc.push_back(network().getConverter(*subCCRF, backFrame()));
+   sc.push_back(network().getConverter(backFrame(), *surCCRF));
+   sc.push_back(network().getConverter(*surCCRF, *surrogate_));
+   new DgSeriesConverter(sc, true);
+   sc.resize(0);
 
 } // DgHexC3Grid2D::DgHexC3Grid2D
 

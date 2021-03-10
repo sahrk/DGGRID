@@ -44,6 +44,11 @@ class DgIDGG : public DgIDGGBase {
 
    public:
 
+      static bool isDiamondTopo (string gridTopo) { 
+         return (gridTopo == "DIAMOND" || gridTopo == "DIAMOND4D4" 
+                  || gridTopo == "DIAMOND4D8"); 
+      }
+
       DgIDGG (const DgIDGGSBase* dggs, const DgGeoSphRF& geoRFIn, const DgGeoCoord& vert0,
               long double azDegs, unsigned int apertureIn, int resIn, 
               const string& nameIn = "IDGG", 
