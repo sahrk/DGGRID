@@ -41,21 +41,21 @@
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgDmdIDGG::DgDmdIDGG (const DgIDGGS4D& dggs, unsigned int aperture,
-              int res, const string& name, bool isD4, unsigned int precision)
-   : DgIDGGBase (&dggs, dggs.geoRF(), aperture, res, name, precision),
-	   scaleFac_ (1.0L), isD4_ (isD4)
+              int res, const string& name, DgGridMetric gridMetric, 
+              unsigned int precision)
+   : DgIDGGBase (&dggs, dggs.geoRF(), aperture, res, name, Diamond, gridMetric, 
+                 precision),
+	   scaleFac_ (1.0L)
 { 
-//cout << "isD4_: " << ((isD4_) ? "true" : "false") << endl;
    initialize();
 
 } // DgDmdIDGG::DgDmdIDGG
 
 ////////////////////////////////////////////////////////////////////////////////
 DgDmdIDGG::DgDmdIDGG (const DgDmdIDGG& rfIn)
-   : DgIDGGBase (rfIn.dggs(), rfIn.geoRF(), rfIn.aperture(), 
-                 rfIn.res(), rfIn.name(), rfIn.precision()),
-	scaleFac_ (rfIn.scaleFac()),
-	isD4_ (rfIn.isD4())
+   : DgIDGGBase (rfIn.dggs(), rfIn.geoRF(), rfIn.aperture(), rfIn.res(), 
+                 rfIn.name(), Diamond, rfIn.gridMetric(), rfIn.precision()),
+	scaleFac_ (rfIn.scaleFac())
 { 
    initialize();
 
@@ -76,12 +76,12 @@ DgDmdIDGG::initialize (void)
    // verify parameter validity
 
    string apErrStr = string("DgDmdIDGG::initialize(): invalid aperture " + 
-                         dgg::util::to_string(aperture()) + 
-                         string(" for grid topo ") + gridTopo());
+             dgg::util::to_string(aperture()) + string(" for grid topo ") + 
+             to_string(gridTopo()));
 
-   if (!DgIDGG::isDiamondTopo(gridTopo()))
-      report("DgDmdIDGG::initialize(): invalid grid topo " + gridTopo(), 
-             DgBase::Fatal);
+   if (gridTopo() != Diamond)
+      report("DgDmdIDGG::initialize(): invalid grid topo " + 
+             to_string(gridTopo()), DgBase::Fatal);
 
    if (aperture() != 4) report(apErrStr, DgBase::Fatal);
  
@@ -107,10 +107,9 @@ DgDmdIDGG::initialize (void)
    // set-up local network to scale so that quad (and consequently dmd) edge 
    // length is 1.0
    ccFrame_ = new DgContCartRF(locNet_, name() + "CC1");
-//cout << "isD4_: " << ((isD4_) ? "true" : "false") << endl;
-   if (isD4_)
+   if (gridMetric() == D4)
       grid2DS_ = new DgDmdD4Grid2DS(locNet_, ccFrame(), res() + 1, 4, true, false, name() + string("D4H2DS"));
-   else // D8
+   else // must be D8
       grid2DS_ = new DgDmdD8Grid2DS(locNet_, ccFrame(), res() + 1, 4, true, false, name() + string("D8H2DS"));
    //cout << "== NEW GRID2DS:" << endl;
    //cout << *grid2DS_;

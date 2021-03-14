@@ -32,12 +32,14 @@
 #include "DgDmdD8Grid2D.h"
 #include "DgDmdD8Grid2DS.h"
 
+using namespace dgg::topo;
+
 ////////////////////////////////////////////////////////////////////////////////
 DgDmdD8Grid2DS::DgDmdD8Grid2DS (DgRFNetwork& networkIn, 
                const DgRF<DgDVec2D, long double>& backFrameIn, int nResIn, 
                unsigned int apertureIn, bool isCongruentIn, bool isAlignedIn,
                const string& nameIn)
-        : DgDiscRFS2D (networkIn, backFrameIn, nResIn, apertureIn, 
+        : DgDiscRFS2D (networkIn, backFrameIn, nResIn, apertureIn, Diamond, D8,
                        isCongruentIn, isAlignedIn, nameIn) 
 { 
    // determine the radix

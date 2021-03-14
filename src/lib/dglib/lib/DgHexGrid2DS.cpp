@@ -36,13 +36,15 @@
 
 static const string& emptyStr = "";
 
+using namespace dgg::topo;
+
 ////////////////////////////////////////////////////////////////////////////////
 DgHexGrid2DS::DgHexGrid2DS (DgRFNetwork& networkIn, 
                const DgRF<DgDVec2D, long double>& backFrameIn, int nResIn, 
                const DgApSeq& apSeqIn, const string& nameIn) 
         : DgDiscRFS2D (networkIn, backFrameIn, nResIn, 4,
                        //apSeqIn.getAperture(apSeqIn.lastRes()).aperture(), 
-                       0, 1, nameIn), 
+                       Hexagon, D6, 0, 1, nameIn), 
           apSeq_ (apSeqIn),
           // these are deprecated and not used by this constructor
           isMixed43_ (0), numAp4_ (0), isSuperfund_ (0), isApSeq_ (0)
@@ -112,8 +114,8 @@ DgHexGrid2DS::DgHexGrid2DS (DgRFNetwork& networkIn,
                unsigned int apertureIn, bool isCongruentIn, bool isAlignedIn,
                const string& nameIn, bool isMixed43In, int numAp4In, 
                bool isSuperfundIn, bool isApSeqIn, const DgApSeq& apSeqIn)
-        : DgDiscRFS2D (networkIn, backFrameIn, nResIn, apertureIn, isCongruentIn, 
-                       isAlignedIn, nameIn), 
+        : DgDiscRFS2D (networkIn, backFrameIn, nResIn, apertureIn, Hexagon, D6,
+              isCongruentIn, isAlignedIn, nameIn), 
           apSeq_ (apSeqIn),
           isMixed43_ (isMixed43In), numAp4_ (numAp4In), isSuperfund_ (isSuperfundIn),
           isApSeq_ (isApSeqIn)

@@ -33,6 +33,8 @@
 
 class DgIDGGSBase;
 
+using namespace dgg::topo;
+
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -44,15 +46,19 @@ class DgIDGG : public DgIDGGBase {
 
    public:
 
+/*
       static bool isDiamondTopo (string gridTopo) { 
          return (gridTopo == "DIAMOND" || gridTopo == "DIAMOND4D4" 
                   || gridTopo == "DIAMOND4D8"); 
       }
+*/
 
-      DgIDGG (const DgIDGGSBase* dggs, const DgGeoSphRF& geoRFIn, const DgGeoCoord& vert0,
+      DgIDGG (const DgIDGGSBase* dggs, const DgGeoSphRF& geoRFIn, 
+           const DgGeoCoord& vert0,
               long double azDegs, unsigned int apertureIn, int resIn, 
               const string& nameIn = "IDGG", 
-              const string& gridTopoIn = string("HEXAGON"),
+              DgGridTopology gridTopoIn = Hexagon,
+              DgGridMetric gridMetricIn = D6,
               const string& projType = string("ISEA"),
               bool isMixedApIn = false, int numAp4 = 0, 
               bool isSuperfund = false, int sfRes = 17, 
@@ -65,7 +71,10 @@ class DgIDGG : public DgIDGGBase {
       virtual const DgGeoCoord&  vert0  (void) const { return vert0_; }
       virtual long double        azDegs (void) const { return azDegs_; }
 
-      virtual const string& gridTopo (void) const { return gridTopo_; }
+/*
+      virtual DgGridTopology   (void) const { return gridTopo_; }
+      virtual DgGridMetric     (void) const { return gridMetric_; }
+*/
       virtual const string& projType (void) const { return projType_; }
 
       bool               isApSeq     (void) const { return isApSeq_; }
@@ -86,7 +95,10 @@ class DgIDGG : public DgIDGGBase {
       const DgGeoSphRF& geoRF_;
       DgGeoCoord vert0_;
       long double azDegs_;
-      string gridTopo_;
+/*
+      DgGridTopology gridTopo_;
+      DgGridMetric gridMetric_;
+*/
       string projType_;
 
       bool isApSeq_;

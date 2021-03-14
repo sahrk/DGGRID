@@ -18,51 +18,43 @@
 *******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
-// DgDmdIDGG.h: DgDmdIDGG class definitions
-//
-// Kevin Sahr, 8/11/20
+// DgGridTopo.cpp: DgGridTopo enum function implementation
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef DGDMDIDGG_H 
-#define DGDMDIDGG_H
+#include <cmath>
 
-#include "DgIDGGBase.h"
+#include "DgGridTopo.h"
 
-class DgIDGGS4D;
+namespace dgg { namespace topo {
 
-using namespace dgg::topo;
+static const string topoStrings[] = 
+               { "HEXAGON", "TRIANGLE", "SQUARE", "DIAMOND", "INVALID" };
+static const string metricStrings[] = 
+               { "D3", "D4", "D6", "D8", "INVALID" };
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-//
-//  Icosahedral DGG class.
-//
-class DgDmdIDGG : public DgIDGGBase {
+DgGridTopology stringToGridTopology (const string& str) {
+   for (int i = 0; i < InvalidTopo; i++)
+      if (str == topoStrings[i]) return static_cast<DgGridTopology>(i);
 
-   public:
+   return InvalidTopo;
+}
 
-      DgDmdIDGG (const DgIDGGS4D& dggs, unsigned int aperture = 4,
-              int res = 0, const string& name = "DmdIDGG", 
-              DgGridMetric gridMetric = D4,
-              unsigned int precision = DEFAULT_PRECISION);
+DgGridMetric stringToGridMetric (const string& str) {
+   for (int i = 0; i < InvalidMetric; i++)
+      if (str == metricStrings[i]) return static_cast<DgGridMetric>(i);
 
-      DgDmdIDGG (const DgDmdIDGG& grd);
+   return InvalidMetric;
+}
 
-      virtual ~DgDmdIDGG (void);
+string to_string (DgGridTopology t) {
+   if (t <= InvalidTopo) return topoStrings[t];
+   return topoStrings[InvalidTopo];
+}
 
-      const DgIDGGS4D& dmdDggs (void) const;
+string to_string (DgGridMetric m) {
+   if (m <= InvalidMetric) return metricStrings[m];
+   return metricStrings[InvalidMetric];
+}
 
-      long double scaleFac (void) const { return scaleFac_; }
-
-   protected:
-
-      void initialize (void);
-
-   private:
-
-      long double scaleFac_;
-};
-
-////////////////////////////////////////////////////////////////////////////////
-#endif
+}} // namespace dgg::topo

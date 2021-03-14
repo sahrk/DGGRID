@@ -36,6 +36,8 @@
 
 class DgPolygon;
 
+using namespace dgg::topo;
+
 ////////////////////////////////////////////////////////////////////////////////
 class DgHexC1Grid2D : public DgDiscRF2D {
 
@@ -44,8 +46,8 @@ class DgHexC1Grid2D : public DgDiscRF2D {
       DgHexC1Grid2D (DgRFNetwork& networkIn, 
                      const DgRF<DgDVec2D, long double>& ccFrameIn,
                      const string& nameIn = "HexC12D")
-         : DgDiscRF2D (networkIn, ccFrameIn, nameIn, M_1_SQRT3, M_1_SQRT3,
-                       M_SQRT3_2, 1.0L)
+         : DgDiscRF2D (networkIn, ccFrameIn, nameIn, Hexagon, D6,
+               M_1_SQRT3, M_1_SQRT3, M_SQRT3_2, 1.0L)
            { area_ = c(); }
 
       DgHexC1Grid2D (const DgHexC1Grid2D& grd) : DgDiscRF2D (grd) {}

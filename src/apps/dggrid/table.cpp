@@ -43,8 +43,9 @@ void doTable (MainParam& dp, DgGridPList& plist)
    DgRFNetwork net0;
    DgGeoSphRF geoRF(net0, dp.datum, dp.earthRadius);
    const DgIDGGSBase *idggs = DgIDGGSBase::makeRF(net0, geoRF, dp.vert0,
-             dp.azimuthDegs, dp.aperture, dp.actualRes+1, dp.gridTopo, "IDGGS",
-             dp.projType, dp.isMixed43, dp.numAp4, dp.isSuperfund, dp.isApSeq, dp.apSeq);
+          dp.azimuthDegs, dp.aperture, dp.actualRes+1, dp.gridTopo, 
+          dp.gridMetric, "IDGGS", dp.projType, dp.isMixed43, dp.numAp4, 
+          dp.isSuperfund, dp.isApSeq, dp.apSeq);
 
    int numRes = dp.actualRes + 1;
 

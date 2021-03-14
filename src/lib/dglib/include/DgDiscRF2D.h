@@ -42,11 +42,15 @@ class DgDiscRF2D : public DgDiscRF<DgIVec2D, DgDVec2D, long double> {
    public:
 
       DgDiscRF2D (DgRFNetwork& networkIn, 
-                  const DgRF<DgDVec2D, long double>& ccFrameIn,
-                  const string& nameIn = "DiscRF2D", long double eIn = 1.0L,
-                  long double rIn = 1.0L, long double cIn = 1.0L, long double areaIn = 1.0L)
+          const DgRF<DgDVec2D, long double>& ccFrameIn,
+          const string& nameIn = "DiscRF2D", 
+          dgg::topo::DgGridTopology gridTopoIn = dgg::topo::Hexagon,
+          dgg::topo::DgGridMetric gridMetricIn = dgg::topo::D6,
+          long double eIn = 1.0L, long double rIn = 1.0L, 
+          long double cIn = 1.0L, long double areaIn = 1.0L)
          : DgDiscRF<DgIVec2D, DgDVec2D, long double> 
-                       (networkIn, ccFrameIn, nameIn, eIn, rIn, cIn, areaIn)
+               (networkIn, ccFrameIn, nameIn, gridTopoIn, gridMetricIn,
+                eIn, rIn, cIn, areaIn)
            { undefLoc_ = makeLocation(undefAddress()); }
 
       DgDiscRF2D (const DgDiscRF2D& grd) 

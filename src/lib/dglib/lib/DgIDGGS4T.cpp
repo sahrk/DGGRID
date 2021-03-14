@@ -39,7 +39,7 @@ DgIDGGS4T::DgIDGGS4T (DgRFNetwork& network, const DgGeoSphRF& backFrame,
                const DgGeoCoord& vert0, long double azDegs, int nRes,
                const string& name, const string& projType)
         : DgIDGGS (network, backFrame, vert0, azDegs, 4, nRes, 
-                       "TRIANGLE", name, projType)
+                       Triangle, D3, name, projType)
 {
    const int aperture = 4;
 

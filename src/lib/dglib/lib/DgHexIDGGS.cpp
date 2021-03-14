@@ -41,7 +41,7 @@ DgHexIDGGS::DgHexIDGGS (DgRFNetwork& network, const DgGeoSphRF& backFrame,
                   const DgApSeq& apSeq, bool isApSeq,
                   bool isMixed43, int numAp4, bool isSuperfund)
         : DgIDGGS (network, backFrame, vert0, azDegs, aperture, nRes, 
-                       "HEXAGON", name, projType, isMixed43, numAp4,
+                       Hexagon, D6, name, projType, isMixed43, numAp4,
                        isSuperfund, isApSeq, apSeq),
           apSeq_ (apSeq)
 {

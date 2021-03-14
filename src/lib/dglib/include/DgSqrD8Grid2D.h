@@ -27,6 +27,8 @@
 
 #include "DgSqrD4Grid2D.h"
 
+using namespace dgg::topo;
+
 ////////////////////////////////////////////////////////////////////////////////
 class DgSqrD8Grid2D : public DgSqrD4Grid2D {
 
@@ -35,10 +37,12 @@ class DgSqrD8Grid2D : public DgSqrD4Grid2D {
       DgSqrD8Grid2D (DgRFNetwork& networkIn, 
                      const DgRF<DgDVec2D, long double>& contCartFrameIn,
                      const string& nameIn = "Sqr2D")
-         : DgSqrD4Grid2D (networkIn, contCartFrameIn, nameIn) { }
+         : DgSqrD4Grid2D (networkIn, contCartFrameIn, nameIn) 
+              { setGridMetric(D8); }
 
       DgSqrD8Grid2D (const DgSqrD8Grid2D& grd) 
-         : DgSqrD4Grid2D (grd) {}
+         : DgSqrD4Grid2D (grd)
+              { setGridMetric(D8); }
 
       virtual long long int dist (const DgIVec2D& add1, const DgIVec2D& add2) const
            { long long int diffi = abs(add2.i() - add1.i());

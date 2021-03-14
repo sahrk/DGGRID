@@ -6,12 +6,13 @@ All changes are by Kevin Sahr, unless otherwise noted.
 ## [7.1] - 2020-11-27
 ### Fixed
 - XXX r-barnes
+- outdated tags in Doxyfile
 ### Added
 - BUILD_WITH_GDAL build flag in MakeIncludes to allow building DGGRID without gdal installed
 - USE_NUCELL build flag in MakeIncludes to maintain compatibility with Kevin's nuit fork
 - WHERE macro in DgBase.h for quick code location output when debugging
 ### Changed
-- added base infrastructure from Kevin's nuit fork
+- integrated DgRF infrastructure from Kevin's nuit fork
 
 ## [7.07] - 2020-06-24
 ### Fixed

@@ -157,8 +157,9 @@ void binPresGlobal (BinPresenceParam& dp)
    DgRFNetwork net0;
    DgGeoSphRF geoRF(net0, dp.datum, dp.earthRadius);
    const DgIDGGSBase *idggs = DgIDGGSBase::makeRF(net0, geoRF, dp.vert0,
-             dp.azimuthDegs, dp.aperture, dp.actualRes+1, dp.gridTopo, "IDGGS",
-             dp.projType, dp.isMixed43, dp.numAp4, dp.isSuperfund, dp.isApSeq, dp.apSeq);
+             dp.azimuthDegs, dp.aperture, dp.actualRes+1, dp.gridTopo, 
+             dp.gridMetric, "IDGGS", dp.projType, dp.isMixed43, dp.numAp4, 
+             dp.isSuperfund, dp.isApSeq, dp.apSeq);
    const DgIDGGBase& dgg = idggs->idggBase(dp.actualRes);
 
    cout << "Res " << dgg.outputRes() << " " << dgg.gridStats() << endl;
@@ -292,8 +293,9 @@ void binPresPartial (BinPresenceParam& dp)
    DgRFNetwork net0;
    DgGeoSphRF geoRF(net0, dp.datum, dp.earthRadius);
       const DgIDGGSBase *idggs = DgIDGGSBase::makeRF(net0, geoRF, dp.vert0,
-             dp.azimuthDegs, dp.aperture, dp.actualRes+1, dp.gridTopo, "IDGGS",
-             dp.projType, dp.isMixed43, dp.numAp4, dp.isSuperfund, dp.isApSeq, dp.apSeq);
+             dp.azimuthDegs, dp.aperture, dp.actualRes+1, dp.gridTopo, 
+             dp.gridMetric, "IDGGS", dp.projType, dp.isMixed43, dp.numAp4, 
+             dp.isSuperfund, dp.isApSeq, dp.apSeq);
       const DgIDGGBase& dgg = idggs->idggBase(dp.actualRes);
 
    cout << "Res " << dgg.outputRes() << " " << dgg.gridStats() << endl;

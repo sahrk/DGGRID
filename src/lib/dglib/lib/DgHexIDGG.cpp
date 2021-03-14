@@ -40,7 +40,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 DgHexIDGG::DgHexIDGG (const DgHexIDGGS& dggs, unsigned int aperture,
               int res, const string& name, unsigned int precision)
-   : DgIDGGBase (&dggs, dggs.geoRF(), aperture, res, name, precision),
+   : DgIDGGBase (&dggs, dggs.geoRF(), aperture, res, name, Hexagon, D6, precision),
 	   scaleFac_ (1.0L), rotRads_ (0.0L)
 { 
    initialize();
@@ -50,7 +50,8 @@ DgHexIDGG::DgHexIDGG (const DgHexIDGGS& dggs, unsigned int aperture,
 ////////////////////////////////////////////////////////////////////////////////
 DgHexIDGG::DgHexIDGG (const DgHexIDGG& rfIn)
    : DgIDGGBase (rfIn.dggs(), rfIn.geoRF(), rfIn.aperture(), 
-                 rfIn.res(), rfIn.name(), rfIn.precision()),
+                 rfIn.res(), rfIn.name(), rfIn.gridTopo(), rfIn.gridMetric(),
+                 rfIn.precision()),
 	scaleFac_ (rfIn.scaleFac()), rotRads_ (rfIn.rotRads())
 { 
    initialize();
@@ -72,13 +73,13 @@ DgHexIDGG::initialize (void)
    // verify parameter validity
 
    string apErrStr = string("DgHexIDGG::initialize(): invalid aperture " + 
-                         dgg::util::to_string(aperture()) + 
-                         string(" for grid topo ") + gridTopo());
+             dgg::util::to_string(aperture()) + string(" for grid topo ") + 
+             to_string(gridTopo()));
 
-   if (gridTopo() != "HEXAGON")
+   if (gridTopo() != Hexagon)
    {
-      report("DgHexIDGG::initialize(): invalid grid topo " + gridTopo(), 
-             DgBase::Fatal);
+      report("DgHexIDGG::initialize(): invalid grid topo " + 
+             to_string(gridTopo()), DgBase::Fatal);
 
       if (aperture() != 3 && aperture() != 4 && aperture() != 7) 
          report(apErrStr, DgBase::Fatal);

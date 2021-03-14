@@ -30,6 +30,8 @@
 #include "DgSuperfund.h"
 #include "DgOutKMLfile.h"
 
+using namespace dgg::topo;
+
 void 
 MainParam::determineRes (const DgParamList& plist)
 {
@@ -68,7 +70,7 @@ MainParam::determineRes (const DgParamList& plist)
       DgRFNetwork net0;
       DgGeoSphRF geoRF(net0, "GS0", earthRadius);
       const DgIDGGSBase *idggs = DgIDGGSBase::makeRF(net0, geoRF, vert0,
-             azimuthDegs, aperture, maxRes, gridTopo, "IDGGS",
+             azimuthDegs, aperture, maxRes, gridTopo, gridMetric, "IDGGS",
              projType, isMixed43, numAp4, isSuperfund, isApSeq, apSeq);
 
       long double last = 0.0;
@@ -201,7 +203,30 @@ MainParam::MainParam (DgParamList& plist)
       }
    }
 
-   getParamValue(plist, "dggs_topology", gridTopo, false);
+   string gridTopoStr = "";
+   getParamValue(plist, "dggs_topology", gridTopoStr, false);
+   gridTopo = stringToGridTopology(gridTopoStr);
+   
+/* metric not exposed to user yet; D8 is broken
+   string gridMetricStr = "";
+   getParamValue(plist, "dggs_metric", gridMetricStr, false);
+   gridMetric = stringToGridMetric(gridMetricStr);
+*/
+   switch (gridTopo) {
+      case Hexagon:
+         gridMetric = D6;
+         break;
+      case Triangle:
+         gridMetric = D3;
+         break;
+      case Diamond:
+         gridMetric = D4;
+         break;
+      default:
+         ::report("MainParam::MainParam() invalid dggs_topology" +
+              gridTopoStr, DgBase::Fatal);
+   }
+
    getParamValue(plist, "dggs_aperture_type", apertureType, false);
    if (apertureType == "MIXED43") 
       isMixed43 = true;
@@ -328,7 +353,8 @@ void MainParam::dump (void)
    cout << " curGrid: " << curGrid << endl;
    cout << " lastGrid: " << lastGrid << endl;
    cout << " numGrids: " << numGrids << endl;
-   cout << " gridTopo: " << gridTopo << endl;
+   cout << " gridTopo: " << to_string(gridTopo) << endl;
+   cout << " gridMetric: " << to_string(gridMetric) << endl;
    cout << " aperture: " << aperture << endl;
    cout << " projType: " << projType << endl;
    cout << " res: " << res << endl;

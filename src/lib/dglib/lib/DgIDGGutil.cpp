@@ -495,7 +495,7 @@ DgQ2DItoInterleaveConverter::DgQ2DItoInterleaveConverter
        effRes_ = (effRes_ + 1) / 2;
    }
 
-   if (IDGG().gridTopo() == string("TRIANGLE")) effRes_++; // adjust for long double j
+   if (IDGG().gridTopo() == Triangle) effRes_++; // adjust for long double j
 
 } // DgQ2DItoInterleaveConverter::DgQ2DItoInterleaveConverter 
 
@@ -555,7 +555,7 @@ DgInterleaveToQ2DIConverter::DgInterleaveToQ2DIConverter
        effRes_ = (effRes_ + 1) / 2;
    }
 
-   if (IDGG().gridTopo() == string("TRIANGLE")) effRes_++; // adjust for long double j
+   if (IDGG().gridTopo() == Triangle) effRes_++; // adjust for long double j
 
 } // DgQ2DItoInterleaveConverter::DgQ2DItoInterleaveConverter 
 

@@ -30,6 +30,9 @@
 
 #include "DgRF.h"
 #include "DgPolygon.h"
+#include "DgGridTopo.h"
+
+using namespace dgg::topo;
 
 ////////////////////////////////////////////////////////////////////////////////
 template<class A, class B, class DB> 
@@ -72,16 +75,21 @@ class DgDiscRF : public DgRF<A, long long int> {
       };
 
       DgDiscRF (DgRFNetwork& networkIn, const DgRF<B, DB>& backFrameIn,
-                const string& nameIn = "Disc", long double eIn = 1.0L,
+                const string& nameIn = "Disc", 
+                DgGridTopology gridTopoIn = Hexagon,
+                DgGridMetric gridMetricIn = D6,
+                long double eIn = 1.0L,
                 long double rIn = 1.0L, long double cIn = 1.0L, long double areaIn = 1.0L)
         : DgRF<A, long long int> (networkIn, nameIn), backFrame_ (&backFrameIn),
-          e_ (eIn), r_ (rIn), c_ (cIn), area_ (areaIn)
+          e_ (eIn), r_ (rIn), c_ (cIn), area_ (areaIn), gridTopo_ (gridTopoIn),
+          gridMetric_ (gridMetricIn)
         { new DgQuantConverter(backFrame(), *this);
           new DgInvQuantConverter(*this, backFrame()); }
 
       DgDiscRF (const DgDiscRF<A, B, DB>& rf) : DgRF<A, long long int> (rf), 
           backFrame_ (&rf.backFrame()), e_ (rf.e()), r_ (rf.r()),
-          c_ (rf.c()), area_ (rf.area())
+          c_ (rf.c()), area_ (rf.area()), gridTopo_ (rf.gridTopo()),
+          gridMetric_ (rf.gridMetric())
         { new DgQuantConverter(backFrame(), *this);
           new DgInvQuantConverter(*this, backFrame()); 
 	}
@@ -96,6 +104,8 @@ class DgDiscRF : public DgRF<A, long long int> {
                 c_ = rf.c();
                 area_ = rf.area();
                 backFrame_ = &rf.backFrame();
+                gridTopo_ = rf.gridTopo();
+                gridMetric_ = rf.gridMetric();
              }
              return *this; 
           }
@@ -109,6 +119,9 @@ class DgDiscRF : public DgRF<A, long long int> {
       long double c    (void) const { return c_; }
       long double area (void) const { return area_; }
 
+      DgGridTopology gridTopo    (void) const { return gridTopo_; }
+      DgGridMetric   gridMetric  (void) const { return gridMetric_; }
+
       // set methods
 
       void setE    (long double eIn) { e_ = eIn; }
@@ -116,9 +129,12 @@ class DgDiscRF : public DgRF<A, long long int> {
       void setC    (long double cIn) { c_ = cIn; }
       void setArea (long double areaIn) { area_ = areaIn; }
 
+      void setGridTopology (DgGridTopology t) { gridTopo_ = t; }
+      void setGridMetric   (DgGridMetric m)   { gridMetric_ = m; }
+
       // misc methods
       
-      virtual string dist2str (const long long int& dist) const { return dgg::util::to_string(dist); }
+      virtual string dist2str (const long long int& dist) const { return to_string(dist); }
       virtual long double dist2dbl (const long long int& dist) const { return (long double) dist; }
       virtual unsigned long long int dist2int (const long long int& dist) const 
                          { return static_cast<unsigned long long int>(dist); }
@@ -234,6 +250,9 @@ class DgDiscRF : public DgRF<A, long long int> {
       long double r_;   // radius (max center-to-vertex)
       long double c_;   // irrational constant
       long double area_; // cell area
+
+      DgGridTopology gridTopo_;
+      DgGridMetric gridMetric_;
 
 };
 

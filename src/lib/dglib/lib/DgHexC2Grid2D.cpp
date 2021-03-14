@@ -36,8 +36,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 DgHexC2Grid2D::DgHexC2Grid2D (DgRFNetwork& networkIn, 
              const DgRF<DgDVec2D, long double>& ccFrameIn, const string& nameIn)
-         : DgDiscRF2D (networkIn, ccFrameIn, nameIn, M_1_SQRT3, M_1_SQRT3, 
-                       M_SQRT3_2, 1.0L)
+         : DgDiscRF2D (networkIn, ccFrameIn, nameIn, Hexagon, D3,
+                 M_1_SQRT3, M_1_SQRT3, M_SQRT3_2, 1.0L)
 { 
    area_ = c(); 
 

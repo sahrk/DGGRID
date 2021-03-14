@@ -38,12 +38,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 DgIDGGS4D::DgIDGGS4D (DgRFNetwork& network, const DgGeoSphRF& backFrame,
                const DgGeoCoord& vert0, long double azDegs, int nRes,
-               const string& name, const string& projType, bool isD4)
+               const string& name, const string& projType, DgGridMetric gridMetric)
         : DgIDGGS (network, backFrame, vert0, azDegs, 4, nRes, 
-                       "DIAMOND", name, projType),
-             isD4_ (isD4)
+                       Diamond, gridMetric, name, projType)
 {
-//cout << " DgIDGGS4D isD4_: " << ((isD4_) ? "true" : "false") << endl;
    const int aperture = 4;
 
    undefLoc_ = makeLocation(undefAddress());
@@ -52,12 +50,12 @@ DgIDGGS4D::DgIDGGS4D (DgRFNetwork& network, const DgGeoSphRF& backFrame,
 
    // create the DGGs
 
-   (*grids_)[0] = new DgDmdIDGG(*this, aperture, 0, name + dgg::util::to_string(0, 2), isD4_);
+   (*grids_)[0] = new DgDmdIDGG(*this, aperture, 0, name + dgg::util::to_string(0, 2), gridMetric);
    //cout << "========================\nRES 0: " << dmdIdgg(0);
 
    for (int r = 1; r < nRes; r++)
    {
-      (*grids_)[r] = new DgDmdIDGG(*this, aperture, r, name + dgg::util::to_string(r, 2), isD4_);
+      (*grids_)[r] = new DgDmdIDGG(*this, aperture, r, name + dgg::util::to_string(r, 2), gridMetric);
    //cout << "========================\nRES " << r << ": " << dmdIdgg(r);
    }
 

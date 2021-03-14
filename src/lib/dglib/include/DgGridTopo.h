@@ -18,38 +18,42 @@
 *******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
-// DgIDGGBase.cpp: DgIDGGBase class implementation
+// DgGridTopo.h: discrete grid topology and metric enum definitions
 //
-// Version 7.0 - Kevin Sahr, 11/15/14
+// Version 7.1 - Kevin Sahr, 3/11/21
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "DgIDGGSBase.h"
-#include "DgIDGGS.h"
-#include "DgHexIDGGS.h"
-#include "DgApSeq.h"
+#ifndef DGGRIDTOPO_H
+#define DGGRIDTOPO_H
+
+#include <iostream>
+
+using namespace std;
+
+namespace dgg { namespace topo {
+
+enum DgGridTopology { Hexagon, Triangle, Square, Diamond, InvalidTopo };
+enum DgGridMetric { D3, D4, D6, D8, InvalidMetric };
 
 ////////////////////////////////////////////////////////////////////////////////
-const DgIDGGSBase*
-DgIDGGSBase::makeRF (DgRFNetwork& network, const DgGeoSphRF& backFrame,
-          const DgGeoCoord& vert0, long double azDegs, unsigned int apertureIn,
-          int nResIn, DgGridTopology gridTopo, DgGridMetric gridMetric, 
-          const string& name, const string& projTypeIn, bool isMixed43In, 
-          int numAp4In, bool isSuperfundIn, bool isApSeqIn, const DgApSeq& apSeqIn)
+inline ostream&
+operator<< (ostream& stream, DgGridTopology obj)
 {
-   const DgIDGGSBase* dg0 = NULL;
+   return stream << to_string(obj);
 
-   if (gridTopo == Hexagon) 
-      dg0 = new DgHexIDGGS(network, backFrame, vert0, azDegs, apertureIn, nResIn,
-            name, projTypeIn, apSeqIn, isApSeqIn, isMixed43In, numAp4In, 
-            isSuperfundIn); 
-   else
-      dg0 = DgIDGGS::makeRF(network, backFrame, vert0, azDegs, 
-            apertureIn, nResIn, gridTopo, gridMetric, name, projTypeIn, 
-            isMixed43In, numAp4In, isSuperfundIn);
-
-   return dg0;
-
-} // DgIDGGSBase::makeRF
+} // ostream& operator<<
 
 ////////////////////////////////////////////////////////////////////////////////
+inline ostream&
+operator<< (ostream& stream, DgGridMetric obj)
+{
+   return stream << to_string(obj);
+
+} // ostream& operator<<
+
+}} // end namespace
+
+////////////////////////////////////////////////////////////////////////////////
+
+#endif

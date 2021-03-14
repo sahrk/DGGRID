@@ -39,7 +39,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 DgTriIDGG::DgTriIDGG (const DgIDGGS4T& dggs, unsigned int aperture,
               int res, const string& name, unsigned int precision)
-   : DgIDGGBase (&dggs, dggs.geoRF(), aperture, res, name, precision),
+   : DgIDGGBase (&dggs, dggs.geoRF(), aperture, res, name, Triangle, D3, precision),
 	   scaleFac_ (1.0L)
 { 
    initialize();
@@ -49,7 +49,8 @@ DgTriIDGG::DgTriIDGG (const DgIDGGS4T& dggs, unsigned int aperture,
 ////////////////////////////////////////////////////////////////////////////////
 DgTriIDGG::DgTriIDGG (const DgTriIDGG& rfIn)
    : DgIDGGBase (rfIn.dggs(), rfIn.geoRF(), rfIn.aperture(), 
-                 rfIn.res(), rfIn.name(), rfIn.precision()),
+                 rfIn.res(), rfIn.name(), rfIn.gridTopo(), rfIn.gridMetric(),
+                 rfIn.precision()),
 	scaleFac_ (rfIn.scaleFac())
 { 
    initialize();
@@ -72,10 +73,10 @@ DgTriIDGG::initialize (void)
 
    string apErrStr = string("DgTriIDGG::initialize(): invalid aperture " + 
                          dgg::util::to_string(aperture()) + 
-                         string(" for grid topo ") + gridTopo());
+                         string(" for grid topo ") + to_string(gridTopo()));
 
-   if (gridTopo() != "TRIANGLE") {
-      report("DgTriIDGG::initialize(): invalid grid topo " + gridTopo(), 
+   if (gridTopo() != Triangle) {
+      report("DgTriIDGG::initialize(): invalid grid topo " + to_string(gridTopo()), 
              DgBase::Fatal);
 
       if (aperture() != 4) report(apErrStr, DgBase::Fatal);

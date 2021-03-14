@@ -34,6 +34,8 @@
 
 class DgPolygon;
 
+using namespace dgg::topo;
+
 ////////////////////////////////////////////////////////////////////////////////
 class DgDmdD4Grid2D : public DgDiscRF2D {
 
@@ -42,8 +44,8 @@ class DgDmdD4Grid2D : public DgDiscRF2D {
       DgDmdD4Grid2D (DgRFNetwork& networkIn, 
                      const DgRF<DgDVec2D, long double>& contCartFrameIn,
                      const string& nameIn = "Dmd2D")
-         : DgDiscRF2D (networkIn, contCartFrameIn, nameIn, 1.0L, 1.0L, 
-                       M_SQRT3_2, 1.0L) 
+         : DgDiscRF2D (networkIn, contCartFrameIn, nameIn, Diamond, D4,
+                 1.0L, 1.0L, M_SQRT3_2, 1.0L) 
            { r_ = c(); }
 
       DgDmdD4Grid2D (const DgDmdD4Grid2D& grd) : DgDiscRF2D (grd) {}

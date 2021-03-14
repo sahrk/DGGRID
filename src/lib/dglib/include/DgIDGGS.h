@@ -33,6 +33,8 @@
 #include "DgIDGGSBase.h"
 #include "DgIDGG.h"
 
+using namespace dgg::topo;
+
 ////////////////////////////////////////////////////////////////////////////////
 class DgIDGGS : public DgIDGGSBase {
 
@@ -41,7 +43,8 @@ class DgIDGGS : public DgIDGGSBase {
       static const DgIDGGS* makeRF (DgRFNetwork& network, 
                const DgGeoSphRF& backFrame, const DgGeoCoord& vert0,
                long double azDegs, unsigned int aperture = 4, int nRes = 1,
-               const string& gridTopo = string("HEXAGON"),
+               DgGridTopology gridTopo = Hexagon,
+               DgGridMetric gridMetric = D6,
                const string& name = "IDGGS", const string& projType = "ISEA", 
                bool isMixed43 = false, int numAp4 = 0, 
                bool isSuperfund = false, bool isApSeq = false,
@@ -65,7 +68,8 @@ class DgIDGGS : public DgIDGGSBase {
                const DgGeoSphRF& backFrame,
                const DgGeoCoord& vert0,
                long double azDegs, unsigned int aperture = 4, int nRes = 1,
-               const string& gridTopo = string("HEXAGON"),
+               DgGridTopology gridTopo = Hexagon,
+               DgGridMetric gridMetric = D6,
                const string& name = "IDGGS", 
                const string& projType = "ISEA", 
                bool isMixed43 = false, int numAp4 = 0, 

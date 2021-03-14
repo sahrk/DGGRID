@@ -35,6 +35,8 @@
 #include "DgIVec2D.h"
 
 class DgPolygon;
+  
+using namespace dgg::topo;
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgHexC2Grid2D : public DgDiscRF2D {

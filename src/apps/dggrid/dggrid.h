@@ -41,6 +41,7 @@
 #include "DgApSeq.h"
 #include "util.h"
 #include "DgRunningStats.h"
+#include "DgGridTopo.h"
 
 using namespace std;
 
@@ -114,7 +115,8 @@ class MainParam {
 
       string operation;             // operation for dggrid to perform
       string dggsType;              // preset DGGS type
-      string gridTopo;              // diamond/hex/triangle
+      dgg::topo::DgGridTopology gridTopo;      // Diamond/Hexagon/Triangle
+      dgg::topo::DgGridMetric   gridMetric;    // D4/D8 
       int aperture;      // aperture
       string projType;              // projection type
       int res;           // resolution (may be adjusted)

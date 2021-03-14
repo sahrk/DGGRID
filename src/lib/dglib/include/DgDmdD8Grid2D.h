@@ -27,6 +27,8 @@
 
 #include "DgDmdD4Grid2D.h"
 
+using namespace dgg::topo;
+
 ////////////////////////////////////////////////////////////////////////////////
 class DgDmdD8Grid2D : public DgDmdD4Grid2D {
 
@@ -35,10 +37,11 @@ class DgDmdD8Grid2D : public DgDmdD4Grid2D {
       DgDmdD8Grid2D (DgRFNetwork& networkIn, 
                      const DgRF<DgDVec2D, long double>& contCartFrameIn,
                      const string& nameIn = "Dmd2D")
-         : DgDmdD4Grid2D (networkIn, contCartFrameIn, nameIn) { }
+         : DgDmdD4Grid2D (networkIn, contCartFrameIn, nameIn) 
+              { setGridMetric(D8); }
 
       DgDmdD8Grid2D (const DgDmdD8Grid2D& grd) 
-         : DgDmdD4Grid2D (grd) {}
+         : DgDmdD4Grid2D (grd) { setGridMetric(D8); }
 
       virtual long long int dist (const DgIVec2D& add1, const DgIVec2D& add2) const
       { 

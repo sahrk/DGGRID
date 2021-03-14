@@ -30,12 +30,14 @@
 #include "DgTriGrid2D.h"
 #include "DgTriGrid2DS.h"
 
+using namespace dgg::topo;
+
 ////////////////////////////////////////////////////////////////////////////////
 DgTriGrid2DS::DgTriGrid2DS (DgRFNetwork& networkIn, 
                const DgRF<DgDVec2D, long double>& backFrameIn, int nResIn, 
                unsigned int apertureIn, bool isCongruentIn, bool isAlignedIn,
                const string& nameIn)
-        : DgDiscRFS2D (networkIn, backFrameIn, nResIn, apertureIn, 
+        : DgDiscRFS2D (networkIn, backFrameIn, nResIn, apertureIn, Triangle, D3,
                        isCongruentIn, isAlignedIn, nameIn) 
 { 
    if (!isCongruent())

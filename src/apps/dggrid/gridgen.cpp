@@ -63,6 +63,8 @@ using namespace std;
 #include "DgOutRandPtsText.h"
 #include "DgHexSF.h"
 
+using namespace dgg::topo;
+
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 GridGenParam::GridGenParam (DgParamList& plist)
@@ -568,12 +570,9 @@ void genPoints (GridGenParam& dp, const DgIDGGBase& dgg, const DgQ2DICoord& add2
    }
 
    DgDVec2D anchor;
-   if (dp.gridTopo == "HEXAGON")
-   {
+   if (dp.gridTopo == Hexagon) {
       anchor = cpv; // use center
-   }
-   else // DIAMOND or TRIANGLE happen to be the same
-   {
+   } else { // Diamond or Triangle happen to be the same
       DgPolygon verts;
       grid.setVertices(add2D.coord(), verts);
       ccRF.convert(verts);
@@ -595,13 +594,13 @@ void genPoints (GridGenParam& dp, const DgIDGGBase& dgg, const DgQ2DICoord& add2
       if (dp.megaVerbose) cout << " " << rp; 
 
       DgLocation* nloc = 0;
-      if (dp.gridTopo != string("DIAMOND"))
+      if (dp.gridTopo != Diamond)
       {
          // force into (0, 0) triangle
 
          if (rp.y() > sqrt(3.0) * rp.x()) rp.rotate(-60.0);
 
-         if (dp.gridTopo == "TRIANGLE")
+         if (dp.gridTopo == Triangle)
          {
             rp *= M_SQRT3; // scale correctly
 
@@ -611,7 +610,7 @@ void genPoints (GridGenParam& dp, const DgIDGGBase& dgg, const DgQ2DICoord& add2
             if (!triG0.isUp(add2D.coord())) rp.rotate(-60.0);
 
          }
-         else if (dp.gridTopo == "HEXAGON")
+         else if (dp.gridTopo == Hexagon)
          {
             DgDVec2D origrp(rp);
             bool goodPt = false;
@@ -926,8 +925,9 @@ void genGrid (GridGenParam& dp)
    DgRFNetwork net0;
    DgGeoSphRF geoRF(net0, dp.datum, dp.earthRadius);
    const DgIDGGSBase *dggs = DgIDGGSBase::makeRF(net0, geoRF, dp.vert0,
-             dp.azimuthDegs, dp.aperture, dp.actualRes+2, dp.gridTopo, "IDGGS",
-             dp.projType, dp.isMixed43, dp.numAp4, dp.isSuperfund, dp.isApSeq, dp.apSeq);
+             dp.azimuthDegs, dp.aperture, dp.actualRes+2, dp.gridTopo, 
+             dp.gridMetric, "IDGGS", dp.projType, dp.isMixed43, dp.numAp4, 
+             dp.isSuperfund, dp.isApSeq, dp.apSeq);
 
    const DgIDGGBase& dgg = dggs->idggBase(dp.actualRes);
 

@@ -37,9 +37,8 @@
 DgHexC3Grid2D::DgHexC3Grid2D (DgRFNetwork& networkIn, 
              const DgRF<DgDVec2D, long double>& ccFrameIn, bool isClassI,
              const string& nameIn)
-         : DgDiscRF2D (networkIn, ccFrameIn, nameIn, M_1_SQRT7, M_1_SQRT7, 
-                       M_SQRT7_2, 1.0L),
-           isClassI_ (isClassI)
+         : DgDiscRF2D (networkIn, ccFrameIn, nameIn, Hexagon, D6, M_1_SQRT7, 
+                 M_1_SQRT7, M_SQRT7_2, 1.0L), isClassI_ (isClassI)
 { 
    area_ = c(); 
 

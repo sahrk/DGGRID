@@ -32,6 +32,8 @@
 
 class DgIDGGSBase;
 
+using namespace dgg::topo;
+
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -45,6 +47,8 @@ class DgIDGGBase : public DgDiscRF<DgQ2DICoord, DgGeoCoord, long double> {
 
       DgIDGGBase (const DgIDGGSBase* dggs, const DgGeoSphRF& geoRFIn, 
                   unsigned int apertureIn, int resIn, const string& nameIn = "IDGG", 
+                  DgGridTopology gridTopo = Hexagon,
+                  DgGridMetric gridMetric = D6,
                   unsigned int precisionIn = DEFAULT_PRECISION);
 
       DgIDGGBase (const DgIDGGBase& grd);
@@ -53,11 +57,12 @@ class DgIDGGBase : public DgDiscRF<DgQ2DICoord, DgGeoCoord, long double> {
 
       const DgIDGGSBase* dggs (void) const { return dggs_; }
 
-      const DgGeoSphRF& geoRF    (void) const;
-      const DgGeoCoord& vert0    (void) const;
-      long double       azDegs   (void) const;
-      const string&     projType (void) const;
-      const string&     gridTopo (void) const;
+      const DgGeoSphRF&  geoRF      (void) const;
+      const DgGeoCoord&  vert0      (void) const;
+      long double        azDegs     (void) const;
+      const string&      projType   (void) const;
+      DgGridTopology     gridTopo   (void) const;
+      DgGridMetric       gridMetric (void) const;
 
       unsigned int  aperture    (void) const { return aperture_; }
       int           res         (void) const { return res_; }
@@ -214,6 +219,7 @@ operator<< (ostream& stream, const DgIDGGBase& dgg)
    stream << "\nazDegs: " << dgg.azDegs();
 
    stream << "\ngridTopo: " << dgg.gridTopo();
+   stream << "\ngridMetric: " << dgg.gridMetric();
    stream << "\nprojType: " << dgg.projType();
 
    stream << "\naperture: " << dgg.aperture_;

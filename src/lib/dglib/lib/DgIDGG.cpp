@@ -44,11 +44,11 @@
 ////////////////////////////////////////////////////////////////////////////////
 DgIDGG::DgIDGG (const DgIDGGSBase* dggs, const DgGeoSphRF& geoRF, const DgGeoCoord& vert0, 
        long double azDegs, unsigned int aperture, int res, const string& name,
-       const string& gridTopo, const string& projType, bool isMixed43, 
-       int numAp4, bool isSuperfund, int sfRes, bool isApSeq, const DgApSeq& apSeq,
-       unsigned int precision)
-   : DgIDGGBase (dggs, geoRF, aperture, res, name, precision),
-     geoRF_(geoRF), vert0_(vert0), azDegs_(azDegs), gridTopo_(gridTopo), 
+       DgGridTopology gridTopo, DgGridMetric gridMetric, const string& projType, 
+       bool isMixed43, int numAp4, bool isSuperfund, int sfRes, bool isApSeq, 
+       const DgApSeq& apSeq, unsigned int precision)
+   : DgIDGGBase (dggs, geoRF, aperture, res, name, gridTopo, gridMetric, precision),
+     geoRF_(geoRF), vert0_(vert0), azDegs_(azDegs), 
      projType_(projType), isApSeq_ (isApSeq), apSeq_ (apSeq), isMixed43_(isMixed43), 
      numAp4_(numAp4), isSuperfund_(isSuperfund), sfRes_ (sfRes)
 { 
@@ -58,10 +58,10 @@ DgIDGG::DgIDGG (const DgIDGGSBase* dggs, const DgGeoSphRF& geoRF, const DgGeoCoo
 
 ////////////////////////////////////////////////////////////////////////////////
 DgIDGG::DgIDGG (const DgIDGG& rfIn)
-   : DgIDGGBase (NULL, rfIn.geoRF(), rfIn.aperture(), 
-                 rfIn.res(), rfIn.name(), rfIn.precision()),
+   : DgIDGGBase (NULL, rfIn.geoRF(), rfIn.aperture(), rfIn.res(), rfIn.name(), 
+                 rfIn.gridTopo(), rfIn.gridMetric(), rfIn.precision()),
         geoRF_(rfIn.geoRF()), vert0_(rfIn.vert0()), 
-        azDegs_(rfIn.azDegs()), gridTopo_(rfIn.gridTopo()), 
+        azDegs_(rfIn.azDegs()),
         projType_ (rfIn.projType()), isApSeq_ (rfIn.isApSeq()),
         apSeq_ (rfIn.apSeq()),
         isMixed43_(rfIn.isMixed43()), numAp4_(rfIn.numAp4()), 
@@ -81,16 +81,16 @@ DgIDGG::initialize (void)
    // verify parameter validity
 
    string apErrStr = string("DgIDGG::initialize(): invalid aperture " + 
-                         dgg::util::to_string(aperture()) + 
-                         string(" for grid topo ") + gridTopo());
+            dgg::util::to_string(aperture()) + string(" for grid topo ") + 
+            to_string(gridTopo()));
 
-   if (gridTopo() == "HEXAGON") {
+   if (gridTopo() == Hexagon) {
       if (aperture() != 3 && aperture() != 4 && aperture() != 7) 
          report(apErrStr, DgBase::Fatal);
-   } else if (gridTopo() == "TRIANGLE" || DgIDGG::isDiamondTopo(gridTopo())) {
+   } else if (gridTopo() == Triangle || gridTopo() == Diamond) {
       if (aperture() != 4) report(apErrStr, DgBase::Fatal);
    } else
-      report("DgIDGG::initialize(): invalid grid topo " + gridTopo(), 
+      report("DgIDGG::initialize(): invalid grid topo " + to_string(gridTopo()), 
              DgBase::Fatal);
 
    if (isMixed43())
@@ -107,7 +107,7 @@ DgIDGG::initialize (void)
    radix_ = (int) sqrtl((long double) aperture());
    allocRes_ = res();
 
-   if (gridTopo() == "HEXAGON") {
+   if (gridTopo() == Hexagon) {
       report("DgIDGG::initialize(): HEXAGON grid should use DgHexIDGG", DgBase::Fatal);
 /*
       isAligned_ = true;
@@ -161,14 +161,11 @@ DgIDGG::initialize (void)
       maxI_ = maxD();
       maxJ_ = maxD();
       mag_ = maxD() + 1;
-      if (gridTopo() == "TRIANGLE") 
-      {
+      if (gridTopo() == Triangle) {
          isAligned_ = true; // only for aperture 4
          isCongruent_ = true;
          maxJ_ = (mag() * 2) - 1;
-      }
-      else // topo must be DIAMOND
-      {
+      } else { // topo must be Diamond
          isAligned_ = false;
          isCongruent_ = true;
       }
@@ -181,13 +178,13 @@ DgIDGG::initialize (void)
 
    ccFrame_ = new DgContCartRF(locNet_, name() + "CC1");
 
-   if (gridTopo() == "DIAMOND" || gridTopo() == "DIAMOND4D4")
+   if (gridTopo() == Diamond && gridMetric() == D4)
       grid2DS_ = new DgDmdD4Grid2DS(locNet_, ccFrame(), res() + 1, aperture(), 
                                     isCongruent(), isAligned());
-   else if (gridTopo() == "DIAMOND4D8")
+   else if (gridTopo() == Diamond && gridMetric() == D8)
       grid2DS_ = new DgDmdD8Grid2DS(locNet_, ccFrame(), res() + 1, aperture(), 
                                     isCongruent(), isAligned());
-   else if (gridTopo() == "TRIANGLE")
+   else if (gridTopo() == Triangle)
       grid2DS_ = new DgTriGrid2DS(locNet_, ccFrame(), res() + 1, aperture(), 
                                   isCongruent(), isAligned());
 
@@ -199,12 +196,12 @@ DgIDGG::initialize (void)
    gridStats_.setNCells(bndRF().size());
 
    long double tmpLen = DgGeoSphRF::icosaEdgeKM();
-   if (gridTopo() == "TRIANGLE") tmpLen /= M_SQRT3;
+   if (gridTopo() == Triangle) tmpLen /= M_SQRT3;
    gridStats_.setCellDistKM(tmpLen / pow(sqrtl((long double) aperture()), res()));
 
-   if (DgIDGG::isDiamondTopo(gridTopo()))
+   if (gridTopo() == Diamond)
       gridStats_.setCellAreaKM(DgGeoSphRF::totalAreaKM() / gridStats_.nCells());
-   else if (gridTopo() == "TRIANGLE")
+   else if (gridTopo() == Triangle)
       gridStats_.setCellAreaKM(DgGeoSphRF::totalAreaKM() / gridStats_.nCells());
 
    gridStats_.setCLS(2.0L * 2.0L * DgGeoSphRF::earthRadiusKM() * 

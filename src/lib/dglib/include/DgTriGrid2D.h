@@ -34,6 +34,8 @@
 
 class DgPolygon;
 
+using namespace dgg::topo;
+
 ////////////////////////////////////////////////////////////////////////////////
 class DgTriGrid2D : public DgDiscRF2D {
 
@@ -42,9 +44,8 @@ class DgTriGrid2D : public DgDiscRF2D {
       DgTriGrid2D (DgRFNetwork& networkIn, 
                    const DgRF<DgDVec2D, long double>& ccFrameIn,
                    const string& nameIn = "TriC12D")
-         : DgDiscRF2D (networkIn, ccFrameIn, nameIn, M_SQRT3, 1.0L,
-                       M_SQRT3_2, 3.0L) 
-           { }
+         : DgDiscRF2D (networkIn, ccFrameIn, nameIn, Triangle, D3, M_SQRT3, 
+               1.0L, M_SQRT3_2, 3.0L) { }
 
       DgTriGrid2D (const DgTriGrid2D& grd) : DgDiscRF2D (grd) {}
 

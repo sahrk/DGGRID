@@ -106,9 +106,12 @@ template<class A, class B, class DB> class DgDiscRFS
 
       DgDiscRFS (DgRFNetwork& network, const DgRF<B, DB>& backFrame,
                  int nResIn, unsigned int aperture, 
+                 dgg::topo::DgGridTopology gridTopo = dgg::topo::Hexagon,
+                 dgg::topo::DgGridMetric gridMetric = dgg::topo::D6,
                  bool isCongruent = true, bool isAligned = false,
                  const string& name = "DiscS")
-        : DgDiscRF<DgResAdd<A>, B, DB> (network, backFrame, name), 
+        : DgDiscRF<DgResAdd<A>, B, DB> 
+                      (network, backFrame, name, gridTopo, gridMetric), 
           aperture_ (aperture), grids_ (new vector<DgDiscRF<A, B, DB>*>()),
           nRes_ (nResIn), isCongruent_ (isCongruent), 
           isAligned_ (isAligned)

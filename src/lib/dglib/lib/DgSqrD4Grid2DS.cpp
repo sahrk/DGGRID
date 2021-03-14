@@ -30,12 +30,14 @@
 #include "DgSqrD4Grid2DS.h"
 #include "DgSqrD8Grid2D.h"
 
+using namespace dgg::topo;
+
 ////////////////////////////////////////////////////////////////////////////////
 DgSqrD4Grid2DS::DgSqrD4Grid2DS (DgRFNetwork& networkIn, 
                const DgRF<DgDVec2D, long double>& backFrameIn, int nResIn, 
                unsigned int apertureIn, bool isCongruentIn, bool isAlignedIn,
                const string& nameIn)
-        : DgDiscRFS2D (networkIn, backFrameIn, nResIn, apertureIn, 
+        : DgDiscRFS2D (networkIn, backFrameIn, nResIn, apertureIn, Square, D4,
                        isCongruentIn, isAlignedIn, nameIn) 
 { 
    // determine the radix

@@ -44,21 +44,21 @@ DgBoundedIDGG::DgBoundedIDGG (const DgIDGGBase& IDGGin)
 //cout << "     offsetPerQuad_ = (idgg().gridStats().nCells() - 2) / 10;
 
    // calculate the offsetPerQuad
-   if (idgg().gridTopo() == "HEXAGON")
+   if (idgg().gridTopo() == dgg::topo::Hexagon)
       offsetPerQuad_ = (idgg().gridStats().nCells() - 2) / 10;
    else
    {
       setFirstAdd(DgQ2DICoord(1, DgIVec2D(0, 0)));
       setLastAdd(DgQ2DICoord(10, DgIVec2D(idgg().maxI(), idgg().maxJ())));
 
-      if (idgg().gridTopo() == "TRIANGLE")
+      if (idgg().gridTopo() == dgg::topo::Triangle)
          offsetPerQuad_ = idgg().mag() * (idgg().maxJ() + 1);
       else
          offsetPerQuad_ = idgg().mag() * idgg().mag();
    }
 
    // create the surrogate boundedRF2D
-   if (idgg().gridTopo() == "HEXAGON")
+   if (idgg().gridTopo() == dgg::topo::Hexagon)
    {
       if (idgg().isClassIII())
       {
@@ -243,7 +243,7 @@ DgBoundedIDGG::q2dixToQ2di (const DgQ2DICoord& add) const
    long long int numDminusOne = numD - 1;
    //cout << " q2dixToQ2di: addIn: " << add << " numD: " << numD << endl;
 
-   bool hexGrid = (idgg().gridTopo() == "HEXAGON");
+   bool hexGrid = (idgg().gridTopo() == dgg::topo::Hexagon);
 
    int numTries = 0;
    while (!good)

@@ -54,6 +54,8 @@ using namespace std;
 #include "DgOutRandPtsText.h"
 #include "DgHexSF.h"
 
+using namespace dgg::topo;
+
 //////////////////////////////////////////////////////////////////////////////
 void createClipRegions (GridGenParam& dp, const DgIDGGBase& dgg, 
              DgQuadClipRegion clipRegions[], set<DgIVec2D> overageSet[],
@@ -533,7 +535,7 @@ void createClipRegions (GridGenParam& dp, const DgIDGGBase& dgg,
 
       // create a buffer zone if applicable
 
-      if (dp.gridTopo == "TRIANGLE" || dp.gridTopo == "HEXAGON")
+      if (dp.gridTopo == Triangle || dp.gridTopo == Hexagon) 
       {
          // build the adjusted minimum
 

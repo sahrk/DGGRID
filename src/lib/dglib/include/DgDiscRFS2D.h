@@ -35,6 +35,8 @@
 #include "DgIVec2D.h"
 #include "DgApSeq.h"
 
+using namespace dgg::topo;
+
 ////////////////////////////////////////////////////////////////////////////////
 class DgDiscRFS2D : public DgDiscRFS<DgIVec2D, DgDVec2D, long double> {
 
@@ -43,6 +45,8 @@ class DgDiscRFS2D : public DgDiscRFS<DgIVec2D, DgDVec2D, long double> {
       static DgDiscRFS2D* makeRF (DgRFNetwork& network, 
                    const DgRF<DgDVec2D, long double>& backFrame,
                    int nRes = 1, unsigned int aperture = 4,
+                   DgGridTopology gridTopo = Hexagon,
+                   DgGridMetric gridMetric = D6,
                    bool isCongruent = true, bool isAligned = false,
                    const string& name = "DiscRFS2D", 
                    const string geometry = "sqr8", bool isMixed43 = false,
@@ -52,10 +56,12 @@ class DgDiscRFS2D : public DgDiscRFS<DgIVec2D, DgDVec2D, long double> {
       DgDiscRFS2D (DgRFNetwork& network, 
                    const DgRF<DgDVec2D, long double>& backFrame,
                    int nRes = 1, unsigned int aperture = 4,
+                   DgGridTopology gridTopo = Hexagon,
+                   DgGridMetric gridMetric = D6,
                    bool isCongruent = true, bool isAligned = false,
                    const string& name = "DiscRFS2D")
         : DgDiscRFS<DgIVec2D, DgDVec2D, long double> 
-              (network, backFrame, nRes, aperture, 
+              (network, backFrame, nRes, aperture, gridTopo, gridMetric,
                                isCongruent, isAligned, name)
            { undefLoc_ = makeLocation(undefAddress()); }
 

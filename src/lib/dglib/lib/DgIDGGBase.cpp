@@ -42,11 +42,12 @@
 #include "DgProjFuller.h"
 
 ////////////////////////////////////////////////////////////////////////////////
-const DgGeoSphRF& DgIDGGBase::geoRF    (void) const { return dggs()->geoRF(); }
-const DgGeoCoord& DgIDGGBase::vert0    (void) const { return dggs()->vert0(); }
-long double       DgIDGGBase::azDegs   (void) const { return dggs()->azDegs(); }
-const string&     DgIDGGBase::projType (void) const { return dggs()->projType(); }
-const string&     DgIDGGBase::gridTopo (void) const { return dggs()->gridTopo(); }
+const DgGeoSphRF& DgIDGGBase::geoRF      (void) const { return dggs()->geoRF(); }
+const DgGeoCoord& DgIDGGBase::vert0      (void) const { return dggs()->vert0(); }
+long double       DgIDGGBase::azDegs     (void) const { return dggs()->azDegs(); }
+const string&     DgIDGGBase::projType   (void) const { return dggs()->projType(); }
+DgGridTopology    DgIDGGBase::gridTopo   (void) const { return dggs()->gridTopo(); }
+DgGridMetric      DgIDGGBase::gridMetric (void) const { return dggs()->gridMetric(); }
 
 ////////////////////////////////////////////////////////////////////////////////
 const DgQuadEdgeCells DgIDGGBase::edgeTable_[12] = {
@@ -102,9 +103,11 @@ DgIDGGBase::str2add (DgQ2DICoord* add, const char* str, char delimiter) const
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgIDGGBase::DgIDGGBase (const DgIDGGSBase* dggs, const DgGeoSphRF& geoRF, 
-                        unsigned int aperture, int res, const string& name, 
-                        unsigned int precision)
-   : DgDiscRF<DgQ2DICoord, DgGeoCoord, long double>(geoRF.network(), geoRF, name),
+             unsigned int aperture, int res, const string& name, 
+             DgGridTopology gridTopo, DgGridMetric gridMetric,
+             unsigned int precision)
+   : DgDiscRF<DgQ2DICoord, DgGeoCoord, long double>
+          (geoRF.network(), geoRF, name, gridTopo, gridMetric),
      dggs_ (dggs), sphIcosa_(0), aperture_(aperture), res_(res),
      precision_(precision), grid2D_(0), grid2DS_(0), ccFrame_(0),
      projTriRF_(0), vertexRF_(0), q2ddRF_(0), bndRF_(0), intRF_(0), planeRF_(0)
@@ -114,6 +117,7 @@ DgIDGGBase::DgIDGGBase (const DgIDGGSBase* dggs, const DgGeoSphRF& geoRF,
 } // DgIDGGBase::DgIDGGBase
 
 ////////////////////////////////////////////////////////////////////////////////
+/*
 DgIDGGBase::DgIDGGBase (const DgIDGGBase& rfIn)
    : DgDiscRF<DgQ2DICoord, DgGeoCoord, long double> (rfIn), 
         dggs_ (NULL), sphIcosa_(0), aperture_(rfIn.aperture()), 
@@ -124,6 +128,7 @@ DgIDGGBase::DgIDGGBase (const DgIDGGBase& rfIn)
    //initialize();
 
 } // DgIDGGBase::DgIDGGBase
+*/
 
 ////////////////////////////////////////////////////////////////////////////////
 DgIDGGBase::~DgIDGGBase()
