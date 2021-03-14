@@ -47,12 +47,12 @@ DgGridMetric stringToGridMetric (const string& str) {
    return InvalidMetric;
 }
 
-string to_string (DgGridTopology t) {
+const string& to_string (DgGridTopology t) {
    if (t <= InvalidTopo) return topoStrings[t];
    return topoStrings[InvalidTopo];
 }
 
-string to_string (DgGridMetric m) {
+const string& to_string (DgGridMetric m) {
    if (m <= InvalidMetric) return metricStrings[m];
    return metricStrings[InvalidMetric];
 }

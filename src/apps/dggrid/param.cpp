@@ -205,7 +205,7 @@ MainParam::MainParam (DgParamList& plist)
 
    string gridTopoStr = "";
    getParamValue(plist, "dggs_topology", gridTopoStr, false);
-   gridTopo = stringToGridTopology(gridTopoStr);
+   gridTopo = dgg::topo::stringToGridTopology(gridTopoStr);
    
 /* metric not exposed to user yet; D8 is broken
    string gridMetricStr = "";
