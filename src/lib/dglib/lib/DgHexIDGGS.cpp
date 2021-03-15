@@ -67,8 +67,8 @@ DgHexIDGGS::DgHexIDGGS (DgRFNetwork& network, const DgGeoSphRF& backFrame,
              " exceeds aperture sequence string length", DgBase::Fatal);
    
    undefLoc_ = makeLocation(undefAddress());
-   isAligned_ = 1;
-   isCongruent_ = 0;
+   isAligned_ = true;
+   isCongruent_ = false;
 
    // create the DGGs
 

@@ -121,47 +121,28 @@ DgTriIDGG::initialize (void)
    }
 
    maxI_ = maxD();
-   maxJ_ = maxD();
    mag_ = maxD() + 1;
-   firstAdd_ = DgQ2DICoord(0, DgIVec2D(0, 0));
-   lastAdd_ = DgQ2DICoord(11, DgIVec2D(0, 0));
+   maxJ_ = (mag() * 2) - 1;
+   firstAdd_ = DgQ2DICoord(1, DgIVec2D(0, 0));
+   lastAdd_ = DgQ2DICoord(10, DgIVec2D(maxI(), maxJ()));
 
    if (res() == 0)
-      gridStats_.setNCells(12);
+      gridStats_.setNCells(20);
    else
-      gridStats_.setNCells((parentNCells - 2) * aperture() + 2);
+      gridStats_.setNCells(parentNCells * 4);
 
    createConverters();
 
    ///// calculate the statistics /////
 
    gridStats_.setPrecision(precision());
-   //gridStats_.setNCells(bndRF().size());
 
    long double tmpLen = DgGeoSphRF::icosaEdgeKM();
 ////// NEEDS UPDATING
    gridStats_.setCellDistKM(tmpLen / pow(sqrt((long double) aperture()), res()));
-/*
-   else // mixed43
-   {
-      if (res() < numAp4())
-      {
-         tmpLen = tmpLen / pow((long double) 2.0, (long double) res());
-      }
-      else
-      {
-         tmpLen = tmpLen / pow((long double) 2.0, (long double) numAp4());
-         if (res() > numAp4())
-            tmpLen = tmpLen / pow(M_SQRT3, (long double) (res() - numAp4()));
-      }
-      gridStats_.setCellDistKM(tmpLen);
-   }
-*/
 
-      // a = globeArea / ((#cells - 12) + (12 * 5/6))
-      //   = globeArea / (#cells - 2);
-      gridStats_.setCellAreaKM(DgGeoSphRF::totalAreaKM() / 
-                       (gridStats_.nCells() - 2));
+   // a = globeArea / #cells
+   gridStats_.setCellAreaKM(DgGeoSphRF::totalAreaKM() / gridStats_.nCells());
 
    gridStats_.setCLS(2.0L * 2.0L * DgGeoSphRF::earthRadiusKM() * 
                      asinl(sqrt(gridStats_.cellAreaKM() / M_PI) / 

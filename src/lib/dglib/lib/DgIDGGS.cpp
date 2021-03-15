@@ -116,6 +116,7 @@ DgIDGGS::DgIDGGS (DgRFNetwork& network, const DgGeoSphRF& backFrame,
    
    undefLoc_ = makeLocation(undefAddress());
 
+/* all of this has been moved to topology-specfic files
    // create the DGGs for non-hex DGGS; the grids for hex DGGS are created
    // in DgHexIDGGS.cpp
 
@@ -139,6 +140,7 @@ DgIDGGS::DgIDGGS (DgRFNetwork& network, const DgGeoSphRF& backFrame,
          isCongruent_ = idgg(0).isCongruent();
       }
    }
+*/
 
 } // DgIDGGS::DgIDGGS
 

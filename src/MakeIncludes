@@ -47,8 +47,8 @@ DEBUG_CC_FLAGS = -g -O0 -Wall -fno-inline -fno-eliminate-unused-debug-types
 SHIP_CC_FLAGS = -O3
 
 # choose which to use; comment out the one you don't want
-ADD_CC_FLAGS = $(SHIP_CC_FLAGS)
-#ADD_CC_FLAGS = $(DEBUG_CC_FLAGS)
+#ADD_CC_FLAGS = $(SHIP_CC_FLAGS)
+ADD_CC_FLAGS = $(DEBUG_CC_FLAGS)
 
 ### the variables below are used by the Makefiles ###
 # any extra C++ flags

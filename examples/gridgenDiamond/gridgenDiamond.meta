@@ -1,9 +1,9 @@
 ################################################################################
 #
-# icosahedron.meta - example of a DGGRID metafile that generates a spherical
-#     icosahedron (a resolution 0 triangle grid) in KML format. 
+# gridgenDiamond.meta - example of a DGGRID metafile that generates resolution 3
+#     of a diamond grid in KML format. 
 #
-# Kevin Sahr, 10/23/14
+# Kevin Sahr, 03/15/21
 #
 ################################################################################
 
@@ -11,8 +11,8 @@
 dggrid_operation GENERATE_GRID
 
 # specify the DGG
-dggs_type FULLER4T
-dggs_res_spec 0
+dggs_type ISEA4D
+dggs_res_spec 3
 
 # control the generation
 clip_subset_type WHOLE_EARTH
@@ -20,10 +20,10 @@ geodetic_densify 0.0
 
 # specify the output
 cell_output_type KML
-cell_output_file_name outputfiles/icosa
+cell_output_file_name outputfiles/dmd
 kml_default_color ffff0000
 kml_default_width 6
-kml_name Spherical Icosahedron
+kml_name ISEA4D
 kml_description www.discreteglobalgrids.org
 kml_default_width 6
 densification 0
