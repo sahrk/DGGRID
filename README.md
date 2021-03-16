@@ -18,7 +18,7 @@ Two directories should be included herein:
 
 - `examples`: contains examples of using __DGGRID__ with pre-computed outputs
 
-User documentation for __DGGRID__ is in `dggridManualV70.pdf`.
+User documentation for __DGGRID__ is in `dggridManualV71.pdf`.
 
 ## Terms of Use
 

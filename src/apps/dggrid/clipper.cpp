@@ -4329,3 +4329,301 @@ double DistanceFromLineSqrd(
   const IntPoint& pt, const IntPoint& ln1, const IntPoint& ln2)
 {
   //The equation of a line in general form (Ax + By + C = 0)
+  //given 2 points (x¹,y¹) & (x²,y²) is ...
+  //(y¹ - y²)x + (x² - x¹)y + (y² - y¹)x¹ - (x² - x¹)y¹ = 0
+  //A = (y¹ - y²); B = (x² - x¹); C = (y² - y¹)x¹ - (x² - x¹)y¹
+  //perpendicular distance of point (x³,y³) = (Ax³ + By³ + C)/Sqrt(A² + B²)
+  //see http://en.wikipedia.org/wiki/Perpendicular_distance
+  double A = double(ln1.Y - ln2.Y);
+  double B = double(ln2.X - ln1.X);
+  double C = A * ln1.X  + B * ln1.Y;
+  C = A * pt.X + B * pt.Y - C;
+  return (C * C) / (A * A + B * B);
+}
+//---------------------------------------------------------------------------
+
+bool SlopesNearCollinear(const IntPoint& pt1, 
+    const IntPoint& pt2, const IntPoint& pt3, double distSqrd)
+{
+  //this function is more accurate when the point that's geometrically
+  //between the other 2 points is the one that's tested for distance.
+  //ie makes it more likely to pick up 'spikes' ...
+	if (Abs(pt1.X - pt2.X) > Abs(pt1.Y - pt2.Y))
+	{
+    if ((pt1.X > pt2.X) == (pt1.X < pt3.X))
+      return DistanceFromLineSqrd(pt1, pt2, pt3) < distSqrd;
+    else if ((pt2.X > pt1.X) == (pt2.X < pt3.X))
+      return DistanceFromLineSqrd(pt2, pt1, pt3) < distSqrd;
+		else
+	    return DistanceFromLineSqrd(pt3, pt1, pt2) < distSqrd;
+	}
+	else
+	{
+    if ((pt1.Y > pt2.Y) == (pt1.Y < pt3.Y))
+      return DistanceFromLineSqrd(pt1, pt2, pt3) < distSqrd;
+    else if ((pt2.Y > pt1.Y) == (pt2.Y < pt3.Y))
+      return DistanceFromLineSqrd(pt2, pt1, pt3) < distSqrd;
+		else
+      return DistanceFromLineSqrd(pt3, pt1, pt2) < distSqrd;
+	}
+}
+//------------------------------------------------------------------------------
+
+bool PointsAreClose(IntPoint pt1, IntPoint pt2, double distSqrd)
+{
+    double Dx = (double)pt1.X - pt2.X;
+    double dy = (double)pt1.Y - pt2.Y;
+    return ((Dx * Dx) + (dy * dy) <= distSqrd);
+}
+//------------------------------------------------------------------------------
+
+OutPt* ExcludeOp(OutPt* op)
+{
+  OutPt* result = op->Prev;
+  result->Next = op->Next;
+  op->Next->Prev = result;
+  result->Idx = 0;
+  return result;
+}
+//------------------------------------------------------------------------------
+
+void CleanPolygon(const Path& in_poly, Path& out_poly, double distance)
+{
+  //distance = proximity in units/pixels below which vertices
+  //will be stripped. Default ~= sqrt(2).
+  
+  size_t size = in_poly.size();
+  
+  if (size == 0) 
+  {
+    out_poly.clear();
+    return;
+  }
+
+  OutPt* outPts = new OutPt[size];
+  for (size_t i = 0; i < size; ++i)
+  {
+    outPts[i].Pt = in_poly[i];
+    outPts[i].Next = &outPts[(i + 1) % size];
+    outPts[i].Next->Prev = &outPts[i];
+    outPts[i].Idx = 0;
+  }
+
+  double distSqrd = distance * distance;
+  OutPt* op = &outPts[0];
+  while (op->Idx == 0 && op->Next != op->Prev) 
+  {
+    if (PointsAreClose(op->Pt, op->Prev->Pt, distSqrd))
+    {
+      op = ExcludeOp(op);
+      size--;
+    } 
+    else if (PointsAreClose(op->Prev->Pt, op->Next->Pt, distSqrd))
+    {
+      ExcludeOp(op->Next);
+      op = ExcludeOp(op);
+      size -= 2;
+    }
+    else if (SlopesNearCollinear(op->Prev->Pt, op->Pt, op->Next->Pt, distSqrd))
+    {
+      op = ExcludeOp(op);
+      size--;
+    }
+    else
+    {
+      op->Idx = 1;
+      op = op->Next;
+    }
+  }
+
+  if (size < 3) size = 0;
+  out_poly.resize(size);
+  for (size_t i = 0; i < size; ++i)
+  {
+    out_poly[i] = op->Pt;
+    op = op->Next;
+  }
+  delete [] outPts;
+}
+//------------------------------------------------------------------------------
+
+void CleanPolygon(Path& poly, double distance)
+{
+  CleanPolygon(poly, poly, distance);
+}
+//------------------------------------------------------------------------------
+
+void CleanPolygons(const Paths& in_polys, Paths& out_polys, double distance)
+{
+  out_polys.resize(in_polys.size());
+  for (Paths::size_type i = 0; i < in_polys.size(); ++i)
+    CleanPolygon(in_polys[i], out_polys[i], distance);
+}
+//------------------------------------------------------------------------------
+
+void CleanPolygons(Paths& polys, double distance)
+{
+  CleanPolygons(polys, polys, distance);
+}
+//------------------------------------------------------------------------------
+
+void Minkowski(const Path& poly, const Path& path, 
+  Paths& solution, bool isSum, bool isClosed)
+{
+  int delta = (isClosed ? 1 : 0);
+  size_t polyCnt = poly.size();
+  size_t pathCnt = path.size();
+  Paths pp;
+  pp.reserve(pathCnt);
+  if (isSum)
+    for (size_t i = 0; i < pathCnt; ++i)
+    {
+      Path p;
+      p.reserve(polyCnt);
+      for (size_t j = 0; j < poly.size(); ++j)
+        p.push_back(IntPoint(path[i].X + poly[j].X, path[i].Y + poly[j].Y));
+      pp.push_back(p);
+    }
+  else
+    for (size_t i = 0; i < pathCnt; ++i)
+    {
+      Path p;
+      p.reserve(polyCnt);
+      for (size_t j = 0; j < poly.size(); ++j)
+        p.push_back(IntPoint(path[i].X - poly[j].X, path[i].Y - poly[j].Y));
+      pp.push_back(p);
+    }
+
+  solution.clear();
+  solution.reserve((pathCnt + delta) * (polyCnt + 1));
+  for (size_t i = 0; i < pathCnt - 1 + delta; ++i)
+    for (size_t j = 0; j < polyCnt; ++j)
+    {
+      Path quad;
+      quad.reserve(4);
+      quad.push_back(pp[i % pathCnt][j % polyCnt]);
+      quad.push_back(pp[(i + 1) % pathCnt][j % polyCnt]);
+      quad.push_back(pp[(i + 1) % pathCnt][(j + 1) % polyCnt]);
+      quad.push_back(pp[i % pathCnt][(j + 1) % polyCnt]);
+      if (!Orientation(quad)) ReversePath(quad);
+      solution.push_back(quad);
+    }
+}
+//------------------------------------------------------------------------------
+
+void MinkowskiSum(const Path& pattern, const Path& path, Paths& solution, bool pathIsClosed)
+{
+  Minkowski(pattern, path, solution, true, pathIsClosed);
+  Clipper c;
+  c.AddPaths(solution, ptSubject, true);
+  c.Execute(ctUnion, solution, pftNonZero, pftNonZero);
+}
+//------------------------------------------------------------------------------
+
+void TranslatePath(const Path& input, Path& output, const IntPoint delta)
+{
+  //precondition: input != output
+  output.resize(input.size());
+  for (size_t i = 0; i < input.size(); ++i)
+    output[i] = IntPoint(input[i].X + delta.X, input[i].Y + delta.Y);
+}
+//------------------------------------------------------------------------------
+
+void MinkowskiSum(const Path& pattern, const Paths& paths, Paths& solution, bool pathIsClosed)
+{
+  Clipper c;
+  for (size_t i = 0; i < paths.size(); ++i)
+  {
+    Paths tmp;
+    Minkowski(pattern, paths[i], tmp, true, pathIsClosed);
+    c.AddPaths(tmp, ptSubject, true);
+    if (pathIsClosed)
+    {
+      Path tmp2;
+      TranslatePath(paths[i], tmp2, pattern[0]);
+      c.AddPath(tmp2, ptClip, true);
+    }
+  }
+    c.Execute(ctUnion, solution, pftNonZero, pftNonZero);
+}
+//------------------------------------------------------------------------------
+
+void MinkowskiDiff(const Path& poly1, const Path& poly2, Paths& solution)
+{
+  Minkowski(poly1, poly2, solution, false, true);
+  Clipper c;
+  c.AddPaths(solution, ptSubject, true);
+  c.Execute(ctUnion, solution, pftNonZero, pftNonZero);
+}
+//------------------------------------------------------------------------------
+
+enum NodeType {ntAny, ntOpen, ntClosed};
+
+void AddPolyNodeToPaths(const PolyNode& polynode, NodeType nodetype, Paths& paths)
+{
+  bool match = true;
+  if (nodetype == ntClosed) match = !polynode.IsOpen();
+  else if (nodetype == ntOpen) return;
+
+  if (!polynode.Contour.empty() && match)
+    paths.push_back(polynode.Contour);
+  for (int i = 0; i < polynode.ChildCount(); ++i)
+    AddPolyNodeToPaths(*polynode.Childs[i], nodetype, paths);
+}
+//------------------------------------------------------------------------------
+
+void PolyTreeToPaths(const PolyTree& polytree, Paths& paths)
+{
+  paths.resize(0); 
+  paths.reserve(polytree.Total());
+  AddPolyNodeToPaths(polytree, ntAny, paths);
+}
+//------------------------------------------------------------------------------
+
+void ClosedPathsFromPolyTree(const PolyTree& polytree, Paths& paths)
+{
+  paths.resize(0); 
+  paths.reserve(polytree.Total());
+  AddPolyNodeToPaths(polytree, ntClosed, paths);
+}
+//------------------------------------------------------------------------------
+
+void OpenPathsFromPolyTree(PolyTree& polytree, Paths& paths)
+{
+  paths.resize(0); 
+  paths.reserve(polytree.Total());
+  //Open paths are top level only, so ...
+  for (int i = 0; i < polytree.ChildCount(); ++i)
+    if (polytree.Childs[i]->IsOpen())
+      paths.push_back(polytree.Childs[i]->Contour);
+}
+//------------------------------------------------------------------------------
+
+std::ostream& operator <<(std::ostream &s, const IntPoint &p)
+{
+  s << "(" << p.X << "," << p.Y << ")";
+  return s;
+}
+//------------------------------------------------------------------------------
+
+std::ostream& operator <<(std::ostream &s, const Path &p)
+{
+  if (p.empty()) return s;
+  Path::size_type last = p.size() -1;
+  for (Path::size_type i = 0; i < last; i++)
+    s << "(" << p[i].X << "," << p[i].Y << "), ";
+  s << "(" << p[last].X << "," << p[last].Y << ")\n";
+  return s;
+}
+//------------------------------------------------------------------------------
+
+std::ostream& operator <<(std::ostream &s, const Paths &p)
+{
+  for (Paths::size_type i = 0; i < p.size(); i++)
+    s << p[i];
+  s << "\n";
+  return s;
+}
+//------------------------------------------------------------------------------
+
+} //ClipperLib namespace

@@ -15,7 +15,7 @@ building with GDAL you must set GDAL_HDR_LIB to the location of the gdal
 header files and GDAL_LIB to the gdal library file you want to link to 
 DGGRID.
 
-**3. Build the application dggrid by executing: 
+**3. Build DGGRID by executing: 
 
    make -f Makefile.noCMake
 
@@ -37,6 +37,9 @@ executing:
 
 See the manual for more details on the parameters contained in the example
 metafiles.
+
+Note that some of the examples use GDAL; if you build DGGRID without GDAL
+those examples will fail to run successfully for you.
 
 **6. If you have doxygen installed you can build the source code documentation
 by going into DGGRID/src and executing:
