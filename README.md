@@ -2,13 +2,13 @@
 
 ## General Information
 
-__DGGRID__ version 7.07 released June 24, 2020  
+__DGGRID__ version 7.1 released March 15, 2021  
 
 __Southern Terra Cognita Laboratory__  
 www.discreteglobalgrids.org  
 [Kevin Sahr](https://inside.sou.edu/cs/kevinsahr.html), Director
 
-__DGGRID__ is a command-line application designed to generate and manipulate 
+__DGGRID__ is a command-line application for generating and manipulating 
 icosahedral discrete global grids (DGGs).
 
 Two directories should be included herein:
@@ -56,4 +56,4 @@ code):
 
 - The gnomonic projection code is adapted from Gerald Evenden’s PROJ.4 library.
 
-
+- Frank Warmerdam’s Shapelib library

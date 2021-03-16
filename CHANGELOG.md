@@ -3,17 +3,18 @@ All notable changes to this project will be documented in this file.
 
 All changes are by Kevin Sahr, unless otherwise noted.
 
-## [7.1] - 2020-11-27
+## [7.1] - 2020-03-15
 ### Fixed
-- XXX r-barnes
+- ensure C++ version of streampos is used (r-barnes)
 - outdated tags in Doxyfile
 ### Added
 - BUILD_WITH_GDAL build flag in MakeIncludes to allow building DGGRID without gdal installed
 - USE_NUCELL build flag in MakeIncludes to maintain compatibility with Kevin's nuit fork
 - WHERE macro in DgBase.h for quick code location output when debugging
+- gridgenDiamond example
 ### Changed
 - integrated DgRF infrastructure from Kevin's nuit fork
-- added gridgenDiamond example
+- minor updates to documentation; note neighbors are broken for triangle grids
 
 ## [7.07] - 2020-06-24
 ### Fixed
