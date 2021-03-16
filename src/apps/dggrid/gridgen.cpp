@@ -809,6 +809,9 @@ void outputCell (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dg
       ///// PlanetRisk output files /////
       if (dp.nbrOut)
       {
+         if (dp.gridTopo == Triangle)
+            ::report("Neighbors not implemented for Triangle grids", DgBase::Fatal);
+
          delete dp.nbrOut;
          dp.nbrOut = NULL;
 
@@ -890,6 +893,8 @@ void outputCell (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dg
    DgLocation ctrGeo = cell.node();
    if (dp.nbrOut)
    {
+      if (dp.gridTopo == Triangle)
+         ::report("Neighbors not implemented for Triangle grids", DgBase::Fatal);
       dgg.setNeighbors(add2D, neighbors);
       dp.nbrOut->insert(dgg, add2D, neighbors);
 
