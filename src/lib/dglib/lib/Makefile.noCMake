@@ -2,7 +2,7 @@ LIB = dglib.a
 SRCS = $(wildcard *.cpp) 
 OBJS = $(SRCS:.cpp=.o)
 DEPS = $(SRCS:.cpp=.depends)
-include ../../../MakeIncludes
+include ../../../MakeIncludes.noCMake
 SHAPELIBDIR = ../../shapelib
 PROJ4LIBDIR = ../../proj4lib
 NULIBDIR = ../../nulib

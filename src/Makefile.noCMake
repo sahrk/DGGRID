@@ -1,4 +1,4 @@
-include ./MakeIncludes
+include ./MakeIncludes.noCMake
 DGGRID_DIR := ./apps/dggrid
 APPEX_DIR := ./apps/appex
 DG_DIR := ./lib/dglib
@@ -11,13 +11,13 @@ LIB_DIRS := $(DG_DIR)/lib $(SHP_DIR)/lib $(PROJ4_DIR)/lib
 all: $(DGGRID_DIR) $(APPEX_DIR)
 
 $(DGGRID_DIR) $(APPEX_DIR) $(LIB_DIRS):
-	$(MAKE) --directory=$@
+	$(DOMAKE) --directory=$@
 
 $(DGGRID_DIR) $(APPEX_DIR): $(LIB_DIRS)
 
 clean:
-	cd $(DGGRID_DIR); $(MAKE) clean
-	cd $(APPEX_DIR); $(MAKE) clean
-	cd $(SHP_DIR)/lib; $(MAKE) clean
-	cd $(PROJ4_DIR)/lib; $(MAKE) clean
-	cd $(DG_DIR)/lib; $(MAKE) clean
+	cd $(DGGRID_DIR); $(DOMAKE) clean
+	cd $(APPEX_DIR); $(DOMAKE) clean
+	cd $(SHP_DIR)/lib; $(DOMAKE) clean
+	cd $(PROJ4_DIR)/lib; $(DOMAKE) clean
+	cd $(DG_DIR)/lib; $(DOMAKE) clean

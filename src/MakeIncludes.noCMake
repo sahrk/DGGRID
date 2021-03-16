@@ -3,8 +3,8 @@
 
 ### this flag controls whether or not DGGRID will use GDAL
 # set to TRUE or FALSE
-#BUILD_WITH_GDAL = TRUE
-BUILD_WITH_GDAL = FALSE
+BUILD_WITH_GDAL = TRUE
+#BUILD_WITH_GDAL = FALSE
 
 ###### if BUILD_WITH_GDAL is FALSE you shouldn't need to 
 ######      change below this line
@@ -59,3 +59,5 @@ ADD_INC_DIRS = $(GDAL_ADD_INC)
 
 # external libraries to link when linking a standard dglib executable
 ADD_LD_LIBS= $(GDAL_LIB) 
+
+DOMAKE = $(MAKE) -f Makefile.noCMake

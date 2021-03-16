@@ -5,9 +5,9 @@ These instructions assume you are on a Unix/Linux system.
 
 **1. Go into the DGGRID source directory, DGGRID/src.
 
-**2. Some basic Make settings are given in the text file src/MakeIncludes, 
-and are used by the Makefiles in the sub-directories. Edit this file if you
-want to add or remove build flags.
+**2. Some basic Make settings are given in the text file 
+src/MakeIncludes.noCMake, and are used by the Makefiles in the 
+sub-directories. Edit this file if you want to add or remove build flags.
 
 In particular, the variable BUILD_WITH_GDAL indicates whether or not
 DGGRID should be built with the GDAL library (the default is TRUE). If 
@@ -17,7 +17,7 @@ DGGRID.
 
 **3. Build the application dggrid by executing: 
 
-   make
+   make -f Makefile.noCMake
 
 **4. If/when the make is successful there will be a command line 
 executable file "dggrid" in the directory DGGRID/src/apps/dggrid. 

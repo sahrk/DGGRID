@@ -2,7 +2,7 @@ LIB = shapelib.a
 SRCS = $(wildcard *.c) 
 OBJS = $(SRCS:.c=.o)
 DEPS = $(SRCS:.c=.depends)
-include ../../../MakeIncludes
+include ../../../MakeIncludes.noCMake
 INCDIRS = -I../include $(ADD_INC_DIRS)
 CCFLAGS = ${INCDIRS} ${ADD_CC_FLAGS} 
 
