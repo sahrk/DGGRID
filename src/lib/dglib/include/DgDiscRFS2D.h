@@ -49,8 +49,7 @@ class DgDiscRFS2D : public DgDiscRFS<DgIVec2D, DgDVec2D, long double> {
                    DgGridMetric gridMetric = D6,
                    bool isCongruent = true, bool isAligned = false,
                    const string& name = "DiscRFS2D", 
-                   const string geometry = "sqr8", bool isMixed43 = false,
-                   int numAp4 = 0, bool isSuperfund = false,
+                   bool isMixed43 = false, int numAp4 = 0, bool isSuperfund = false,
                    bool isApSeq = false, const DgApSeq& apSeq = DgApSeq::defaultApSeq);
 
       DgDiscRFS2D (DgRFNetwork& network, 

@@ -42,8 +42,8 @@ DgDiscRFS2D*
 DgDiscRFS2D::makeRF (DgRFNetwork& net, const DgRF<DgDVec2D, long double>& cc0,
    int nRes, unsigned int aperture, dgg::topo::DgGridTopology gridTopo,
    dgg::topo::DgGridMetric gridMetric, bool isCongruent, bool isAligned, 
-   const string& name, const string geometry, bool isMixed43, int numAp4,
-   bool isSuperfund, bool isApSeq, const DgApSeq& apSeq)
+   const string& name, bool isMixed43, int numAp4, bool isSuperfund, 
+   bool isApSeq, const DgApSeq& apSeq)
 {
    DgDiscRFS2D* dg0 = 0;
 
@@ -69,47 +69,9 @@ DgDiscRFS2D::makeRF (DgRFNetwork& net, const DgRF<DgDVec2D, long double>& cc0,
       dg0 = new DgTriGrid2DS(net, cc0, nRes, aperture, isCongruent,
                              isAligned, "Tri2DS");
    } else {
-     report("DgDiscRFS2D::makeRF() invalid or unimplemented geometry type: " + 
-            geometry, DgBase::Fatal);
+      report("DgDiscRFS2D::makeRF() invalid or unimplemented grid topology/metric: " 
+        + to_string(gridTopo) + "/" + to_string(gridMetric), DgBase::Fatal);
    }
-/*
-   if (geometry == "sqr8")
-   {
-      dg0 = new DgSqrD8Grid2DS(net, cc0, nRes, aperture, isCongruent,
-                               isAligned, "SqrD82DS");
-   }
-   else if (geometry == "sqr4")
-   {
-      dg0 = new DgSqrD4Grid2DS(net, cc0, nRes, aperture, isCongruent,
-                               isAligned, "SqrD42DS");
-   }
-   else if (geometry == "dmd8")
-   {
-      dg0 = new DgDmdD8Grid2DS(net, cc0, nRes, aperture, isCongruent,
-                               isAligned, "DmdD82DS");
-   }
-   else if (geometry == "dmd4")
-   {
-      dg0 = new DgDmdD4Grid2DS(net, cc0, nRes, aperture, isCongruent,
-                               isAligned, "DmdD42DS");
-   }
-   else if (geometry == "hex")
-   {
-      dg0 = new DgHexGrid2DS(net, cc0, nRes, aperture, isCongruent,
-                   isAligned, "HexC12DS", isMixed43, numAp4, isSuperfund,
-                   isApSeq, apSeq);
-   }
-   else if (geometry == "tri")
-   {
-      dg0 = new DgTriGrid2DS(net, cc0, nRes, aperture, isCongruent,
-                             isAligned, "Tri2DS");
-   }
-   else
-   {
-     report("DgDiscRFS2D::makeRF() invalid or unimplemented geometry type: " + 
-            geometry, DgBase::Fatal);
-   }
-*/
 
    dg0->createSubConverters();
 
