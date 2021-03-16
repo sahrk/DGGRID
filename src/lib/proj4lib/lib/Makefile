@@ -3,7 +3,7 @@ SRCS = $(wildcard *.cpp)
 OBJS = $(SRCS:.cpp=.o)
 DEPS = $(SRCS:.cpp=.depends)
 include ../../../MakeIncludes
-INCDIRS = -I../include $(ADD_INC_DIRS) -I../../dglib/include
+INCDIRS = -I../include -I../../dglib/include $(ADD_INC_DIRS)
 CCFLAGS = ${INCDIRS} ${ADD_CPP_FLAGS} 
 
 .PHONY: clean all

@@ -25,7 +25,10 @@
 #include <iostream>
 #include <set>
 #include <cstdlib>
+// USE_GDAL is set in MakeIncludes
+#ifdef USE_GDAL
 #include <gdal.h>
+#endif
 
 using namespace std;
 
@@ -95,10 +98,14 @@ GridGenParam::GridGenParam (DgParamList& plist)
          clipAIGen  = true;
       else if (dummy == "SHAPEFILE")
          clipShape  = true; 
+// USE_GDAL is set in MakeIncludes
+#ifdef USE_GDAL
       else if (dummy == "GDAL") {
          useGDAL = true;
          clipGDAL  = true; 
-      } else if (dummy == "SEQNUMS") {
+      } 
+#endif
+      else if (dummy == "SEQNUMS") {
          if (isApSeq)
             ::report("clip_subset_type of SEQNUMS not supported for dggs_aperture_type of SEQUENCE", 
                      DgBase::Fatal);
@@ -142,9 +149,13 @@ GridGenParam::GridGenParam (DgParamList& plist)
       ///// output files
 
       getParamValue(plist, "cell_output_type", cellOutType, "NONE");
+#ifdef USE_GDAL
       getParamValue(plist, "cell_output_gdal_format", gdalCellDriver, "NONE");
+#endif
       getParamValue(plist, "point_output_type", pointOutType, "NONE");
+#ifdef USE_GDAL
       getParamValue(plist, "point_output_gdal_format", gdalPointDriver, "NONE");
+#endif
       getParamValue(plist, "randpts_output_type", randPtsOutType, "NONE");
       getParamValue(plist, "neighbor_output_type", neighborsOutType, "NONE");
       getParamValue(plist, "children_output_type", childrenOutType, "NONE");
@@ -1162,10 +1173,13 @@ void genGrid (GridGenParam& dp)
       }
    } else { // use clip regions
 
+// USE_GDAL is set in MakeIncludes
+#ifdef USE_GDAL
       if (dp.clipGDAL) {
         report("Registering GDAL drivers...", DgBase::Info);
         GDALAllRegister();
       }
+#endif
 
       DgQuadClipRegion clipRegions[12]; // clip regions for each quad
       set<DgIVec2D> overageSet[12];     // overage sets

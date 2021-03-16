@@ -551,7 +551,9 @@ DgGridPList::DgGridPList (void)
    choices.push_back(new string("WHOLE_EARTH"));
    choices.push_back(new string("AIGEN"));
    choices.push_back(new string("SHAPEFILE"));
+#ifdef USE_GDAL
    choices.push_back(new string("GDAL"));
+#endif
    choices.push_back(new string("SEQNUMS"));
    choices.push_back(new string("POINTS"));
    insertParam(new DgStringChoiceParam("clip_subset_type", "WHOLE_EARTH", 
@@ -605,7 +607,9 @@ DgGridPList::init2 (void)
    // cell_output_type <NONE | AIGEN | GDAL | KML | GEOJSON | SHAPEFILE >
    choices.push_back(new string("NONE"));
    choices.push_back(new string("AIGEN"));
+#ifdef USE_GDAL
    choices.push_back(new string("GDAL"));
+#endif
    choices.push_back(new string("KML"));
    choices.push_back(new string("GEOJSON"));
    choices.push_back(new string("SHAPEFILE"));
@@ -617,7 +621,9 @@ DgGridPList::init2 (void)
    // point_output_type <NONE | AIGEN | GDAL | KML | GEOJSON | SHAPEFILE | TEXT >
    choices.push_back(new string("NONE"));
    choices.push_back(new string("AIGEN"));
+#ifdef USE_GDAL
    choices.push_back(new string("GDAL"));
+#endif
    choices.push_back(new string("KML"));
    choices.push_back(new string("GEOJSON"));
    choices.push_back(new string("SHAPEFILE"));
@@ -629,7 +635,9 @@ DgGridPList::init2 (void)
    // randpts_output_type <NONE | AIGEN | GDAL | KML | GEOJSON | SHAPEFILE | TEXT>
    choices.push_back(new string("NONE"));
    choices.push_back(new string("AIGEN"));
+#ifdef USE_GDAL
    choices.push_back(new string("GDAL"));
+#endif
    choices.push_back(new string("KML"));
    choices.push_back(new string("SHAPEFILE"));
    choices.push_back(new string("GEOJSON"));
@@ -638,11 +646,13 @@ DgGridPList::init2 (void)
                &choices));
    dgg::util::release(choices);
 
+#ifdef USE_GDAL
    // cell_output_gdal_format <gdal driver type>
    insertParam(new DgStringParam("cell_output_gdal_format", "GeoJSON"));
 
    // point_output_gdal_format <gdal driver type>
    insertParam(new DgStringParam("point_output_gdal_format", "GeoJSON"));
+#endif
 
    // cell_output_file_name <outputFileName>
    insertParam(new DgStringParam("cell_output_file_name", "cells"));

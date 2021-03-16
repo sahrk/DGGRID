@@ -228,8 +228,10 @@ void createClipRegions (GridGenParam& dp, const DgIDGGBase& dgg,
          else {
             pRegionFile = new DgInShapefile(dgg.geoRF(), &dp.regionFiles[fc]);
          }
+#ifdef USE_GDAL
       } else if (dp.clipGDAL) {
             pRegionFile = new DgInGDALFile(dgg.geoRF(), &dp.regionFiles[fc]);
+#endif
       } else {
             report("invalid dp.clip file parameters.", DgBase::Fatal);
       }

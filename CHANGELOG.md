@@ -13,6 +13,7 @@ All changes are by Kevin Sahr, unless otherwise noted.
 - WHERE macro in DgBase.h for quick code location output when debugging
 ### Changed
 - integrated DgRF infrastructure from Kevin's nuit fork
+- added gridgenDiamond example
 
 ## [7.07] - 2020-06-24
 ### Fixed
