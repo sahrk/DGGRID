@@ -9,7 +9,9 @@ These instructions assume you are on a Unix/Linux system.
 and are used by the Makefiles in the sub-directories. Edit this file if you
 want to add or remove build flags.
 
-In particular, you must set GDAL_HDR_LIB to the location of the gdal 
+In particular, the variable BUILD_WITH_GDAL indicates whether or not
+DGGRID should be built with the GDAL library (the default is TRUE). If 
+building with GDAL you must set GDAL_HDR_LIB to the location of the gdal 
 header files and GDAL_LIB to the gdal library file you want to link to 
 DGGRID.
 
