@@ -6,6 +6,7 @@ include ../../MakeIncludes
 DGLIBDIR = ../../lib/dglib
 SHPLIBDIR = ../../lib/shapelib
 PROJ4LIBDIR = ../../lib/proj4lib
+NULIBDIR = ../../lib/nulib
 INCDIRS = -I$(DGLIBDIR)/include -I$(SHPLIBDIR)/include \
    -I$(PROJ4LIBDIR)/include $(ADD_INC_DIRS)
 CCFLAGS  = ${INCDIRS} ${ADD_CPP_FLAGS} 
