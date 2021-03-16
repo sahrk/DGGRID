@@ -1,5 +1,5 @@
 /*******************************************************************************
-    Copyright (C) 2018 Kevin Sahr
+    Copyright (C) 2021 Kevin Sahr
 
     This file is part of DGGRID.
 
