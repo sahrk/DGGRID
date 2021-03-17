@@ -30,9 +30,9 @@ link:
 	$(CPPCOMP) -M $(CCFLAGS) $< > $@
 
 $(LDLIBS):
-	cd $(SHPLIBDIR)/lib; ${MAKE}
-	cd $(PROJ4LIBDIR)/lib; ${MAKE}
-	cd $(DGLIBDIR)/lib; ${MAKE}
+	cd $(SHPLIBDIR)/lib; ${DOMAKE}
+	cd $(PROJ4LIBDIR)/lib; ${DOMAKE}
+	cd $(DGLIBDIR)/lib; ${DOMAKE}
 
 clean:
 	rm -rf $(OBJS) $(DEPS) ${TARGET} core ti_files ii_files
