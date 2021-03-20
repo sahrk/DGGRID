@@ -9,6 +9,7 @@ All changes are by Kevin Sahr, unless otherwise noted.
 - minor documentation errors
 ### Changed
 - removed unnecessary application source code files from the shapelib directory to avoid Xcode linker errors
+- removed main function from shputils.c to avoid Xcode linker errors
 
 ## [7.1] - 2021-03-15
 ### Fixed
