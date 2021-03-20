@@ -61,15 +61,15 @@ void doTable (MainParam& dp, DgGridPList& plist)
 
    const DgGridStats& gs0 = idggs->idggBase(0).gridStats();
    const DgGridStats& gsR = idggs->idggBase(numRes - 1).gridStats();
-   int resWidth = resS.length();
-   int nCellsWidth = max(dgg::util::addCommas(gsR.nCells()).length(), 
-                         nCellsS.length()) + 1;
-   int areaWidth = max(dgg::util::addCommas(gs0.cellAreaKM(), 
-                         dp.precision).length(), areaS.length()) + 1;
-//   int spcWidth = max(dgg::util::addCommas(gs0.cellDistKM(), 
+   int resWidth =  (int) resS.length();
+   int nCellsWidth = max((int) dgg::util::addCommas(gsR.nCells()).length(),
+                         (int) nCellsS.length()) + 1;
+   int areaWidth = max((int) dgg::util::addCommas(gs0.cellAreaKM(),
+                         dp.precision).length(),  (int) areaS.length()) + 1;
+//   int spcWidth = max((int) dgg::util::addCommas(gs0.cellDistKM(),
 //                         dp.precision).length(), spcS.length()) + 1;
-   int clsWidth = max(dgg::util::addCommas(gs0.cls(), 
-                         dp.precision).length(), clsS.length()) + 1;
+   int clsWidth = max((int) dgg::util::addCommas(gs0.cls(),
+                         dp.precision).length(), (int) clsS.length()) + 1;
 
    cout << setw(resWidth) << resS
         << setw(nCellsWidth) << nCellsS

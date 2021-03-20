@@ -400,8 +400,8 @@ void binValsPartial (BinValsParam& dp)
       
       qv.upperRight = qv.upperRight - qv.offset; // make relative
 
-      qv.numI = qv.upperRight.i() + 1;
-      qv.numJ = qv.upperRight.j() + 1;
+      qv.numI = (int) qv.upperRight.i() + 1;
+      qv.numJ = (int) qv.upperRight.j() + 1;
       qv.vals = new Val*[qv.numI];
       for (int i = 0; i < qv.numI; i++)
       {

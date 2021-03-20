@@ -192,7 +192,7 @@ void binPresGlobal (BinPresenceParam& dp)
 
    // create an array to store the values
 
-   int nClasses = dp.inputFiles.size();
+   int nClasses = (int) dp.inputFiles.size();
    //bool** vals = new (bool (*[dgg.bndRF().size()]));
    bool** vals = new bool*[dgg.bndRF().size()];
    for (unsigned long int i = 0; i < dgg.bndRF().size(); i++) 
@@ -385,7 +385,7 @@ void binPresPartial (BinPresenceParam& dp)
 
    // now initialize the vals storage in the quads which are used
 
-   int nClasses = dp.inputFiles.size();
+   int nClasses = (int) dp.inputFiles.size();
    for (int q = 0; q < 12; q++)
    {
       QuadVals& qv = qvals[q];
@@ -393,8 +393,8 @@ void binPresPartial (BinPresenceParam& dp)
       
       qv.upperRight = qv.upperRight - qv.offset; // make relative
 
-      qv.numI = qv.upperRight.i() + 1;
-      qv.numJ = qv.upperRight.j() + 1;
+      qv.numI = (int) qv.upperRight.i() + 1;
+      qv.numJ = (int) qv.upperRight.j() + 1;
       qv.vals = new bool**[qv.numI];
       for (int i = 0; i < qv.numI; i++)
       {

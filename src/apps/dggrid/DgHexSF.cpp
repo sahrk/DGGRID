@@ -299,9 +299,9 @@ DgHexSF::downAp4 (void)
 {
    int i, j, k;
 
-   i = ijkCoord_.i() * 2;
-   j = ijkCoord_.j() * 2;
-   k = ijkCoord_.k() * 2;
+   i = (int) ijkCoord_.i() * 2;
+   j = (int) ijkCoord_.j() * 2;
+   k = (int) ijkCoord_.k() * 2;
       
    return DgHexSF(i, j, k, res_ + 1);
 }
@@ -343,9 +343,9 @@ DgHexSF::downAp3r (void)
 DgHexSF 
 DgHexSF::dirFromCenter (int digit)
 {
-   int i = ijkCoord_.i();
-   int j = ijkCoord_.j();
-   int k = ijkCoord_.k();
+   int i = (int) ijkCoord_.i();
+   int j = (int) ijkCoord_.j();
+   int k = (int) ijkCoord_.k();
 
    switch (digit)
    {

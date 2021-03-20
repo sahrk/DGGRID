@@ -181,12 +181,12 @@ MainParam::MainParam (DgParamList& plist)
          if (!tmplc.compare(0, 4, "isea"))
          {
             plist.setPresetParam("dggs_proj", "ISEA");
-            projLen = string("isea").length();
+            projLen = (int) string("isea").length();
          }
          else // must be FULLER
          {
             plist.setPresetParam("dggs_proj", "FULLER");
-            projLen = string("fuller").length();
+            projLen = (int) string("fuller").length();
          }
 
          // get the aperture
