@@ -3,7 +3,14 @@ All notable changes to this project will be documented in this file.
 
 All changes are by Kevin Sahr, unless otherwise noted.
 
-## [7.1] - 2020-03-15
+## [7.101] - 2021-03-20
+### Fixed
+- type conversion compiler warnings
+- minor documentation errors
+### Changed
+- removed unnecessary application source code files from the shapelib directory to avoid Xcode linker errors
+
+## [7.1] - 2021-03-15
 ### Fixed
 - ensure C++ version of streampos is used (r-barnes)
 - outdated tags in Doxyfile
