@@ -48,7 +48,7 @@ class DgSeriesConverter : public DgConverterBase {
 
       virtual ~DgSeriesConverter (void);
       
-      int size (void) const { return series_.size(); }
+      int size (void) const { return (int) series_.size(); }
 
       const DgConverterBase& converter (int ndx) const;
 

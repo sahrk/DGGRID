@@ -309,7 +309,7 @@ DgInterleaveRF::str2add (DgInterleaveCoord* add, const char* str,
 
    delete[] tmpStr;
 
-   unsigned int offset = strlen(tok) + 1;
+   unsigned long offset = strlen(tok) + 1;
    if (offset >= strlen(str)) return 0;
    else return &str[offset];
 
@@ -507,8 +507,8 @@ DgQ2DItoInterleaveConverter::convertTypedAddress
    string qstr = dgg::util::to_string(addIn.quadNum(), 2);
 
 cout << "** addIn " << addIn << endl;
-   DgRadixString rs1(effRadix_, addIn.coord().i(), effRes_);
-   DgRadixString rs2(effRadix_, addIn.coord().j(), effRes_);
+   DgRadixString rs1(effRadix_, (int) addIn.coord().i(), effRes_);
+   DgRadixString rs2(effRadix_, (int) addIn.coord().j(), effRes_);
 
 cout << "rs1 " << rs1 << endl;
 cout << "rs2 " << rs2 << endl;

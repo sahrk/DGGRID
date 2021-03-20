@@ -147,7 +147,7 @@ DgHexC3Grid2D::setAddNeighbors (const DgIVec2D& add, DgLocVector& vec) const
    delete tmpLoc;
 
    vector<DgAddressBase*>& v = vec.addressVec();
-   for (long long int i = 0; i < tmpVec.size(); i++)
+   for (int i = 0; i < (int) tmpVec.size(); i++)
    {
       v.push_back(new DgAddress<DgIVec2D>(
                      *(substrate().getAddress(tmpVec[i]))));
@@ -168,7 +168,7 @@ DgHexC3Grid2D::setAddNeighborsBdry2 (const DgIVec2D& add, DgLocVector& vec) cons
    delete tmpLoc;
 
    vector<DgAddressBase*>& v = vec.addressVec();
-   for (long long int i = 0; i < tmpVec.size(); i++)
+   for (int i = 0; i < (int) tmpVec.size(); i++)
    {
       v.push_back(new DgAddress<DgIVec2D>(
                      *(substrate().getAddress(tmpVec[i]))));

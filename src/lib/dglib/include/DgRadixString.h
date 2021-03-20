@@ -56,8 +56,8 @@ class DgRadixString {
              string tmp1 = s1.digits();
              string tmp2 = s2.digits();
 
-             int n1 = tmp1.length();
-             int n2 = tmp2.length();
+             int n1 = (int) tmp1.length();
+             int n2 = (int) tmp2.length();
 
              // pad shorter one with 0's
 
@@ -147,7 +147,7 @@ class DgRadixString {
 
          long long int val = 0;
          int exponent = 1;
-         for (int index = digits().size() - 1;
+         for (int index = (int) digits().size() - 1;
               index >= 0; index--) {
 
             int d = digits()[index] - '0'; // convert digit to int
@@ -191,7 +191,7 @@ cout << " ==== d: " << d << " exp: " << exponent << " val: " << val << endl;
 
             // pad to specified width
 
-            int nPad = padWidth - digits().length();
+            int nPad = padWidth - (int) digits().length();
             for (int i = 0; i < nPad; i++) setDigits("0" + digits());
 
             // adjust if negative

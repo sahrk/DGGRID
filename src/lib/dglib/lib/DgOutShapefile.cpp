@@ -323,12 +323,12 @@ DgOutShapefile::insert (DgPolygon& poly, const string* label,
 
    // output the vertices
    const vector<DgAddressBase*>& v = poly.addressVec();
-   int numVerts = v.size() + 1;
+   int numVerts = (int) v.size() + 1;
    double *x = new double[numVerts];
    double *y = new double[numVerts];
 
    // need to reverse order to get clockwise winding
-   int oldNdx = v.size() - 1;
+   int oldNdx = (int) v.size() - 1;
    for (int newNdx = 0; newNdx < numVerts - 1; newNdx++) 
    {
       DgDVec2D vec = rf().getVecAddress(*v[oldNdx]);

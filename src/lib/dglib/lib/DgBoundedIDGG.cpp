@@ -132,9 +132,9 @@ DgBoundedIDGG::validAddress (const DgQ2DICoord& add) const
 DgQ2DICoord&
 DgBoundedIDGG::incrementAddress (DgQ2DICoord& add) const
 {
-   //cout << "+++ DgBoundedIDGG::incrementAddress(): add: " << add 
-        //<< " add.coord(): " << add.coord() 
-        //<< " bnd2D().lastAdd(): " << bnd2D().lastAdd() << endl;
+   /* cout << "+++ DgBoundedIDGG::incrementAddress(): add: " << add
+        << " add.coord(): " << add.coord()
+        << " bnd2D().lastAdd(): " << bnd2D().lastAdd() << endl; */
 
    if (!validAddress(add)) return add = invalidAdd();
    else if (add == lastAdd() || add == endAdd()) return add = endAdd();
