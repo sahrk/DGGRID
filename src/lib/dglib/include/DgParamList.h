@@ -583,6 +583,9 @@ class DgChoiceParam : public DgParameter<T> {
            addChoices(*choicesIn); 
       }
 
+     ~DgChoiceParam (void)
+           { clearChoices(); }
+
       const vector<T*>& choices (void) const { return choices_; }
 
       void addChoices (const vector<T*>& choicesIn) // makes copy

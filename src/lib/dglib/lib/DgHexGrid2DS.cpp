@@ -68,7 +68,10 @@ DgHexGrid2DS::DgHexGrid2DS (DgRFNetwork& networkIn,
 
       DgContCartRF* ccRF = new DgContCartRF(network(), newName + string("bf"));
 
-      new Dg2WayContAffineConverter(backFrame(), *ccRF, (long double) fac, M_ZERO, 
+      // this creates the forward and inverse converters, which are memory
+      // managed by the DgRFNetwork. but 2Way converters  are not themselves 
+      // converters
+      Dg2WayContAffineConverter dummy(backFrame(), *ccRF, (long double) fac, M_ZERO, 
                                     DgDVec2D(M_ZERO, M_ZERO)); 
 
       if (isClassIII)
