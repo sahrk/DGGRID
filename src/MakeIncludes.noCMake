@@ -3,8 +3,8 @@
 
 ### this flag controls whether or not DGGRID will use GDAL
 # set to TRUE or FALSE
-BUILD_WITH_GDAL = TRUE
-#BUILD_WITH_GDAL = FALSE
+#BUILD_WITH_GDAL = TRUE
+BUILD_WITH_GDAL = FALSE
 
 ###### if BUILD_WITH_GDAL is FALSE you shouldn't need to 
 ######      change below this line
@@ -45,10 +45,12 @@ CPPCOMP = g++
 # flags for debugging vs. production
 DEBUG_CC_FLAGS = -g -O0 -Wall -fno-inline -fno-eliminate-unused-debug-types 
 SHIP_CC_FLAGS = -O3
+MEMCHECK_CC_FLAGS = -g -O1 -fno-omit-frame-pointer -fsanitize=address 
 
-# choose which to use; comment out the one you don't want
-ADD_CC_FLAGS = $(SHIP_CC_FLAGS)
+# choose which to use; comment out the ones you don't want
+#ADD_CC_FLAGS = $(SHIP_CC_FLAGS)
 #ADD_CC_FLAGS = $(DEBUG_CC_FLAGS)
+ADD_CC_FLAGS = $(MEMCHECK_CC_FLAGS)
 
 ### the variables below are used by the Makefiles ###
 # any extra C++ flags
@@ -58,6 +60,7 @@ ADD_CPP_FLAGS = $(ADD_CC_FLAGS) $(GDAL_FLAG) -std=c++11
 ADD_INC_DIRS = $(GDAL_ADD_INC)
 
 # external libraries to link when linking a standard dglib executable
-ADD_LD_LIBS= $(GDAL_LIB) 
+#ADD_LD_LIBS = $(GDAL_LIB) 
+ADD_LD_LIBS = $(GDAL_LIB) $(MEMCHECK_CC_FLAGS)
 
 DOMAKE = $(MAKE) -f Makefile.noCMake
