@@ -71,7 +71,7 @@ DgHexGrid2DS::DgHexGrid2DS (DgRFNetwork& networkIn,
       // this creates the forward and inverse converters, which are memory
       // managed by the DgRFNetwork. but 2Way converters  are not themselves 
       // converters
-      Dg2WayContAffineConverter dummy(backFrame(), *ccRF, (long double) fac, M_ZERO, 
+      Dg2WayContAffineConverter dummy1(backFrame(), *ccRF, (long double) fac, M_ZERO, 
                                     DgDVec2D(M_ZERO, M_ZERO)); 
 
       if (isClassIII)
@@ -84,7 +84,7 @@ DgHexGrid2DS::DgHexGrid2DS (DgRFNetwork& networkIn,
             (*grids_)[r] = new DgHexC2Grid2D(network(), *ccRF, newName);
       }
 
-      new Dg2WayResAddConverter<DgIVec2D, DgDVec2D, long double>
+      Dg2WayResAddConverter<DgIVec2D, DgDVec2D, long double> dummy2
                                                   (*this, *(grids()[r]), r);
       // setup for next res
       if (r < apSeq().lastRes())
@@ -162,7 +162,7 @@ DgHexGrid2DS::DgHexGrid2DS (DgRFNetwork& networkIn,
 
       DgContCartRF* ccRF = new DgContCartRF(network(), newName + string("bf"));
 
-      new Dg2WayContAffineConverter(backFrame(), *ccRF, (long double) fac, M_ZERO, 
+      Dg2WayContAffineConverter dummy3(backFrame(), *ccRF, (long double) fac, M_ZERO, 
                                     DgDVec2D(M_ZERO, M_ZERO)); 
 
       bool isClassI;
@@ -190,7 +190,7 @@ DgHexGrid2DS::DgHexGrid2DS (DgRFNetwork& networkIn,
          (*grids_)[i] = new DgHexC2Grid2D(network(), *ccRF, newName);
       }
 
-      new Dg2WayResAddConverter<DgIVec2D, DgDVec2D, long double>
+      Dg2WayResAddConverter<DgIVec2D, DgDVec2D, long double> dummy4
                                                   (*this, *(grids()[i]), i);
       if (isMixed43())
       {

@@ -191,6 +191,9 @@ DgIDGGBase::createConverters (void)
    const DgConverterBase* c3to2 = new DgVertex2DDtoProjTri(vertexRF(), projTriRF());
    const DgConverterBase* c2to1 = &(icosaProj->inverse());
 
+   // done with icosaProj; the fwd/inv converters are in the RFNetwork
+   delete icosaProj;
+
    DgConverterBase* toInt = new DgQ2DItoInterleaveConverter(*this, intRF());
    DgConverterBase* toPlane = new DgPlaneTriProj(projTriRF(), planeRF());
 

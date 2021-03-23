@@ -59,7 +59,7 @@ DgIDGGS4T::DgIDGGS4T (DgRFNetwork& network, const DgGeoSphRF& backFrame,
    }
 
    for (int r = 0; r < nRes; r++)
-      new Dg2WayResAddConverter<DgQ2DICoord, DgGeoCoord, long double> 
+      Dg2WayResAddConverter<DgQ2DICoord, DgGeoCoord, long double> dummy
                                                    (*this, *(grids()[r]), r);
 
 } // DgTriIDGGS::DgTriIDGGS

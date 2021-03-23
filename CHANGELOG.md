@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 All changes are by Kevin Sahr, unless otherwise noted.
 
+## [7.??] - 2021-03-22
+### Fixed
+- fixed Dg2WayConverter object memory leaks by using static memory allocation (the fwd/inverse converters they create are managed by the DgRFNetwork)
+
+
 ## [7.101] - 2021-03-20
 ### Fixed
 - type conversion compiler warnings

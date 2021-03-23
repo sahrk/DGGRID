@@ -70,11 +70,11 @@ DgTriGrid2DS::DgTriGrid2DS (DgRFNetwork& networkIn,
 
       DgContCartRF* ccRF = new DgContCartRF(network(), newName + string("bf"));
 
-      new Dg2WayContAffineConverter(backFrame(), *ccRF, (long double) fac, 0.0, 
+      Dg2WayContAffineConverter dummy1(backFrame(), *ccRF, (long double) fac, 0.0, 
                                     trans); 
 
       (*grids_)[i] = new DgTriGrid2D(network(), *ccRF, newName);
-      new Dg2WayResAddConverter<DgIVec2D, DgDVec2D, long double>
+      Dg2WayResAddConverter<DgIVec2D, DgDVec2D, long double> dummy2
                                                   (*this, *(grids()[i]), i);
 
       fac *= radix();
