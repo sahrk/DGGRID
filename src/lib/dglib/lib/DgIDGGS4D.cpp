@@ -77,7 +77,6 @@ DgIDGGS4D::DgIDGGS4D (const DgIDGGS4D& rf)
 ////////////////////////////////////////////////////////////////////////////////
 DgIDGGS4D::~DgIDGGS4D (void)
 {
-   // The grids_ are deleted in DgDiscRFS.
 
 } // DgIDGGS4D::~DgIDGGS4D
 

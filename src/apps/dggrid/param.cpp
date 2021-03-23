@@ -68,7 +68,7 @@ MainParam::determineRes (const DgParamList& plist)
       // determine the resolution
 
       DgRFNetwork net0;
-      DgGeoSphRF geoRF(net0, "GS0", earthRadius);
+      DgGeoSphRF& geoRF = *(new DgGeoSphRF(net0, "GS0", earthRadius));
       const DgIDGGSBase *idggs = DgIDGGSBase::makeRF(net0, geoRF, vert0,
              azimuthDegs, aperture, maxRes, gridTopo, gridMetric, "IDGGS",
              projType, isMixed43, numAp4, isSuperfund, isApSeq, apSeq);

@@ -939,7 +939,7 @@ void genGrid (GridGenParam& dp)
    ////// create the reference frames ////////
 
    DgRFNetwork net0;
-   DgGeoSphRF geoRF(net0, dp.datum, dp.earthRadius);
+   DgGeoSphRF& geoRF = *(new DgGeoSphRF(net0, dp.datum, dp.earthRadius));
    const DgIDGGSBase *dggs = DgIDGGSBase::makeRF(net0, geoRF, dp.vert0,
              dp.azimuthDegs, dp.aperture, dp.actualRes+2, dp.gridTopo, 
              dp.gridMetric, "IDGGS", dp.projType, dp.isMixed43, dp.numAp4, 
@@ -948,7 +948,7 @@ void genGrid (GridGenParam& dp)
    const DgIDGGBase& dgg = dggs->idggBase(dp.actualRes);
 
    // set-up to convert to degrees
-   DgGeoSphDegRF deg(geoRF, geoRF.name() + "Deg");
+   DgGeoSphDegRF& deg = *(new DgGeoSphDegRF(geoRF, geoRF.name() + "Deg"));
 
    // create output files that rely on having the RF's created
 

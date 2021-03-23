@@ -56,8 +56,8 @@ DgOutGdalFile::DgOutGdalFile(const DgGeoSphDegRF& rf,
 
 DgOutGdalFile::~DgOutGdalFile()
 {
-	delete(_oField);
-    close();
+   delete(_oField);
+   close();
 }
 
 void DgOutGdalFile::init(const std::string& filename)

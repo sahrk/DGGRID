@@ -30,12 +30,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 DgRFNetwork::~DgRFNetwork (void)
 {
-   for (unsigned long long int i = 0; i < size(); i++)
-   {
-      for (unsigned long long int j = 0; j < size(); j++) 
-      {
-         if (matrix_[i][j] && !(matrix_[i][j]->userGenerated()))
-         {
+   for (unsigned long long int i = 0; i < size(); i++) {
+      for (unsigned long long int j = 0; j < size(); j++) {
+         if (matrix_[i][j] && !(matrix_[i][j]->userGenerated())) {
             delete matrix_[i][j];
             matrix_[i][j] = 0;
          }
@@ -43,13 +40,10 @@ DgRFNetwork::~DgRFNetwork (void)
       matrix_[i].clear();
    }
 
-/* 
-   for (int i = 0; i < frames_.size(); i++)
-   {
+   for (int i = 0; i < frames_.size(); i++) {
       delete frames_[i];
       frames_[i] = 0;
    }
-*/
 
 } // DgRFNetwork::~DgRFNetwork
 

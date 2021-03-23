@@ -105,12 +105,7 @@ DgSqrD4Grid2DS::DgSqrD4Grid2DS (const DgSqrD4Grid2DS& rf)
 
 ////////////////////////////////////////////////////////////////////////////////
 DgSqrD4Grid2DS::~DgSqrD4Grid2DS (void)
-{
-   for (unsigned long i = 0; i < grids().size(); i++) 
-    delete (*grids_)[i]; 
-
-   delete grids_;
-} // DgSqrD4Grid2DS::~DgSqrD4Grid2DS
+{ } // DgSqrD4Grid2DS::~DgSqrD4Grid2DS
 
 ////////////////////////////////////////////////////////////////////////////////
 DgSqrD4Grid2DS&

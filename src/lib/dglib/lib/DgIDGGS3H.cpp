@@ -45,7 +45,6 @@ DgIDGGS3H::DgIDGGS3H (const DgIDGGS3H& rf)
 ////////////////////////////////////////////////////////////////////////////////
 DgIDGGS3H::~DgIDGGS3H (void)
 {
-   // The grids_ are deleted in DgDiscRFS.
 
 } // DgIDGGS3H::~DgIDGGS3H
 

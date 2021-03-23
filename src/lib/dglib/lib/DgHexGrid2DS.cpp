@@ -217,15 +217,7 @@ DgHexGrid2DS::DgHexGrid2DS (const DgHexGrid2DS& rf)
 
 ////////////////////////////////////////////////////////////////////////////////
 DgHexGrid2DS::~DgHexGrid2DS (void)
-{
-/*
-   for (unsigned long i = 0; i < grids().size(); i++) 
-    delete (*grids_)[i]; 
-
-   delete grids_;
-*/
-
-} // DgHexGrid2DS::~DgHexGrid2DS
+{ } // DgHexGrid2DS::~DgHexGrid2DS
 
 ////////////////////////////////////////////////////////////////////////////////
 DgHexGrid2DS&

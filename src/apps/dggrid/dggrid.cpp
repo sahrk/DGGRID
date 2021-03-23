@@ -60,13 +60,13 @@ void orientGrid (MainParam& dp, DgGridPList& plist)
    else if (dp.orientCenter && dp.curGrid == 1)
    {
       DgRFNetwork netc;
-      DgGeoSphRF geoRF(netc, "GS0", dp.earthRadius);
+      DgGeoSphRF& geoRF = *(new DgGeoSphRF(netc, "GS0", dp.earthRadius));
 
       long double lonc = 0.0, latc = 0.0;
       getParamValue(plist, "region_center_lon", lonc, false);
       getParamValue(plist, "region_center_lat", latc, false);
 
-      DgProjGnomonicRF gnomc(netc, "cgnom", DgGeoCoord(lonc, latc, false)); 
+      DgProjGnomonicRF& gnomc = *(new DgProjGnomonicRF(netc, "cgnom", DgGeoCoord(lonc, latc, false))); 
       Dg2WayGeoProjConverter(geoRF, gnomc);
 
       DgLocation* gloc = gnomc.makeLocation(DgDVec2D(-7289214.618283, 

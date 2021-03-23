@@ -133,21 +133,14 @@ DgIDGGBase::DgIDGGBase (const DgIDGGBase& rfIn)
 ////////////////////////////////////////////////////////////////////////////////
 DgIDGGBase::~DgIDGGBase()
 {
- /* Notice that we do not delete:
-	grid2D_, grid2DS_
-    ...this is because they are freed elsewhere (by DgHexGrid2DS.C), and a segfault
-    will result. It would be good to resolve the "ambiguity" -JFW */
-
  delete sphIcosa_;
-
- delete ccFrame_;
-
- delete projTriRF_;
- delete vertexRF_;
- delete q2ddRF_;
- delete bndRF_;
- delete intRF_;
- delete planeRF_;
+ //delete ccFrame_;
+ //delete projTriRF_;
+ //delete vertexRF_;
+ //delete q2ddRF_;
+ //delete bndRF_;
+ //delete intRF_;
+ //delete planeRF_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

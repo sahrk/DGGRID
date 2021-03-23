@@ -137,8 +137,10 @@ template<class A, class B, class DB> class DgDiscRFS
 
      ~DgDiscRFS (void) 
         { 
+/* the grids themselves are deleted by the DgRFNetwork
            for (unsigned int i = 0; i < grids().size(); i++)
               delete (*grids_)[i];
+*/
   
            delete grids_;
         }
@@ -166,9 +168,7 @@ template<class A, class B, class DB> class DgDiscRFS
                 isCongruent_ = rf.isCongruent();
                 isAligned_ = rf.isAligned();
 
-                delete grids_; // possible memory leak; who deletes the
-                               // grids themselves? but shallow copy
-                               // makes this necessary
+                delete grids_; // the DgRFNetwork deleteds the grids themselves
 
                 grids_ = new vector<DgDiscRF<A, B, DB>*>(rf.nRes());
                 for (int i = 0; i < nRes(); i++)

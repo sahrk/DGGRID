@@ -110,12 +110,7 @@ DgSqrD8Grid2DS::DgSqrD8Grid2DS (const DgSqrD8Grid2DS& rf)
 
 ////////////////////////////////////////////////////////////////////////////////
 DgSqrD8Grid2DS::~DgSqrD8Grid2DS (void)
-{
-   for (unsigned long i = 0; i < grids().size(); i++)
-    delete (*grids_)[i]; 
-
-   delete grids_;
-} // DgSqrD8Grid2DS::~DgSqrD8Grid2DS
+{ } // DgSqrD8Grid2DS::~DgSqrD8Grid2DS
 
 ////////////////////////////////////////////////////////////////////////////////
 DgSqrD8Grid2DS&

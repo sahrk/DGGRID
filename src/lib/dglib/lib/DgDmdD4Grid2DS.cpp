@@ -115,7 +115,6 @@ DgDmdD4Grid2DS::DgDmdD4Grid2DS (const DgDmdD4Grid2DS& rf)
 ////////////////////////////////////////////////////////////////////////////////
 DgDmdD4Grid2DS::~DgDmdD4Grid2DS (void)
 {
-   // The grids_ are deleted in DgDiscRFS.
 
 } // DgDmdD4Grid2DS::~DgDmdD4Grid2DS
 

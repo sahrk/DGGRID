@@ -37,8 +37,6 @@ using namespace std;
 ////////////////////////////////////////////////////////////////////////////////
 DgRFBase::~DgRFBase (void)
 {
-   /* JFW: We don't delete connectTo and connectFrom (we don't really own them);
-   for that matter, I'm not sure we actually ever touch undefLoc_, below: */
    delete undefLoc_;
 
 } // DgRFBase::~DgRFBase

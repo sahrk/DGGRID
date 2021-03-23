@@ -92,13 +92,7 @@ DgTriGrid2DS::DgTriGrid2DS (const DgTriGrid2DS& rf)
 
 ////////////////////////////////////////////////////////////////////////////////
 DgTriGrid2DS::~DgTriGrid2DS (void)
-{
-   for (unsigned long i = 0; i < grids().size(); i++) 
-    delete (*grids_)[i]; 
-
-   delete grids_;
-
-} // DgTriGrid2DS::~DgTriGrid2DS
+{ } // DgTriGrid2DS::~DgTriGrid2DS
 
 ////////////////////////////////////////////////////////////////////////////////
 DgTriGrid2DS&
