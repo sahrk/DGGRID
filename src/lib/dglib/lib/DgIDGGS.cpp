@@ -133,8 +133,7 @@ DgIDGGS::DgIDGGS (DgRFNetwork& network, const DgGeoSphRF& backFrame,
                "DDG", gridTopo, gridMetric, projType, isMixed43, numAp4, isSuperfund,
                actualRes2sfRes(i));
 
-         Dg2WayResAddConverter<DgQ2DICoord, DgGeoCoord, long double> dummy
-                                                   (*this, *(grids()[i]), i);
+         Dg2WayResAddConverter<DgQ2DICoord, DgGeoCoord, long double>(*this, *(grids()[i]), i);
 
          isAligned_ = idgg(0).isAligned();
          isCongruent_ = idgg(0).isCongruent();

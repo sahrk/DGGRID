@@ -160,6 +160,6 @@ DgGeoSphRF::travelGC (const DgGeoCoord& p0, long double distance, long double az
 DgGeoSphDegRF::DgGeoSphDegRF (const DgGeoSphRF& geoRFin, const string& nameIn)
          : DgContCartRF (geoRFin.network(), nameIn), geoRF_ (geoRFin)
 {
-   DgDegRadConverter dummy(geoRFin, *this);
+   DgDegRadConverter (geoRFin, *this);
 }
 

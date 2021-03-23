@@ -51,10 +51,10 @@ DgHexC3Grid2D::DgHexC3Grid2D (DgRFNetwork& networkIn,
    if (!isClassI)
       rotDegs *= -30.0L;
 
-   Dg2WayContAffineConverter dummy1(backFrame(), *surCCRF, 1.0L, rotDegs);
+   Dg2WayContAffineConverter(backFrame(), *surCCRF, 1.0L, rotDegs);
    surrogate_ = new DgHexC1Grid2D(network(), *surCCRF, nameIn + string("Sur"));
 */
-   Dg2WayContAffineConverter dummy2(backFrame(), *surCCRF, 1.0L, rotDegs);
+   Dg2WayContAffineConverter(backFrame(), *surCCRF, 1.0L, rotDegs);
    if (isClassI)
       surrogate_ = new DgHexC1Grid2D(network(), *surCCRF, nameIn + string("Sur"));
    else
@@ -69,7 +69,7 @@ DgHexC3Grid2D::DgHexC3Grid2D (DgRFNetwork& networkIn,
    if (!isClassI)
       scaleFac *= M_SQRT3;
 
-   Dg2WayContAffineConverter dummy3(backFrame(), *subCCRF, scaleFac);
+   Dg2WayContAffineConverter(backFrame(), *subCCRF, scaleFac);
    substrate_ = new DgHexC1Grid2D(network(), *subCCRF, nameIn + string("Sub"));
 
    // connect the surrogate to the substrate
