@@ -33,7 +33,7 @@
 #include <string>
 #include <iostream>
 
-#include "ogrsf_frmts.h"
+#include <ogrsf_frmts.h>
 #include "DgUtil.h"
 #include "DgOutLocTextFile.h"
 

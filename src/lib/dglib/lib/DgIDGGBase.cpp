@@ -134,13 +134,7 @@ DgIDGGBase::DgIDGGBase (const DgIDGGBase& rfIn)
 DgIDGGBase::~DgIDGGBase()
 {
  delete sphIcosa_;
- //delete ccFrame_;
- //delete projTriRF_;
- //delete vertexRF_;
- //delete q2ddRF_;
- //delete bndRF_;
- //delete intRF_;
- //delete planeRF_;
+ delete bndRF_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

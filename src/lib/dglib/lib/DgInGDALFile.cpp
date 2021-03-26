@@ -30,7 +30,7 @@
 
 #include <sstream>
 
-#include "ogrsf_frmts.h"
+#include <ogrsf_frmts.h>
 #include "DgInGDALFile.h"
 #include "DgLocList.h"
 #include "DgPolygon.h"

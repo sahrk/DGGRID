@@ -14,9 +14,12 @@ ifeq ($(BUILD_WITH_GDAL),TRUE)
    ### these GDAL location variables must be correctly set ###
    # location of GDAL header files
    GDAL_HDR_DIR = /opt/local/include
+   #GDAL_HDR_DIR = /usr/include/gdal
+
    # full path to the libgdal library file
    # we advise using a shared library (.so, .dylib, etc.)
    GDAL_LIB = /opt/local/lib/libgdal.dylib
+   #GDAL_LIB = /usr/lib/libgdal.so
 
    # Note: Some users have reported problems trying to build with gdal 
    # libraries installed by other software systems. If you have problems

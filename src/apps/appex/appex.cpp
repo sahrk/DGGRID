@@ -38,14 +38,18 @@ int main (int argc, char* argv[])
    DgRFNetwork net0;
 
    // create the geodetic reference frame
-   DgGeoSphRF geoRF(net0, "GS0");
+   // reference frames must be created dynamically using new or makeRF
+   DgGeoSphRF* geoRFptr = new DgGeoSphRF(net0, "GS0");
+   DgGeoSphRF& geoRF = *geoRFptr;
 
    // create the ISEA4H grid system with resolutions 0-9; requires a
    // fixed icosahedron vertex and edge azimuth
    DgGeoCoord vert0(11.25L, 58.28252559L, false); // args: lon, lat, isRadians
    long double azimuth = 0.0L;
-   const DgIDGGS4H idggs(net0, geoRF, vert0, azimuth, 10); // last argument is
+
+   const DgIDGGS4H* idggsPtr = new DgIDGGS4H(net0, geoRF, vert0, azimuth, 10); // last argument is
                                                       // number of resolutions
+   const DgIDGGS4H& idggs = *idggsPtr;
 
    // get the resolution 7 dgg from the dggs
    const DgIDGG& dgg = idggs.idgg(7);

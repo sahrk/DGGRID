@@ -32,7 +32,8 @@ DgRFNetwork::~DgRFNetwork (void)
 {
    for (unsigned long long int i = 0; i < size(); i++) {
       for (unsigned long long int j = 0; j < size(); j++) {
-         if (matrix_[i][j] && !(matrix_[i][j]->userGenerated())) {
+         //if (matrix_[i][j] && !(matrix_[i][j]->userGenerated())) {
+         if (matrix_[i][j]) {
             delete matrix_[i][j];
             matrix_[i][j] = 0;
          }

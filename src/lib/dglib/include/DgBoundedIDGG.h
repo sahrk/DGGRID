@@ -42,6 +42,7 @@ class DgBoundedIDGG : public DgBoundedRF<DgQ2DICoord, DgGeoCoord, long double> {
    public:
 
       DgBoundedIDGG (const DgIDGGBase& IDGGin);
+     ~DgBoundedIDGG (void) { delete bnd2D_; }
 
       virtual DgQ2DICoord& incrementAddress (DgQ2DICoord& add) const;
       virtual DgQ2DICoord& decrementAddress (DgQ2DICoord& add) const;
