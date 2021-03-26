@@ -142,7 +142,7 @@ template<class A, class B, class DB> class DgBoundedRF
 
       void setFirstAdd (const A& firstAddIn) 
          { firstAdd_ = firstAddIn;
-           discRF().forceAddress(&(DgBoundedRFBase0::first_), firstAddIn); }
+           discRF().forceAddress(DgBoundedRFBase0::first_, firstAddIn); }
 
       void setLastAdd  (const A& lastAddIn)  { lastAdd_ = lastAddIn; }
       void setEndAdd   (const A& endAddIn)   { endAdd_ = endAddIn; }

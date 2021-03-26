@@ -85,8 +85,8 @@ template<class B, class DB> class DgBoundedRFBase : public DgBoundedRFBase0 {
 
    protected:
 
-      DgBoundedRFBase (const DgRFBase& rfIn, const DgLocation& firstIn, 
-                       const DgLocation& lastIn, const DgLocation& endIn,
+      DgBoundedRFBase (const DgRFBase& rfIn, DgLocation* firstIn, 
+                       DgLocation* lastIn, DgLocation* endIn,
                        bool zBasedIn = true)
          : DgBoundedRFBase0(rfIn, firstIn, lastIn, endIn, zBasedIn) { }
 

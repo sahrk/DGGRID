@@ -52,9 +52,9 @@ class DgBoundedRFBase0 {
       virtual DgLocation& decrementLocation (DgLocation& loc, 
                                              bool convert = true) const = 0; 
                                      
-      const DgLocation& first (void) const { return first_; }
-      const DgLocation& last  (void) const { return last_; }
-      const DgLocation& end   (void) const { return end_; }
+      const DgLocation& first (void) const { return *first_; }
+      const DgLocation& last  (void) const { return *last_; }
+      const DgLocation& end   (void) const { return *end_; }
 
       unsigned long long int size (void) const { return size_; }
       bool validSize (void) const { return validSize_; }
@@ -111,8 +111,8 @@ class DgBoundedRFBase0 {
 
    protected:
 
-      DgBoundedRFBase0 (const DgRFBase& rfIn, const DgLocation& firstIn, 
-                       const DgLocation& lastIn, const DgLocation& endIn,
+      DgBoundedRFBase0 (const DgRFBase& rfIn, DgLocation* firstIn, 
+                       DgLocation* lastIn, DgLocation* endIn,
                        bool zBasedIn = true)
          : size_(0), validSize_(false), rf_ (rfIn), 
 	   first_ (firstIn), last_ (lastIn), end_ (endIn),
@@ -124,9 +124,9 @@ class DgBoundedRFBase0 {
       bool validSize_;
    
       const DgRFBase& rf_;
-      DgLocation first_;
-      DgLocation last_;
-      DgLocation end_;
+      DgLocation *first_;
+      DgLocation *last_;
+      DgLocation *end_;
 
       bool zeroBased_; // seq starts with 0 (or 1)?
 

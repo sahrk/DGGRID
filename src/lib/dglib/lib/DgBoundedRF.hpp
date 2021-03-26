@@ -25,8 +25,8 @@
 template<class A, class B, class DB>
 DgBoundedRF<A, B, DB>::DgBoundedRF (const DgDiscRF<A, B, DB>& rfIn, 
       const A& firstAddIn, const A& lastAddIn, const A& endAddIn, bool zBasedIn)
-   : DgBoundedRFBase<B, DB> (rfIn, *rfIn.makeLocation(firstAddIn), 
-     *rfIn.makeLocation(lastAddIn), *rfIn.makeLocation(endAddIn), zBasedIn),
+   : DgBoundedRFBase<B, DB> (rfIn, rfIn.makeLocation(firstAddIn), 
+     rfIn.makeLocation(lastAddIn), rfIn.makeLocation(endAddIn), zBasedIn),
      discRF_(rfIn),
      firstAdd_(firstAddIn), lastAdd_(lastAddIn), endAdd_(endAddIn)
 {
