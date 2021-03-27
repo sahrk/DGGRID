@@ -108,13 +108,15 @@ MainParam::determineRes (const DgParamList& plist)
 
 } // int MainParam::determineRes
 
-/* JFW: I have a feeling that the new-ed pointers here are never freed... */
 MainParam::MainParam (DgParamList& plist)
-      : aperture (4), projType ("ISEA"), res (5), actualRes (5), 
-        placeRandom (false), orientCenter (false), orientRand(0),
-        numGrids (1), curGrid (1), lastGrid (false), azimuthDegs (0.0),
-        precision (DEFAULT_PRECISION), verbosity (0), megaVerbose (false), 
-        isMixed43 (false), isSuperfund (false), isApSeq (false)
+   : operation (""), dggsType (""), gridTopo (dgg::topo::InvalidTopo),
+     gridMetric (dgg::topo::InvalidMetric), aperture (4),
+     projType ("ISEA"), res (5), actualRes (5), 
+     placeRandom (false), orientCenter (false), orientRand (0),
+     numGrids (1), curGrid (1), lastGrid (false), azimuthDegs (0.0),
+     datum (""), precision (DEFAULT_PRECISION), verbosity (0), megaVerbose (false), 
+     metaOutFileNameBase (""), metaOutFileName (""), apertureType (""),
+     isMixed43 (false), isSuperfund (false), isApSeq (false)
 { 
    /////// fill state variables from the parameter list //////////
 
@@ -382,8 +384,6 @@ void MainParam::dump (void)
 
 } // void MainParam::dump
 
-/* JFW: We should check to see if the new-ed pointers here are freed:
-	(I doubt we really need a vector of pointers to strings.) */
 DgGridPList::DgGridPList (void)
 {
    vector<string*> choices;
