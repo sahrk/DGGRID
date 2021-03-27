@@ -148,6 +148,8 @@ class DgRFBase {
 
       void forceRF (DgLocBase* loc) { loc->rf_ = this; }
 
+      void setUndefLoc (DgLocation* undefLoc);
+
    private:
    
       void setFormatStr (void)

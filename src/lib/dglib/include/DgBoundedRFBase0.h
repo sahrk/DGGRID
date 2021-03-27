@@ -37,7 +37,7 @@ class DgBoundedRFBase0 {
 
    public:
    
-      virtual ~DgBoundedRFBase0 (void) { }
+      virtual ~DgBoundedRFBase0 (void);
       
       const DgRFBase& rf (void) const { return rf_; }
       

@@ -47,8 +47,9 @@ int main (int argc, char* argv[])
    DgGeoCoord vert0(11.25L, 58.28252559L, false); // args: lon, lat, isRadians
    long double azimuth = 0.0L;
 
-   const DgIDGGS4H* idggsPtr = new DgIDGGS4H(net0, geoRF, vert0, azimuth, 10); // last argument is
-                                                      // number of resolutions
+   // the DGGS is memory managed by the DgRFNetwork
+   const DgIDGGS4H* idggsPtr = new DgIDGGS4H(net0, geoRF, vert0, azimuth, 10); 
+
    const DgIDGGS4H& idggs = *idggsPtr;
 
    // get the resolution 7 dgg from the dggs
@@ -72,7 +73,7 @@ int main (int argc, char* argv[])
    DgPolygon verts;
    int ptsPerEdgeDensify = 3;
    dgg.setVertices(*thePt, verts, ptsPerEdgeDensify);
-   cout << "* with cell boundary:\n" << verts << endl;
+   cout << "* with densified cell boundary:\n" << verts << endl;
 
    // we can get the cell's center point by converting the cell back to geoRF
    geoRF.convert(thePt);
@@ -90,6 +91,8 @@ int main (int argc, char* argv[])
    double lonDegs = firstVert.lonDegs();
    cout << "* first boundary vertex lon,lat in degrees: " 
         << lonDegs << ", " << latDegs << endl;
+
+   delete thePt;
 
    return 0;
 

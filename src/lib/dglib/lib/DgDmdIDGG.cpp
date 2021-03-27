@@ -86,7 +86,7 @@ DgDmdIDGG::initialize (void)
    if (aperture() != 4) report(apErrStr, DgBase::Fatal);
  
    // create some internal data structures
-   undefLoc_ = makeLocation(undefAddress());
+   setUndefLoc(makeLocation(undefAddress()));
    sphIcosa_ = new DgSphIcosa(vert0(), azDegs());
 
    isAligned_ = false;

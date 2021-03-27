@@ -113,6 +113,7 @@ template<class A, class D> DgLocation*
 DgRF<A, D>::makeLocation (const A& addIn) const
 {
    DgLocation* loc = buildLocation(new DgAddress<A>(addIn));
+   //DgLocation* loc = buildLocation(new DgAddress<A>(addIn));
    //cout << "makeLocation: " << *loc << endl;
    return loc;
 

@@ -86,7 +86,7 @@ DgHexIDGG::initialize (void)
    }
 
    // create some internal data structures
-   undefLoc_ = makeLocation(undefAddress());
+   setUndefLoc(makeLocation(undefAddress())); 
    sphIcosa_ = new DgSphIcosa(vert0(), azDegs());
 
    radix_ = (int) sqrt((long double) aperture());

@@ -66,7 +66,7 @@ DgHexIDGGS::DgHexIDGGS (DgRFNetwork& network, const DgGeoSphRF& backFrame,
       report("DgHexIDGGS::DgHexIDGGS res " + dgg::util::to_string(nRes) +
              " exceeds aperture sequence string length", DgBase::Fatal);
    
-   undefLoc_ = makeLocation(undefAddress());
+   setUndefLoc(makeLocation(undefAddress())); 
    isAligned_ = true;
    isCongruent_ = false;
 

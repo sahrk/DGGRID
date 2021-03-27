@@ -151,7 +151,7 @@ class DgEllipsoidRF : public DgGeoDatumRF<DgGeoCoord, long double> {
                : DgGeoDatumRF<DgGeoCoord, long double> (networkIn, nameIn),
                  a_ (aIn), b_ (bIn)
                 { 
-                   undefLoc_ = makeLocation(undefAddress());
+                   setUndefLoc(makeLocation(undefAddress()));
 
                    f_ = (a() - b()) / a();
                    as_ = a() * a();

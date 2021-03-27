@@ -1340,6 +1340,7 @@ void genGrid (GridGenParam& dp)
                dgg.setVertices(*addLoc, verts, dp.nDensify);
 
                outputCellAdd2D(dp, *dggs, dgg, *addLoc, verts, deg);
+	       delete addLoc;
 
                // check for special cases 
                if (q == 0 || q == 11) break; // only one cell

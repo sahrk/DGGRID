@@ -37,11 +37,11 @@ class DgContCartRF : public DgRF<DgDVec2D, long double> {
 
       DgContCartRF (DgRFNetwork& networkIn, const string& nameIn = "ContCart")
          : DgRF<DgDVec2D, long double> (networkIn, nameIn) 
-           { undefLoc_ = makeLocation(undefAddress()); }
+           { setUndefLoc(makeLocation(undefAddress())); }
 
       DgContCartRF (const DgContCartRF& rf)
          : DgRF<DgDVec2D, long double>(rf) 
-           { undefLoc_ = makeLocation(undefAddress()); }
+           { setUndefLoc(makeLocation(undefAddress())); }
 
       DgContCartRF& operator= (const DgContCartRF& rf)
          { DgRF<DgDVec2D, long double>::operator=(rf); return *this; }

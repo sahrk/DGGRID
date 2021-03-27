@@ -44,7 +44,7 @@ DgIDGGS4D::DgIDGGS4D (DgRFNetwork& network, const DgGeoSphRF& backFrame,
 {
    const int aperture = 4;
 
-   undefLoc_ = makeLocation(undefAddress());
+   setUndefLoc(makeLocation(undefAddress()));
    isAligned_ = true;
    isCongruent_ = true;
 

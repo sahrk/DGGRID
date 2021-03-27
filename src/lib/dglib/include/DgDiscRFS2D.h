@@ -62,11 +62,11 @@ class DgDiscRFS2D : public DgDiscRFS<DgIVec2D, DgDVec2D, long double> {
         : DgDiscRFS<DgIVec2D, DgDVec2D, long double> 
               (network, backFrame, nRes, aperture, gridTopo, gridMetric,
                                isCongruent, isAligned, name)
-           { undefLoc_ = makeLocation(undefAddress()); }
+           { setUndefLoc(makeLocation(undefAddress())); }
 
       DgDiscRFS2D (const DgDiscRFS2D& grd) 
         : DgDiscRFS<DgIVec2D, DgDVec2D, long double> (grd) 
-           { undefLoc_ = makeLocation(undefAddress()); }
+           { setUndefLoc(makeLocation(undefAddress())); }
 
       DgDiscRFS2D& operator= (const DgDiscRFS2D& grd)
            { DgDiscRFS<DgIVec2D, DgDVec2D, long double>::operator=(grd); 

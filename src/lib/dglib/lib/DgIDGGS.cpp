@@ -114,7 +114,7 @@ DgIDGGS::DgIDGGS (DgRFNetwork& network, const DgGeoSphRF& backFrame,
           apSeq_ (apSeq)
 {
    
-   undefLoc_ = makeLocation(undefAddress());
+   setUndefLoc(makeLocation(undefAddress()));
 
 /* all of this has been moved to topology-specfic files
    // create the DGGs for non-hex DGGS; the grids for hex DGGS are created
