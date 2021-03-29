@@ -41,22 +41,34 @@
 DgOutGdalFile::DgOutGdalFile(const DgGeoSphDegRF& rf,
                     const std::string& filename, const std::string& gdalDriver, 
                     int precision, bool isPointFile, DgReportLevel failLevel)
-    : DgOutLocFile (filename, rf, isPointFile, failLevel)
+    : DgOutLocFile (filename, rf, isPointFile, failLevel), _gdalDriver(""),
+	_driver(NULL), _dataset(NULL), _oLayer(NULL), _oField(NULL), fileNameOnly_("")
 {
-    if (0 == rf.vecAddress(DgDVec2D())) {
+   // test for override of vecAddress
+   DgAddressBase* dummy = rf.vecAddress(DgDVec2D(M_ZERO, M_ZERO));
+   if (!dummy)
         ::report("DgOutGdalFile::DgOutGdalFile(): RF " + rf.name() +
-                               " must override the vecAddress() method", DgBase::Fatal);
-    }
+             " must override the vecAddress() method", DgBase::Fatal);
+   delete dummy;
 
-	_gdalDriver = gdalDriver;
+   _gdalDriver = gdalDriver;
 	
-	//Initialize the gdal requirements
-    init(filename);
+   //Initialize the gdal requirements
+   init(filename);
 }
 
 DgOutGdalFile::~DgOutGdalFile()
 {
-   delete(_oField);
+   delete _oField;
+   _oField = NULL;
+   //delete _driver;
+   //_driver = NULL;
+   delete _dataset;
+   _dataset = NULL;
+   //delete _oLayer;
+   //_oLayer = NULL;
+   delete _oField;
+   _oField = NULL;
    close();
 }
 
@@ -84,6 +96,7 @@ void DgOutGdalFile::init(const std::string& filename)
 
    GDALAllRegister();
 
+    delete _driver;
     _driver = GetGDALDriverManager()->GetDriverByName(_gdalDriver.c_str());
     if( _driver == NULL )
     {
@@ -91,6 +104,7 @@ void DgOutGdalFile::init(const std::string& filename)
         exit(1);
     }
 
+    delete _dataset;
     _dataset = _driver->Create( fileNameOnly_.c_str(), 0, 0, 0, GDT_Unknown, NULL );
     if( _dataset == NULL )
     {
@@ -98,8 +112,10 @@ void DgOutGdalFile::init(const std::string& filename)
         exit( 1 );
     }
 	
-	_oLayer = NULL;
-	_oField = NULL;
+    delete _oLayer;
+    _oLayer = NULL;
+    delete _oField;
+    _oField = NULL;
 }
 
 DgOutLocFile&
@@ -196,7 +212,7 @@ DgOutGdalFile::insert (DgLocVector& vec, const string* label,
 
 	//Create an OGRPolygon and attach ring to it
 	OGRPolygon polygon;
-	polygon.addRing(linearRing);
+	polygon.addRingDirectly(linearRing);
 
 	//This will hold the geometry information
 	OGRFeature *feature;
@@ -258,7 +274,7 @@ DgOutGdalFile::insert (DgPolygon& poly, const string* label,
 	
 	//Create an OGRPolygon and attach ring to it
 	OGRPolygon polygon;
-	polygon.addRing(linearRing);
+	polygon.addRingDirectly(linearRing);
 
 	//This will hold the geometry information
 	OGRFeature *feature;

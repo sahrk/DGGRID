@@ -38,11 +38,12 @@ DgOutGeoJSONFile::DgOutGeoJSONFile(const DgGeoSphDegRF& rf,
    : DgOutLocTextFile (filename, rf, isPointFile, "geojson", precision,
         failLevel)
 {
-   if (0 == rf.vecAddress(DgDVec2D()))
-   {
+   // test for override of vecAddress
+   DgAddressBase* dummy = rf.vecAddress(DgDVec2D(M_ZERO, M_ZERO));
+   if (!dummy)
       DgOutputStream::report("DgOutGeoJSONFile::DgOutGeoJSONFile(): RF " + rf.name() +
-        " must override the vecAddress() method", DgBase::Fatal);
-   }
+             " must override the vecAddress() method", DgBase::Fatal);
+   delete dummy;
 
    setFormatStr();
    preamble();

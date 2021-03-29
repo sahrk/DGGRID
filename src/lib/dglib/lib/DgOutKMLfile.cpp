@@ -37,11 +37,12 @@ DgOutKMLfile::DgOutKMLfile(const DgGeoSphDegRF& rf, const std::string& filename,
     const string& nameIn, const string& descIn, DgReportLevel failLevel)
    : DgOutLocTextFile (filename, rf, isPointFile, "kml", precision, failLevel)
 {
-   if (0 == rf.vecAddress(DgDVec2D()))
-   {
+   // test for override of vecAddress
+   DgAddressBase* dummy = rf.vecAddress(DgDVec2D(M_ZERO, M_ZERO));
+   if (!dummy)
       DgOutputStream::report("DgOutKMLfile::DgOutKMLfile(): RF " + rf.name() +
-        " must override the vecAddress() method", DgBase::Fatal);
-   }
+             " must override the vecAddress() method", DgBase::Fatal);
+   delete dummy;
 
    setColor(colorIn);
    setWidth(widthIn);

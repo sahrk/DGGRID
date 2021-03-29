@@ -46,10 +46,12 @@ DgInGDALFile::DgInGDALFile (const DgRFBase& rfIn, const string* fileNameIn,
       gdalDataset_ (NULL), oFeature_ (NULL), 
       insideMultiPoly_ (false), multiPolyIndex_ (0), numMultiPolyGeometries_ (0)
 {
-    if (rfIn.vecAddress(DgDVec2D(0.0L, 0.0L)) == 0) {
-        report("DgInGDALFile::DgInGDALFile(): RF " + rfIn.name() +
-               " must override the vecAddress() method", DgBase::Fatal);
-    }
+   // test for override of vecAddress
+   DgAddressBase* dummy = rfIn.vecAddress(DgDVec2D(M_ZERO, M_ZERO));
+   if (!dummy)
+      report("DgInGDALFile::DgInGDALFile(): RF " + rfIn.name() +
+             " must override the vecAddress() method", DgBase::Fatal);
+   delete dummy;
 
     gdalDataset_ = (GDALDataset*) GDALOpenEx(fileName().c_str(), 
                                         GDAL_OF_VECTOR, NULL, NULL, NULL);
@@ -153,7 +155,13 @@ DgInGDALFile::extract (DgPolygon& poly)
     //if (oFeature_) OGRFeature::DestroyFeature(oFeature_);
 
     // remove the duplicate first/last vertex
+    DgAddressBase* lastPt = *(poly.addressVec().end() - 1);
     poly.addressVec().erase(poly.addressVec().end() - 1);
+    delete lastPt;
+/*
+    // remove the duplicate first/last vertex
+    poly.addressVec().erase(poly.addressVec().end() - 1);
+    */
 
     return *this;
 

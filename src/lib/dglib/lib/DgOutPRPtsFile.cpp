@@ -39,11 +39,12 @@ DgOutPRPtsFile::DgOutPRPtsFile (const DgRFBase& rfIn,
         const string& fileNameIn, int precision, DgReportLevel failLevel)
    : DgOutLocTextFile (fileNameIn, rfIn, true, "pts", precision, failLevel)
 {
-   if (rfIn.vecAddress(DgDVec2D(M_ZERO, M_ZERO)) == 0)
-   {
+   // test for override of vecAddress
+   DgAddressBase* dummy = rfIn.vecAddress(DgDVec2D(M_ZERO, M_ZERO));
+   if (!dummy)
       DgOutputStream::report("DgOutPRPtsFile::DgOutPRPtsFile(): RF " + rfIn.name() +
              " must override the vecAddress() method", DgBase::Fatal);
-   }
+   delete dummy;
 
    setFormatStr();
 

@@ -51,11 +51,12 @@ DgInAIGenFile::DgInAIGenFile (const DgRFBase& rfIn, const string* fileNameIn,
    : DgInLocTextFile (rfIn, fileNameIn, false, failLevel), 
      forcePolyLine_ (false), forceCells_ (false)
 {
-   if (rfIn.vecAddress(DgDVec2D(0.0L, 0.0L)) == 0)
-   {
+   // test for override of vecAddress
+   DgAddressBase* dummy = rfIn.vecAddress(DgDVec2D(M_ZERO, M_ZERO));
+   if (!dummy)
       report("DgInAIGenFile::DgInAIGenFile(): RF " + rfIn.name() +
              " must override the vecAddress() method", DgBase::Fatal);
-   }
+   delete dummy;
 
 } // DgInAIGenFile::DgInAIGenFile
 

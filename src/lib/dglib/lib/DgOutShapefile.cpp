@@ -43,9 +43,12 @@ DgOutShapefile::DgOutShapefile (const DgGeoSphDegRF& rfIn,
      geoRF_ (rfIn.geoRF()), dbFile_ (NULL), shpFile_ (NULL), recNum_ (0), 
      numDigits_ (precisionIn), numFields_ (0), idLen_ (shapefileIdLen)
 {
-   if (rfIn.vecAddress(DgDVec2D(M_ZERO, M_ZERO)) == 0)
+   // test for override of vecAddress
+   DgAddressBase* dummy = rfIn.vecAddress(DgDVec2D(M_ZERO, M_ZERO));
+   if (!dummy)
       report("DgOutShapefile::DgOutShapefile(): RF " + rfIn.name() +
              " must override the vecAddress() method", DgBase::Fatal);
+   delete dummy;
 
    if (!open(fileNameIn, failLevelIn))
       report("DgOutShapefile::DgOutShapefile() unable to open file " +
