@@ -24,6 +24,11 @@ doexamples.sh - executes all examples and performs a
     rounding errors may result in small differences
     in the output generated, depending on your system.
 
+doexamplesNoGDAL.sh - works exactly like doexamples.sh
+    above except it does not execute the examples that
+    use GDAL input or output files. Use this if you
+    built DGGRID without GDAL.
+
 cleanexamples.sh - removes output files from all
     examples, returning the examples to their original
     state
