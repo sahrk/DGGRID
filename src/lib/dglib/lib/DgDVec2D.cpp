@@ -83,6 +83,7 @@ DgDVec2D::fromString (const char* str, char delimiter)
    setY(yIn);
 
    unsigned long offset = (tok - tmpStr) + strlen(tok) + 1;
+   delete [] tmpStr;
    if (offset >= strlen(str)) 
     return 0;
    else 
