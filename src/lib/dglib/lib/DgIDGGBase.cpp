@@ -399,36 +399,28 @@ DgIDGGBase::setAddVertices (const DgQ2DICoord& add, DgPolygon& vec,
    vertexRF().convert(vec);
 
 //cout << "E: " << vec << endl;
-   // do we need to look for non-keepers?
 
    if (!isCongruent() && add.coord() == DgIVec2D(0, 0))
    {
       // we need to explicitly go to vertexRF to look for non-keepers
       // to clip
-
-      // JFW: possible overflow: keepers is smaller than v.size() below:
-      unsigned int keepers = 0;
-
       vector<DgAddressBase*>& v = vec.addressVec();
-      for (unsigned long i = 0; i < v.size(); i++)
-      {
-         DgAddress<DgVertex2DDCoord>& fullAdd =
-                   dynamic_cast< DgAddress<DgVertex2DDCoord>& >(*v[i]);
-         DgVertex2DDCoord& add = fullAdd.address();
-         if (add.keep())
-         {
-            if (i > keepers)
-            {
-               DgAddress<DgVertex2DDCoord>& fullAdd2 =
-                   dynamic_cast< DgAddress<DgVertex2DDCoord>& >(*v[keepers]);
-               DgVertex2DDCoord& add2 = fullAdd2.address();
-               add2 = add;
-            }
-            keepers++;
+      vector<DgAddressBase*> newV;
+      for (unsigned long i = 0; i < v.size(); i++) {
+         DgAddress<DgVertex2DDCoord>* fullAdd =
+                   dynamic_cast< DgAddress<DgVertex2DDCoord>* >(v[i]);
+         DgVertex2DDCoord& add = fullAdd->address();
+         if (add.keep()) {
+            newV.push_back(v[i]);
+         } else {
+            delete v[i];
          }
       }
 
-      v.resize(keepers);
+      v.resize(0);
+      for (unsigned long i = 0; i < newV.size(); i++) {
+         v.push_back(newV[i]);
+      }
    }
 
    // now convert to the geoRF

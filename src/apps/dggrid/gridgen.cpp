@@ -1156,10 +1156,11 @@ void genGrid (GridGenParam& dp)
                dp.nCellsTested++;
                outputStatus(dp);
    
-               DgPolygon verts(dgg);
-               dgg.setVertices(*addLoc, verts, dp.nDensify);
+               DgPolygon* verts = new DgPolygon(dgg);
+               dgg.setVertices(*addLoc, *verts, dp.nDensify);
 
-               outputCellAdd2D(dp, *dggs, dgg, *addLoc, verts, deg);
+               outputCellAdd2D(dp, *dggs, dgg, *addLoc, *verts, deg);
+	       delete verts;
 
                dgg.bndRF().incrementLocation(*addLoc);
                if (!dgg.bndRF().validLocation(*addLoc)) break;

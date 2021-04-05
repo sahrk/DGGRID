@@ -27,10 +27,10 @@
 #include "DgInAIGenFile.h"
 #include "DgLocList.h"
 #include "DgPolygon.h"
-#include "DgPolygon.h"
 #include "DgLocation.h"
 #include "DgCell.h"
 #include "DgContCartRF.h"
+#include "DgEllipsoidRF.h"
 
 const static int maxLine = 256;
 
@@ -69,31 +69,38 @@ DgInAIGenFile::extract (DgLocVector& vec)
 //
 ////////////////////////////////////////////////////////////////////////////////
 {
-   char nextLine[maxLine];
-
-   long double x, y;
-
-   // discard the header line
-   getline(nextLine, maxLine);
-
    vec.clearAddress();
    rf().convert(vec);
 
-   while (!eof())
-   {
+   // get the header line
+   char nextLine[maxLine];
+   getline(nextLine, maxLine);
+
+   // check to see if we're at EOF
+   if (string(nextLine) == string("END")) {
+      // force feof()
+      while (!eof()) getline(nextLine, maxLine);
+      return *this;
+   }
+
+   long double x, y;
+   vector<DgAddressBase*>& v = vec.addressVec();
+   while (!eof()) {
       getline(nextLine, maxLine);
 
-      if (string(nextLine) == string("END")) 
-       break;
+      // check for end-of-polyline
+      if (string(nextLine) == string("END")) break;
 
       fixSciNotation(nextLine);
 
       istringstream iss(nextLine);
       iss >> x >> y;
 
-      DgAddressBase* add = rf().vecAddress(DgDVec2D(x, y));
+      DgAddressBase* add = rf().vecAddress(DgGeoCoord(x, y));
       vec.addressVec().push_back(add); // polyline should delete when done
    }
+
+   //cout << "HERE: " << poly << endl;
 
    return *this;
 
@@ -108,22 +115,36 @@ DgInAIGenFile::extract (DgPolygon& poly)
 //
 ////////////////////////////////////////////////////////////////////////////////
 {
-   char nextLine[maxLine];
-
-   long double x, y;
-
-   // discard the header line
-   getline(nextLine, maxLine);
-
    poly.clearAddress();
    rf().convert(poly);
-   while (!eof())
-   {
-      getline(nextLine, maxLine);
-      if (string(nextLine) == string("END")) 
-      {
-         poly.addressVec().erase(poly.addressVec().end() - 1);
 
+   // get the header line
+   char nextLine[maxLine];
+   getline(nextLine, maxLine);
+
+   // check to see if we're at EOF
+   if (string(nextLine) == string("END")) {
+      // force feof()
+      while (!eof()) getline(nextLine, maxLine);
+      return *this;
+   }
+
+   long double x, y;
+   vector<DgAddressBase*>& v = poly.addressVec();
+   while (!eof()) {
+      getline(nextLine, maxLine);
+
+      // check for end-of-polygon
+      // delete the duplicate first/last vertex
+      if (string(nextLine) == string("END")) {
+         delete v.back();
+         v.back() = NULL;
+         v.pop_back();
+
+         //delete v[v.size() - 1];
+         //v[v.size() - 1] = NULL;
+         //v.pop_back;
+    
          break;
       }
       fixSciNotation(nextLine);
@@ -131,9 +152,11 @@ DgInAIGenFile::extract (DgPolygon& poly)
       istringstream iss(nextLine);
       iss >> x >> y;
 
-      DgAddressBase* add = rf().vecAddress(DgDVec2D(x, y));
+      DgAddressBase* add = rf().vecAddress(DgGeoCoord(x, y));
       poly.addressVec().push_back(add); // polygon should delete when done
    }
+
+   //cout << "HERE: " << poly << endl;
 
    return *this;
 

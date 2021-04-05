@@ -114,14 +114,13 @@ DgRFBase::convert (DgLocVector& vec) const
    }
 
    vector<DgAddressBase*>& v = vec.addressVec();
-   for (unsigned long i = 0; i < v.size(); i++)
-   {
-      DgAddressBase* addIn = v[i];
-
-      if (addIn) 
-       v[i] = conv->createConvertedAddress(*addIn);
-
-      delete addIn;
+   for (unsigned long i = 0; i < v.size(); i++) {
+      if (v[i]) { 
+         DgAddressBase* addIn = v[i];
+         DgAddressBase* newAdd = conv->createConvertedAddress(*addIn);
+         v[i] = newAdd;
+         delete addIn;
+      }
    }
 
    vec.rf_ = this;
