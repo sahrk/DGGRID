@@ -41,14 +41,10 @@ class DgDmdD4Grid2D : public DgDiscRF2D {
 
    public:
 
-      DgDmdD4Grid2D (DgRFNetwork& networkIn, 
+      static DgDmdD4Grid2D* makeRF (DgRFNetwork& networkIn, 
                      const DgRF<DgDVec2D, long double>& contCartFrameIn,
                      const string& nameIn = "Dmd2D")
-         : DgDiscRF2D (networkIn, contCartFrameIn, nameIn, Diamond, D4,
-                 1.0L, 1.0L, M_SQRT3_2, 1.0L) 
-           { r_ = c(); }
-
-      DgDmdD4Grid2D (const DgDmdD4Grid2D& grd) : DgDiscRF2D (grd) {}
+         { return new DgDmdD4Grid2D (networkIn, contCartFrameIn, nameIn); }
 
       DgDmdD4Grid2D& operator= (const DgDmdD4Grid2D& grd)
            { DgDiscRF2D::operator=(grd); return *this; }
@@ -60,6 +56,15 @@ class DgDmdD4Grid2D : public DgDiscRF2D {
       static long double xOff (void) { return xOff_; }
 
    protected:
+
+      DgDmdD4Grid2D (DgRFNetwork& networkIn, 
+                     const DgRF<DgDVec2D, long double>& contCartFrameIn,
+                     const string& nameIn = "Dmd2D")
+         : DgDiscRF2D (networkIn, contCartFrameIn, nameIn, Diamond, D4,
+                 1.0L, 1.0L, M_SQRT3_2, 1.0L) 
+           { r_ = c(); }
+
+      DgDmdD4Grid2D (const DgDmdD4Grid2D& grd) : DgDiscRF2D (grd) {}
 
       virtual void setAddVertices (const DgIVec2D& add, DgPolygon& vec) const;
       virtual void setAddNeighbors (const DgIVec2D& add, DgLocVector& vec) 

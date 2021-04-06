@@ -75,13 +75,13 @@ DgHexGrid2DS::DgHexGrid2DS (DgRFNetwork& networkIn,
                                     DgDVec2D(M_ZERO, M_ZERO)); 
 
       if (isClassIII)
-         (*grids_)[r] = new DgHexC3Grid2D(network(), *ccRF, isClassI, newName);
+         (*grids_)[r] = DgHexC3Grid2D::makeRF(network(), *ccRF, isClassI, newName);
       else
       {
          if (isClassI)
-            (*grids_)[r] = new DgHexC1Grid2D(network(), *ccRF, newName);
+            (*grids_)[r] = DgHexC1Grid2D::makeRF(network(), *ccRF, newName);
          else
-            (*grids_)[r] = new DgHexC2Grid2D(network(), *ccRF, newName);
+            (*grids_)[r] = DgHexC2Grid2D::makeRF(network(), *ccRF, newName);
       }
 
       Dg2WayResAddConverter<DgIVec2D, DgDVec2D, long double>(*this, *(grids()[r]), r);
@@ -165,28 +165,22 @@ DgHexGrid2DS::DgHexGrid2DS (DgRFNetwork& networkIn,
                                     DgDVec2D(M_ZERO, M_ZERO)); 
 
       bool isClassI;
-      if (!isMixed43())
-      {
+      if (!isMixed43()) {
          if (aperture() == 4) 
             isClassI = true;
          else // ap 3
             isClassI = !(i % 2);
-      }
-      else // mixed43
-      {
+      } else { // mixed43 
          if (i <= numAp4())
             isClassI = true;
          else
             isClassI = !((i - numAp4()) % 2);
       }
 
-      if (isClassI)
-      {
-         (*grids_)[i] = new DgHexC1Grid2D(network(), *ccRF, newName);
-      }
-      else
-      {
-         (*grids_)[i] = new DgHexC2Grid2D(network(), *ccRF, newName);
+      if (isClassI) {
+         (*grids_)[i] = DgHexC1Grid2D::makeRF(network(), *ccRF, newName);
+      } else {
+         (*grids_)[i] = DgHexC2Grid2D::makeRF(network(), *ccRF, newName);
       }
 
       Dg2WayResAddConverter<DgIVec2D, DgDVec2D, long double>(*this, *(grids()[i]), i);

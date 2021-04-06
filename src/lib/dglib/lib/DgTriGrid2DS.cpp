@@ -72,7 +72,7 @@ DgTriGrid2DS::DgTriGrid2DS (DgRFNetwork& networkIn,
 
       Dg2WayContAffineConverter(backFrame(), *ccRF, (long double) fac, 0.0, trans); 
 
-      (*grids_)[i] = new DgTriGrid2D(network(), *ccRF, newName);
+      (*grids_)[i] = DgTriGrid2D::makeRF(network(), *ccRF, newName);
       Dg2WayResAddConverter<DgIVec2D, DgDVec2D, long double>(*this, *(grids()[i]), i);
 
       fac *= radix();

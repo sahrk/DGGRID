@@ -149,12 +149,12 @@ DgIDGGBase::createConverters (void)
 
    // create the intermediate RFs
 
-   projTriRF_ = new DgProjTriRF(network(), name() + string("projTri"), 
+   projTriRF_ = DgProjTriRF::makeRF(network(), name() + string("projTri"), 
                 sphIcosa_);
-   vertexRF_ = new DgVertex2DDRF(network(), name() + string("vertex"));
-   q2ddRF_ = new DgQ2DDRF(network(), name() + string("q2dd"));
-   intRF_ = new DgInterleaveRF(network(), name() + string("int"));
-   planeRF_ = new DgPlaneTriRF(network(), name() + string("plane"));
+   vertexRF_ = DgVertex2DDRF::makeRF(network(), name() + string("vertex"));
+   q2ddRF_ = DgQ2DDRF::makeRF(network(), name() + string("q2dd"));
+   intRF_ = DgInterleaveRF::makeRF(network(), name() + string("int"));
+   planeRF_ = DgPlaneTriRF::makeRF(network(), name() + string("plane"));
 
    // create the converters; for convenience use where they are in overall
    // sequence for name

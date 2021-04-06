@@ -131,38 +131,6 @@ class DgEllipsoidRF : public DgGeoDatumRF<DgGeoCoord, long double> {
 
    public:
 
-      DgEllipsoidRF (DgRFNetwork& networkIn, const string& nameIn)
-               : DgGeoDatumRF<DgGeoCoord, long double> (networkIn, nameIn),
-                 a_ (-1.0L), b_ (-1.0L), f_ (-1.0L), e_ (-1.0L), es_ (-1.0L),
-                 as_ (-1.0L), bs_ (-1.0L), ra_ (-1.0L), one_es_ (-1.0L),
-                 rone_es_ (-1.0L) { }
-
-      DgEllipsoidRF (DgRFNetwork& networkIn, const string& nameIn,
-                   const DgEllipsoidRF& ell)
-               : DgGeoDatumRF<DgGeoCoord, long double> (networkIn, nameIn),
-                 a_ (ell.a()), b_ (ell.b()), f_ (ell.f()),
-                 e_ (ell.e()), es_ (ell.es()), as_ (ell.as()), bs_ (ell.bs()),
-                 ra_ (ell.ra()), one_es_ (ell.one_es()),
-                 rone_es_ (ell.rone_es())
-           { undefLoc_ = makeLocation(undefAddress()); }
-
-      DgEllipsoidRF (DgRFNetwork& networkIn, const string& nameIn, 
-                   long double aIn, long double bIn)
-               : DgGeoDatumRF<DgGeoCoord, long double> (networkIn, nameIn),
-                 a_ (aIn), b_ (bIn)
-                { 
-                   setUndefLoc(makeLocation(undefAddress()));
-
-                   f_ = (a() - b()) / a();
-                   as_ = a() * a();
-                   bs_ = b() * b();
-                   es_ = 1.0L - bs() / as();
-                   e_ = sqrtl(es());
-                   ra_ = 1.0L / a();
-                   one_es_ = 1.0L - es();
-                   rone_es_ = 1.0L / one_es();
-                }  
-
       DgEllipsoidRF& operator= (const DgEllipsoidRF& ell)
                {
                   if (&ell != this)
@@ -288,6 +256,40 @@ class DgEllipsoidRF : public DgGeoDatumRF<DgGeoCoord, long double> {
 
       virtual unsigned long long int dist2int (const long double& dist) const
                        { return static_cast<unsigned long long int>(dist); }
+
+   protected:
+
+      DgEllipsoidRF (DgRFNetwork& networkIn, const string& nameIn)
+               : DgGeoDatumRF<DgGeoCoord, long double> (networkIn, nameIn),
+                 a_ (-1.0L), b_ (-1.0L), f_ (-1.0L), e_ (-1.0L), es_ (-1.0L),
+                 as_ (-1.0L), bs_ (-1.0L), ra_ (-1.0L), one_es_ (-1.0L),
+                 rone_es_ (-1.0L) { }
+
+      DgEllipsoidRF (DgRFNetwork& networkIn, const string& nameIn,
+                   const DgEllipsoidRF& ell)
+               : DgGeoDatumRF<DgGeoCoord, long double> (networkIn, nameIn),
+                 a_ (ell.a()), b_ (ell.b()), f_ (ell.f()),
+                 e_ (ell.e()), es_ (ell.es()), as_ (ell.as()), bs_ (ell.bs()),
+                 ra_ (ell.ra()), one_es_ (ell.one_es()),
+                 rone_es_ (ell.rone_es())
+           { undefLoc_ = makeLocation(undefAddress()); }
+
+      DgEllipsoidRF (DgRFNetwork& networkIn, const string& nameIn, 
+                   long double aIn, long double bIn)
+               : DgGeoDatumRF<DgGeoCoord, long double> (networkIn, nameIn),
+                 a_ (aIn), b_ (bIn)
+                { 
+                   setUndefLoc(makeLocation(undefAddress()));
+
+                   f_ = (a() - b()) / a();
+                   as_ = a() * a();
+                   bs_ = b() * b();
+                   es_ = 1.0L - bs() / as();
+                   e_ = sqrtl(es());
+                   ra_ = 1.0L / a();
+                   one_es_ = 1.0L - es();
+                   rone_es_ = 1.0L / one_es();
+                }  
 
    private:
 

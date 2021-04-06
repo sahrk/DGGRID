@@ -36,13 +36,13 @@ class DgTriGrid2DS : public DgDiscRFS2D {
 
    public:
 
-      DgTriGrid2DS (DgRFNetwork& networkIn, 
+      static DgTriGrid2DS* makeRF (DgRFNetwork& networkIn, 
                     const DgRF<DgDVec2D, long double>& backFrameIn,
                     int nRes = 1, unsigned int apertureIn = 4, 
                     bool isCongruentIn = true, bool isAlignedIn = false,
-                    const string& nameIn = "3T4");
-
-      DgTriGrid2DS (const DgTriGrid2DS& rf);
+                    const string& nameIn = "3T4")
+         { return new DgTriGrid2DS (networkIn, backFrameIn, nRes, apertureIn, 
+                    isCongruentIn, isAlignedIn, nameIn); }
 
      ~DgTriGrid2DS (void);
 
@@ -51,6 +51,14 @@ class DgTriGrid2DS : public DgDiscRFS2D {
       int radix (void) const { return radix_; }
 
    protected:
+
+      DgTriGrid2DS (DgRFNetwork& networkIn, 
+                    const DgRF<DgDVec2D, long double>& backFrameIn,
+                    int nRes = 1, unsigned int apertureIn = 4, 
+                    bool isCongruentIn = true, bool isAlignedIn = false,
+                    const string& nameIn = "3T4");
+
+      DgTriGrid2DS (const DgTriGrid2DS& rf);
 
       int radix_;
 

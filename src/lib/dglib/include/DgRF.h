@@ -45,11 +45,6 @@ template <class A, class D> class DgRF : public DgRFBase {
 
       virtual ~DgRF (void);
 
-      DgRF (DgRFNetwork& networkIn, const string& nameIn)
-         : DgRFBase (networkIn, nameIn) { }
-
-      DgRF (const DgRF& rf) : DgRFBase (rf) { }
-
       DgRF& operator= (const DgRF& rf)
           { DgRFBase::operator=(rf); return *this; }
 
@@ -115,6 +110,11 @@ template <class A, class D> class DgRF : public DgRFBase {
       virtual const A& undefAddress (void) const = 0;
 
    protected:
+
+      DgRF (DgRFNetwork& networkIn, const string& nameIn)
+         : DgRFBase (networkIn, nameIn) { }
+
+      DgRF (const DgRF& rf) : DgRFBase (rf) { }
 
       // note these assume the addresses are from this system; they are for
       // internal use only

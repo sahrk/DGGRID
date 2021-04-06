@@ -104,37 +104,6 @@ template<class A, class B, class DB> class DgDiscRFS
 
    public:
 
-      DgDiscRFS (DgRFNetwork& network, const DgRF<B, DB>& backFrame,
-                 int nResIn, unsigned int aperture, 
-                 dgg::topo::DgGridTopology gridTopo = dgg::topo::Hexagon,
-                 dgg::topo::DgGridMetric gridMetric = dgg::topo::D6,
-                 bool isCongruent = true, bool isAligned = false,
-                 const string& name = "DiscS")
-        : DgDiscRF<DgResAdd<A>, B, DB> 
-                      (network, backFrame, name, gridTopo, gridMetric), 
-          aperture_ (aperture), grids_ (new vector<DgDiscRF<A, B, DB>*>()),
-          nRes_ (nResIn), isCongruent_ (isCongruent), 
-          isAligned_ (isAligned)
-        { 
-          if (nRes() < 0)
-          {
-             report("DgDiscRFS<A, B, DB>::DgDiscRF() nRes < 0", 
-                    DgBase::Fatal);
-          }
-
-          if (!this->isAligned() && !this->isCongruent())
-          {
-             report("DgDiscRFS::DgDiscRFS() grid system must be either "
-                    "congruent, aligned, or both", DgBase::Fatal);
-          }
-
-          grids_->resize(nRes()); 
-        }
-
-      DgDiscRFS (const DgDiscRFS<A, B, DB>& rf) // uses dubious operator=
-        : DgDiscRF<DgResAdd<A>, B, DB> (rf) 
-        { *this = rf; }
-
      ~DgDiscRFS (void) 
         { 
 /* the grids themselves are deleted by the DgRFNetwork
@@ -427,6 +396,37 @@ template<class A, class B, class DB> class DgDiscRFS
       }
 
    protected:
+
+      DgDiscRFS (DgRFNetwork& network, const DgRF<B, DB>& backFrame,
+                 int nResIn, unsigned int aperture, 
+                 dgg::topo::DgGridTopology gridTopo = dgg::topo::Hexagon,
+                 dgg::topo::DgGridMetric gridMetric = dgg::topo::D6,
+                 bool isCongruent = true, bool isAligned = false,
+                 const string& name = "DiscS")
+        : DgDiscRF<DgResAdd<A>, B, DB> 
+                      (network, backFrame, name, gridTopo, gridMetric), 
+          aperture_ (aperture), grids_ (new vector<DgDiscRF<A, B, DB>*>()),
+          nRes_ (nResIn), isCongruent_ (isCongruent), 
+          isAligned_ (isAligned)
+        { 
+          if (nRes() < 0)
+          {
+             report("DgDiscRFS<A, B, DB>::DgDiscRF() nRes < 0", 
+                    DgBase::Fatal);
+          }
+
+          if (!this->isAligned() && !this->isCongruent())
+          {
+             report("DgDiscRFS::DgDiscRFS() grid system must be either "
+                    "congruent, aligned, or both", DgBase::Fatal);
+          }
+
+          grids_->resize(nRes()); 
+        }
+
+      DgDiscRFS (const DgDiscRFS<A, B, DB>& rf) // uses dubious operator=
+        : DgDiscRF<DgResAdd<A>, B, DB> (rf) 
+        { *this = rf; }
 
       virtual DgResAdd<A> quantify (const B& point) const
             { 

@@ -82,7 +82,7 @@ void createClipRegions (GridGenParam& dp, const DgIDGGBase& dgg,
    DgContCartRF* ccRFptr = DgContCartRF::makeRF(tmpNet);
    DgContCartRF& ccRF = *ccRFptr;
    DgDmdD4Grid2DS* dmd = 
-        new DgDmdD4Grid2DS(tmpNet, ccRF, 1, 4, true, false);
+        DgDmdD4Grid2DS::makeRF(tmpNet, ccRF, 1, 4, true, false);
 
    const DgDmdD4Grid2D& dmd0 = 
         *(dynamic_cast<const DgDmdD4Grid2D*>(dmd->grids()[0]));
@@ -151,7 +151,7 @@ void createClipRegions (GridGenParam& dp, const DgIDGGBase& dgg,
 
       if (dp.megaVerbose) cout << " -> " << *tloc << endl;
    
-      clipRegions[q].setGnomProj(new DgProjGnomonicRF(dgg.network(), 
+      clipRegions[q].setGnomProj(DgProjGnomonicRF::makeRF(dgg.network(), 
            string("gnom") + dgg::util::to_string(q, 2), *dgg.geoRF().getAddress(*tloc)));
 
       delete tloc;

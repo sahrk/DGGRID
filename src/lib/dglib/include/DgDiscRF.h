@@ -74,26 +74,6 @@ class DgDiscRF : public DgRF<A, long long int> {
 
       };
 
-      DgDiscRF (DgRFNetwork& networkIn, const DgRF<B, DB>& backFrameIn,
-                const string& nameIn = "Disc", 
-                DgGridTopology gridTopoIn = Hexagon,
-                DgGridMetric gridMetricIn = D6,
-                long double eIn = 1.0L,
-                long double rIn = 1.0L, long double cIn = 1.0L, long double areaIn = 1.0L)
-        : DgRF<A, long long int> (networkIn, nameIn), backFrame_ (&backFrameIn),
-          e_ (eIn), r_ (rIn), c_ (cIn), area_ (areaIn), gridTopo_ (gridTopoIn),
-          gridMetric_ (gridMetricIn)
-        { new DgQuantConverter(backFrame(), *this);
-          new DgInvQuantConverter(*this, backFrame()); }
-
-      DgDiscRF (const DgDiscRF<A, B, DB>& rf) : DgRF<A, long long int> (rf), 
-          backFrame_ (&rf.backFrame()), e_ (rf.e()), r_ (rf.r()),
-          c_ (rf.c()), area_ (rf.area()), gridTopo_ (rf.gridTopo()),
-          gridMetric_ (rf.gridMetric())
-        { new DgQuantConverter(backFrame(), *this);
-          new DgInvQuantConverter(*this, backFrame()); 
-	}
-
       DgDiscRF& operator= (const DgDiscRF<A, B, DB>& rf)
           { 
              if (&rf != this)
@@ -241,6 +221,25 @@ class DgDiscRF : public DgRF<A, long long int> {
       virtual void setAddVertices  (const A& add, DgPolygon& vec) const = 0;
 
    protected:
+
+      DgDiscRF (DgRFNetwork& networkIn, const DgRF<B, DB>& backFrameIn,
+                const string& nameIn = "Disc", 
+                DgGridTopology gridTopoIn = Hexagon,
+                DgGridMetric gridMetricIn = D6,
+                long double eIn = 1.0L,
+                long double rIn = 1.0L, long double cIn = 1.0L, long double areaIn = 1.0L)
+        : DgRF<A, long long int> (networkIn, nameIn), backFrame_ (&backFrameIn),
+          e_ (eIn), r_ (rIn), c_ (cIn), area_ (areaIn), gridTopo_ (gridTopoIn),
+          gridMetric_ (gridMetricIn)
+        { new DgQuantConverter(backFrame(), *this);
+          new DgInvQuantConverter(*this, backFrame()); }
+
+      DgDiscRF (const DgDiscRF<A, B, DB>& rf) : DgRF<A, long long int> (rf), 
+          backFrame_ (&rf.backFrame()), e_ (rf.e()), r_ (rf.r()),
+          c_ (rf.c()), area_ (rf.area()), gridTopo_ (rf.gridTopo()),
+          gridMetric_ (rf.gridMetric())
+        { new DgQuantConverter(backFrame(), *this);
+          new DgInvQuantConverter(*this, backFrame()); }
 
       virtual void setAddPoint (const A& add, DgLocation& pt) const;
 

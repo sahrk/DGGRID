@@ -36,13 +36,13 @@ class DgSqrD8Grid2DS : public DgDiscRFS2D {
 
    public:
 
-      DgSqrD8Grid2DS (DgRFNetwork& networkIn, 
+      static DgSqrD8Grid2DS* makeRF (DgRFNetwork& networkIn, 
                  const DgRF<DgDVec2D, long double>& backFrameIn,
                  int nRes = 1, unsigned int apertureIn = 4, 
                  bool isCongruentIn = true, bool isAlignedIn = false,
-                 const string& nameIn = "8S4");
-
-      DgSqrD8Grid2DS (const DgSqrD8Grid2DS& rf);
+                 const string& nameIn = "8S4")
+         { return new DgSqrD8Grid2DS (networkIn, backFrameIn, nRes, apertureIn, 
+                 isCongruentIn, isAlignedIn, nameIn); }
 
      ~DgSqrD8Grid2DS (void);
 
@@ -51,6 +51,14 @@ class DgSqrD8Grid2DS : public DgDiscRFS2D {
       int radix (void) const { return radix_; }
 
    protected:
+
+      DgSqrD8Grid2DS (DgRFNetwork& networkIn, 
+                 const DgRF<DgDVec2D, long double>& backFrameIn,
+                 int nRes = 1, unsigned int apertureIn = 4, 
+                 bool isCongruentIn = true, bool isAlignedIn = false,
+                 const string& nameIn = "8S4");
+
+      DgSqrD8Grid2DS (const DgSqrD8Grid2DS& rf);
 
       int radix_;
 

@@ -42,9 +42,10 @@ class DgHexC3Grid2D : public DgDiscRF2D {
 
    public:
 
-      DgHexC3Grid2D (DgRFNetwork& networkIn, 
+      static DgHexC3Grid2D* makeRF (DgRFNetwork& networkIn, 
                      const DgRF<DgDVec2D, long double>& ccFrameIn,
-                     bool isClassI = true, const string& nameIn = "HexC3D");
+                     bool isClassI = true, const string& nameIn = "HexC3D")
+         { return new DgHexC3Grid2D (networkIn, ccFrameIn, isClassI, nameIn); }
 
       DgHexC3Grid2D (const DgHexC3Grid2D& grd) : DgDiscRF2D (grd) {}
 
@@ -69,6 +70,10 @@ class DgHexC3Grid2D : public DgDiscRF2D {
         }  
 
    protected:
+
+      DgHexC3Grid2D (DgRFNetwork& networkIn, 
+                     const DgRF<DgDVec2D, long double>& ccFrameIn,
+                     bool isClassI = true, const string& nameIn = "HexC3D");
 
       static const long double sin60_;
 

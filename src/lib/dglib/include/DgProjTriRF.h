@@ -108,11 +108,10 @@ class DgProjTriRF : public DgRF<DgProjTriCoord, long double> {
 
    public:
 
-      DgProjTriRF (DgRFNetwork& networkIn, const string& nameIn = "ProjTriRF",
+      static DgProjTriRF* makeRF (DgRFNetwork& networkIn, const string& nameIn = "ProjTriRF",
                    DgSphIcosa* sphIcosaIn = 0) 
                       //DgSphIcosa(DgGeoCoord(11.25L, 58.28252559L, false), M_ZERO))
-         : DgRF<DgProjTriCoord, long double> (networkIn, nameIn),
-           sphIcosa_ (sphIcosaIn) { }
+         { return new DgProjTriRF(networkIn, nameIn, sphIcosaIn); } 
 
       //virtual DgLocVector& convert (DgLocVector& vec) const;
 
@@ -144,6 +143,14 @@ class DgProjTriRF : public DgRF<DgProjTriCoord, long double> {
                        { return (unsigned long long int) dist; }
 
       DgSphIcosa& sphIcosa (void) const { return *sphIcosa_; }
+
+   protected:
+
+      DgProjTriRF (DgRFNetwork& networkIn, const string& nameIn = "ProjTriRF",
+                   DgSphIcosa* sphIcosaIn = 0) 
+                      //DgSphIcosa(DgGeoCoord(11.25L, 58.28252559L, false), M_ZERO))
+         : DgRF<DgProjTriCoord, long double> (networkIn, nameIn),
+           sphIcosa_ (sphIcosaIn) { }
 
    private:
 

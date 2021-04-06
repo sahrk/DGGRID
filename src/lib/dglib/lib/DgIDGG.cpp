@@ -179,13 +179,13 @@ DgIDGG::initialize (void)
    ccFrame_ = DgContCartRF::makeRF(locNet_, name() + "CC1");
 
    if (gridTopo() == Diamond && gridMetric() == D4)
-      grid2DS_ = new DgDmdD4Grid2DS(locNet_, ccFrame(), res() + 1, aperture(), 
+      grid2DS_ = DgDmdD4Grid2DS::makeRF(locNet_, ccFrame(), res() + 1, aperture(), 
                                     isCongruent(), isAligned());
    else if (gridTopo() == Diamond && gridMetric() == D8)
-      grid2DS_ = new DgDmdD8Grid2DS(locNet_, ccFrame(), res() + 1, aperture(), 
+      grid2DS_ = DgDmdD8Grid2DS::makeRF(locNet_, ccFrame(), res() + 1, aperture(), 
                                     isCongruent(), isAligned());
    else if (gridTopo() == Triangle)
-      grid2DS_ = new DgTriGrid2DS(locNet_, ccFrame(), res() + 1, aperture(), 
+      grid2DS_ = DgTriGrid2DS::makeRF(locNet_, ccFrame(), res() + 1, aperture(), 
                                   isCongruent(), isAligned());
 
    createConverters();

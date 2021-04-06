@@ -155,7 +155,7 @@ void binPresGlobal (BinPresenceParam& dp)
    ////// create the reference frames ////////
 
    DgRFNetwork net0;
-   DgGeoSphRF& geoRF = *(new DgGeoSphRF(net0, dp.datum, dp.earthRadius));
+   DgGeoSphRF& geoRF = *(DgGeoSphRF::makeRF(net0, dp.datum, dp.earthRadius));
    const DgIDGGSBase *idggs = DgIDGGSBase::makeRF(net0, geoRF, dp.vert0,
              dp.azimuthDegs, dp.aperture, dp.actualRes+1, dp.gridTopo, 
              dp.gridMetric, "IDGGS", dp.projType, dp.isMixed43, dp.numAp4, 
@@ -165,7 +165,7 @@ void binPresGlobal (BinPresenceParam& dp)
    cout << "Res " << dgg.outputRes() << " " << dgg.gridStats() << endl;
 
    // set-up to convert to degrees
-   DgGeoSphDegRF& deg = *(new DgGeoSphDegRF(geoRF, geoRF.name() + "Deg"));
+   DgGeoSphDegRF& deg = *(DgGeoSphDegRF::makeRF(geoRF, geoRF.name() + "Deg"));
 
    // set-up the output reference frame
 
@@ -291,7 +291,7 @@ void binPresPartial (BinPresenceParam& dp)
 {
    ////// create the reference frames ////////
    DgRFNetwork net0;
-   DgGeoSphRF& geoRF = *(new DgGeoSphRF(net0, dp.datum, dp.earthRadius));
+   DgGeoSphRF& geoRF = *(DgGeoSphRF::makeRF(net0, dp.datum, dp.earthRadius));
       const DgIDGGSBase *idggs = DgIDGGSBase::makeRF(net0, geoRF, dp.vert0,
              dp.azimuthDegs, dp.aperture, dp.actualRes+1, dp.gridTopo, 
              dp.gridMetric, "IDGGS", dp.projType, dp.isMixed43, dp.numAp4, 
@@ -301,7 +301,7 @@ void binPresPartial (BinPresenceParam& dp)
    cout << "Res " << dgg.outputRes() << " " << dgg.gridStats() << endl;
 
    // set-up to convert to degrees
-   DgGeoSphDegRF& deg = *(new DgGeoSphDegRF(geoRF, geoRF.name() + "Deg"));
+   DgGeoSphDegRF& deg = *(DgGeoSphDegRF::makeRF(geoRF, geoRF.name() + "Deg"));
 
    // set-up the output reference frame
 

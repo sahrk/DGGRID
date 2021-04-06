@@ -34,14 +34,10 @@ class DgDmdD8Grid2D : public DgDmdD4Grid2D {
 
    public:
 
-      DgDmdD8Grid2D (DgRFNetwork& networkIn, 
+      static DgDmdD8Grid2D* makeRF (DgRFNetwork& networkIn, 
                      const DgRF<DgDVec2D, long double>& contCartFrameIn,
                      const string& nameIn = "Dmd2D")
-         : DgDmdD4Grid2D (networkIn, contCartFrameIn, nameIn) 
-              { setGridMetric(D8); }
-
-      DgDmdD8Grid2D (const DgDmdD8Grid2D& grd) 
-         : DgDmdD4Grid2D (grd) { setGridMetric(D8); }
+         { return new DgDmdD8Grid2D (networkIn, contCartFrameIn, nameIn); }
 
       virtual long long int dist (const DgIVec2D& add1, const DgIVec2D& add2) const
       { 
@@ -51,6 +47,15 @@ class DgDmdD8Grid2D : public DgDmdD4Grid2D {
       }
 
    protected:
+
+      DgDmdD8Grid2D (DgRFNetwork& networkIn, 
+                     const DgRF<DgDVec2D, long double>& contCartFrameIn,
+                     const string& nameIn = "Dmd2D")
+         : DgDmdD4Grid2D (networkIn, contCartFrameIn, nameIn) 
+              { setGridMetric(D8); }
+
+      DgDmdD8Grid2D (const DgDmdD8Grid2D& grd) 
+         : DgDmdD4Grid2D (grd) { setGridMetric(D8); }
 
       virtual void setAddNeighbors (const DgIVec2D& add, DgLocVector& vec) 
                                                                         const;

@@ -41,13 +41,10 @@ class DgTriGrid2D : public DgDiscRF2D {
 
    public:
 
-      DgTriGrid2D (DgRFNetwork& networkIn, 
+      static DgTriGrid2D* makeRF (DgRFNetwork& networkIn, 
                    const DgRF<DgDVec2D, long double>& ccFrameIn,
                    const string& nameIn = "TriC12D")
-         : DgDiscRF2D (networkIn, ccFrameIn, nameIn, Triangle, D3, M_SQRT3, 
-               1.0L, M_SQRT3_2, 3.0L) { }
-
-      DgTriGrid2D (const DgTriGrid2D& grd) : DgDiscRF2D (grd) {}
+         { return new DgTriGrid2D (networkIn, ccFrameIn, nameIn); }
 
       DgTriGrid2D& operator= (const DgTriGrid2D& grd)
            { DgDiscRF2D::operator=(grd); return *this; }
@@ -57,6 +54,14 @@ class DgTriGrid2D : public DgDiscRF2D {
       static bool isUp (const DgIVec2D& add) { return !(add.j() % 2); }
 
    protected:
+
+      DgTriGrid2D (DgRFNetwork& networkIn, 
+                   const DgRF<DgDVec2D, long double>& ccFrameIn,
+                   const string& nameIn = "TriC12D")
+         : DgDiscRF2D (networkIn, ccFrameIn, nameIn, Triangle, D3, M_SQRT3, 
+               1.0L, M_SQRT3_2, 3.0L) { }
+
+      DgTriGrid2D (const DgTriGrid2D& grd) : DgDiscRF2D (grd) {}
 
       static const long double sin60_;
 

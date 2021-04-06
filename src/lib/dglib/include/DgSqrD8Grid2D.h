@@ -34,6 +34,18 @@ class DgSqrD8Grid2D : public DgSqrD4Grid2D {
 
    public:
 
+      static DgSqrD8Grid2D* makeRF (DgRFNetwork& networkIn, 
+                     const DgRF<DgDVec2D, long double>& contCartFrameIn,
+                     const string& nameIn = "Sqr2D")
+         { return new DgSqrD8Grid2D (networkIn, contCartFrameIn, nameIn); } 
+
+      virtual long long int dist (const DgIVec2D& add1, const DgIVec2D& add2) const
+           { long long int diffi = abs(add2.i() - add1.i());
+             long long int diffj = abs(add2.j() - add1.j());
+             return (diffi >= diffj) ? diffi : diffj; }
+
+   protected:
+
       DgSqrD8Grid2D (DgRFNetwork& networkIn, 
                      const DgRF<DgDVec2D, long double>& contCartFrameIn,
                      const string& nameIn = "Sqr2D")
@@ -43,13 +55,6 @@ class DgSqrD8Grid2D : public DgSqrD4Grid2D {
       DgSqrD8Grid2D (const DgSqrD8Grid2D& grd) 
          : DgSqrD4Grid2D (grd)
               { setGridMetric(D8); }
-
-      virtual long long int dist (const DgIVec2D& add1, const DgIVec2D& add2) const
-           { long long int diffi = abs(add2.i() - add1.i());
-             long long int diffj = abs(add2.j() - add1.j());
-             return (diffi >= diffj) ? diffi : diffj; }
-
-   protected:
 
       virtual void setAddNeighbors (const DgIVec2D& add, DgLocVector& vec) 
                                                                         const;

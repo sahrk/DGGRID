@@ -172,8 +172,8 @@ class DgQ2DDRF : public DgRF<DgQ2DDCoord, long double> {
 
    public:
 
-      DgQ2DDRF (DgRFNetwork& networkIn, const string& nameIn)
-         : DgRF<DgQ2DDCoord, long double>(networkIn, nameIn) { }
+      static DgQ2DDRF* makeRF (DgRFNetwork& networkIn, const string& nameIn = "Q2DDRF")
+         { return new DgQ2DDRF(networkIn, nameIn); }
 
       virtual long double dist (const DgQ2DDCoord& add1, 
                            const DgQ2DDCoord& add2) const 
@@ -201,6 +201,11 @@ class DgQ2DDRF : public DgRF<DgQ2DDCoord, long double> {
 
       virtual const DgQ2DDCoord& undefAddress (void) const
                        { static DgQ2DDCoord undef; return undef; }
+
+   protected:
+
+      DgQ2DDRF (DgRFNetwork& networkIn, const string& nameIn)
+         : DgRF<DgQ2DDCoord, long double>(networkIn, nameIn) { }
 
 };
 
@@ -330,8 +335,9 @@ class DgVertex2DDRF : public DgRF<DgVertex2DDCoord, long double> {
 
    public:
 
-      DgVertex2DDRF (DgRFNetwork& networkIn, const string& nameIn)
-         : DgRF<DgVertex2DDCoord, long double> (networkIn, nameIn) { }
+      static DgVertex2DDRF* makeRF (DgRFNetwork& networkIn, 
+                const string& nameIn = "DgVertex2DDRF")
+         { return new DgVertex2DDRF(networkIn, nameIn); }
 
       //virtual DgLocVector& convert (DgLocVector& vec) const;
 
@@ -369,6 +375,11 @@ class DgVertex2DDRF : public DgRF<DgVertex2DDCoord, long double> {
 
       static const DgVertTriVals& triTable (int triNum)
                        { return triTable_[triNum]; }
+
+   protected:
+
+      DgVertex2DDRF (DgRFNetwork& networkIn, const string& nameIn)
+         : DgRF<DgVertex2DDCoord, long double> (networkIn, nameIn) { }
 
    private:
 
@@ -526,11 +537,17 @@ class DgPlaneTriRF : public DgContCartRF {
 
    public:
 
+      static DgPlaneTriRF* makeRF (DgRFNetwork& networkIn, const string& nameIn = "PlaneTri",
+                    const DgIcosaMap& icosaMapIn = DgIcosaMap::defIcosaMap)
+      { return new DgPlaneTriRF(networkIn, nameIn, DgIcosaMap::defIcosaMap); }
+
+      const DgIcosaMap& icosaMap (void) const { return icosaMap_; }
+
+   protected:
+
       DgPlaneTriRF (DgRFNetwork& networkIn, const string& nameIn = "PlaneTri",
                     const DgIcosaMap& icosaMapIn = DgIcosaMap::defIcosaMap)
          : DgContCartRF(networkIn, nameIn), icosaMap_ (icosaMapIn) { }
-
-      const DgIcosaMap& icosaMap (void) const { return icosaMap_; }
 
    private:
 
@@ -608,8 +625,8 @@ class DgInterleaveRF : public DgRF<DgInterleaveCoord, long long int> {
 
    public:
 
-      DgInterleaveRF (DgRFNetwork& networkIn, const string& nameIn)
-         : DgRF<DgInterleaveCoord, long long int>(networkIn, nameIn) { }
+      static DgInterleaveRF* makeRF (DgRFNetwork& networkIn, const string& nameIn)
+         { return new DgInterleaveRF (networkIn, nameIn); }
 
       virtual long long int dist (const DgInterleaveCoord& add1, 
                         const DgInterleaveCoord& add2) const 
@@ -636,6 +653,11 @@ class DgInterleaveRF : public DgRF<DgInterleaveCoord, long long int> {
 
       virtual const DgInterleaveCoord& undefAddress (void) const
                        { static DgInterleaveCoord undef; return undef; }
+
+   protected:
+
+      DgInterleaveRF (DgRFNetwork& networkIn, const string& nameIn)
+         : DgRF<DgInterleaveCoord, long long int>(networkIn, nameIn) { }
 
 };
 

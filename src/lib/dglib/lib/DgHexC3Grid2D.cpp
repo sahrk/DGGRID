@@ -52,13 +52,13 @@ DgHexC3Grid2D::DgHexC3Grid2D (DgRFNetwork& networkIn,
       rotDegs *= -30.0L;
 
    Dg2WayContAffineConverter(backFrame(), *surCCRF, 1.0L, rotDegs);
-   surrogate_ = new DgHexC1Grid2D(network(), *surCCRF, nameIn + string("Sur"));
+   surrogate_ = DgHexC1Grid2D::makeRF(network(), *surCCRF, nameIn + string("Sur"));
 */
    Dg2WayContAffineConverter(backFrame(), *surCCRF, 1.0L, rotDegs);
    if (isClassI)
-      surrogate_ = new DgHexC1Grid2D(network(), *surCCRF, nameIn + string("Sur"));
+      surrogate_ = DgHexC1Grid2D::makeRF(network(), *surCCRF, nameIn + string("Sur"));
    else
-      surrogate_ = new DgHexC2Grid2D(network(), *surCCRF, nameIn + string("Sur"));
+      surrogate_ = DgHexC2Grid2D::makeRF(network(), *surCCRF, nameIn + string("Sur"));
 
    // create the substrate hex grid: a class I hex grid one aperture 7 resolution
    // finer (or an aperture 3 + 7 if Class II)
@@ -70,7 +70,7 @@ DgHexC3Grid2D::DgHexC3Grid2D (DgRFNetwork& networkIn,
       scaleFac *= M_SQRT3;
 
    Dg2WayContAffineConverter(backFrame(), *subCCRF, scaleFac);
-   substrate_ = new DgHexC1Grid2D(network(), *subCCRF, nameIn + string("Sub"));
+   substrate_ = DgHexC1Grid2D::makeRF(network(), *subCCRF, nameIn + string("Sub"));
 
    // connect the surrogate to the substrate
    vector<const DgConverterBase*> sc;

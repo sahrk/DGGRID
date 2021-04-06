@@ -85,7 +85,7 @@ DgSqrD4Grid2DS::DgSqrD4Grid2DS (DgRFNetwork& networkIn,
 
       Dg2WayContAffineConverter(backFrame(), *ccRF, (long double) fac, 0.0, trans); 
 
-      (*grids_)[i] = new DgSqrD4Grid2D(network(), *ccRF, newName);
+      (*grids_)[i] = DgSqrD4Grid2D::makeRF(network(), *ccRF, newName);
       Dg2WayResAddConverter<DgIVec2D, DgDVec2D, long double>(*this, *(grids()[i]), i);
 
       fac *= radix();
@@ -219,8 +219,8 @@ DgSqrD4Grid2DS::setAddBoundaryChildren (const DgResAdd<DgIVec2D>& add,
 
       // D8 neighbors is what we want
 
-      DgSqrD8Grid2D d8(network(), grids()[add.res() + 1]->backFrame(), 
-                       "dummyD8");
+      DgSqrD8Grid2D& d8 = (* DgSqrD8Grid2D::makeRF(network(), grids()[add.res() + 1]->backFrame(), 
+                       "dummyD8"));
       d8.convert(tmpLoc);
       d8.setNeighbors(*tmpLoc, vec);
 

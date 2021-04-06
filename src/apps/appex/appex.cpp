@@ -38,8 +38,9 @@ int main (int argc, char* argv[])
    DgRFNetwork net0;
 
    // create the geodetic reference frame
-   // reference frames must be created dynamically using new or makeRF
-   DgGeoSphRF* geoRFptr = new DgGeoSphRF(net0, "GS0");
+   // reference frames must be created dynamically using makeRF
+   // they will be deleted by the Network
+   DgGeoSphRF* geoRFptr = DgGeoSphRF::makeRF(net0, "GS0");
    DgGeoSphRF& geoRF = *geoRFptr;
 
    // create the ISEA4H grid system with resolutions 0-9; requires a

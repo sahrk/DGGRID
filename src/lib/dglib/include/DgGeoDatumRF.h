@@ -34,11 +34,6 @@ template <class A, class D> class DgGeoDatumRF : public DgRF<A, D> {
 
    public:
 
-      DgGeoDatumRF (DgRFNetwork& networkIn, const string& nameIn)
-         : DgRF<A, D> (networkIn, nameIn) { }
-
-      DgGeoDatumRF (const DgGeoDatumRF& rf) : DgRF<A, D> (rf) { }
-
       DgGeoDatumRF& operator= (const DgGeoDatumRF& rf)
           { DgRF<A, D>::operator=(rf); return *this; }
 
@@ -57,6 +52,13 @@ template <class A, class D> class DgGeoDatumRF : public DgRF<A, D> {
       virtual unsigned long long int dist2int (const D& dist) const = 0;
 
       virtual const A& undefAddress (void) const = 0;
+
+   protected:
+
+      DgGeoDatumRF (DgRFNetwork& networkIn, const string& nameIn)
+         : DgRF<A, D> (networkIn, nameIn) { }
+
+      DgGeoDatumRF (const DgGeoDatumRF& rf) : DgRF<A, D> (rf) { }
 
 };
 

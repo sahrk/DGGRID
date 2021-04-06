@@ -36,20 +36,9 @@ class DgGeoSphRF : public DgEllipsoidRF {
 
    public:
 
-      DgGeoSphRF (DgRFNetwork& networkIn, const string& nameIn = "GeodeticSph",
+      static DgGeoSphRF* makeRF (DgRFNetwork& networkIn, const string& nameIn = "GeodeticSph",
                   long double earthRadiusKMin = DEFAULT_RADIUS_KM)
-         : DgEllipsoidRF (networkIn, nameIn, earthRadiusKMin * 1000L,
-                earthRadiusKMin * 1000L) 
-           { 
-              earthRadiusKM_ = earthRadiusKMin; 
-              icosaEdgeRads_ = M_ATAN2;
-              icosaEdgeDegs_ = icosaEdgeRads_ * M_180_PI;
-              icosaEdgeKM_ = icosaEdgeRads_ * earthRadiusKM_;
-              totalAreaKM_ = 4.0L * M_PI * earthRadiusKM_ * earthRadiusKM_;
-           }
-
-      DgGeoSphRF (const DgGeoSphRF& rf) 
-         : DgEllipsoidRF(rf) { /* earthRadius_ = rf.earthRadius(); */ }
+         { return new DgGeoSphRF (networkIn, nameIn, earthRadiusKMin); }
 
       DgGeoSphRF& operator= (const DgGeoSphRF& rf)
          { DgEllipsoidRF::operator=(rf); 
@@ -93,6 +82,23 @@ class DgGeoSphRF : public DgEllipsoidRF {
       // densify polygon in geodetic coordinates
       static void densify (DgPolygon& p, long double maxDist, bool rads = true);
 
+   protected:
+
+      DgGeoSphRF (DgRFNetwork& networkIn, const string& nameIn = "GeodeticSph",
+                  long double earthRadiusKMin = DEFAULT_RADIUS_KM)
+         : DgEllipsoidRF (networkIn, nameIn, earthRadiusKMin * 1000L,
+                earthRadiusKMin * 1000L) 
+           { 
+              earthRadiusKM_ = earthRadiusKMin; 
+              icosaEdgeRads_ = M_ATAN2;
+              icosaEdgeDegs_ = icosaEdgeRads_ * M_180_PI;
+              icosaEdgeKM_ = icosaEdgeRads_ * earthRadiusKM_;
+              totalAreaKM_ = 4.0L * M_PI * earthRadiusKM_ * earthRadiusKM_;
+           }
+
+      DgGeoSphRF (const DgGeoSphRF& rf) 
+         : DgEllipsoidRF(rf) { /* earthRadius_ = rf.earthRadius(); */ }
+
    private:
 
       static long double earthRadiusKM_;  // earth radius in km
@@ -108,12 +114,16 @@ class DgGeoSphDegRF : public DgContCartRF {
 
    public:
 
-      DgGeoSphDegRF (const DgGeoSphRF& geoRFin, 
-                     const string& nameIn = "GeodeticSphDeg");
+      static DgGeoSphDegRF* makeRF(const DgGeoSphRF& geoRFin, 
+                     const string& nameIn = "GeodeticSphDeg")
+         { return new DgGeoSphDegRF(geoRFin, nameIn); }
 
       const DgGeoSphRF& geoRF (void) const { return geoRF_; }
 
    protected:
+
+      DgGeoSphDegRF (const DgGeoSphRF& geoRFin, 
+                     const string& nameIn = "GeodeticSphDeg");
 
       const DgGeoSphRF& geoRF_;
 };

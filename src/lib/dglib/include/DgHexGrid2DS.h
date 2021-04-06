@@ -40,20 +40,22 @@ class DgHexGrid2DS : public DgDiscRFS2D {
 
    public:
 
-      DgHexGrid2DS (DgRFNetwork& networkIn,
+      static DgHexGrid2DS* makeRF (DgRFNetwork& networkIn,
                const DgRF<DgDVec2D, long double>& backFrameIn, int nRes = 1,
                const DgApSeq& apSeq = DgApSeq::defaultApSeq, 
-               const string& nameIn = "H2DS");
+               const string& nameIn = "H2DS")
+         { return new DgHexGrid2DS (networkIn, backFrameIn, nRes, apSeq, nameIn); }
 
-      DgHexGrid2DS (DgRFNetwork& network, 
+      static DgHexGrid2DS* makeRF (DgRFNetwork& network, 
                  const DgRF<DgDVec2D, long double>& backFrame,
                  int nRes = 1, unsigned int aperture = 4, 
                  bool isCongruent = true, bool isAligned = false,
                  const string& name = "H2DS", bool isMixed43 = false,
                  int numAp4 = 0, bool isSuperfund = false, bool isApSeq = false,
-                 const DgApSeq& apSeq = DgApSeq::defaultApSeq);
-
-      DgHexGrid2DS (const DgHexGrid2DS& rf);
+                 const DgApSeq& apSeq = DgApSeq::defaultApSeq)
+         { return new DgHexGrid2DS (network, backFrame, nRes, aperture, 
+                 isCongruent, isAligned, name, isMixed43, numAp4, isSuperfund, 
+                 isApSeq, apSeq); }
 
      ~DgHexGrid2DS (void);
 
@@ -70,6 +72,21 @@ class DgHexGrid2DS : public DgDiscRFS2D {
       bool     isApSeq     (void) const { return isApSeq_; }
 
    protected:
+
+      DgHexGrid2DS (DgRFNetwork& networkIn,
+               const DgRF<DgDVec2D, long double>& backFrameIn, int nRes = 1,
+               const DgApSeq& apSeq = DgApSeq::defaultApSeq, 
+               const string& nameIn = "H2DS");
+
+      DgHexGrid2DS (DgRFNetwork& network, 
+                 const DgRF<DgDVec2D, long double>& backFrame,
+                 int nRes = 1, unsigned int aperture = 4, 
+                 bool isCongruent = true, bool isAligned = false,
+                 const string& name = "H2DS", bool isMixed43 = false,
+                 int numAp4 = 0, bool isSuperfund = false, bool isApSeq = false,
+                 const DgApSeq& apSeq = DgApSeq::defaultApSeq);
+
+      DgHexGrid2DS (const DgHexGrid2DS& rf);
 
       //long double frequency_;
 

@@ -5,10 +5,11 @@ All changes are by Kevin Sahr, unless otherwise noted.
 
 ## [7.2] - 2021-04-06
 ### Fixed
-- lots and lots of memory leaks
+- lots of memory leaks
 ### Added
 - doexamplesNoGDAL.sh shell script in examples for users who built DGGRID without GDAL
 ### Changed
+- all RF's can now only be created using factory methods name makeRF
 - reduced precision on several examples so that the output would match on a wider range of platforms
 
 ## [7.101] - 2021-03-20

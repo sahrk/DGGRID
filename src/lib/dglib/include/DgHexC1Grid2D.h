@@ -43,14 +43,10 @@ class DgHexC1Grid2D : public DgDiscRF2D {
 
    public:
 
-      DgHexC1Grid2D (DgRFNetwork& networkIn, 
+      static DgHexC1Grid2D* makeRF (DgRFNetwork& networkIn, 
                      const DgRF<DgDVec2D, long double>& ccFrameIn,
                      const string& nameIn = "HexC12D")
-         : DgDiscRF2D (networkIn, ccFrameIn, nameIn, Hexagon, D6,
-               M_1_SQRT3, M_1_SQRT3, M_SQRT3_2, 1.0L)
-           { area_ = c(); }
-
-      DgHexC1Grid2D (const DgHexC1Grid2D& grd) : DgDiscRF2D (grd) {}
+         { return new DgHexC1Grid2D (networkIn, ccFrameIn, nameIn); }
 
       DgHexC1Grid2D& operator= (const DgHexC1Grid2D& grd)
            { DgDiscRF2D::operator=(grd); return *this; }
@@ -77,6 +73,15 @@ class DgHexC1Grid2D : public DgDiscRF2D {
       }
 
    protected:
+
+      DgHexC1Grid2D (DgRFNetwork& networkIn, 
+                     const DgRF<DgDVec2D, long double>& ccFrameIn,
+                     const string& nameIn = "HexC12D")
+         : DgDiscRF2D (networkIn, ccFrameIn, nameIn, Hexagon, D6,
+               M_1_SQRT3, M_1_SQRT3, M_SQRT3_2, 1.0L)
+           { area_ = c(); }
+
+      DgHexC1Grid2D (const DgHexC1Grid2D& grd) : DgDiscRF2D (grd) {}
 
       static const long double sin60_;
 

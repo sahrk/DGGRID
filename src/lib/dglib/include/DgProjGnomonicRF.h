@@ -41,12 +41,14 @@ class DgProjGnomonicRF : public DgGeoProjRF {
 
    public:
 
-      DgProjGnomonicRF (DgRFNetwork& networkIn, 
+      static DgProjGnomonicRF* makeRF (DgRFNetwork& networkIn, 
                       const string& nameIn = "GnomonicRF",
                       const DgGeoCoord& proj0In = DgGeoCoord(M_ZERO, M_ZERO),
                       long double x0In = M_ZERO, long double y0In = M_ZERO,
                       long double k0In = M_ONE, long double to_meterIn = M_ONE,
-                      long double fr_meterIn = M_ONE);
+                      long double fr_meterIn = M_ONE)
+         { return new DgProjGnomonicRF (networkIn, nameIn, proj0In, x0In, y0In, 
+                            k0In, to_meterIn, fr_meterIn); }
 
       // pure virtual methods
 
@@ -57,6 +59,13 @@ class DgProjGnomonicRF : public DgGeoProjRF {
                                       const DgEllipsoidRF& e) const;
 
    protected:
+
+      DgProjGnomonicRF (DgRFNetwork& networkIn, 
+                      const string& nameIn = "GnomonicRF",
+                      const DgGeoCoord& proj0In = DgGeoCoord(M_ZERO, M_ZERO),
+                      long double x0In = M_ZERO, long double y0In = M_ZERO,
+                      long double k0In = M_ONE, long double to_meterIn = M_ONE,
+                      long double fr_meterIn = M_ONE);
 
       long double sinph0_;
       long double cosph0_;

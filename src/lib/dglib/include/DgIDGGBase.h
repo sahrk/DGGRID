@@ -45,13 +45,12 @@ class DgIDGGBase : public DgDiscRF<DgQ2DICoord, DgGeoCoord, long double> {
 
    public:
 
-      DgIDGGBase (const DgIDGGSBase* dggs, const DgGeoSphRF& geoRFIn, 
+      static DgIDGGBase* makeRF (const DgIDGGSBase* dggs, const DgGeoSphRF& geoRFIn, 
                   unsigned int apertureIn, int resIn, const string& nameIn = "IDGG", 
-                  DgGridTopology gridTopo = Hexagon,
-                  DgGridMetric gridMetric = D6,
-                  unsigned int precisionIn = DEFAULT_PRECISION);
-
-      DgIDGGBase (const DgIDGGBase& grd);
+                  DgGridTopology gridTopo = Hexagon, DgGridMetric gridMetric = D6,
+                  unsigned int precisionIn = DEFAULT_PRECISION)
+         { return new DgIDGGBase (dggs, geoRFIn, apertureIn, resIn, nameIn, 
+                  gridTopo, gridMetric, precisionIn); }
 
       virtual ~DgIDGGBase();
 
@@ -155,6 +154,13 @@ class DgIDGGBase : public DgDiscRF<DgQ2DICoord, DgGeoCoord, long double> {
                        { return edgeTable_[quadNum]; }
 
    protected:
+
+      DgIDGGBase (const DgIDGGSBase* dggs, const DgGeoSphRF& geoRFIn, 
+                  unsigned int apertureIn, int resIn, const string& nameIn = "IDGG", 
+                  DgGridTopology gridTopo = Hexagon, DgGridMetric gridMetric = D6,
+                  unsigned int precisionIn = DEFAULT_PRECISION);
+
+      DgIDGGBase (const DgIDGGBase& grd);
 
       virtual void createConverters (void);
 
