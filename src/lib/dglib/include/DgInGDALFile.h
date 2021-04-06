@@ -46,6 +46,8 @@ public:
     DgInGDALFile (const DgRFBase& rfIn, const string* fileNameIn = NULL,
                    DgReportLevel failLevel = DgBase::Fatal);
 
+   ~DgInGDALFile (void);
+
     bool forcePolyLine (void) const { return forcePolyLine_; }
     bool forceCells    (void) const { return forceCells_; }
 

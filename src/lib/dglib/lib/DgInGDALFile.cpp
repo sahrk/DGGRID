@@ -43,7 +43,7 @@ DgInGDALFile::DgInGDALFile (const DgRFBase& rfIn, const string* fileNameIn,
                               DgReportLevel failLevel)
     : DgInLocTextFile (rfIn, fileNameIn, false, failLevel),
       forcePolyLine_ (false), forceCells_ (false),
-      gdalDataset_ (NULL), oFeature_ (NULL), 
+      gdalDataset_ (NULL), oFeature_ (NULL),
       insideMultiPoly_ (false), multiPolyIndex_ (0), numMultiPolyGeometries_ (0)
 {
    // test for override of vecAddress
@@ -53,6 +53,8 @@ DgInGDALFile::DgInGDALFile (const DgRFBase& rfIn, const string* fileNameIn,
              " must override the vecAddress() method", DgBase::Fatal);
    delete dummy;
 
+   GDALAllRegister();
+
     gdalDataset_ = (GDALDataset*) GDALOpenEx(fileName().c_str(), 
                                         GDAL_OF_VECTOR, NULL, NULL, NULL);
     if (gdalDataset_ == NULL) {
@@ -60,6 +62,13 @@ DgInGDALFile::DgInGDALFile (const DgRFBase& rfIn, const string* fileNameIn,
     }
 
 } // DgInGDALFile::DgInGDALFile
+
+////////////////////////////////////////////////////////////////////////////////
+DgInGDALFile::~DgInGDALFile (void)
+{
+   if (oFeature_) OGRFeature::DestroyFeature(oFeature_);
+
+} // DgInGDALFile::~DgInGDALFile
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -102,6 +111,8 @@ DgInGDALFile::extract (DgPolygon& poly)
            return *this;
        }
 */
+       if (oFeature_) OGRFeature::DestroyFeature(oFeature_);
+
        if ((oFeature_ = oLayer->GetNextFeature()) == NULL) {
            setstate(ios_base::eofbit);
            return *this;
@@ -152,8 +163,6 @@ DgInGDALFile::extract (DgPolygon& poly)
         poly.addressVec().push_back(add);
     }
    
-    //if (oFeature_) OGRFeature::DestroyFeature(oFeature_);
-
     // remove the duplicate first/last vertex
     DgAddressBase* lastPt = *(poly.addressVec().end() - 1);
     poly.addressVec().erase(poly.addressVec().end() - 1);
