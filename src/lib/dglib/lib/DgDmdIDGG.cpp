@@ -106,7 +106,7 @@ DgDmdIDGG::initialize (void)
 
    // set-up local network to scale so that quad (and consequently dmd) edge 
    // length is 1.0
-   ccFrame_ = new DgContCartRF(locNet_, name() + "CC1");
+   ccFrame_ = DgContCartRF::makeRF(locNet_, name() + "CC1");
    if (gridMetric() == D4)
       grid2DS_ = new DgDmdD4Grid2DS(locNet_, ccFrame(), res() + 1, 4, true, false, name() + string("D4H2DS"));
    else // must be D8

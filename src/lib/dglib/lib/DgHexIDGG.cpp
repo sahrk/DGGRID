@@ -135,7 +135,7 @@ DgHexIDGG::initialize (void)
 
    // set-up local network to scale so that quad (and consequently tri) edge 
    // length is 1.0
-   ccFrame_ = new DgContCartRF(locNet_, name() + "CC1");
+   ccFrame_ = DgContCartRF::makeRF(locNet_, name() + "CC1");
    grid2DS_ = new DgHexGrid2DS(locNet_, ccFrame(), allocRes() + 1, hexDggs().apSeq(),
         name() + string("H2DS"));
    //cout << "== NEW GRID2DS:" << endl;

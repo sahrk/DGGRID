@@ -35,13 +35,9 @@ class DgContCartRF : public DgRF<DgDVec2D, long double> {
 
    public:
 
-      DgContCartRF (DgRFNetwork& networkIn, const string& nameIn = "ContCart")
-         : DgRF<DgDVec2D, long double> (networkIn, nameIn) 
-           { setUndefLoc(makeLocation(undefAddress())); }
-
-      DgContCartRF (const DgContCartRF& rf)
-         : DgRF<DgDVec2D, long double>(rf) 
-           { setUndefLoc(makeLocation(undefAddress())); }
+      static DgContCartRF* makeRF (DgRFNetwork& networkIn, 
+                const string& nameIn = "ContCart") 
+      { return new DgContCartRF(networkIn, nameIn); }
 
       DgContCartRF& operator= (const DgContCartRF& rf)
          { DgRF<DgDVec2D, long double>::operator=(rf); return *this; }
@@ -88,6 +84,15 @@ class DgContCartRF : public DgRF<DgDVec2D, long double> {
       virtual DgDVec2D getVecLocation (const DgLocation& loc) const
                     { return *getAddress(loc); }
 
+   protected:
+
+      DgContCartRF (DgRFNetwork& networkIn, const string& nameIn = "ContCart")
+         : DgRF<DgDVec2D, long double> (networkIn, nameIn) 
+           { setUndefLoc(makeLocation(undefAddress())); }
+
+      DgContCartRF (const DgContCartRF& rf)
+         : DgRF<DgDVec2D, long double>(rf) 
+           { setUndefLoc(makeLocation(undefAddress())); }
 };
 
 ////////////////////////////////////////////////////////////////////////////////

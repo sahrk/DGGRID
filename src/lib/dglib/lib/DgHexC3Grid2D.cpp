@@ -44,7 +44,7 @@ DgHexC3Grid2D::DgHexC3Grid2D (DgRFNetwork& networkIn,
 
    // create the surrogate hex grid: a class I/II hex grid rotated ap7 degrees
 
-   DgContCartRF* surCCRF = new DgContCartRF(network(), nameIn + string("SurBF"));
+   DgContCartRF* surCCRF = DgContCartRF::makeRF(network(), nameIn + string("SurBF"));
 
    long double rotDegs = -M_AP7_ROT_DEGS;
 /*
@@ -63,7 +63,7 @@ DgHexC3Grid2D::DgHexC3Grid2D (DgRFNetwork& networkIn,
    // create the substrate hex grid: a class I hex grid one aperture 7 resolution
    // finer (or an aperture 3 + 7 if Class II)
 
-   DgContCartRF* subCCRF = new DgContCartRF(network(), nameIn + string("SubBF"));
+   DgContCartRF* subCCRF = DgContCartRF::makeRF(network(), nameIn + string("SubBF"));
 
    long double scaleFac = M_SQRT7;
    if (!isClassI)
