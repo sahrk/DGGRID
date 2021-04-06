@@ -31,5 +31,5 @@ neighbor_output_file_name outputfiles/mixed
 children_output_type TEXT
 children_output_file_name outputfiles/mixed
 densification 0
-precision 6
+precision 5
 verbosity 0

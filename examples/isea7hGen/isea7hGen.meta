@@ -27,4 +27,4 @@ point_output_file_name outputfiles/isea7h3p
 kml_default_width 2
 kml_default_color ff0000ff
 densification 3
-precision 6
+precision 5

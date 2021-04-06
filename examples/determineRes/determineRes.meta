@@ -24,3 +24,4 @@ clip_subset_type WHOLE_EARTH
 cell_output_type KML
 cell_output_file_name outputfiles/earth120k
 densification 1
+precision 6

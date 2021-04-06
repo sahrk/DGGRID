@@ -27,3 +27,4 @@ kml_name ISEA4D
 kml_description www.discreteglobalgrids.org
 kml_default_width 6
 densification 0
+precision 6
