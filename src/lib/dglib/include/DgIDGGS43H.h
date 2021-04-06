@@ -36,6 +36,21 @@ class DgIDGGS43H : public DgHexIDGGS {
 
    public:
 
+      static DgIDGGS43H* makeRF (DgRFNetwork& networkIn, const DgGeoSphRF& backFrameIn,
+             const DgGeoCoord& vert0, long double azDegs, int nResIn = 1,
+             const string& nameIn = "ISEA43H", const string& projType = "ISEA",
+             int numAp4 = 0, bool isSuperfund = false)
+         { return new DgIDGGS43H(networkIn, backFrameIn, vert0, azDegs, nResIn,
+                                             nameIn, projType, numAp4, isSuperfund); }
+
+     ~DgIDGGS43H (void);
+
+      DgIDGGS43H& operator= (const DgIDGGS43H& rf);
+
+      long double frequency   (void) const { return frequency_; }
+
+   protected:
+
       DgIDGGS43H (DgRFNetwork& networkIn, const DgGeoSphRF& backFrameIn,
              const DgGeoCoord& vert0, long double azDegs, int nResIn = 1,
              const string& nameIn = "ISEA43H", const string& projType = "ISEA",
@@ -46,14 +61,6 @@ class DgIDGGS43H : public DgHexIDGGS {
          { frequency_ = sqrtl(aperture()); }
 
       DgIDGGS43H (const DgIDGGS43H& rf);
-
-     ~DgIDGGS43H (void);
-
-      DgIDGGS43H& operator= (const DgIDGGS43H& rf);
-
-      long double frequency   (void) const { return frequency_; }
-
-   protected:
 
       long double frequency_;
 

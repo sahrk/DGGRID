@@ -48,9 +48,9 @@ int main (int argc, char* argv[])
    DgGeoCoord vert0(11.25L, 58.28252559L, false); // args: lon, lat, isRadians
    long double azimuth = 0.0L;
 
+   // all DGGS's must be created using a factory makeRF method
    // the DGGS is memory managed by the DgRFNetwork
-   const DgIDGGS4H* idggsPtr = new DgIDGGS4H(net0, geoRF, vert0, azimuth, 10); 
-
+   const DgIDGGS4H* idggsPtr = DgIDGGS4H::makeRF(net0, geoRF, vert0, azimuth, 10); 
    const DgIDGGS4H& idggs = *idggsPtr;
 
    // get the resolution 7 dgg from the dggs

@@ -66,7 +66,7 @@ DgIDGGS::makeRF (DgRFNetwork& network, const DgGeoSphRF& backFrame,
             theName = projTypeIn + string("43H");
       }
 
-      dg0 = new DgHexIDGGS(network, backFrame, vert0, azDegs, apertureIn, nRes,
+      dg0 = DgHexIDGGS::makeRF(network, backFrame, vert0, azDegs, apertureIn, nRes,
               theName, projTypeIn, apSeqIn, isApSeqIn, isMixed43In, numAp4In, isSuperfundIn);
    } else if (gridTopo == Diamond) {
 
@@ -81,12 +81,12 @@ DgIDGGS::makeRF (DgRFNetwork& network, const DgGeoSphRF& backFrame,
 //cout << " makeRF isD4: " << ((isD4) ? "true" : "false") << endl;
 
       if (defaultName) theName = projTypeIn + nameSuffix;
-      dg0 = new DgIDGGS4D(network, backFrame, vert0, azDegs, nRes, 
+      dg0 = DgIDGGS4D::makeRF(network, backFrame, vert0, azDegs, nRes, 
                        theName, projTypeIn, gridMetric);
    } else if (gridTopo == Triangle) {
       if (apertureIn == 4) {
          if (defaultName) theName = projTypeIn + string("4T");
-         dg0 = new DgIDGGS4T(network, backFrame, vert0, azDegs, nRes, 
+         dg0 = DgIDGGS4T::makeRF(network, backFrame, vert0, azDegs, nRes, 
                        theName, projTypeIn);
       } else
             report(apErrStr, DgBase::Fatal);
@@ -126,10 +126,10 @@ DgIDGGS::DgIDGGS (DgRFNetwork& network, const DgGeoSphRF& backFrame,
    } else {
       for (int i = 0; i < nRes; i++) {
          if (!isSuperfund)
-            (*grids_)[i] = new DgIDGG(this, backFrame, vert0, azDegs, aperture, i,
+            (*grids_)[i] = DgIDGG::makeRF(this, backFrame, vert0, azDegs, aperture, i,
                "DDG", gridTopo, gridMetric, projType, isMixed43, numAp4, isSuperfund);
          else
-            (*grids_)[i] = new DgIDGG(this, backFrame, vert0, azDegs, aperture, i,
+            (*grids_)[i] = DgIDGG::makeRF(this, backFrame, vert0, azDegs, aperture, i,
                "DDG", gridTopo, gridMetric, projType, isMixed43, numAp4, isSuperfund,
                actualRes2sfRes(i));
 

@@ -40,7 +40,7 @@ DgIDGGSBase::makeRF (DgRFNetwork& network, const DgGeoSphRF& backFrame,
    const DgIDGGSBase* dg0 = NULL;
 
    if (gridTopo == Hexagon) 
-      dg0 = new DgHexIDGGS(network, backFrame, vert0, azDegs, apertureIn, nResIn,
+      dg0 = DgHexIDGGS::makeRF(network, backFrame, vert0, azDegs, apertureIn, nResIn,
             name, projTypeIn, apSeqIn, isApSeqIn, isMixed43In, numAp4In, 
             isSuperfundIn); 
    else

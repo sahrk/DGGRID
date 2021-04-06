@@ -37,11 +37,11 @@ class DgIDGGS4T : public DgIDGGS {
 
    public:
 
-      DgIDGGS4T (DgRFNetwork& networkIn, const DgGeoSphRF& backFrameIn,
+      static DgIDGGS4T* makeRF (DgRFNetwork& networkIn, const DgGeoSphRF& backFrameIn,
                const DgGeoCoord& vert0, long double azDegs, int nResIn = 1,
-               const string& nameIn = "ISEA4T", const string& projType = "ISEA");
-
-      DgIDGGS4T (const DgIDGGS4T& rf);
+               const string& nameIn = "ISEA4T", const string& projType = "ISEA")
+         { return new DgIDGGS4T(networkIn, backFrameIn, vert0, azDegs, nResIn,
+                                    nameIn, projType); }
 
      ~DgIDGGS4T (void);
 
@@ -53,6 +53,12 @@ class DgIDGGS4T : public DgIDGGS {
 
 
    protected:
+
+      DgIDGGS4T (DgRFNetwork& networkIn, const DgGeoSphRF& backFrameIn,
+               const DgGeoCoord& vert0, long double azDegs, int nResIn = 1,
+               const string& nameIn = "ISEA4T", const string& projType = "ISEA");
+
+      DgIDGGS4T (const DgIDGGS4T& rf);
 
       // pure virtual functions from DgDiscRFS
 

@@ -39,16 +39,13 @@ class DgHexIDGGS : public DgIDGGS {
 
    public:
 
-      DgHexIDGGS (DgRFNetwork& network, 
-               const DgGeoSphRF& backFrame,
-               const DgGeoCoord& vert0,
-               long double azDegs, unsigned int aperture = 4, int nRes = 1,
-               const string& name = "IDGGS", 
-               const string& projType = "ISEA", 
-               const DgApSeq& apSeq = DgApSeq::defaultApSeq,
-               bool isApSeq = false,
-               bool isMixed43 = false, int numAp4 = 0,
-               bool isSuperfund = false);
+      static DgHexIDGGS* makeRF (DgRFNetwork& network, const DgGeoSphRF& backFrame,
+               const DgGeoCoord& vert0, long double azDegs, unsigned int aperture = 4, 
+               int nRes = 1, const string& name = "IDGGS", const string& projType = "ISEA", 
+               const DgApSeq& apSeq = DgApSeq::defaultApSeq, bool isApSeq = false,
+               bool isMixed43 = false, int numAp4 = 0, bool isSuperfund = false)
+         { return new DgHexIDGGS(network, backFrame, vert0, azDegs, aperture, nRes, name, 
+               projType, apSeq, isApSeq, isMixed43, numAp4, isSuperfund); }
 
       // copy constructor and operator= not implemented
 
@@ -58,6 +55,12 @@ class DgHexIDGGS : public DgIDGGS {
       const DgApSeq& apSeq (void) const { return apSeq_; }
 
    protected:
+
+      DgHexIDGGS (DgRFNetwork& network, const DgGeoSphRF& backFrame, const DgGeoCoord& vert0,
+               long double azDegs, unsigned int aperture = 4, int nRes = 1,
+               const string& name = "IDGGS", const string& projType = "ISEA", 
+               const DgApSeq& apSeq = DgApSeq::defaultApSeq, bool isApSeq = false,
+               bool isMixed43 = false, int numAp4 = 0, bool isSuperfund = false);
 
       // pure virtual functions remaining from above
 
