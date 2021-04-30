@@ -1,3 +1,0 @@
-[submodule "submodule/shapelib"]
-	path = submodule/shapelib
-	url = https://github.com/r-barnes/shapelib.git
