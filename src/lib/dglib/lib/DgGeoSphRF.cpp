@@ -25,10 +25,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "DgGeoSphRF.h"
-#include "DgIDGG.h"
-#include "DgConstants.h"
-#include "DgPolygon.h"
+#include <dglib/DgGeoSphRF.h>
+#include <dglib/DgIDGG.h>
+#include <dglib/DgConstants.h>
+#include <dglib/DgPolygon.h>
 
 // these are initialized here but will get set again when the datum is created
 long double DgGeoSphRF::earthRadiusKM_ = DEFAULT_RADIUS_KM;

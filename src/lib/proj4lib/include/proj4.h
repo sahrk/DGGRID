@@ -7,8 +7,8 @@
 #ifndef PROJ4_H
 #define PROJ4_H
 
+#include <math.h>
 #include <stdlib.h>
-#include "DgUtil.h"
 /*
 #ifdef __cplusplus
 extern "C" {

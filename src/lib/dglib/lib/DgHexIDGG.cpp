@@ -29,12 +29,12 @@
 #include <climits>
 #include <cfloat>
 
-#include "DgHexIDGG.h"
-#include "DgHexIDGGS.h"
-#include "DgHexGrid2DS.h"
-#include "DgSeriesConverter.h"
-#include "DgRadixString.h"
-#include "DgBoundedIDGG.h"
+#include <dglib/DgHexIDGG.h>
+#include <dglib/DgHexIDGGS.h>
+#include <dglib/DgHexGrid2DS.h>
+#include <dglib/DgSeriesConverter.h>
+#include <dglib/DgRadixString.h>
+#include <dglib/DgBoundedIDGG.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

@@ -26,10 +26,10 @@
 
 using namespace std;
 
-#include "DgConstants.h"
+#include <dglib/DgConstants.h>
 #include "dggrid.h"
-#include "DgProjGnomonicRF.h"
-#include "DgGeoProjConverter.h"
+#include <dglib/DgProjGnomonicRF.h>
+#include <dglib/DgGeoProjConverter.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

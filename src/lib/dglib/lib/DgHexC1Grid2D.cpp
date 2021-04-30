@@ -27,8 +27,8 @@
 
 #include <cmath>
 
-#include "DgHexC1Grid2D.h"
-#include "DgPolygon.h"
+#include <dglib/DgHexC1Grid2D.h>
+#include <dglib/DgPolygon.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 void

@@ -22,18 +22,18 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include <dglib/DgBoundedHexC2RF2D.h>
+#include <dglib/DgDiscRF.h>
+
 #include <climits>
 
-#include "DgBoundedHexC2RF2D.h"
-#include "DgDiscRF.h"
-
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-DgBoundedHexC2RF2D::DgBoundedHexC2RF2D 
-           (const DgDiscRF<DgIVec2D, DgDVec2D, long double>& rf, 
+DgBoundedHexC2RF2D::DgBoundedHexC2RF2D
+           (const DgDiscRF<DgIVec2D, DgDVec2D, long double>& rf,
             const DgIVec2D& lowerLeft, const DgIVec2D& upperRight)
-   : DgBoundedRF2D (rf, lowerLeft, upperRight) 
-{ 
+   : DgBoundedRF2D (rf, lowerLeft, upperRight)
+{
    DgIVec2D magVec = upperRight - lowerLeft + DgIVec2D(1, 1);
 
    size_ = magVec.i() / 3 * magVec.j();
@@ -44,7 +44,7 @@ DgBoundedHexC2RF2D::DgBoundedHexC2RF2D
        validSize_ = false;
    }
    else validSize_ = true;
-  
+
    setLastAdd(addFromSeqNum(size() - 1));
 
 } // DgBoundedHexC2RF2D::DgBoundedHexC2RF2D
@@ -81,7 +81,7 @@ DgIVec2D&
 DgBoundedHexC2RF2D::decrementAddress (DgIVec2D& add) const
 {
    if (!validAddress(add) || add == lowerLeft()) return add = invalidAdd();
-   
+
    do {
 
       if (add.j() == lowerLeft().j())
@@ -124,7 +124,7 @@ DgBoundedHexC2RF2D::seqNumAddress (const DgIVec2D& add) const
 
    return sNum;
 
-} 
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 DgIVec2D
@@ -132,7 +132,7 @@ DgBoundedHexC2RF2D::addFromSeqNum (unsigned long long int sNum) const
 {
    DgIVec2D res;
 
-   if (!zeroBased()) 
+   if (!zeroBased())
     sNum--;
 
    res.setI((sNum * 3) / numI());
@@ -157,5 +157,3 @@ DgBoundedHexC2RF2D::addFromSeqNum (unsigned long long int sNum) const
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-
-

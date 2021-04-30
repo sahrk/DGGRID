@@ -26,11 +26,11 @@
 
 #include <cmath>
 
-#include "DgHexIDGGS.h"
-#include "DgContCartRF.h"
-#include "DgDiscRF.h"
-#include "DgHexC1Grid2D.h"
-#include "DgHexC2Grid2D.h"
+#include <dglib/DgHexIDGGS.h>
+#include <dglib/DgContCartRF.h>
+#include <dglib/DgDiscRF.h>
+#include <dglib/DgHexC1Grid2D.h>
+#include <dglib/DgHexC2Grid2D.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

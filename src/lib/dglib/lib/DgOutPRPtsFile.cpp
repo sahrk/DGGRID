@@ -27,11 +27,11 @@
 #include <list>
 #include <sstream>
 
-#include "DgOutPRPtsFile.h"
-#include "DgLocList.h"
-#include "DgPolygon.h"
-#include "DgLocation.h"
-#include "DgCell.h"
+#include <dglib/DgOutPRPtsFile.h>
+#include <dglib/DgLocList.h>
+#include <dglib/DgPolygon.h>
+#include <dglib/DgLocation.h>
+#include <dglib/DgCell.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

@@ -24,8 +24,8 @@
 
 #include <climits>
 
-#include "DgBase.h"
-#include "DgIVec2D.h"
+#include <dglib/DgBase.h>
+#include <dglib/DgIVec2D.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 

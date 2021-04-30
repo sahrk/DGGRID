@@ -27,12 +27,12 @@
 
 #include <cmath>
 
-#include "DgContCartRF.h"
-#include "DgDiscRF.h"
-#include "DgHexC1Grid2D.h"
-#include "DgHexC2Grid2D.h"
-#include "DgHexC3Grid2D.h"
-#include "DgHexGrid2DS.h"
+#include <dglib/DgContCartRF.h>
+#include <dglib/DgDiscRF.h>
+#include <dglib/DgHexC1Grid2D.h>
+#include <dglib/DgHexC2Grid2D.h>
+#include <dglib/DgHexC3Grid2D.h>
+#include <dglib/DgHexGrid2DS.h>
 
 static const string& emptyStr = "";
 

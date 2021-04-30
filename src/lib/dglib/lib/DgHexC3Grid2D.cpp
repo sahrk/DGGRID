@@ -24,23 +24,23 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include <dglib/DgContCartRF.h>
+#include <dglib/DgHexC3Grid2D.h>
+#include <dglib/DgHexC1Grid2D.h>
+#include <dglib/DgHexC2Grid2D.h>
+#include <dglib/DgPolygon.h>
+#include <dglib/DgSeriesConverter.h>
+
 #include <cmath>
 
-#include "DgContCartRF.h"
-#include "DgHexC3Grid2D.h"
-#include "DgHexC1Grid2D.h"
-#include "DgHexC2Grid2D.h"
-#include "DgPolygon.h"
-#include "DgSeriesConverter.h"
-
 ////////////////////////////////////////////////////////////////////////////////
-DgHexC3Grid2D::DgHexC3Grid2D (DgRFNetwork& networkIn, 
+DgHexC3Grid2D::DgHexC3Grid2D (DgRFNetwork& networkIn,
              const DgRF<DgDVec2D, long double>& ccFrameIn, bool isClassI,
              const string& nameIn)
-         : DgDiscRF2D (networkIn, ccFrameIn, nameIn, Hexagon, D6, M_1_SQRT7, 
+         : DgDiscRF2D (networkIn, ccFrameIn, nameIn, Hexagon, D6, M_1_SQRT7,
                  M_1_SQRT7, M_SQRT7_2, 1.0L), isClassI_ (isClassI)
-{ 
-   area_ = c(); 
+{
+   area_ = c();
 
    // create the surrogate hex grid: a class I/II hex grid rotated ap7 degrees
 
@@ -177,7 +177,7 @@ DgHexC3Grid2D::setAddNeighborsBdry2 (const DgIVec2D& add, DgLocVector& vec) cons
 } // void DgHexC3Grid2D::setAddNeighborsBdry2
 
 ////////////////////////////////////////////////////////////////////////////////
-DgIVec2D 
+DgIVec2D
 DgHexC3Grid2D::quantify (const DgDVec2D& point) const
 {
    DgLocation* tmpLoc = backFrame().makeLocation(point);
@@ -195,7 +195,7 @@ DgHexC3Grid2D::quantify (const DgDVec2D& point) const
 } // DgIVec2D DgHexC3Grid2D::quantify
 
 ////////////////////////////////////////////////////////////////////////////////
-DgDVec2D 
+DgDVec2D
 DgHexC3Grid2D::invQuantify (const DgIVec2D& add) const
 {
    DgLocation* tmpLoc = substrate().makeLocation(add);

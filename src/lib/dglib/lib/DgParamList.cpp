@@ -26,7 +26,7 @@
 #include <algorithm>
 #include <fstream>
 
-#include "DgParamList.h"
+#include <dglib/DgParamList.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 DgAssoc::~DgAssoc (void)

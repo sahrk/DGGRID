@@ -29,19 +29,19 @@
 #include <climits>
 #include <cfloat>
 
-#include "DgIDGGutil.h"
-#include "DgIDGGBase.h"
-#include "DgUtil.h"
-#include "DgIDGG.h"
-#include "DgDmdD4Grid2DS.h"
-#include "DgHexGrid2DS.h"
-#include "DgTriGrid2DS.h"
-#include "DgSeriesConverter.h"
-#include "DgRadixString.h"
-#include "DgBoundedIDGG.h"
-#include "DgProjISEA.h"
-#include "DgProjFuller.h"
-#include "DgString.h"
+#include <dglib/DgIDGGutil.h>
+#include <dglib/DgIDGGBase.h>
+#include <dglib/DgUtil.h>
+#include <dglib/DgIDGG.h>
+#include <dglib/DgDmdD4Grid2DS.h>
+#include <dglib/DgHexGrid2DS.h>
+#include <dglib/DgTriGrid2DS.h>
+#include <dglib/DgSeriesConverter.h>
+#include <dglib/DgRadixString.h>
+#include <dglib/DgBoundedIDGG.h>
+#include <dglib/DgProjISEA.h>
+#include <dglib/DgProjFuller.h>
+#include <dglib/DgString.h>
 
 const DgQ2DICoord DgQ2DICoord::undefDgQ2DICoord(-1, 
                                      DgIVec2D(LLONG_MAX, LLONG_MAX));

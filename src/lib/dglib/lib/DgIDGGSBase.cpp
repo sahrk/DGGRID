@@ -24,10 +24,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "DgIDGGSBase.h"
-#include "DgIDGGS.h"
-#include "DgHexIDGGS.h"
-#include "DgApSeq.h"
+#include <dglib/DgIDGGSBase.h>
+#include <dglib/DgIDGGS.h>
+#include <dglib/DgHexIDGGS.h>
+#include <dglib/DgApSeq.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 const DgIDGGSBase*

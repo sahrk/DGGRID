@@ -31,10 +31,10 @@
 using namespace std;
 
 #include "dggrid.h"
-#include "DgIDGGBase.h"
-#include "DgIDGGSBase.h"
-#include "DgBoundedIDGG.h"
-#include "DgInputStream.h"
+#include <dglib/DgIDGGBase.h>
+#include <dglib/DgIDGGSBase.h>
+#include <dglib/DgBoundedIDGG.h>
+#include <dglib/DgInputStream.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

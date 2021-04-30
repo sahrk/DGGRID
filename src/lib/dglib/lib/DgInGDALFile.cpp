@@ -28,15 +28,17 @@
 // USE_GDAL is set in MakeIncludes
 #ifdef USE_GDAL
 
-#include <sstream>
+
+#include <dglib/DgInGDALFile.h>
+#include <dglib/DgLocList.h>
+#include <dglib/DgPolygon.h>
+#include <dglib/DgLocation.h>
+#include <dglib/DgCell.h>
+#include <dglib/DgContCartRF.h>
 
 #include <ogrsf_frmts.h>
-#include "DgInGDALFile.h"
-#include "DgLocList.h"
-#include "DgPolygon.h"
-#include "DgLocation.h"
-#include "DgCell.h"
-#include "DgContCartRF.h"
+
+#include <sstream>
 
 ////////////////////////////////////////////////////////////////////////////////
 DgInGDALFile::DgInGDALFile (const DgRFBase& rfIn, const string* fileNameIn,
@@ -55,7 +57,7 @@ DgInGDALFile::DgInGDALFile (const DgRFBase& rfIn, const string* fileNameIn,
 
    GDALAllRegister();
 
-    gdalDataset_ = (GDALDataset*) GDALOpenEx(fileName().c_str(), 
+    gdalDataset_ = (GDALDataset*) GDALOpenEx(fileName().c_str(),
                                         GDAL_OF_VECTOR, NULL, NULL, NULL);
     if (gdalDataset_ == NULL) {
         report("Invalid GDAL data model in file " + fileName(), DgBase::Fatal);
@@ -147,7 +149,7 @@ DgInGDALFile::extract (DgPolygon& poly)
           numMultiPolyGeometries_ = 0;
        }
     }
-       
+
     // Now we get the points out of the Polygon
     // You can't iterate over the points of an OGRPolygon
     // We need to cast it to an OGRLinearRing
@@ -162,7 +164,7 @@ DgInGDALFile::extract (DgPolygon& poly)
         DgAddressBase* add = rf().vecAddress(DgDVec2D(x, y));
         poly.addressVec().push_back(add);
     }
-   
+
     // remove the duplicate first/last vertex
     DgAddressBase* lastPt = *(poly.addressVec().end() - 1);
     poly.addressVec().erase(poly.addressVec().end() - 1);

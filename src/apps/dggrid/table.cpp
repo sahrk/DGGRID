@@ -30,10 +30,10 @@ using namespace std;
 
 #include <sstream>
 #include "dggrid.h"
-#include "DgIDGGBase.h"
-#include "DgIDGGSBase.h"
-#include "DgIDGGS.h"
-#include "DgString.h"
+#include <dglib/DgIDGGBase.h>
+#include <dglib/DgIDGGSBase.h>
+#include <dglib/DgIDGGS.h>
+#include <dglib/DgString.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 void doTable (MainParam& dp, DgGridPList& plist)

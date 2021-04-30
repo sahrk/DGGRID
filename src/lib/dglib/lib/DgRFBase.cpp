@@ -26,12 +26,12 @@
 
 using namespace std;
 
-#include "DgBase.h"
-#include "DgRFBase.h"
-#include "DgLocBase.h"
-#include "DgLocation.h"
-#include "DgLocVector.h"
-#include "DgConverterBase.h"
+#include <dglib/DgBase.h>
+#include <dglib/DgRFBase.h>
+#include <dglib/DgLocBase.h>
+#include <dglib/DgLocation.h>
+#include <dglib/DgLocVector.h>
+#include <dglib/DgConverterBase.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

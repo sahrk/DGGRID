@@ -6,7 +6,7 @@
 # Kevin Sahr, 4/9/13
 #
 
-dggridExe=../../src/apps/dggrid/dggrid
+dggridExe=../../build/src/apps/dggrid/dggrid
 examples=( `cat examples.lst` )
 
 for f in ${examples[@]}

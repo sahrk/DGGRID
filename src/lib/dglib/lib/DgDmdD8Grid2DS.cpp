@@ -27,10 +27,10 @@
 
 #include <cmath>
 
-#include "DgContCartRF.h"
-#include "DgDiscRF.h"
-#include "DgDmdD8Grid2D.h"
-#include "DgDmdD8Grid2DS.h"
+#include <dglib/DgContCartRF.h>
+#include <dglib/DgDiscRF.h>
+#include <dglib/DgDmdD8Grid2D.h>
+#include <dglib/DgDmdD8Grid2DS.h>
 
 using namespace dgg::topo;
 

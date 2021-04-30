@@ -27,19 +27,19 @@
 
 #include <cmath>
 
-#include "DgContCartRF.h"
-#include "DgDiscRF.h"
-#include "DgIDGGS4D.h"
-#include "DgDmdIDGG.h"
-#include "DgDmdD4Grid2D.h"
-#include "DgDmdD8Grid2D.h"
+#include <dglib/DgContCartRF.h>
+#include <dglib/DgDiscRF.h>
+#include <dglib/DgDmdD4Grid2D.h>
+#include <dglib/DgDmdD8Grid2D.h>
+#include <dglib/DgDmdIDGG.h>
+#include <dglib/DgIDGGS4D.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgIDGGS4D::DgIDGGS4D (DgRFNetwork& network, const DgGeoSphRF& backFrame,
                const DgGeoCoord& vert0, long double azDegs, int nRes,
                const string& name, const string& projType, DgGridMetric gridMetric)
-        : DgIDGGS (network, backFrame, vert0, azDegs, 4, nRes, 
+        : DgIDGGS (network, backFrame, vert0, azDegs, 4, nRes,
                        Diamond, gridMetric, name, projType)
 {
    const int aperture = 4;
@@ -66,7 +66,7 @@ DgIDGGS4D::DgIDGGS4D (DgRFNetwork& network, const DgGeoSphRF& backFrame,
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-DgIDGGS4D::DgIDGGS4D (const DgIDGGS4D& rf) 
+DgIDGGS4D::DgIDGGS4D (const DgIDGGS4D& rf)
   : DgIDGGS (rf)
 {
    report("DgIDGGS4D::operator=() not implemented yet", DgBase::Fatal);
@@ -90,8 +90,8 @@ DgIDGGS4D::operator= (const DgIDGGS4D& rf)
 } // DgIDGGS4D& DgIDGGS4D::operator=
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgIDGGS4D::setAddParents (const DgResAdd<DgQ2DICoord>& add, 
+void
+DgIDGGS4D::setAddParents (const DgResAdd<DgQ2DICoord>& add,
                                DgLocVector& vec) const
 {
 //cout << "   setAddParents: " << add << endl;
@@ -124,10 +124,10 @@ DgIDGGS4D::setAddParents (const DgResAdd<DgQ2DICoord>& add,
       {
          bool found = false;
 
-         for (int j = 0; j < vec.size(); j++) 
+         for (int j = 0; j < vec.size(); j++)
          {
 //cout << "  " << i << " " << j << " " << (*verts)[i] << " " << vec[j];
-            if ((*verts)[i] == vec[j]) 
+            if ((*verts)[i] == vec[j])
             {
 //cout << " YES" << endl;
                found = true;
@@ -135,7 +135,7 @@ DgIDGGS4D::setAddParents (const DgResAdd<DgQ2DICoord>& add,
             }
 //cout << " NO" << endl;
          }
-         
+
          if (!found) vec.push_back((*verts)[i]);
       }
 //cout << "   parents: " << vec << endl;
@@ -147,8 +147,8 @@ DgIDGGS4D::setAddParents (const DgResAdd<DgQ2DICoord>& add,
 } // void DgIDGGS4D::setAddParents
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgIDGGS4D::setAddInteriorChildren (const DgResAdd<DgQ2DICoord>& add, 
+void
+DgIDGGS4D::setAddInteriorChildren (const DgResAdd<DgQ2DICoord>& add,
                                         DgLocVector& vec) const
 {
    if (isCongruent()) {
@@ -162,7 +162,7 @@ DgIDGGS4D::setAddInteriorChildren (const DgResAdd<DgQ2DICoord>& add,
          {
             v.push_back(new DgAddress< DgResAdd<DgQ2DICoord> >(
              DgResAdd<DgQ2DICoord>(DgQ2DICoord(add.address().quadNum(),
-                       DgIVec2D(lowerLeft.i() + i, lowerLeft.j() + j)), 
+                       DgIVec2D(lowerLeft.i() + i, lowerLeft.j() + j)),
                                add.res() + 1)));
          }
       }
@@ -179,12 +179,12 @@ DgIDGGS4D::setAddInteriorChildren (const DgResAdd<DgQ2DICoord>& add,
       delete tmpLoc;
    }
 */
-   
+
 } // void DgIDGGS4D::setAddInteriorChildren
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgIDGGS4D::setAddBoundaryChildren (const DgResAdd<DgQ2DICoord>& add, 
+void
+DgIDGGS4D::setAddBoundaryChildren (const DgResAdd<DgQ2DICoord>& add,
                                         DgLocVector& vec) const
 {
    if (isCongruent()) {
@@ -212,8 +212,8 @@ DgIDGGS4D::setAddBoundaryChildren (const DgResAdd<DgQ2DICoord>& add,
 } // void DgIDGGS4D::setAddBoundaryChildren
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgIDGGS4D::setAddAllChildren (const DgResAdd<DgQ2DICoord>& add, 
+void
+DgIDGGS4D::setAddAllChildren (const DgResAdd<DgQ2DICoord>& add,
                                    DgLocVector& vec) const
 {
    setAddInteriorChildren(add, vec);

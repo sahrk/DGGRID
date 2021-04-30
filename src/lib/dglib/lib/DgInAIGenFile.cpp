@@ -22,15 +22,15 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <sstream>
+#include <dglib/DgCell.h>
+#include <dglib/DgContCartRF.h>
+#include <dglib/DgEllipsoidRF.h>
+#include <dglib/DgInAIGenFile.h>
+#include <dglib/DgLocation.h>
+#include <dglib/DgLocList.h>
+#include <dglib/DgPolygon.h>
 
-#include "DgInAIGenFile.h"
-#include "DgLocList.h"
-#include "DgPolygon.h"
-#include "DgLocation.h"
-#include "DgCell.h"
-#include "DgContCartRF.h"
-#include "DgEllipsoidRF.h"
+#include <sstream>
 
 const static int maxLine = 256;
 
@@ -48,7 +48,7 @@ static void fixSciNotation (char* string)
 ////////////////////////////////////////////////////////////////////////////////
 DgInAIGenFile::DgInAIGenFile (const DgRFBase& rfIn, const string* fileNameIn,
                         DgReportLevel failLevel)
-   : DgInLocTextFile (rfIn, fileNameIn, false, failLevel), 
+   : DgInLocTextFile (rfIn, fileNameIn, false, failLevel),
      forcePolyLine_ (false), forceCells_ (false)
 {
    // test for override of vecAddress
@@ -144,7 +144,7 @@ DgInAIGenFile::extract (DgPolygon& poly)
          //delete v[v.size() - 1];
          //v[v.size() - 1] = NULL;
          //v.pop_back;
-    
+
          break;
       }
       fixSciNotation(nextLine);
@@ -201,7 +201,7 @@ DgInAIGenFile::extract (DgCell& cell)
       while (!eof())
       {
          getline(nextLine, maxLine);
-         if (string(nextLine) == string("END")) 
+         if (string(nextLine) == string("END"))
          {
             poly->addressVec().erase(poly->addressVec().end() - 1);
 
@@ -228,8 +228,8 @@ DgInLocFile&
 DgInAIGenFile::extract (DgLocList& list)
 //
 // Determine whether the file is a point or polygon/polyline file. If it's
-// a point file, read-in the points. If not, get the sets which constitute 
-// me. If the last point in a set is the same as the first, assume it's a 
+// a point file, read-in the points. If not, get the sets which constitute
+// me. If the last point in a set is the same as the first, assume it's a
 // polygon. Otherwise, make it a polyline.
 //
 ////////////////////////////////////////////////////////////////////////////////
@@ -255,12 +255,12 @@ DgInAIGenFile::extract (DgLocList& list)
 
    iss >> tmp;
 
-   if (tmp[0] == 'E') 
+   if (tmp[0] == 'E')
    {
       setIsPointFile(true);
    }
    else
-   { 
+   {
       // try to get values
 
       long double x, y;
@@ -299,17 +299,17 @@ DgInAIGenFile::extract (DgLocList& list)
             if (this->eof())
             {
                // determine whether it's a polygon
-   
+
                if (!forcePolyLine() && vec->size() > 2 &&
                    rf().getVecAddress(*(vec->addressVec().front())) ==
                    rf().getVecAddress(*(vec->addressVec().back())))
                {
                   vec->addressVec().erase(vec->addressVec().end() - 1);
-   
+
                   DgPolygon* poly = new DgPolygon(*vec);
 
                   list.push_back(poly);
-   
+
                   //vec->destroy();
                   delete vec;
                }

@@ -25,12 +25,12 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "DgBoundedIDGG.h"
-#include "DgBoundedRF2D.h"
-#include "DgBoundedHexC2RF2D.h"
-#include "DgBoundedHexC3RF2D.h"
-#include "DgBoundedHexC3C2RF2D.h"
-#include "DgIDGGBase.h"
+#include <dglib/DgBoundedIDGG.h>
+#include <dglib/DgBoundedRF2D.h>
+#include <dglib/DgBoundedHexC2RF2D.h>
+#include <dglib/DgBoundedHexC3RF2D.h>
+#include <dglib/DgBoundedHexC3C2RF2D.h>
+#include <dglib/DgIDGGBase.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

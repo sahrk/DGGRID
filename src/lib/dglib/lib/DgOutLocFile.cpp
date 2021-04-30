@@ -25,20 +25,20 @@
 #include <list>
 #include <sstream>
 
-#include "DgOutLocFile.h"
-#include "DgLocList.h"
-#include "DgCell.h"
-#include "DgPolygon.h"
-#include "DgLocation.h"
-#include "DgOutAIGenFile.h"
-#include "DgOutGdalFile.h"
-#include "DgOutKMLfile.h"
-#include "DgOutGeoJSONFile.h"
-#include "DgOutShapefile.h"
-#include "DgOutPtsText.h"
-#include "DgOutPRCellsFile.h"
-#include "DgOutPRPtsFile.h"
-#include "DgGeoSphRF.h"
+#include <dglib/DgOutLocFile.h>
+#include <dglib/DgLocList.h>
+#include <dglib/DgCell.h>
+#include <dglib/DgPolygon.h>
+#include <dglib/DgLocation.h>
+#include <dglib/DgOutAIGenFile.h>
+#include <dglib/DgOutGdalFile.h>
+#include <dglib/DgOutKMLfile.h>
+#include <dglib/DgOutGeoJSONFile.h>
+#include <dglib/DgOutShapefile.h>
+#include <dglib/DgOutPtsText.h>
+#include <dglib/DgOutPRCellsFile.h>
+#include <dglib/DgOutPRPtsFile.h>
+#include <dglib/DgGeoSphRF.h>
 
 const string DgOutLocFile::defaultKMLColor = "ffffffff";
 const int    DgOutLocFile::defaultKMLWidth = 4;

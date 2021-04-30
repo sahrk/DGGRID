@@ -24,8 +24,8 @@
 
 #include <cmath>
 
-#include "DgTriGrid2D.h"
-#include "DgPolygon.h"
+#include <dglib/DgTriGrid2D.h>
+#include <dglib/DgPolygon.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 void

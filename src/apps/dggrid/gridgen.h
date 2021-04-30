@@ -29,9 +29,9 @@
 #include <map>
 #include <limits>
 #include "clipper.hpp"
-#include "DgIVec2D.h"
-#include "DgProjGnomonicRF.h"
-#include "DgInShapefileAtt.h"
+#include <dglib/DgIVec2D.h>
+#include <dglib/DgProjGnomonicRF.h>
+#include <dglib/DgInShapefileAtt.h>
 
 class GridGenParam;
 class DgIDGGSBase;

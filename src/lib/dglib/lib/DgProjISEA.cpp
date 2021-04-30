@@ -25,7 +25,7 @@
 #include <cmath>
 #include <climits>
 
-#include "DgProjISEA.h"
+#include <dglib/DgProjISEA.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 DgProjISEAInv::DgProjISEAInv (const DgRF<DgProjTriCoord, long double>& from,
