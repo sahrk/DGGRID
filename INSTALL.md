@@ -11,11 +11,7 @@ Acquire the Code
 
 Acquire the code, including submodules with:
 
-    git clone --recurse-submodules https://github.com/sahrk/DGGRID.git
-
-If you git-cloned without the submodules, you can fetch them later with:
-
-    git submodule update --init --recursive
+    git clone https://github.com/sahrk/DGGRID.git
 
 
 
@@ -32,6 +28,11 @@ Build the application dggrid by executing:
 
 cmake will automatically detect where libraries are installed on your machine
 and include them appropriately.
+
+Note that if `GDAL` is present on your system and you want to force a build 
+of __DGGRID__ without `GDAL`, you must use the legacy build system. See README.NOCMAKE
+for instructions.
+
 
 You can also build DGGRID with extra debugging info. Doing this requires
 emptying your `build/` directory first or making a new `build_debug/` directory.
@@ -68,7 +69,7 @@ with pre-computed output. You can run these examples and automatically compare
 your output to the pre-computed output by going into `DGGRID/examples` and
 executing:
 
-    ./doexamples
+    ./doexamples.sh
 
 See the manual for more details on the parameters contained in the example
 metafiles.

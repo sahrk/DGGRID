@@ -18,7 +18,7 @@
 *******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
-// transform.C: perform transformations of addresses
+// transform.cpp: perform transformations of addresses
 //
 // Created by Kevin Sahr, October 1, 2001
 //
@@ -144,7 +144,7 @@ void doTransform (TransformParam& dp)
    cout << "Res " << dgg.outputRes() << " " << dgg.gridStats() << endl;
 
    // set-up to convert to degrees
-   DgGeoSphDegRF& deg = *(DgGeoSphDegRF::makeRF(geoRF, geoRF.name() + "Deg"));
+   DgGeoSphDegRF::makeRF(geoRF, geoRF.name() + "Deg");
 
    // set-up the input reference frame
 

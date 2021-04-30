@@ -84,7 +84,7 @@ DgInAIGenFile::extract (DgLocVector& vec)
    }
 
    long double x, y;
-   vector<DgAddressBase*>& v = vec.addressVec();
+   //vector<DgAddressBase*>& v = vec.addressVec();
    while (!eof()) {
       getline(nextLine, maxLine);
 

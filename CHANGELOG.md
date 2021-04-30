@@ -3,11 +3,18 @@ All notable changes to this project will be documented in this file.
 
 All changes are by Kevin Sahr, unless otherwise noted.
 
+## [7.3] - 2021-04-29
+### Fixed
+- all build warnings
+### Added
+- cmake build system (thanks to R. Barnes)
+
 ## [7.2] - 2021-04-06
 ### Fixed
 - lots of memory leaks
 ### Added
 - doexamplesNoGDAL.sh shell script in examples for users who built DGGRID without GDAL
+- added doexamples shell scripts for users who built DGGRID using the legace Makefile build system
 ### Changed
 - all RF's can now only be created using factory methods name makeRF
 - reduced precision on several examples so that the output would match on a wider range of platforms

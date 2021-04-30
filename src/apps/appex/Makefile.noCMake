@@ -1,0 +1,42 @@
+TARGET = appex
+SRCS = $(wildcard *.cpp)
+OBJS = $(SRCS:.cpp=.o)
+DEPS = $(SRCS:.cpp=.depends)
+include ../../MakeIncludes.noCMake
+DGLIBDIR = ../../lib/dglib
+SHPLIBDIR = ../../lib/shapelib
+PROJ4LIBDIR = ../../lib/proj4lib
+NULIBDIR = ../../lib/nulib
+INCDIRS = -I$(DGLIBDIR)/include -I$(SHPLIBDIR)/include -I$(SHPLIBDIR)/include/shapelib \
+   -I$(PROJ4LIBDIR)/include $(ADD_INC_DIRS)
+CCFLAGS  = ${INCDIRS} ${ADD_CPP_FLAGS} 
+LDLIBS= $(DGLIBDIR)/lib/dglib.a \
+        $(SHPLIBDIR)/lib/shapelib.a \
+        $(PROJ4LIBDIR)/lib/proj4lib.a ${ADD_LD_LIBS}
+
+.PHONY: clean all
+
+all: $(TARGET)
+
+${TARGET}: $(SRC) $(OBJS) $(DEPS) $(LDLIBS)
+	${CPPCOMP} $(CCFLAGS) $(EXPORT) -o ${TARGET} ${OBJS} $(LDLIBS)
+
+%.o: %.cpp
+	$(CPPCOMP) -c $< $(CCFLAGS) -o $@
+
+link:
+	${CPPCOMP} $(CCFLAGS) $(EXPORT) -o ${TARGET} ${OBJS} $(LDLIBS)
+
+%.depends: %.cpp
+	$(CPPCOMP) -M $(CCFLAGS) $< > $@
+
+$(LDLIBS):
+	cd $(SHPLIBDIR)/lib; ${DOMAKE}
+	cd $(PROJ4LIBDIR)/lib; ${DOMAKE}
+	cd $(DGLIBDIR)/lib; ${DOMAKE}
+
+clean:
+	rm -rf $(OBJS) $(DEPS) ${TARGET} core ti_files ii_files
+
+-include $(DEPS)
+

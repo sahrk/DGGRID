@@ -18,7 +18,7 @@
 *******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
-// binpres.C: perform presence/absence binning of point values into grid
+// binpres.cpp: perform presence/absence binning of point values into grid
 //
 // Created by Kevin Sahr, October 1, 2001
 //    version 3.1b: November 11, 2001
@@ -165,7 +165,7 @@ void binPresGlobal (BinPresenceParam& dp)
    cout << "Res " << dgg.outputRes() << " " << dgg.gridStats() << endl;
 
    // set-up to convert to degrees
-   DgGeoSphDegRF& deg = *(DgGeoSphDegRF::makeRF(geoRF, geoRF.name() + "Deg"));
+   DgGeoSphDegRF::makeRF(geoRF, geoRF.name() + "Deg");
 
    // set-up the output reference frame
 
@@ -301,7 +301,7 @@ void binPresPartial (BinPresenceParam& dp)
    cout << "Res " << dgg.outputRes() << " " << dgg.gridStats() << endl;
 
    // set-up to convert to degrees
-   DgGeoSphDegRF& deg = *(DgGeoSphDegRF::makeRF(geoRF, geoRF.name() + "Deg"));
+   DgGeoSphDegRF::makeRF(geoRF, geoRF.name() + "Deg");
 
    // set-up the output reference frame
 

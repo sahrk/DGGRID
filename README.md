@@ -13,11 +13,18 @@ icosahedral discrete global grids (DGGs).
 
 Two directories should be included herein:
 
-- `src`: contains complete source code for __DGGRID__ (see 
-     [INSTALL.md](INSTALL.md) for instructions on building the application 
-     and source code documentation)
+- `src`: contains complete source code for __DGGRID__ 
 
-- `examples`: contains examples of using __DGGRID__ with pre-computed outputs
+   There are two ways that you can build __DGGRID__: you may use `cmake`
+   (see [INSTALL.md](INSTALL.md) for instructions),
+   or you can use the legacy build system from previous versions of __DGGRID__
+   (see the text file README.NOCMAKE for instructions). 
+
+   Note that if `GDAL` is present on your system and you want to force a build 
+   of __DGGRID__ without `GDAL`, you must use the legacy build system.
+
+
+- `examples`: contains examples of using __DGGRID__ with pre-computed outputs.
 
 User documentation for __DGGRID__ is in `dggridManualV71.pdf`.
 

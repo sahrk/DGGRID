@@ -14,19 +14,11 @@ else()
   add_compile_options(-Wall -pedantic)
 endif()
 
-add_library(shapelib
-  submodule/shapelib/shpopen.c
-  submodule/shapelib/dbfopen.c
-  submodule/shapelib/safileio.c
-  submodule/shapelib/shptree.c
-  submodule/shapelib/sbnsearch.c
-)
-target_include_directories(shapelib PUBLIC submodule/shapelib/)
-
 
 
 add_subdirectory(src/lib/dglib)
 add_subdirectory(src/lib/proj4lib)
+add_subdirectory(src/lib/shapelib)
 
 add_subdirectory(src/apps/dggrid)
 add_subdirectory(src/apps/appex)

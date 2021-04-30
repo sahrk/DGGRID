@@ -1,4 +1,4 @@
-** executing DGGRID version 7.2 **
+** executing DGGRID version 7.3 **
 type sizes: big int: 64 bits / big double: 128 bits
 
 ** loading meta file planetRiskTable.meta...

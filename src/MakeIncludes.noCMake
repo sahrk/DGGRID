@@ -46,9 +46,9 @@ CCOMP = gcc
 CPPCOMP = g++ 
 
 # flags for debugging vs. production
-DEBUG_CC_FLAGS = -g -O0 -Wall -fno-inline -fno-eliminate-unused-debug-types 
-MEMCHECK_CC_FLAGS = -g -O1 -fno-omit-frame-pointer -fsanitize=address 
-SHIP_CC_FLAGS = -O3
+DEBUG_CC_FLAGS = -g -O0 -Wall -fno-inline -fno-eliminate-unused-debug-types -Wall -pedantic
+MEMCHECK_CC_FLAGS = -g -O1 -fno-omit-frame-pointer -fsanitize=address -Wall -pedantic
+SHIP_CC_FLAGS = -O3 -Wall -pedantic
 
 # choose which to use; comment out the ones you don't want
 ADD_CC_FLAGS = $(SHIP_CC_FLAGS)

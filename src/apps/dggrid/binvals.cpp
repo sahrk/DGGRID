@@ -18,7 +18,7 @@
 *******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
-// binvals.C: perform binning of point values into grid
+// binvals.cpp: perform binning of point values into grid
 //
 // Created by Kevin Sahr, October 1, 2001
 //    version 3.1b: November 11, 2001
@@ -177,7 +177,7 @@ void binValsGlobal (BinValsParam& dp)
    cout << "Res " << dgg.outputRes() << " " << dgg.gridStats() << endl;
 
    // set-up to convert to degrees
-   DgGeoSphDegRF& deg = *(DgGeoSphDegRF::makeRF(geoRF, geoRF.name() + "Deg"));
+   DgGeoSphDegRF::makeRF(geoRF, geoRF.name() + "Deg");
 
    // set-up the output reference frame
 
@@ -309,7 +309,7 @@ void binValsPartial (BinValsParam& dp)
    cout << "Res " << dgg.outputRes() << " " << dgg.gridStats() << endl;
 
    // set-up to convert to degrees
-   DgGeoSphDegRF& deg = *(DgGeoSphDegRF::makeRF(geoRF, geoRF.name() + "Deg"));
+   DgGeoSphDegRF::makeRF(geoRF, geoRF.name() + "Deg");
 
    // set-up the output reference frame
 
