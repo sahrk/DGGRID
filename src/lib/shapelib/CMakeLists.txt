@@ -10,3 +10,4 @@ add_library(shapelib
 )
 
 target_include_directories(shapelib PUBLIC include)
+target_include_directories(shapelib PUBLIC include/shapelib)
