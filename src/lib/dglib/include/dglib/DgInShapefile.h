@@ -25,7 +25,7 @@
 #ifndef DGINSHAPEFILE_H
 #define DGINSHAPEFILE_H
 
-#include "dglib/DgInLocFile.h"
+#include <dglib/DgInLocFile.h>
 
 #include "shapefil.h"
 
