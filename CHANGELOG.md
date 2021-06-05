@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 All changes are by Kevin Sahr, unless otherwise noted.
 
+## [7.31] - 2021-06-04
+### Fixed
+- fixed shapelib include search for cmake (R. Barnes)
+
 ## [7.3] - 2021-04-29
 ### Fixed
 - all build warnings
