@@ -41,9 +41,9 @@ DgRFNetwork::~DgRFNetwork (void)
       matrix_[i].clear();
    }
 
-   for (size_t i = 0; i < frames_.size(); i++) {
-      delete frames_[i];
-      frames_[i] = 0;
+   for (auto &frame : frames_) {
+      delete frame;
+      frame = nullptr;
    }
 
 } // DgRFNetwork::~DgRFNetwork
@@ -131,8 +131,9 @@ DgRFNetwork::reserve (const size_t& capacity)
    frames_.reserve(capacity);
    matrix_.reserve(capacity);
 
-   for (unsigned long i = 0; i < matrix_.size(); i++)
-    matrix_[i].reserve(capacity);
+   for(auto &row : matrix_){
+      row.reserve(capacity);
+   }
 
 } // void DgRFNetwork::reserve
 
@@ -145,8 +146,9 @@ DgRFNetwork::generateId (DgRFBase* frame)
    frames_.resize(newSize, 0);
    matrix_.resize(newSize);
 
-   for (unsigned long long int i = 0; i < newSize; i++)
-    matrix_[i].resize(newSize, 0);
+   for (auto& row : matrix_){
+      row.resize(newSize, 0);
+   }
 
    frames_[nextId_] = frame;
 
