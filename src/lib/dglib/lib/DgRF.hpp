@@ -112,11 +112,7 @@ DgRF<A, D>::createCell (const NuCell& cell, bool conv) const
 template<class A, class D> DgLocation*
 DgRF<A, D>::makeLocation (const A& addIn) const
 {
-   DgLocation* loc = buildLocation(new DgAddress<A>(addIn));
-   //DgLocation* loc = buildLocation(new DgAddress<A>(addIn));
-   //cout << "makeLocation: " << *loc << endl;
-   return loc;
-
+   return buildLocation(new DgAddress<A>(addIn));
 } // DgLocation* DgRF<A>::makeLocation
 
 ////////////////////////////////////////////////////////////////////////////////
