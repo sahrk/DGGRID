@@ -141,16 +141,12 @@ DgRFNetwork::reserve (const size_t& capacity)
 int
 DgRFNetwork::generateId (DgRFBase* frame)
 {
-   unsigned long long int newSize = size() + 1;
-
-   frames_.resize(newSize, 0);
-   matrix_.resize(newSize);
+   frames_.push_back(frame);
+   matrix_.resize(frames_.size());
 
    for (auto& row : matrix_){
-      row.resize(newSize, 0);
+      row.resize(frames_.size(), 0);
    }
-
-   frames_[nextId_] = frame;
 
    matrix_[nextId_][nextId_] = new DgIdentityConverter(*frame);
 
