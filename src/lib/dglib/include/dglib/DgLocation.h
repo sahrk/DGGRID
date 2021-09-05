@@ -89,13 +89,13 @@ class DgLocation : public DgLocBase {
 
       virtual void clearAddress (void) { delete address_; address_ = 0; }
 
-   protected:
-
-      virtual void convertTo (const DgRFBase& rf) { rf.convert(this); }
-
       DgLocation (const DgRFBase& rfIn, DgAddressBase* addIn)
          : DgLocBase (rfIn),
            address_ (addIn) {}
+
+   protected:
+
+      virtual void convertTo (const DgRFBase& rf) { rf.convert(this); }
 
    protected:
 
