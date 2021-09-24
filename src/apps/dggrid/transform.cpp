@@ -33,21 +33,21 @@
 using namespace std;
 
 #include "dggrid.h"
+#include <dglib/DgBoundedIDGG.h>
+#include <dglib/DgCell.h>
+#include <dglib/DgIDGG.h>
 #include <dglib/DgIDGGBase.h>
 #include <dglib/DgIDGGSBase.h>
-#include <dglib/DgIDGG.h>
-#include <dglib/DgBoundedIDGG.h>
 #include <dglib/DgInputStream.h>
-#include <dglib/DgOutputStream.h>
-#include <dglib/DgCell.h>
 #include <dglib/DgOutAIGenFile.h>
+#include <dglib/DgOutputStream.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 TransformParam::TransformParam (DgParamList& plist)
       : MainParam(plist), inSeqNum (0), outSeqNum (false), inputDelimiter (' '),
         outputDelimiter (' '), nDensify (1)
-{ 
+{
       using namespace dgg;
 
       /////// fill state variables from the parameter list //////////
@@ -110,7 +110,7 @@ void TransformParam::dump (void)
    MainParam::dump();
 
    cout << "BEGIN TRANSFORM PARAMETER DUMP" << endl;
-   
+
    cout << " outFileNameBase: " << outFileNameBase << endl;
    cout << " outFileName: " << outFileName << endl;
    cout << " outAddType: " << outAddType << endl;
@@ -135,8 +135,8 @@ void doTransform (TransformParam& dp)
    DgRFNetwork net0;
    DgGeoSphRF& geoRF = *(DgGeoSphRF::makeRF(net0, dp.datum, dp.earthRadius));
    const DgIDGGSBase *idggs = DgIDGGSBase::makeRF(net0, geoRF, dp.vert0,
-             dp.azimuthDegs, dp.aperture, dp.actualRes+1, dp.gridTopo, 
-             dp.gridMetric, "IDGGS", dp.projType, dp.isMixed43, dp.numAp4, 
+             dp.azimuthDegs, dp.aperture, dp.actualRes+1, dp.gridTopo,
+             dp.gridMetric, "IDGGS", dp.projType, dp.isMixed43, dp.numAp4,
              dp.isSuperfund, dp.isApSeq, dp.apSeq);
 
    const DgIDGGBase& dgg = idggs->idggBase(dp.actualRes);
@@ -157,10 +157,10 @@ void doTransform (TransformParam& dp)
    else if (dp.inAddType == "INTERLEAVE") pInRF = &dgg.intRF();
    else if (dp.inAddType == "PLANE") pInRF = &dgg.planeRF();
    else if (dp.inAddType == "Q2DI") pInRF = &dgg;
-   else if (dp.inAddType == "SEQNUM") 
+   else if (dp.inAddType == "SEQNUM")
    {
       if (dp.isApSeq)
-         ::report("input_address_type of SEQNUM not supported for dggs_aperture_type of SEQUENCE", 
+         ::report("input_address_type of SEQNUM not supported for dggs_aperture_type of SEQUENCE",
                   DgBase::Fatal);
 
       dp.inSeqNum = true;
@@ -186,7 +186,7 @@ void doTransform (TransformParam& dp)
    } else if (dp.outAddType == "PLANE") pOutRF = &dgg.planeRF();
    else if (dp.outAddType == "Q2DI") pOutRF = &dgg;
    else if (outAIG) pOutRF = &dgg;
-   else if (dp.outAddType == "SEQNUM") 
+   else if (dp.outAddType == "SEQNUM")
    {
       dp.outSeqNum = true;
       pOutRF = &dgg;
@@ -227,7 +227,7 @@ void doTransform (TransformParam& dp)
 
       // parse the address
 
-      DgLocation* loc = NULL; 
+      DgLocation* loc = NULL;
       if (dp.inSeqNum)
       {
          char* snStr;
@@ -235,7 +235,7 @@ void doTransform (TransformParam& dp)
          unsigned long int sNum;
          if (sscanf(snStr, "%lu", &sNum) != 1)
          {
-            ::report("doTransform(): invalid SEQNUM " + string(snStr), 
+            ::report("doTransform(): invalid SEQNUM " + string(snStr),
                      DgBase::Fatal);
          }
 
@@ -243,7 +243,7 @@ void doTransform (TransformParam& dp)
          remainder = &(buff[strlen(snStr) + 1]);
       }
       else
-      {    
+      {
          loc = new DgLocation(inRF);
          remainder = loc->fromString(buff, dp.inputDelimiter);
       }
@@ -274,9 +274,9 @@ void doTransform (TransformParam& dp)
          }
 
          while (remainder && isspace(*remainder)) remainder++;
-         if (remainder && strlen(remainder) > 0) 
+         if (remainder && strlen(remainder) > 0)
             outFile << dp.outputDelimiter << remainder << endl;
-         else 
+         else
             outFile << endl;
       }
 
@@ -298,18 +298,18 @@ void doTransforms (TransformParam& dp, DgGridPList& plist)
       // first get the grid placement
 
       dp.outFileName = dp.outFileNameBase;
-      dp.metaOutFileName = dp.metaOutFileNameBase; 
+      dp.metaOutFileName = dp.metaOutFileNameBase;
 
       orientGrid(dp, plist);
 
-      if (dp.numGrids > 1) 
+      if (dp.numGrids > 1)
       {
          string suffix = string(".") + dgg::util::to_string(dp.curGrid, 4);
          dp.metaOutFileName = dp.metaOutFileName + suffix;
          dp.outFileName = dp.outFileName + suffix;
       }
-      
-      if (dp.numGrids > 1 || dp.placeRandom) 
+
+      if (dp.numGrids > 1 || dp.placeRandom)
       {
          ofstream metaOutFile;
          metaOutFile.open(dp.metaOutFileName.c_str());
