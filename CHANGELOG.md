@@ -6,6 +6,7 @@ All changes are by Kevin Sahr, unless otherwise noted.
 ## [7.311] - 2021-09-27
 ### Fixed
 - code improvements (R. Barnes)
+- set C STANDARD target property in shapelib CMakeLists.txt (Crghilardi)
 - incorrect nulib include in DgRF.hpp
 
 ## [7.31] - 2021-06-04

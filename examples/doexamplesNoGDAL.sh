@@ -1,12 +1,12 @@
 #!/bin/bash
 #
-# doexamples.sh: executes the examples and diff's the output 
-#     against sample output
+# doexamplesNoGDAL.sh: executes the examples and diff's the output 
+#     against sample output for a cmake build without GDAL
 #
 # Kevin Sahr, 4/9/13
 #
 
-dggridExe=../../src/apps/dggrid/dggrid
+dggridExe=../../build/src/apps/dggrid/dggrid
 examples=( `cat examplesNoGDAL.lst` )
 
 for f in ${examples[@]}
