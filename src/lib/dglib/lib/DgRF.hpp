@@ -32,7 +32,7 @@
 #include <dglib/DgLocVector.h>
 // USE_NUCELL is set in MakeIncludes
 #ifdef USE_NUCELL
-#include <dglib/NuCell.h>
+#include <nulib/NuCell.h>
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
