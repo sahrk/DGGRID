@@ -1,7 +1,5 @@
 cmake_minimum_required (VERSION 3.9)
 
-find_package(GDAL)
-
 add_library(dglib
   lib/DgAddressBase.cpp
   lib/DgApSeq.cpp

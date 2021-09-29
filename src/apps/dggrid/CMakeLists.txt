@@ -1,7 +1,5 @@
 cmake_minimum_required (VERSION 3.9)
 
-find_package(GDAL)
-
 add_executable(dggrid
   binpres.cpp
   binvals.cpp
