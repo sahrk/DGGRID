@@ -8,7 +8,7 @@ All changes are by Kevin Sahr, unless otherwise noted.
 - modify find_package(GDAL) calls to allow user to toggle on/off (Crghilardi)
 ### Fixed
 - cmake USE_GDAL flag in dggrid CMakeLists.txt
-- initialized instance variables in DgDiscRFS template
+- initialized instance variables in DgResAdd template
 
 ## [7.311] - 2021-09-27
 ### Fixed
