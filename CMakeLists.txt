@@ -14,7 +14,11 @@ else()
   add_compile_options(-Wall -pedantic)
 endif()
 
+option(WITH_GDAL "Build with external GDAL" ON)
 
+if(WITH_GDAL)
+    find_package(GDAL)
+endif()
 
 add_subdirectory(src/lib/dglib)
 add_subdirectory(src/lib/proj4lib)
