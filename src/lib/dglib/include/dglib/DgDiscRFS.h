@@ -85,9 +85,8 @@ template<class A> class DgResAdd {
 
    private:
 
-      A address_;
-
-      int res_;
+      A address_{};
+      int res_ = -1;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
