@@ -51,7 +51,7 @@ __DGGRID__ was made possible in part by funding from the __US Environmental Prot
 
 ## Dependencies
 
-__DGGRID__ requires the following external library (not included):
+__DGGRID__ will make use of the following external library, if available (not included):
 
 - The Open Source Geospatial Foundation’s GDAL translator library for raster and vector geospatial data formats (see http://www.gdal.org)
 
