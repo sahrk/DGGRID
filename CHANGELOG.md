@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file.
 
 All changes are by Kevin Sahr, unless otherwise noted.
 
+## [7.312] - 2021-09-28
+### Added
+- modify find_package(GDAL) calls to allow user to toggle on/off (Crghilardi)
+### Fixed
+- cmake USE_GDAL flag in dggrid CMakeLists.txt
+
 ## [7.311] - 2021-09-27
 ### Fixed
 - code improvements (R. Barnes)

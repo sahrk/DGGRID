@@ -9,7 +9,7 @@ should be broadly compatible.
 Acquire the Code
 ------------------
 
-Acquire the code, including submodules with:
+Acquire the code with:
 
     git clone https://github.com/sahrk/DGGRID.git
 
@@ -29,10 +29,7 @@ Build the application dggrid by executing:
 cmake will automatically detect where libraries are installed on your machine
 and include them appropriately.
 
-Note that if `GDAL` is present on your system and you want to force a build 
-of __DGGRID__ without `GDAL`, you must use the legacy build system. See README.NOCMAKE
-for instructions.
-
+By default cmake will search for `GDAL` and link __DGGRID__ with it if found. If `GDAL` is present on your system and you want to force a build of __DGGRID__ without `GDAL`, call cmake with `-DWITH_GDAL=OFF`.
 
 You can also build DGGRID with extra debugging info. Doing this requires
 emptying your `build/` directory first or making a new `build_debug/` directory.

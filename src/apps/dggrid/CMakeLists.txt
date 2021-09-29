@@ -15,7 +15,7 @@ add_executable(dggrid
 )
 
 if(GDAL_FOUND)
-  target_compile_definitions(dglib PRIVATE USE_GDAL)
+  target_compile_definitions(dggrid PRIVATE USE_GDAL)
 endif()
 
 # If GDAL isn't present than ${GDAL_LIBRARIES} gives an empty string
