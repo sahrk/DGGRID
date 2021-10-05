@@ -36,7 +36,7 @@ class DgIDGGS4H : public DgHexIDGGS {
 
    public:
 
-      static DgIDGGS4H* makeRF (DgRFNetwork& networkIn, const DgGeoSphRF& backFrameIn,
+      static const DgIDGGS4H* makeRF (DgRFNetwork& networkIn, const DgGeoSphRF& backFrameIn,
                const DgGeoCoord& vert0, long double azDegs, int nResIn = 1,
                const string& nameIn = "ISEA4H", const string& projType = "ISEA")
          { return new DgIDGGS4H(networkIn, backFrameIn, vert0, azDegs, nResIn,

@@ -56,7 +56,7 @@ class DgBoundedIDGGS
 
       const DgIDGGS& IDGGS (void) const { return IDGGS_; }
 
-      const vector<DgBoundedIDGG*>& grids (void) const { return *grids_; }
+      const vector<const DgBoundedIDGG*>& grids (void) const { return *grids_; }
 
       virtual unsigned long long int seqNumAddress
                                   (const DgResAdd<DgQ2DICoord>& add) const;
@@ -68,7 +68,7 @@ class DgBoundedIDGGS
 
       const DgIDGGS& IDGGS_;
 
-      vector<DgBoundedIDGG*>* grids_;
+      vector<const DgBoundedIDGG*>* grids_;
 
 };
 

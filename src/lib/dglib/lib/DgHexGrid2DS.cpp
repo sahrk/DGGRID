@@ -66,7 +66,7 @@ DgHexGrid2DS::DgHexGrid2DS (DgRFNetwork& networkIn,
 
       //cout << "  r: " + dgg::util::to_string(r) + " grid: " + newName << " fac: " << fac << endl;
 
-      DgContCartRF* ccRF = DgContCartRF::makeRF(network(), newName + string("bf"));
+      const DgContCartRF* ccRF = DgContCartRF::makeRF(network(), newName + string("bf"));
 
       // this creates the forward and inverse converters, which are memory
       // managed by the DgRFNetwork. but 2Way converters  are not themselves 
@@ -159,7 +159,7 @@ DgHexGrid2DS::DgHexGrid2DS (DgRFNetwork& networkIn,
 
       //cout << newName << " " << fac << ' ' << trans << endl;
 
-      DgContCartRF* ccRF = DgContCartRF::makeRF(network(), newName + string("bf"));
+      const DgContCartRF* ccRF = DgContCartRF::makeRF(network(), newName + string("bf"));
 
       Dg2WayContAffineConverter(backFrame(), *ccRF, (long double) fac, M_ZERO, 
                                     DgDVec2D(M_ZERO, M_ZERO)); 

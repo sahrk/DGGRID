@@ -49,7 +49,7 @@ DgBoundedRFS2D::DgBoundedRFS2D (const DgDiscRFS2D& rf,
 
    // allocate the grids
 
-   grids_ = new vector<DgBoundedRF2D*>(discRFS().nRes());
+   grids_ = new vector<const DgBoundedRF2D*>(discRFS().nRes());
 
    int totTicks = 1;
    long long int numI = upperRight0.i() + 1;

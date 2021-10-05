@@ -40,13 +40,13 @@ class DgHexGrid2DS : public DgDiscRFS2D {
 
    public:
 
-      static DgHexGrid2DS* makeRF (DgRFNetwork& networkIn,
+      static const DgHexGrid2DS* makeRF (DgRFNetwork& networkIn,
                const DgRF<DgDVec2D, long double>& backFrameIn, int nRes = 1,
                const DgApSeq& apSeq = DgApSeq::defaultApSeq,
                const string& nameIn = "H2DS")
          { return new DgHexGrid2DS (networkIn, backFrameIn, nRes, apSeq, nameIn); }
 
-      static DgHexGrid2DS* makeRF (DgRFNetwork& network,
+      static const DgHexGrid2DS* makeRF (DgRFNetwork& network,
                  const DgRF<DgDVec2D, long double>& backFrame,
                  int nRes = 1, unsigned int aperture = 4,
                  bool isCongruent = true, bool isAligned = false,

@@ -39,7 +39,7 @@ DgBoundedIDGGS::DgBoundedIDGGS (const DgIDGGS& rf)
 { 
    // allocate the grids
 
-   grids_ = new vector<DgBoundedIDGG*>(IDGGS().nRes());
+   grids_ = new vector<const DgBoundedIDGG*>(IDGGS().nRes());
 
    for (int i = 0; i < IDGGS().nRes(); i++)
       (*grids_)[i] = new DgBoundedIDGG(rf.idgg(i));

@@ -72,7 +72,7 @@ class DgQuadClipRegion {
              { upperRight_ = upperRightIn; }
 
       const DgProjGnomonicRF& gnomProj (void) const { return *gnomProj_; }
-      void setGnomProj (DgProjGnomonicRF* gnomProjIn) 
+      void setGnomProj (const DgProjGnomonicRF* gnomProjIn) 
                                   { gnomProj_ = gnomProjIn; }
 
       ClipperLib::Paths& gnomBndry (void) { return gnomBndry_; }
@@ -107,7 +107,7 @@ class DgQuadClipRegion {
 
       map<DgIVec2D, set<DgDBFfield> > ptFields_; // shapefile attribute fields
 
-      DgProjGnomonicRF* gnomProj_; // gnomonic proj centered on this quad
+      const DgProjGnomonicRF* gnomProj_; // gnomonic proj centered on this quad
 
       ClipperLib::Paths gnomBndry_; // quad boundary in gnomonic
 

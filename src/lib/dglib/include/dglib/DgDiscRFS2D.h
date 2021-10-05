@@ -42,7 +42,7 @@ class DgDiscRFS2D : public DgDiscRFS<DgIVec2D, DgDVec2D, long double> {
 
    public:
 
-      static DgDiscRFS2D* makeRF (DgRFNetwork& network,
+      static const DgDiscRFS2D* makeRF (DgRFNetwork& network,
                    const DgRF<DgDVec2D, long double>& backFrame,
                    int nRes = 1, unsigned int aperture = 4,
                    DgGridTopology gridTopo = Hexagon,
@@ -73,7 +73,7 @@ class DgDiscRFS2D : public DgDiscRFS<DgIVec2D, DgDVec2D, long double> {
 
    protected:
 
-      void createSubConverters (void);
+      void createSubConverters (void) const;
 
       // remind users of the pure virtual functions remaining from above
 

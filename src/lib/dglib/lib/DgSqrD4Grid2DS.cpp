@@ -81,7 +81,7 @@ DgSqrD4Grid2DS::DgSqrD4Grid2DS (DgRFNetwork& networkIn,
 
       //cout << newName << " " << fac << ' ' << trans << endl;
 
-      DgContCartRF* ccRF = DgContCartRF::makeRF(network(), newName + string("bf"));
+      const DgContCartRF* ccRF = DgContCartRF::makeRF(network(), newName + string("bf"));
 
       Dg2WayContAffineConverter(backFrame(), *ccRF, (long double) fac, 0.0, trans); 
 
@@ -219,7 +219,7 @@ DgSqrD4Grid2DS::setAddBoundaryChildren (const DgResAdd<DgIVec2D>& add,
 
       // D8 neighbors is what we want
 
-      DgSqrD8Grid2D& d8 = (* DgSqrD8Grid2D::makeRF(network(), grids()[add.res() + 1]->backFrame(), 
+      const DgSqrD8Grid2D& d8 = (* DgSqrD8Grid2D::makeRF(network(), grids()[add.res() + 1]->backFrame(), 
                        "dummyD8"));
       d8.convert(tmpLoc);
       d8.setNeighbors(*tmpLoc, vec);

@@ -138,7 +138,7 @@ template<class A, class B, class DB> class DgDiscRFS
 
                 delete grids_; // the DgRFNetwork deleteds the grids themselves
 
-                grids_ = new vector<DgDiscRF<A, B, DB>*>(rf.nRes());
+                grids_ = new vector<const DgDiscRF<A, B, DB>*>(rf.nRes());
                 for (int i = 0; i < nRes(); i++)
                 {
                    // KLUDGE: don't know real type of each grid so can't
@@ -151,7 +151,7 @@ template<class A, class B, class DB> class DgDiscRFS
             return *this;
          }
 
-      const vector<DgDiscRF<A, B, DB>*>& grids (void) const { return *grids_; }
+      const vector<const DgDiscRF<A, B, DB>*>& grids (void) const { return *grids_; }
 
       unsigned int aperture (void) const { return aperture_; }
 
@@ -404,7 +404,7 @@ template<class A, class B, class DB> class DgDiscRFS
                  const string& name = "DiscS")
         : DgDiscRF<DgResAdd<A>, B, DB>
                       (network, backFrame, name, gridTopo, gridMetric),
-          aperture_ (aperture), grids_ (new vector<DgDiscRF<A, B, DB>*>()),
+          aperture_ (aperture), grids_ (new vector<const DgDiscRF<A, B, DB>*>()),
           nRes_ (nResIn), isCongruent_ (isCongruent),
           isAligned_ (isAligned)
         {
@@ -486,7 +486,7 @@ template<class A, class B, class DB> class DgDiscRFS
 
       unsigned int aperture_;
 
-      vector<DgDiscRF<A, B, DB>*>* grids_;
+      vector<const DgDiscRF<A, B, DB>*>* grids_;
 
       int nRes_;
       bool isCongruent_;

@@ -40,8 +40,7 @@ int main (int argc, char* argv[])
    // create the geodetic reference frame
    // reference frames must be created dynamically using makeRF
    // they will be deleted by the Network
-   DgGeoSphRF* geoRFptr = DgGeoSphRF::makeRF(net0, "GS0");
-   DgGeoSphRF& geoRF = *geoRFptr;
+   const DgGeoSphRF& geoRF = *(DgGeoSphRF::makeRF(net0, "GS0"));
 
    // create the ISEA4H grid system with resolutions 0-9; requires a
    // fixed icosahedron vertex and edge azimuth

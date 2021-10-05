@@ -108,7 +108,7 @@ class DgProjTriRF : public DgRF<DgProjTriCoord, long double> {
 
    public:
 
-      static DgProjTriRF* makeRF (DgRFNetwork& networkIn, const string& nameIn = "ProjTriRF",
+      static const DgProjTriRF* makeRF (DgRFNetwork& networkIn, const string& nameIn = "ProjTriRF",
                    DgSphIcosa* sphIcosaIn = 0)
                       //DgSphIcosa(DgGeoCoord(11.25L, 58.28252559L, false), M_ZERO))
          { return new DgProjTriRF(networkIn, nameIn, sphIcosaIn); }

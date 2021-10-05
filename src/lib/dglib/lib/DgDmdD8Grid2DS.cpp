@@ -89,7 +89,7 @@ DgDmdD8Grid2DS::DgDmdD8Grid2DS (DgRFNetwork& networkIn,
 
       //cout << newName << " " << fac << ' ' << trans << endl;
 
-      DgContCartRF* ccRF = DgContCartRF::makeRF(network(), newName + string("bf"));
+      const DgContCartRF* ccRF = DgContCartRF::makeRF(network(), newName + string("bf"));
 
       Dg2WayContAffineConverter (backFrame(), *ccRF, (long double) fac, 0.0, trans); 
 

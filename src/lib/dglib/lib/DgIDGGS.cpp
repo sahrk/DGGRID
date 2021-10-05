@@ -44,7 +44,7 @@ DgIDGGS::makeRF (DgRFNetwork& network, const DgGeoSphRF& backFrame,
    if (isApSeqIn)
       report("DgIDGGS::makeRF(): isApSeq must be false", DgBase::Fatal);
 
-   DgIDGGS* dg0 = 0;
+   const DgIDGGS* dg0 = 0;
 
    string apErrStr = string("DgIDGGS::makeRF(): invalid aperture " +
                          dgg::util::to_string(apertureIn) +

@@ -45,7 +45,7 @@ class DgIDGGBase : public DgDiscRF<DgQ2DICoord, DgGeoCoord, long double> {
 
    public:
 
-      static DgIDGGBase* makeRF (const DgIDGGSBase* dggs, const DgGeoSphRF& geoRFIn, 
+      static const DgIDGGBase* makeRF (const DgIDGGSBase* dggs, const DgGeoSphRF& geoRFIn, 
                   unsigned int apertureIn, int resIn, const string& nameIn = "IDGG", 
                   DgGridTopology gridTopo = Hexagon, DgGridMetric gridMetric = D6,
                   unsigned int precisionIn = DEFAULT_PRECISION)
@@ -196,18 +196,18 @@ class DgIDGGBase : public DgDiscRF<DgQ2DICoord, DgGeoCoord, long double> {
 
       DgRFNetwork locNet_;
 
-      DgDiscRF2D* grid2D_;
-      DgDiscRFS2D* grid2DS_;
-      DgContCartRF* ccFrame_;
+      const DgDiscRF2D* grid2D_;
+      const DgDiscRFS2D* grid2DS_;
+      const DgContCartRF* ccFrame_;
 
       // intermediate RFs
 
-      DgProjTriRF* projTriRF_;
-      DgVertex2DDRF* vertexRF_;
-      DgQ2DDRF* q2ddRF_;
-      DgBoundedIDGG* bndRF_;
-      DgInterleaveRF* intRF_;
-      DgPlaneTriRF* planeRF_;
+      const DgProjTriRF* projTriRF_;
+      const DgVertex2DDRF* vertexRF_;
+      const DgQ2DDRF* q2ddRF_;
+      const DgBoundedIDGG* bndRF_;
+      const DgInterleaveRF* intRF_;
+      const DgPlaneTriRF* planeRF_;
 
    friend class DgQ2DItoDConverter;
    friend class DgQ2DDtoIConverter;

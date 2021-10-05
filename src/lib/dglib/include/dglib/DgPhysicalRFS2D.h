@@ -52,7 +52,7 @@ template<class C> class DgPhysicalRFS2D :
 
       virtual void deleteAddContents (const DgResAdd<DgIVec2D>& add);
 
-      const vector<DgPhysicalRF2D<C>*>& grids (void) const { return *grids_; }
+      const vector<const DgPhysicalRF2D<C>*>& grids (void) const { return *grids_; }
 
    protected:
 
