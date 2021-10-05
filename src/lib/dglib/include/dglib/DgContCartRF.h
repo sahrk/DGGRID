@@ -35,7 +35,7 @@ class DgContCartRF : public DgRF<DgDVec2D, long double> {
 
    public:
 
-      static DgContCartRF* makeRF (DgRFNetwork& networkIn,
+      static const DgContCartRF* makeRF (DgRFNetwork& networkIn,
                 const string& nameIn = "ContCart")
       { return new DgContCartRF(networkIn, nameIn); }
 

@@ -41,7 +41,7 @@ class DgTriGrid2D : public DgDiscRF2D {
 
    public:
 
-      static DgTriGrid2D* makeRF (DgRFNetwork& networkIn,
+      static const DgTriGrid2D* makeRF (DgRFNetwork& networkIn,
                    const DgRF<DgDVec2D, long double>& ccFrameIn,
                    const string& nameIn = "TriC12D")
          { return new DgTriGrid2D (networkIn, ccFrameIn, nameIn); }

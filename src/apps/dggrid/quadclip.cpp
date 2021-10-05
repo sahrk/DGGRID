@@ -79,9 +79,9 @@ void createClipRegions (GridGenParam& dp, const DgIDGGBase& dgg,
    //// find center for gnomonic; use a dummy diamond
 
    DgRFNetwork tmpNet;
-   DgContCartRF* ccRFptr = DgContCartRF::makeRF(tmpNet);
-   DgContCartRF& ccRF = *ccRFptr;
-   DgDmdD4Grid2DS* dmd = 
+   const DgContCartRF* ccRFptr = DgContCartRF::makeRF(tmpNet);
+   const DgContCartRF& ccRF = *ccRFptr;
+   const DgDmdD4Grid2DS* dmd = 
         DgDmdD4Grid2DS::makeRF(tmpNet, ccRF, 1, 4, true, false);
 
    const DgDmdD4Grid2D& dmd0 = 

@@ -40,7 +40,7 @@ class DgSqrD4Grid2D : public DgDiscRF2D {
 
    public:
 
-      static DgSqrD4Grid2D* makeRF (DgRFNetwork& networkIn,
+      static const DgSqrD4Grid2D* makeRF (DgRFNetwork& networkIn,
                      const DgRF<DgDVec2D, long double>& contCartFrameIn,
                      const string& nameIn = "Sqr2D")
          { return new DgSqrD4Grid2D (networkIn, contCartFrameIn, nameIn); }

@@ -172,7 +172,7 @@ class DgQ2DDRF : public DgRF<DgQ2DDCoord, long double> {
 
    public:
 
-      static DgQ2DDRF* makeRF (DgRFNetwork& networkIn, const string& nameIn = "Q2DDRF")
+      static const DgQ2DDRF* makeRF (DgRFNetwork& networkIn, const string& nameIn = "Q2DDRF")
          { return new DgQ2DDRF(networkIn, nameIn); }
 
       virtual long double dist (const DgQ2DDCoord& add1,
@@ -335,7 +335,7 @@ class DgVertex2DDRF : public DgRF<DgVertex2DDCoord, long double> {
 
    public:
 
-      static DgVertex2DDRF* makeRF (DgRFNetwork& networkIn, 
+      static const DgVertex2DDRF* makeRF (DgRFNetwork& networkIn, 
                 const string& nameIn = "DgVertex2DDRF")
          { return new DgVertex2DDRF(networkIn, nameIn); }
 

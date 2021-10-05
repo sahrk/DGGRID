@@ -36,7 +36,7 @@ class DgDmdD8Grid2DS : public DgDiscRFS2D {
 
    public:
 
-      static DgDmdD8Grid2DS* makeRF (DgRFNetwork& networkIn,
+      static const DgDmdD8Grid2DS* makeRF (DgRFNetwork& networkIn,
                  const DgRF<DgDVec2D, long double>& backFrameIn,
                  int nRes = 1, unsigned int apertureIn = 4,
                  bool isCongruentIn = true, bool isAlignedIn = false,

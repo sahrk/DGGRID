@@ -36,7 +36,7 @@ class DgGeoSphRF : public DgEllipsoidRF {
 
    public:
 
-      static DgGeoSphRF* makeRF (DgRFNetwork& networkIn, const string& nameIn = "GeodeticSph",
+      static const DgGeoSphRF* makeRF (DgRFNetwork& networkIn, const string& nameIn = "GeodeticSph",
                   long double earthRadiusKMin = DEFAULT_RADIUS_KM)
          { return new DgGeoSphRF (networkIn, nameIn, earthRadiusKMin); }
 
@@ -114,7 +114,7 @@ class DgGeoSphDegRF : public DgContCartRF {
 
    public:
 
-      static DgGeoSphDegRF* makeRF(const DgGeoSphRF& geoRFin,
+      static const DgGeoSphDegRF* makeRF(const DgGeoSphRF& geoRFin,
                      const string& nameIn = "GeodeticSphDeg")
          { return new DgGeoSphDegRF(geoRFin, nameIn); }
 

@@ -42,7 +42,7 @@ class DgDiscRF2D : public DgDiscRF<DgIVec2D, DgDVec2D, long double> {
    public:
 
 /* TODO: necessary?
-      static DgDiscRF2D* makeRF (DgRFNetwork& networkIn,
+      static const DgDiscRF2D* makeRF (DgRFNetwork& networkIn,
           const DgRF<DgDVec2D, long double>& ccFrameIn,
           const string& nameIn = "DiscRF2D",
           dgg::topo::DgGridTopology gridTopoIn = dgg::topo::Hexagon,

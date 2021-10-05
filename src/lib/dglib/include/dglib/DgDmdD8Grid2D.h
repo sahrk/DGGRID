@@ -34,7 +34,7 @@ class DgDmdD8Grid2D : public DgDmdD4Grid2D {
 
    public:
 
-      static DgDmdD8Grid2D* makeRF (DgRFNetwork& networkIn, 
+      static const DgDmdD8Grid2D* makeRF (DgRFNetwork& networkIn, 
                      const DgRF<DgDVec2D, long double>& contCartFrameIn,
                      const string& nameIn = "Dmd2D")
          { return new DgDmdD8Grid2D (networkIn, contCartFrameIn, nameIn); }

@@ -141,7 +141,7 @@ DgIDGGBase::~DgIDGGBase()
 void
 DgIDGGBase::createConverters (void)
 {
-   grid2D_ = dynamic_cast<DgDiscRF2D*>(grid2DS().grids()[res()]);
+   grid2D_ = dynamic_cast<const DgDiscRF2D*>(grid2DS().grids()[res()]);
    //cout << "== GRID2D: " << string(*grid2D_);
 
    bndRF_ = new DgBoundedIDGG(*this);

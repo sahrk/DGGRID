@@ -38,14 +38,14 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-DgDiscRFS2D*
+const DgDiscRFS2D*
 DgDiscRFS2D::makeRF (DgRFNetwork& net, const DgRF<DgDVec2D, long double>& cc0,
    int nRes, unsigned int aperture, dgg::topo::DgGridTopology gridTopo,
    dgg::topo::DgGridMetric gridMetric, bool isCongruent, bool isAligned,
    const string& name, bool isMixed43, int numAp4, bool isSuperfund,
    bool isApSeq, const DgApSeq& apSeq)
 {
-   DgDiscRFS2D* dg0 = 0;
+   const DgDiscRFS2D* dg0 = 0;
 
    using namespace dgg::topo;
 
@@ -77,11 +77,11 @@ DgDiscRFS2D::makeRF (DgRFNetwork& net, const DgRF<DgDVec2D, long double>& cc0,
 
    return dg0;
 
-} // DgDiscRFS2D* DgDiscRFS2D::makeRF
+} // const DgDiscRFS2D* DgDiscRFS2D::makeRF
 
 ////////////////////////////////////////////////////////////////////////////////
 void
-DgDiscRFS2D::createSubConverters (void) {
+DgDiscRFS2D::createSubConverters (void) const {
 
    vector<const DgConverterBase*> sc;
    for (int i = 0; i < nRes(); i++)
@@ -99,7 +99,6 @@ DgDiscRFS2D::createSubConverters (void) {
       sc.resize(0);
    }
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

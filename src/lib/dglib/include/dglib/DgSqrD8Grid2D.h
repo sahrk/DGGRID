@@ -34,7 +34,7 @@ class DgSqrD8Grid2D : public DgSqrD4Grid2D {
 
    public:
 
-      static DgSqrD8Grid2D* makeRF (DgRFNetwork& networkIn,
+      static const DgSqrD8Grid2D* makeRF (DgRFNetwork& networkIn,
                      const DgRF<DgDVec2D, long double>& contCartFrameIn,
                      const string& nameIn = "Sqr2D")
          { return new DgSqrD8Grid2D (networkIn, contCartFrameIn, nameIn); }

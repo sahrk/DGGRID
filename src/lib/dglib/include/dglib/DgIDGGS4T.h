@@ -37,7 +37,7 @@ class DgIDGGS4T : public DgIDGGS {
 
    public:
 
-      static DgIDGGS4T* makeRF (DgRFNetwork& networkIn, const DgGeoSphRF& backFrameIn,
+      static const DgIDGGS4T* makeRF (DgRFNetwork& networkIn, const DgGeoSphRF& backFrameIn,
                const DgGeoCoord& vert0, long double azDegs, int nResIn = 1,
                const string& nameIn = "ISEA4T", const string& projType = "ISEA")
          { return new DgIDGGS4T(networkIn, backFrameIn, vert0, azDegs, nResIn,

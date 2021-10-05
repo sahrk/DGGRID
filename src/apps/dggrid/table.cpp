@@ -41,7 +41,7 @@ void doTable (MainParam& dp, DgGridPList& plist)
    orientGrid(dp, plist);
 
    DgRFNetwork net0;
-   DgGeoSphRF& geoRF = *(DgGeoSphRF::makeRF(net0, dp.datum, dp.earthRadius));
+   const DgGeoSphRF& geoRF = *(DgGeoSphRF::makeRF(net0, dp.datum, dp.earthRadius));
    const DgIDGGSBase *idggs = DgIDGGSBase::makeRF(net0, geoRF, dp.vert0,
           dp.azimuthDegs, dp.aperture, dp.actualRes+1, dp.gridTopo, 
           dp.gridMetric, "IDGGS", dp.projType, dp.isMixed43, dp.numAp4, 

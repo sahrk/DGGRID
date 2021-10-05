@@ -42,7 +42,7 @@ class DgHexC3Grid2D : public DgDiscRF2D {
 
    public:
 
-      static DgHexC3Grid2D* makeRF (DgRFNetwork& networkIn, 
+      static const DgHexC3Grid2D* makeRF (DgRFNetwork& networkIn, 
                      const DgRF<DgDVec2D, long double>& ccFrameIn,
                      bool isClassI = true, const string& nameIn = "HexC3D")
          { return new DgHexC3Grid2D (networkIn, ccFrameIn, isClassI, nameIn); }
@@ -79,8 +79,8 @@ class DgHexC3Grid2D : public DgDiscRF2D {
 
       bool isClassI_;
 
-      DgDiscRF2D* surrogate_;
-      DgDiscRF2D* substrate_;
+      const DgDiscRF2D* surrogate_;
+      const DgDiscRF2D* substrate_;
 
       virtual void setAddVertices (const DgIVec2D& add, DgPolygon& vec) const;
 

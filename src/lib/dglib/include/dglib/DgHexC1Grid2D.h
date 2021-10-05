@@ -43,7 +43,7 @@ class DgHexC1Grid2D : public DgDiscRF2D {
 
    public:
 
-      static DgHexC1Grid2D* makeRF (DgRFNetwork& networkIn,
+      static const DgHexC1Grid2D* makeRF (DgRFNetwork& networkIn,
                      const DgRF<DgDVec2D, long double>& ccFrameIn,
                      const string& nameIn = "HexC12D")
          { return new DgHexC1Grid2D (networkIn, ccFrameIn, nameIn); }
