@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 All changes are by Kevin Sahr, unless otherwise noted.
 
+## [7.32] - 2021-10-05
+### Changed
+- all makeRF methods now return a const pointer
+
 ## [7.312] - 2021-09-28
 ### Added
 - modify find_package(GDAL) calls to allow user to toggle on/off (Crghilardi)
