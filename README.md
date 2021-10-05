@@ -2,7 +2,7 @@
 
 ## General Information
 
-__DGGRID__ version 7.31 released June 4, 2021  
+__DGGRID__ version 7.32 released October 5, 2021  
 
 __Southern Terra Cognita Laboratory__  
 www.discreteglobalgrids.org  
@@ -19,10 +19,6 @@ Two directories should be included herein:
    (see [INSTALL.md](INSTALL.md) for instructions),
    or you can use the legacy build system from previous versions of __DGGRID__
    (see the text file README.NOCMAKE for instructions). 
-
-   Note that if `GDAL` is present on your system and you want to force a build 
-   of __DGGRID__ without `GDAL`, you must use the legacy build system.
-
 
 - `examples`: contains examples of using __DGGRID__ with pre-computed outputs.
 
