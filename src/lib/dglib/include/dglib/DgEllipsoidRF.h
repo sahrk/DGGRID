@@ -67,7 +67,7 @@ class DgGeoCoord : public DgDVec2D {
 
       DgGeoCoord (void) { }
 
-      DgGeoCoord (const DgGeoCoord& coord) { *this = coord; }
+      DgGeoCoord (const DgGeoCoord& coord) = default;
 
       DgGeoCoord (const DgDVec2D& coord, bool rads = true)
         { if (rads) *this = coord; else *this = coord * M_PI_180; }
