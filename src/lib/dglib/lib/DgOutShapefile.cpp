@@ -243,6 +243,10 @@ DgOutShapefile::writeDbf (const string& id)
                ::report("DgOutShapefile::writeDbf() logical shapefile "
                    "attributes not supported", failLevel());
                break;
+            case FTInvalid:
+               ::report("DgOutShapefile::writeDbf() invalid field",
+                   failLevel());
+               break;
          }
 
          if (!res)
