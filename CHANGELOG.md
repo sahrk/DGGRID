@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file.
 
 All changes are by Kevin Sahr, unless otherwise noted.
 
+## [7.33] - 2022-01-07
+### Changed
+- fixes to suppress compiler warnings (r-barnes)
+- added DGGRIDR compiler flag to allow for dggridR-specific code. Used in the DgBase::report() method.
+- commented-out possible overflow warning messages pending a better implementation 
+
 ## [7.32] - 2021-10-05
 ### Changed
 - all makeRF methods now return a const pointer
