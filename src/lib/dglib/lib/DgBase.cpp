@@ -46,6 +46,11 @@ void report (const string& message, DgBase::DgReportLevel level)
 {
    if (level < DgBase::minReportLevel()) return;
 
+#ifdef DGGRIDR
+
+// dggridR output
+
+#else
    switch (level)
    {
       case DgBase::Debug0:
@@ -77,6 +82,7 @@ void report (const string& message, DgBase::DgReportLevel level)
 
          break;
    }
+#endif
 
 } // void report
 
