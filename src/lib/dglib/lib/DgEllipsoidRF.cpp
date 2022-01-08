@@ -28,6 +28,7 @@
 
 const DgGeoCoord DgGeoCoord::undefGeoCoord(LDBL_MAX, LDBL_MAX);
 const long double DgGeoCoord::tolerance = 0.0000000005L;
+DgGeoCoord::LonWrapMode DgGeoCoord::lonWrapMode = DgGeoCoord::NoWrap;
 
 ////////////////////////////////////////////////////////////////////////////////
 long double 

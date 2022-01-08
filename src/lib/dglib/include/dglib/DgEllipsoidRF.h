@@ -46,7 +46,11 @@ class DgPolygon;
 ////////////////////////////////////////////////////////////////////////////////
 class DgGeoCoord : public DgDVec2D {
 
+   enum LonWrapMode { Wrap, NoWrap, InvalidLonWrapMode };
+
    public:
+
+      static LonWrapMode lonWrapMode;
 
       static const DgGeoCoord undefGeoCoord;
 
@@ -109,8 +113,20 @@ class DgGeoCoord : public DgDVec2D {
               }
               else
               {
-                 while (lonDegs() <= -180.0L) setLonDeg(lonDegs() + 360.0L);
-                 while (lonDegs() > 180.0L) setLonDeg(lonDegs() - 360.0L);
+                 while (lonDegs() <= -360.0L) setLonDeg(lonDegs() + 360.0L);
+                 while (lonDegs() >= 360.0L) setLonDeg(lonDegs() - 360.0L);
+
+                 // handle the anti-meridian based on wrap mode
+                 switch (lonWrapMode) {
+                    case Wrap:
+                       if (lonDegs() <= -180.0L) setLonDeg(lonDegs() + 360.0L);
+                       if (lonDegs() > 180.0L) setLonDeg(lonDegs() - 360.0L);
+                       break;
+                    case NoWrap:
+                       break;
+                    default:
+                       report("DgGeoCoord::normalize() invalid wrap mode", DgBase::Fatal);
+                 }
               }
            }
 
