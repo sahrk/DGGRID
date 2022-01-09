@@ -30,8 +30,6 @@
 #include <dglib/DgConstants.h>
 #include <dglib/DgPolygon.h>
 
-DgGeoSphRF::DgLonWrapMode DgGeoSphRF::lonWrapMode = DgGeoSphRF::Wrap;
-
 // these are initialized here but will get set again when the datum is created
 long double DgGeoSphRF::earthRadiusKM_ = DEFAULT_RADIUS_KM;
 long double DgGeoSphRF::icosaEdgeRads_ = M_ATAN2;
@@ -39,6 +37,57 @@ long double DgGeoSphRF::icosaEdgeDegs_ = icosaEdgeRads_ * M_180_PI;
 long double DgGeoSphRF::icosaEdgeKM_ = icosaEdgeRads_ * earthRadiusKM_;
 long double DgGeoSphRF::totalAreaKM_ = 
                       4.0L * M_PI * earthRadiusKM_ * earthRadiusKM_;
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+// Assumes that all vertices in p are currently normalized (which means p would
+// wrap if it crosses the anti-meridian).
+void
+DgGeoSphRF::lonWrap (DgPolygon& p, DgLonWrapMode wrapMode)
+{
+   // assumes p starts out wrapped (which would be the result of invoking 
+   // normalize on all the vertices in p)
+   if (wrapMode == Wrap) return;
+
+   const DgGeoSphRF* gs = dynamic_cast<const DgGeoSphRF*>(&p.rf());
+   if (gs == 0) report("DgGeoSphRF::lonWrap() with non-CCRF", DgBase::Fatal);
+
+   vector<DgAddressBase*>& v = p.addressVec();
+
+   // first determine the range of longitude values
+   long double minLon = 360.0L;
+   long double maxLon = -360.0L;
+   for (unsigned long i = 0; i < v.size(); i++)
+   {
+      DgGeoCoord g = dynamic_cast< DgAddress<DgGeoCoord>& >(*v[i]).address();
+      if (g.lonDegs() < minLon) minLon = g.lonDegs();
+      if (g.lonDegs() > maxLon) maxLon = g.lonDegs();
+   }
+
+   // check for wrap
+   long double deltaLon = maxLon - minLon;
+   if (deltaLon < 120) // no wrap 
+      return;
+
+   // perform the wrap, putting the new vertices in unwrappedVerts
+   DgPolygon unwrappedVerts(*gs);
+   vector<DgAddressBase*>& v2 = unwrappedVerts.addressVec();
+   for (unsigned long i = 0; i < v.size(); i++)
+   {
+      DgGeoCoord g = dynamic_cast< DgAddress<DgGeoCoord>& >(*v[i]).address();
+      if (wrapMode == UnwrapWest && g.lonDegs() > 0.0)
+         g.setLonDeg(g.lonDegs() - 360.0);
+      else if (wrapMode == UnwrapEast && g.lonDegs() < 0.0)
+         g.setLonDeg(g.lonDegs() + 360.0);
+
+      // add the unwrapped point
+      v2.push_back(new DgAddress<DgGeoCoord>(g));
+   }
+
+   // now replace the original with the unwrapped version
+   p = unwrappedVerts;
+
+} // void DgGeoSphRF::unwrap
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

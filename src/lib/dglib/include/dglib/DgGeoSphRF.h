@@ -34,11 +34,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 class DgGeoSphRF : public DgEllipsoidRF {
 
-   enum DgLonWrapMode { Wrap, NoWrap, InvalidLonWrapMode };
-
    public:
 
-      static DgLonWrapMode lonWrapMode;
+      enum DgLonWrapMode { Wrap, UnwrapWest, UnwrapEast, InvalidLonWrapMode };
 
       static const DgGeoSphRF* makeRF (DgRFNetwork& networkIn, const string& nameIn = "GeodeticSph",
                   long double earthRadiusKMin = DEFAULT_RADIUS_KM)
@@ -85,6 +83,9 @@ class DgGeoSphRF : public DgEllipsoidRF {
 
       // densify polygon in geodetic coordinates
       static void densify (DgPolygon& p, long double maxDist, bool rads = true);
+
+      // unwrap any cells in polygon that cross the anti-meridian
+      static void lonWrap (DgPolygon& p, DgLonWrapMode wrapMode);
 
    protected:
 

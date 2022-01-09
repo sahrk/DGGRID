@@ -827,12 +827,20 @@ void outputCell (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dg
 
          string fileName = dp.childrenOutFileName + string("_") +
                                        dgg::util::to_string(dp.nOutputFile);
-         dp.chdOut = new DgOutChildrenFile(fileName, "chd");
-      }
+         dp.chdOut = new DgOutChildrenFile(fileName, "chd"); 
+       } 
    }
 
    DgLocation* tmpLoc = new DgLocation(add2D);
-   DgCell cell(dgg.geoRF(), label, *tmpLoc, new DgPolygon(verts));
+
+   // unwrap the cell east/west if applicable
+   DgPolygon* unwrappedVerts = new DgPolygon(verts);
+   if (dp.megaVerbose) cout << "before unwrap: " << *unwrappedVerts << endl;
+   DgGeoSphRF::lonWrap(*unwrappedVerts, DgGeoSphRF::Wrap);
+   if (dp.megaVerbose) cout << "unwrapped: " << *unwrappedVerts << endl;
+
+   // create the cell to output
+   DgCell cell(dgg.geoRF(), label, *tmpLoc, unwrappedVerts);
 
 /* 
    //output cell area
