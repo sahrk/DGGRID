@@ -30,6 +30,8 @@
 #include <dglib/DgConstants.h>
 #include <dglib/DgPolygon.h>
 
+DgGeoSphRF::DgLonWrapMode DgGeoSphRF::lonWrapMode = DgGeoSphRF::Wrap;
+
 // these are initialized here but will get set again when the datum is created
 long double DgGeoSphRF::earthRadiusKM_ = DEFAULT_RADIUS_KM;
 long double DgGeoSphRF::icosaEdgeRads_ = M_ATAN2;

@@ -34,7 +34,11 @@
 ////////////////////////////////////////////////////////////////////////////////
 class DgGeoSphRF : public DgEllipsoidRF {
 
+   enum DgLonWrapMode { Wrap, NoWrap, InvalidLonWrapMode };
+
    public:
+
+      static DgLonWrapMode lonWrapMode;
 
       static const DgGeoSphRF* makeRF (DgRFNetwork& networkIn, const string& nameIn = "GeodeticSph",
                   long double earthRadiusKMin = DEFAULT_RADIUS_KM)
