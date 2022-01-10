@@ -532,7 +532,7 @@ DgGridPList::DgGridPList (void)
    insertParam(new DgDoubleParam("dggs_res_specify_intercell_distance", 100.0, 
                                  0.0, 2.0 * M_PI * 6500.0));
 
-   // dggs_res_specify_rnd_down <TRUE ! FALSE> (true indicates round down, false up)
+   // dggs_res_specify_rnd_down <TRUE | FALSE> (true indicates round down, false up)
    insertParam(new DgBoolParam("dggs_res_specify_rnd_down", true));
  
    // dggs_res_spec <int> (0 <= v <= MAX_DGG_RES)
@@ -598,6 +598,10 @@ DgGridPList::init2 (void)
    insertParam(new DgStringChoiceParam("longitude_wrap_mode", "WRAP", 
                &choices));
    dgg::util::release(choices);
+
+   // unwrap_points <TRUE | FALSE> (true indicates unwrap center point 
+   //        longitude to match the cell boundary, false allow to wrap)
+   insertParam(new DgBoolParam("unwrap_points", true));
 
    // precision <int> (0 <= v <= 30)
    insertParam(new DgIntParam("precision", DEFAULT_PRECISION, 0, INT_MAX));
@@ -714,7 +718,7 @@ DgGridPList::init2 (void)
 
    ///// additional random points parameters /////
 
-   // randpts_concatenate_output <TRUE ! FALSE> 
+   // randpts_concatenate_output <TRUE | FALSE> 
    insertParam(new DgBoolParam("randpts_concatenate_output", true));
 
    // randpts_num_per_cell <int> (v >= 0)

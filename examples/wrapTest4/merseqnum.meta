@@ -21,7 +21,8 @@ clip_subset_type SEQNUMS
 clip_region_files inputfiles/merCells.txt
 
 # specify the output using GDAL-supported file formats
-longitude_wrap_mode UNWRAP_EAST
+longitude_wrap_mode UNWRAP_WEST
+unwrap_points TRUE
 cell_output_type KML
 cell_output_file_name outputfiles/cells
 point_output_type KML

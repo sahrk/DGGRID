@@ -75,7 +75,7 @@ GridGenParam::GridGenParam (DgParamList& plist)
         useGDAL (false),
         clipAIGen (false), clipGDAL(false), clipShape(false),
         nRandPts (0), clipRandPts (false), nDensify (1),
-        lonWrapMode (DgGeoSphRF::Wrap),
+        lonWrapMode (DgGeoSphRF::Wrap), unwrapPts (true),
         nudge (0.001), ptsRand (0), doPointInPoly (true), 
         doPolyIntersect (false), sampleCount(0), nSamplePts(0), 
         doRandPts (true), cellOut (0), ptOut (0), randPtsOut (0), 
@@ -83,6 +83,7 @@ GridGenParam::GridGenParam (DgParamList& plist)
         nCellsTested(0), nCellsAccepted (0)
 { 
       using namespace dgg;
+
 
       /////// fill state variables from the parameter list //////////
 
@@ -142,6 +143,8 @@ GridGenParam::GridGenParam (DgParamList& plist)
          lonWrapMode = DgGeoSphRF::UnwrapEast;
       } else
          ::report("Unrecognised value for 'longitude_wrap_mode'", DgBase::Fatal);
+
+      getParamValue(plist, "unwrap_points", unwrapPts, false);
 
       getParamValue(plist, "clip_type", dummy, false);
       if (dummy == "POLY_INTERSECT") {
@@ -851,17 +854,15 @@ void outputCell (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dg
    if (dp.megaVerbose) cout << "unwrapped: " << *unwrappedVerts << endl;
 
    // wrap the cell center point if the boundary was wrapped
-cout << "BEFORE UNWRAP 2D: " << *tmpLoc << endl;
-   if (wrapped) {
+   if (dp.unwrapPts && wrapped) {
       dgg.geoRF().convert(tmpLoc);
-cout << "BEFORE UNWRAP GEO: " << *tmpLoc << endl;
-      //DgGeoCoord g = dynamic_cast< DgAddress<DgGeoCoord>& >(*tmpLoc).address();
+//cout << "BEFORE UNWRAP GEO: " << *tmpLoc << endl;
       DgGeoCoord g = *(dgg.geoRF().getAddress(*tmpLoc));
       int testWrap = DgGeoSphRF::lonWrap(g, dp.lonWrapMode);
       if (testWrap) {
          delete tmpLoc;
          tmpLoc = dgg.geoRF().makeLocation(g);
-         cout << "UNWRAPPED: " << *tmpLoc << endl;
+// cout << "UNWRAPPED: " << *tmpLoc << endl;
       }
    }
 

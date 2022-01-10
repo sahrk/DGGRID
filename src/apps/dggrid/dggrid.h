@@ -180,6 +180,7 @@ class GridGenParam : public MainParam {
       int nDensify;          // number of points-per-edge of densification
       DgGeoSphRF::DgLonWrapMode lonWrapMode; 
                   // how to handle outputting cells that straddle the anti-meridian
+      bool unwrapPts;        // unwrap point longitude to match cell boundary
       long double nudge;     // adjustment for quad intersection consistency
       DgRandom* ptsRand;     // RNG for generating random points
 
@@ -343,6 +344,7 @@ class TransformParam : public MainParam {
 
       int nDensify;
       DgGeoSphRF::DgLonWrapMode lonWrapMode; 
+      bool unwrapPts; 
 };
 
 ////////////////////////////////////////////////////////////////////////////////

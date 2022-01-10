@@ -45,21 +45,21 @@ const string DgGeoSphRF::lonWrapModeStrings[] =
 ////////////////////////////////////////////////////////////////////////////////
 // Assumes that g is currently normalized.
 //
-// Returns 1 if wrap occurred, 0 otherwise.
+// Returns true if wrap occurred, false otherwise.
 //
 int
 DgGeoSphRF::lonWrap (DgGeoCoord& g, DgLonWrapMode wrapMode)
 {
    // assumes g starts out wrapped (i.e., it has been normalized)
-   if (wrapMode == Wrap) return 0;
+   if (wrapMode == Wrap) return false;
 
-   int wrapped = 0;
+   int wrapped = false;
    if (wrapMode == UnwrapWest && g.lonDegs() > 0.0) {
       g.setLonDeg(g.lonDegs() - 360.0);
-      wrapped = 1;
+      wrapped = true;
    } else if (wrapMode == UnwrapEast && g.lonDegs() < 0.0) {
       g.setLonDeg(g.lonDegs() + 360.0);
-      wrapped = 1;
+      wrapped = true;
    }
 
    return wrapped;
@@ -72,14 +72,14 @@ DgGeoSphRF::lonWrap (DgGeoCoord& g, DgLonWrapMode wrapMode)
 // currently normalized (which means p would wrap if it crosses the 
 // anti-meridian).
 //
-// Returns 1 if wrap occurred, 0 otherwise.
+// Returns true if wrap occurred, false otherwise.
 //
 int
 DgGeoSphRF::lonWrap (DgPolygon& p, DgLonWrapMode wrapMode)
 {
    // assumes p starts out wrapped (which would be the result of invoking 
    // normalize on all the vertices in p)
-   if (wrapMode == Wrap) return 0;
+   if (wrapMode == Wrap) return false;
 
    const DgGeoSphRF* gs = dynamic_cast<const DgGeoSphRF*>(&p.rf());
    if (gs == 0) report("DgGeoSphRF::lonWrap() with non-CCRF", DgBase::Fatal);
@@ -100,16 +100,16 @@ DgGeoSphRF::lonWrap (DgPolygon& p, DgLonWrapMode wrapMode)
    long double deltaLon = maxLon - minLon;
 //cout << "DELTALON: " << deltaLon << endl;
    if (deltaLon < 120) // no wrap 
-      return 0;
+      return false;
 
    // perform the wrap, putting the new vertices in unwrappedVerts
    DgPolygon unwrappedVerts(*gs);
    vector<DgAddressBase*>& v2 = unwrappedVerts.addressVec();
-   int wrapped = 0; // has wrap occurred?
+   int wrapped = false; // has wrap occurred?
    for (unsigned long i = 0; i < v.size(); i++) {
 
       DgGeoCoord g = dynamic_cast< DgAddress<DgGeoCoord>& >(*v[i]).address();
-      if (lonWrap(g, wrapMode)) wrapped = 1;
+      if (lonWrap(g, wrapMode)) wrapped = true;
 
       // add the unwrapped point
       v2.push_back(new DgAddress<DgGeoCoord>(g));
