@@ -75,6 +75,7 @@ GridGenParam::GridGenParam (DgParamList& plist)
         useGDAL (false),
         clipAIGen (false), clipGDAL(false), clipShape(false),
         nRandPts (0), clipRandPts (false), nDensify (1),
+        lonWrapMode (DgGeoSphRF::Wrap),
         nudge (0.001), ptsRand (0), doPointInPoly (true), 
         doPolyIntersect (false), sampleCount(0), nSamplePts(0), 
         doRandPts (true), cellOut (0), ptOut (0), randPtsOut (0), 
@@ -131,14 +132,22 @@ GridGenParam::GridGenParam (DgParamList& plist)
       nudge = 0.0000001;
       //getParamValue(plist, "quad_bndry_nudge", nudge, false);
 
+      getParamValue(plist, "longitude_wrap_mode", dummy, false);
+      lonWrapMode = DgGeoSphRF::Wrap;
+      if (dummy == "WRAP") {
+         lonWrapMode = DgGeoSphRF::Wrap;
+      } else if (dummy == "UNWRAP_WEST") {
+         lonWrapMode = DgGeoSphRF::UnwrapWest;
+      } else if (dummy == "UNWRAP_EAST") {
+         lonWrapMode = DgGeoSphRF::UnwrapEast;
+      } else
+         ::report("Unrecognised value for 'longitude_wrap_mode'", DgBase::Fatal);
+
       getParamValue(plist, "clip_type", dummy, false);
-      if (dummy == "POLY_INTERSECT") 
-      {
+      if (dummy == "POLY_INTERSECT") {
          doPolyIntersect = true;
          doPointInPoly = false;
-      }
-      else
-      {
+      } else {
          doPolyIntersect = false;
          doPointInPoly = true;
       }
@@ -329,6 +338,8 @@ void GridGenParam::dump (void)
    cout << " nRandPts: " << nRandPts << endl;
    //cout << " clipRandPts: " << clipRandPts << endl;
    cout << " nDensify: " << nDensify << endl;
+   cout << " lonWrapMode: " << 
+        DgGeoSphRF::lonWrapModeStrings[lonWrapMode] << endl;
    cout << " precision: " << precision << endl;
    cout << " nudge: " << nudge << endl;
 
@@ -836,7 +847,7 @@ void outputCell (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dg
    // unwrap the cell east/west if applicable
    DgPolygon* unwrappedVerts = new DgPolygon(verts);
    if (dp.megaVerbose) cout << "before unwrap: " << *unwrappedVerts << endl;
-   DgGeoSphRF::lonWrap(*unwrappedVerts, DgGeoSphRF::Wrap);
+   DgGeoSphRF::lonWrap(*unwrappedVerts, dp.lonWrapMode);
    if (dp.megaVerbose) cout << "unwrapped: " << *unwrappedVerts << endl;
 
    // create the cell to output

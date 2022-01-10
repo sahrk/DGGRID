@@ -38,6 +38,9 @@ long double DgGeoSphRF::icosaEdgeKM_ = icosaEdgeRads_ * earthRadiusKM_;
 long double DgGeoSphRF::totalAreaKM_ = 
                       4.0L * M_PI * earthRadiusKM_ * earthRadiusKM_;
 
+const string DgGeoSphRF::lonWrapModeStrings[] = 
+             { "Wrap", "UnwrapWest", "UnwrapEast", "InvalidLonWrapMode" };
+
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 // Assumes that all vertices in p are currently normalized (which means p would

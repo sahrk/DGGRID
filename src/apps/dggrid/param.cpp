@@ -591,6 +591,14 @@ DgGridPList::init2 (void)
    // densification <int> (0 <= v <= 500)
    insertParam(new DgIntParam("densification", 0, 0, 500));
 
+   // longitude_wrap_mode < WRAP | UNWRAP_WEST | UNWRAP_EAST >
+   choices.push_back(new string("WRAP"));
+   choices.push_back(new string("UNWRAP_WEST"));
+   choices.push_back(new string("UNWRAP_EAST"));
+   insertParam(new DgStringChoiceParam("longitude_wrap_mode", "WRAP", 
+               &choices));
+   dgg::util::release(choices);
+
    // precision <int> (0 <= v <= 30)
    insertParam(new DgIntParam("precision", DEFAULT_PRECISION, 0, INT_MAX));
 
