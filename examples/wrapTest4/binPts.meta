@@ -20,7 +20,10 @@ dggrid_operation BIN_POINT_VALS
 # specify the DGG
 
 dggs_type ISEA3H
-dggs_res_spec 0
+dggs_vert0_lon 10.0
+dggs_vert0_lat 42.0
+dggs_vert0_azimuth 33.0
+dggs_res_spec 20
 
 # specify bin controls
 

@@ -43,14 +43,43 @@ const string DgGeoSphRF::lonWrapModeStrings[] =
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-// Assumes that all vertices in p are currently normalized (which means p would
-// wrap if it crosses the anti-meridian).
-void
+// Assumes that g is currently normalized.
+//
+// Returns 1 if wrap occurred, 0 otherwise.
+//
+int
+DgGeoSphRF::lonWrap (DgGeoCoord& g, DgLonWrapMode wrapMode)
+{
+   // assumes g starts out wrapped (i.e., it has been normalized)
+   if (wrapMode == Wrap) return 0;
+
+   int wrapped = 0;
+   if (wrapMode == UnwrapWest && g.lonDegs() > 0.0) {
+      g.setLonDeg(g.lonDegs() - 360.0);
+      wrapped = 1;
+   } else if (wrapMode == UnwrapEast && g.lonDegs() < 0.0) {
+      g.setLonDeg(g.lonDegs() + 360.0);
+      wrapped = 1;
+   }
+
+   return wrapped;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+// Assumes that p is a polygon with less than 120' in longitude range (which
+// should include all DGGS cell boundaries) and that all vertices in p are 
+// currently normalized (which means p would wrap if it crosses the 
+// anti-meridian).
+//
+// Returns 1 if wrap occurred, 0 otherwise.
+//
+int
 DgGeoSphRF::lonWrap (DgPolygon& p, DgLonWrapMode wrapMode)
 {
    // assumes p starts out wrapped (which would be the result of invoking 
    // normalize on all the vertices in p)
-   if (wrapMode == Wrap) return;
+   if (wrapMode == Wrap) return 0;
 
    const DgGeoSphRF* gs = dynamic_cast<const DgGeoSphRF*>(&p.rf());
    if (gs == 0) report("DgGeoSphRF::lonWrap() with non-CCRF", DgBase::Fatal);
@@ -69,26 +98,27 @@ DgGeoSphRF::lonWrap (DgPolygon& p, DgLonWrapMode wrapMode)
 
    // check for wrap
    long double deltaLon = maxLon - minLon;
+//cout << "DELTALON: " << deltaLon << endl;
    if (deltaLon < 120) // no wrap 
-      return;
+      return 0;
 
    // perform the wrap, putting the new vertices in unwrappedVerts
    DgPolygon unwrappedVerts(*gs);
    vector<DgAddressBase*>& v2 = unwrappedVerts.addressVec();
-   for (unsigned long i = 0; i < v.size(); i++)
-   {
+   int wrapped = 0; // has wrap occurred?
+   for (unsigned long i = 0; i < v.size(); i++) {
+
       DgGeoCoord g = dynamic_cast< DgAddress<DgGeoCoord>& >(*v[i]).address();
-      if (wrapMode == UnwrapWest && g.lonDegs() > 0.0)
-         g.setLonDeg(g.lonDegs() - 360.0);
-      else if (wrapMode == UnwrapEast && g.lonDegs() < 0.0)
-         g.setLonDeg(g.lonDegs() + 360.0);
+      if (lonWrap(g, wrapMode)) wrapped = 1;
 
       // add the unwrapped point
       v2.push_back(new DgAddress<DgGeoCoord>(g));
    }
 
-   // now replace the original with the unwrapped version
+   // now replace the original polygon with the unwrapped version
    p = unwrappedVerts;
+
+   return wrapped;
 
 } // void DgGeoSphRF::unwrap
 

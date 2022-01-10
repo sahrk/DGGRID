@@ -847,8 +847,23 @@ void outputCell (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dg
    // unwrap the cell east/west if applicable
    DgPolygon* unwrappedVerts = new DgPolygon(verts);
    if (dp.megaVerbose) cout << "before unwrap: " << *unwrappedVerts << endl;
-   DgGeoSphRF::lonWrap(*unwrappedVerts, dp.lonWrapMode);
+   int wrapped = DgGeoSphRF::lonWrap(*unwrappedVerts, dp.lonWrapMode);
    if (dp.megaVerbose) cout << "unwrapped: " << *unwrappedVerts << endl;
+
+   // wrap the cell center point if the boundary was wrapped
+cout << "BEFORE UNWRAP 2D: " << *tmpLoc << endl;
+   if (wrapped) {
+      dgg.geoRF().convert(tmpLoc);
+cout << "BEFORE UNWRAP GEO: " << *tmpLoc << endl;
+      //DgGeoCoord g = dynamic_cast< DgAddress<DgGeoCoord>& >(*tmpLoc).address();
+      DgGeoCoord g = *(dgg.geoRF().getAddress(*tmpLoc));
+      int testWrap = DgGeoSphRF::lonWrap(g, dp.lonWrapMode);
+      if (testWrap) {
+         delete tmpLoc;
+         tmpLoc = dgg.geoRF().makeLocation(g);
+         cout << "UNWRAPPED: " << *tmpLoc << endl;
+      }
+   }
 
    // create the cell to output
    DgCell cell(dgg.geoRF(), label, *tmpLoc, unwrappedVerts);
