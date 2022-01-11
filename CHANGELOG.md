@@ -3,13 +3,20 @@ All notable changes to this project will be documented in this file.
 
 All changes are by Kevin Sahr, unless otherwise noted.
 
+## [7.4] - 2022-01-11
+### Added
+- parameters longitude_wrap_mode and unwrap_points to output cells and points
+without longitude wrapping (to facilitate 2D display)
+- example planetRiskGridNoWrap to demonstrate new parameters
+- updated manual to version 7.4
+
 ## [7.33] - 2022-01-07
 ### Changed
 - commented-out possible overflow warning messages pending a better implementation 
 ### Added
-- added DGGRIDR compiler flag to allow for dggridR-specific code. Used in the DgBase::report() method.
+- DGGRIDR compiler flag to allow for dggridR-specific code. Used in the DgBase::report() method.
 ### Fixed
-- fixes to suppress compiler warnings (r-barnes)
+- suppress compiler warnings (r-barnes)
 
 ## [7.32] - 2021-10-05
 ### Changed
