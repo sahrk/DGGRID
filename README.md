@@ -2,7 +2,7 @@
 
 ## General Information
 
-__DGGRID__ version 7.32 released October 5, 2021  
+__DGGRID__ version 7.4 released January 11, 2022  
 
 __Southern Terra Cognita Laboratory__  
 www.discreteglobalgrids.org  
@@ -22,7 +22,7 @@ Two directories should be included herein:
 
 - `examples`: contains examples of using __DGGRID__ with pre-computed outputs.
 
-User documentation for __DGGRID__ is in `dggridManualV71.pdf`.
+User documentation for __DGGRID__ is in `dggridManualV74.pdf`.
 
 ## Terms of Use
 
