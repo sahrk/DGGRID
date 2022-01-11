@@ -1,0 +1,44 @@
+################################################################################
+#
+# planetRiskGridNoWrap.meta - example of generating a PlanetRisk grid with
+#      neighbors and children, where cell boundaries and their associated 
+#      points are "unwrapped" to facilitate 2D display (see the last two
+#      parameters at the bottom of this file).
+#
+# Kevin Sahr, 1/10/22
+#
+################################################################################
+
+# specify the operation
+dggrid_operation GENERATE_GRID
+
+# specify the DGG
+dggs_type PLANETRISK
+dggs_res_spec 2
+
+# control the generation
+clip_subset_type WHOLE_EARTH
+geodetic_densify 0.0
+
+# specify the output using GDAL-supported file formats
+cell_output_type GDAL
+cell_output_gdal_format GeoJSON
+cell_output_file_name outputfiles/cells.geojson
+point_output_type GDAL
+point_output_gdal_format GeoJSON
+point_output_file_name outputfiles/points.geojson
+neighbor_output_type TEXT
+neighbor_output_file_name outputfiles/neighbors
+children_output_type TEXT
+children_output_file_name outputfiles/children
+
+# other output parameters
+densification 0
+precision 6
+
+# force cells who straddle the anti-meridian to "unwrap" to the east 
+# (i.e., all vertices output with a positive longitude)
+longitude_wrap_mode UNWRAP_EAST
+# force points to follow the associated cells when the cell is "unwrapped"
+unwrap_points TRUE
+
