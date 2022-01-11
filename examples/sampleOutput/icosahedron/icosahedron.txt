@@ -1,4 +1,4 @@
-** executing DGGRID version 7.3 **
+** executing DGGRID version 7.4 **
 type sizes: big int: 64 bits / big double: 128 bits
 
 ** loading meta file icosahedron.meta...
@@ -25,6 +25,8 @@ clip_region_files test.gen (default)
 clip_type POLY_INTERSECT (default)
 clipper_scale_factor 1000000 (default)
 densification 0 (user set)
+longitude_wrap_mode WRAP (default)
+unwrap_points true (default)
 precision 7 (default)
 output_cell_label_type GLOBAL_SEQUENCE (default)
 cell_output_type KML (user set)

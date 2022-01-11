@@ -12,6 +12,7 @@ icosahedron
 isea7hGen
 mixedAperture
 planetRiskGridGen
+planetRiskGridNoWrap
 planetRiskClipHiRes
 planetRiskClipMulti
 planetRiskTable
