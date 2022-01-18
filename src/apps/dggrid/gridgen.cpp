@@ -71,9 +71,9 @@ using namespace dgg::topo;
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 GridGenParam::GridGenParam (DgParamList& plist)
-      : MainParam(plist), wholeEarth (false), seqToPoly(false), pointClip (false),
-        useGDAL (false),
-        clipAIGen (false), clipGDAL(false), clipShape(false),
+      : MainParam(plist), wholeEarth (false), regionClip (false), seqToPoly(false), pointClip (false),
+        cellClip (false), useGDAL (false),
+        clipAIGen (false), clipGDAL(false), clipShape(false), clipCellRes (0),
         nRandPts (0), clipRandPts (false), nDensify (1),
         lonWrapMode (DgGeoSphRF::Wrap), unwrapPts (true),
         nudge (0.001), ptsRand (0), doPointInPoly (true), 
@@ -83,7 +83,6 @@ GridGenParam::GridGenParam (DgParamList& plist)
         nCellsTested(0), nCellsAccepted (0)
 { 
       using namespace dgg;
-
 
       /////// fill state variables from the parameter list //////////
 
@@ -96,18 +95,20 @@ GridGenParam::GridGenParam (DgParamList& plist)
       seqToPoly = false;
       if (dummy == "WHOLE_EARTH") 
          wholeEarth = true;
-      else if (dummy == "AIGEN")
+      else if (dummy == "AIGEN"){
+         regionClip = true;
          clipAIGen  = true;
-      else if (dummy == "SHAPEFILE")
+      } else if (dummy == "SHAPEFILE"){
+         regionClip = true;
          clipShape  = true; 
 // USE_GDAL is set in MakeIncludes
 #ifdef USE_GDAL
-      else if (dummy == "GDAL") {
+      } else if (dummy == "GDAL") {{
+         regionClip = true;
          useGDAL = true;
          clipGDAL  = true; 
-      } 
 #endif
-      else if (dummy == "SEQNUMS") {
+      } else if (dummy == "SEQNUMS") {
          if (isApSeq)
             ::report("clip_subset_type of SEQNUMS not supported for dggs_aperture_type of SEQUENCE", 
                      DgBase::Fatal);
@@ -115,8 +116,16 @@ GridGenParam::GridGenParam (DgParamList& plist)
          seqToPoly = true;
       } else if (dummy == "POINTS") {
          pointClip = true;
+      } else if (dummy == "COARSE_CELLS") {
+         cellClip = true;
       } else
          ::report("Unrecognised value for 'clip_subset_type'", DgBase::Fatal);
+
+      getParamValue(plist, "clip_cell_res", clipCellRes, false);
+      string clipCellsStr;
+      getParamValue(plist, "clip_cell_addresses", clipCellsStr, false);
+
+      util::ssplit(clipCellsStr, clipCellAddressStrs);
 
       //// region file names
 
@@ -1062,7 +1071,7 @@ void genGrid (GridGenParam& dp)
    if (!dp.childrenOutType.compare("TEXT"))
       dp.chdOut = new DgOutChildrenFile(childrenOutFileName, "chd");
 
-   ////// do whole earth grid if applicable /////
+   ////// do applicable clipping mode /////
 
    if (dp.seqToPoly) {
       dp.nCellsAccepted = 0;
@@ -1157,6 +1166,22 @@ void genGrid (GridGenParam& dp)
 
         delete loc;
       }
+   } else if (dp.cellClip) {
+      dp.nCellsAccepted = 0;
+      dp.nCellsTested = 0;
+
+      vector<unsigned long int> seqnums;
+
+      // parse the sequence numbers
+      for (const auto &seqStr: dp.clipCellAddressStrs) {
+           unsigned long int sNum;
+           if (sscanf(seqStr, "%lu", &sNum) != 1)
+             ::report("gridgen(): invalid SEQNUM in clip_cell_addresses" + 
+               string(seqStr), DgBase::Fatal);
+
+           seqnums.append(sNum);
+      }
+
    } else if (dp.wholeEarth) {
       dp.nCellsAccepted = 0;
       dp.nCellsTested = 0;
