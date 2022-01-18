@@ -103,7 +103,7 @@ GridGenParam::GridGenParam (DgParamList& plist)
          clipShape  = true; 
 // USE_GDAL is set in MakeIncludes
 #ifdef USE_GDAL
-      } else if (dummy == "GDAL") {{
+      } else if (dummy == "GDAL") {
          regionClip = true;
          useGDAL = true;
          clipGDAL  = true; 
@@ -1175,7 +1175,7 @@ void genGrid (GridGenParam& dp)
       // parse the sequence numbers
       for (const auto &seqStr: dp.clipCellAddressStrs) {
            unsigned long int sNum;
-           if (sscanf(seqStr, "%lu", &sNum) != 1)
+           if (sscanf(seqStr.c_str(), "%lu", &sNum) != 1)
              ::report("gridgen(): invalid SEQNUM in clip_cell_addresses" + 
                string(seqStr), DgBase::Fatal);
 

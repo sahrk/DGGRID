@@ -57,201 +57,10 @@ using namespace std;
 using namespace dgg::topo;
 
 //////////////////////////////////////////////////////////////////////////////
-void createClipRegions (GridGenParam& dp, const DgIDGGBase& dgg, 
+void processClipPoly (const DgPolygon& v, GridGenParam& dp, const DgIDGGBase& dgg, 
              DgQuadClipRegion clipRegions[], set<DgIVec2D> overageSet[],
              map<DgIVec2D, set<DgDBFfield> > overageFields[])
 {
-   cout << "\n* building clipping regions..." << endl;
-
-   // initialize the i,j bounds
-
-   for (int q = 1; q < 11; q++) 
-   {
-      clipRegions[q].setOffset(DgIVec2D(dgg.maxD(), dgg.maxJ()));
-      clipRegions[q].setUpperRight(DgIVec2D(0, 0));
-   }
-
-   // create the gnomonic quad boundaries to clip against
-
-   if (dp.megaVerbose) 
-      cout << "creating gnomonic quad boundaries..." << endl;
-
-   //// find center for gnomonic; use a dummy diamond
-
-   DgRFNetwork tmpNet;
-   const DgContCartRF* ccRFptr = DgContCartRF::makeRF(tmpNet);
-   const DgContCartRF& ccRF = *ccRFptr;
-   const DgDmdD4Grid2DS* dmd = 
-        DgDmdD4Grid2DS::makeRF(tmpNet, ccRF, 1, 4, true, false);
-
-   const DgDmdD4Grid2D& dmd0 = 
-        *(dynamic_cast<const DgDmdD4Grid2D*>(dmd->grids()[0]));
-
-   // generate the center on the dummy grid
-
-   DgLocation cent;
-   dmd0.setPoint(DgIVec2D(0, 0), cent);
-   ccRF.convert(&cent);
-
-   // generate the boundary on the dummy grid; adjust the boundary so
-   // it will definately be on the quad after reprojection
-
-   DgPolygon verts;
-   dmd0.setVertices(DgIVec2D(0, 0), verts);
-   ccRF.convert(verts);
-
-   if (dp.megaVerbose) cout << "verts:\n" << verts << endl;
-
-   // lower left
-
-   DgDVec2D p = *ccRF.getAddress(verts[0]);
-   p += DgDVec2D(0.0, dp.nudge);
-   DgLocation* tloc = ccRF.makeLocation(p);
-   verts.setLoc(0, *tloc);
-   delete tloc;
-      
-   // lower right
-
-   p = *ccRF.getAddress(verts[1]);
-   p += DgDVec2D(-2.0 * dp.nudge, dp.nudge);
-   tloc = ccRF.makeLocation(p);
-   verts.setLoc(1, *tloc);
-   delete tloc;
-
-   // upper right
-
-   p = *ccRF.getAddress(verts[2]);
-   p += DgDVec2D(0.0, -dp.nudge);
-   tloc = ccRF.makeLocation(p);
-   verts.setLoc(2, *tloc);
-   delete tloc;
-
-   // upper left
-
-   p = *ccRF.getAddress(verts[3]);
-   p += DgDVec2D(2.0 * dp.nudge, -dp.nudge);
-   tloc = ccRF.makeLocation(p);
-   verts.setLoc(3, *tloc);
-   delete tloc;
-
-   if (dp.megaVerbose) cout << "(nudge) ->" << verts << endl;
-
-   for (int q = 1; q < 11; q++)
-   {
-      if (dp.megaVerbose) cout << "quad " << q << endl;
-
-      // find gnomonic projection center for this quad
-
-      tloc = dgg.q2ddRF().makeLocation(
-                                  DgQ2DDCoord(q, *ccRF.getAddress(cent)));
-
-      if (dp.megaVerbose) cout << "center: " << *tloc; 
-
-      dgg.geoRF().convert(tloc);
-
-      if (dp.megaVerbose) cout << " -> " << *tloc << endl;
-   
-      clipRegions[q].setGnomProj(DgProjGnomonicRF::makeRF(dgg.network(), 
-           string("gnom") + dgg::util::to_string(q, 2), *dgg.geoRF().getAddress(*tloc)));
-
-      delete tloc;
-
-      Dg2WayGeoProjConverter(dgg.geoRF(), clipRegions[q].gnomProj());
-   
-      // now find gnomonic quad boundary
-
-      // kludge to jump nets
-
-      DgPolygon v0(dgg.q2ddRF());
-      for (int i = 0; i < verts.size(); i++)
-      {
-         tloc = dgg.q2ddRF().makeLocation(
-                               DgQ2DDCoord(q, *ccRF.getAddress(verts[i])));
-         v0.push_back(*tloc);
-         delete tloc;
-      }
-
-      if (dp.megaVerbose) 
-	  cout << v0 << endl;
-
-      dgg.geoRF().convert(v0);
-
-      if (dp.megaVerbose) 
-	  cout << " -> " << v0 << endl;
-
-      clipRegions[q].gnomProj().convert(v0);
-
-      if (dp.megaVerbose)
-	  cout << " -> " << v0 << endl;
-  
-      // finally store the boundary as a clipper polygon
-      ClipperLib::Path contour;
-      for (int i = 0; i < v0.size(); i++)
-      {
-         const DgDVec2D& p0 = *clipRegions[q].gnomProj().getAddress(v0[i]);
-
-         contour << ClipperLib::IntPoint( dp.clipperFactor*p0.x() , dp.clipperFactor*p0.y() );
-      }
-
-      clipRegions[q].gnomBndry().push_back(contour);
-   }
-
-   //// read in the region boundary files
-
-   for (unsigned long fc = 0; fc < dp.regionFiles.size(); fc++)
-   {
-      DgInLocFile* pRegionFile = NULL;
-      DgInShapefileAtt* pAttributeFile = NULL;
-      if (dp.clipAIGen)
-         pRegionFile = new DgInAIGenFile(dgg.geoRF(), &dp.regionFiles[fc]);
-      else if (dp.clipShape)
-      {
-         if (dp.buildShapeFileAttributes)
-         {
-            pRegionFile = pAttributeFile = 
-                  new DgInShapefileAtt(dgg.geoRF(), &dp.regionFiles[fc]);
-
-            // add any new fields to the global list
-            const set<DgDBFfield>& fields = pAttributeFile->fields();
-            for (set<DgDBFfield>::iterator it = fields.begin(); 
-                 it != fields.end(); it++)
-            {
-               if (it->fieldName() == "global_id") continue;
-
-               set<DgDBFfield>::iterator cur = dp.allFields.find(*it);
-               if (cur == dp.allFields.end()) // new field
-                  dp.allFields.insert(*it);
-               else if (cur->type() != it->type())
-                  report("input files contain incompatible definitions "
-                         "of attribute field " + it->fieldName(), DgBase::Fatal);
-            }
-         }
-         else {
-            pRegionFile = new DgInShapefile(dgg.geoRF(), &dp.regionFiles[fc]);
-         }
-#ifdef USE_GDAL
-      } else if (dp.clipGDAL) {
-            pRegionFile = new DgInGDALFile(dgg.geoRF(), &dp.regionFiles[fc]);
-#endif
-      } else {
-            report("invalid dp.clip file parameters.", DgBase::Fatal);
-      }
-
-      DgInLocFile& regionFile = *pRegionFile;
-
-      if (!regionFile.isPointFile())
-      {
-         // read in each poly
-
-         while (true) 
-         {
-            bool quadInt[12]; // which quads are intersected?
-            for (int q = 0; q < 12; q++) 
-               quadInt[q] = false;
-
-            DgPolygon v;
-            regionFile >> v;
-            if (regionFile.isEOF()) break;
    
             if (dp.megaVerbose) cout << "input: " << v << endl;
    
@@ -270,8 +79,12 @@ void createClipRegions (GridGenParam& dp, const DgIDGGBase& dgg,
    
             if (dp.megaVerbose) cout << "->: " << quadVec << endl;
    
+            // set up to track which quads are intersected
+            bool quadInt[12]; // which quads are intersected?
+            for (int q = 0; q < 12; q++) 
+               quadInt[q] = false;
+
             // test where vertices fall
-   
             for (int i = 0; i < quadVec.size(); i++) 
             {
                const DgQ2DDCoord& qc = *dgg.q2ddRF().getAddress(quadVec[i]);
@@ -464,6 +277,202 @@ void createClipRegions (GridGenParam& dp, const DgIDGGBase& dgg,
                   }
                }
             }
+
+} // void processClipPoly
+
+//////////////////////////////////////////////////////////////////////////////
+void createClipRegions (GridGenParam& dp, const DgIDGGBase& dgg, 
+             DgQuadClipRegion clipRegions[], set<DgIVec2D> overageSet[],
+             map<DgIVec2D, set<DgDBFfield> > overageFields[])
+{
+   cout << "\n* building clipping regions..." << endl;
+
+   // initialize the i,j bounds
+
+   for (int q = 1; q < 11; q++) 
+   {
+      clipRegions[q].setOffset(DgIVec2D(dgg.maxD(), dgg.maxJ()));
+      clipRegions[q].setUpperRight(DgIVec2D(0, 0));
+   }
+
+   // create the gnomonic quad boundaries to clip against
+
+   if (dp.megaVerbose) 
+      cout << "creating gnomonic quad boundaries..." << endl;
+
+   //// find center for gnomonic; use a dummy diamond
+
+   DgRFNetwork tmpNet;
+   const DgContCartRF* ccRFptr = DgContCartRF::makeRF(tmpNet);
+   const DgContCartRF& ccRF = *ccRFptr;
+   const DgDmdD4Grid2DS* dmd = 
+        DgDmdD4Grid2DS::makeRF(tmpNet, ccRF, 1, 4, true, false);
+
+   const DgDmdD4Grid2D& dmd0 = 
+        *(dynamic_cast<const DgDmdD4Grid2D*>(dmd->grids()[0]));
+
+   // generate the center on the dummy grid
+
+   DgLocation cent;
+   dmd0.setPoint(DgIVec2D(0, 0), cent);
+   ccRF.convert(&cent);
+
+   // generate the boundary on the dummy grid; adjust the boundary so
+   // it will definately be on the quad after reprojection
+
+   DgPolygon verts;
+   dmd0.setVertices(DgIVec2D(0, 0), verts);
+   ccRF.convert(verts);
+
+   if (dp.megaVerbose) cout << "verts:\n" << verts << endl;
+
+   // lower left
+
+   DgDVec2D p = *ccRF.getAddress(verts[0]);
+   p += DgDVec2D(0.0, dp.nudge);
+   DgLocation* tloc = ccRF.makeLocation(p);
+   verts.setLoc(0, *tloc);
+   delete tloc;
+      
+   // lower right
+
+   p = *ccRF.getAddress(verts[1]);
+   p += DgDVec2D(-2.0 * dp.nudge, dp.nudge);
+   tloc = ccRF.makeLocation(p);
+   verts.setLoc(1, *tloc);
+   delete tloc;
+
+   // upper right
+
+   p = *ccRF.getAddress(verts[2]);
+   p += DgDVec2D(0.0, -dp.nudge);
+   tloc = ccRF.makeLocation(p);
+   verts.setLoc(2, *tloc);
+   delete tloc;
+
+   // upper left
+
+   p = *ccRF.getAddress(verts[3]);
+   p += DgDVec2D(2.0 * dp.nudge, -dp.nudge);
+   tloc = ccRF.makeLocation(p);
+   verts.setLoc(3, *tloc);
+   delete tloc;
+
+   if (dp.megaVerbose) cout << "(nudge) ->" << verts << endl;
+
+   for (int q = 1; q < 11; q++)
+   {
+      if (dp.megaVerbose) cout << "quad " << q << endl;
+
+      // find gnomonic projection center for this quad
+
+      tloc = dgg.q2ddRF().makeLocation(
+                                  DgQ2DDCoord(q, *ccRF.getAddress(cent)));
+
+      if (dp.megaVerbose) cout << "center: " << *tloc; 
+
+      dgg.geoRF().convert(tloc);
+
+      if (dp.megaVerbose) cout << " -> " << *tloc << endl;
+   
+      clipRegions[q].setGnomProj(DgProjGnomonicRF::makeRF(dgg.network(), 
+           string("gnom") + dgg::util::to_string(q, 2), *dgg.geoRF().getAddress(*tloc)));
+
+      delete tloc;
+
+      Dg2WayGeoProjConverter(dgg.geoRF(), clipRegions[q].gnomProj());
+   
+      // now find gnomonic quad boundary
+
+      // kludge to jump nets
+
+      DgPolygon v0(dgg.q2ddRF());
+      for (int i = 0; i < verts.size(); i++)
+      {
+         tloc = dgg.q2ddRF().makeLocation(
+                               DgQ2DDCoord(q, *ccRF.getAddress(verts[i])));
+         v0.push_back(*tloc);
+         delete tloc;
+      }
+
+      if (dp.megaVerbose) 
+	  cout << v0 << endl;
+
+      dgg.geoRF().convert(v0);
+
+      if (dp.megaVerbose) 
+	  cout << " -> " << v0 << endl;
+
+      clipRegions[q].gnomProj().convert(v0);
+
+      if (dp.megaVerbose)
+	  cout << " -> " << v0 << endl;
+  
+      // finally store the boundary as a clipper polygon
+      ClipperLib::Path contour;
+      for (int i = 0; i < v0.size(); i++)
+      {
+         const DgDVec2D& p0 = *clipRegions[q].gnomProj().getAddress(v0[i]);
+
+         contour << ClipperLib::IntPoint( dp.clipperFactor*p0.x() , dp.clipperFactor*p0.y() );
+      }
+
+      clipRegions[q].gnomBndry().push_back(contour);
+   }
+
+   //// read in the region boundary files
+
+   for (unsigned long fc = 0; fc < dp.regionFiles.size(); fc++)
+   {
+      DgInLocFile* pRegionFile = NULL;
+      DgInShapefileAtt* pAttributeFile = NULL;
+      if (dp.clipAIGen)
+         pRegionFile = new DgInAIGenFile(dgg.geoRF(), &dp.regionFiles[fc]);
+      else if (dp.clipShape)
+      {
+         if (dp.buildShapeFileAttributes)
+         {
+            pRegionFile = pAttributeFile = 
+                  new DgInShapefileAtt(dgg.geoRF(), &dp.regionFiles[fc]);
+
+            // add any new fields to the global list
+            const set<DgDBFfield>& fields = pAttributeFile->fields();
+            for (set<DgDBFfield>::iterator it = fields.begin(); 
+                 it != fields.end(); it++)
+            {
+               if (it->fieldName() == "global_id") continue;
+
+               set<DgDBFfield>::iterator cur = dp.allFields.find(*it);
+               if (cur == dp.allFields.end()) // new field
+                  dp.allFields.insert(*it);
+               else if (cur->type() != it->type())
+                  report("input files contain incompatible definitions "
+                         "of attribute field " + it->fieldName(), DgBase::Fatal);
+            }
+         }
+         else {
+            pRegionFile = new DgInShapefile(dgg.geoRF(), &dp.regionFiles[fc]);
+         }
+#ifdef USE_GDAL
+      } else if (dp.clipGDAL) {
+            pRegionFile = new DgInGDALFile(dgg.geoRF(), &dp.regionFiles[fc]);
+#endif
+      } else {
+            report("invalid dp.clip file parameters.", DgBase::Fatal);
+      }
+
+      DgInLocFile& regionFile = *pRegionFile;
+
+      if (!regionFile.isPointFile()) {
+         // read in each poly
+         while (true) {
+
+            DgPolygon v;
+            regionFile >> v;
+            if (regionFile.isEOF()) break;
+
+            // add to the clipRegions
+            processClipPoly(v, dp, dgg, clipRegions, overageSet, overageFields);
          }
       }
       else // point file
