@@ -547,7 +547,7 @@ DgGridPList::DgGridPList (void)
    // geodetic_densify <long double: decimal degrees> (v >= 0.0)
    insertParam(new DgDoubleParam("geodetic_densify", 0.0, 0.0, 360.0));
 
-   // clip_subset_type <WHOLE_EARTH | AIGEN | SHAPEFILE | GDAL | SEQNUMS>
+   // clip_subset_type <WHOLE_EARTH | AIGEN | SHAPEFILE | GDAL | SEQNUMS | COARSE_CELLS >
    choices.push_back(new string("WHOLE_EARTH"));
    choices.push_back(new string("AIGEN"));
    choices.push_back(new string("SHAPEFILE"));
@@ -556,9 +556,16 @@ DgGridPList::DgGridPList (void)
 #endif
    choices.push_back(new string("SEQNUMS"));
    choices.push_back(new string("POINTS"));
+   choices.push_back(new string("COARSE_CELLS"));
    insertParam(new DgStringChoiceParam("clip_subset_type", "WHOLE_EARTH", 
                &choices));
    dgg::util::release(choices);
+
+   // clip_cell_addresses <clipCell1 clipCell2 ... clipCellN>
+   insertParam(new DgStringParam("clip_cell_addresses", ""));
+
+   // clip_cell_res <int> (0 <= v <= MAX_DGG_RES)
+   insertParam(new DgIntParam("clip_cell_res", 0, 0, MAX_DGG_RES));
 
    // clip_region_files <fileName1 fileName2 ... fileNameN>
    insertParam(new DgStringParam("clip_region_files", "test.gen"));

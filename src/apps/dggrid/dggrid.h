@@ -168,13 +168,17 @@ class GridGenParam : public MainParam {
       // the parameters
 
       bool wholeEarth;       // generate entire grid?
+      bool regionClip;       // whether user wants to generate using regions
       bool seqToPoly;        // whether user wants polys from seqnum
       bool pointClip;        // whether user wants to generate using points
+      bool cellClip;         // whether user wants to generate using coarse cells
       bool useGDAL;          // use GDAL for either input or output
       bool clipAIGen;        // clip using AIGen files (or Shapefiles)
       bool clipGDAL;         // clip using GDAL files
       bool clipShape;        // clip using Shapefiles
       vector<string> regionFiles;
+      int clipCellRes;       // resolution of the clipping cell indexes
+      vector<string> clipCellAddressStrs;
       int nRandPts;          // # of random pts generated for each hex
       bool clipRandPts;      // clip randpts to polys
       int nDensify;          // number of points-per-edge of densification
