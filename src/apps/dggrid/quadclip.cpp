@@ -532,6 +532,7 @@ void createClipRegions (GridGenParam& dp, const DgIDGGBase& dgg,
              i != dp.clipSeqNums.end(); i++){
 
         DgLocation* loc = static_cast<const DgIDGG&>(clipDgg).bndRF().locFromSeqNum(*i);
+cout << " clip seq num " << *i << " " << *loc << endl;
         if (!clipDgg.bndRF().validLocation(*loc)) {
           std::cerr << "genGrid(): invalid clipping cell res: " << dp.clipCellRes 
                     << " address: " << (*i)<< std::endl;
