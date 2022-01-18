@@ -57,9 +57,9 @@ using namespace std;
 using namespace dgg::topo;
 
 //////////////////////////////////////////////////////////////////////////////
-void processClipPoly (const DgPolygon& v, GridGenParam& dp, const DgIDGGBase& dgg, 
+void processClipPoly (DgPolygon& v, GridGenParam& dp, const DgIDGGBase& dgg, 
              DgQuadClipRegion clipRegions[], set<DgIVec2D> overageSet[],
-             map<DgIVec2D, set<DgDBFfield> > overageFields[])
+             map<DgIVec2D, set<DgDBFfield> > overageFields[], DgInShapefileAtt* pAttributeFile)
 {
    
             if (dp.megaVerbose) cout << "input: " << v << endl;
@@ -472,7 +472,7 @@ void createClipRegions (GridGenParam& dp, const DgIDGGBase& dgg,
             if (regionFile.isEOF()) break;
 
             // add to the clipRegions
-            processClipPoly(v, dp, dgg, clipRegions, overageSet, overageFields);
+            processClipPoly(v, dp, dgg, clipRegions, overageSet, overageFields, pAttributeFile);
          }
       }
       else // point file

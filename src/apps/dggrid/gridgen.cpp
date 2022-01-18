@@ -1179,7 +1179,7 @@ void genGrid (GridGenParam& dp)
              ::report("gridgen(): invalid SEQNUM in clip_cell_addresses" + 
                string(seqStr), DgBase::Fatal);
 
-           seqnums.append(sNum);
+           seqnums.push_back(sNum);
       }
 
    } else if (dp.wholeEarth) {
