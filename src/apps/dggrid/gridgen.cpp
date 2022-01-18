@@ -124,8 +124,19 @@ GridGenParam::GridGenParam (DgParamList& plist)
       getParamValue(plist, "clip_cell_res", clipCellRes, false);
       string clipCellsStr;
       getParamValue(plist, "clip_cell_addresses", clipCellsStr, false);
-
+      
+      vector<string> clipCellAddressStrs;
       util::ssplit(clipCellsStr, clipCellAddressStrs);
+
+      // parse the clip cell sequence numbers
+      for (const auto &seqStr: clipCellAddressStrs) {
+           unsigned long int sNum;
+           if (sscanf(seqStr.c_str(), "%lu", &sNum) != 1)
+             ::report("gridgen(): invalid SEQNUM in clip_cell_addresses" + 
+               string(seqStr), DgBase::Fatal);
+
+           clipSeqNums.insert(sNum);
+      }
 
       //// region file names
 
@@ -1122,7 +1133,7 @@ void genGrid (GridGenParam& dp)
 
         delete loc;
       }
-
+/*
    } else if (dp.pointClip) {
       dp.nCellsAccepted = 0;
 
@@ -1166,22 +1177,7 @@ void genGrid (GridGenParam& dp)
 
         delete loc;
       }
-   } else if (dp.cellClip) {
-      dp.nCellsAccepted = 0;
-      dp.nCellsTested = 0;
-
-      vector<unsigned long int> seqnums;
-
-      // parse the sequence numbers
-      for (const auto &seqStr: dp.clipCellAddressStrs) {
-           unsigned long int sNum;
-           if (sscanf(seqStr.c_str(), "%lu", &sNum) != 1)
-             ::report("gridgen(): invalid SEQNUM in clip_cell_addresses" + 
-               string(seqStr), DgBase::Fatal);
-
-           seqnums.push_back(sNum);
-      }
-
+*/
    } else if (dp.wholeEarth) {
       dp.nCellsAccepted = 0;
       dp.nCellsTested = 0;
