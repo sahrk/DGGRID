@@ -3,6 +3,7 @@ binpres
 binvals
 determineRes
 gdalExample
+gridgenCellClip
 gridgenDiamond
 gridgenGeoJSON
 gridgenMixedSHP
