@@ -16,16 +16,14 @@ dggs_res_spec 5
 
 # control the generation
 clip_subset_type COARSE_CELLS
-clip_cell_res 2
-clip_cell_addresses 12 15
+clip_cell_res 1
+clip_cell_addresses 3 14
 geodetic_densify 0.0
 
-# specify the output using GDAL-supported file formats
-cell_output_type GDAL
-cell_output_gdal_format GeoJSON
-cell_output_file_name outputfiles/cells.geojson
-point_output_type GDAL
-point_output_gdal_format GeoJSON
-point_output_file_name outputfiles/points.geojson
+# specify the output
+cell_output_type KML
+cell_output_file_name outputfiles/cells
+point_output_type KML
+point_output_file_name outputfiles/points
 densification 0
 precision 6
