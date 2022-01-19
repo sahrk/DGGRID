@@ -561,8 +561,8 @@ DgGridPList::DgGridPList (void)
                &choices));
    dgg::util::release(choices);
 
-   // clip_cell_addresses <clipCell1 clipCell2 ... clipCellN>
-   insertParam(new DgStringParam("clip_cell_addresses", ""));
+   // clip_cell_seqnums <clipCell1 clipCell2 ... clipCellN>
+   insertParam(new DgStringParam("clip_cell_seqnums", ""));
 
    // clip_cell_res <int> (0 < v <= MAX_DGG_RES)
    insertParam(new DgIntParam("clip_cell_res", 1, 1, MAX_DGG_RES));

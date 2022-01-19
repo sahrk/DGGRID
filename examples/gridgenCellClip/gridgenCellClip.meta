@@ -17,7 +17,7 @@ dggs_res_spec 5
 # control the generation
 clip_subset_type COARSE_CELLS
 clip_cell_res 1
-clip_cell_addresses 1 13 22
+clip_cell_seqnums 1 13 22
 clip_cell_densification 1
 geodetic_densify 0.0
 

@@ -125,7 +125,7 @@ GridGenParam::GridGenParam (DgParamList& plist)
       getParamValue(plist, "clip_cell_densification", nClipCellDensify, false);
 
       string clipCellsStr;
-      getParamValue(plist, "clip_cell_addresses", clipCellsStr, false);
+      getParamValue(plist, "clip_cell_seqnums", clipCellsStr, false);
       
       vector<string> clipCellAddressStrs;
       util::ssplit(clipCellsStr, clipCellAddressStrs);
@@ -134,7 +134,7 @@ GridGenParam::GridGenParam (DgParamList& plist)
       for (const auto &seqStr: clipCellAddressStrs) {
            unsigned long int sNum;
            if (sscanf(seqStr.c_str(), "%lu", &sNum) != 1)
-             ::report("gridgen(): invalid SEQNUM in clip_cell_addresses" + 
+             ::report("gridgen(): invalid cell sequence number in clip_cell_seqnums" + 
                string(seqStr), DgBase::Fatal);
 
            clipSeqNums.insert(sNum);

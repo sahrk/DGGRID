@@ -3,11 +3,21 @@ All notable changes to this project will be documented in this file.
 
 All changes are by Kevin Sahr, unless otherwise noted.
 
+## [7.41] - 2022-01-19
+### Added 
+- choice COARSE_CELLS to parameter clip_subset_type so grid generation
+clipping region can be specified using lower resolution cells
+- parameters clip_cell_res, clip_cell_seqnums, and clip_cell_densification
+- example gridgenCellClip to demonstrate new parameters
+### Changed
+- updated manual to version 7.41
+
 ## [7.4] - 2022-01-11
 ### Added
 - parameters longitude_wrap_mode and unwrap_points to output cells and points
 without longitude wrapping (to facilitate 2D display)
 - example planetRiskGridNoWrap to demonstrate new parameters
+### Changed
 - updated manual to version 7.4
 
 ## [7.33] - 2022-01-07
