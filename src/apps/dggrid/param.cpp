@@ -564,8 +564,11 @@ DgGridPList::DgGridPList (void)
    // clip_cell_addresses <clipCell1 clipCell2 ... clipCellN>
    insertParam(new DgStringParam("clip_cell_addresses", ""));
 
-   // clip_cell_res <int> (0 <= v <= MAX_DGG_RES)
-   insertParam(new DgIntParam("clip_cell_res", 0, 0, MAX_DGG_RES));
+   // clip_cell_res <int> (0 < v <= MAX_DGG_RES)
+   insertParam(new DgIntParam("clip_cell_res", 1, 1, MAX_DGG_RES));
+
+   // clip_cell_densification <int> (0 <= v <= 500)
+   insertParam(new DgIntParam("clip_cell_densification", 1, 0, 500));
 
    // clip_region_files <fileName1 fileName2 ... fileNameN>
    insertParam(new DgStringParam("clip_region_files", "test.gen"));

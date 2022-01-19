@@ -73,7 +73,7 @@ using namespace dgg::topo;
 GridGenParam::GridGenParam (DgParamList& plist)
       : MainParam(plist), wholeEarth (false), regionClip (false), seqToPoly(false), pointClip (false),
         cellClip (false), useGDAL (false),
-        clipAIGen (false), clipGDAL(false), clipShape(false), clipCellRes (0),
+        clipAIGen (false), clipGDAL(false), clipShape(false), clipCellRes (0), nClipCellDensify (1),
         nRandPts (0), clipRandPts (false), nDensify (1),
         lonWrapMode (DgGeoSphRF::Wrap), unwrapPts (true),
         nudge (0.001), ptsRand (0), doPointInPoly (true), 
@@ -122,6 +122,8 @@ GridGenParam::GridGenParam (DgParamList& plist)
          ::report("Unrecognised value for 'clip_subset_type'", DgBase::Fatal);
 
       getParamValue(plist, "clip_cell_res", clipCellRes, false);
+      getParamValue(plist, "clip_cell_densification", nClipCellDensify, false);
+
       string clipCellsStr;
       getParamValue(plist, "clip_cell_addresses", clipCellsStr, false);
       
@@ -149,6 +151,7 @@ GridGenParam::GridGenParam (DgParamList& plist)
       geoDens *= M_PI / 180.0;
 
       getParamValue(plist, "densification", nDensify, false);
+
       //nudge = 0.00000001;
       nudge = 0.0000001;
       //getParamValue(plist, "quad_bndry_nudge", nudge, false);

@@ -518,11 +518,18 @@ void createClipRegions (GridGenParam& dp, const DgIDGGBase& dgg,
          delete pRegionFile;
       }  
    } else if (dp.cellClip) {
-      cout << "CELL CLIP" << endl;
+
+      // check for valid state
+      if (dgg.gridTopo() != dgg::topo::Hexagon)
+          ::report("clip_subset_type of COARSE_CELLS only implemented for hexagon grids",
+                   DgBase::Fatal);
 
       if (dp.clipCellRes >= dp.actualRes)
-          ::report("clip_cell_res must be less than the grid resolution begin generated",
+          ::report("clip_cell_res must be less than the grid resolution being generated",
                    DgBase::Fatal);
+
+      if (dp.clipCellRes == 0)
+          ::report("clip_cell_res must be greater than 0", DgBase::Fatal);
 
       // get the clipping cell dgg resolution
       const DgIDGGBase& clipDgg = dgg.dggs()->idggBase(dp.clipCellRes);
@@ -532,7 +539,7 @@ void createClipRegions (GridGenParam& dp, const DgIDGGBase& dgg,
              i != dp.clipSeqNums.end(); i++){
 
         DgLocation* loc = static_cast<const DgIDGG&>(clipDgg).bndRF().locFromSeqNum(*i);
-cout << " clip seq num " << *i << " " << *loc << endl;
+//cout << " clip seq num " << *i << " " << *loc << endl;
         if (!clipDgg.bndRF().validLocation(*loc)) {
           std::cerr << "genGrid(): invalid clipping cell res: " << dp.clipCellRes 
                     << " address: " << (*i)<< std::endl;
@@ -540,7 +547,7 @@ cout << " clip seq num " << *i << " " << *loc << endl;
         }
 
         DgPolygon verts(clipDgg);
-        clipDgg.setVertices(*loc, verts, dp.nDensify);
+        clipDgg.setVertices(*loc, verts, dp.nClipCellDensify);
 
         // add to the clipRegions
         processOneClipPoly(verts, dp, dgg, clipRegions, NULL);
