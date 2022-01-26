@@ -74,35 +74,16 @@ DgOutGdalFile::~DgOutGdalFile()
 
 void DgOutGdalFile::init(const std::string& filename)
 {
-
-/*
-   // get just the file name
-   string s = DgOutLocFile::fileName();
-
-   char sep = '/';
-
-   #ifdef _WIN32
-      sep = '\\';
-   #endif
-
-   bool found = false;
-   size_t i = s.rfind(sep, s.length());
-   if (i != string::npos) 
-      s = s.substr(i+1, s.length() - i);
-
-   fileNameOnly_ = s;
-*/
    fileNameOnly_ = DgOutLocFile::fileName();
 
    GDALAllRegister();
 
-    delete _driver;
-    _driver = GetGDALDriverManager()->GetDriverByName(_gdalDriver.c_str());
-    if( _driver == NULL )
-    {
+   delete _driver;
+   _driver = GetGDALDriverManager()->GetDriverByName(_gdalDriver.c_str());
+   if( _driver == NULL ) {
         ::report( _gdalDriver + " driver not available.",  DgBase::Fatal);
         exit(1);
-    }
+   }
 
     delete _dataset;
     _dataset = _driver->Create( fileNameOnly_.c_str(), 0, 0, 0, GDT_Unknown, NULL );
@@ -123,6 +104,32 @@ DgOutGdalFile::insert(const DgDVec2D& pt)
 {
 	//Probably isn't needed but keep in for safety
     return *this;
+}
+
+DgOutLocFile&
+DgOutGdalFile::insert (const DgIDGGBase& dgg, const DgLocation& loc,
+           bool outputPoint, DgLocVector* vec, const string* label,
+           const DgLocVector* neighbors, const DgLocVector* children)
+{
+
+
+//// children
+   const DgIDGGSBase& dggs = *(dgg.dggs());
+   const DgIDGGBase& dggr = dggs.idggBase(dgg.res() + 1);
+
+   unsigned long long int sn = dgg.bndRF().seqNum(center);
+   *this << sn;
+   for (int i = 0; i < vec.size(); i++)
+   {
+      DgLocation tmpLoc(vec[i]);
+      dggr.convert(&tmpLoc);
+      *this << " " << dggr.bndRF().seqNum(tmpLoc);
+   }
+
+   *this << endl;
+
+   return *this;
+   //// end  children
 }
 
 DgOutLocFile&
