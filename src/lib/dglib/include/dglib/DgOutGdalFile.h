@@ -46,8 +46,6 @@ class DgOutGdalFile : public DgOutLocFile
 
    public:
 
-      enum DgOutGdalFileMode { Polygon, Point, Collection, InvalidMode };
-
       DgOutGdalFile(const DgGeoSphDegRF& rf, const std::string& filename = "", 
                const std::string& gdalDriver = "GeoJSON", 
                DgOutGdalFileMode mode = InvalidMode, int precision = 7,

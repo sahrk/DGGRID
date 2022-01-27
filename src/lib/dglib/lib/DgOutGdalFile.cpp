@@ -125,7 +125,7 @@ DgOutGdalFile::init (const std::string& filename)
 OGRFeature*
 DgOutGdalFile::createFeature (const string* label)
 {
-   OGRFeature *feature = OGRFeature::CreateFeature( _oLayer->GetLayerDefn() );
+   OGRFeature *feature = OGRFeature::CreateFeature(_oLayer->GetLayerDefn());
    if (!feature)
       ::report("GDAL feature creation failed.", DgBase::Fatal );
    feature->SetField("name", label->c_str());
@@ -162,9 +162,10 @@ DgOutGdalFile::insert (const DgIDGGBase& dgg, const DgLocation& loc,
 
    *this << endl;
 
-   return *this;
 */
    //// end  children
+
+   return *this;
 }
 
 DgOutLocFile&

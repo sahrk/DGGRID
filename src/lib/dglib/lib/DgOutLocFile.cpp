@@ -56,7 +56,8 @@ DgOutLocFile*
 DgOutLocFile::makeOutLocFile (const string& type, const string& fileName, 
                     const string& gdalDriver,
                     const DgRFBase& rf, bool isPointFile, int precision,
-                    int shapefileIdLen, const string& kmlColor, int kmlWidth,
+                    DgOutGdalFileMode mode, int shapefileIdLen, 
+                    const string& kmlColor, int kmlWidth,
                     const string& kmlName, const string& kmlDesc,
                     DgReportLevel failLevelIn)
 {
@@ -84,7 +85,7 @@ DgOutLocFile::makeOutLocFile (const string& type, const string& fileName,
 // USE_GDAL is set in MakeIncludes
 #ifdef USE_GDAL
       else if (!type.compare("GDAL"))
-         file = new DgOutGdalFile(*geoRF, fileName, gdalDriver, precision, isPointFile, failLevelIn);
+         file = new DgOutGdalFile(*geoRF, fileName, gdalDriver, mode, precision, isPointFile, failLevelIn);
 #endif
       else if (type.compare("NONE"))
          ::report("DgOutLocFile::makeOutLoc(): invalid file type " + type, 
