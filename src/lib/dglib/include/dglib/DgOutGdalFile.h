@@ -38,58 +38,65 @@
 class DgDVec2D;
 class DgPolygon;
 class DgGeoSphDegRF;
+class DgIDGGBase;
 
 class DgOutGdalFile : public DgOutLocFile
 {
-    using DgOutLocFile::insert;
+   using DgOutLocFile::insert;
 
-public:
+   public:
 
-    DgOutGdalFile(const DgGeoSphDegRF& rf,
-                     const std::string& filename = "", const std::string& gdalDriver = "GeoJSON", int precision = 7,
-                     bool isPointFile = false, DgReportLevel failLevel = DgBase::Fatal);
+      enum DgOutGdalFileMode { Polygon, Point, Collection, InvalidMode };
 
-    ~DgOutGdalFile();
+      DgOutGdalFile(const DgGeoSphDegRF& rf, const std::string& filename = "", 
+               const std::string& gdalDriver = "GeoJSON", 
+               DgOutGdalFileMode mode = InvalidMode, int precision = 7,
+               bool isPointFile = false, DgReportLevel failLevel = DgBase::Fatal);
 
-	// direct the DgOutLocFile abstract methods to the DgOutputStream ones
-    virtual bool open (const string& fileName,
-                       DgReportLevel failLevel = DgBase::Fatal)
-    {
-        return true;
-    }
+      ~DgOutGdalFile();
 
-    virtual void close (void)
-    {
-       GDALClose( _dataset );
-    }
+      // direct the DgOutLocFile abstract methods to the DgOutputStream ones
+      virtual bool open (const string& fileName,
+                       DgReportLevel failLevel = DgBase::Fatal) {
+         return true;
+      }
 
+      virtual void close (void) {
+         GDALClose( _dataset );
+      }
 
-    virtual DgOutLocFile& insert (DgLocation& loc, const string* label = NULL);
-    virtual DgOutLocFile& insert (DgLocVector& vec, const string* label = NULL,
-                                  const DgLocation* cent = NULL);
-    virtual DgOutLocFile& insert (DgPolygon& poly, const string* label = NULL,
-                                  const DgLocation* cent = NULL);
+      virtual DgOutLocFile& insert (DgLocation& loc, const string* label = NULL);
+      virtual DgOutLocFile& insert (DgLocVector& vec, const string* label = NULL,
+                                    const DgLocation* cent = NULL);
+      virtual DgOutLocFile& insert (DgPolygon& poly, const string* label = NULL,
+                                    const DgLocation* cent = NULL);
 
-    virtual void setFormatStr(void)
-    {
+      // collection output
+      DgOutLocFile& insert (const DgIDGGBase& dgg, const DgLocation& loc,
+           bool outputPoint, DgLocVector* vec = NULL, const string* label = NULL,
+           const DgLocVector* neighbors = NULL, const DgLocVector* children = NULL);
 
-    }
+      virtual void setFormatStr(void) { }
 
-protected:
+   protected:
 
-    virtual DgOutLocFile& insert(const DgDVec2D& pt);
+      DgOutGdalFileMode _mode;
 
-private:
+      virtual DgOutLocFile& insert(const DgDVec2D& pt);
 
-    // Gdal helpers:
-	std::string   _gdalDriver;
-	GDALDriver   *_driver;
-	GDALDataset  *_dataset;
-	OGRLayer     *_oLayer;
-	OGRFieldDefn *_oField;
-        std::string fileNameOnly_;
+   private:
 
-    void init(const std::string& filename);
+      // Gdal helpers:
+      std::string   _gdalDriver;
+      GDALDriver   *_driver;
+      GDALDataset  *_dataset;
+      OGRLayer     *_oLayer;
+      OGRFieldDefn *_oField;
+
+      std::string fileNameOnly_;
+
+      void init(const std::string& filename);
+      OGRFeature* createFeature (const string* label);
 };
 
 #endif
