@@ -79,17 +79,13 @@ DgOutGdalFile::init (const std::string& filename)
 
    delete _driver;
    _driver = GetGDALDriverManager()->GetDriverByName(_gdalDriver.c_str());
-   if (_driver == NULL) {
+   if (_driver == NULL)
         ::report( _gdalDriver + " driver not available.",  DgBase::Fatal);
-        exit(1);
-   }
 
    delete _dataset;
    _dataset = _driver->Create( fileNameOnly_.c_str(), 0, 0, 0, GDT_Unknown, NULL );
-   if (_dataset == NULL) {
+   if (_dataset == NULL)
       ::report( "Creation of output file failed.", DgBase::Fatal );
-      exit( 1 );
-   }
    
    delete _oLayer;
    _oLayer = NULL;
@@ -144,6 +140,7 @@ DgOutGdalFile::insert (const DgIDGGBase& dgg, const DgLocation& loc,
            bool outputPoint, DgLocVector* vec, const string* label,
            const DgLocVector* neighbors, const DgLocVector* children)
 {
+cout << "insert all " << _mode << endl;
    if (_mode != Collection)
       ::report("invalid GDAL output file mode encountered.", DgBase::Fatal);
 /*
@@ -161,7 +158,6 @@ DgOutGdalFile::insert (const DgIDGGBase& dgg, const DgLocation& loc,
    }
 
    *this << endl;
-
 */
    //// end  children
 
@@ -171,6 +167,7 @@ DgOutGdalFile::insert (const DgIDGGBase& dgg, const DgLocation& loc,
 DgOutLocFile&
 DgOutGdalFile::insert (DgLocation& loc, const string* label)
 {
+cout << "insert point " << _mode << endl;
    if (_mode != Point)
       ::report( "invalid GDAL output file mode encountered.", DgBase::Fatal );
 
@@ -188,7 +185,6 @@ DgOutGdalFile::insert (DgLocation& loc, const string* label)
    //Make sure no errors occur with binding the feature to the layer
    if (_oLayer->CreateFeature( feature ) != OGRERR_NONE)
       ::report( "Failed to create feature in file", DgBase::Fatal );
-      exit( 1 );
    
    //Clean up the feature and ready for the next one    
    OGRFeature::DestroyFeature( feature );
@@ -236,6 +232,7 @@ DgOutLocFile&
 DgOutGdalFile::insert (DgPolygon& poly, const string* label,
                           const DgLocation* cent)
 {
+cout << "insert polygon " << _mode << endl;
    if (_mode != Polygon)
       ::report( "invalid GDAL output file mode encountered.", DgBase::Fatal );
 
@@ -263,10 +260,9 @@ DgOutGdalFile::insert (DgPolygon& poly, const string* label,
    feature->SetGeometry(&polygon);
 
    // make sure no errors occure with binding the feature to the layer
-   if (_oLayer->CreateFeature( feature ) != OGRERR_NONE) {
+   if (_oLayer->CreateFeature( feature ) != OGRERR_NONE)
         ::report( "Failed to create feature in file", DgBase::Fatal );
-        exit( 1 );
-   }
+ 
    
    // clean up the feature and ready for the next one    
    OGRFeature::DestroyFeature( feature );
