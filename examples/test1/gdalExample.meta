@@ -23,8 +23,8 @@ clip_region_files inputfiles/corvallis.shp
 # specify the output
 cell_output_type GDAL
 # for output the format needs to be explicit
-cell_output_gdal_format KML
-cell_output_file_name ./outputfiles/corvallisCells.kml
+point_output_gdal_format GeoJSON
+cell_output_file_name ./outputfiles/corvallisCells.geojson
 
 point_output_type GDAL
 point_output_gdal_format GeoJSON
