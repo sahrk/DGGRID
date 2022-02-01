@@ -85,7 +85,7 @@ DgOutLocFile::makeOutLocFile (const string& type, const string& fileName,
 // USE_GDAL is set in MakeIncludes
 #ifdef USE_GDAL
       else if (!type.compare("GDAL")) {
-cout << "GDAL " << mode << endl;
+//cout << "GDAL " << mode << endl;
          file = new DgOutGdalFile(*geoRF, fileName, gdalDriver, mode, precision, isPointFile, failLevelIn);
 #endif
       } else if (type.compare("NONE"))

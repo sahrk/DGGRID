@@ -167,7 +167,7 @@ cout << "insert all " << _mode << endl;
 DgOutLocFile&
 DgOutGdalFile::insert (DgLocation& loc, const string* label)
 {
-cout << "insert point " << _mode << endl;
+//cout << "insert point " << _mode << endl;
    if (_mode != Point)
       ::report( "invalid GDAL output file mode encountered.", DgBase::Fatal );
 
@@ -232,7 +232,7 @@ DgOutLocFile&
 DgOutGdalFile::insert (DgPolygon& poly, const string* label,
                           const DgLocation* cent)
 {
-cout << "insert polygon " << _mode << endl;
+//cout << "insert polygon " << _mode << endl;
    if (_mode != Polygon)
       ::report( "invalid GDAL output file mode encountered.", DgBase::Fatal );
 
