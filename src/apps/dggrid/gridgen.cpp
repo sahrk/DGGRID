@@ -78,7 +78,7 @@ GridGenParam::GridGenParam (DgParamList& plist)
         lonWrapMode (DgGeoSphRF::Wrap), unwrapPts (true),
         nudge (0.001), ptsRand (0), doPointInPoly (true), 
         doPolyIntersect (false), sampleCount(0), nSamplePts(0), 
-        doRandPts (true), cellOut (0), ptOut (0), randPtsOut (0), 
+        doRandPts (true), cellOut (0), ptOut (0), collectOut (0), randPtsOut (0), 
         cellOutShp (0), ptOutShp (0), concatPtOut (true), useEnumLbl (false), 
         nCellsTested(0), nCellsAccepted (0)
 { 
@@ -205,6 +205,8 @@ GridGenParam::GridGenParam (DgParamList& plist)
       getParamValue(plist, "point_output_file_name", ptOutFileNameBase, 
                        false);
       getParamValue(plist, "randpts_output_file_name", randPtsOutFileNameBase, 
+                       false);
+      getParamValue(plist, "collection_output_file_name", collectOutFileNameBase, 
                        false);
       getParamValue(plist, "shapefile_id_field_length", shapefileIdLen, 
                        false);
@@ -380,6 +382,7 @@ void GridGenParam::dump (void)
    cout << " randPtsOutType: " << randPtsOutType << endl;
    cout << " cellOutFileNameBase: " << cellOutFileNameBase << endl;
    cout << " ptOutFileNameBase: " << ptOutFileNameBase << endl;
+   cout << " collectOutFileNameBase: " << collectOutFileNameBase << endl;
    cout << " randPtsOutFileNameBase: " << randPtsOutFileNameBase << endl;
    cout << " doPointInPoly: " << doPointInPoly << endl;
    cout << " doPolyIntersect: " << doPolyIntersect << endl;
@@ -764,6 +767,13 @@ void outputCell (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dg
       dp.nCellsOutputToFile = 1;
       dp.nOutputFile++;
 
+      if (dp.collectOut) {
+         delete dp.collectOut;
+         string fileName = dp.collectOutFileName + string("_") + 
+                                    dgg::util::to_string(dp.nOutputFile);
+         //dp.collectOut = XXX
+      }
+
       if (dp.cellOut) {
          delete dp.cellOut;
          dp.cellOut = NULL;
@@ -772,8 +782,9 @@ void outputCell (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dg
          string fileName = dp.cellOutFileName + string("_") + 
                                        dgg::util::to_string(dp.nOutputFile);
          dp.cellOut = DgOutLocFile::makeOutLocFile(dp.cellOutType, fileName,
-                         dp.gdalCellDriver, deg, false, dp.precision, DgOutLocFile::Polygon,
-                         dp.shapefileIdLen, dp.kmlColor, dp.kmlWidth, dp.kmlName, 
+                         dp.gdalCellDriver,
+                         deg, false, dp.precision, DgOutLocFile::Polygon, dp.shapefileIdLen,
+                         dp.kmlColor, dp.kmlWidth, dp.kmlName, 
                          dp.kmlDescription);
    
          if (dp.outCellAttributes) {
@@ -801,8 +812,8 @@ void outputCell (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dg
          string fileName = dp.ptOutFileName + string("_") + 
                                        dgg::util::to_string(dp.nOutputFile);
          dp.ptOut = DgOutLocFile::makeOutLocFile(dp.pointOutType, fileName,
-                      dp.gdalPointDriver, deg, true, dp.precision, 
-                      DgOutLocFile::Point, dp.shapefileIdLen,
+                      dp.gdalPointDriver,
+                      deg, true, dp.precision, DgOutLocFile::Point, dp.shapefileIdLen,
                       dp.kmlColor, dp.kmlWidth, dp.kmlName, dp.kmlDescription);
 
          if (dp.outPointAttributes)
@@ -842,7 +853,7 @@ void outputCell (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dg
          }
       }
 
-      ///// PlanetRisk output files /////
+      ///// children/neighber output files /////
       if (dp.nbrOut)
       {
          if (dp.gridTopo == Triangle)
@@ -856,8 +867,8 @@ void outputCell (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dg
          dp.nbrOut = new DgOutNeighborsFile(fileName);
       }
 
-      if (dp.chdOut)
-      {
+      if (dp.childrenOutType == "GDAL_COLLECTION") {
+
          delete dp.chdOut;
          dp.chdOut = NULL;
 
@@ -940,6 +951,9 @@ void outputCell (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dg
          *dp.ptOut << cell;
       }
    }
+
+   if (dp.collectOut) *dp.collectOut << cell;
+
 	
    ///// generate random points if applicable ///
    if (dp.doRandPts) 
@@ -966,6 +980,9 @@ void outputCell (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dg
    if (dp.chdOut) {
       dggs.setAllChildren(q2diR, children);
       dp.chdOut->insert(dgg, add2D, children);
+   } else if (dp.childrenOutType == "GDAL_COLLECTION") {
+      dggs.setAllChildren(q2diR, children);
+      //dp.collectOut->insertArrayProperty("children:", children);
    }
 
 } // void outputCell
@@ -1441,6 +1458,7 @@ void doGridGen (GridGenParam& dp, DgGridPList& plist)
       // first get the grid placement
       dp.cellOutFileName = dp.cellOutFileNameBase;
       dp.ptOutFileName = dp.ptOutFileNameBase;
+      dp.collectOutFileName = dp.collectOutFileNameBase;
       dp.randPtsOutFileName = dp.randPtsOutFileNameBase;
       dp.metaOutFileName = dp.metaOutFileNameBase; 
       dp.neighborsOutFileName = dp.neighborsOutFileNameBase;
@@ -1458,6 +1476,7 @@ void doGridGen (GridGenParam& dp, DgGridPList& plist)
          dp.metaOutFileName = dp.metaOutFileName + suffix; 
          dp.cellOutFileName = dp.cellOutFileName + suffix; 
          dp.ptOutFileName = dp.ptOutFileName + suffix;
+         dp.collectOutFileName = dp.collectOutFileName + suffix;
 
          if (!dp.concatPtOut)
             dp.randPtsOutFileName = dp.randPtsOutFileName + suffix;

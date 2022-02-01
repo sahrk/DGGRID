@@ -206,6 +206,8 @@ class GridGenParam : public MainParam {
       string cellOutFileName;
       string ptOutFileNameBase;
       string ptOutFileName;
+      string collectOutFileNameBase;
+      string collectOutFileName;
       string randPtsOutFileNameBase;
       string randPtsOutFileName;
       int    shapefileIdLen;  // global_id string field length
@@ -223,7 +225,7 @@ class GridGenParam : public MainParam {
       unsigned long int clipperFactor; // clipper scaling factor
       long double invClipperFactor; // 1.0L / clipper scaling factor
 
-      DgOutLocFile *cellOut, *ptOut, *randPtsOut;
+      DgOutLocFile *cellOut, *ptOut, *collectOut, *randPtsOut;
       DgOutShapefile *cellOutShp, *ptOutShp;
       DgOutPRCellsFile *prCellOut;
       DgOutPRPtsFile *prPtOut;

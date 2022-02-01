@@ -626,7 +626,7 @@ DgGridPList::init2 (void)
 
    ////// output parameters //////
 
-   // cell_output_type <NONE | AIGEN | GDAL | KML | GEOJSON | SHAPEFILE >
+   // cell_output_type <NONE | AIGEN | GDAL | KML | GEOJSON | SHAPEFILE | GDAL_COLLECTION>
    choices.push_back(new string("NONE"));
    choices.push_back(new string("AIGEN"));
 #ifdef USE_GDAL
@@ -635,12 +635,13 @@ DgGridPList::init2 (void)
    choices.push_back(new string("KML"));
    choices.push_back(new string("GEOJSON"));
    choices.push_back(new string("SHAPEFILE"));
+   choices.push_back(new string("GDAL_COLLECTION"));
    //choices.push_back(new string("TEXT"));
    insertParam(new DgStringChoiceParam("cell_output_type", "AIGEN", 
                &choices));
    dgg::util::release(choices);
 
-   // point_output_type <NONE | AIGEN | GDAL | KML | GEOJSON | SHAPEFILE | TEXT >
+   // point_output_type <NONE | AIGEN | GDAL | KML | GEOJSON | SHAPEFILE | TEXT | GDAL_COLLECTION>
    choices.push_back(new string("NONE"));
    choices.push_back(new string("AIGEN"));
 #ifdef USE_GDAL
@@ -650,6 +651,7 @@ DgGridPList::init2 (void)
    choices.push_back(new string("GEOJSON"));
    choices.push_back(new string("SHAPEFILE"));
    choices.push_back(new string("TEXT"));
+   choices.push_back(new string("GDAL_COLLECTION"));
    insertParam(new DgStringChoiceParam("point_output_type", "NONE", 
                &choices));
    dgg::util::release(choices);
@@ -685,6 +687,9 @@ DgGridPList::init2 (void)
    // randpts_output_file_name <outputFileName>
    insertParam(new DgStringParam("randpts_output_file_name", "randPts"));
 
+   // collection_output_file_name <outputFileName>
+   insertParam(new DgStringParam("collection_output_file_name", "cells"));
+
    // shapefile_id_field_length <int> (1 <= v <= 50)
    insertParam(new DgIntParam("shapefile_id_field_length", 11, 1, 50));
 
@@ -706,9 +711,10 @@ DgGridPList::init2 (void)
 
    ///// PlanetRisk output formats /////
 
-   // neighbor_output_type <NONE | TEXT>
+   // neighbor_output_type <NONE | TEXT | GEOJSON_COLLECTION>
    choices.push_back(new string("NONE"));
    choices.push_back(new string("TEXT"));
+   choices.push_back(new string("GDAL_COLLECTION"));
    insertParam(new DgStringChoiceParam("neighbor_output_type", "NONE",
                &choices));
    dgg::util::release(choices);
@@ -716,9 +722,10 @@ DgGridPList::init2 (void)
    // neighbor_output_file_name <outputFileName>
    insertParam(new DgStringParam("neighbor_output_file_name", "nbr"));
 
-   // children_output_type <NONE | TEXT>
+   // children_output_type <NONE | TEXT | GDAL_COLLECTION>
    choices.push_back(new string("NONE"));
    choices.push_back(new string("TEXT"));
+   choices.push_back(new string("GDAL_COLLECTION"));
    insertParam(new DgStringChoiceParam("children_output_type", "NONE",
                &choices));
    dgg::util::release(choices);
