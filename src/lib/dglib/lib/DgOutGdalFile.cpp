@@ -136,35 +136,6 @@ DgOutGdalFile::insert(const DgDVec2D& pt)
 }
 
 DgOutLocFile&
-DgOutGdalFile::insert (const DgIDGGBase& dgg, const DgLocation& loc,
-           bool outputPoint, DgLocVector* vec, const string* label,
-           const DgLocVector* neighbors, const DgLocVector* children)
-{
-cout << "insert all " << _mode << endl;
-   if (_mode != Collection)
-      ::report("invalid GDAL output file mode encountered.", DgBase::Fatal);
-/*
-//// children
-   const DgIDGGSBase& dggs = *(dgg.dggs());
-   const DgIDGGBase& dggr = dggs.idggBase(dgg.res() + 1);
-
-   unsigned long long int sn = dgg.bndRF().seqNum(center);
-   *this << sn;
-   for (int i = 0; i < vec.size(); i++)
-   {
-      DgLocation tmpLoc(vec[i]);
-      dggr.convert(&tmpLoc);
-      *this << " " << dggr.bndRF().seqNum(tmpLoc);
-   }
-
-   *this << endl;
-*/
-   //// end  children
-
-   return *this;
-}
-
-DgOutLocFile&
 DgOutGdalFile::insert (DgLocation& loc, const string* label)
 {
 //cout << "insert point " << _mode << endl;
