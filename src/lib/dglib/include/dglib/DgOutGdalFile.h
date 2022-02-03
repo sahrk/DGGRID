@@ -70,7 +70,7 @@ class DgOutGdalFile : public DgOutLocFile
                                     const DgLocation* cent = NULL);
 
       // collection output
-      DgOutLocFile& insert (const DgIDGGBase& dgg, const DgLocation& loc,
+      virtual DgOutLocFile& insert (const DgIDGGBase& dgg, const DgLocation& loc,
            bool outputPoint, DgLocVector* vec = NULL, const string* label = NULL,
            const DgLocVector* neighbors = NULL, const DgLocVector* children = NULL);
 
@@ -81,6 +81,10 @@ class DgOutGdalFile : public DgOutLocFile
       DgOutGdalFileMode _mode;
 
       virtual DgOutLocFile& insert(const DgDVec2D& pt);
+
+      OGRFeature* createFeature (const string* label) const;
+      OGRPoint createPoint (DgLocation& loc) const;
+      OGRPolygon createPolygon (DgPolygon& poly) const;
 
    private:
 
