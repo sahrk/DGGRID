@@ -54,9 +54,6 @@ DgOutGdalFile::DgOutGdalFile (const DgGeoSphDegRF& rf,
    delete dummy;
 
    _gdalDriver = gdalDriver;
-
-   // set-up the data structure
-   init(filename);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -73,7 +70,7 @@ DgOutGdalFile::~DgOutGdalFile()
 
 ////////////////////////////////////////////////////////////////////////////////
 void 
-DgOutGdalFile::init (const std::string& filename)
+DgOutGdalFile::init (bool outputPoint, bool outputRegion)
 {
    fileNameOnly_ = DgOutLocFile::fileName();
 
@@ -104,7 +101,13 @@ DgOutGdalFile::init (const std::string& filename)
          geomType = wkbPoint;
          break;
       case Collection:
-         geomType = wkbGeometryCollection;
+         if (outputPoint) {
+            if (outputRegion) 
+               geomType = wkbGeometryCollection;
+            else // just points
+               geomType = wkbPoint;
+         } else // just regions
+            geomType = wkbPolygon;
          break;
       default:
          ::report( "Invalid GDAL file mode.", DgBase::Fatal );
@@ -140,34 +143,32 @@ DgOutGdalFile::insert(const DgDVec2D& pt)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/*
-DgOutLocFile&
-DgOutGdalFile::insert (const DgIDGGBase& dgg, const DgLocation& loc,
-           bool outputPoint, DgLocVector* vec, const string* label,
-           const DgLocVector* neighbors, const DgLocVector* children)
-*/
 DgOutLocFile&
 DgOutGdalFile::insert (const DgIDGGBase& dgg, const DgCell& cell,
            bool outputPoint, bool outputRegion,
            const DgLocVector* neighbors, const DgLocVector* children)
 {
-cout << "insert all " << _mode << endl;
-
    if (_mode != Collection)
       ::report("invalid GDAL output file mode encountered.", DgBase::Fatal);
+
+   if (!_oLayer)
+      init(outputPoint, outputRegion);
 
    // create the named feature
    OGRFeature *feature = createFeature(cell.label());
    
    // determine the geometry
 
+/*
    // first check for multi
    if (outputPoint && outputRegion) {
 cout << "both" << endl;
    } else if (outputPoint) {
+*/
 
       OGRPoint oPt = createPoint(cell.node());
       feature->SetGeometry(&oPt);
+/*
 
    } else if (outputRegion) {
 
@@ -175,6 +176,7 @@ cout << "both" << endl;
       feature->SetGeometry(&poly);
    } else
       ::report( "No geometry specified for GDAL collection feature.", DgBase::Fatal );
+*/
 
    addFeature(feature);
 
@@ -264,6 +266,9 @@ DgOutGdalFile::insert (DgLocation& loc, const string* label)
    if (_mode != Point)
       ::report( "invalid GDAL output file mode encountered.", DgBase::Fatal );
 
+   if (!_oLayer)
+      init(true, false);
+
    // create the feature
    OGRFeature *feature = createFeature(*label);
    
@@ -300,6 +305,9 @@ DgOutGdalFile::insert (DgPolygon& poly, const string* label,
 {
    if (_mode != Polygon)
       ::report( "invalid GDAL output file mode encountered.", DgBase::Fatal );
+
+   if (!_oLayer)
+      init(false, true);
 
    OGRPolygon polygon = createPolygon(poly);
 

@@ -21,7 +21,7 @@ clip_subset_type WHOLE_EARTH
 # specify the output collection file used
 # when GDAL_COLLECTION is specified below
 collection_output_gdal_format GeoJSON
-collection_output_file_name ./outputfiles/everything
+collection_output_file_name ./outputfiles/everything.geojson
 
 # specify the output
 #cell_output_type NONE

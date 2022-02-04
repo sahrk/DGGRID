@@ -103,7 +103,7 @@ class DgOutGdalFile : public DgOutLocFile
 
       std::string fileNameOnly_;
 
-      void init(const std::string& filename);
+      void init (bool outputPoint, bool outputRegion);
 };
 
 #endif
