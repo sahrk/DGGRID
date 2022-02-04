@@ -39,6 +39,7 @@
 #include <dglib/DgOutPRCellsFile.h>
 #include <dglib/DgOutPRPtsFile.h>
 #include <dglib/DgGeoSphRF.h>
+#include <dglib/DgIDGGBase.h>
 
 const string DgOutLocFile::defaultKMLColor = "ffffffff";
 const int    DgOutLocFile::defaultKMLWidth = 4;
@@ -62,10 +63,10 @@ DgOutLocFile::makeOutLocFile (const string& type, const string& fileName,
                     DgReportLevel failLevelIn)
 {
    DgOutLocFile* file = NULL;
-   if (!type.compare("AIGEN"))
+   if (type == "AIGEN")
       file = new DgOutAIGenFile(rf, fileName, precision, isPointFile, 
                                  failLevelIn);
-   else if (!type.compare("TEXT"))
+   else if (type == "TEXT")
       file = new DgOutPtsText(rf, fileName, precision, failLevelIn);
    else // must be KML, GEOJSON, SHAPEFILE, or GDAL
    {
@@ -73,22 +74,22 @@ DgOutLocFile::makeOutLocFile (const string& type, const string& fileName,
       if (geoRF == NULL)
          ::report("DgOutLocFile::makeOutLoc(): invalid RF type", failLevelIn);
 
-      if (!type.compare("KML"))
+      if (type == "KML")
          file = new DgOutKMLfile(*geoRF, fileName, precision, isPointFile, 
                                  kmlColor, kmlWidth, kmlName, kmlDesc, failLevelIn);
-      else if (!type.compare("GEOJSON"))
+      else if (type == "GEOJSON")
          file = new DgOutGeoJSONFile(*geoRF, fileName, precision, isPointFile,
                                      failLevelIn);
-      else if (!type.compare("SHAPEFILE"))
+      else if (type == "SHAPEFILE")
          file = new DgOutShapefile(*geoRF, fileName, precision, isPointFile, 
                                     shapefileIdLen, failLevelIn);
 // USE_GDAL is set in MakeIncludes
 #ifdef USE_GDAL
-      else if (!type.compare("GDAL")) {
+      else if (type == "GDAL" || type == "GDAL_COLLECTIBLE") {
 //cout << "GDAL " << mode << endl;
          file = new DgOutGdalFile(*geoRF, fileName, gdalDriver, mode, precision, isPointFile, failLevelIn);
 #endif
-      } else if (type.compare("NONE"))
+      } else if (type != "NONE")
          ::report("DgOutLocFile::makeOutLoc(): invalid file type " + type, 
                                  failLevelIn);
    }

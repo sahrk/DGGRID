@@ -59,6 +59,7 @@ DgOutGdalFile::DgOutGdalFile (const DgGeoSphDegRF& rf,
    init(filename);
 }
 
+////////////////////////////////////////////////////////////////////////////////
 DgOutGdalFile::~DgOutGdalFile()
 {
    delete _oField;
@@ -70,6 +71,7 @@ DgOutGdalFile::~DgOutGdalFile()
    close();
 }
 
+////////////////////////////////////////////////////////////////////////////////
 void 
 DgOutGdalFile::init (const std::string& filename)
 {
@@ -111,23 +113,25 @@ DgOutGdalFile::init (const std::string& filename)
    if (_oLayer == NULL)
       ::report( "Layer creation failed.", DgBase::Fatal );
 
-   //Create the name field
+   // create the name field; other fields may be added if this is a collection
    _oField = new OGRFieldDefn( "name", OFTString );
    _oField->SetWidth(32);
    if (_oLayer->CreateField(_oField) != OGRERR_NONE)
       ::report("Creating name field failed.", DgBase::Fatal );
 }
 
+////////////////////////////////////////////////////////////////////////////////
 OGRFeature*
-DgOutGdalFile::createFeature (const string* label) const
+DgOutGdalFile::createFeature (const string& label) const
 {
    OGRFeature *feature = OGRFeature::CreateFeature(_oLayer->GetLayerDefn());
    if (!feature)
       ::report("GDAL feature creation failed.", DgBase::Fatal );
-   feature->SetField("name", label->c_str());
+   feature->SetField("name", label.c_str());
    return feature;
 }
 
+////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
 DgOutGdalFile::insert(const DgDVec2D& pt)
 {
@@ -135,14 +139,54 @@ DgOutGdalFile::insert(const DgDVec2D& pt)
    return *this;
 }
 
+////////////////////////////////////////////////////////////////////////////////
+/*
 DgOutLocFile&
 DgOutGdalFile::insert (const DgIDGGBase& dgg, const DgLocation& loc,
            bool outputPoint, DgLocVector* vec, const string* label,
            const DgLocVector* neighbors, const DgLocVector* children)
+*/
+DgOutLocFile&
+DgOutGdalFile::insert (const DgIDGGBase& dgg, const DgCell& cell,
+           bool outputPoint, bool outputRegion,
+           const DgLocVector* neighbors, const DgLocVector* children)
 {
 cout << "insert all " << _mode << endl;
+
    if (_mode != Collection)
       ::report("invalid GDAL output file mode encountered.", DgBase::Fatal);
+
+   // create the named feature
+   OGRFeature *feature = createFeature(cell.label());
+   
+   // determine the geometry
+
+   // first check for multi
+   if (outputPoint && outputRegion) {
+cout << "both" << endl;
+   } else if (outputPoint) {
+
+      OGRPoint oPt = createPoint(cell.node());
+      feature->SetGeometry(&oPt);
+
+   } else if (outputRegion) {
+
+      OGRPolygon poly = createPolygon(cell.region());
+      feature->SetGeometry(&poly);
+   } else
+      ::report( "No geometry specified for GDAL collection feature.", DgBase::Fatal );
+
+   addFeature(feature);
+
+   return *this;
+/*
+   //Make sure no errors occur with binding the feature to the layer
+   if (_oLayer->CreateFeature( feature ) != OGRERR_NONE)
+      ::report( "Failed to create feature in file", DgBase::Fatal );
+   
+   //Clean up the feature and ready for the next one    
+   OGRFeature::DestroyFeature( feature );
+*/
 /*
 //// children
    const DgIDGGSBase& dggs = *(dgg.dggs());
@@ -160,12 +204,11 @@ cout << "insert all " << _mode << endl;
    *this << endl;
 */
    //// end  children
-
-   return *this;
 }
 
+////////////////////////////////////////////////////////////////////////////////
 OGRPoint
-DgOutGdalFile::createPoint (DgLocation& loc) const
+DgOutGdalFile::createPoint (const DgLocation& loc) const
 {
    DgDVec2D pt = rf().getVecLocation(loc);
    OGRPoint oPt;
@@ -176,67 +219,17 @@ DgOutGdalFile::createPoint (DgLocation& loc) const
    return oPt;
 }
 
+////////////////////////////////////////////////////////////////////////////////
 OGRPolygon
-DgOutGdalFile::createPolygon (DgPolygon& poly) const
+DgOutGdalFile::createPolygon (const DgPolygon& poly) const
 {
-   OGRPolygon p;
-   return p;
-}
-
-DgOutLocFile&
-DgOutGdalFile::insert (DgLocation& loc, const string* label)
-{
-//cout << "insert point " << _mode << endl;
-   if (_mode != Point)
-      ::report( "invalid GDAL output file mode encountered.", DgBase::Fatal );
-
-   // create the feature
-   OGRFeature *feature = createFeature(label);
-   
-   OGRPoint oPt = createPoint(loc);
-/*
-   DgDVec2D pt = rf().getVecLocation(loc);
-   OGRPoint oPt;
-
-   oPt.setX(pt.x());
-   oPt.setY(pt.y());
-*/
-
-   feature->SetGeometry(&oPt);
-
-   //Make sure no errors occur with binding the feature to the layer
-   if (_oLayer->CreateFeature( feature ) != OGRERR_NONE)
-      ::report( "Failed to create feature in file", DgBase::Fatal );
-   
-   //Clean up the feature and ready for the next one    
-   OGRFeature::DestroyFeature( feature );
-   
-   return *this;
-}
-
-DgOutLocFile&
-DgOutGdalFile::insert (DgLocVector& vec, const string* label,
-                          const DgLocation* cent)
-{
-   ::report( "polyline output not supported for GDAL file output", DgBase::Fatal );
-   return *this;
-}
-
-DgOutLocFile&
-DgOutGdalFile::insert (DgPolygon& poly, const string* label,
-                          const DgLocation* cent)
-{
-//cout << "insert polygon " << _mode << endl;
-   if (_mode != Polygon)
-      ::report( "invalid GDAL output file mode encountered.", DgBase::Fatal );
-
    // first create a linearRing
    OGRLinearRing *linearRing;
    linearRing = (OGRLinearRing*) OGRGeometryFactory::createGeometry(wkbLinearRing);
 
    // fill linearRing with points
-   vector<DgAddressBase *>& v = poly.addressVec();
-   for (vector<DgAddressBase *>::iterator i = v.begin(); v.end() != i; ++i) {
+   const vector<DgAddressBase *>& v = poly.addressVec();
+   for (vector<DgAddressBase *>::const_iterator i = v.begin(); v.end() != i; ++i) {
      DgDVec2D pt = rf().getVecAddress(*(*i));
      linearRing->addPoint(pt.x(), pt.y());
    }
@@ -249,9 +242,12 @@ DgOutGdalFile::insert (DgPolygon& poly, const string* label,
    OGRPolygon polygon;
    polygon.addRingDirectly(linearRing);
 
-   // this will hold the geometry information
-   OGRFeature *feature = createFeature(label);
-   feature->SetGeometry(&polygon);
+   return polygon;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+void
+DgOutGdalFile::addFeature (OGRFeature *feature) {
 
    // make sure no errors occure with binding the feature to the layer
    if (_oLayer->CreateFeature( feature ) != OGRERR_NONE)
@@ -259,6 +255,66 @@ DgOutGdalFile::insert (DgPolygon& poly, const string* label,
  
    // clean up the feature and ready for the next one    
    OGRFeature::DestroyFeature( feature );
+}
+
+////////////////////////////////////////////////////////////////////////////////
+DgOutLocFile&
+DgOutGdalFile::insert (DgLocation& loc, const string* label)
+{
+   if (_mode != Point)
+      ::report( "invalid GDAL output file mode encountered.", DgBase::Fatal );
+
+   // create the feature
+   OGRFeature *feature = createFeature(*label);
+   
+   OGRPoint oPt = createPoint(loc);
+
+   feature->SetGeometry(&oPt);
+
+   addFeature(feature);
+/*
+   //Make sure no errors occur with binding the feature to the layer
+   if (_oLayer->CreateFeature( feature ) != OGRERR_NONE)
+      ::report( "Failed to create feature in file", DgBase::Fatal );
+   
+   //Clean up the feature and ready for the next one    
+   OGRFeature::DestroyFeature( feature );
+*/
+   
+   return *this;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+DgOutLocFile&
+DgOutGdalFile::insert (DgLocVector& vec, const string* label,
+                          const DgLocation* cent)
+{
+   ::report( "polyline output not supported for GDAL file output", DgBase::Fatal );
+   return *this;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+DgOutLocFile&
+DgOutGdalFile::insert (DgPolygon& poly, const string* label,
+                          const DgLocation* cent)
+{
+   if (_mode != Polygon)
+      ::report( "invalid GDAL output file mode encountered.", DgBase::Fatal );
+
+   OGRPolygon polygon = createPolygon(poly);
+
+   OGRFeature *feature = createFeature(*label);
+   feature->SetGeometry(&polygon);
+
+   addFeature(feature);
+/*
+   // make sure no errors occure with binding the feature to the layer
+   if (_oLayer->CreateFeature( feature ) != OGRERR_NONE)
+        ::report( "Failed to create feature in file", DgBase::Fatal );
+ 
+   // clean up the feature and ready for the next one    
+   OGRFeature::DestroyFeature( feature );
+*/
    return *this;
 }
 

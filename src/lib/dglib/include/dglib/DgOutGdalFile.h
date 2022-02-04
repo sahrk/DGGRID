@@ -70,9 +70,14 @@ class DgOutGdalFile : public DgOutLocFile
                                     const DgLocation* cent = NULL);
 
       // collection output
+/*
       virtual DgOutLocFile& insert (const DgIDGGBase& dgg, const DgLocation& loc,
            bool outputPoint, DgLocVector* vec = NULL, const string* label = NULL,
            const DgLocVector* neighbors = NULL, const DgLocVector* children = NULL);
+*/
+      virtual DgOutLocFile& insert (const DgIDGGBase& dgg, const DgCell& cell,
+                      bool outputPoint, bool outputRegion, 
+                      const DgLocVector* neighbors, const DgLocVector* children);
 
       virtual void setFormatStr(void) { }
 
@@ -82,9 +87,10 @@ class DgOutGdalFile : public DgOutLocFile
 
       virtual DgOutLocFile& insert(const DgDVec2D& pt);
 
-      OGRFeature* createFeature (const string* label) const;
-      OGRPoint createPoint (DgLocation& loc) const;
-      OGRPolygon createPolygon (DgPolygon& poly) const;
+      OGRFeature* createFeature (const string& label) const;
+      OGRPoint createPoint (const DgLocation& loc) const;
+      OGRPolygon createPolygon (const DgPolygon& poly) const;
+      void addFeature (OGRFeature *feature);
 
    private:
 
@@ -98,7 +104,6 @@ class DgOutGdalFile : public DgOutLocFile
       std::string fileNameOnly_;
 
       void init(const std::string& filename);
-      OGRFeature* createFeature (const string* label);
 };
 
 #endif

@@ -1,6 +1,6 @@
 ################################################################################
 #
-# aigenerate.meta - example of a DGGRID metafile that generates a resolution 
+# gdalExample.meta - example of a DGGRID metafile that generates a resolution 
 #     9 ISEA7H grid. The clipping and output files all use GDAL-readable file 
 #     formats.
 #

@@ -194,6 +194,7 @@ class GridGenParam : public MainParam {
       string pointOutType;
       string gdalPointDriver;
       string randPtsOutType;
+      string gdalCollectDriver;
 
       string neighborsOutType;
       string childrenOutType;

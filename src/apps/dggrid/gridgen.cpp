@@ -186,6 +186,7 @@ GridGenParam::GridGenParam (DgParamList& plist)
       getParamValue(plist, "cell_output_type", cellOutType, "NONE");
 #ifdef USE_GDAL
       getParamValue(plist, "cell_output_gdal_format", gdalCellDriver, "NONE");
+      getParamValue(plist, "collection_output_gdal_format", gdalCollectDriver, "NONE");
 #endif
       getParamValue(plist, "point_output_type", pointOutType, "NONE");
 #ifdef USE_GDAL
@@ -769,9 +770,17 @@ void outputCell (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dg
 
       if (dp.collectOut) {
          delete dp.collectOut;
+         dp.collectOut = NULL;
+
          string fileName = dp.collectOutFileName + string("_") + 
                                     dgg::util::to_string(dp.nOutputFile);
-         //dp.collectOut = XXX
+
+         dp.collectOut = DgOutLocFile::makeOutLocFile(dp.cellOutType, fileName,
+                         dp.gdalCollectDriver,
+                         deg, false, dp.precision, DgOutLocFile::Collection, dp.shapefileIdLen,
+                         dp.kmlColor, dp.kmlWidth, dp.kmlName, 
+                         dp.kmlDescription);
+   
       }
 
       if (dp.cellOut) {
@@ -782,10 +791,10 @@ void outputCell (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dg
          string fileName = dp.cellOutFileName + string("_") + 
                                        dgg::util::to_string(dp.nOutputFile);
          dp.cellOut = DgOutLocFile::makeOutLocFile(dp.cellOutType, fileName,
-                         dp.gdalCellDriver,
-                         deg, false, dp.precision, DgOutLocFile::Polygon, dp.shapefileIdLen,
-                         dp.kmlColor, dp.kmlWidth, dp.kmlName, 
-                         dp.kmlDescription);
+                dp.gdalCellDriver, deg, false, dp.precision, 
+                DgOutLocFile::Polygon, dp.shapefileIdLen,
+                dp.kmlColor, dp.kmlWidth, dp.kmlName, 
+                dp.kmlDescription);
    
          if (dp.outCellAttributes) {
             dp.cellOutShp = static_cast<DgOutShapefile*>(dp.cellOut);
@@ -952,9 +961,6 @@ void outputCell (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dg
       }
    }
 
-   if (dp.collectOut) *dp.collectOut << cell;
-
-	
    ///// generate random points if applicable ///
    if (dp.doRandPts) 
       genPoints(dp, dgg, *dgg.getAddress(add2D), deg, cell.label());
@@ -962,12 +968,14 @@ void outputCell (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dg
    ///// neighbor/children output files /////
    DgLocVector neighbors;
    DgLocation ctrGeo = cell.node();
-   if (dp.nbrOut)
-   {
+   //if (dp.nbrOut || dp.neighborOutType == "GDAL_COLLECTION")
+   if (dp.neighborsOutType != "NONE") {
+
       if (dp.gridTopo == Triangle)
          ::report("Neighbors not implemented for Triangle grids", DgBase::Fatal);
+
       dgg.setNeighbors(add2D, neighbors);
-      dp.nbrOut->insert(dgg, add2D, neighbors);
+      if (dp.nbrOut) dp.nbrOut->insert(dgg, add2D, neighbors);
 
       for (int i = 0; i < neighbors.size(); i++)
          dp.runStats.push(dgg.geoRF().dist(ctrGeo, neighbors[i]));
@@ -977,12 +985,21 @@ void outputCell (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dg
    //const DgHexIDGGS& dggs = hexdgg.dggs();
    DgResAdd<DgQ2DICoord> q2diR(q2di, dgg.res());
    DgLocVector children;
-   if (dp.chdOut) {
+   //if (dp.chdOut || dp.childrenOutType == "GDAL_COLLECTION") {
+   if (dp.childrenOutType != "NONE") {
+
       dggs.setAllChildren(q2diR, children);
-      dp.chdOut->insert(dgg, add2D, children);
-   } else if (dp.childrenOutType == "GDAL_COLLECTION") {
-      dggs.setAllChildren(q2diR, children);
-      //dp.collectOut->insertArrayProperty("children:", children);
+
+      if (dp.chdOut) 
+         dp.chdOut->insert(dgg, add2D, children);
+   }
+
+   if (dp.collectOut) {
+      dp.collectOut->insert(dgg, cell, 
+            (dp.pointOutType == "GDAL_COLLECTION"), 
+            (dp.cellOutType == "GDAL_COLLECTION"),
+            ((dp.neighborsOutType == "GDAL_COLLECTION") ? &neighbors : NULL),
+            ((dp.childrenOutType == "GDAL_COLLECTION") ? &children : NULL));
    }
 
 } // void outputCell
@@ -1034,6 +1051,9 @@ void genGrid (GridGenParam& dp)
    string randPtsOutFileName = dp.randPtsOutFileName;
    string neighborsOutFileName = dp.neighborsOutFileName;
    string childrenOutFileName = dp.childrenOutFileName;
+   string collectOutFileName = dp.collectOutFileName;
+   bool makeCollectFile = false;
+
    if (dp.maxCellsPerFile)
    {
       string numStr = string("_") + dgg::util::to_string(dp.nOutputFile);
@@ -1046,16 +1066,18 @@ void genGrid (GridGenParam& dp)
    
    dp.prCellOut = NULL;
    dp.cellOut = NULL;
-   if (!dp.cellOutType.compare("TEXT"))
+   if (dp.cellOutType == "TEXT")
       dp.prCellOut = new DgOutPRCellsFile(deg, cellOutFileName, dp.precision);
+   else if (dp.cellOutType == "GDAL_COLLECTION")
+      makeCollectFile = true;
    else
-      dp.cellOut = DgOutLocFile::makeOutLocFile(dp.cellOutType, cellOutFileName, dp.gdalCellDriver,
-                   deg, false, dp.precision, DgOutLocFile::Polygon, dp.shapefileIdLen,
+      dp.cellOut = DgOutLocFile::makeOutLocFile(dp.cellOutType, cellOutFileName, 
+                   dp.gdalCellDriver, deg, false, dp.precision, 
+                   DgOutLocFile::Polygon, dp.shapefileIdLen,
                    dp.kmlColor, dp.kmlWidth, dp.kmlName, dp.kmlDescription);
 
    dp.cellOutShp = NULL;
-   if (dp.outCellAttributes)
-   {
+   if (dp.outCellAttributes) {
       dp.cellOutShp = static_cast<DgOutShapefile*>(dp.cellOut);
       dp.cellOutShp->setDefIntAttribute(dp.shapefileDefaultInt);
       dp.cellOutShp->setDefDblAttribute(dp.shapefileDefaultDouble);
@@ -1064,13 +1086,22 @@ void genGrid (GridGenParam& dp)
 
    dp.prPtOut = NULL;
    dp.ptOut = NULL;
-   dp.ptOut = DgOutLocFile::makeOutLocFile(dp.pointOutType, ptOutFileName, dp.gdalPointDriver,
-                   deg, true, dp.precision, DgOutLocFile::Point, dp.shapefileIdLen,
-                   dp.kmlColor, dp.kmlWidth, dp.kmlName, dp.kmlDescription);
+   if (dp.pointOutType == "GDAL_COLLECTION")
+      makeCollectFile = true;
+   else
+      dp.ptOut = DgOutLocFile::makeOutLocFile(dp.pointOutType, 
+           ptOutFileName, dp.gdalPointDriver, deg, true, dp.precision, 
+           DgOutLocFile::Point, dp.shapefileIdLen,
+           dp.kmlColor, dp.kmlWidth, dp.kmlName, dp.kmlDescription);
+
+   if (makeCollectFile)
+      dp.collectOut = DgOutLocFile::makeOutLocFile("GDAL_COLLECTIBLE", 
+             collectOutFileName, dp.gdalCollectDriver, deg, false, 
+             dp.precision, DgOutLocFile::Collection, dp.shapefileIdLen,
+             dp.kmlColor, dp.kmlWidth, dp.kmlName, dp.kmlDescription);
 
    dp.ptOutShp = NULL;
-   if (dp.outPointAttributes)
-   {
+   if (dp.outPointAttributes) {
       dp.ptOutShp = static_cast<DgOutShapefile*>(dp.ptOut);
       dp.ptOutShp->setDefIntAttribute(dp.shapefileDefaultInt);
       dp.ptOutShp->setDefDblAttribute(dp.shapefileDefaultDouble);
@@ -1078,10 +1109,8 @@ void genGrid (GridGenParam& dp)
    }
 
    dp.randPtsOut = NULL;
-   if (dp.doRandPts) 
-   {
-      if (dp.curGrid == 1 || !dp.concatPtOut)
-      {
+   if (dp.doRandPts) {
+      if (dp.curGrid == 1 || !dp.concatPtOut) {
          if (!dp.randPtsOutType.compare("TEXT"))
             dp.randPtsOut = new DgOutRandPtsText(deg, randPtsOutFileName,
                       dp.precision);

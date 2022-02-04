@@ -38,6 +38,7 @@ class DgLocation;
 class DgCell;
 class DgRFBase;
 class DgDVec2D;
+class DgIDGGBase;
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgOutLocFile : public DgBase {
@@ -82,9 +83,9 @@ class DgOutLocFile : public DgBase {
       virtual DgOutLocFile& insert (DgLocList& list);
 
       // collection output; does nothing by default
-      virtual DgOutLocFile& insert (const DgIDGGBase& dgg, const DgLocation& loc,
-           bool outputPoint, DgLocVector* vec = NULL, const string* label = NULL,
-           const DgLocVector* neighbors = NULL, const DgLocVector* children = NULL) 
+      virtual DgOutLocFile& insert (const DgIDGGBase& dgg, const DgCell& cell,
+                      bool outputPoint, bool outputRegion,
+                      const DgLocVector* neighbors, const DgLocVector* children)
         { return *this; }
 
       // abstract virtual methods

@@ -676,6 +676,9 @@ DgGridPList::init2 (void)
 
    // point_output_gdal_format <gdal driver type>
    insertParam(new DgStringParam("point_output_gdal_format", "GeoJSON"));
+
+   // collection_output_gdal_format <gdal driver type>
+   insertParam(new DgStringParam("collection_output_gdal_format", "GeoJSON"));
 #endif
 
    // cell_output_file_name <outputFileName>

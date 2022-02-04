@@ -37,9 +37,11 @@ point_output_type GDAL (user set)
 randpts_output_type NONE (default)
 cell_output_gdal_format KML (user set)
 point_output_gdal_format GeoJSON (user set)
+collection_output_gdal_format GeoJSON (default)
 cell_output_file_name ./outputfiles/corvallisCells.kml (user set)
 point_output_file_name ./outputfiles/corvallisPts.geojson (user set)
 randpts_output_file_name randPts (default)
+collection_output_file_name cells (default)
 shapefile_id_field_length 11 (default)
 kml_default_width 4 (default)
 kml_default_color ffffffff (default)
@@ -55,13 +57,13 @@ output_first_seqnum 1 (default)
 output_last_seqnum 18446744073709551615 (default)
 verbosity 0 (default)
 
+Warning 1: Layer name './outputfiles/corvallisCells.kml' adjusted to '._outputfiles_corvallisCells.kml' for XML validity.
 Registering GDAL drivers...
 
 * building clipping regions...
 
 * No intersections in quad 0.
 * Testing quad 1... 
-Warning 1: Layer name './outputfiles/corvallisCells.kml' adjusted to '._outputfiles_corvallisCells.kml' for XML validity.
 ...quad 1 complete.
 * No intersections in quad 2.
 * No intersections in quad 3.
