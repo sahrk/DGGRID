@@ -320,6 +320,7 @@ GridGenParam::~GridGenParam ()
  // Flush and close any input files we may have used:
  delete cellOut; 
  delete ptOut;
+ delete collectOut;
  delete randPtsOut;
  delete prCellOut;
  delete prPtOut;
@@ -1094,6 +1095,7 @@ void genGrid (GridGenParam& dp)
            DgOutLocFile::Point, dp.shapefileIdLen,
            dp.kmlColor, dp.kmlWidth, dp.kmlName, dp.kmlDescription);
 
+   dp.collectOut = NULL;
    if (makeCollectFile)
       dp.collectOut = DgOutLocFile::makeOutLocFile("GDAL_COLLECTIBLE", 
              collectOutFileName, dp.gdalCollectDriver, deg, false, 
@@ -1463,6 +1465,8 @@ void genGrid (GridGenParam& dp)
    dp.cellOut = NULL;
    delete dp.ptOut;
    dp.ptOut = NULL;
+   delete dp.collectOut;
+   dp.collectOut = NULL;
 
    if (dp.numGrids == 1 || !dp.concatPtOut)
    {

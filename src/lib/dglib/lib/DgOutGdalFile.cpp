@@ -159,16 +159,13 @@ DgOutGdalFile::insert (const DgIDGGBase& dgg, const DgCell& cell,
    
    // determine the geometry
 
-/*
    // first check for multi
    if (outputPoint && outputRegion) {
 cout << "both" << endl;
    } else if (outputPoint) {
-*/
 
       OGRPoint oPt = createPoint(cell.node());
       feature->SetGeometry(&oPt);
-/*
 
    } else if (outputRegion) {
 
@@ -176,19 +173,10 @@ cout << "both" << endl;
       feature->SetGeometry(&poly);
    } else
       ::report( "No geometry specified for GDAL collection feature.", DgBase::Fatal );
-*/
 
    addFeature(feature);
 
    return *this;
-/*
-   //Make sure no errors occur with binding the feature to the layer
-   if (_oLayer->CreateFeature( feature ) != OGRERR_NONE)
-      ::report( "Failed to create feature in file", DgBase::Fatal );
-   
-   //Clean up the feature and ready for the next one    
-   OGRFeature::DestroyFeature( feature );
-*/
 /*
 //// children
    const DgIDGGSBase& dggs = *(dgg.dggs());
@@ -277,14 +265,6 @@ DgOutGdalFile::insert (DgLocation& loc, const string* label)
    feature->SetGeometry(&oPt);
 
    addFeature(feature);
-/*
-   //Make sure no errors occur with binding the feature to the layer
-   if (_oLayer->CreateFeature( feature ) != OGRERR_NONE)
-      ::report( "Failed to create feature in file", DgBase::Fatal );
-   
-   //Clean up the feature and ready for the next one    
-   OGRFeature::DestroyFeature( feature );
-*/
    
    return *this;
 }
@@ -315,14 +295,7 @@ DgOutGdalFile::insert (DgPolygon& poly, const string* label,
    feature->SetGeometry(&polygon);
 
    addFeature(feature);
-/*
-   // make sure no errors occure with binding the feature to the layer
-   if (_oLayer->CreateFeature( feature ) != OGRERR_NONE)
-        ::report( "Failed to create feature in file", DgBase::Fatal );
- 
-   // clean up the feature and ready for the next one    
-   OGRFeature::DestroyFeature( feature );
-*/
+
    return *this;
 }
 

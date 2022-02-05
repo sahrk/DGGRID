@@ -24,8 +24,8 @@ collection_output_gdal_format GeoJSON
 collection_output_file_name ./outputfiles/everything.geojson
 
 # specify the output
-#cell_output_type NONE
-cell_output_type GDAL
+cell_output_type NONE
+#cell_output_type GDAL
 cell_output_gdal_format GeoJSON
 cell_output_file_name ./outputfiles/corvallisCells.kml
 
