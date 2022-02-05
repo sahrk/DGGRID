@@ -51,8 +51,8 @@ MEMCHECK_CC_FLAGS = -g -O1 -fno-omit-frame-pointer -fsanitize=address -Wall -ped
 SHIP_CC_FLAGS = -O3 -Wall -pedantic
 
 # choose which to use; comment out the ones you don't want
-ADD_CC_FLAGS = $(SHIP_CC_FLAGS)
-#ADD_CC_FLAGS = $(DEBUG_CC_FLAGS)
+#ADD_CC_FLAGS = $(SHIP_CC_FLAGS)
+ADD_CC_FLAGS = $(DEBUG_CC_FLAGS)
 #ADD_CC_FLAGS = $(MEMCHECK_CC_FLAGS)
 
 ### the variables below are used by the Makefiles ###

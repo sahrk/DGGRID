@@ -70,12 +70,7 @@ class DgOutGdalFile : public DgOutLocFile
                                     const DgLocation* cent = NULL);
 
       // collection output
-/*
-      virtual DgOutLocFile& insert (const DgIDGGBase& dgg, const DgLocation& loc,
-           bool outputPoint, DgLocVector* vec = NULL, const string* label = NULL,
-           const DgLocVector* neighbors = NULL, const DgLocVector* children = NULL);
-*/
-      virtual DgOutLocFile& insert (const DgIDGGBase& dgg, const DgCell& cell,
+      virtual DgOutLocFile& insert (const DgIDGGBase& dgg, DgCell& cell,
                       bool outputPoint, bool outputRegion, 
                       const DgLocVector* neighbors, const DgLocVector* children);
 

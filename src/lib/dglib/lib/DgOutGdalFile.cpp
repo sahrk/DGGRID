@@ -144,7 +144,7 @@ DgOutGdalFile::insert(const DgDVec2D& pt)
 
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutGdalFile::insert (const DgIDGGBase& dgg, const DgCell& cell,
+DgOutGdalFile::insert (const DgIDGGBase& dgg, DgCell& cell,
            bool outputPoint, bool outputRegion,
            const DgLocVector* neighbors, const DgLocVector* children)
 {
@@ -153,6 +153,9 @@ DgOutGdalFile::insert (const DgIDGGBase& dgg, const DgCell& cell,
 
    if (!_oLayer)
       init(outputPoint, outputRegion);
+
+   //DgCell cell(cellIn);
+   rf().convert(&cell);
 
    // create the named feature
    OGRFeature *feature = createFeature(cell.label());
