@@ -96,11 +96,11 @@ class DgOutGdalFile : public DgOutLocFile
       GDALDriver   *_driver;
       GDALDataset  *_dataset;
       OGRLayer     *_oLayer;
-      OGRFieldDefn *_oField;
 
       std::string fileNameOnly_;
 
-      void init (bool outputPoint, bool outputRegion);
+      void init (bool outputPoint, bool outputRegion = false,
+              bool outputNeighbors = false, bool outputChildren = false);
 };
 
 #endif

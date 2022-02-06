@@ -37,3 +37,9 @@ point_output_type GDAL_COLLECTION
 #point_output_type GDAL
 point_output_gdal_format GeoJSON
 point_output_file_name ./outputfiles/points.geojson
+
+children_output_type GDAL_COLLECTION
+children_output_file_name outputfiles/children
+
+neighbor_output_type TEXT
+neighbor_output_file_name outputfiles/neighbors

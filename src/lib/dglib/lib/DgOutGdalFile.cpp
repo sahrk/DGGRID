@@ -29,6 +29,7 @@
 
 #include <sstream>
 #include <iostream>
+#include <string>
 
 #include <dglib/DgOutGdalFile.h>
 #include <dglib/DgLocList.h>
@@ -36,6 +37,8 @@
 #include <dglib/DgLocation.h>
 #include <dglib/DgCell.h>
 #include <dglib/DgGeoSphRF.h>
+#include <dglib/DgIDGGSBase.h>
+#include <dglib/DgBoundedIDGG.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 DgOutGdalFile::DgOutGdalFile (const DgGeoSphDegRF& rf,
@@ -43,7 +46,7 @@ DgOutGdalFile::DgOutGdalFile (const DgGeoSphDegRF& rf,
                     DgOutGdalFileMode mode, int precision, bool isPointFile, 
                     DgReportLevel failLevel)
     : DgOutLocFile (filename, rf, isPointFile, failLevel), _mode (mode),
-         _gdalDriver(""), _driver(NULL), _dataset(NULL), _oLayer(NULL), _oField(NULL), 
+         _gdalDriver(""), _driver(NULL), _dataset(NULL), _oLayer(NULL),  
          fileNameOnly_("")
 {
    // test for override of vecAddress
@@ -59,18 +62,13 @@ DgOutGdalFile::DgOutGdalFile (const DgGeoSphDegRF& rf,
 ////////////////////////////////////////////////////////////////////////////////
 DgOutGdalFile::~DgOutGdalFile()
 {
-   delete _oField;
-   _oField = NULL;
-   delete _dataset;
-   _dataset = NULL;
-   delete _oField;
-   _oField = NULL;
    close();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 void 
-DgOutGdalFile::init (bool outputPoint, bool outputRegion)
+DgOutGdalFile::init (bool outputPoint, bool outputRegion, bool outputNeighbors,
+                      bool outputChildren)
 {
    fileNameOnly_ = DgOutLocFile::fileName();
 
@@ -88,8 +86,6 @@ DgOutGdalFile::init (bool outputPoint, bool outputRegion)
    
    delete _oLayer;
    _oLayer = NULL;
-   delete _oField;
-   _oField = NULL;
 
    // create the layer that we will be using
    OGRwkbGeometryType geomType = wkbUnknown;
@@ -117,10 +113,24 @@ DgOutGdalFile::init (bool outputPoint, bool outputRegion)
       ::report( "Layer creation failed.", DgBase::Fatal );
 
    // create the name field; other fields may be added if this is a collection
-   _oField = new OGRFieldDefn( "name", OFTString );
-   _oField->SetWidth(32);
-   if (_oLayer->CreateField(_oField) != OGRERR_NONE)
+   OGRFieldDefn *nameFieldDefn = new OGRFieldDefn( "name", OFTString );
+   nameFieldDefn->SetWidth(32);
+   if (_oLayer->CreateField(nameFieldDefn) != OGRERR_NONE)
       ::report("Creating name field failed.", DgBase::Fatal );
+
+   if (outputNeighbors) {
+      OGRFieldDefn *fldDefn = new OGRFieldDefn( "neighbors", OFTStringList );
+      //fldDefn->SetWidth(32);
+      if (_oLayer->CreateField(fldDefn) != OGRERR_NONE)
+         ::report("Creating neighbors field failed.", DgBase::Fatal );
+   }
+
+   if (outputChildren) {
+      OGRFieldDefn *fldDefn = new OGRFieldDefn( "children", OFTStringList );
+      //fldDefn->SetWidth(32);
+      if (_oLayer->CreateField(fldDefn) != OGRERR_NONE)
+         ::report("Creating children field failed.", DgBase::Fatal );
+   }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -154,6 +164,8 @@ DgOutGdalFile::insert (const DgIDGGBase& dgg, DgCell& cell,
    if (!_oLayer)
       init(outputPoint, outputRegion);
 
+   // first build the geometry
+
    //DgCell cell(cellIn);
    rf().convert(&cell);
 
@@ -180,26 +192,27 @@ DgOutGdalFile::insert (const DgIDGGBase& dgg, DgCell& cell,
    } else
       ::report( "No geometry specified for GDAL collection feature.", DgBase::Fatal );
 
+   if (children) {
+      const DgIDGGSBase& dggs = *(dgg.dggs());
+      const DgIDGGBase& dggr = dggs.idggBase(dgg.res() + 1);
+
+      char** strArr = new char*[children->size()];
+      for (int i = 0; i < children->size(); i++) {
+         DgLocation tmpLoc((*children)[i]);
+         dggr.convert(&tmpLoc);
+
+         std::string str = std::to_string(dggr.bndRF().seqNum(tmpLoc));
+         strArr[i] = new char[str.length() + 1];
+         strcpy(strArr[i], str.c_str());
+
+         feature->SetField("children", strArr);
+//cleanup
+      }
+   }
+
    addFeature(feature);
 
    return *this;
-/*
-//// children
-   const DgIDGGSBase& dggs = *(dgg.dggs());
-   const DgIDGGBase& dggr = dggs.idggBase(dgg.res() + 1);
-
-   unsigned long long int sn = dgg.bndRF().seqNum(center);
-   *this << sn;
-   for (int i = 0; i < vec.size(); i++)
-   {
-      DgLocation tmpLoc(vec[i]);
-      dggr.convert(&tmpLoc);
-      *this << " " << dggr.bndRF().seqNum(tmpLoc);
-   }
-
-   *this << endl;
-*/
-   //// end  children
 }
 
 ////////////////////////////////////////////////////////////////////////////////

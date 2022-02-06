@@ -142,7 +142,9 @@ int main (int argc, char* argv[])
 
    delete pdp;
    
-   ////// do the grid /////////
+cout << "PAUSED" << endl;
+char c;
+scanf("%c", &c);
 
    return 0;
 
