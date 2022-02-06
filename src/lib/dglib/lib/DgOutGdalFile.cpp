@@ -164,11 +164,14 @@ DgOutGdalFile::insert (const DgIDGGBase& dgg, DgCell& cell,
 
    // first check for multi
    if (outputPoint && outputRegion) {
-cout << "both" << endl;
+
+      OGRGeometryCollection collect = createCollection(cell); 
+      feature->SetGeometry(&collect);
+
    } else if (outputPoint) {
 
-      OGRPoint oPt = createPoint(cell.node());
-      feature->SetGeometry(&oPt);
+      OGRPoint pt = createPoint(cell.node());
+      feature->SetGeometry(&pt);
 
    } else if (outputRegion) {
 
@@ -236,6 +239,21 @@ DgOutGdalFile::createPolygon (const DgPolygon& poly) const
    polygon.addRingDirectly(linearRing);
 
    return polygon;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+OGRGeometryCollection
+DgOutGdalFile::createCollection (const DgCell& cell) const
+{
+   OGRGeometryCollection collection;
+
+   OGRPoint oPt = createPoint(cell.node());
+   collection.addGeometry(&oPt);
+
+   OGRPolygon poly = createPolygon(cell.region());
+   collection.addGeometry(&poly);
+
+   return collection;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

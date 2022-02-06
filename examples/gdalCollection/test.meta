@@ -28,12 +28,12 @@ collection_output_gdal_format GeoJSON
 collection_output_file_name ./outputfiles/everything.geojson
 
 # specify the output
-cell_output_type NONE
-cell_output_type GDAL
-cell_output_gdal_format KML
-cell_output_file_name ./outputfiles/cells.kml
+cell_output_type GDAL_COLLECTION
+#cell_output_type GDAL
+cell_output_gdal_format GEOJSON
+cell_output_file_name ./outputfiles/cells.geojson
 
 point_output_type GDAL_COLLECTION
 #point_output_type GDAL
-#point_output_gdal_format GeoJSON
-#point_output_file_name ./outputfiles/points.geojson
+point_output_gdal_format GeoJSON
+point_output_file_name ./outputfiles/points.geojson
