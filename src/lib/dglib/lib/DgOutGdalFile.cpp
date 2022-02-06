@@ -196,8 +196,10 @@ DgOutGdalFile::insert (const DgIDGGBase& dgg, DgCell& cell,
       const DgIDGGSBase& dggs = *(dgg.dggs());
       const DgIDGGBase& dggr = dggs.idggBase(dgg.res() + 1);
 
-      char** strArr = new char*[children->size()];
-      for (int i = 0; i < children->size(); i++) {
+      int n = children->size();
+      char** strArr = new char*[n + 1];
+      strArr[n] = NULL; // null-terminate the array for OGRStringList
+      for (int i = 0; i < n; i++) {
          DgLocation tmpLoc((*children)[i]);
          dggr.convert(&tmpLoc);
 
