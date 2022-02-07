@@ -864,8 +864,8 @@ void outputCell (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dg
       }
 
       ///// children/neighber output files /////
-      if (dp.nbrOut)
-      {
+      if (dp.nbrOut) {
+
          if (dp.gridTopo == Triangle)
             ::report("Neighbors not implemented for Triangle grids", DgBase::Fatal);
 
@@ -877,7 +877,7 @@ void outputCell (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dg
          dp.nbrOut = new DgOutNeighborsFile(fileName);
       }
 
-      if (dp.childrenOutType == "GDAL_COLLECTION") {
+      if (dp.chdOut) {
 
          delete dp.chdOut;
          dp.chdOut = NULL;
@@ -986,7 +986,6 @@ void outputCell (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dg
    //const DgHexIDGGS& dggs = hexdgg.dggs();
    DgResAdd<DgQ2DICoord> q2diR(q2di, dgg.res());
    DgLocVector children;
-   //if (dp.chdOut || dp.childrenOutType == "GDAL_COLLECTION") {
    if (dp.childrenOutType != "NONE") {
 
       dggs.setAllChildren(q2diR, children);
@@ -1126,11 +1125,11 @@ void genGrid (GridGenParam& dp)
 
    ///// PlanetRisk /////
    dp.nbrOut = NULL;
-   if (!dp.neighborsOutType.compare("TEXT"))
+   if (dp.neighborsOutType == "TEXT")
       dp.nbrOut = new DgOutNeighborsFile(neighborsOutFileName, "nbr");
 
    dp.chdOut = NULL;
-   if (!dp.childrenOutType.compare("TEXT"))
+   if (dp.childrenOutType == "TEXT")
       dp.chdOut = new DgOutChildrenFile(childrenOutFileName, "chd");
 
    ////// do applicable clipping mode /////

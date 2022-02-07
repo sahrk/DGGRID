@@ -112,7 +112,7 @@ DgOutGdalFile::init (bool outputPoint, bool outputRegion, bool outputNeighbors,
    if (_oLayer == NULL)
       ::report( "Layer creation failed.", DgBase::Fatal );
 
-   // create the name field; other fields may be added if this is a collection
+   // create the name field
    OGRFieldDefn *nameFieldDefn = new OGRFieldDefn( "name", OFTString );
    nameFieldDefn->SetWidth(32);
    if (_oLayer->CreateField(nameFieldDefn) != OGRERR_NONE)
@@ -162,7 +162,7 @@ DgOutGdalFile::insert (const DgIDGGBase& dgg, DgCell& cell,
       ::report("invalid GDAL output file mode encountered.", DgBase::Fatal);
 
    if (!_oLayer)
-      init(outputPoint, outputRegion);
+      init(outputPoint, outputRegion, neighbors, children);
 
    // first build the geometry
 
@@ -206,10 +206,13 @@ DgOutGdalFile::insert (const DgIDGGBase& dgg, DgCell& cell,
          std::string str = std::to_string(dggr.bndRF().seqNum(tmpLoc));
          strArr[i] = new char[str.length() + 1];
          strcpy(strArr[i], str.c_str());
-
-         feature->SetField("children", strArr);
-//cleanup
       }
+
+      feature->SetField("children", strArr);
+      for (int i = 0; i < n; i++)
+         delete strArr[i];
+      delete [] strArr;
+//cleanup
    }
 
    addFeature(feature);
