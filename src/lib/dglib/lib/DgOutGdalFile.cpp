@@ -113,23 +113,29 @@ DgOutGdalFile::init (bool outputPoint, bool outputRegion, bool outputNeighbors,
       ::report( "Layer creation failed.", DgBase::Fatal );
 
    // create the name field
-   OGRFieldDefn *nameFieldDefn = new OGRFieldDefn( "name", OFTString );
-   nameFieldDefn->SetWidth(32);
-   if (_oLayer->CreateField(nameFieldDefn) != OGRERR_NONE)
+   OGRFieldDefn *fldDfn = new OGRFieldDefn( "name", OFTString );
+   fldDfn->SetWidth(32);
+   if (_oLayer->CreateField(fldDfn) != OGRERR_NONE)
       ::report("Creating name field failed.", DgBase::Fatal );
+   delete fldDfn;
+   fldDfn = NULL;
 
    if (outputNeighbors) {
-      OGRFieldDefn *fldDefn = new OGRFieldDefn( "neighbors", OFTStringList );
-      //fldDefn->SetWidth(32);
-      if (_oLayer->CreateField(fldDefn) != OGRERR_NONE)
+      fldDfn = new OGRFieldDefn( "neighbors", OFTStringList );
+      fldDfn->SetWidth(32);
+      if (_oLayer->CreateField(fldDfn) != OGRERR_NONE)
          ::report("Creating neighbors field failed.", DgBase::Fatal );
+      delete fldDfn;
+      fldDfn = NULL;
    }
 
    if (outputChildren) {
-      OGRFieldDefn *fldDefn = new OGRFieldDefn( "children", OFTStringList );
-      //fldDefn->SetWidth(32);
-      if (_oLayer->CreateField(fldDefn) != OGRERR_NONE)
+      fldDfn = new OGRFieldDefn( "children", OFTStringList );
+      fldDfn->SetWidth(32);
+      if (_oLayer->CreateField(fldDfn) != OGRERR_NONE)
          ::report("Creating children field failed.", DgBase::Fatal );
+      delete fldDfn;
+      fldDfn = NULL;
    }
 }
 
@@ -193,7 +199,6 @@ DgOutGdalFile::insert (const DgIDGGBase& dgg, DgCell& cell,
 
    // first build the geometry
 
-   //DgCell cell(cellIn);
    rf().convert(&cell);
 
    // create the named feature
@@ -219,30 +224,14 @@ DgOutGdalFile::insert (const DgIDGGBase& dgg, DgCell& cell,
    } else
       ::report( "No geometry specified for GDAL collection feature.", DgBase::Fatal );
 
-   const DgIDGGSBase& dggs = *(dgg.dggs());
    if (children) {
+      const DgIDGGSBase& dggs = *(dgg.dggs());
       const DgIDGGBase& dggr = dggs.idggBase(dgg.res() + 1);
-
       createSeqnumsProperty (dggr, feature, "children", *children);
-/*
-      int n = children->size();
-      char** strArr = new char*[n + 1];
-      strArr[n] = NULL; // null-terminate the array for OGRStringList
-      for (int i = 0; i < n; i++) {
-         DgLocation tmpLoc((*children)[i]);
-         dggr.convert(&tmpLoc);
-
-         std::string str = std::to_string(dggr.bndRF().seqNum(tmpLoc));
-         strArr[i] = new char[str.length() + 1];
-         strcpy(strArr[i], str.c_str());
-      }
-
-      feature->SetField("children", strArr);
-      for (int i = 0; i < n; i++)
-         delete strArr[i];
-      delete [] strArr;
-*/
    }
+
+   if (neighbors)
+      createSeqnumsProperty (dgg, feature, "neighbors", *neighbors);
 
    addFeature(feature);
 

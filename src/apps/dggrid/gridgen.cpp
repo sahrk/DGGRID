@@ -1094,9 +1094,15 @@ void genGrid (GridGenParam& dp)
            DgOutLocFile::Point, dp.shapefileIdLen,
            dp.kmlColor, dp.kmlWidth, dp.kmlName, dp.kmlDescription);
 
+   if (!makeCollectFile && 
+         ((dp.childrenOutType == "GDAL_COLLECTION") ||
+          (dp.neighborsOutType == "GDAL_COLLECTION")))
+      ::report("GDAL_COLLECTION must include cell and/or point data",
+                DgBase::Fatal);
+
    dp.collectOut = NULL;
    if (makeCollectFile)
-      dp.collectOut = DgOutLocFile::makeOutLocFile("GDAL_COLLECTIBLE", 
+      dp.collectOut = DgOutLocFile::makeOutLocFile("GDAL_COLLECTION", 
              collectOutFileName, dp.gdalCollectDriver, deg, false, 
              dp.precision, DgOutLocFile::Collection, dp.shapefileIdLen,
              dp.kmlColor, dp.kmlWidth, dp.kmlName, dp.kmlDescription);

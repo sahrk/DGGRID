@@ -85,7 +85,7 @@ DgOutLocFile::makeOutLocFile (const string& type, const string& fileName,
                                     shapefileIdLen, failLevelIn);
 // USE_GDAL is set in MakeIncludes
 #ifdef USE_GDAL
-      else if (type == "GDAL" || type == "GDAL_COLLECTIBLE") {
+      else if (type == "GDAL" || type == "GDAL_COLLECTION") {
 //cout << "GDAL " << mode << endl;
          file = new DgOutGdalFile(*geoRF, fileName, gdalDriver, mode, precision, isPointFile, failLevelIn);
 #endif
@@ -107,30 +107,18 @@ DgOutLocFile::insert (DgLocList& dlist)
 ////////////////////////////////////////////////////////////////////////////////
 {
    list<DgLocBase*>::iterator it;
-   for (it = dlist.begin(); it != dlist.end(); it++)
-   {
-      if (DgLocList* d = dynamic_cast<DgLocList*>(*it))
-      {
+   for (it = dlist.begin(); it != dlist.end(); it++) {
+      if (DgLocList* d = dynamic_cast<DgLocList*>(*it)) {
          this->insert(*d);
-      }
-      else if (DgPolygon* d = dynamic_cast<DgPolygon*>(*it))
-      {
+      } else if (DgPolygon* d = dynamic_cast<DgPolygon*>(*it)) {
          this->insert(*d);
-      }
-      else if (DgCell* d = dynamic_cast<DgCell*>(*it))
-      {
+      } else if (DgCell* d = dynamic_cast<DgCell*>(*it)) {
          this->insert(*d);
-      }
-      else if (DgLocation* d = dynamic_cast<DgLocation*>(*it))
-      {
+      } else if (DgLocation* d = dynamic_cast<DgLocation*>(*it)) {
          this->insert(*d);
-      }
-      else if (DgLocVector* d = dynamic_cast<DgLocVector*>(*it))
-      {
+      } else if (DgLocVector* d = dynamic_cast<DgLocVector*>(*it)) {
          this->insert(*d);
-      }
-      else
-      {
+      } else {
          report("DgOutLocFile::insert() invalid location not inserted", Warning);
       }
    }
