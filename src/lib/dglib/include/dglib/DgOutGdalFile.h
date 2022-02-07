@@ -86,6 +86,8 @@ class DgOutGdalFile : public DgOutLocFile
       OGRPoint createPoint (const DgLocation& loc) const;
       OGRPolygon createPolygon (const DgPolygon& poly) const;
       OGRGeometryCollection createCollection (const DgCell& cell) const;
+      void createSeqnumsProperty (const DgIDGGBase& dgg, OGRFeature* feature,
+           const char* fieldName, const DgLocVector& vec);
 
       void addFeature (OGRFeature *feature);
 

@@ -153,6 +153,33 @@ DgOutGdalFile::insert(const DgDVec2D& pt)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+void
+DgOutGdalFile::createSeqnumsProperty (const DgIDGGBase& dgg, OGRFeature* feature,
+           const char* fieldName, const DgLocVector& vec)
+{
+   // create the string list
+   int n = vec.size();
+   char** strArr = new char*[n + 1];
+   strArr[n] = NULL; // null-terminate the array for OGRStringList
+   for (int i = 0; i < n; i++) {
+      DgLocation tmpLoc(vec[i]);
+      dgg.convert(&tmpLoc);
+
+      std::string str = std::to_string(dgg.bndRF().seqNum(tmpLoc));
+      strArr[i] = new char[str.length() + 1];
+      strcpy(strArr[i], str.c_str());
+   }
+
+   // add to the feature
+   feature->SetField(fieldName, strArr);
+
+   // cleanup
+   for (int i = 0; i < n; i++)
+      delete strArr[i];
+   delete [] strArr;
+}
+
+////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
 DgOutGdalFile::insert (const DgIDGGBase& dgg, DgCell& cell,
            bool outputPoint, bool outputRegion,
@@ -192,10 +219,12 @@ DgOutGdalFile::insert (const DgIDGGBase& dgg, DgCell& cell,
    } else
       ::report( "No geometry specified for GDAL collection feature.", DgBase::Fatal );
 
+   const DgIDGGSBase& dggs = *(dgg.dggs());
    if (children) {
-      const DgIDGGSBase& dggs = *(dgg.dggs());
       const DgIDGGBase& dggr = dggs.idggBase(dgg.res() + 1);
 
+      createSeqnumsProperty (dggr, feature, "children", *children);
+/*
       int n = children->size();
       char** strArr = new char*[n + 1];
       strArr[n] = NULL; // null-terminate the array for OGRStringList
@@ -212,7 +241,7 @@ DgOutGdalFile::insert (const DgIDGGBase& dgg, DgCell& cell,
       for (int i = 0; i < n; i++)
          delete strArr[i];
       delete [] strArr;
-//cleanup
+*/
    }
 
    addFeature(feature);
