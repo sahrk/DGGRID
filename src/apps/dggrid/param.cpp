@@ -114,7 +114,8 @@ MainParam::MainParam (DgParamList& plist)
      projType ("ISEA"), res (5), actualRes (5), 
      placeRandom (false), orientCenter (false), orientRand (0),
      numGrids (1), curGrid (1), lastGrid (false), azimuthDegs (0.0),
-     datum (""), precision (DEFAULT_PRECISION), verbosity (0), megaVerbose (false), 
+     datum (""), precision (DEFAULT_PRECISION), verbosity (0), 
+     megaVerbose (false), pauseOnStart (false), pauseBeforeExit (false), 
      metaOutFileNameBase (""), metaOutFileName (""), apertureType (""),
      isMixed43 (false), isSuperfund (false), isApSeq (false)
 { 
@@ -306,34 +307,30 @@ MainParam::MainParam (DgParamList& plist)
    getParamValue(plist, "precision", precision, false);
 
    getParamValue(plist, "verbosity", verbosity, false);
-   if (verbosity > 2) 
-   {
+   if (verbosity > 2) {
       megaVerbose = true;
       DgConverterBase::setTraceOn(true);
    }
+
+   getParamValue(plist, "pause_on_startup", pauseOnStart, false);
+   getParamValue(plist, "pause_before_exit", pauseBeforeExit, false);
 
    getParamValue(plist, "dggs_orient_output_file_name", metaOutFileNameBase, 
                  false);
    getParamValue(plist, "dggs_orient_specify_type", dummy, false);
    if (dummy == string("SPECIFIED"))
       placeRandom = false;
-   else if (dummy == string("REGION_CENTER")) 
-   {
+   else if (dummy == string("REGION_CENTER")) {
       placeRandom = false;
       orientCenter = true;
-   }
-   else 
-   {
+   } else {
       placeRandom = true;
 
       unsigned long int ranSeed = 0;
       getParamValue(plist, "dggs_orient_rand_seed", ranSeed, false);
-      if (useMother)
-      {
+      if (useMother) {
          orientRand = new DgRandMother(ranSeed);
-      }
-      else
-      {
+      } else {
          orientRand = new DgRand(ranSeed);
       }
    }
@@ -798,6 +795,12 @@ DgGridPList::init2 (void)
 
    //  verbosity <int> (0 <= v <= 3)
    insertParam(new DgIntParam("verbosity", 0, 0, 3));
+
+   // pause_on_startup <TRUE | FALSE> 
+   insertParam(new DgBoolParam("pause_on_startup", false));
+
+   // pause_before_exit <TRUE | FALSE> 
+   insertParam(new DgBoolParam("pause_before_exit", false));
 
    ///// binvals parameters /////
 

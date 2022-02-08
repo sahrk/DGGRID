@@ -2,6 +2,7 @@ aigenerate
 binpres
 binvals
 determineRes
+gdalCollection
 gdalExample
 gridgenCellClip
 gridgenDiamond

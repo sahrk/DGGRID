@@ -88,6 +88,14 @@ void orientGrid (MainParam& dp, DgGridPList& plist)
 } // void orientGrid
 
 ////////////////////////////////////////////////////////////////////////////////
+void pause (const string& where)
+{
+   cout << "*** execution paused: " << where << endl;
+   cout << "*** press ENTER to continue: ";
+   scanf("%*c");
+}
+
+////////////////////////////////////////////////////////////////////////////////
 int main (int argc, char* argv[])
 {
    //////// setup /////////////////
@@ -128,6 +136,9 @@ int main (int argc, char* argv[])
    cout << "* using parameter values:\n";
    cout << plist << endl;
 
+   if (pdp->pauseOnStart)
+      pause("parameters loaded");
+
    // execute the operation
    if (tmp == "GENERATE_GRID")
       doGridGen(static_cast<GridGenParam&>(*pdp), plist);
@@ -140,11 +151,12 @@ int main (int argc, char* argv[])
    else if (tmp == "TRANSFORM_POINTS")   
       doTransforms(static_cast<TransformParam&>(*pdp), plist);
 
+   bool pauseBeforeExit = pdp->pauseBeforeExit;
+
    delete pdp;
    
-cout << "PAUSED" << endl;
-char c;
-scanf("%c", &c);
+   if (pauseBeforeExit) 
+      pause("before exit");
 
    return 0;
 

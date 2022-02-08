@@ -135,6 +135,8 @@ class MainParam {
       int precision;     // number of digits after decimal pt to output
       int verbosity;     // debugging info verbosity
       bool megaVerbose;                 //
+      bool pauseOnStart;
+      bool pauseBeforeExit;
       bool useMother;                   // use Mother RNG?
       string metaOutFileNameBase;
       string metaOutFileName;
