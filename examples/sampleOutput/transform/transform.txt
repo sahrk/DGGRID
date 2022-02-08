@@ -1,4 +1,4 @@
-** executing DGGRID version 7.41 **
+** executing DGGRID version 7.5 **
 type sizes: big int: 64 bits / big double: 128 bits
 
 ** loading meta file transform.meta...
@@ -22,6 +22,8 @@ rng_type RAND (default)
 densification 0 (default)
 precision 7 (default)
 verbosity 0 (default)
+pause_on_startup false (default)
+pause_before_exit false (default)
 input_delimiter " " (user set)
 output_file_name outputfiles/cities3h9.txt (user set)
 output_address_type SEQNUM (user set)

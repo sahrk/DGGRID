@@ -3,6 +3,15 @@ All notable changes to this project will be documented in this file.
 
 All changes are by Kevin Sahr, unless otherwise noted.
 
+## [7.5] - 2022-02-7
+### Added
+- GDAL collection output, including parameters collection_output_gdal_format
+and collection_output_file_name, and GDAL_COLLECTION as a choice for output
+type parameters
+- debugging parameters pause_on_startup and pause_before_exit
+### Changed
+- updated manual to version 7.5
+
 ## [7.41] - 2022-01-19
 ### Added 
 - choice COARSE_CELLS to parameter clip_subset_type so grid generation
