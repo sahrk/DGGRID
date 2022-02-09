@@ -1,10 +1,9 @@
 ################################################################################
 #
-# gdalCollection.meta - example of a DGGRID metafile that generates a resolution 
-#     9 ISEA7H grid. The clipping and output files all use GDAL-readable file 
-#     formats.
+# gdalCollection.meta - example of a DGGRID metafile that combines all data for
+#     each cell into a single file.
 #
-# Kevin Sahr, 08/29/19
+# Kevin Sahr, 02/08/22
 #
 ################################################################################
 
