@@ -3,11 +3,12 @@ All notable changes to this project will be documented in this file.
 
 All changes are by Kevin Sahr, unless otherwise noted.
 
-## [7.5] - 2022-02-7
+## [7.5] - 2022-02-8
 ### Added
 - GDAL collection output, including parameters collection_output_gdal_format
 and collection_output_file_name, and GDAL_COLLECTION as a choice for output
 type parameters
+- example `gdalCollection`
 - debugging parameters pause_on_startup and pause_before_exit
 ### Changed
 - updated manual to version 7.5
