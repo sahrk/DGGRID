@@ -102,6 +102,7 @@ DgProjGnomonicRF::projForward (const DgGeoCoord& addIn,
       break;
    case N_POLE:
       coslam = - coslam;
+      FALLTHROUGH
    case S_POLE:
       xy.setY(xy.y() * cosphi * coslam);
       break;

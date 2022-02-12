@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 All changes are by Kevin Sahr, unless otherwise noted.
 
+## [7.51] - 2022-02-12
+### Added
+- macro FALLTHROUGH to suppress compiler warning on implict switch case fallthrough
+
 ## [7.5] - 2022-02-8
 ### Added
 - GDAL collection output, including parameters collection_output_gdal_format
