@@ -85,11 +85,10 @@ DgOutLocFile::makeOutLocFile (const string& type, const string& fileName,
                                     shapefileIdLen, failLevelIn);
 // USE_GDAL is set in MakeIncludes
 #ifdef USE_GDAL
-      else if (type == "GDAL" || type == "GDAL_COLLECTION") {
-//cout << "GDAL " << mode << endl;
+      else if (type == "GDAL" || type == "GDAL_COLLECTION")
          file = new DgOutGdalFile(*geoRF, fileName, gdalDriver, mode, precision, isPointFile, failLevelIn);
 #endif
-      } else if (type != "NONE")
+      else if (type != "NONE")
          ::report("DgOutLocFile::makeOutLoc(): invalid file type " + type, 
                                  failLevelIn);
    }
