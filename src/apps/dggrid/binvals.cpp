@@ -122,30 +122,30 @@ void BinValsParam::dump (void)
 {
    MainParam::dump();
 
-   cout << "BEGIN BINVALS PARAMETER DUMP" << endl;
+   dgcout << "BEGIN BINVALS PARAMETER DUMP" << endl;
    
-   cout << " wholeEarth: " << wholeEarth << endl;
-   cout << " outFileNameBase: " << outFileNameBase << endl;
-   cout << " outFileName: " << outFileName << endl;
+   dgcout << " wholeEarth: " << wholeEarth << endl;
+   dgcout << " outFileNameBase: " << outFileNameBase << endl;
+   dgcout << " outFileName: " << outFileName << endl;
 
-   cout << " *outFile: ";
+   dgcout << " *outFile: ";
    if (outFile)
-      cout << "(allocated)" << endl;
+      dgcout << "(allocated)" << endl;
    else
-      cout << "null" << endl;
+      dgcout << "null" << endl;
 
-   cout << " inputFiles: " << endl;
+   dgcout << " inputFiles: " << endl;
    for (unsigned int i = 0; i < inputFiles.size(); i++)
-      cout << "  " << i << " " << inputFiles[i] << endl;
+      dgcout << "  " << i << " " << inputFiles[i] << endl;
 
-   cout << " outAddType: " << outAddType << endl;
-   cout << " outSeqNum: " << outSeqNum << endl;
-   cout << " inputDelimiter: " << inputDelimiter << endl;
-   cout << " outputDelimiter: " << outputDelimiter << endl;
-   cout << " inFormatStr: " << inFormatStr << endl;
-   cout << " outputAllCells: " << outputAllCells << endl;
+   dgcout << " outAddType: " << outAddType << endl;
+   dgcout << " outSeqNum: " << outSeqNum << endl;
+   dgcout << " inputDelimiter: " << inputDelimiter << endl;
+   dgcout << " outputDelimiter: " << outputDelimiter << endl;
+   dgcout << " inFormatStr: " << inFormatStr << endl;
+   dgcout << " outputAllCells: " << outputAllCells << endl;
 
-   cout << "END BINVALS PARAMETER DUMP" << endl;
+   dgcout << "END BINVALS PARAMETER DUMP" << endl;
 
 } // void BinValsParam::dump
 
@@ -174,7 +174,7 @@ void binValsGlobal (BinValsParam& dp)
              dp.isSuperfund, dp.isApSeq, dp.apSeq);
    const DgIDGGBase& dgg = idggs->idggBase(dp.actualRes);
 
-   cout << "Res " << dgg.outputRes() << " " << dgg.gridStats() << endl;
+   dgcout << "Res " << dgg.outputRes() << " " << dgg.gridStats() << endl;
 
    // set-up to convert to degrees
    DgGeoSphDegRF::makeRF(geoRF, geoRF.name() + "Deg");
@@ -213,7 +213,7 @@ void binValsGlobal (BinValsParam& dp)
 
    // now process the points in each input file
 
-   cout << "binning values..." << endl;
+   dgcout << "binning values..." << endl;
 
    const int maxLine = 100;
    char buff[maxLine];
@@ -306,7 +306,7 @@ void binValsPartial (BinValsParam& dp)
              dp.isSuperfund, dp.isApSeq, dp.apSeq);
    const DgIDGGBase& dgg = idggs->idggBase(dp.actualRes);
 
-   cout << "Res " << dgg.outputRes() << " " << dgg.gridStats() << endl;
+   dgcout << "Res " << dgg.outputRes() << " " << dgg.gridStats() << endl;
 
    // set-up to convert to degrees
    DgGeoSphDegRF::makeRF(geoRF, geoRF.name() + "Deg");
@@ -350,7 +350,7 @@ void binValsPartial (BinValsParam& dp)
    // now make a first pass through the input files and determine what
    // cells are represented
 
-   cout << "determing quad bounds..." << endl;
+   dgcout << "determing quad bounds..." << endl;
 
    const int maxLine = 100;
    char buff[maxLine];
@@ -417,7 +417,7 @@ void binValsPartial (BinValsParam& dp)
 
    // now process the points in each input file
 
-   cout << "binning values..." << endl;
+   dgcout << "binning values..." << endl;
 
    for (unsigned int fc = 0; fc < dp.inputFiles.size(); fc++)
    {
@@ -628,7 +628,7 @@ void doBinVals (BinValsParam& dp, DgGridPList& plist)
       if (dp.wholeEarth) binValsGlobal(dp);
       else binValsPartial(dp);
 
-      cout << "\n** binning complete **" << endl;
+      dgcout << "\n** binning complete **" << endl;
 
       // close the output files
 

@@ -61,22 +61,22 @@ using namespace dgg::topo;
 void processOneClipPoly (DgPolygon& v, GridGenParam& dp, const DgIDGGBase& dgg, 
              DgQuadClipRegion clipRegions[], DgInShapefileAtt* pAttributeFile)
 {
-   if (dp.megaVerbose) cout << "input: " << v << endl;
+   if (dp.megaVerbose) dgcout << "input: " << v << endl;
 
    if (dp.geoDens > 0.000000000001) 
       DgGeoSphRF::densify(v, dp.geoDens);
    
-   if (dp.megaVerbose) cout << "densified: " << v << endl;
+   if (dp.megaVerbose) dgcout << "densified: " << v << endl;
    
    // create a copy to test for intersected quads
 
    DgPolygon quadVec(v);
    
-   if (dp.megaVerbose) cout << "quadVec(v): " << quadVec << endl;
+   if (dp.megaVerbose) dgcout << "quadVec(v): " << quadVec << endl;
 
    dgg.q2ddRF().convert(quadVec);
 
-   if (dp.megaVerbose) cout << "->: " << quadVec << endl;
+   if (dp.megaVerbose) dgcout << "->: " << quadVec << endl;
    
    // set up to track which quads are intersected
    bool quadInt[12]; // which quads are intersected?
@@ -101,11 +101,11 @@ void processOneClipPoly (DgPolygon& v, GridGenParam& dp, const DgIDGGBase& dgg,
             if (DgGeoCoord::gcDist(
               *dgg.geoRF().getAddress(quadVec2[i]), cp, false) > 90.0) {
 
-               cerr << "ERROR: polygon intersects quad #" 
+               dgcerr << "ERROR: polygon intersects quad #" 
                  << dgg::util::to_string(q) << " but a vertex of that polygon is "
                  << "more than 90' from the quad center." << endl;
-               cerr << "polygon is: " << endl;
-               cerr << v << endl;
+               dgcerr << "polygon is: " << endl;
+               dgcerr << v << endl;
                report("break-up polygon or reorient grid", 
                        DgBase::Fatal);
                allGood = false;
@@ -115,7 +115,7 @@ void processOneClipPoly (DgPolygon& v, GridGenParam& dp, const DgIDGGBase& dgg,
          }
 
          if (allGood) {
-            if (dp.megaVerbose) cout << "intersects quad " << q << endl;
+            if (dp.megaVerbose) dgcout << "intersects quad " << q << endl;
          }
       }
    }
@@ -125,23 +125,23 @@ void processOneClipPoly (DgPolygon& v, GridGenParam& dp, const DgIDGGBase& dgg,
    int nQuadsInt = 0;
    for (int q = 1; q < 11; q++) {
 
-      if (dp.megaVerbose) cout << "intersecting with quads..." << endl;
+      if (dp.megaVerbose) dgcout << "intersecting with quads..." << endl;
 
       if (!quadInt[q]) continue;
 
-      if (dp.megaVerbose) cout << "INTERSECTING quad " << q << endl;
+      if (dp.megaVerbose) dgcout << "INTERSECTING quad " << q << endl;
 
       //// create a local copy and project to gnomonic
 
-      if (dp.megaVerbose) cout << "input: " << v << endl;
+      if (dp.megaVerbose) dgcout << "input: " << v << endl;
 
       DgPolygon polyVec(v);
 
-      if (dp.megaVerbose) cout << "input polyVec(v): " << polyVec << endl;
+      if (dp.megaVerbose) dgcout << "input polyVec(v): " << polyVec << endl;
 
       clipRegions[q].gnomProj().convert(polyVec);
 
-      if (dp.megaVerbose) cout << " -> input: " << polyVec << endl;
+      if (dp.megaVerbose) dgcout << " -> input: " << polyVec << endl;
 
       //// now create a clipper poly version
 
@@ -151,7 +151,7 @@ void processOneClipPoly (DgPolygon& v, GridGenParam& dp, const DgIDGGBase& dgg,
          const DgDVec2D& p0 = 
                  *clipRegions[q].gnomProj().getAddress(polyVec[i]);
 
-         if (dp.megaVerbose) cout << "clipper: \n" << " i: " << i << " " << p0 << endl;
+         if (dp.megaVerbose) dgcout << "clipper: \n" << " i: " << i << " " << p0 << endl;
                                                
          clpPoly[0] << 
            ClipperLib::IntPoint( dp.clipperFactor*p0.x() , dp.clipperFactor*p0.y() );
@@ -170,7 +170,7 @@ void processOneClipPoly (DgPolygon& v, GridGenParam& dp, const DgIDGGBase& dgg,
 
       if (solution.size()==0) {
          if (dp.megaVerbose)
-            cout << "no intersection in quad " << q << endl;
+            dgcout << "no intersection in quad " << q << endl;
 
          continue;
       }
@@ -178,7 +178,7 @@ void processOneClipPoly (DgPolygon& v, GridGenParam& dp, const DgIDGGBase& dgg,
       // if we're here we have intersection(s)
 
       if (dp.megaVerbose)
-         cout << solution.size() << " intersections FOUND in quad " << q << endl;
+         dgcout << solution.size() << " intersections FOUND in quad " << q << endl;
 
       nQuadsInt++;
       clipRegions[q].setIsQuadUsed(true);
@@ -198,15 +198,15 @@ void processOneClipPoly (DgPolygon& v, GridGenParam& dp, const DgIDGGBase& dgg,
             delete tloc;
          }
 
-         if (dp.megaVerbose) cout << "locv: " << locv << endl;
+         if (dp.megaVerbose) dgcout << "locv: " << locv << endl;
 
          dgg.geoRF().convert(locv);
 
-         if (dp.megaVerbose) cout << "->" << locv << endl;
+         if (dp.megaVerbose) dgcout << "->" << locv << endl;
 
          dgg.q2ddRF().convert(locv);
 
-         if (dp.megaVerbose) cout << "->" << locv << endl;
+         if (dp.megaVerbose) dgcout << "->" << locv << endl;
 
          // add the intersection to our clipper list
 
@@ -278,7 +278,7 @@ void createClipRegions (GridGenParam& dp, const DgIDGGBase& dgg,
              DgQuadClipRegion clipRegions[], set<DgIVec2D> overageSet[],
              map<DgIVec2D, set<DgDBFfield> > overageFields[])
 {
-   cout << "\n* building clipping regions..." << endl;
+   dgcout << "\n* building clipping regions..." << endl;
 
    // initialize the i,j bounds
 
@@ -291,7 +291,7 @@ void createClipRegions (GridGenParam& dp, const DgIDGGBase& dgg,
    // create the gnomonic quad boundaries to clip against
 
    if (dp.megaVerbose) 
-      cout << "creating gnomonic quad boundaries..." << endl;
+      dgcout << "creating gnomonic quad boundaries..." << endl;
 
    //// find center for gnomonic; use a dummy diamond
 
@@ -317,7 +317,7 @@ void createClipRegions (GridGenParam& dp, const DgIDGGBase& dgg,
    dmd0.setVertices(DgIVec2D(0, 0), verts);
    ccRF.convert(verts);
 
-   if (dp.megaVerbose) cout << "verts:\n" << verts << endl;
+   if (dp.megaVerbose) dgcout << "verts:\n" << verts << endl;
 
    // lower left
 
@@ -351,22 +351,22 @@ void createClipRegions (GridGenParam& dp, const DgIDGGBase& dgg,
    verts.setLoc(3, *tloc);
    delete tloc;
 
-   if (dp.megaVerbose) cout << "(nudge) ->" << verts << endl;
+   if (dp.megaVerbose) dgcout << "(nudge) ->" << verts << endl;
 
    for (int q = 1; q < 11; q++) {
 
-      if (dp.megaVerbose) cout << "quad " << q << endl;
+      if (dp.megaVerbose) dgcout << "quad " << q << endl;
 
       // find gnomonic projection center for this quad
 
       tloc = dgg.q2ddRF().makeLocation(
                             DgQ2DDCoord(q, *ccRF.getAddress(cent)));
 
-      if (dp.megaVerbose) cout << "center: " << *tloc; 
+      if (dp.megaVerbose) dgcout << "center: " << *tloc; 
 
       dgg.geoRF().convert(tloc);
 
-      if (dp.megaVerbose) cout << " -> " << *tloc << endl;
+      if (dp.megaVerbose) dgcout << " -> " << *tloc << endl;
    
       clipRegions[q].setGnomProj(DgProjGnomonicRF::makeRF(dgg.network(), 
            string("gnom") + dgg::util::to_string(q, 2), 
@@ -390,17 +390,17 @@ void createClipRegions (GridGenParam& dp, const DgIDGGBase& dgg,
       }
 
       if (dp.megaVerbose) 
-	  cout << v0 << endl;
+	  dgcout << v0 << endl;
 
       dgg.geoRF().convert(v0);
 
       if (dp.megaVerbose) 
-	  cout << " -> " << v0 << endl;
+	  dgcout << " -> " << v0 << endl;
 
       clipRegions[q].gnomProj().convert(v0);
 
       if (dp.megaVerbose)
-	  cout << " -> " << v0 << endl;
+	  dgcout << " -> " << v0 << endl;
   
       // finally store the boundary as a clipper polygon
       ClipperLib::Path contour;
@@ -473,7 +473,7 @@ void createClipRegions (GridGenParam& dp, const DgIDGGBase& dgg,
                regionFile >> v;
                if (regionFile.isEOF()) break;
 
-               if (dp.megaVerbose) cout << "input: " << v << endl;
+               if (dp.megaVerbose) dgcout << "input: " << v << endl;
 
                dgg.convert(&v);
                for (int i = 0; i < v.size(); i++) {
@@ -541,7 +541,7 @@ void createClipRegions (GridGenParam& dp, const DgIDGGBase& dgg,
         DgLocation* loc = static_cast<const DgIDGG&>(clipDgg).bndRF().locFromSeqNum(*i);
 //cout << " clip seq num " << *i << " " << *loc << endl;
         if (!clipDgg.bndRF().validLocation(*loc)) {
-          std::cerr << "genGrid(): invalid clipping cell res: " << dp.clipCellRes 
+          dgcerr << "genGrid(): invalid clipping cell res: " << dp.clipCellRes 
                     << " address: " << (*i)<< std::endl;
           ::report("genGrid(): Invalid clipping cell address found.", DgBase::Fatal);
         }
@@ -565,8 +565,8 @@ void createClipRegions (GridGenParam& dp, const DgIDGGBase& dgg,
       if (!clipRegions[q].isQuadUsed()) continue;
 
       if (dp.megaVerbose) {
-         cout << "POLY FINAL: ";
-         cout << "q: " << q << " " << clipRegions[q].offset()
+         dgcout << "POLY FINAL: ";
+         dgcout << "q: " << q << " " << clipRegions[q].offset()
                    << " " << clipRegions[q].upperRight() << endl;
       }
 
@@ -606,8 +606,8 @@ void createClipRegions (GridGenParam& dp, const DgIDGGBase& dgg,
          clipRegions[q].setOffset(newOff);
 
          if (dp.megaVerbose) {
-            cout << "AFTER ADJUSTMENT: ";
-            cout << "q: " << q << " " << clipRegions[q].offset()
+            dgcout << "AFTER ADJUSTMENT: ";
+            dgcout << "q: " << q << " " << clipRegions[q].offset()
                 << " " << clipRegions[q].upperRight() << endl;
          }
       }
@@ -626,7 +626,7 @@ void createClipRegions (GridGenParam& dp, const DgIDGGBase& dgg,
 
    if (!dgg.isCongruent()) {
       for (int q = 1; q < 11; q++) {
-         if (dp.verbosity > 0) cout << "Checking OVERAGE quad " << q << endl;
+         if (dp.verbosity > 0) dgcout << "Checking OVERAGE quad " << q << endl;
          if (!clipRegions[q].isQuadUsed()) continue;
 
          // check for over J
@@ -638,7 +638,7 @@ void createClipRegions (GridGenParam& dp, const DgIDGGBase& dgg,
             uRight = DgIVec2D(uRight.i(), dgg.maxJ() + 1);
 
             if (dp.megaVerbose) 
-               cout << "OVERJ in quad " << q << "-" << lLeft << 
+               dgcout << "OVERJ in quad " << q << "-" << lLeft << 
                     " " << uRight << endl;
 
             DgIVec2D tCoord = lLeft;
@@ -697,7 +697,7 @@ void createClipRegions (GridGenParam& dp, const DgIDGGBase& dgg,
                     pair<DgIVec2D, set<DgDBFfield> >(newC, dp.curFields));
 
                if (dp.megaVerbose)
-                  cout << "PUSH OVERAGE: " << q << ": " << coord <<
+                  dgcout << "PUSH OVERAGE: " << q << ": " << coord <<
                        " -> " << newQ << ": " << newC << endl;
 
                if (tCoord == uRight) break;
@@ -717,7 +717,7 @@ void createClipRegions (GridGenParam& dp, const DgIDGGBase& dgg,
                uRight = DgIVec2D(uRight.i(), dgg.maxJ() + 1);
 
             if (dp.megaVerbose) 
-               cout << "OVERI in quad " << q << "-" << lLeft << " " << uRight << endl;
+               dgcout << "OVERI in quad " << q << "-" << lLeft << " " << uRight << endl;
 
             DgBoundedRF2D b1(grid, lLeft, uRight);
             for (DgIVec2D tCoord = b1.lowerLeft(); tCoord != b1.invalidAdd();
@@ -771,7 +771,7 @@ void createClipRegions (GridGenParam& dp, const DgIDGGBase& dgg,
                     pair<DgIVec2D, set<DgDBFfield> >(newC, dp.curFields));
 
                if (dp.megaVerbose)
-                  cout << "ADD OVERAGE: " << q << ": " << coord <<
+                  dgcout << "ADD OVERAGE: " << q << ": " << coord <<
                           " -> " << newQ << ": " << newC << endl;
             }
          }

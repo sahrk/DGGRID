@@ -182,6 +182,15 @@
 extern "C" {
 #endif
 
+// allow for R output from dggridR
+#ifdef DGGRIDR
+#include <R_ext/Print.h>
+#define dgprintf Rprintf
+#else
+#include <stdio.h>
+#define dgprintf printf
+#endif
+
 /************************************************************************/
 /*                        Configuration options.                        */
 /************************************************************************/

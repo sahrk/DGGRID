@@ -74,7 +74,7 @@ DgHexSF::visitMe (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& d
             accepted = true;
             ed->overageSet.erase(it);
             if (dp.megaVerbose) 
-               cout << "found OVERAGE coord " << coord2d << endl;
+               dgcout << "found OVERAGE coord " << coord2d << endl;
          }
       }
       
@@ -102,7 +102,7 @@ cout << "accepted: " << quadNum_ << " " << coord2d
    outputStatus(dp);
 
    if (dp.megaVerbose) 
-      cout << coord2d << " " << ciNdx_ << " " << sfNdx_ << endl;
+      dgcout << coord2d << " " << ciNdx_ << " " << sfNdx_ << endl;
 
    return 1;
 }

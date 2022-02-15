@@ -49,7 +49,7 @@ void doTable (MainParam& dp, DgGridPList& plist)
 
    int numRes = dp.actualRes + 1;
 
-   cout << "Earth Radius: " 
+   dgcout << "Earth Radius: " 
         << dgg::util::addCommas(geoRF.earthRadiusKM(), dp.precision)
         << "\n" << endl;
 
@@ -71,7 +71,7 @@ void doTable (MainParam& dp, DgGridPList& plist)
    int clsWidth = max((int) dgg::util::addCommas(gs0.cls(),
                          dp.precision).length(), (int) clsS.length()) + 1;
 
-   cout << setw(resWidth) << resS
+   dgcout << setw(resWidth) << resS
         << setw(nCellsWidth) << nCellsS
         << setw(areaWidth) << areaS
  //       << setw(spcWidth) << spcS
@@ -82,7 +82,7 @@ void doTable (MainParam& dp, DgGridPList& plist)
       if (idggs->idggBase(r).outputRes() >= 0) // in case invalid sf res
       {
          const DgGridStats& gs = idggs->idggBase(r).gridStats();
-         cout << setw(resWidth)  << idggs->idggBase(r).outputRes()
+         dgcout << setw(resWidth)  << idggs->idggBase(r).outputRes()
            << setw(nCellsWidth) << dgg::util::addCommas(gs.nCells()) 
            << setw(areaWidth) << dgg::util::addCommas(gs.cellAreaKM(), 
                                                 dp.precision) 

@@ -41,7 +41,7 @@ class DgConverterBase {
       static bool isTraceOn (void) { return isTraceOn_; }
       static bool setTraceOn (bool traceOnIn)
                      { isTraceOn_ = traceOnIn; return isTraceOn(); }
-      static void setTraceStream (ostream& stream = cout)
+      static void setTraceStream (ostream& stream = dgcout)
                            { traceStream_ = &stream; }
       static ostream& traceStream (void) { return *traceStream_; }
 

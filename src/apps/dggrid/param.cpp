@@ -96,7 +96,7 @@ MainParam::determineRes (const DgParamList& plist)
          last = next;
       }
 
-      cout << "** choosing grid resolution: " << res << endl;
+      dgcout << "** choosing grid resolution: " << res << endl;
    }
 
    if (res > maxRes)
@@ -346,38 +346,38 @@ MainParam::~MainParam()
 ////////////////////////////////////////////////////////////////////////////////
 void MainParam::dump (void)
 {
-   cout << "BEGIN MAIN PARAMETER DUMP" << endl;
+   dgcout << "BEGIN MAIN PARAMETER DUMP" << endl;
    
-   cout << " dggsType: " << dggsType << endl;
-   cout << " curGrid: " << curGrid << endl;
-   cout << " lastGrid: " << lastGrid << endl;
-   cout << " numGrids: " << numGrids << endl;
-   cout << " gridTopo: " << to_string(gridTopo) << endl;
-   cout << " gridMetric: " << to_string(gridMetric) << endl;
-   cout << " aperture: " << aperture << endl;
-   cout << " projType: " << projType << endl;
-   cout << " res: " << res << endl;
-   cout << " superfund res: " << sfRes << endl;
-   cout << " numAp4: " << numAp4 << endl;
-   cout << " actualRes: " << actualRes << endl;
-   cout << " placeRandom: " << placeRandom << endl;
-   cout << " orientCenter: " << orientCenter << endl;
-   cout << " vert0: " << vert0 << endl;
-   cout << " azimuthDegs: " << azimuthDegs << endl;
-   cout << " earthRadius: " << earthRadius << endl;
-   cout << " precision: " << precision << endl;
-   cout << " verbosity: " << verbosity << endl;
-   cout << " megaVerbose: " << megaVerbose << endl;
+   dgcout << " dggsType: " << dggsType << endl;
+   dgcout << " curGrid: " << curGrid << endl;
+   dgcout << " lastGrid: " << lastGrid << endl;
+   dgcout << " numGrids: " << numGrids << endl;
+   dgcout << " gridTopo: " << to_string(gridTopo) << endl;
+   dgcout << " gridMetric: " << to_string(gridMetric) << endl;
+   dgcout << " aperture: " << aperture << endl;
+   dgcout << " projType: " << projType << endl;
+   dgcout << " res: " << res << endl;
+   dgcout << " superfund res: " << sfRes << endl;
+   dgcout << " numAp4: " << numAp4 << endl;
+   dgcout << " actualRes: " << actualRes << endl;
+   dgcout << " placeRandom: " << placeRandom << endl;
+   dgcout << " orientCenter: " << orientCenter << endl;
+   dgcout << " vert0: " << vert0 << endl;
+   dgcout << " azimuthDegs: " << azimuthDegs << endl;
+   dgcout << " earthRadius: " << earthRadius << endl;
+   dgcout << " precision: " << precision << endl;
+   dgcout << " verbosity: " << verbosity << endl;
+   dgcout << " megaVerbose: " << megaVerbose << endl;
 
-   cout << " *orientRand: ";
+   dgcout << " *orientRand: ";
    if (orientRand)
-      cout << *orientRand << endl;
+      dgcout << *orientRand << endl;
    else
-      cout << "null" << endl; 
+      dgcout << "null" << endl; 
 
-   cout << " metaOutFileNameBase: " << metaOutFileNameBase << endl;
+   dgcout << " metaOutFileNameBase: " << metaOutFileNameBase << endl;
 
-   cout << "END MAIN PARAMETER DUMP" << endl;
+   dgcout << "END MAIN PARAMETER DUMP" << endl;
 
 } // void MainParam::dump
 

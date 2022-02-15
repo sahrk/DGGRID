@@ -109,21 +109,21 @@ void TransformParam::dump (void)
 {
    MainParam::dump();
 
-   cout << "BEGIN TRANSFORM PARAMETER DUMP" << endl;
+   dgcout << "BEGIN TRANSFORM PARAMETER DUMP" << endl;
 
-   cout << " outFileNameBase: " << outFileNameBase << endl;
-   cout << " outFileName: " << outFileName << endl;
-   cout << " outAddType: " << outAddType << endl;
-   cout << " outSeqNum: " << outSeqNum << endl;
-   cout << " outputDelimiter: " << outputDelimiter << endl;
-   cout << " nDensify: " << nDensify << endl;
+   dgcout << " outFileNameBase: " << outFileNameBase << endl;
+   dgcout << " outFileName: " << outFileName << endl;
+   dgcout << " outAddType: " << outAddType << endl;
+   dgcout << " outSeqNum: " << outSeqNum << endl;
+   dgcout << " outputDelimiter: " << outputDelimiter << endl;
+   dgcout << " nDensify: " << nDensify << endl;
 
-   cout << " inFileName: " << inFileName << endl;
-   cout << " inAddType: " << inAddType << endl;
-   cout << " inSeqNum: " << inSeqNum << endl;
-   cout << " inputDelimiter: " << inputDelimiter << endl;
+   dgcout << " inFileName: " << inFileName << endl;
+   dgcout << " inAddType: " << inAddType << endl;
+   dgcout << " inSeqNum: " << inSeqNum << endl;
+   dgcout << " inputDelimiter: " << inputDelimiter << endl;
 
-   cout << "END TRANSFORM PARAMETER DUMP" << endl;
+   dgcout << "END TRANSFORM PARAMETER DUMP" << endl;
 
 } // void TransformParam::dump
 
@@ -141,7 +141,7 @@ void doTransform (TransformParam& dp)
 
    const DgIDGGBase& dgg = idggs->idggBase(dp.actualRes);
 
-   cout << "Res " << dgg.outputRes() << " " << dgg.gridStats() << endl;
+   dgcout << "Res " << dgg.outputRes() << " " << dgg.gridStats() << endl;
 
    // set-up to convert to degrees
    DgGeoSphDegRF::makeRF(geoRF, geoRF.name() + "Deg");
@@ -203,7 +203,7 @@ void doTransform (TransformParam& dp)
    char buff[maxLine];
    const char* remainder;
 
-   cout << "transforming values..." << endl;
+   dgcout << "transforming values..." << endl;
 
    DgInputStream inFile(dp.inFileName, "", DgBase::Fatal);
    ofstream* pOutFile;
@@ -325,10 +325,10 @@ void doTransforms (TransformParam& dp, DgGridPList& plist)
 
       doTransform(dp);
 
-      cout << endl;
+      dgcout << endl;
    }
 
-   cout << "** transformation complete **" << endl;
+   dgcout << "** transformation complete **" << endl;
 
 } // void doBinVals
 

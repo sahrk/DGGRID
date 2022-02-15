@@ -27,7 +27,7 @@
 #include <dglib/DgConverterBase.h>
 
 bool DgConverterBase::isTraceOn_ = false;
-ostream* DgConverterBase::traceStream_ = &cout;
+ostream* DgConverterBase::traceStream_ = &dgcout;
 
 ////////////////////////////////////////////////////////////////////////////////
 DgConverterBase::~DgConverterBase (void)

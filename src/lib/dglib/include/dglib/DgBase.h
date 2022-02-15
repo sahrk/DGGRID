@@ -49,6 +49,16 @@ using namespace std;
 #endif
 #endif
 
+// allow for R output from dggridR
+#ifdef DGGRIDR
+#include <Rcpp.h>
+#define dgcout Rcpp::Rcout
+#define dgcerr Rcpp::Rcerr
+#else
+#define dgcout std::cout
+#define dgcerr std::cerr
+#endif
+
 ////////////////////////////////////////////////////////////////////////////////
 class DgBase {
 
@@ -122,7 +132,7 @@ DgBase::debug (const string& message) const
 
 #if DGDEBUG
 
-   cout << "DEBUG: [" << instanceName_ << "] " << message << endl;
+   dgcout << "DEBUG: [" << instanceName_ << "] " << message << endl;
 
 #endif
 

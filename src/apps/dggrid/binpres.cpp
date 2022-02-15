@@ -121,31 +121,31 @@ void BinPresenceParam::dump (void)
 {
    MainParam::dump();
 
-   cout << "BEGIN BINPRESENCE PARAMETER DUMP" << endl;
+   dgcout << "BEGIN BINPRESENCE PARAMETER DUMP" << endl;
    
-   cout << " wholeEarth: " << wholeEarth << endl;
-   cout << " outFileNameBase: " << outFileNameBase << endl;
-   cout << " outFileName: " << outFileName << endl;
+   dgcout << " wholeEarth: " << wholeEarth << endl;
+   dgcout << " outFileNameBase: " << outFileNameBase << endl;
+   dgcout << " outFileName: " << outFileName << endl;
 
-   cout << " *outFile: ";
+   dgcout << " *outFile: ";
    if (outFile)
-      cout << "(allocated)" << endl;
+      dgcout << "(allocated)" << endl;
    else
-      cout << "null" << endl;
+      dgcout << "null" << endl;
 
-   cout << " inputFiles: " << endl;
+   dgcout << " inputFiles: " << endl;
    for (unsigned int i = 0; i < inputFiles.size(); i++)
-      cout << "  " << i << " " << inputFiles[i] << endl;
+      dgcout << "  " << i << " " << inputFiles[i] << endl;
 
-   cout << " outAddType: " << outAddType << endl;
-   cout << " outSeqNum: " << outSeqNum << endl;
-   cout << " inputDelimiter: " << inputDelimiter << endl;
-   cout << " outputDelimiter: " << outputDelimiter << endl;
-   cout << " inFormatStr: " << inFormatStr << endl;
-   cout << " outputAllCells: " << outputAllCells << endl;
-   cout << " outputCount: " << ((outputCount) ? "true" : "false") << endl;
+   dgcout << " outAddType: " << outAddType << endl;
+   dgcout << " outSeqNum: " << outSeqNum << endl;
+   dgcout << " inputDelimiter: " << inputDelimiter << endl;
+   dgcout << " outputDelimiter: " << outputDelimiter << endl;
+   dgcout << " inFormatStr: " << inFormatStr << endl;
+   dgcout << " outputAllCells: " << outputAllCells << endl;
+   dgcout << " outputCount: " << ((outputCount) ? "true" : "false") << endl;
    
-   cout << "END BINPRESENCE PARAMETER DUMP" << endl;
+   dgcout << "END BINPRESENCE PARAMETER DUMP" << endl;
 
 } // void BinPresenceParam::dump
 
@@ -162,7 +162,7 @@ void binPresGlobal (BinPresenceParam& dp)
              dp.isSuperfund, dp.isApSeq, dp.apSeq);
    const DgIDGGBase& dgg = idggs->idggBase(dp.actualRes);
 
-   cout << "Res " << dgg.outputRes() << " " << dgg.gridStats() << endl;
+   dgcout << "Res " << dgg.outputRes() << " " << dgg.gridStats() << endl;
 
    // set-up to convert to degrees
    DgGeoSphDegRF::makeRF(geoRF, geoRF.name() + "Deg");
@@ -203,7 +203,7 @@ void binPresGlobal (BinPresenceParam& dp)
 
    // now process the points in each input file
 
-   cout << "binning points..." << endl;
+   dgcout << "binning points..." << endl;
 
    const int maxLine = 100;
    char buff[maxLine];
@@ -298,7 +298,7 @@ void binPresPartial (BinPresenceParam& dp)
              dp.isSuperfund, dp.isApSeq, dp.apSeq);
       const DgIDGGBase& dgg = idggs->idggBase(dp.actualRes);
 
-   cout << "Res " << dgg.outputRes() << " " << dgg.gridStats() << endl;
+   dgcout << "Res " << dgg.outputRes() << " " << dgg.gridStats() << endl;
 
    // set-up to convert to degrees
    DgGeoSphDegRF::makeRF(geoRF, geoRF.name() + "Deg");
@@ -342,7 +342,7 @@ void binPresPartial (BinPresenceParam& dp)
    // now make a first pass through the input files and determine what
    // cells are represented
 
-   cout << "determing quad bounds..." << endl;
+   dgcout << "determing quad bounds..." << endl;
 
    const int maxLine = 100;
    char buff[maxLine];
@@ -410,7 +410,7 @@ void binPresPartial (BinPresenceParam& dp)
 
    // now process the points in each input file
 
-   cout << "binning points..." << endl;
+   dgcout << "binning points..." << endl;
 
    for (unsigned int fc = 0; fc < dp.inputFiles.size(); fc++)
    {
@@ -602,7 +602,7 @@ void doBinPresence (BinPresenceParam& dp, DgGridPList& plist)
       if (dp.wholeEarth) binPresGlobal(dp);
       else binPresPartial(dp);
 
-      cout << endl;
+      dgcout << endl;
 
       // close the output files
 
@@ -610,7 +610,7 @@ void doBinPresence (BinPresenceParam& dp, DgGridPList& plist)
       delete dp.outFile;
    }
 
-   cout << "** presence binning complete **" << endl;
+   dgcout << "** presence binning complete **" << endl;
 
 } // void doBinPres
 

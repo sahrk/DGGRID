@@ -131,7 +131,7 @@ DgInGDALFile::extract (DgPolygon& poly)
            OGRMultiPolygon* oMultiPolygon = (OGRMultiPolygon*) oGeometry;
            numMultiPolyGeometries_ = oMultiPolygon->getNumGeometries();
        } else {
-           cout << "WKBGeometryType: " << geomType << endl;
+           dgcout << "WKBGeometryType: " << geomType << endl;
            report("Geometry is not of type Polygon or MultiPolygon", DgBase::Fatal);
        }
     }

@@ -40,10 +40,10 @@ DgHexC1Grid2D::setAddVertices (const DgIVec2D& add, DgPolygon& vec) const
    // find the center
 
 #if DGDEBUG
-cout << setprecision(20) << "^^^^^^^^^^^^^^^^^\nDgHexC1Grid2D::setAddVertices"
-     << endl; 
-cout << "^^ input: " << add << endl;
-cout.flush();
+dgcout << setprecision(20) << "^^^^^^^^^^^^^^^^^\nDgHexC1Grid2D::setAddVertices"
+       << endl; 
+dgcout << "^^ input: " << add << endl;
+dgcout.flush();
 #endif
 
    DgLocation tmpLoc;

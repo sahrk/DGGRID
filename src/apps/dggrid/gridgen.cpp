@@ -336,13 +336,13 @@ void outputStatus (const GridGenParam& dp, bool force)
              (dp.updateFreq && (dp.nCellsTested % dp.updateFreq == 0))))
    {
       if (dp.wholeEarth)
-         cout << "* generated " << dgg::util::addCommas(dp.nCellsAccepted) 
+         dgcout << "* generated " << dgg::util::addCommas(dp.nCellsAccepted) 
               << " cells" << endl;
       else
       {
-         cout << "accepted " << dgg::util::addCommas(dp.nCellsAccepted) 
+         dgcout << "accepted " << dgg::util::addCommas(dp.nCellsAccepted) 
               << " cells / ";
-         cout << dgg::util::addCommas(dp.nCellsTested) << " tested" << endl; 
+         dgcout << dgg::util::addCommas(dp.nCellsTested) << " tested" << endl; 
       }
    }
 }
@@ -353,73 +353,73 @@ void GridGenParam::dump (void)
 {
    MainParam::dump();
 
-   cout << "BEGIN GEN PARAMETER DUMP" << endl;
+   dgcout << "BEGIN GEN PARAMETER DUMP" << endl;
    
-   cout << " wholeEarth: " << wholeEarth << endl;
-   cout << " useGDAL: " << useGDAL << endl;
-   cout << " clipAIGen: " << clipAIGen << endl;
-   cout << " clipShape: " << clipShape << endl;
-   cout << " clipGDAL: " << clipGDAL << endl;
+   dgcout << " wholeEarth: " << wholeEarth << endl;
+   dgcout << " useGDAL: " << useGDAL << endl;
+   dgcout << " clipAIGen: " << clipAIGen << endl;
+   dgcout << " clipShape: " << clipShape << endl;
+   dgcout << " clipGDAL: " << clipGDAL << endl;
    
-   cout << " regionFiles: " << endl;
+   dgcout << " regionFiles: " << endl;
    for (unsigned long i = 0; i < regionFiles.size(); i++)
-      cout << "  " << i << " " << regionFiles[i] << endl;
+      dgcout << "  " << i << " " << regionFiles[i] << endl;
    
-   cout << " nRandPts: " << nRandPts << endl;
+   dgcout << " nRandPts: " << nRandPts << endl;
    //cout << " clipRandPts: " << clipRandPts << endl;
-   cout << " nDensify: " << nDensify << endl;
-   cout << " lonWrapMode: " << 
+   dgcout << " nDensify: " << nDensify << endl;
+   dgcout << " lonWrapMode: " << 
         DgGeoSphRF::lonWrapModeStrings[lonWrapMode] << endl;
-   cout << " precision: " << precision << endl;
-   cout << " nudge: " << nudge << endl;
+   dgcout << " precision: " << precision << endl;
+   dgcout << " nudge: " << nudge << endl;
 
-   cout << " *ptsRand: ";
+   dgcout << " *ptsRand: ";
    if (ptsRand)
-      cout << "(allocated)" << endl;
+      dgcout << "(allocated)" << endl;
    else
-      cout << "null" << endl; 
+      dgcout << "null" << endl; 
 
-   cout << " cellOutType: " << cellOutType << endl;
-   cout << " pointOutType: " << pointOutType << endl;
-   cout << " randPtsOutType: " << randPtsOutType << endl;
-   cout << " cellOutFileNameBase: " << cellOutFileNameBase << endl;
-   cout << " ptOutFileNameBase: " << ptOutFileNameBase << endl;
-   cout << " collectOutFileNameBase: " << collectOutFileNameBase << endl;
-   cout << " randPtsOutFileNameBase: " << randPtsOutFileNameBase << endl;
-   cout << " doPointInPoly: " << doPointInPoly << endl;
-   cout << " doPolyIntersect: " << doPolyIntersect << endl;
-   cout << " sampleCount: " << sampleCount << endl;
-   cout << " nSamplePts: " << nSamplePts << endl;
-   cout << " doRandPts: " << doRandPts << endl;
+   dgcout << " cellOutType: " << cellOutType << endl;
+   dgcout << " pointOutType: " << pointOutType << endl;
+   dgcout << " randPtsOutType: " << randPtsOutType << endl;
+   dgcout << " cellOutFileNameBase: " << cellOutFileNameBase << endl;
+   dgcout << " ptOutFileNameBase: " << ptOutFileNameBase << endl;
+   dgcout << " collectOutFileNameBase: " << collectOutFileNameBase << endl;
+   dgcout << " randPtsOutFileNameBase: " << randPtsOutFileNameBase << endl;
+   dgcout << " doPointInPoly: " << doPointInPoly << endl;
+   dgcout << " doPolyIntersect: " << doPolyIntersect << endl;
+   dgcout << " sampleCount: " << sampleCount << endl;
+   dgcout << " nSamplePts: " << nSamplePts << endl;
+   dgcout << " doRandPts: " << doRandPts << endl;
 
-   cout << " *cellOut: ";
+   dgcout << " *cellOut: ";
    if (cellOut)
-      cout << "(allocated)" << endl;
+      dgcout << "(allocated)" << endl;
    else
-      cout << "null" << endl; 
+      dgcout << "null" << endl; 
 
-   cout << " *ptOut: ";
+   dgcout << " *ptOut: ";
    if (cellOut)
-      cout << "(allocated)" << endl;
+      dgcout << "(allocated)" << endl;
    else
-      cout << "null" << endl; 
+      dgcout << "null" << endl; 
 
-   cout << " *randPtsOut: ";
+   dgcout << " *randPtsOut: ";
    if (randPtsOut)
-      cout << "(allocated)" << endl;
+      dgcout << "(allocated)" << endl;
    else
-      cout << "null" << endl; 
+      dgcout << "null" << endl; 
 
-   cout << " concatPtOut: " << concatPtOut << endl;
-   cout << " formatStr: " << formatStr << endl;
-   cout << " useEnumLbl: " << useEnumLbl << endl;
-   cout << " nCellsTested: " << nCellsTested << endl;
-   cout << " nCellsAccepted: " << nCellsAccepted << endl;
-   cout << " geoDens: " << geoDens << endl;
-   cout << " updateFreq: " << updateFreq << endl;
-   cout << " maxCellsPerFile: " << maxCellsPerFile << endl;
+   dgcout << " concatPtOut: " << concatPtOut << endl;
+   dgcout << " formatStr: " << formatStr << endl;
+   dgcout << " useEnumLbl: " << useEnumLbl << endl;
+   dgcout << " nCellsTested: " << nCellsTested << endl;
+   dgcout << " nCellsAccepted: " << nCellsAccepted << endl;
+   dgcout << " geoDens: " << geoDens << endl;
+   dgcout << " updateFreq: " << updateFreq << endl;
+   dgcout << " maxCellsPerFile: " << maxCellsPerFile << endl;
    
-   cout << "END GEN PARAMETER DUMP" << endl;
+   dgcout << "END GEN PARAMETER DUMP" << endl;
 
 } // void GridGenParam::dump
 
@@ -435,7 +435,7 @@ bool evalCell (GridGenParam& dp,  const DgIDGGBase& dgg, const DgContCartRF& cc1
    dp.nCellsTested++;
 
    if (dp.megaVerbose) 
-      cout << "Testing #" << dp.nCellsTested << ": " << add2D << endl;
+      dgcout << "Testing #" << dp.nCellsTested << ": " << add2D << endl;
 
    bool accepted = false; 
 
@@ -604,7 +604,7 @@ void genPoints (GridGenParam& dp, const DgIDGGBase& dgg, const DgQ2DICoord& add2
    grid.setPoint(add2D.coord(), *cp);
    ccRF.convert(cp);
 
-   if (dp.megaVerbose) cout << "RP: " << add2D << " " << *cp;
+   if (dp.megaVerbose) dgcout << "RP: " << add2D << " " << *cp;
 
    DgLocVector rpts(dgg.q2ddRF());
    DgDVec2D cpv = *ccRF.getAddress(*cp);
@@ -612,14 +612,14 @@ void genPoints (GridGenParam& dp, const DgIDGGBase& dgg, const DgQ2DICoord& add2
    grid.setPoint(DgIVec2D(0, 0), *cp);
    DgDVec2D cpv00 = *ccRF.getAddress(*cp);
 
-   if (dp.megaVerbose) cout << " " << *cp;
+   if (dp.megaVerbose) dgcout << " " << *cp;
    
    delete cp;
 
    if (dp.megaVerbose)
    {
       DgDVec2D tvec = cpv - cpv00;
-      cout << " " << tvec << endl;
+      dgcout << " " << tvec << endl;
    }
 
    DgDVec2D anchor;
@@ -631,7 +631,7 @@ void genPoints (GridGenParam& dp, const DgIDGGBase& dgg, const DgQ2DICoord& add2
       ccRF.convert(verts);
       anchor = *ccRF.getAddress(verts[0]); // use lower left corner
    }
-   if (dp.megaVerbose) cout << "anchor: " << anchor << endl;
+   if (dp.megaVerbose) dgcout << "anchor: " << anchor << endl;
 
    for (int i = 0; i < dp.nRandPts; i++)
    {
@@ -640,11 +640,11 @@ void genPoints (GridGenParam& dp, const DgIDGGBase& dgg, const DgQ2DICoord& add2
       DgDVec2D rp(dp.ptsRand->randInRange(0.0, 1.0),
          dp.ptsRand->randInRange(0.0, 2.0 * DgDmdD4Grid2D::yOff()));
 
-      if (dp.megaVerbose) cout << i << " " << rp; 
+      if (dp.megaVerbose) dgcout << i << " " << rp; 
    
       rp.setX(rp.x() - (sqrt(3.0) / 3.0) * rp.y()); // shear
 
-      if (dp.megaVerbose) cout << " " << rp; 
+      if (dp.megaVerbose) dgcout << " " << rp; 
 
       DgLocation* nloc = 0;
       if (dp.gridTopo != Diamond)
@@ -700,23 +700,23 @@ void genPoints (GridGenParam& dp, const DgIDGGBase& dgg, const DgQ2DICoord& add2
                }
             }
 
-            if (dp.megaVerbose) cout << rp << endl;
+            if (dp.megaVerbose) dgcout << rp << endl;
          }
 
          rp += anchor;
-         if (dp.megaVerbose) cout << " =final rp: " << rp; 
+         if (dp.megaVerbose) dgcout << " =final rp: " << rp; 
 
          DgLocation* tloc = ccRF.makeLocation(rp);
          dgg.ccFrame().convert(tloc);
 
-         if (dp.megaVerbose) cout << "->" << *tloc; 
+         if (dp.megaVerbose) dgcout << "->" << *tloc; 
 
          nloc = dgg.q2ddRF().makeLocation(
                        DgQ2DDCoord(q, *dgg.ccFrame().getAddress(*tloc)));
 
          delete tloc;
 
-         if (dp.megaVerbose) cout << "->" << *nloc << endl;
+         if (dp.megaVerbose) dgcout << "->" << *nloc << endl;
 
          rpts.push_back(*nloc);
          delete nloc;
@@ -725,15 +725,15 @@ void genPoints (GridGenParam& dp, const DgIDGGBase& dgg, const DgQ2DICoord& add2
 
    // convert
 
-   if (dp.megaVerbose) cout << "rpts: " << rpts << endl;
+   if (dp.megaVerbose) dgcout << "rpts: " << rpts << endl;
 
    dgg.geoRF().convert(rpts);
 
-   if (dp.megaVerbose) cout << "-> " << rpts << endl;
+   if (dp.megaVerbose) dgcout << "-> " << rpts << endl;
 
    deg.convert(rpts);
 
-   if (dp.megaVerbose) cout << "-> " << rpts << endl;
+   if (dp.megaVerbose) dgcout << "-> " << rpts << endl;
 
    DgLocList pts;
    for (int i = 0; i < rpts.size(); i++)
@@ -892,9 +892,9 @@ void outputCell (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dg
 
    // unwrap the cell east/west if applicable
    DgPolygon* unwrappedVerts = new DgPolygon(verts);
-   if (dp.megaVerbose) cout << "before unwrap: " << *unwrappedVerts << endl;
+   if (dp.megaVerbose) dgcout << "before unwrap: " << *unwrappedVerts << endl;
    int wrapped = DgGeoSphRF::lonWrap(*unwrappedVerts, dp.lonWrapMode);
-   if (dp.megaVerbose) cout << "unwrapped: " << *unwrappedVerts << endl;
+   if (dp.megaVerbose) dgcout << "unwrapped: " << *unwrappedVerts << endl;
 
    // wrap the cell center point if the boundary was wrapped
    if (dp.unwrapPts && wrapped) {
@@ -905,7 +905,7 @@ void outputCell (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dg
       if (testWrap) {
          delete tmpLoc;
          tmpLoc = dgg.geoRF().makeLocation(g);
-// cout << "UNWRAPPED: " << *tmpLoc << endl;
+// dgcout << "UNWRAPPED: " << *tmpLoc << endl;
       }
    }
 
@@ -917,8 +917,8 @@ void outputCell (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dg
    dgg.geoRF().convert(tmpLoc);
    long double area = 
          DgGeoCoord::geoPolyArea(verts, *dgg.geoRF().getAddress(*tmpLoc));
-   cout << std::setprecision(15);
-   cout << label << " " << area << " " 
+   dgcout << std::setprecision(15);
+   dgcout << label << " " << area << " " 
         << area * dgg.geoRF().earthRadiusKM() * dgg.geoRF().earthRadiusKM() 
         << endl;
 */
@@ -933,7 +933,7 @@ void outputCell (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dg
 */
          
    if (dp.megaVerbose) 
-      cout << "accepted " << label << " " << add2D << endl;
+      dgcout << "accepted " << label << " " << add2D << endl;
 
    const DgQ2DICoord& q2di = *dgg.getAddress(add2D);
    if (dp.cellOut)
@@ -1175,7 +1175,7 @@ void genGrid (GridGenParam& dp)
 
         DgLocation* loc = static_cast<const DgIDGG&>(dgg).bndRF().locFromSeqNum(*i);
         if (!dgg.bndRF().validLocation(*loc)){
-          std::cerr<<"genGrid(): SEQNUM " << (*i)<< " is not a valid location"<<std::endl;
+          dgcerr<<"genGrid(): SEQNUM " << (*i)<< " is not a valid location"<<std::endl;
           ::report("genGrid(): Invalid SEQNUM found.", DgBase::Fatal);
         }
 
@@ -1205,11 +1205,11 @@ void genGrid (GridGenParam& dp)
          regionFile.close();
          delete pRegionFile;
    
-         if (dp.megaVerbose) cout << "input: " << points << endl;
+         if (dp.megaVerbose) dgcout << "input: " << points << endl;
 
          dgg.convert(&points);
    
-         if (dp.megaVerbose) cout << " -> " << points << endl;
+         if (dp.megaVerbose) dgcout << " -> " << points << endl;
 
          list<DgLocBase*>::const_iterator it;
          for (it = points.begin(); it != points.end(); it++) {
@@ -1306,7 +1306,7 @@ void genGrid (GridGenParam& dp)
       try {
          createClipRegions(dp, dgg, clipRegions, overageSet, overageFields);
       } catch (ClipperLib::clipperException& e) {
-         cerr << "ERROR: a clipping polygon vertex exceeds the range for the clipping library.\n";
+         dgcerr << "ERROR: a clipping polygon vertex exceeds the range for the clipping library.\n";
          report("Try reducing the value of parameter clipper_scale_factor and/or breaking-up large clipping polygons.", DgBase::Fatal);
       }
 
@@ -1324,21 +1324,21 @@ void genGrid (GridGenParam& dp)
       const DgContCartRF& cc1 = dgg.ccFrame();
       const DgDiscRF2D& grid = dgg.grid2D();
 
-      cout << "\n";
+      dgcout << "\n";
       for (int q = 0; q < 12; q++)
       {
          if (overageSet[q].empty() && !clipRegions[q].isQuadUsed())
          {
-            cout << string("* No intersections in quad ") 
+            dgcout << string("* No intersections in quad ") 
                  << dgg::util::to_string(q) << "." << endl;
             continue;
          }
 
-         cout << string("* Testing quad ") << dgg::util::to_string(q) 
+         dgcout << string("* Testing quad ") << dgg::util::to_string(q) 
               << "... " << endl;
 
          if (dp.megaVerbose) 
-            cout << "Generating: " << q << " " << clipRegions[q].offset() 
+            dgcout << "Generating: " << q << " " << clipRegions[q].offset() 
                  << " " << clipRegions[q].upperRight() << endl;
 
          DgIVec2D lLeft;
@@ -1380,7 +1380,7 @@ void genGrid (GridGenParam& dp)
                      {
                         accepted = true;
                         overageSet[q].erase(it);
-                        if (dp.megaVerbose) cout << "found OVERAGE coord " << coord << endl;
+                        if (dp.megaVerbose) dgcout << "found OVERAGE coord " << coord << endl;
  
                         tCoord -= lLeft;
                         tCoord = b1.incrementAddress(tCoord);
@@ -1397,7 +1397,7 @@ void genGrid (GridGenParam& dp)
                            accepted = true;
                            coord = *it;
                            overageSet[q].erase(it);
-                           if (dp.megaVerbose) cout << "processing OVERAGE " << coord << endl;
+                           if (dp.megaVerbose) dgcout << "processing OVERAGE " << coord << endl;
                         }
                         else
                         {
@@ -1416,7 +1416,7 @@ void genGrid (GridGenParam& dp)
                      coord = *it;
                      overageSet[q].erase(it);
                      accepted = true;
-                     if (dp.megaVerbose) cout << "processing OVERAGE " << coord << endl;
+                     if (dp.megaVerbose) dgcout << "processing OVERAGE " << coord << endl;
                   }
                }
                else if (clipRegions[q].isQuadUsed())
@@ -1460,7 +1460,7 @@ void genGrid (GridGenParam& dp)
             }
          } // else !dp.isSuperfund
 
-         cout << "...quad " << q << " complete." << endl;
+         dgcout << "...quad " << q << " complete." << endl;
       }
 
    } // end if wholeEarth else
@@ -1479,10 +1479,10 @@ void genGrid (GridGenParam& dp)
       dp.randPtsOut = NULL;
    }
 
-   cout << "\n** grid generation complete **" << endl;
+   dgcout << "\n** grid generation complete **" << endl;
    outputStatus(dp, true);
    if (!dp.wholeEarth && !dp.seqToPoly)
-      cout << "acceptance rate is " << 
+      dgcout << "acceptance rate is " << 
           100.0 * (long double) dp.nCellsAccepted / (long double) dp.nCellsTested <<
           "%" << endl;
 
@@ -1539,7 +1539,7 @@ void doGridGen (GridGenParam& dp, DgGridPList& plist)
 
       genGrid(dp);
 
-      cout << endl;
+      dgcout << endl;
    }
 
 } // void doGridGen

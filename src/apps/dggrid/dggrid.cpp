@@ -52,10 +52,10 @@ void orientGrid (MainParam& dp, DgGridPList& plist)
       plist.setParam("dggs_vert0_lat", dgg::util::to_string(dp.vert0.latDegs()));
       plist.setParam("dggs_vert0_azimuth", dgg::util::to_string(dp.azimuthDegs));
 
-      cout << "Grid " << dp.curGrid <<
+      dgcout << "Grid " << dp.curGrid <<
            " #####################################################" << endl;
-      cout << "grid #" << dp.curGrid << " orientation randomized to: " << endl;
-      cout << plist << endl;
+      dgcout << "grid #" << dp.curGrid << " orientation randomized to: " << endl;
+      dgcout << plist << endl;
    }
    else if (dp.orientCenter && dp.curGrid == 1)
    {
@@ -90,8 +90,8 @@ void orientGrid (MainParam& dp, DgGridPList& plist)
 ////////////////////////////////////////////////////////////////////////////////
 void pause (const string& where)
 {
-   cout << "*** execution paused: " << where << endl;
-   cout << "*** press ENTER to continue: ";
+   dgcout << "*** execution paused: " << where << endl;
+   dgcout << "*** press ENTER to continue: ";
    scanf("%*c");
 }
 
@@ -107,11 +107,11 @@ int main (int argc, char* argv[])
 
    //// build and load the parameter list ////
 
-   cout << "** executing DGGRID version " << DGGRID_VERSION << " **\n";
-   cout << "type sizes: big int: " << sizeof(long long int) * 8 << " bits / ";
-   cout << "big double: " << sizeof(long double) * 8 << " bits\n";
+   dgcout << "** executing DGGRID version " << DGGRID_VERSION << " **\n";
+   dgcout << "type sizes: big int: " << sizeof(long long int) * 8 << " bits / ";
+   dgcout << "big double: " << sizeof(long double) * 8 << " bits\n";
 
-   cout << "\n** loading meta file " << metaFileName << "..." << endl;
+   dgcout << "\n** loading meta file " << metaFileName << "..." << endl;
 
    // first parse the meta file 
    DgGridPList plist; // builds the parameter list
@@ -133,8 +133,8 @@ int main (int argc, char* argv[])
       pdp = new TransformParam(plist);
 
    // echo the parameter list
-   cout << "* using parameter values:\n";
-   cout << plist << endl;
+   dgcout << "* using parameter values:\n";
+   dgcout << plist << endl;
 
    if (pdp->pauseOnStart)
       pause("parameters loaded");
