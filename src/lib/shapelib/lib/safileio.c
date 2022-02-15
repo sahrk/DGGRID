@@ -170,7 +170,11 @@ int SADRemove( const char *filename )
 void SADError( const char *message )
 
 {
+#ifdef DGGRIDR
+    REprintf( stderr, "%s\n", message );
+#else
     fprintf( stderr, "%s\n", message );
+#endif
 }
 
 /************************************************************************/

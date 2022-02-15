@@ -190,7 +190,7 @@ void openfiles() {
     hDBF = DBFOpen( infile, "rb" );
     if( hDBF == NULL )
     {
-	printf( "ERROR: Unable to open the input DBF:%s\n", infile );
+	dgprintf( "ERROR: Unable to open the input DBF:%s\n", infile );
 	exit( 1 );
     }
 /* -------------------------------------------------------------------- */
@@ -206,7 +206,7 @@ void openfiles() {
             hDBFappend = DBFCreate( outfile );
             if( hDBFappend == NULL )
             {
-                printf( "ERROR: Unable to open the append DBF:%s\n", outfile );
+                dgprintf( "ERROR: Unable to open the append DBF:%s\n", outfile );
                 exit( 1 );
             }
         }
@@ -219,7 +219,7 @@ void openfiles() {
 
     if( hSHP == NULL )
     {
-	printf( "ERROR: Unable to open the input shape file:%s\n", infile );
+	dgprintf( "ERROR: Unable to open the input shape file:%s\n", infile );
 	exit( 1 );
     }
 
@@ -237,7 +237,7 @@ void openfiles() {
             hSHPappend = SHPCreate( outfile, nShapeType );
             if( hSHPappend == NULL )
             {
-                printf( "ERROR: Unable to open the append shape file:%s\n",
+                dgprintf( "ERROR: Unable to open the append shape file:%s\n",
                         outfile );
                 exit( 1 );
             }
@@ -304,7 +304,7 @@ void mergefields()
 	            if (found || newdbf)
 	            {
 	                if (i == j)  pt[i]=j;
-	                printf("Warning: Duplicate field name found (%s)\n",iszTitle);
+	                dgprintf("Warning: Duplicate field name found (%s)\n",iszTitle);
 	                /* Duplicate field name
 	                   (Try to guess the correct field by position) */
 	            }
@@ -331,7 +331,7 @@ void mergefields()
 	    if( DBFAddField( hDBFappend, iszTitle, iType, iWidth, iDecimals )
                 == -1 )
 	    {
-		printf( "Warning: DBFAddField(%s, TYPE:%d, WIDTH:%d  DEC:%d, ITEM#:%d of %d) failed.\n",
+		dgprintf( "Warning: DBFAddField(%s, TYPE:%d, WIDTH:%d  DEC:%d, ITEM#:%d of %d) failed.\n",
                         iszTitle, iType, iWidth, iDecimals, (i+1), (ti+1) );
 		pt[i]=-1;
 	    }
@@ -351,11 +351,11 @@ void findselect()
     }
     if (iselectitem == -1) 
     {
-        printf("Warning: Item not found for selection (%s)\n",selectitem);
+        dgprintf("Warning: Item not found for selection (%s)\n",selectitem);
         iselect = FALSE;
         iall = FALSE;
 	showitems();
-        printf("Continued... (Selecting entire file)\n");
+        dgprintf("Continued... (Selecting entire file)\n");
     }
     /* Extract all of the select values (by field type) */
     
@@ -369,11 +369,11 @@ void showitems()
     long int  maxrec;
     char      *pt;
 
-    printf("Available Items: (%d)",ti);
+    dgprintf("Available Items: (%d)",ti);
     maxrec = DBFGetRecordCount(hDBF);
     if (maxrec > 5000 && ! iall) 
-    { maxrec=5000; printf("  ** ESTIMATED RANGES (MEAN)  For more records use \"All\""); }
-    else  { printf("          RANGES (MEAN)"); }
+    { maxrec=5000; dgprintf("  ** ESTIMATED RANGES (MEAN)  For more records use \"All\""); }
+    else  { dgprintf("          RANGES (MEAN)"); }
           
     for( i = 0; i < ti; i++ )
     {
@@ -383,7 +383,7 @@ void showitems()
           case FTLogical:
             strcpy(slow, "~");
             strcpy(shigh,"\0");
-            printf("\n  String  %3d  %-16s",iWidth,iszTitle);
+            dgprintf("\n  String  %3d  %-16s",iWidth,iszTitle);
             for( iRecord = 0; iRecord < maxrec; iRecord++ ) {
                 strncpy(stmp,DBFReadStringAttribute( hDBF, iRecord, i ),39);
                 if (strcmp(stmp,"!!") > 0) {
@@ -395,12 +395,12 @@ void showitems()
             while(*pt == ' ') { *pt='\0'; pt--; }
             pt=shigh+strlen(shigh)-1;
             while(*pt == ' ') { *pt='\0'; pt--; }
-            if (strncasecmp2(slow,shigh,0) < 0)		printf("%s to %s",slow,shigh);
-            else if (strncasecmp2(slow,shigh,0) == 0)	printf("= %s",slow);
-            else	printf("No Values");
+            if (strncasecmp2(slow,shigh,0) < 0)		dgprintf("%s to %s",slow,shigh);
+            else if (strncasecmp2(slow,shigh,0) == 0)	dgprintf("= %s",slow);
+            else	dgprintf("No Values");
             break;
           case FTInteger:
-            printf("\n  Integer %3d  %-16s",iWidth,iszTitle);
+            dgprintf("\n  Integer %3d  %-16s",iWidth,iszTitle);
             ilow =  1999999999;
             ihigh= -1999999999;
             isum =  0;
@@ -411,13 +411,13 @@ void showitems()
                 isum = isum + itmp;
             }
             mean=isum/maxrec;
-            if (ilow < ihigh)       printf("%ld to %ld \t(%.1f)",ilow,ihigh,mean);
-            else if (ilow == ihigh) printf("= %ld",ilow);
-            else printf("No Values");
+            if (ilow < ihigh)       dgprintf("%ld to %ld \t(%.1f)",ilow,ihigh,mean);
+            else if (ilow == ihigh) dgprintf("= %ld",ilow);
+            else dgprintf("No Values");
             break;
 
           case FTDouble:
-            printf("\n  Real  %3d,%d  %-16s",iWidth,iDecimals,iszTitle);
+            dgprintf("\n  Real  %3d,%d  %-16s",iWidth,iDecimals,iszTitle);
             dlow =  999999999999999.0;
             dhigh= -999999999999999.0;
             dsum =  0;
@@ -429,12 +429,12 @@ void showitems()
             }
             mean=dsum/maxrec;
             sprintf(stmp,"%%.%df to %%.%df \t(%%.%df)",iDecimals,iDecimals,iDecimals);
-            if (dlow < dhigh)       printf(stmp,dlow,dhigh,mean);
+            if (dlow < dhigh)       dgprintf(stmp,dlow,dhigh,mean);
             else if (dlow == dhigh) {
                 sprintf(stmp,"= %%.%df",iDecimals);
-                printf(stmp,dlow);
+                dgprintf(stmp,dlow);
             }
-            else printf("No Values");
+            else dgprintf("No Values");
             break;
 
           case FTInvalid:
@@ -443,7 +443,7 @@ void showitems()
         }
 
     }
-    printf("\n");
+    dgprintf("\n");
 }
 
 int selectrec()
@@ -596,7 +596,7 @@ int clip_boundary()
             }
         }
              
-        printf("Vertices:%d   OUT:%d   Number of Parts:%d\n",
+        dgprintf("Vertices:%d   OUT:%d   Number of Parts:%d\n",
                psCShape->nVertices,i2, psCShape->nParts );
                
         psCShape->nVertices = i2;
