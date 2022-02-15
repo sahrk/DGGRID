@@ -71,7 +71,9 @@ void report (const string& message, DgBase::DgReportLevel level)
 
          dgcout.flush();  // in case stdout and stderr go to the same place
          dgcerr << "FATAL ERROR: " << message << endl;
+#ifndef DGGRIDR
          exit(1);
+#endif
 
       case DgBase::Silent:
 

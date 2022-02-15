@@ -35,7 +35,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-DgOutPRCellsFile::DgOutPRCellsFile (const DgRFBase& rfIn, 
+DgOutPRCellsFile::DgOutPRCellsFile (const DgRFBase& rfIn,
         const string& fileNameIn, int precision, DgReportLevel failLevel)
    : DgOutLocTextFile (fileNameIn, rfIn, true, "cells", precision, failLevel)
 {
@@ -100,7 +100,7 @@ DgOutPRCellsFile::insert (DgLocation& loc, const string* label)
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutPRCellsFile::insert (DgLocVector& vec, const string* label, 
+DgOutPRCellsFile::insert (DgLocVector& vec, const string* label,
                      const DgLocation* cent)
 //
 // Put the polyline vec.
@@ -115,7 +115,7 @@ DgOutPRCellsFile::insert (DgLocVector& vec, const string* label,
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutPRCellsFile::insert (DgPolygon& poly, const string* label, 
+DgOutPRCellsFile::insert (DgPolygon& poly, const string* label,
                      const DgLocation* cent)
 //
 // Put the polygon poly.

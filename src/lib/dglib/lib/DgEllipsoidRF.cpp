@@ -209,6 +209,7 @@ DgEllipsoidRF::str2add (DgGeoCoord* add, const char* str, char delimiter) const
 #include <stdlib.h> 
 #include <stdio.h> 
 #include <cmath>
+#include "dglib/DgBase.h"
 
 /******************************************************************************/
 void sphTriInit (SphTri* tri)
@@ -251,9 +252,9 @@ void printInt (long long int val)
 */
 {
    if (val == UNDEFVAL)
-      printf("UNDEFVAL");
+      dgcout << "UNDEFVAL";
    else
-      printf("%lld", val);
+      dgcout << val;
  
 } /* void printInt */
 
@@ -263,10 +264,10 @@ void printVal (long double val)
    Print val or 'UNDEFVAL' to stdout as appropriate.
 */
 {
-   if (val == UNDEFVAL) 
-      printf("UNDEFVAL"); 
-   else 
-      printf("%LF", val);
+   if (val == UNDEFVAL)
+      dgcout << "UNDEFVAL";
+   else
+      dgcout << val;
 
 } /* void printVal */
 
@@ -276,12 +277,7 @@ void printGeoCoord (const GeoCoord& p)
    Print p to stdout.
 */
 {
-   /*printVec2D(*((Vec2D*) &p));*/
-   printf("(");
-   printVal(p.lon* M_180_PI);
-   printf(",");
-   printVal(p.lat* M_180_PI);
-   printf(")");
+   dgcout << "(" << p.lon * M_180_PI << ", " << p.lat * M_180_PI << ")";
 
 } /* void printGeoCoord */
 
@@ -291,11 +287,7 @@ void printVec2D (const Vec2D& p)
    Print p to stdout.
 */
 {
-   printf("(");
-   printVal(p.x);
-   printf(", ");
-   printVal(p.y);
-   printf(")");
+   dgcout << "(" << p.x << ", " << p.y << ")";
 
 } /* void printVec2D */
 
@@ -305,13 +297,7 @@ void printVec3D (const Vec3D& p)
    Print p to stdout.
 */
 {
-   printf("(");
-   printVal(p.x);
-   printf(", ");
-   printVal(p.y);
-   printf(", ");
-   printVal(p.z);
-   printf(")");
+   dgcout << "(" << p.x << ", " << p.y << ", " << p.z << ")";
 
 } /* void printVec3D */
 
@@ -323,31 +309,32 @@ void printSphTri (const SphTri& tri)
 {
    int i;
 
-   printf("{\n  code: "); printInt(tri.code);
-   printf("\n  vertices: ");
+   dgcout << "{\n  code: "; 
+   printInt(tri.code);
+   dgcout << "\n  vertices: ";
    for (i = 0; i < 3; i++) 
    {
-      printf(" ");
+      dgcout << " ";
       printGeoCoord(tri.verts[i]);
    }
-   printf("\n");
+   dgcout << "\n";
    
-   printf("  A: "); printVal(tri.edges[0]);
-   printf("  B: "); printVal(tri.edges[1]);
-   printf("  C: "); printVal(tri.edges[2]);
-   printf("\n");
+   dgcout << "  A: "; printVal(tri.edges[0]);
+   dgcout << "  B: "; printVal(tri.edges[1]);
+   dgcout << "  C: "; printVal(tri.edges[2]);
+   dgcout << "\n";
 
-   printf("  a: "); printVal(tri.angles[0]* M_180_PI);
-   printf("  b: "); printVal(tri.angles[1]* M_180_PI);
-   printf("  c: "); printVal(tri.angles[2]* M_180_PI);
-   printf("\n");
+   dgcout << "  a: "; printVal(tri.angles[0]* M_180_PI);
+   dgcout << "  b: "; printVal(tri.angles[1]* M_180_PI);
+   dgcout << "  c: "; printVal(tri.angles[2]* M_180_PI);
+   dgcout << "\n";
 
-   printf("  area: "); printVal(tri.area);
-   printf("  perimeter: "); printVal(tri.perimeter);
-   printf("  compactness: "); printVal(tri.compactness);
-   printf("\n");
+   dgcout << "  area: "; printVal(tri.area);
+   dgcout << "  perimeter: "; printVal(tri.perimeter);
+   dgcout << "  compactness: "; printVal(tri.compactness);
+   dgcout << "\n";
 
-   printf("}\n");
+   dgcout << "}\n";
 
 } /* void printSphTri */
 
@@ -359,18 +346,18 @@ void printPlaneTri (const PlaneTri& tri)
 {
    int i;
  
-   printf("{\n  code: "); printInt(tri.code);
-   printf("\n  vertices: ");
+   dgcout << "{\n  code: "; printInt(tri.code);
+   dgcout << "\n  vertices: ";
    for (i = 0; i < 3; i++)
    {
-      printf(" ");
+      dgcout << " ";
       printVec2D(tri.points[i]);
    }
-   printf("\n");
+   dgcout << "\n";
    printVec2D(tri.cenpoint);
-   printf("\n");
+   dgcout << "\n";
  
-   printf("}\n");
+   dgcout << "}\n";
  
 } /* void PlaneTri */
 
@@ -541,7 +528,7 @@ GeoCoord xyzll(const Vec3D& v0)
   }
   else 
   {
-     printf("Error: in function xyzll, asin domain error.\n");
+     dgcerr << "Error: in function xyzll, asin domain error.\n";
      return sv;
   }
 
@@ -698,57 +685,43 @@ GeoCoord GCintersect(const GeoCoord& sv11, const GeoCoord& sv12,
   nn2.x=p21.y*p22.z-p22.y*p21.z;
   nn2.y=-p21.x*p22.z+p22.x*p21.z;
   nn2.z=p21.x*p22.y-p22.x*p21.y;
-  if ((nn2.z*nn1.y-nn1.z*nn2.y)!= 0.0L)
-   {
+  if ((nn2.z*nn1.y-nn1.z*nn2.y)!= 0.0L) {
     b=(nn1.x*nn2.y-nn2.x*nn1.y)/(nn2.z*nn1.y-nn1.z*nn2.y);
     a=(nn2.x*nn1.z-nn1.x*nn2.z)/(nn1.y*nn2.z-nn2.y*nn1.z);
     pp.x=1/sqrtl(a*a+b*b+1);
     pp.y=a*pp.x;
     pp.z=b*pp.x;
-   }
-  else if (((nn2.z*nn1.y-nn1.z*nn2.y)==0.0L) &&
-         ((nn1.x*nn2.y-nn2.x*nn1.y)==0.0L) && ((nn1.x*nn2.z-nn2.x*nn1.z)==0.0L))   {
-    printf("Error of GCintersect: the two great circle planes are parallel.\n");
-    exit(1);
-   }  
-  else if (((nn2.z*nn1.y-nn1.z*nn2.y)==0.0L) && (nn1.z!=0.0L))
-   {  
+   } else if (((nn2.z*nn1.y-nn1.z*nn2.y)==0.0L) &&
+         ((nn1.x*nn2.y-nn2.x*nn1.y)==0.0L) && ((nn1.x*nn2.z-nn2.x*nn1.z)==0.0L)) {
+    report("Error in GCintersect: the two great circle planes are parallel.\n", 
+           DgBase::Fatal);
+   } else if (((nn2.z*nn1.y-nn1.z*nn2.y)==0.0L) && (nn1.z!=0.0L)) {  
     pp.x=0.0L;
     pp.y=1.0L/sqrtl(1+nn1.y*nn1.y/nn1.z/nn1.z);
     pp.z=-nn1.y/nn1.z*pp.y;
-   }  
-  else if (((nn2.z*nn1.y-nn1.z*nn2.y)==0.0L) && (nn2.z!=0.0L))
-   {  
+   } else if (((nn2.z*nn1.y-nn1.z*nn2.y)==0.0L) && (nn2.z!=0.0L)) {  
     pp.x=0.0L;
     pp.y=1.0L/sqrtl(1.0L+nn2.y*nn2.y/nn2.z/nn2.z);
     pp.z=-nn2.y/nn2.z*pp.y;
-   }  
-  else if (((nn2.z*nn1.y-nn1.z*nn2.y)==0.0L) && (nn1.y!=0.0L))
-   {  
+   } else if (((nn2.z*nn1.y-nn1.z*nn2.y)==0.0L) && (nn1.y!=0.0L)) {  
     pp.x=0.0L;
     pp.z=1/sqrtl(1+nn1.z*nn1.z/nn1.y/nn1.y);
     pp.y=-nn1.z/nn1.y*pp.z;
-   } 
- else if (((nn2.z*nn1.y-nn1.z*nn2.y)==0.0L) && (nn2.y!=0.0L))
-   {
+   } else if (((nn2.z*nn1.y-nn1.z*nn2.y)==0.0L) && (nn2.y!=0.0L)) {
     pp.x=0.0L;
     pp.z=1.0L/sqrtl(1.0L+nn2.z*nn2.z/nn2.y/nn2.y);
     pp.y=-nn2.z/nn2.y*pp.z;
    }
     
-  if (sign==0)
-   {
-    if (pp.z<0.0L)
-     {
+  if (sign==0) {
+    if (pp.z<0.0L) {
       pp.x=0.0L-pp.x;
       pp.y=-pp.y;
       pp.z=-pp.z;
-     }
+    }
     pt=xyzll(pp);
     return pt;
-   }
-  else
-  {
+  } else {
    /* judge if the point is on the two great circle segment */
  
   pt=xyzll(pp);
@@ -756,23 +729,21 @@ GeoCoord GCintersect(const GeoCoord& sv11, const GeoCoord& sv12,
   minlon=minval(sv11.lon,sv12.lon);
   if ((pt.lon<=maxlon) && (pt.lon>=minlon)) 
    return pt;
-  else
-   {
+  else {
     pp2.x=-pp.x;
     pp2.y=-pp.y;
     pp2.z=-pp.z;
     pt=xyzll(pp2);
     if ((pt.lon<=maxlon) && (pt.lat>=minlon)) 
      return pt;
-    else
-     {
-      printf("Error of GCintersect: the point is not on great circle segment.\n");
+    else {
+      dgcerr << "Error of GCintersect: the point is not on great circle segment.\n";
       pt.lat=UNDEFVAL; pt.lon=UNDEFVAL;
       return pt;
-     }
-   }
+    }
+  }
   } 
- } /* GeoCoord GCintersect */
+} /* GeoCoord GCintersect */
 
 /******************************************************************************/
 long double GCptlat(long double lon, const GeoCoord& sv1, const GeoCoord& sv2)
@@ -794,9 +765,10 @@ long double GCptlat(long double lon, const GeoCoord& sv1, const GeoCoord& sv2)
   b=(p1.x*p2.z-p1.z*p2.x)*sinl(lon);
   c=(p1.x*p2.y-p1.y*p2.x);
   if (c!=0.0L) lat=atanl((b-a)/c);
-  else { lat = UNDEFVAL;
-         printf("Error of GCptlat: the two end points are at one longitude.\n");
-       }
+  else { 
+     lat = UNDEFVAL;
+     dgcerr << "Error in GCptlat: the two end points are at one longitude.\n";
+  }
   return(lat);
  } /* long double GCptlat */
 

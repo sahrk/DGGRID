@@ -33,7 +33,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-DgOutRandPtsText::DgOutRandPtsText (const DgRFBase& rfIn, 
+DgOutRandPtsText::DgOutRandPtsText (const DgRFBase& rfIn,
         const string& fileNameIn, int precision, DgReportLevel failLevel)
    : DgOutLocTextFile (fileNameIn, rfIn, true, "txt", precision, failLevel)
 {
@@ -93,7 +93,7 @@ DgOutRandPtsText::insert (DgLocation& loc, const string* label)
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutRandPtsText::insert (DgLocVector& vec, const string* label, 
+DgOutRandPtsText::insert (DgLocVector& vec, const string* label,
                      const DgLocation* cent)
 //
 // Put the polyline vec.
@@ -108,7 +108,7 @@ DgOutRandPtsText::insert (DgLocVector& vec, const string* label,
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutRandPtsText::insert (DgPolygon& poly, const string* label, 
+DgOutRandPtsText::insert (DgPolygon& poly, const string* label,
                      const DgLocation* cent)
 //
 // Put the polygon poly.

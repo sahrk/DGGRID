@@ -191,7 +191,9 @@ void openfiles() {
     if( hDBF == NULL )
     {
 	dgprintf( "ERROR: Unable to open the input DBF:%s\n", infile );
+#ifndef DGGRIDR
 	exit( 1 );
+#endif
     }
 /* -------------------------------------------------------------------- */
 /*      Open the append DBF file.                                       */
@@ -207,7 +209,9 @@ void openfiles() {
             if( hDBFappend == NULL )
             {
                 dgprintf( "ERROR: Unable to open the append DBF:%s\n", outfile );
+#ifndef DGGRIDR
                 exit( 1 );
+#endif
             }
         }
     }
@@ -220,7 +224,9 @@ void openfiles() {
     if( hSHP == NULL )
     {
 	dgprintf( "ERROR: Unable to open the input shape file:%s\n", infile );
-	exit( 1 );
+#ifndef DGGRIDR
+        exit( 1 );
+#endif
     }
 
     SHPGetInfo( hSHP, &nEntities, &nShapeType, NULL, NULL );
@@ -239,7 +245,9 @@ void openfiles() {
             {
                 dgprintf( "ERROR: Unable to open the append shape file:%s\n",
                         outfile );
+#ifndef DGGRIDR
                 exit( 1 );
+#endif
             }
         }
         SHPGetInfo( hSHPappend, &nEntitiesAppend, &nShapeTypeAppend,
@@ -248,7 +256,9 @@ void openfiles() {
         if (nShapeType != nShapeTypeAppend) 
         {
             puts( "ERROR: Input and Append shape files are of different types.");
-            exit( 1 );
+#ifndef DGGRIDR
+        exit( 1 );
+#endif
         }
     }
 }
@@ -780,5 +790,7 @@ det_inv = 1/(a1*b2 - a2*b1);
 } // end Intersect_Lines
     **********************************************************/
 
-    exit( 1 );
+#ifndef DGGRIDR
+     exit( 1 );
+#endif
 }
