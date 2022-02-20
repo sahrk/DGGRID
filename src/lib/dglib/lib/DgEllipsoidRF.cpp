@@ -30,8 +30,8 @@ const DgGeoCoord DgGeoCoord::undefGeoCoord(LDBL_MAX, LDBL_MAX);
 const long double DgGeoCoord::tolerance = 0.0000000005L;
 
 ////////////////////////////////////////////////////////////////////////////////
-long double 
-DgGeoCoord::gcDist (const DgGeoCoord& g1, const DgGeoCoord& g2, 
+long double
+DgGeoCoord::gcDist (const DgGeoCoord& g1, const DgGeoCoord& g2,
                     bool rads)
 /*
    return great circle distance in radians between g1 and g2.
@@ -44,15 +44,15 @@ DgGeoCoord::gcDist (const DgGeoCoord& g1, const DgGeoCoord& g2,
    // use spherical triangle with g1 at A, g2 at B, and north pole at C
 
    long double bigC = fabsl(g2.lon() - g1.lon());
-   
+
    if (bigC > M_PI) // assume we want the complement
    {
       // note that in this case they can't both be negative
 
       long double lon1 = g1.lon();
-      if (lon1 < 0.0L) lon1 += 2.0L * M_PI; 
+      if (lon1 < 0.0L) lon1 += 2.0L * M_PI;
       long double lon2 = g2.lon();
-      if (lon2 < 0.0L) lon2 += 2.0L * M_PI; 
+      if (lon2 < 0.0L) lon2 += 2.0L * M_PI;
 
       bigC = fabsl(lon2 - lon1);
    }
@@ -69,17 +69,17 @@ DgGeoCoord::gcDist (const DgGeoCoord& g1, const DgGeoCoord& g2,
    long double retVal = acosl(cosc);
 
    if (!rads) retVal *= M_180_PI;
- 
+
    return retVal;
 
 } // long double DgGeoCoord::gcDist
 
 ////////////////////////////////////////////////////////////////////////////////
-DgGeoCoord 
-DgGeoCoord::gcIntersect (const DgGeoCoord& g11, const DgGeoCoord& g12, 
+DgGeoCoord
+DgGeoCoord::gcIntersect (const DgGeoCoord& g11, const DgGeoCoord& g12,
           const DgGeoCoord& g21, const DgGeoCoord& g22)
 /*
-   Return point of intersection of the two great circle arc segments g11-g12 
+   Return point of intersection of the two great circle arc segments g11-g12
    and g21-g22.
 
    Works by calling Lian Song's routine GCintersect.
@@ -92,14 +92,14 @@ DgGeoCoord::gcIntersect (const DgGeoCoord& g11, const DgGeoCoord& g12,
    //sv22.lon = g22.lon(); sv22.lat = g22.lat();
 
    GeoCoord ans = GCintersect(sv11, sv12, sv21, sv11, 1);
-   
+
    return DgGeoCoord(ans.lon, ans.lat);
 
 } // DgGeoCoord DgGeoCoord::gcIntersect
 
 ////////////////////////////////////////////////////////////////////////////////
-long double 
-DgGeoCoord::geoTriArea (const DgGeoCoord& g1, const DgGeoCoord& g2, 
+long double
+DgGeoCoord::geoTriArea (const DgGeoCoord& g1, const DgGeoCoord& g2,
                         const DgGeoCoord& g3)
 /*
    return area in radians.
@@ -124,7 +124,7 @@ DgGeoCoord::geoTriArea (const DgGeoCoord& g1, const DgGeoCoord& g2,
    long double sinsc = sinl(s - c);
 
    long double k = sqrtl(sinsa * sinsb * sinsc / sinl(s));
-   
+
    long double bigA = 2.0L * atanl(k / sinsa);
    long double bigB = 2.0L * atanl(k / sinsb);
    long double bigC = 2.0L * atanl(k / sinsc);
@@ -133,10 +133,10 @@ DgGeoCoord::geoTriArea (const DgGeoCoord& g1, const DgGeoCoord& g2,
 
 /*
    cout << "geoTriArea: " << g1 << " " << g2 << " " << g3 << endl
-        << " a: " << a 
+        << " a: " << a
         << " b: " << b
         << " c: " << c << endl
-        << " A: " << bigA 
+        << " A: " << bigA
         << " B: " << bigB
         << " C: " << bigC << endl
         << " E: " << E << " "
@@ -148,10 +148,10 @@ DgGeoCoord::geoTriArea (const DgGeoCoord& g1, const DgGeoCoord& g2,
 } // long double DgGeoCoord::geoTriArea
 
 ////////////////////////////////////////////////////////////////////////////////
-long double 
+long double
 DgGeoCoord::geoPolyArea (const DgPolygon& poly, const DgGeoCoord center)
 //
-// returns area of spherical polygon in radians; 
+// returns area of spherical polygon in radians;
 //
 // assumes DgAddressBase for poly is DgGeoCoord
 //
@@ -160,9 +160,9 @@ DgGeoCoord::geoPolyArea (const DgPolygon& poly, const DgGeoCoord center)
 //
 {
    long double totArea = 0.0L;
-   
+
    const DgGeoSphRF* geoRF = dynamic_cast<const DgGeoSphRF*>(&poly.rf());
-   if (geoRF == 0) 
+   if (geoRF == 0)
       report("DgGeoCoord::geoPolyArea() non-geo polygon", DgBase::Fatal);
 
    // do each sub-triangle
@@ -170,7 +170,7 @@ DgGeoCoord::geoPolyArea (const DgPolygon& poly, const DgGeoCoord center)
    {
       const DgGeoCoord& v1 = *geoRF->getAddress(poly[i]);
       const DgGeoCoord& v2 = *geoRF->getAddress(poly[(i + 1) % poly.size()]);
-                              
+
       totArea += DgGeoCoord::geoTriArea(center, v1, v2);
    }
 
@@ -206,15 +206,16 @@ DgEllipsoidRF::str2add (DgGeoCoord* add, const char* str, char delimiter) const
 */
 /******************************************************************************/
 
-#include <stdlib.h> 
-#include <stdio.h> 
+#include <dglib/DgBase.h>
+
 #include <cmath>
-#include "dglib/DgBase.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 /******************************************************************************/
 void sphTriInit (SphTri* tri)
 /*
-   Initialize tri with UNDEFVAL values. 
+   Initialize tri with UNDEFVAL values.
 */
 {
    int i;
@@ -255,7 +256,7 @@ void printInt (long long int val)
       dgcout << "UNDEFVAL";
    else
       dgcout << val;
- 
+
 } /* void printInt */
 
 /******************************************************************************/
@@ -309,16 +310,16 @@ void printSphTri (const SphTri& tri)
 {
    int i;
 
-   dgcout << "{\n  code: "; 
+   dgcout << "{\n  code: ";
    printInt(tri.code);
    dgcout << "\n  vertices: ";
-   for (i = 0; i < 3; i++) 
+   for (i = 0; i < 3; i++)
    {
       dgcout << " ";
       printGeoCoord(tri.verts[i]);
    }
    dgcout << "\n";
-   
+
    dgcout << "  A: "; printVal(tri.edges[0]);
    dgcout << "  B: "; printVal(tri.edges[1]);
    dgcout << "  C: "; printVal(tri.edges[2]);
@@ -345,7 +346,7 @@ void printPlaneTri (const PlaneTri& tri)
 */
 {
    int i;
- 
+
    dgcout << "{\n  code: "; printInt(tri.code);
    dgcout << "\n  vertices: ";
    for (i = 0; i < 3; i++)
@@ -356,9 +357,9 @@ void printPlaneTri (const PlaneTri& tri)
    dgcout << "\n";
    printVec2D(tri.cenpoint);
    dgcout << "\n";
- 
+
    dgcout << "}\n";
- 
+
 } /* void PlaneTri */
 
 /******************************************************************************/
@@ -411,7 +412,7 @@ Vec3D vecCross (const Vec3D& A, const Vec3D& B)
 
 /******************************************************************************/
 long double vecMag (const Vec3D& V)
-/* 
+/*
    Calculate and return the magnitude of a vector V.
 */
 {
@@ -429,7 +430,7 @@ Vec3D vecNormalize  (const Vec3D& V)
 
    C.x = V.x/sqrtl(V.x * V.x + V.y * V.y + V.z * V.z);
    C.y = V.y/sqrtl(V.x * V.x + V.y * V.y + V.z * V.z);
-   C.z = V.z/sqrtl(V.x * V.x + V.y * V.y + V.z * V.z); 
+   C.z = V.z/sqrtl(V.x * V.x + V.y * V.y + V.z * V.z);
 
    return C;
 
@@ -448,7 +449,7 @@ long double vecDot (const Vec3D& A, const Vec3D& B)
 /******************************************************************************/
 long double sqrMetersToExcessD (long double area)
 {
-   return area * 360.0L / (4.0L * M_PI * DgGeoSphRF::earthRadiusKM() * 
+   return area * 360.0L / (4.0L * M_PI * DgGeoSphRF::earthRadiusKM() *
           DgGeoSphRF::earthRadiusKM());
 
 } /* long double metersToExcessD */
@@ -475,9 +476,9 @@ long double maxval(long double val1, long double val2)
 
 /******************************************************************************/
 long double minval(long double val1, long double val2)
-/* 
+/*
   return the minmum of two variables
-*/ 
+*/
  {
   long double minn;
   if (val1<val2) minn=val1;
@@ -509,8 +510,8 @@ Vec3D llxyz(const GeoCoord& sv)
 /******************************************************************************/
 GeoCoord xyzll(const Vec3D& v0)
 /*
-   Transformation of a point on the sphere from xyz cordinates to latitude and 
-   longitude Input unit regard the earth's radius as one unit. Output unit is 
+   Transformation of a point on the sphere from xyz cordinates to latitude and
+   longitude Input unit regard the earth's radius as one unit. Output unit is
    degree.
 */
  {
@@ -526,7 +527,7 @@ GeoCoord xyzll(const Vec3D& v0)
      else sv.lon=atan2l(v.y,v.x);
      return sv;
   }
-  else 
+  else
   {
      dgcerr << "Error: in function xyzll, asin domain error.\n";
      return sv;
@@ -537,14 +538,14 @@ GeoCoord xyzll(const Vec3D& v0)
 /******************************************************************************/
 GeoCoord sphTricenpoint(GeoCoord sp[3])
 /*
-   Calculate and return the center point of a sphere triangle 
+   Calculate and return the center point of a sphere triangle
    Input and output unit is degree.
 */
  {
   Vec3D p[3], cp, cpn;
   GeoCoord cv;
   int i;
- 
+
   for (i=0;i<3;i++) p[i]=llxyz(sp[i]);
   cp.x=(p[0].x+p[1].x+p[2].x)/3;
   cp.y=(p[0].y+p[1].y+p[2].y)/3;
@@ -563,13 +564,13 @@ long double chorddist(const GeoCoord& ll1, const GeoCoord& ll2)
  {
   //long double la1,lo1,la2,lo2;
   Vec3D p1,p2;
-  p1.x=cosl(ll1.lat)*cosl(ll1.lon); 
-  p1.y=cosl(ll1.lat)*sinl(ll1.lon); 
+  p1.x=cosl(ll1.lat)*cosl(ll1.lon);
+  p1.y=cosl(ll1.lat)*sinl(ll1.lon);
   p1.z=sinl(ll1.lat);
-  p2.x=cosl(ll2.lat)*cosl(ll2.lon); 
-  p2.y=cosl(ll2.lat)*sinl(ll2.lon); 
+  p2.x=cosl(ll2.lat)*cosl(ll2.lon);
+  p2.y=cosl(ll2.lat)*sinl(ll2.lon);
   p2.z=sinl(ll2.lat);
-  return 
+  return
     sqrtl((p1.x-p2.x)*(p1.x-p2.x)+(p1.y-p2.y)*(p1.y-p2.y)+(p1.z-p2.z)*(p1.z-p2.z));
 
  } /* long double chorddist */
@@ -624,7 +625,7 @@ void sphTriSolve(SphTri* tri)
    }
   else tri->area=(tri->angles[0]+tri->angles[1]+tri->angles[2]-M_PI)*
               DgGeoSphRF::earthRadiusKM()*DgGeoSphRF::earthRadiusKM();
- 
+
  } /* void sphTriSolve(SphTri* tri) */
 
 /******************************************************************************/
@@ -645,7 +646,7 @@ GeoCoord GCmidpoint(const GeoCoord& pp1, const GeoCoord& pp2)
 /******************************************************************************/
 long double Azimuth(const GeoCoord& pt1, const GeoCoord& pt2)
 /*
-  return the azimuth of pt2 relatived to pt1  
+  return the azimuth of pt2 relatived to pt1
   output azimuth unit is radius
 */
  {
@@ -657,15 +658,15 @@ long double Azimuth(const GeoCoord& pt1, const GeoCoord& pt2)
  } /* long double Azimuth */
 
 /******************************************************************************/
-GeoCoord GCintersect(const GeoCoord& sv11, const GeoCoord& sv12, 
+GeoCoord GCintersect(const GeoCoord& sv11, const GeoCoord& sv12,
                      const GeoCoord& sv21, const GeoCoord& sv22, int sign)
 /*
   return the intersect point of two great circle
   sign=1: two great circle segment with ends of sv11 and sv12,
           sv21 and sv22 respectively
-  sign=0: two whole great circle with one pass sv11 and sv12, one pass 
+  sign=0: two whole great circle with one pass sv11 and sv12, one pass
           sv21 and sv22, return the intersect point on North Hemisphere
-*/ 
+*/
  {
   GeoCoord pt;
   Vec3D nn1,nn2,
@@ -673,7 +674,7 @@ GeoCoord GCintersect(const GeoCoord& sv11, const GeoCoord& sv12,
 	p21,p22,
 	pp,pp2;
   long double a,b,maxlon,minlon;
- 
+
 /* calculate the intersect point of two great circle */
   p11=llxyz(sv11);
   p12=llxyz(sv12);
@@ -693,17 +694,17 @@ GeoCoord GCintersect(const GeoCoord& sv11, const GeoCoord& sv12,
     pp.z=b*pp.x;
    } else if (((nn2.z*nn1.y-nn1.z*nn2.y)==0.0L) &&
          ((nn1.x*nn2.y-nn2.x*nn1.y)==0.0L) && ((nn1.x*nn2.z-nn2.x*nn1.z)==0.0L)) {
-    report("Error in GCintersect: the two great circle planes are parallel.\n", 
+    report("Error in GCintersect: the two great circle planes are parallel.\n",
            DgBase::Fatal);
-   } else if (((nn2.z*nn1.y-nn1.z*nn2.y)==0.0L) && (nn1.z!=0.0L)) {  
+   } else if (((nn2.z*nn1.y-nn1.z*nn2.y)==0.0L) && (nn1.z!=0.0L)) {
     pp.x=0.0L;
     pp.y=1.0L/sqrtl(1+nn1.y*nn1.y/nn1.z/nn1.z);
     pp.z=-nn1.y/nn1.z*pp.y;
-   } else if (((nn2.z*nn1.y-nn1.z*nn2.y)==0.0L) && (nn2.z!=0.0L)) {  
+   } else if (((nn2.z*nn1.y-nn1.z*nn2.y)==0.0L) && (nn2.z!=0.0L)) {
     pp.x=0.0L;
     pp.y=1.0L/sqrtl(1.0L+nn2.y*nn2.y/nn2.z/nn2.z);
     pp.z=-nn2.y/nn2.z*pp.y;
-   } else if (((nn2.z*nn1.y-nn1.z*nn2.y)==0.0L) && (nn1.y!=0.0L)) {  
+   } else if (((nn2.z*nn1.y-nn1.z*nn2.y)==0.0L) && (nn1.y!=0.0L)) {
     pp.x=0.0L;
     pp.z=1/sqrtl(1+nn1.z*nn1.z/nn1.y/nn1.y);
     pp.y=-nn1.z/nn1.y*pp.z;
@@ -712,7 +713,7 @@ GeoCoord GCintersect(const GeoCoord& sv11, const GeoCoord& sv12,
     pp.z=1.0L/sqrtl(1.0L+nn2.z*nn2.z/nn2.y/nn2.y);
     pp.y=-nn2.z/nn2.y*pp.z;
    }
-    
+
   if (sign==0) {
     if (pp.z<0.0L) {
       pp.x=0.0L-pp.x;
@@ -723,18 +724,18 @@ GeoCoord GCintersect(const GeoCoord& sv11, const GeoCoord& sv12,
     return pt;
   } else {
    /* judge if the point is on the two great circle segment */
- 
+
   pt=xyzll(pp);
   maxlon=maxval(sv11.lon,sv12.lon);
   minlon=minval(sv11.lon,sv12.lon);
-  if ((pt.lon<=maxlon) && (pt.lon>=minlon)) 
+  if ((pt.lon<=maxlon) && (pt.lon>=minlon))
    return pt;
   else {
     pp2.x=-pp.x;
     pp2.y=-pp.y;
     pp2.z=-pp.z;
     pt=xyzll(pp2);
-    if ((pt.lon<=maxlon) && (pt.lat>=minlon)) 
+    if ((pt.lon<=maxlon) && (pt.lat>=minlon))
      return pt;
     else {
       dgcerr << "Error of GCintersect: the point is not on great circle segment.\n";
@@ -742,7 +743,7 @@ GeoCoord GCintersect(const GeoCoord& sv11, const GeoCoord& sv12,
       return pt;
     }
   }
-  } 
+  }
 } /* GeoCoord GCintersect */
 
 /******************************************************************************/
@@ -753,19 +754,19 @@ long double GCptlat(long double lon, const GeoCoord& sv1, const GeoCoord& sv2)
  {
   long double lat,a,b,c;
   Vec3D p1,p2;
- 
+
   p1.x=cosl(sv1.lat)*cosl(sv1.lon);
   p1.y=cosl(sv1.lat)*sinl(sv1.lon);
   p1.z=sinl(sv1.lat);
   p2.x=cosl(sv2.lat)*cosl(sv2.lon);
   p2.y=cosl(sv2.lat)*sinl(sv2.lon);
   p2.z=sinl(sv2.lat);
-  
+
   a=(p1.y*p2.z-p1.z*p2.y)*cosl(lon);
   b=(p1.x*p2.z-p1.z*p2.x)*sinl(lon);
   c=(p1.x*p2.y-p1.y*p2.x);
   if (c!=0.0L) lat=atanl((b-a)/c);
-  else { 
+  else {
      lat = UNDEFVAL;
      dgcerr << "Error in GCptlat: the two end points are at one longitude.\n";
   }
@@ -793,11 +794,11 @@ int ptinsphtri(const GeoCoord& pt, GeoCoord sTri[3])
         ptri[0].y * (ptri[1].x * ptri[2].z - ptri[2].x * ptri[1].z) +
         ptri[0].z * (ptri[1].x * ptri[2].y - ptri[2].x * ptri[1].y);
 
-   if (p0 * t0 < 0.0L) 
+   if (p0 * t0 < 0.0L)
    {
       return 0;
    }
-   else 
+   else
    {
       p0 = pp.x * (ptri[0].y * ptri[2].z - ptri[2].y * ptri[0].z) -
            pp.y * (ptri[0].x * ptri[2].z - ptri[2].x * ptri[0].z) +
@@ -807,11 +808,11 @@ int ptinsphtri(const GeoCoord& pt, GeoCoord sTri[3])
            ptri[1].y * (ptri[0].x * ptri[2].z - ptri[2].x * ptri[0].z) +
            ptri[1].z * (ptri[0].x * ptri[2].y - ptri[2].x * ptri[0].y);
 
-      if (p0 * t0 < 0.0L) 
+      if (p0 * t0 < 0.0L)
       {
          return 0;
       }
-      else 
+      else
       {
          p0 = pp.x * (ptri[0].y * ptri[1].z - ptri[1].y * ptri[0].z) -
               pp.y * (ptri[0].x * ptri[1].z - ptri[1].x * ptri[0].z) +
@@ -825,59 +826,58 @@ int ptinsphtri(const GeoCoord& pt, GeoCoord sTri[3])
       }
    }
 
-}  /* ptinsphtri */ 
+}  /* ptinsphtri */
 
 /******************************************************************************/
 GeoCoord GCdaz(const GeoCoord& pt, long double distance, long double az)
 /*
-  compute and return the point whose azimuth (az) and distance 
+  compute and return the point whose azimuth (az) and distance
   (distance) relative to a known point (pt) are given.
   input parameter distance and az are in radius, pt in degree.
 */
  {
   GeoCoord pt2;
   long double sinlat, sinlon, coslon;
- 
+
   if ((fabsl(az)<PRECISION) || (fabsl(fabsl(az)-M_PI)<PRECISION))
   {
      if (fabsl(az)<PRECISION) pt2.lat = pt.lat + distance;
      else pt2.lat = pt.lat - distance;
      pt2.lon = pt.lon;
      if (fabsl(pt2.lat-M_PI_2)<PRECISION)
-     { 
+     {
         pt2.lat = M_PI_2;
         pt2.lon = 0.0L;
-     } 
+     }
      if (fabsl(pt2.lat+M_PI_2)<PRECISION)
-     { 
+     {
         pt2.lat = -M_PI;
         pt2.lon = 0.0L;
-     } 
-  }   
+     }
+  }
   else
   {
      sinlat=sinl(pt.lat)*cosl(distance)+cosl(pt.lat)*sinl(distance)*cosl(az);
      if (sinlat>1.0L) sinlat=1.0L;
      if (sinlat<-1.0L) sinlat=-1.0L;
-     pt2.lat=asinl(sinlat);   
+     pt2.lat=asinl(sinlat);
      if ((pt2.lat==M_PI_2) || (pt2.lat==-M_PI_2)) pt2.lon=0.0L;
-     else   
-      {  
+     else
+      {
        sinlon=sinl(az)*sinl(distance)/cosl(pt2.lat);
        coslon=(cosl(distance)-sinl(pt.lat)*sinl(pt2.lat))/
-	      cosl(pt.lat)/cosl(pt2.lat); 
+	      cosl(pt.lat)/cosl(pt2.lat);
        if (sinlon>1.0L) sinlon=1.0L;
        if (sinlon<-1.0L) sinlon=-1.0L;
-       if (coslon>1.0L) coslon=1.0L; 
+       if (coslon>1.0L) coslon=1.0L;
        if (coslon<-1.0L) coslon=-1.0L;
-       pt2.lon=pt.lon+atan2l(sinlon,coslon); 
-      }   
+       pt2.lon=pt.lon+atan2l(sinlon,coslon);
+      }
      if (pt2.lon>M_PI+PRECISION) pt2.lon -=2.0L*M_PI;
      if (pt2.lon<-M_PI-PRECISION) pt2.lon +=2.0L*M_PI;
   }
- 
+
   return pt2;
  } /* GeoCoord GCdaz */
 
 /******************************************************************************/
-
