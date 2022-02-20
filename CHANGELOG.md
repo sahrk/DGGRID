@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file.
 
 All changes are by Kevin Sahr, unless otherwise noted.
 
+## [7.52] - 2022-02-19
+### Added
+- support for dggridR output
+### Changed
+- minor refactor of macro FALLTHROUGH to suppress clang compiler warning
+
 ## [7.51] - 2022-02-12
 ### Added
 - macro FALLTHROUGH to suppress compiler warning on implict switch case fallthrough
