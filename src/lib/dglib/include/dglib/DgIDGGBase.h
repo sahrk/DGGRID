@@ -31,6 +31,7 @@
 #include <dglib/DgIDGGutil.h>
 
 class DgIDGGSBase;
+class DgInterleaveRF;
 
 using namespace dgg::topo;
 

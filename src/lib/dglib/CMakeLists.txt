@@ -53,6 +53,7 @@ add_library(dglib
   lib/DgInputStream.cpp
   lib/DgInShapefileAtt.cpp
   lib/DgInShapefile.cpp
+  lib/DgInterleaveRF.cpp
   lib/DgIVec2D.cpp
   lib/DgIVec3D.cpp
   lib/DgLocation.cpp

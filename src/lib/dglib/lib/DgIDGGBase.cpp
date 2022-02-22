@@ -36,6 +36,7 @@
 #include <dglib/DgRadixString.h>
 #include <dglib/DgSeriesConverter.h>
 #include <dglib/DgTriGrid2DS.h>
+#include <dglib/DgInterleaveRF.h>
 
 #include <cfloat>
 #include <climits>
