@@ -859,12 +859,13 @@ DgGridPList::init2 (void)
    // input_file_name <fileName>
    insertParam(new DgStringParam("input_file_name", "valsin.txt"));
 
-   // input_address_type <GEO | Q2DI | SEQNUM | INTERLEAVE | PLANE | Q2DD | 
-   //                      PROJTRI | VERTEX2DD>
+   // input_address_type <GEO | Q2DI | SEQNUM | INTERLEAVE | ZORDER | PLANE | 
+   //                     Q2DD | PROJTRI | VERTEX2DD>
    choices.push_back(new string("GEO")); 
    choices.push_back(new string("Q2DI")); 
    choices.push_back(new string("SEQNUM")); 
-   //choices.push_back(new string("INTERLEAVE")); // NOT IMPLEMENTED
+   choices.push_back(new string("INTERLEAVE"));
+   choices.push_back(new string("ZORDER"));
    //choices.push_back(new string("PLANE")); 
    choices.push_back(new string("Q2DD")); 
    choices.push_back(new string("PROJTRI")); 

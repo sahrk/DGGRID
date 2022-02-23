@@ -22,8 +22,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef DGINTERLEAVERF_H
-#define DGINTERLEAVERF_H
+#ifndef DGZORDERRF_H
+#define DGZORDERRF_H
 
 #include <climits>
 #include <iostream>

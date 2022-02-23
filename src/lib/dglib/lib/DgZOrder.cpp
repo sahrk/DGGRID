@@ -115,7 +115,7 @@ dgcout << "rs2 " << rs2 << endl;
      else addstr = addstr + string("1");
    }
 
-   addstr = addstr + DgRadixString::digitZOrder(rs1, rs2);
+   addstr = addstr + DgRadixString::digitInterleave(rs1, rs2);
 
 dgcout << "addstr " << addstr << endl;
 

@@ -246,7 +246,7 @@ DgIDGGBase::createConverters (void)
    if (interleaveRF()) {
       sc.push_back(c3to4);
       sc.push_back(c4to5);
-      sc.push_back(toInterleave->forward());
+      sc.push_back(&toInterleave->forward());
       new DgSeriesConverter(sc, true);
       sc.resize(0);
    }
@@ -255,7 +255,7 @@ DgIDGGBase::createConverters (void)
    if (zorderRF()) {
       sc.push_back(c3to4);
       sc.push_back(c4to5);
-      sc.push_back(toZOrder->forward());
+      sc.push_back(&toZOrder->forward());
       new DgSeriesConverter(sc, true);
       sc.resize(0);
    }
@@ -279,11 +279,21 @@ DgIDGGBase::createConverters (void)
    new DgSeriesConverter(sc, true);
    sc.resize(0);
 
-   // projTriRF -> intRF
-   sc.push_back(c2to3);
-   sc.push_back(network().getConverter(vertexRF(), intRF()));
-   new DgSeriesConverter(sc, true);
-   sc.resize(0);
+   // projTriRF -> interleaveRF
+   if (interleaveRF()) {
+      sc.push_back(c2to3);
+      sc.push_back(network().getConverter(vertexRF(), *interleaveRF()));
+      new DgSeriesConverter(sc, true);
+      sc.resize(0);
+   }
+
+   // projTriRF -> zorderRF
+   if (zorderRF()) {
+      sc.push_back(c2to3);
+      sc.push_back(network().getConverter(vertexRF(), *zorderRF()));
+      new DgSeriesConverter(sc, true);
+      sc.resize(0);
+   }
 
    /// do from Q2DD
 
@@ -308,11 +318,21 @@ DgIDGGBase::createConverters (void)
    new DgSeriesConverter(sc, true);
    sc.resize(0);
 
-   // Q2DD -> intRF
-   sc.push_back(c4to3);
-   sc.push_back(network().getConverter(vertexRF(), intRF()));
-   new DgSeriesConverter(sc, true);
-   sc.resize(0);
+   // Q2DD -> interleaveRF
+   if (interleaveRF()) {
+      sc.push_back(c4to3);
+      sc.push_back(network().getConverter(vertexRF(), *interleaveRF()));
+      new DgSeriesConverter(sc, true);
+      sc.resize(0);
+   }
+
+   // Q2DD -> zorderRF
+   if (zorderRF()) {
+      sc.push_back(c4to3);
+      sc.push_back(network().getConverter(vertexRF(), *zorderRF()));
+      new DgSeriesConverter(sc, true);
+      sc.resize(0);
+   }
 
    /// do from Q2DI
 
@@ -337,8 +357,8 @@ DgIDGGBase::createConverters (void)
    sc.resize(0);
 
    // Q2DI -> Q2DD is c5to4 above
-   // Q2DI -> interleaveRF is toInterleave.forward() above
-   // Q2DI -> zorderRF is toZorder.forward() above
+   // Q2DI -> interleaveRF is toInterleave->forward() above
+   // Q2DI -> zorderRF is toZorder->forward() above
 
    /// finally from geoRF
 
@@ -368,7 +388,7 @@ DgIDGGBase::createConverters (void)
    // geoRF -> interleaveRF
    if (interleaveRF()) {
       sc.push_back(network().getConverter(geoRF(), *this));
-      sc.push_back(toInterleave->forward());
+      sc.push_back(&toInterleave->forward());
       new DgSeriesConverter(sc, true);
       sc.resize(0);
    }
@@ -376,7 +396,7 @@ DgIDGGBase::createConverters (void)
    // geoRF -> zorderRF
    if (zorderRF()) {
       sc.push_back(network().getConverter(geoRF(), *this));
-      sc.push_back(toZOrder->forward());
+      sc.push_back(&toZOrder->forward());
       new DgSeriesConverter(sc, true);
       sc.resize(0);
    }

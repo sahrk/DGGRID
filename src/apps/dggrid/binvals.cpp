@@ -37,6 +37,7 @@ using namespace std;
 #include <dglib/DgIDGGS.h>
 #include <dglib/DgBoundedIDGGS.h>
 #include <dglib/DgInterleaveRF.h>
+#include <dglib/DgZOrderRF.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -187,8 +188,19 @@ void binValsGlobal (BinValsParam& dp)
    if (dp.outAddType == "PROJTRI") pOutRF = &dgg.projTriRF();
    else if (dp.outAddType == "VERTEX2DD") pOutRF = &dgg.vertexRF();
    else if (dp.outAddType == "Q2DD") pOutRF = &dgg.q2ddRF();
-   else if (dp.outAddType == "INTERLEAVE") pOutRF = &dgg.intRF();
-   else if (dp.outAddType == "PLANE") pOutRF = &dgg.planeRF();
+   else if (dp.outAddType == "INTERLEAVE") {
+      if (dgg.interleaveRF())
+         pOutRF = dgg.interleaveRF();
+      else
+         ::report("binPresGlobal(): INTERLEAVE only supported for aperture 3 or 4",
+                  DgBase::Fatal);
+   } else if (dp.outAddType == "ZORDER") {
+      if (dgg.zorderRF())
+         pOutRF = dgg.zorderRF();
+      else
+         ::report("binPresGlobal(): ZORDER only supported for aperture 3 or 4",
+                  DgBase::Fatal);
+   } else if (dp.outAddType == "PLANE") pOutRF = &dgg.planeRF();
    else if (dp.outAddType == "Q2DI") pOutRF = &dgg;
    else if (dp.outAddType == "SEQNUM") 
    {
@@ -319,8 +331,19 @@ void binValsPartial (BinValsParam& dp)
    if (dp.outAddType == "PROJTRI") pOutRF = &dgg.projTriRF();
    else if (dp.outAddType == "VERTEX2DD") pOutRF = &dgg.vertexRF();
    else if (dp.outAddType == "Q2DD") pOutRF = &dgg.q2ddRF();
-   else if (dp.outAddType == "INTERLEAVE") pOutRF = &dgg.intRF();
-   else if (dp.outAddType == "PLANE") pOutRF = &dgg.planeRF();
+   else if (dp.outAddType == "INTERLEAVE") {
+      if (dgg.interleaveRF())
+         pOutRF = dgg.interleaveRF();
+      else
+         ::report("binPresGlobal(): INTERLEAVE only supported for aperture 3 or 4",
+                  DgBase::Fatal);
+   } else if (dp.outAddType == "ZORDER") {
+      if (dgg.zorderRF())
+         pOutRF = dgg.zorderRF();
+      else
+         ::report("binPresGlobal(): ZORDER only supported for aperture 3 or 4",
+                  DgBase::Fatal);
+   } else if (dp.outAddType == "PLANE") pOutRF = &dgg.planeRF();
    else if (dp.outAddType == "Q2DI") pOutRF = &dgg;
    else if (dp.outAddType == "SEQNUM") 
    {
