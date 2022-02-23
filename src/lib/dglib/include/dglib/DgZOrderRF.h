@@ -18,7 +18,7 @@
 *******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
-// DgInterleaveRF.h: DgInterleaveRF header file
+// DgZOrderRF.h: DgZOrderRF header file
 //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -33,22 +33,22 @@
 
 class DgQ2DICoord;
 class DgIDGGBase;
-class DgInterleaveCoord;
+class DgZOrderCoord;
 
 using namespace std;
 
 ////////////////////////////////////////////////////////////////////////////////
-class DgQ2DItoInterleaveConverter :
-        public DgConverter<DgQ2DICoord, long long int, DgInterleaveCoord, long long int>
+class DgQ2DItoZOrderConverter :
+        public DgConverter<DgQ2DICoord, long long int, DgZOrderCoord, long long int>
 {
    public:
 
-      DgQ2DItoInterleaveConverter (const DgRF<DgQ2DICoord, long long int>& from,
-                                   const DgRF<DgInterleaveCoord, long long int>& to);
+      DgQ2DItoZOrderConverter (const DgRF<DgQ2DICoord, long long int>& from,
+                                   const DgRF<DgZOrderCoord, long long int>& to);
 
       const DgIDGGBase& IDGG (void) const { return *pIDGG_; }
 
-      virtual DgInterleaveCoord convertTypedAddress
+      virtual DgZOrderCoord convertTypedAddress
                                 (const DgQ2DICoord& addIn) const;
 
    protected:
@@ -60,18 +60,18 @@ class DgQ2DItoInterleaveConverter :
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-class DgInterleaveToQ2DIConverter :
-        public DgConverter<DgInterleaveCoord, long long int, DgQ2DICoord, long long int>
+class DgZOrderToQ2DIConverter :
+        public DgConverter<DgZOrderCoord, long long int, DgQ2DICoord, long long int>
 {
    public:
 
-      DgInterleaveToQ2DIConverter (const DgRF<DgInterleaveCoord, long long int>& from,
+      DgZOrderToQ2DIConverter (const DgRF<DgZOrderCoord, long long int>& from,
                                    const DgRF<DgQ2DICoord, long long int>& to);
 
       const DgIDGGBase& IDGG (void) const { return *pIDGG_; }
 
       virtual DgQ2DICoord convertTypedAddress
-                                (const DgInterleaveCoord& addIn) const;
+                                (const DgZOrderCoord& addIn) const;
 
    protected:
 
@@ -82,14 +82,14 @@ class DgInterleaveToQ2DIConverter :
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-class Dg2WayInterleaveConverter : public Dg2WayConverter {
+class Dg2WayZOrderConverter : public Dg2WayConverter {
 
    public:
 
-      Dg2WayInterleaveConverter (const DgRF<DgQ2DICoord, long long int>& fromFrame,
-                                 const DgRF<DgInterleaveCoord, long long int>& toFrame)
-         : Dg2WayConverter (*(new DgQ2DItoInterleaveConverter(fromFrame, toFrame)),
-                            *(new DgInterleaveToQ2DIConverter(toFrame, fromFrame)))
+      Dg2WayZOrderConverter (const DgRF<DgQ2DICoord, long long int>& fromFrame,
+                                 const DgRF<DgZOrderCoord, long long int>& toFrame)
+         : Dg2WayConverter (*(new DgQ2DItoZOrderConverter(fromFrame, toFrame)),
+                            *(new DgZOrderToQ2DIConverter(toFrame, fromFrame)))
                                              {}
 };
 
@@ -98,15 +98,15 @@ class Dg2WayInterleaveConverter : public Dg2WayConverter {
 //   Coordinate consisting of a string containing quad number, (aperture 3 hex
 //        level indicator), and radix string
 //
-class DgInterleaveCoord  {
+class DgZOrderCoord  {
 
    public:
 
-      static const DgInterleaveCoord undefDgInterleaveCoord;
+      static const DgZOrderCoord undefDgZOrderCoord;
 
-      DgInterleaveCoord (void) { }
+      DgZOrderCoord (void) { }
 
-      DgInterleaveCoord (const DgInterleaveCoord& coord)
+      DgZOrderCoord (const DgZOrderCoord& coord)
               { valString_ = coord.valString(); }
 
       void setValString (const string strIn) { valString_ = strIn; }
@@ -115,13 +115,13 @@ class DgInterleaveCoord  {
 
       operator string (void) const { return valString(); }
 
-      bool operator== (const DgInterleaveCoord& c) const
+      bool operator== (const DgZOrderCoord& c) const
           { return valString() == c.valString(); }
 
-      bool operator!= (const DgInterleaveCoord& c) const
+      bool operator!= (const DgZOrderCoord& c) const
           { return !(*this == c); }
 
-      DgInterleaveCoord& operator= (const DgInterleaveCoord& add)
+      DgZOrderCoord& operator= (const DgZOrderCoord& add)
           {
              if (add != *this) setValString(add.valString());
 
@@ -136,29 +136,29 @@ class DgInterleaveCoord  {
 
 ////////////////////////////////////////////////////////////////////////////////
 inline ostream&
-operator<< (ostream& stream, const DgInterleaveCoord& coord)
+operator<< (ostream& stream, const DgZOrderCoord& coord)
 { return stream << string(coord); }
 
 ////////////////////////////////////////////////////////////////////////////////
-class DgInterleaveRF : public DgRF<DgInterleaveCoord, long long int> {
+class DgZOrderRF : public DgRF<DgZOrderCoord, long long int> {
 
    public:
 
-      static DgInterleaveRF* makeRF (DgRFNetwork& networkIn, const string& nameIn)
-         { return new DgInterleaveRF (networkIn, nameIn); }
+      static DgZOrderRF* makeRF (DgRFNetwork& networkIn, const string& nameIn)
+         { return new DgZOrderRF (networkIn, nameIn); }
 
-      virtual long long int dist (const DgInterleaveCoord& add1,
-                        const DgInterleaveCoord& add2) const
+      virtual long long int dist (const DgZOrderCoord& add1,
+                        const DgZOrderCoord& add2) const
                        { return 0; }
 
-      virtual string add2str (const DgInterleaveCoord& add) const
+      virtual string add2str (const DgZOrderCoord& add) const
                        { return string(add); }
 
-      virtual string add2str (const DgInterleaveCoord& add, char delimiter)
+      virtual string add2str (const DgZOrderCoord& add, char delimiter)
                                                                          const
                        { return string(add); }
 
-      virtual const char* str2add (DgInterleaveCoord* add, const char* str,
+      virtual const char* str2add (DgZOrderCoord* add, const char* str,
                                    char delimiter) const;
 
       virtual string dist2str (const long long int& dist) const
@@ -170,13 +170,13 @@ class DgInterleaveRF : public DgRF<DgInterleaveCoord, long long int> {
       virtual unsigned long long int dist2int (const long long int& dist) const
                        { return dist; }
 
-      virtual const DgInterleaveCoord& undefAddress (void) const
-                       { static DgInterleaveCoord undef; return undef; }
+      virtual const DgZOrderCoord& undefAddress (void) const
+                       { static DgZOrderCoord undef; return undef; }
 
    protected:
 
-      DgInterleaveRF (DgRFNetwork& networkIn, const string& nameIn)
-         : DgRF<DgInterleaveCoord, long long int>(networkIn, nameIn) { }
+      DgZOrderRF (DgRFNetwork& networkIn, const string& nameIn)
+         : DgRF<DgZOrderCoord, long long int>(networkIn, nameIn) { }
 
 };
 

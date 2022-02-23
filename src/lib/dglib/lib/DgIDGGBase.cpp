@@ -37,6 +37,7 @@
 #include <dglib/DgSeriesConverter.h>
 #include <dglib/DgTriGrid2DS.h>
 #include <dglib/DgInterleaveRF.h>
+#include <dglib/DgZOrderRF.h>
 
 #include <cfloat>
 #include <climits>
@@ -111,7 +112,8 @@ DgIDGGBase::DgIDGGBase (const DgIDGGSBase* dggs, const DgGeoSphRF& geoRF,
           (geoRF.network(), geoRF, name, gridTopo, gridMetric),
      dggs_ (dggs), sphIcosa_(0), aperture_(aperture), res_(res),
      precision_(precision), grid2D_(0), grid2DS_(0), ccFrame_(0),
-     projTriRF_(0), vertexRF_(0), q2ddRF_(0), bndRF_(0), intRF_(0), planeRF_(0)
+     projTriRF_(0), vertexRF_(0), q2ddRF_(0), bndRF_(0), planeRF_(0),
+     interleaveRF_ (0), zorderRF_ (0)
 {
    //initialize();
 
@@ -124,7 +126,8 @@ DgIDGGBase::DgIDGGBase (const DgIDGGBase& rfIn)
         dggs_ (NULL), sphIcosa_(0), aperture_(rfIn.aperture()),
         res_(rfIn.res()), precision_(rfIn.precision()),
         grid2D_(0), grid2DS_(0), ccFrame_(0), projTriRF_(0),
-        vertexRF_(0), q2ddRF_(0), bndRF_(0), intRF_(0), planeRF_(0)
+        vertexRF_(0), q2ddRF_(0), bndRF_(0), planeRF_(0), 
+        interleaveRF_ (0), zorderRF_ (0)
 {
    //initialize();
 
@@ -154,8 +157,12 @@ DgIDGGBase::createConverters (void)
                 sphIcosa_);
    vertexRF_ = DgVertex2DDRF::makeRF(network(), name() + string("vertex"));
    q2ddRF_ = DgQ2DDRF::makeRF(network(), name() + string("q2dd"));
-   intRF_ = DgInterleaveRF::makeRF(network(), name() + string("int"));
    planeRF_ = DgPlaneTriRF::makeRF(network(), name() + string("plane"));
+
+   if (aperture() == 4 || aperture() == 3) {
+      interleaveRF_ = DgInterleaveRF::makeRF(network(), name() + string("interleave"));
+      zorderRF_ = DgZOrderRF::makeRF(network(), name() + string("zorder"));
+   }
 
    // create the converters; for convenience use where they are in overall
    // sequence for name
@@ -182,8 +189,15 @@ DgIDGGBase::createConverters (void)
    // done with icosaProj; the fwd/inv converters are in the RFNetwork
    delete icosaProj;
 
-   DgConverterBase* toInt = new DgQ2DItoInterleaveConverter(*this, intRF());
    DgConverterBase* toPlane = new DgPlaneTriProj(projTriRF(), planeRF());
+
+   Dg2WayConverter* toInterleave = NULL;
+   if (interleaveRF())
+      toInterleave = new Dg2WayInterleaveConverter(*this, *interleaveRF());
+
+   Dg2WayConverter* toZOrder = NULL;
+   if (zorderRF())
+      toZOrder = new Dg2WayZOrderConverter(*this, *zorderRF());
 
    // create the series converters that will replace the default DgDiscRF
    // converters
@@ -228,12 +242,23 @@ DgIDGGBase::createConverters (void)
 
    // vertexRF -> Q2DD is c3to4 above
 
-   // vertexRF -> intRF
-   sc.push_back(c3to4);
-   sc.push_back(c4to5);
-   sc.push_back(toInt);
-   new DgSeriesConverter(sc, true);
-   sc.resize(0);
+   // vertexRF -> interleaveRF
+   if (interleaveRF()) {
+      sc.push_back(c3to4);
+      sc.push_back(c4to5);
+      sc.push_back(toInterleave->forward());
+      new DgSeriesConverter(sc, true);
+      sc.resize(0);
+   }
+
+   // vertexRF -> zorderRF
+   if (zorderRF()) {
+      sc.push_back(c3to4);
+      sc.push_back(c4to5);
+      sc.push_back(toZOrder->forward());
+      new DgSeriesConverter(sc, true);
+      sc.resize(0);
+   }
 
    /// now do from projTriRF
 
@@ -312,7 +337,8 @@ DgIDGGBase::createConverters (void)
    sc.resize(0);
 
    // Q2DI -> Q2DD is c5to4 above
-   // Q2DI -> intRF is toInt above
+   // Q2DI -> interleaveRF is toInterleave.forward() above
+   // Q2DI -> zorderRF is toZorder.forward() above
 
    /// finally from geoRF
 
@@ -339,11 +365,21 @@ DgIDGGBase::createConverters (void)
    new DgSeriesConverter(sc, true);
    sc.resize(0);
 
-   // geoRF -> intRF
-   sc.push_back(network().getConverter(geoRF(), *this));
-   sc.push_back(toInt);
-   new DgSeriesConverter(sc, true);
-   sc.resize(0);
+   // geoRF -> interleaveRF
+   if (interleaveRF()) {
+      sc.push_back(network().getConverter(geoRF(), *this));
+      sc.push_back(toInterleave->forward());
+      new DgSeriesConverter(sc, true);
+      sc.resize(0);
+   }
+
+   // geoRF -> zorderRF
+   if (zorderRF()) {
+      sc.push_back(network().getConverter(geoRF(), *this));
+      sc.push_back(toZOrder->forward());
+      new DgSeriesConverter(sc, true);
+      sc.resize(0);
+   }
 
 } // DgIDGGBase::createConverters
 

@@ -70,8 +70,9 @@ int main (int argc, char* argv[])
    cout << "* lies in cell " << *thePt << endl;
 
    DgInterleaveRF& zRF = *(DgInterleaveRF::makeRF(net0, "zRF"));
-   new DgQ2DItoInterleaveConverter(dgg, zRF);
-   new DgInterleaveToQ2DIConverter(zRF, dgg);
+   new Dg2WayInterleaveConverter(dgg, zRF);
+   //new DgQ2DItoInterleaveConverter(dgg, zRF);
+   //new DgInterleaveToQ2DIConverter(zRF, dgg);
    zRF.convert(thePt);
    cout << "* interleave " << *thePt << endl;
    dgg.convert(thePt);
