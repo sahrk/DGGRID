@@ -26,7 +26,8 @@
 
 using namespace std;
 
-#include <dglib/DgIDGGS4H.h>
+#include <dglib/DgIDGGS3H.h>
+#include <dglib/DgInterleaveRF.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 int main (int argc, char* argv[])
@@ -41,15 +42,15 @@ int main (int argc, char* argv[])
    // they will be deleted by the Network
    const DgGeoSphRF& geoRF = *(DgGeoSphRF::makeRF(net0, "GS0"));
 
-   // create the ISEA4H grid system with resolutions 0-9; requires a
+   // create the ISEA3H grid system with resolutions 0-9; requires a
    // fixed icosahedron vertex and edge azimuth
    DgGeoCoord vert0(11.25L, 58.28252559L, false); // args: lon, lat, isRadians
    long double azimuth = 0.0L;
 
    // all DGGS's must be created using a factory makeRF method
    // the DGGS is memory managed by the DgRFNetwork
-   const DgIDGGS4H* idggsPtr = DgIDGGS4H::makeRF(net0, geoRF, vert0, azimuth, 10); 
-   const DgIDGGS4H& idggs = *idggsPtr;
+   const DgIDGGS3H* idggsPtr = DgIDGGS3H::makeRF(net0, geoRF, vert0, azimuth, 10); 
+   const DgIDGGS3H& idggs = *idggsPtr;
 
    // get the resolution 7 dgg from the dggs
    const DgIDGG& dgg = idggs.idgg(7);
@@ -68,6 +69,15 @@ int main (int argc, char* argv[])
    dgg.convert(thePt);
    cout << "* lies in cell " << *thePt << endl;
 
+   DgInterleaveRF& zRF = *(DgInterleaveRF::makeRF(net0, "zRF"));
+   new DgQ2DItoInterleaveConverter(dgg, zRF);
+   new DgInterleaveToQ2DIConverter(zRF, dgg);
+   zRF.convert(thePt);
+   cout << "* interleave " << *thePt << endl;
+   dgg.convert(thePt);
+   cout << "* is cell " << *thePt << endl;
+
+/*
    // we can get the cell's vertices, which are defined in geoRF
    DgPolygon verts;
    int ptsPerEdgeDensify = 3;
@@ -90,6 +100,7 @@ int main (int argc, char* argv[])
    double lonDegs = firstVert.lonDegs();
    cout << "* first boundary vertex lon,lat in degrees: " 
         << lonDegs << ", " << latDegs << endl;
+*/
 
    delete thePt;
 

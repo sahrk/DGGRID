@@ -25,30 +25,12 @@
 #ifndef DGINTERLEAVERF_H
 #define DGINTERLEAVERF_H
 
-#include <dglib/Dg2WayConverter.h>
-#include <dglib/DgContCartRF.h>
-#include <dglib/DgConverter.h>
-#include <dglib/DgDiscRF2D.h>
-#include <dglib/DgDiscRFS2D.h>
-#include <dglib/DgDVec2D.h>
-#include <dglib/DgEllipsoidRF.h>
-#include <dglib/DgGeoSphRF.h>
-#include <dglib/DgHexC1Grid2D.h>
-#include <dglib/DgIcosaMap.h>
-#include <dglib/DgIcosaProj.h>
-#include <dglib/DgIVec2D.h>
-#include <dglib/DgLocation.h>
-#include <dglib/DgPolygon.h>
-#include <dglib/DgProjTriRF.h>
-#include <dglib/DgRF.h>
-#include <dglib/DgUtil.h>
-
 #include <climits>
 #include <iostream>
 
+#include <dglib/DgConverter.h>
+
 class DgQ2DICoord;
-class DgPolygon;
-class DgBoundedIDGG;
 class DgIDGGBase;
 class DgInterleaveCoord;
 
