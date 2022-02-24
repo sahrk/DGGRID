@@ -156,7 +156,7 @@ void doTransform (TransformParam& dp)
    else if (dp.inAddType == "PROJTRI") pInRF = &dgg.projTriRF();
    else if (dp.inAddType == "VERTEX2DD") pInRF = &dgg.vertexRF();
    else if (dp.inAddType == "Q2DD") pInRF = &dgg.q2ddRF();
-   else if (dp.outAddType == "INTERLEAVE") {
+   else if (dp.inAddType == "INTERLEAVE") {
       if (dp.isApSeq)
          ::report("input_address_type of INTERLEAVE not supported for dggs_aperture_type of SEQUENCE", DgBase::Fatal);
 
@@ -165,7 +165,7 @@ void doTransform (TransformParam& dp)
       else
          ::report("binPresGlobal(): INTERLEAVE only supported for aperture 3 or 4",
                   DgBase::Fatal);
-   } else if (dp.outAddType == "ZORDER") {
+   } else if (dp.inAddType == "ZORDER") {
       if (dp.isApSeq)
          ::report("input_address_type of ZORDER not supported for dggs_aperture_type of SEQUENCE", DgBase::Fatal);
 
@@ -253,22 +253,18 @@ void doTransform (TransformParam& dp)
       // parse the address
 
       DgLocation* loc = NULL;
-      if (dp.inSeqNum)
-      {
+      if (dp.inSeqNum) {
          char* snStr;
          snStr = strtok(buff, delimStr);
          unsigned long int sNum;
-         if (sscanf(snStr, "%lu", &sNum) != 1)
-         {
+         if (sscanf(snStr, "%lu", &sNum) != 1) {
             ::report("doTransform(): invalid SEQNUM " + string(snStr),
                      DgBase::Fatal);
          }
 
          loc = static_cast<const DgIDGGBase&>(inRF).bndRF().locFromSeqNum(sNum);
          remainder = &(buff[strlen(snStr) + 1]);
-      }
-      else
-      {
+      } else {
          loc = new DgLocation(inRF);
          remainder = loc->fromString(buff, dp.inputDelimiter);
       }

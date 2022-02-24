@@ -46,13 +46,14 @@ CCOMP = gcc
 CPPCOMP = g++ 
 
 # flags for debugging vs. production
-DEBUG_CC_FLAGS = -g -O0 -Wall -fno-inline -fno-eliminate-unused-debug-types -pedantic -Wimplicit-fallthrough -W -Wextra
+DEBUG_CC_FLAGS = -g -O0 -Wall -fno-inline -fno-eliminate-unused-debug-types -pedantic -Wimplicit-fallthrough -W
+DEBUG_VERBOSE_CC_FLAGS = -g -O0 -Wall -fno-inline -fno-eliminate-unused-debug-types -pedantic -Wimplicit-fallthrough -W -Wextra
 MEMCHECK_CC_FLAGS = -g -O1 -fsanitize=undefined -fno-omit-frame-pointer -fsanitize=address -Wall -pedantic
 SHIP_CC_FLAGS = -O3 -Wall -pedantic
 
 # choose which to use; comment out the ones you don't want
 ADD_CC_FLAGS = $(SHIP_CC_FLAGS)
-#ADD_CC_FLAGS = $(DEBUG_CC_FLAGS)
+ADD_CC_FLAGS = $(DEBUG_CC_FLAGS)
 #ADD_CC_FLAGS = $(MEMCHECK_CC_FLAGS)
 
 ### the variables below are used by the Makefiles ###
