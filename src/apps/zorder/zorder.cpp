@@ -28,6 +28,7 @@ using namespace std;
 
 #include <dglib/DgIDGGS3H.h>
 #include <dglib/DgInterleaveRF.h>
+#include <dglib/DgZOrderRF.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 int main (int argc, char* argv[])
@@ -53,7 +54,7 @@ int main (int argc, char* argv[])
    const DgIDGGS3H& idggs = *idggsPtr;
 
    // get the resolution 7 dgg from the dggs
-   const DgIDGG& dgg = idggs.idgg(7);
+   const DgIDGG& dgg = idggs.idgg(5);
    cout << dgg.gridStats() << endl;
 
    //////// now use the DGG /////////
@@ -69,12 +70,14 @@ int main (int argc, char* argv[])
    dgg.convert(thePt);
    cout << "* lies in cell " << *thePt << endl;
 
-   DgInterleaveRF& zRF = *(DgInterleaveRF::makeRF(net0, "zRF"));
-   new Dg2WayInterleaveConverter(dgg, zRF);
+   //DgInterleaveRF& zRF = *(DgInterleaveRF::makeRF(net0, "zRF"));
+   //new Dg2WayInterleaveConverter(dgg, zRF);
    //new DgQ2DItoInterleaveConverter(dgg, zRF);
    //new DgInterleaveToQ2DIConverter(zRF, dgg);
+   DgZOrderRF& zRF = *(DgZOrderRF::makeRF(net0, "zRF"));
+   new Dg2WayZOrderConverter(dgg, zRF);
    zRF.convert(thePt);
-   cout << "* interleave " << *thePt << endl;
+   cout << "* zorder " << *thePt << endl;
    dgg.convert(thePt);
    cout << "* is cell " << *thePt << endl;
 

@@ -76,17 +76,16 @@ DgQ2DItoZOrderConverter::DgQ2DItoZOrderConverter
 { 
    pIDGG_ = dynamic_cast<const DgIDGGBase*>(&fromFrame());
 
-   if (!pIDGG_)
-   {
+   if (!pIDGG_) {
       report("DgQ2DItoZOrderConverter::DgQ2DItoZOrderConverter(): "
          " fromFrame not of type DgIDGGBase", DgBase::Fatal);
    }
 
    effRes_ = IDGG().res();       // effective resolution
    effRadix_ = IDGG().radix();   // effective radix
-   if (IDGG().aperture() == 3)    
-   {
+   if (IDGG().aperture() == 3) {
        effRadix_ = 3;
+       // effRes_ is the number of Class I resolutions
        effRes_ = (effRes_ + 1) / 2;
    }
 
@@ -96,8 +95,7 @@ DgQ2DItoZOrderConverter::DgQ2DItoZOrderConverter
 
 ////////////////////////////////////////////////////////////////////////////////
 DgZOrderCoord 
-DgQ2DItoZOrderConverter::convertTypedAddress 
-                                               (const DgQ2DICoord& addIn) const
+DgQ2DItoZOrderConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
 {
    string qstr = dgg::util::to_string(addIn.quadNum(), 2);
 
@@ -109,15 +107,17 @@ dgcout << "rs1 " << rs1 << endl;
 dgcout << "rs2 " << rs2 << endl;
 
    string addstr = qstr;
-   if (IDGG().aperture() == 3)
-   {
-     if (IDGG().isClassI()) addstr = addstr + string("0");
-     else addstr = addstr + string("1");
+   if (IDGG().aperture() == 3) {
+cout << "Class " << ((IDGG().isClassI()) ? "I" : "II") << endl;
    }
-
-   addstr = addstr + DgRadixString::digitInterleave(rs1, rs2);
+   addstr = addstr + DgRadixString::digitInterleave(rs1, rs2, false);
 
 dgcout << "addstr " << addstr << endl;
+   // trim last digit if Class II
+   if (IDGG().aperture() == 3 && !IDGG().isClassI() && addstr.length()) {
+      addstr.pop_back();
+   }
+dgcout << "trimmed " << addstr << endl;
 
    DgZOrderCoord zorder;
    zorder.setValString(addstr);
@@ -136,17 +136,16 @@ DgZOrderToQ2DIConverter::DgZOrderToQ2DIConverter
 { 
    pIDGG_ = dynamic_cast<const DgIDGGBase*>(&toFrame());
 
-   if (!pIDGG_)
-   {
+   if (!pIDGG_) {
       report("DgZOrderToQ2DIConverter::DgZOrderToQ2DIConverter(): "
          " toFrame not of type DgIDGGBase", DgBase::Fatal);
    }
 
    effRes_ = IDGG().res();       // effective resolution
    effRadix_ = IDGG().radix();   // effective radix
-   if (IDGG().aperture() == 3)    
-   {
+   if (IDGG().aperture() == 3) {
        effRadix_ = 3;
+       // effRes_ is the number of Class I resolutions
        effRes_ = (effRes_ + 1) / 2;
    }
 
@@ -156,8 +155,7 @@ DgZOrderToQ2DIConverter::DgZOrderToQ2DIConverter
 
 ////////////////////////////////////////////////////////////////////////////////
 DgQ2DICoord 
-DgZOrderToQ2DIConverter::convertTypedAddress 
-                                       (const DgZOrderCoord& addIn) const
+DgZOrderToQ2DIConverter::convertTypedAddress (const DgZOrderCoord& addIn) const
 {
 dgcout << " -> " << addIn << endl;
    string addstr = addIn.valString();
@@ -170,39 +168,28 @@ dgcout << " -> " << addIn << endl;
 
    int index = 2; // skip the two quad digits
 
-   // check for special aperture leading character
-   if (IDGG().aperture() == 3) {
-      // validate the leading character
-      if (IDGG().isClassI()) {
-         if (addstr[index] != '0') 
-            report(string("invalid zorder index \'") + addstr 
-              + string("\'; Class I aperture 3 DGG index must have a leading 0"), 
-              DgBase::Fatal);
-      } else if (addstr[index] != '1') {
-            report(string("invalid zorder index \'") + addstr 
-              + string("\'; Class II aperture 3 DGG index must have a leading 1"), 
-              DgBase::Fatal);
-      }
-
-      index++; // expended first character
-   }
-
    // the rest is the radix string
    string radStr = addstr.substr(index);
 
    // split out the interleaved digits
    string radStr1 = "";
    string radStr2 = "";
+   bool isIdigit = true; // first char is an i digit
+   int lastIdigit = 0;
    for (const char& digit: radStr) {
+      if (isIdigit) {
+         radStr1 += dgg::util::to_string(digit);
+         lastIdigit = digit - '0';
+      } else
+         radStr2 += dgg::util::to_string(digit);
 
-      // break out the interleaved digits
-      int d = digit - '0'; // convert to int
-      int c1 = (int) (d / effRadix_);
+      isIdigit = !isIdigit;
+   }
 
-      int c2 = (d % effRadix_); 
-
-      radStr1 += dgg::util::to_string(c1);
-      radStr2 += dgg::util::to_string(c2);
+   if (IDGG().aperture() == 3 && !IDGG().isClassI()) {
+      // add the last j digit based on the last i digit
+      string jDigits[] = { "0", "2", "1" };
+      radStr2 += jDigits[lastIdigit];
    }
 
    DgRadixString rad1(effRadix_, radStr1);
