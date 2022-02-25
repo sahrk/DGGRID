@@ -81,6 +81,11 @@ DgQ2DItoZOrderConverter::DgQ2DItoZOrderConverter
          " fromFrame not of type DgIDGGBase", DgBase::Fatal);
    }
 
+   if (IDGG().gridTopo() != Hexagon) {
+      report("DgQ2DItoZOrderConverter::DgQ2DItoZOrderConverter(): "
+         "only implemented for hexagon grids", DgBase::Fatal);
+   }
+
    effRes_ = IDGG().res();       // effective resolution
    effRadix_ = IDGG().radix();   // effective radix
    if (IDGG().aperture() == 3) {
@@ -112,7 +117,8 @@ DgQ2DItoZOrderConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
       dgcout << "Class " << ((IDGG().isClassI()) ? "I" : "II") << endl;
    }
 */
-   addstr = addstr + DgRadixString::digitInterleave(rs1, rs2, false);
+   addstr = addstr + 
+     DgRadixString::digitInterleave(rs1, rs2, !((IDGG().aperture() == 3)));
 
 //dgcout << "addstr " << addstr << endl;
    // trim last digit if Class II
@@ -141,6 +147,11 @@ DgZOrderToQ2DIConverter::DgZOrderToQ2DIConverter
    if (!pIDGG_) {
       report("DgZOrderToQ2DIConverter::DgZOrderToQ2DIConverter(): "
          " toFrame not of type DgIDGGBase", DgBase::Fatal);
+   }
+
+   if (IDGG().gridTopo() != Hexagon) {
+      report("DgZOrderToQ2DIConverter::DgZOrderToQ2DIConverter(): "
+         "only implemented for hexagon grids", DgBase::Fatal);
    }
 
    effRes_ = IDGG().res();       // effective resolution
@@ -176,22 +187,39 @@ DgZOrderToQ2DIConverter::convertTypedAddress (const DgZOrderCoord& addIn) const
    // split out the interleaved digits
    string radStr1 = "";
    string radStr2 = "";
-   bool isIdigit = true; // first char is an i digit
-   int lastIdigit = 0;
-   for (const char& digit: radStr) {
-      if (isIdigit) {
-         radStr1 += dgg::util::to_string(digit);
-         lastIdigit = digit - '0';
-      } else
-         radStr2 += dgg::util::to_string(digit);
 
-      isIdigit = !isIdigit;
-   }
+   if (IDGG().aperture() == 3) {
+      bool isIdigit = true; // first char is an i digit
+      int lastIdigit = 0;
+      for (const char& digit: radStr) {
+         if (isIdigit) {
+            radStr1 += dgg::util::to_string(digit);
+            lastIdigit = digit - '0';
+         } else
+            radStr2 += dgg::util::to_string(digit);
 
-   if (IDGG().aperture() == 3 && !IDGG().isClassI()) {
-      // add the last j digit based on the last i digit
-      string jDigits[] = { "0", "2", "1" };
-      radStr2 += jDigits[lastIdigit];
+         isIdigit = !isIdigit;
+      }
+
+      if (!IDGG().isClassI()) {
+         // add the last j digit based on the last i digit
+         string jDigits[] = { "0", "2", "1" };
+         radStr2 += jDigits[lastIdigit];
+      }
+
+   } else {
+
+      for (const char& digit: radStr) {
+
+         // break out the interleaved digits
+         int d = digit - '0'; // convert to int
+         int c1 = (int) (d / effRadix_);
+
+         int c2 = (d % effRadix_);
+
+         radStr1 += dgg::util::to_string(c1);
+         radStr2 += dgg::util::to_string(c2);
+      }
    }
 
    DgRadixString rad1(effRadix_, radStr1);

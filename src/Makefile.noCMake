@@ -14,7 +14,7 @@ all: $(DGGRID_DIR) $(APPEX_DIR) $(ZORDER_DIR)
 $(DGGRID_DIR) $(APPEX_DIR) $(ZORDER_DIR) $(LIB_DIRS):
 	$(DOMAKE) --directory=$@
 
-$(DGGRID_DIR) $(APPEX_DIR$) (ZORDER_DIR): $(LIB_DIRS)
+$(DGGRID_DIR) $(APPEX_DIR) $(ZORDER_DIR): $(LIB_DIRS)
 
 clean:
 	cd $(DGGRID_DIR); $(DOMAKE) clean

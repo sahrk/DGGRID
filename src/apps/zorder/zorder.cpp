@@ -28,6 +28,8 @@ using namespace std;
 
 #include <dglib/DgIDGGS3H.h>
 #include <dglib/DgIDGGS4H.h>
+#include <dglib/DgIDGGS4T.h>
+#include <dglib/DgIDGGS4D.h>
 #include <dglib/DgBoundedIDGG.h>
 #include <dglib/DgInterleaveRF.h>
 #include <dglib/DgZOrderRF.h>
@@ -52,11 +54,11 @@ int main (int argc, char* argv[])
 
    // all DGGS's must be created using a factory makeRF method
    // the DGGS is memory managed by the DgRFNetwork
-   const DgIDGGS4H* idggsPtr = DgIDGGS4H::makeRF(net0, geoRF, vert0, azimuth, 10); 
-   const DgIDGGS4H& idggs = *idggsPtr;
+   const DgIDGGS4D* idggsPtr = DgIDGGS4D::makeRF(net0, geoRF, vert0, azimuth, 12); 
+   const DgIDGGS4D& idggs = *idggsPtr;
 
    // get the resolution 7 dgg from the dggs
-   const DgIDGG& dgg = idggs.idgg(7);
+   const DgIDGG& dgg = idggs.idgg(2);
    cout << dgg.gridStats() << endl;
 
    //////// now use the DGG /////////
@@ -64,18 +66,29 @@ int main (int argc, char* argv[])
    ///// given a point in lon/lat, get the cell it lies within /////
 
    // first create a DgLocation in geoRF coordinates
-   DgGeoCoord geoAddress(-122.7083, 42.1947, false);
+   //DgGeoCoord geoAddress(-122.7083, 42.1947, false);
+   DgGeoCoord geoAddress(-124.839, 42.9778, false);
    DgLocation* thePt = geoRF.makeLocation(geoAddress);
    cout << "the point " << *thePt << endl;
 
    // converting the point location to the dgg RF determines which cell it's in
    dgg.convert(thePt);
    cout << "* lies in cell " << *thePt << endl;
+/*
+geoRF.convert(thePt);
+cout << *thePt << endl;
+exit(1);
+*/
 
-   //DgInterleaveRF& zRF = *(DgInterleaveRF::makeRF(net0, "zRF"));
-   //new Dg2WayInterleaveConverter(dgg, zRF);
-   //new DgQ2DItoInterleaveConverter(dgg, zRF);
-   //new DgInterleaveToQ2DIConverter(zRF, dgg);
+   DgInterleaveRF& interRF = *(DgInterleaveRF::makeRF(net0, "interRF"));
+   new Dg2WayInterleaveConverter(dgg, interRF);
+   new DgQ2DItoInterleaveConverter(dgg, interRF);
+   new DgInterleaveToQ2DIConverter(interRF, dgg);
+   interRF.convert(thePt);
+   cout << "* interleave " << *thePt << endl;
+   dgg.convert(thePt);
+   cout << "* is cell " << *thePt << endl;
+
    DgZOrderRF& zRF = *(DgZOrderRF::makeRF(net0, "zRF"));
    new Dg2WayZOrderConverter(dgg, zRF);
    zRF.convert(thePt);
@@ -96,8 +109,11 @@ int main (int argc, char* argv[])
       dgg.convert(addLoc);
       cout << (*addLoc);
       DgQ2DICoord finish = *dgg.getAddress(*addLoc);
-      if (start != finish)
-         cout << "ERROR";
+      if (start != finish) {
+         cout << "ERROR" << endl;
+         exit(1);
+      }
+
       cout << endl;
 
       dgg.bndRF().incrementLocation(*addLoc);
