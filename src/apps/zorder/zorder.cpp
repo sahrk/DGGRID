@@ -53,8 +53,8 @@ int main (int argc, char* argv[])
 
    // all DGGS's must be created using a factory makeRF method
    // the DGGS is memory managed by the DgRFNetwork
-   const DgIDGGS4D* idggsPtr = DgIDGGS4D::makeRF(net0, geoRF, vert0, azimuth, 12); 
-   const DgIDGGS4D& idggs = *idggsPtr;
+   const DgIDGGS3H* idggsPtr = DgIDGGS3H::makeRF(net0, geoRF, vert0, azimuth, 12); 
+   const DgIDGGS3H& idggs = *idggsPtr;
 
    // get the resolution 7 dgg from the dggs
    const DgIDGG& dgg = idggs.idgg(2);
