@@ -41,7 +41,6 @@ using namespace std;
 #include <dglib/DgInputStream.h>
 #include <dglib/DgOutAIGenFile.h>
 #include <dglib/DgOutputStream.h>
-#include <dglib/DgInterleaveRF.h>
 #include <dglib/DgZOrderRF.h>
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -156,16 +155,7 @@ void doTransform (TransformParam& dp)
    else if (dp.inAddType == "PROJTRI") pInRF = &dgg.projTriRF();
    else if (dp.inAddType == "VERTEX2DD") pInRF = &dgg.vertexRF();
    else if (dp.inAddType == "Q2DD") pInRF = &dgg.q2ddRF();
-   else if (dp.inAddType == "INTERLEAVE") {
-      if (dp.isApSeq)
-         ::report("input_address_type of INTERLEAVE not supported for dggs_aperture_type of SEQUENCE", DgBase::Fatal);
-
-      if (dgg.interleaveRF())
-         pInRF = dgg.interleaveRF();
-      else
-         ::report("binPresGlobal(): INTERLEAVE only supported for aperture 3 or 4",
-                  DgBase::Fatal);
-   } else if (dp.inAddType == "ZORDER") {
+   else if (dp.inAddType == "ZORDER") {
       if (dp.isApSeq)
          ::report("input_address_type of ZORDER not supported for dggs_aperture_type of SEQUENCE", DgBase::Fatal);
 
@@ -196,13 +186,7 @@ void doTransform (TransformParam& dp)
    else if (dp.outAddType == "PROJTRI") pOutRF = &dgg.projTriRF();
    else if (dp.outAddType == "VERTEX2DD") pOutRF = &dgg.vertexRF();
    else if (dp.outAddType == "Q2DD") pOutRF = &dgg.q2ddRF();
-   else if (dp.outAddType == "INTERLEAVE") {
-      if (dgg.interleaveRF())
-         pOutRF = dgg.interleaveRF();
-      else
-         ::report("binPresGlobal(): INTERLEAVE only supported for aperture 3 or 4",
-                  DgBase::Fatal);
-   } else if (dp.outAddType == "ZORDER") {
+   else if (dp.outAddType == "ZORDER") {
       if (dgg.zorderRF())
          pOutRF = dgg.zorderRF();
       else

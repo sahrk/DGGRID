@@ -36,7 +36,6 @@
 #include <dglib/DgRadixString.h>
 #include <dglib/DgSeriesConverter.h>
 #include <dglib/DgTriGrid2DS.h>
-#include <dglib/DgInterleaveRF.h>
 #include <dglib/DgZOrderRF.h>
 
 #include <cfloat>
@@ -113,7 +112,7 @@ DgIDGGBase::DgIDGGBase (const DgIDGGSBase* dggs, const DgGeoSphRF& geoRF,
      dggs_ (dggs), sphIcosa_(0), aperture_(aperture), res_(res),
      precision_(precision), grid2D_(0), grid2DS_(0), ccFrame_(0),
      projTriRF_(0), vertexRF_(0), q2ddRF_(0), bndRF_(0), planeRF_(0),
-     interleaveRF_ (0), zorderRF_ (0)
+     zorderRF_ (0)
 {
    //initialize();
 
@@ -127,7 +126,7 @@ DgIDGGBase::DgIDGGBase (const DgIDGGBase& rfIn)
         res_(rfIn.res()), precision_(rfIn.precision()),
         grid2D_(0), grid2DS_(0), ccFrame_(0), projTriRF_(0),
         vertexRF_(0), q2ddRF_(0), bndRF_(0), planeRF_(0), 
-        interleaveRF_ (0), zorderRF_ (0)
+        zorderRF_ (0)
 {
    //initialize();
 
@@ -159,8 +158,7 @@ DgIDGGBase::createConverters (void)
    q2ddRF_ = DgQ2DDRF::makeRF(network(), name() + string("q2dd"));
    planeRF_ = DgPlaneTriRF::makeRF(network(), name() + string("plane"));
 
-   if (aperture() == 4 || aperture() == 3) {
-      interleaveRF_ = DgInterleaveRF::makeRF(network(), name() + string("interleave"));
+   if (gridTopo() == Hexagon && (aperture() == 4 || aperture() == 3)) {
       zorderRF_ = DgZOrderRF::makeRF(network(), name() + string("zorder"));
    }
 
@@ -190,10 +188,6 @@ DgIDGGBase::createConverters (void)
    delete icosaProj;
 
    DgConverterBase* toPlane = new DgPlaneTriProj(projTriRF(), planeRF());
-
-   Dg2WayConverter* toInterleave = NULL;
-   if (interleaveRF())
-      toInterleave = new Dg2WayInterleaveConverter(*this, *interleaveRF());
 
    Dg2WayConverter* toZOrder = NULL;
    if (zorderRF())
@@ -242,15 +236,6 @@ DgIDGGBase::createConverters (void)
 
    // vertexRF -> Q2DD is c3to4 above
 
-   // vertexRF -> interleaveRF
-   if (interleaveRF()) {
-      sc.push_back(c3to4);
-      sc.push_back(c4to5);
-      sc.push_back(&toInterleave->forward());
-      new DgSeriesConverter(sc, true);
-      sc.resize(0);
-   }
-
    // vertexRF -> zorderRF
    if (zorderRF()) {
       sc.push_back(c3to4);
@@ -278,14 +263,6 @@ DgIDGGBase::createConverters (void)
    sc.push_back(c3to4);
    new DgSeriesConverter(sc, true);
    sc.resize(0);
-
-   // projTriRF -> interleaveRF
-   if (interleaveRF()) {
-      sc.push_back(c2to3);
-      sc.push_back(network().getConverter(vertexRF(), *interleaveRF()));
-      new DgSeriesConverter(sc, true);
-      sc.resize(0);
-   }
 
    // projTriRF -> zorderRF
    if (zorderRF()) {
@@ -318,14 +295,6 @@ DgIDGGBase::createConverters (void)
    new DgSeriesConverter(sc, true);
    sc.resize(0);
 
-   // Q2DD -> interleaveRF
-   if (interleaveRF()) {
-      sc.push_back(c4to3);
-      sc.push_back(network().getConverter(vertexRF(), *interleaveRF()));
-      new DgSeriesConverter(sc, true);
-      sc.resize(0);
-   }
-
    // Q2DD -> zorderRF
    if (zorderRF()) {
       sc.push_back(c4to3);
@@ -357,7 +326,6 @@ DgIDGGBase::createConverters (void)
    sc.resize(0);
 
    // Q2DI -> Q2DD is c5to4 above
-   // Q2DI -> interleaveRF is toInterleave->forward() above
    // Q2DI -> zorderRF is toZorder->forward() above
 
    /// finally from geoRF
@@ -384,14 +352,6 @@ DgIDGGBase::createConverters (void)
    sc.push_back(c3to4);
    new DgSeriesConverter(sc, true);
    sc.resize(0);
-
-   // geoRF -> interleaveRF
-   if (interleaveRF()) {
-      sc.push_back(network().getConverter(geoRF(), *this));
-      sc.push_back(&toInterleave->forward());
-      new DgSeriesConverter(sc, true);
-      sc.resize(0);
-   }
 
    // geoRF -> zorderRF
    if (zorderRF()) {

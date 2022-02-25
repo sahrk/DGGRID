@@ -829,12 +829,11 @@ DgGridPList::init2 (void)
 
    insertParam(new DgStringParam("output_file_name", "valsout.txt"));
 
-   // output_address_type <GEO | Q2DI | SEQNUM | INTERLEAVE | ZORDER |
+   // output_address_type <GEO | Q2DI | SEQNUM | ZORDER |
    //      ZORDER_STRING | PLANE | Q2DD | PROJTRI | VERTEX2DD | AIGEN >
    choices.push_back(new string("GEO")); 
    choices.push_back(new string("Q2DI")); 
    choices.push_back(new string("SEQNUM")); 
-   choices.push_back(new string("INTERLEAVE")); 
    choices.push_back(new string("ZORDER")); 
    choices.push_back(new string("ZORDER_STRING")); 
    choices.push_back(new string("PLANE")); 
@@ -861,12 +860,11 @@ DgGridPList::init2 (void)
    // input_file_name <fileName>
    insertParam(new DgStringParam("input_file_name", "valsin.txt"));
 
-   // input_address_type <GEO | Q2DI | SEQNUM | INTERLEAVE | ZORDER | 
+   // input_address_type <GEO | Q2DI | SEQNUM | ZORDER | 
    //         ZORDER_STRING | PLANE | Q2DD | PROJTRI | VERTEX2DD>
    choices.push_back(new string("GEO")); 
    choices.push_back(new string("Q2DI")); 
    choices.push_back(new string("SEQNUM")); 
-   choices.push_back(new string("INTERLEAVE"));
    choices.push_back(new string("ZORDER"));
    choices.push_back(new string("ZORDER_STRING")); 
    //choices.push_back(new string("PLANE")); 

@@ -31,7 +31,6 @@
 #include <dglib/DgIDGGutil.h>
 
 class DgIDGGSBase;
-class DgInterleaveRF;
 class DgZOrderRF;
 
 using namespace dgg::topo;
@@ -91,7 +90,6 @@ class DgIDGGBase : public DgDiscRF<DgQ2DICoord, DgGeoCoord, long double> {
       const DgPlaneTriRF&   planeRF   (void) const { return *planeRF_; }
 
       // these are only defined for aperture 3 and 4 so must be NULL-able
-      const DgInterleaveRF* interleaveRF (void) const { return interleaveRF_; }
       const DgZOrderRF*     zorderRF     (void) const { return zorderRF_; }
 
       const DgContCartRF&   ccFrame (void) const { return *ccFrame_; }
@@ -214,7 +212,6 @@ class DgIDGGBase : public DgDiscRF<DgQ2DICoord, DgGeoCoord, long double> {
       const DgPlaneTriRF* planeRF_;
 
       // possible I/O RFs
-      const DgInterleaveRF* interleaveRF_;
       const DgZOrderRF* zorderRF_;
 
    friend class DgQ2DItoDConverter;

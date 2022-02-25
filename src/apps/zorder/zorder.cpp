@@ -31,7 +31,6 @@ using namespace std;
 #include <dglib/DgIDGGS4T.h>
 #include <dglib/DgIDGGS4D.h>
 #include <dglib/DgBoundedIDGG.h>
-#include <dglib/DgInterleaveRF.h>
 #include <dglib/DgZOrderRF.h>
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -79,15 +78,6 @@ geoRF.convert(thePt);
 cout << *thePt << endl;
 exit(1);
 */
-
-   DgInterleaveRF& interRF = *(DgInterleaveRF::makeRF(net0, "interRF"));
-   new Dg2WayInterleaveConverter(dgg, interRF);
-   new DgQ2DItoInterleaveConverter(dgg, interRF);
-   new DgInterleaveToQ2DIConverter(interRF, dgg);
-   interRF.convert(thePt);
-   cout << "* interleave " << *thePt << endl;
-   dgg.convert(thePt);
-   cout << "* is cell " << *thePt << endl;
 
    DgZOrderRF& zRF = *(DgZOrderRF::makeRF(net0, "zRF"));
    new Dg2WayZOrderConverter(dgg, zRF);

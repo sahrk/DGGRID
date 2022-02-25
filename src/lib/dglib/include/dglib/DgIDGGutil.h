@@ -52,7 +52,6 @@
 class DgPolygon;
 class DgBoundedIDGG;
 class DgIDGGBase;
-class DgInterleaveCoord;
 
 using namespace std;
 
