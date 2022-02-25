@@ -27,6 +27,8 @@
 using namespace std;
 
 #include <dglib/DgIDGGS3H.h>
+#include <dglib/DgIDGGS4H.h>
+#include <dglib/DgBoundedIDGG.h>
 #include <dglib/DgInterleaveRF.h>
 #include <dglib/DgZOrderRF.h>
 
@@ -50,11 +52,11 @@ int main (int argc, char* argv[])
 
    // all DGGS's must be created using a factory makeRF method
    // the DGGS is memory managed by the DgRFNetwork
-   const DgIDGGS3H* idggsPtr = DgIDGGS3H::makeRF(net0, geoRF, vert0, azimuth, 10); 
-   const DgIDGGS3H& idggs = *idggsPtr;
+   const DgIDGGS4H* idggsPtr = DgIDGGS4H::makeRF(net0, geoRF, vert0, azimuth, 10); 
+   const DgIDGGS4H& idggs = *idggsPtr;
 
    // get the resolution 7 dgg from the dggs
-   const DgIDGG& dgg = idggs.idgg(5);
+   const DgIDGG& dgg = idggs.idgg(7);
    cout << dgg.gridStats() << endl;
 
    //////// now use the DGG /////////
@@ -81,32 +83,25 @@ int main (int argc, char* argv[])
    dgg.convert(thePt);
    cout << "* is cell " << *thePt << endl;
 
-/*
-   // we can get the cell's vertices, which are defined in geoRF
-   DgPolygon verts;
-   int ptsPerEdgeDensify = 3;
-   dgg.setVertices(*thePt, verts, ptsPerEdgeDensify);
-   cout << "* with densified cell boundary:\n" << verts << endl;
-
-   // we can get the cell's center point by converting the cell back to geoRF
-   geoRF.convert(thePt);
-   cout << "* and cell center point:" << *thePt << endl;
-
-   // we can extract the coordinates into primitive data types
-   const DgGeoCoord& centCoord = *geoRF.getAddress(*thePt);
-   double latRads = centCoord.lat();
-   double lonRads = centCoord.lon();
-   cout << "* center point lon,lat in radians: " 
-        << lonRads << ", " << latRads << endl;
-
-   const DgGeoCoord& firstVert = *geoRF.getAddress(verts[0]);
-   double latDegs = firstVert.latDegs();
-   double lonDegs = firstVert.lonDegs();
-   cout << "* first boundary vertex lon,lat in degrees: " 
-        << lonDegs << ", " << latDegs << endl;
-*/
-
    delete thePt;
+
+   cout << "=========" << endl;
+   DgLocation* addLoc = new DgLocation(dgg.bndRF().first());
+   while (dgg.bndRF().validLocation(*addLoc)) {
+
+      DgQ2DICoord start = *dgg.getAddress(*addLoc);
+      cout << (*addLoc) << " -> ";
+      zRF.convert(addLoc);
+      cout << (*addLoc) << " -> ";
+      dgg.convert(addLoc);
+      cout << (*addLoc);
+      DgQ2DICoord finish = *dgg.getAddress(*addLoc);
+      if (start != finish)
+         cout << "ERROR";
+      cout << endl;
+
+      dgg.bndRF().incrementLocation(*addLoc);
+   }
 
    return 0;
 

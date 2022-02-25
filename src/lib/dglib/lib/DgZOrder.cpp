@@ -99,29 +99,31 @@ DgQ2DItoZOrderConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
 {
    string qstr = dgg::util::to_string(addIn.quadNum(), 2);
 
-dgcout << "** addIn " << addIn << endl;
+//dgcout << "** addIn " << addIn << endl;
    DgRadixString rs1(effRadix_, (int) addIn.coord().i(), effRes_);
    DgRadixString rs2(effRadix_, (int) addIn.coord().j(), effRes_);
 
-dgcout << "rs1 " << rs1 << endl;
-dgcout << "rs2 " << rs2 << endl;
+//dgcout << "rs1 " << rs1 << endl;
+//dgcout << "rs2 " << rs2 << endl;
 
    string addstr = qstr;
+/*
    if (IDGG().aperture() == 3) {
-cout << "Class " << ((IDGG().isClassI()) ? "I" : "II") << endl;
+      dgcout << "Class " << ((IDGG().isClassI()) ? "I" : "II") << endl;
    }
+*/
    addstr = addstr + DgRadixString::digitInterleave(rs1, rs2, false);
 
-dgcout << "addstr " << addstr << endl;
+//dgcout << "addstr " << addstr << endl;
    // trim last digit if Class II
    if (IDGG().aperture() == 3 && !IDGG().isClassI() && addstr.length()) {
       addstr.pop_back();
    }
-dgcout << "trimmed " << addstr << endl;
+//dgcout << "trimmed " << addstr << endl;
 
    DgZOrderCoord zorder;
    zorder.setValString(addstr);
-dgcout << "zorder " << zorder << endl;
+//dgcout << "zorder " << zorder << endl;
 
    return zorder;
 
@@ -157,7 +159,7 @@ DgZOrderToQ2DIConverter::DgZOrderToQ2DIConverter
 DgQ2DICoord 
 DgZOrderToQ2DIConverter::convertTypedAddress (const DgZOrderCoord& addIn) const
 {
-dgcout << " -> " << addIn << endl;
+//dgcout << " -> " << addIn << endl;
    string addstr = addIn.valString();
 
    // first get the quad number
@@ -195,10 +197,10 @@ dgcout << " -> " << addIn << endl;
    DgRadixString rad1(effRadix_, radStr1);
    DgRadixString rad2(effRadix_, radStr2);
 
-   dgcout << "qstr: " << qstr << " rad1: " << rad1 << " rad2: " << rad2 << endl;
+   //dgcout << "qstr: " << qstr << " rad1: " << rad1 << " rad2: " << rad2 << endl;
 
    DgQ2DICoord q2di(quadNum, DgIVec2D(rad1.value(), rad2.value()));
-   dgcout << "q2di: " << q2di << endl;
+   //dgcout << "q2di: " << q2di << endl;
 
    return q2di;
 
