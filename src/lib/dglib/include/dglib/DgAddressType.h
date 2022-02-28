@@ -18,45 +18,37 @@
 *******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
-// DgGridTopo.h: discrete grid topology and metric enum definitions
-//
-// Version 7.1 - Kevin Sahr, 3/11/21
+// DgAddressType.h: discrete grid address types enum definitions
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef DGGRIDTOPO_H
-#define DGGRIDTOPO_H
+#ifndef DGADDRESSTYPE_H
+#define DGADDRESSTYPE_H
 
 #include <iostream>
 
-namespace dgg { namespace topo {
+namespace dgg { namespace addtype {
 
-enum DgGridTopology { Hexagon, Triangle, Square, Diamond, InvalidTopo };
-enum DgGridMetric { D3, D4, D6, D8, InvalidMetric };
+enum DgAddressType { Geo, Plane, ProjTri, Q2DD, Q2DI, SeqNum, Vertex2DD, 
+                     ZOrder, ZOrderString, InvalidAddressType };
 
-DgGridTopology stringToGridTopology (const std::string& str);
-DgGridMetric stringToGridMetric (const std::string& str);
-const std::string& to_string (DgGridTopology t);
-const std::string& to_string (DgGridMetric m);
+static const std::string addTypeStrings[] = { "GEO", "PLANE", "PROJTRI", "Q2DD",
+    "Q2DI", "SEQNUM", "VERTEX2DD", "ZORDER", "ZORDER_STRING", "INVALID" };
+
+DgAddressType stringToAddressType (const std::string& str);
+const std::string& to_string (DgAddressType t);
 
 ////////////////////////////////////////////////////////////////////////////////
 inline std::ostream&
-operator<< (std::ostream& stream, DgGridTopology obj)
+operator<< (std::ostream& stream, DgAddressType obj)
 {
    return stream << to_string(obj);
 
 } // std::ostream& operator<<
 
 ////////////////////////////////////////////////////////////////////////////////
-inline std::ostream&
-operator<< (std::ostream& stream, DgGridMetric obj)
-{
-   return stream << to_string(obj);
-
-} // std::ostream& operator<<
-
-}} // end namespace
-
 ////////////////////////////////////////////////////////////////////////////////
+
+}} // namespace dgg::addtype
 
 #endif

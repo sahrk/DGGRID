@@ -40,8 +40,7 @@ using namespace std;
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 BinPresenceParam::BinPresenceParam (DgParamList& plist)
-      : MainParam(plist), wholeEarth (true), outFile (0), outSeqNum (false),
-        inputDelimiter (' '), outputDelimiter (' '), outputAllCells (true)
+      : MainParam(plist), wholeEarth (true), outFile (0), outputAllCells (true)
 { 
       /////// fill state variables from the parameter list //////////
 
@@ -69,37 +68,9 @@ BinPresenceParam::BinPresenceParam (DgParamList& plist)
       }
       delete [] names;
 
-      // input delimiter
-
-      getParamValue(plist, "input_delimiter", dummy, false);
-      if (dummy.length() != 3 || dummy.c_str()[0] != '"' ||
-          dummy.c_str()[2] != '"')
-      {
-         ::report(
-          "invalid input_delimiter; must be a single char in double quotes",
-          DgBase::Fatal);
-      }
-      inputDelimiter = dummy.c_str()[1];
-
       // output file name
 
       getParamValue(plist, "output_file_name", outFileNameBase, false);
-
-      // output address type
-
-      getParamValue(plist, "output_address_type", outAddType, false);
-
-      // output delimiter
-
-      getParamValue(plist, "output_delimiter", dummy, false);
-      if (dummy.length() != 3 || dummy.c_str()[0] != '"' ||
-          dummy.c_str()[2] != '"')
-      {
-         ::report(
-          "invalid output_delimiter; must be a single char in double quotes",
-          DgBase::Fatal);
-      }
-      outputDelimiter = dummy.c_str()[1];
 
       // cell_output_control
 
@@ -138,11 +109,6 @@ void BinPresenceParam::dump (void)
    for (unsigned int i = 0; i < inputFiles.size(); i++)
       dgcout << "  " << i << " " << inputFiles[i] << endl;
 
-   dgcout << " outAddType: " << outAddType << endl;
-   dgcout << " outSeqNum: " << outSeqNum << endl;
-   dgcout << " inputDelimiter: " << inputDelimiter << endl;
-   dgcout << " outputDelimiter: " << outputDelimiter << endl;
-   dgcout << " inFormatStr: " << inFormatStr << endl;
    dgcout << " outputAllCells: " << outputAllCells << endl;
    dgcout << " outputCount: " << ((outputCount) ? "true" : "false") << endl;
    
@@ -169,40 +135,17 @@ void binPresGlobal (BinPresenceParam& dp)
    DgGeoSphDegRF::makeRF(geoRF, geoRF.name() + "Deg");
 
    // set-up the output reference frame
-
-   dp.outSeqNum = false;
-   const DgRFBase* pOutRF = NULL;
-   if (dp.outAddType == "PROJTRI") pOutRF = &dgg.projTriRF();
-   else if (dp.outAddType == "VERTEX2DD") pOutRF = &dgg.vertexRF();
-   else if (dp.outAddType == "Q2DD") pOutRF = &dgg.q2ddRF();
-   else if (dp.outAddType == "ZORDER") {
-      if (dgg.zorderRF())
-         pOutRF = dgg.zorderRF();
-      else
-         ::report("binPresGlobal(): ZORDER only supported for aperture 3 or 4", 
-                  DgBase::Fatal);
-   } else if (dp.outAddType == "PLANE") pOutRF = &dgg.planeRF();
-   else if (dp.outAddType == "Q2DI") pOutRF = &dgg;
-   else if (dp.outAddType == "SEQNUM") 
-   {
-      dp.outSeqNum = true;
-      pOutRF = &dgg;
-   }
-   else
-   {
-      ::report("binPresGlobal(): invalid output_address_type " + 
-               dp.outAddType, DgBase::Fatal);
-   }
-
-   const DgRFBase& outRF = *pOutRF;
+   MainParam::addressTypeToRF(dp, dgg, false);
+   if (!dp.pOutRF)
+      ::report("binPresGlobal(): invalid output RF", DgBase::Fatal);
+   const DgRFBase& outRF = *dp.pOutRF;
 
    // create an array to store the values
 
    int nClasses = (int) dp.inputFiles.size();
    //bool** vals = new (bool (*[dgg.bndRF().size()]));
    bool** vals = new bool*[dgg.bndRF().size()];
-   for (unsigned long int i = 0; i < dgg.bndRF().size(); i++) 
-   {
+   for (unsigned long int i = 0; i < dgg.bndRF().size(); i++) {
       vals[i] = new bool[nClasses];
       for (int j = 0; j < nClasses; j++) vals[i][j] = false;
    }
@@ -310,32 +253,10 @@ void binPresPartial (BinPresenceParam& dp)
    DgGeoSphDegRF::makeRF(geoRF, geoRF.name() + "Deg");
 
    // set-up the output reference frame
-
-   dp.outSeqNum = false;
-   const DgRFBase* pOutRF = NULL;
-   if (dp.outAddType == "PROJTRI") pOutRF = &dgg.projTriRF();
-   else if (dp.outAddType == "VERTEX2DD") pOutRF = &dgg.vertexRF();
-   else if (dp.outAddType == "Q2DD") pOutRF = &dgg.q2ddRF();
-   else if (dp.outAddType == "ZORDER") {
-      if (dgg.zorderRF())
-         pOutRF = dgg.zorderRF();
-      else
-         ::report("binPresGlobal(): ZORDER only supported for aperture 3 or 4",
-                  DgBase::Fatal);
-   } else if (dp.outAddType == "PLANE") pOutRF = &dgg.planeRF();
-   else if (dp.outAddType == "Q2DI") pOutRF = &dgg;
-   else if (dp.outAddType == "SEQNUM") 
-   {
-      dp.outSeqNum = true;
-      pOutRF = &dgg;
-   }
-   else
-   {
-      ::report("binPresPartial(): invalid output_address_type " + 
-               dp.outAddType, DgBase::Fatal);
-   }
-
-   const DgRFBase& outRF = *pOutRF;
+   MainParam::addressTypeToRF(dp, dgg, false);
+   if (!dp.pOutRF)
+      ::report("binPresPartial(): invalid output RF", DgBase::Fatal);
+   const DgRFBase& outRF = *dp.pOutRF;
 
    // create a place to store the values by quad
 

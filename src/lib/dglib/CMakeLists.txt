@@ -2,6 +2,7 @@ cmake_minimum_required (VERSION 3.9)
 
 add_library(dglib
   lib/DgAddressBase.cpp
+  lib/DgAddressType.cpp
   lib/DgApSeq.cpp
   lib/DgBase.cpp
   lib/DgBoundedHexC2RF2D.cpp

@@ -18,45 +18,33 @@
 *******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
-// DgGridTopo.cpp: DgGridTopo enum function implementation
+// DgAddressType.cpp: DgAddressType enum function implementation
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <dglib/DgGridTopo.h>
+#include <dglib/DgAddressType.h>
 
 #include <cmath>
 
 using namespace std;
 
-namespace dgg { namespace topo {
+namespace dgg { namespace addtype {
 
-static const string topoStrings[] =
-               { "HEXAGON", "TRIANGLE", "SQUARE", "DIAMOND", "INVALID" };
-static const string metricStrings[] =
-               { "D3", "D4", "D6", "D8", "INVALID" };
+/*
+static const string addTypeStrings[] = { "GEO", "PLANE", "PROJTRI", "Q2DD", 
+    "Q2DI", "SEQNUM", "VERTEX2DD", "ZORDER", "ZORDER_STRING", "INVALID" };
+*/
 
-DgGridTopology stringToGridTopology (const string& str) {
-   for (int i = 0; i < InvalidTopo; i++)
-      if (str == topoStrings[i]) return static_cast<DgGridTopology>(i);
+DgAddressType stringToAddressType (const string& str) {
+   for (int i = 0; i < InvalidAddressType; i++)
+      if (str == addTypeStrings[i]) return static_cast<DgAddressType>(i);
 
-   return InvalidTopo;
+   return InvalidAddressType;
 }
 
-DgGridMetric stringToGridMetric (const string& str) {
-   for (int i = 0; i < InvalidMetric; i++)
-      if (str == metricStrings[i]) return static_cast<DgGridMetric>(i);
-
-   return InvalidMetric;
+const string& to_string (DgAddressType t) {
+   if (t <= InvalidAddressType) return addTypeStrings[t];
+   return addTypeStrings[InvalidAddressType];
 }
 
-const string& to_string (DgGridTopology t) {
-   if (t <= InvalidTopo) return topoStrings[t];
-   return topoStrings[InvalidTopo];
-}
-
-const string& to_string (DgGridMetric m) {
-   if (m <= InvalidMetric) return metricStrings[m];
-   return metricStrings[InvalidMetric];
-}
-
-}} // namespace dgg::topo
+}} // namespace dgg::addtype
