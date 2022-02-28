@@ -30,6 +30,7 @@
 #include <dglib/DgSuperfund.h>
 #include <dglib/DgOutKMLfile.h>
 #include <dglib/DgZOrderRF.h>
+#include <dglib/DgZOrderStringRF.h>
 #include <dglib/DgAddressType.h>
 
 using namespace dgg::topo;
@@ -77,14 +78,28 @@ MainParam::addressTypeToRF (MainParam& dp, const DgIDGGBase& dgg, bool isInput)
          break;
 
       case ZOrder:
-      case ZOrderString:
          if (dp.isApSeq)
-            ::report("input_address_type of ZORDER not supported for dggs_aperture_type of SEQUENCE", DgBase::Fatal);
+            ::report("input_address_type of ZORDER not supported for dggs_aperture_type of SEQUENCE", 
+                     DgBase::Fatal);
 
          if (dgg.zorderRF())
             rf = dgg.zorderRF();
          else
             ::report("addressTypeToRF(): ZORDER only supported for aperture 3 or 4",
+                     DgBase::Fatal);
+
+         break;
+
+
+      case ZOrderString:
+         if (dp.isApSeq)
+            ::report("input_address_type of ZORDER_STRING not supported for dggs_aperture_type of SEQUENCE", 
+                     DgBase::Fatal);
+
+         if (dgg.zorderStringRF())
+            rf = dgg.zorderStringRF();
+         else
+            ::report("addressTypeToRF(): ZORDER_STRING only supported for aperture 3 or 4",
                      DgBase::Fatal);
 
          break;
@@ -637,7 +652,7 @@ DgGridPList::DgGridPList (void)
    // geodetic_densify <long double: decimal degrees> (v >= 0.0)
    insertParam(new DgDoubleParam("geodetic_densify", 0.0, 0.0, 360.0));
 
-   // clip_subset_type <WHOLE_EARTH | AIGEN | SHAPEFILE | GDAL | SEQNUMS | COARSE_CELLS >
+   // clip_subset_type <WHOLE_EARTH | AIGEN | SHAPEFILE | GDAL | SEQNUMS | ADDRESSES | COARSE_CELLS >
    choices.push_back(new string("WHOLE_EARTH"));
    choices.push_back(new string("AIGEN"));
    choices.push_back(new string("SHAPEFILE"));
@@ -645,6 +660,7 @@ DgGridPList::DgGridPList (void)
    choices.push_back(new string("GDAL"));
 #endif
    choices.push_back(new string("SEQNUMS"));
+   choices.push_back(new string("ADDRESSES"));
    choices.push_back(new string("POINTS"));
    choices.push_back(new string("COARSE_CELLS"));
    insertParam(new DgStringChoiceParam("clip_subset_type", "WHOLE_EARTH", 

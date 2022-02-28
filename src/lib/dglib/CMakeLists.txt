@@ -98,7 +98,8 @@ add_library(dglib
   lib/DgTriGrid2DS.cpp
   lib/DgTriIDGG.cpp
   lib/DgUtil.cpp
-  lib/DgZOrder.cpp
+  lib/DgZOrderRF.cpp
+  lib/DgZOrderStringRF.cpp
 )
 
 if(GDAL_FOUND)

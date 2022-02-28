@@ -41,7 +41,6 @@ using namespace std;
 #include <dglib/DgInputStream.h>
 #include <dglib/DgOutAIGenFile.h>
 #include <dglib/DgOutputStream.h>
-#include <dglib/DgZOrderRF.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -86,9 +85,8 @@ void TransformParam::dump (void)
    dgcout << " inFileName: " << inFileName << endl;
    dgcout << " inAddType: " << inAddType << endl;
    dgcout << " inSeqNum: " << inSeqNum << endl;
-   dgcout << " inputDelimiter: " << inputDelimiter << endl;
 
-   dgcout << "END TRANSFORM PARAMETER DUMP" << endl;
+  dgcout << "END TRANSFORM PARAMETER DUMP" << endl;
 
 } // void TransformParam::dump
 

@@ -61,6 +61,10 @@ output_last_seqnum 18446744073709551615 (default)
 verbosity 0 (default)
 pause_on_startup false (default)
 pause_before_exit false (default)
+input_delimiter " " (default)
+output_address_type SEQNUM (default)
+output_delimiter " " (default)
+input_address_type SEQNUM (default)
 
 
 ** grid generation complete **

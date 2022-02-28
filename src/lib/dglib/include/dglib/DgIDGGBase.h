@@ -32,6 +32,7 @@
 
 class DgIDGGSBase;
 class DgZOrderRF;
+class DgZOrderStringRF;
 
 using namespace dgg::topo;
 
@@ -90,7 +91,8 @@ class DgIDGGBase : public DgDiscRF<DgQ2DICoord, DgGeoCoord, long double> {
       const DgPlaneTriRF&   planeRF   (void) const { return *planeRF_; }
 
       // these are only defined for aperture 3 and 4 so must be NULL-able
-      const DgZOrderRF*     zorderRF     (void) const { return zorderRF_; }
+      const DgZOrderRF*       zorderRF     (void) const { return zorderRF_; }
+      const DgZOrderStringRF* zorderStrRF  (void) const { return zorderStrRF_; }
 
       const DgContCartRF&   ccFrame (void) const { return *ccFrame_; }
       const DgDiscRF2D&     grid2D  (void) const { return *grid2D_; }
@@ -212,7 +214,8 @@ class DgIDGGBase : public DgDiscRF<DgQ2DICoord, DgGeoCoord, long double> {
       const DgPlaneTriRF* planeRF_;
 
       // possible I/O RFs
-      const DgZOrderRF* zorderRF_;
+      const DgZOrderRF*       zorderRF_;
+      const DgZOrderStringRF* zorderStrRF_;
 
    friend class DgQ2DItoDConverter;
    friend class DgQ2DDtoIConverter;

@@ -37,6 +37,7 @@
 #include <dglib/DgSeriesConverter.h>
 #include <dglib/DgTriGrid2DS.h>
 #include <dglib/DgZOrderRF.h>
+#include <dglib/DgZOrderStringRF.h>
 
 #include <cfloat>
 #include <climits>
@@ -112,7 +113,7 @@ DgIDGGBase::DgIDGGBase (const DgIDGGSBase* dggs, const DgGeoSphRF& geoRF,
      dggs_ (dggs), sphIcosa_(0), aperture_(aperture), res_(res),
      precision_(precision), grid2D_(0), grid2DS_(0), ccFrame_(0),
      projTriRF_(0), vertexRF_(0), q2ddRF_(0), bndRF_(0), planeRF_(0),
-     zorderRF_ (0)
+     zorderRF_ (0), zorderStrRF_ (0)
 {
    //initialize();
 
@@ -126,7 +127,7 @@ DgIDGGBase::DgIDGGBase (const DgIDGGBase& rfIn)
         res_(rfIn.res()), precision_(rfIn.precision()),
         grid2D_(0), grid2DS_(0), ccFrame_(0), projTriRF_(0),
         vertexRF_(0), q2ddRF_(0), bndRF_(0), planeRF_(0), 
-        zorderRF_ (0)
+        zorderRF_ (0), zorderStrRF_ (0)
 {
    //initialize();
 
@@ -160,6 +161,7 @@ DgIDGGBase::createConverters (void)
 
    if (gridTopo() == Hexagon && (aperture() == 4 || aperture() == 3)) {
       zorderRF_ = DgZOrderRF::makeRF(network(), name() + string("zorder"));
+      zorderStrRF_ = DgZOrderStringRF::makeRF(network(), name() + string("zorderStr"));
    }
 
    // create the converters; for convenience use where they are in overall
@@ -189,9 +191,14 @@ DgIDGGBase::createConverters (void)
 
    DgConverterBase* toPlane = new DgPlaneTriProj(projTriRF(), planeRF());
 
+   Dg2WayConverter* toZOrderStr = NULL;
    Dg2WayConverter* toZOrder = NULL;
-   if (zorderRF())
-      toZOrder = new Dg2WayZOrderConverter(*this, *zorderRF());
+   if (zorderStringRF()) {
+      toZOrderStr = new Dg2WayZOrderStringConverter(*this, *zorderStrRF());
+
+      if (zorderRF())
+         toZOrder = new Dg2WayZOrderToStringConverter(*zorderStrRF(), *zorderRF());
+   }
 
    // create the series converters that will replace the default DgDiscRF
    // converters
@@ -236,11 +243,11 @@ DgIDGGBase::createConverters (void)
 
    // vertexRF -> Q2DD is c3to4 above
 
-   // vertexRF -> zorderRF
-   if (zorderRF()) {
+   // vertexRF -> zorderStrRF
+   if (zorderStrRF()) {
       sc.push_back(c3to4);
       sc.push_back(c4to5);
-      sc.push_back(&toZOrder->forward());
+      sc.push_back(&toZOrderStr->forward());
       new DgSeriesConverter(sc, true);
       sc.resize(0);
    }
@@ -264,10 +271,10 @@ DgIDGGBase::createConverters (void)
    new DgSeriesConverter(sc, true);
    sc.resize(0);
 
-   // projTriRF -> zorderRF
-   if (zorderRF()) {
+   // projTriRF -> zorderStrRF
+   if (zorderStrRF()) {
       sc.push_back(c2to3);
-      sc.push_back(network().getConverter(vertexRF(), *zorderRF()));
+      sc.push_back(network().getConverter(vertexRF(), *zorderStrRF()));
       new DgSeriesConverter(sc, true);
       sc.resize(0);
    }
@@ -295,10 +302,10 @@ DgIDGGBase::createConverters (void)
    new DgSeriesConverter(sc, true);
    sc.resize(0);
 
-   // Q2DD -> zorderRF
-   if (zorderRF()) {
+   // Q2DD -> zorderStrRF
+   if (zorderStrRF()) {
       sc.push_back(c4to3);
-      sc.push_back(network().getConverter(vertexRF(), *zorderRF()));
+      sc.push_back(network().getConverter(vertexRF(), *zorderStrRF()));
       new DgSeriesConverter(sc, true);
       sc.resize(0);
    }
@@ -326,7 +333,7 @@ DgIDGGBase::createConverters (void)
    sc.resize(0);
 
    // Q2DI -> Q2DD is c5to4 above
-   // Q2DI -> zorderRF is toZorder->forward() above
+   // Q2DI -> zorderStrRF is toZOrderStr->forward() above
 
    /// finally from geoRF
 
@@ -353,8 +360,8 @@ DgIDGGBase::createConverters (void)
    new DgSeriesConverter(sc, true);
    sc.resize(0);
 
-   // geoRF -> zorderRF
-   if (zorderRF()) {
+   // geoRF -> zorderStrRF
+   if (zorderStrRF()) {
       sc.push_back(network().getConverter(geoRF(), *this));
       sc.push_back(&toZOrder->forward());
       new DgSeriesConverter(sc, true);

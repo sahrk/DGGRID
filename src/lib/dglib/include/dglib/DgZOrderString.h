@@ -18,12 +18,12 @@
 *******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
-// DgZOrderRF.h: DgZOrderRF header file
+// DgZOrderStringRF.h: DgZOrderStringRF header file
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef DGZORDERRF_H
-#define DGZORDERRF_H
+#ifndef DGZORDERSTRINGRF_H
+#define DGZORDERSTRINGRF_H
 
 #include <climits>
 #include <iostream>
@@ -31,24 +31,46 @@
 #include <dglib/DgConverter.h>
 #include <dglib/Dg2WayConverter.h>
 
-class DgZOrderStringCoord;
+class DgQ2DICoord;
 class DgIDGGBase;
-class DgZOrderCoord;
+class DgZOrderStringCoord;
 
 using namespace std;
 
 ////////////////////////////////////////////////////////////////////////////////
-class DgZOrderStringtoZOrderConverter :
-        public DgConverter<DgZOrderStringCoord, long long int, DgZOrderCoord, long long int>
+class DgQ2DItoZOrderConverter :
+        public DgConverter<DgQ2DICoord, long long int, DgZOrderStringCoord, long long int>
 {
    public:
 
-      DgZOrderStringtoZOrderConverter (const DgRF<DgZOrderStringCoord, long long int>& from,
-                                   const DgRF<DgZOrderCoord, long long int>& to);
+      DgQ2DItoZOrderConverter (const DgRF<DgQ2DICoord, long long int>& from,
+                                   const DgRF<DgZOrderStringCoord, long long int>& to);
 
       const DgIDGGBase& IDGG (void) const { return *pIDGG_; }
 
-      virtual DgZOrderCoord convertTypedAddress
+      virtual DgZOrderStringCoord convertTypedAddress
+                                (const DgQ2DICoord& addIn) const;
+
+   protected:
+
+      const DgIDGGBase* pIDGG_;
+      int effRes_;
+      int effRadix_;
+
+};
+
+////////////////////////////////////////////////////////////////////////////////
+class DgZOrderStringToQ2DIConverter :
+        public DgConverter<DgZOrderStringCoord, long long int, DgQ2DICoord, long long int>
+{
+   public:
+
+      DgZOrderStringToQ2DIConverter (const DgRF<DgZOrderStringCoord, long long int>& from,
+                                   const DgRF<DgQ2DICoord, long long int>& to);
+
+      const DgIDGGBase& IDGG (void) const { return *pIDGG_; }
+
+      virtual DgQ2DICoord convertTypedAddress
                                 (const DgZOrderStringCoord& addIn) const;
 
    protected:
@@ -60,38 +82,14 @@ class DgZOrderStringtoZOrderConverter :
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-class DgZOrderToZOrderStringConverter :
-        public DgConverter<DgZOrderCoord, long long int, DgZOrderStringCoord, long long int>
-{
-   public:
-
-      DgZOrderToZOrderStringConverter (const DgRF<DgZOrderCoord, long long int>& from,
-                                   const DgRF<DgZOrderStringCoord, long long int>& to);
-
-      const DgIDGGBase& IDGG (void) const { return *pIDGG_; }
-
-      virtual DgZOrderStringCoord convertTypedAddress
-                                (const DgZOrderCoord& addIn) const;
-
-   protected:
-
-      const DgIDGGBase* pIDGG_;
-      int effRes_;
-      int effRadix_;
-
-};
-
-////////////////////////////////////////////////////////////////////////////////
-class Dg2WayZOrderToStringConverter : public Dg2WayConverter {
+class Dg2WayZOrderConverter : public Dg2WayConverter {
 
    public:
 
-      Dg2WayZOrderToStringConverter (
-               const DgRF<DgZOrderStringCoord, long long int>& fromFrame,
-               const DgRF<DgZOrderCoord, long long int>& toFrame)
-         : Dg2WayConverter (*(new DgZOrderStringtoZOrderConverter(fromFrame, toFrame)),
-                            *(new DgZOrderToZOrderStringConverter(toFrame, fromFrame)))
-                                             {}
+      Dg2WayZOrderConverter (const DgRF<DgQ2DICoord, long long int>& fromFrame,
+              const DgRF<DgZOrderStringCoord, long long int>& toFrame)
+         : Dg2WayConverter (*(new DgQ2DItoZOrderConverter(fromFrame, toFrame)),
+              *(new DgZOrderStringToQ2DIConverter(toFrame, fromFrame))) {}
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -99,15 +97,15 @@ class Dg2WayZOrderToStringConverter : public Dg2WayConverter {
 //   Coordinate consisting of a string containing quad number, (aperture 3 hex
 //        level indicator), and digit-interleaved radix string
 //
-class DgZOrderCoord  {
+class DgZOrderStringCoord  {
 
    public:
 
-      static const DgZOrderCoord undefDgZOrderCoord;
+      static const DgZOrderStringCoord undefDgZOrderStringCoord;
 
-      DgZOrderCoord (void) { }
+      DgZOrderStringCoord (void) { }
 
-      DgZOrderCoord (const DgZOrderCoord& coord)
+      DgZOrderStringCoord (const DgZOrderStringCoord& coord)
               { valString_ = coord.valString(); }
 
       void setValString (const string strIn) { valString_ = strIn; }
@@ -116,13 +114,13 @@ class DgZOrderCoord  {
 
       operator string (void) const { return valString(); }
 
-      bool operator== (const DgZOrderCoord& c) const
+      bool operator== (const DgZOrderStringCoord& c) const
           { return valString() == c.valString(); }
 
-      bool operator!= (const DgZOrderCoord& c) const
+      bool operator!= (const DgZOrderStringCoord& c) const
           { return !(*this == c); }
 
-      DgZOrderCoord& operator= (const DgZOrderCoord& add)
+      DgZOrderStringCoord& operator= (const DgZOrderStringCoord& add)
           {
              if (add != *this) setValString(add.valString());
 
@@ -132,33 +130,34 @@ class DgZOrderCoord  {
    private:
 
       string valString_;
+
 };
 
 ////////////////////////////////////////////////////////////////////////////////
 inline ostream&
-operator<< (ostream& stream, const DgZOrderCoord& coord)
+operator<< (ostream& stream, const DgZOrderStringCoord& coord)
 { return stream << string(coord); }
 
 ////////////////////////////////////////////////////////////////////////////////
-class DgZOrderRF : public DgRF<DgZOrderCoord, long long int> {
+class DgZOrderStringRF : public DgRF<DgZOrderStringCoord, long long int> {
 
    public:
 
-      static DgZOrderRF* makeRF (DgRFNetwork& networkIn, const string& nameIn)
-         { return new DgZOrderRF (networkIn, nameIn); }
+      static DgZOrderStringRF* makeRF (DgRFNetwork& networkIn, const string& nameIn)
+         { return new DgZOrderStringRF (networkIn, nameIn); }
 
-      virtual long long int dist (const DgZOrderCoord& add1,
-                        const DgZOrderCoord& add2) const
+      virtual long long int dist (const DgZOrderStringCoord& add1,
+                        const DgZOrderStringCoord& add2) const
                        { return 0; }
 
-      virtual string add2str (const DgZOrderCoord& add) const
+      virtual string add2str (const DgZOrderStringCoord& add) const
                        { return string(add); }
 
-      virtual string add2str (const DgZOrderCoord& add, char delimiter)
+      virtual string add2str (const DgZOrderStringCoord& add, char delimiter)
                                                                          const
                        { return string(add); }
 
-      virtual const char* str2add (DgZOrderCoord* add, const char* str,
+      virtual const char* str2add (DgZOrderStringCoord* add, const char* str,
                                    char delimiter) const;
 
       virtual string dist2str (const long long int& dist) const
@@ -170,13 +169,13 @@ class DgZOrderRF : public DgRF<DgZOrderCoord, long long int> {
       virtual unsigned long long int dist2int (const long long int& dist) const
                        { return dist; }
 
-      virtual const DgZOrderCoord& undefAddress (void) const
-                       { static DgZOrderCoord undef; return undef; }
+      virtual const DgZOrderStringCoord& undefAddress (void) const
+                       { static DgZOrderStringCoord undef; return undef; }
 
    protected:
 
-      DgZOrderRF (DgRFNetwork& networkIn, const string& nameIn)
-         : DgRF<DgZOrderCoord, long long int>(networkIn, nameIn) { }
+      DgZOrderStringRF (DgRFNetwork& networkIn, const string& nameIn)
+         : DgRF<DgZOrderStringCoord, long long int>(networkIn, nameIn) { }
 
 };
 

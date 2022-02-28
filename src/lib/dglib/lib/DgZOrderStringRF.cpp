@@ -18,7 +18,7 @@
 *******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
-// DgZOrderRF.cpp: DgZOrderRF class implementation
+// DgZOrderStringRF.cpp: DgZOrderStringRF class implementation
 //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -26,7 +26,7 @@
 #include <climits>
 #include <cfloat>
 
-#include <dglib/DgZOrderRF.h>
+#include <dglib/DgZOrderStringRF.h>
 #include <dglib/DgIDGGBase.h>
 #include <dglib/DgRadixString.h>
 /*
@@ -44,10 +44,10 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 const char*
-DgZOrderRF::str2add (DgZOrderCoord* add, const char* str, 
+DgZOrderStringRF::str2add (DgZOrderStringCoord* add, const char* str, 
                          char delimiter) const
 {
-   if (!add) add = new DgZOrderCoord();
+   if (!add) add = new DgZOrderStringCoord();
 
    char delimStr[2];
    delimStr[0] = delimiter;
@@ -65,13 +65,13 @@ DgZOrderRF::str2add (DgZOrderCoord* add, const char* str,
    if (offset >= strlen(str)) return 0;
    else return &str[offset];
 
-} // const char* DgZOrderRF::str2add
+} // const char* DgZOrderStringRF::str2add
 
 ////////////////////////////////////////////////////////////////////////////////
 DgQ2DItoZOrderConverter::DgQ2DItoZOrderConverter 
                 (const DgRF<DgQ2DICoord, long long int>& from,
-                 const DgRF<DgZOrderCoord, long long int>& to)
-        : DgConverter<DgQ2DICoord, long long int, DgZOrderCoord, long long int> (from, to),
+                 const DgRF<DgZOrderStringCoord, long long int>& to)
+        : DgConverter<DgQ2DICoord, long long int, DgZOrderStringCoord, long long int> (from, to),
           pIDGG_ (NULL), effRes_ (0), effRadix_ (0)
 { 
    pIDGG_ = dynamic_cast<const DgIDGGBase*>(&fromFrame());
@@ -99,7 +99,7 @@ DgQ2DItoZOrderConverter::DgQ2DItoZOrderConverter
 } // DgQ2DItoZOrderConverter::DgQ2DItoZOrderConverter 
 
 ////////////////////////////////////////////////////////////////////////////////
-DgZOrderCoord 
+DgZOrderStringCoord 
 DgQ2DItoZOrderConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
 {
    string qstr = dgg::util::to_string(addIn.quadNum(), 2);
@@ -127,19 +127,19 @@ DgQ2DItoZOrderConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
    }
 //dgcout << "trimmed " << addstr << endl;
 
-   DgZOrderCoord zorder;
+   DgZOrderStringCoord zorder;
    zorder.setValString(addstr);
 //dgcout << "zorder " << zorder << endl;
 
    return zorder;
 
-} // DgZOrderCoord DgQ2DItoZOrderConverter::convertTypedAddress 
+} // DgZOrderStringCoord DgQ2DItoZOrderConverter::convertTypedAddress 
 
 ////////////////////////////////////////////////////////////////////////////////
 DgZOrderToQ2DIConverter::DgZOrderToQ2DIConverter            
-                (const DgRF<DgZOrderCoord, long long int>& from,
+                (const DgRF<DgZOrderStringCoord, long long int>& from,
                  const DgRF<DgQ2DICoord, long long int>& to)
-        : DgConverter<DgZOrderCoord, long long int, DgQ2DICoord, long long int> (from, to),
+        : DgConverter<DgZOrderStringCoord, long long int, DgQ2DICoord, long long int> (from, to),
           pIDGG_ (NULL), effRes_ (0), effRadix_ (0)
 { 
    pIDGG_ = dynamic_cast<const DgIDGGBase*>(&toFrame());
@@ -168,7 +168,7 @@ DgZOrderToQ2DIConverter::DgZOrderToQ2DIConverter
 
 ////////////////////////////////////////////////////////////////////////////////
 DgQ2DICoord 
-DgZOrderToQ2DIConverter::convertTypedAddress (const DgZOrderCoord& addIn) const
+DgZOrderToQ2DIConverter::convertTypedAddress (const DgZOrderStringCoord& addIn) const
 {
 //dgcout << " -> " << addIn << endl;
    string addstr = addIn.valString();
