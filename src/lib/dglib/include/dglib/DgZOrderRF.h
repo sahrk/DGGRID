@@ -47,17 +47,12 @@ class DgZOrderStringtoZOrderConverter :
       DgZOrderStringtoZOrderConverter (const DgRF<DgZOrderStringCoord, long long int>& from,
                                    const DgRF<DgZOrderCoord, long long int>& to);
 
-      const DgIDGGBase& IDGG (void) const { return *pIDGG_; }
-
       virtual DgZOrderCoord convertTypedAddress
                                 (const DgZOrderStringCoord& addIn) const;
 
-   protected:
+   private:
 
-      const DgIDGGBase* pIDGG_;
-      int effRes_;
-      int effRadix_;
-
+      int res_;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -69,17 +64,12 @@ class DgZOrderToZOrderStringConverter :
       DgZOrderToZOrderStringConverter (const DgRF<DgZOrderCoord, long long int>& from,
                                    const DgRF<DgZOrderStringCoord, long long int>& to);
 
-      const DgIDGGBase& IDGG (void) const { return *pIDGG_; }
-
       virtual DgZOrderStringCoord convertTypedAddress
                                 (const DgZOrderCoord& addIn) const;
 
-   protected:
+   private:
 
-      const DgIDGGBase* pIDGG_;
-      int effRes_;
-      int effRadix_;
-
+      int res_;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -147,8 +137,12 @@ class DgZOrderRF : public DgRF<DgZOrderCoord, long long int> {
 
    public:
 
-      static DgZOrderRF* makeRF (DgRFNetwork& networkIn, const string& nameIn)
-         { return new DgZOrderRF (networkIn, nameIn); }
+      static DgZOrderRF* makeRF (DgRFNetwork& networkIn, const string& nameIn, 
+                                  int resIn, int apertureIn)
+         { return new DgZOrderRF (networkIn, nameIn, resIn, apertureIn); }
+
+      int res      (void) const { return res_; }
+      int aperture (void) const { return aperture_; }
 
       virtual long long int dist (const DgZOrderCoord& add1,
                         const DgZOrderCoord& add2) const
@@ -178,8 +172,13 @@ class DgZOrderRF : public DgRF<DgZOrderCoord, long long int> {
 
    protected:
 
-      DgZOrderRF (DgRFNetwork& networkIn, const string& nameIn)
-         : DgRF<DgZOrderCoord, long long int>(networkIn, nameIn) { }
+      DgZOrderRF (DgRFNetwork& networkIn, const string& nameIn, 
+                    int resIn, int apertureIn)
+         : DgRF<DgZOrderCoord, long long int>(networkIn, nameIn), 
+           res_ (resIn), aperture_ (apertureIn) { }
+
+      int res_;
+      int aperture_;
 
 };
 

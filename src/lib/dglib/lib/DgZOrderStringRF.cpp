@@ -75,10 +75,20 @@ DgQ2DItoZOrderStringConverter::DgQ2DItoZOrderStringConverter
           pIDGG_ (NULL), effRes_ (0), effRadix_ (0)
 { 
    pIDGG_ = dynamic_cast<const DgIDGGBase*>(&fromFrame());
-
    if (!pIDGG_) {
       report("DgQ2DItoZOrderStringConverter::DgQ2DItoZOrderStringConverter(): "
          " fromFrame not of type DgIDGGBase", DgBase::Fatal);
+   }
+
+   const DgZOrderStringRF* zRF = dynamic_cast<const DgZOrderStringRF*>(&toFrame());
+   if (!zRF) {
+      report("DgQ2DItoZOrderStringConverter::DgQ2DItoZOrderStringConverter(): "
+         " toFrame not of type DgZOrderStringRF", DgBase::Fatal);
+   }
+
+   if (IDGG().aperture() != zRF->aperture() || IDGG().res() != zRF->res()) {
+      report("DgQ2DItoZOrderStringConverter::DgQ2DItoZOrderStringConverter(): "
+         " fromFrame and toFrame apertures or resolutions do not match", DgBase::Fatal);
    }
 
    if (IDGG().gridTopo() != Hexagon) {
@@ -143,10 +153,20 @@ DgZOrderStringToQ2DIConverter::DgZOrderStringToQ2DIConverter
           pIDGG_ (NULL), effRes_ (0), effRadix_ (0)
 { 
    pIDGG_ = dynamic_cast<const DgIDGGBase*>(&toFrame());
-
    if (!pIDGG_) {
       report("DgZOrderStringToQ2DIConverter::DgZOrderStringToQ2DIConverter(): "
          " toFrame not of type DgIDGGBase", DgBase::Fatal);
+   }
+
+   const DgZOrderStringRF* zRF = dynamic_cast<const DgZOrderStringRF*>(&fromFrame());
+   if (!zRF) {
+      report("DgQ2DItoZOrderStringConverter::DgQ2DItoZOrderStringConverter(): "
+         " fromFrame not of type DgZOrderStringRF", DgBase::Fatal);
+   }
+
+   if (IDGG().aperture() != zRF->aperture() || IDGG().res() != zRF->res()) {
+      report("DgQ2DItoZOrderStringConverter::DgQ2DItoZOrderStringConverter(): "
+         " fromFrame and toFrame apertures or resolutions do not match", DgBase::Fatal); 
    }
 
    if (IDGG().gridTopo() != Hexagon) {

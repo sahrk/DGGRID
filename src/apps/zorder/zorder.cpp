@@ -37,6 +37,18 @@ using namespace std;
 ////////////////////////////////////////////////////////////////////////////////
 int main (int argc, char* argv[])
 {
+   // get the res
+   int res = 0;
+   if (argc != 2) {
+      fprintf(stderr, "usage: %s res\n", *argv);
+      exit(1);
+   }
+
+   if (!sscanf(argv[1], "%d", &res)) {
+      fprintf(stderr, "ERROR: '%s' is not a valid res\n", argv[1]);
+      exit(2);
+   }
+
    ///// create the DGG /////
 
    // create the reference frame (RF) conversion network
@@ -57,8 +69,8 @@ int main (int argc, char* argv[])
    const DgIDGGS3H* idggsPtr = DgIDGGS3H::makeRF(net0, geoRF, vert0, azimuth, 12); 
    const DgIDGGS3H& idggs = *idggsPtr;
 
-   // get the resolution 7 dgg from the dggs
-   const DgIDGG& dgg = idggs.idgg(2);
+   // get the resolution res dgg from the dggs
+   const DgIDGG& dgg = idggs.idgg(res);
    cout << dgg.gridStats() << endl;
 
    //////// now use the DGG /////////
@@ -82,27 +94,38 @@ exit(1);
 
    const DgZOrderStringRF& zStrRF = *dgg.zorderStrRF();
    const DgZOrderRF& zRF = *dgg.zorderRF();
+   const DgRFBase& rf = zRF;
+
    zStrRF.convert(thePt);
+   cout << "* zstr " << *thePt << endl;
+   zRF.convert(thePt);
+   cout << "* z " << *thePt << endl;
+   zStrRF.convert(thePt);
+   cout << "* zstr " << *thePt << endl;
+   dgg.convert(thePt);
+   cout << "* is cell " << *thePt << endl;
+
+   rf.convert(thePt);
    cout << "* zorder " << *thePt << endl;
    dgg.convert(thePt);
    cout << "* is cell " << *thePt << endl;
 
    delete thePt;
-
+exit(1);
    cout << "=========" << endl;
    DgLocation* addLoc = new DgLocation(dgg.bndRF().first());
    while (dgg.bndRF().validLocation(*addLoc)) {
 
       DgQ2DICoord start = *dgg.getAddress(*addLoc);
       cout << (*addLoc) << " -> ";
-      zStrRF.convert(addLoc);
+      rf.convert(addLoc);
       cout << (*addLoc) << " -> ";
       dgg.convert(addLoc);
       cout << (*addLoc);
       DgQ2DICoord finish = *dgg.getAddress(*addLoc);
       if (start != finish) {
-         cout << "ERROR" << endl;
-         exit(1);
+         cerr << "ERROR" << endl;
+         exit(3);
       }
 
       cout << endl;

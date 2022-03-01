@@ -160,8 +160,10 @@ DgIDGGBase::createConverters (void)
    planeRF_ = DgPlaneTriRF::makeRF(network(), name() + string("plane"));
 
    if (gridTopo() == Hexagon && (aperture() == 4 || aperture() == 3)) {
-      zorderRF_ = DgZOrderRF::makeRF(network(), name() + string("zorder"));
-      zorderStrRF_ = DgZOrderStringRF::makeRF(network(), name() + string("zorderStr"));
+      zorderRF_ = DgZOrderRF::makeRF(network(), name() + string("zorder"), 
+                        res(), aperture());
+      zorderStrRF_ = DgZOrderStringRF::makeRF(network(), name() + string("zorderStr"),
+                        res(), aperture());
    }
 
    // create the converters; for convenience use where they are in overall

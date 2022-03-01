@@ -110,7 +110,7 @@ string
 DgZOrderCoord::valString (void) const
 {
    char str[17]; // max 16 digits plus 1 for the null terminator
-   sprintf(str, "%" PRIx64, value_);
+   sprintf(str, "%016" PRIx64, value_);
    return string(str);
 
 } // const string& DgZOrderRF::valString
@@ -119,30 +119,28 @@ DgZOrderCoord::valString (void) const
 DgZOrderStringtoZOrderConverter::DgZOrderStringtoZOrderConverter 
                 (const DgRF<DgZOrderStringCoord, long long int>& from,
                  const DgRF<DgZOrderCoord, long long int>& to)
-        : DgConverter<DgZOrderStringCoord, long long int, DgZOrderCoord, long long int> (from, to),
-          pIDGG_ (NULL), effRes_ (0), effRadix_ (0)
+   : DgConverter<DgZOrderStringCoord, long long int, DgZOrderCoord, long long int> (from, to)
 { 
-   pIDGG_ = dynamic_cast<const DgIDGGBase*>(&fromFrame());
-
-   if (!pIDGG_) {
+   // validate the to/from RF's
+   const DgZOrderStringRF* zsRF = dynamic_cast<const DgZOrderStringRF*>(&fromFrame());
+   if (!zsRF) {
       report("DgZOrderStringtoZOrderConverter::DgZOrderStringtoZOrderConverter(): "
-         " fromFrame not of type DgIDGGBase", DgBase::Fatal);
+         " fromFrame not of type DgZOrderStringRF", DgBase::Fatal);
    }
 
-   if (IDGG().gridTopo() != Hexagon) {
+   const DgZOrderRF* zRF = dynamic_cast<const DgZOrderRF*>(&toFrame());
+   if (!zRF) {
       report("DgZOrderStringtoZOrderConverter::DgZOrderStringtoZOrderConverter(): "
-         "only implemented for hexagon grids", DgBase::Fatal);
+         " toFrame not of type DgZOrderRF", DgBase::Fatal);
    }
 
-   effRes_ = IDGG().res();       // effective resolution
-   effRadix_ = IDGG().radix();   // effective radix
-   if (IDGG().aperture() == 3) {
-       effRadix_ = 3;
-       // effRes_ is the number of Class I resolutions
-       effRes_ = (effRes_ + 1) / 2;
+   if (zsRF->aperture() != zRF->aperture() || zsRF->res() != zRF->res()) {
+      report("DgZOrderStringtoZOrderConverter::DgZOrderStringtoZOrderConverter(): "
+         " fromFrame and toFrame apertures or resolutions do not match", DgBase::Fatal); 
    }
 
-   if (IDGG().gridTopo() == Triangle) effRes_++; // adjust for long double j
+   // store the res
+   res_ = zRF->res();
 
 } // DgZOrderStringtoZOrderConverter::DgZOrderStringtoZOrderConverter 
 
@@ -170,6 +168,10 @@ DgZOrderStringtoZOrderConverter::convertTypedAddress (const DgZOrderStringCoord&
    // now get the digits
    int r = 1;
    for (const char& digit: radStr) {
+      if (r > res_)
+         report("DgZOrderStringtoZOrderConverter::convertTypedAddress(): "
+         " incoming index exceeds converter resolution", DgBase::Fatal);
+
       int d = digit - '0'; // convert to int
       ZORDER_SET_INDEX_DIGIT(z, r, d);
       r++;
@@ -190,30 +192,28 @@ DgZOrderStringtoZOrderConverter::convertTypedAddress (const DgZOrderStringCoord&
 DgZOrderToZOrderStringConverter::DgZOrderToZOrderStringConverter            
                 (const DgRF<DgZOrderCoord, long long int>& from,
                  const DgRF<DgZOrderStringCoord, long long int>& to)
-        : DgConverter<DgZOrderCoord, long long int, DgZOrderStringCoord, long long int> (from, to),
-          pIDGG_ (NULL), effRes_ (0), effRadix_ (0)
+        : DgConverter<DgZOrderCoord, long long int, DgZOrderStringCoord, long long int> (from, to)
 { 
-   pIDGG_ = dynamic_cast<const DgIDGGBase*>(&toFrame());
-
-   if (!pIDGG_) {
+   // validate the to/from RF's
+   const DgZOrderRF* zRF = dynamic_cast<const DgZOrderRF*>(&fromFrame());
+   if (!zRF) {
       report("DgZOrderToZOrderStringConverter::DgZOrderToZOrderStringConverter(): "
-         " toFrame not of type DgIDGGBase", DgBase::Fatal);
+         " fromFrame not of type DgZOrderRF", DgBase::Fatal);
    }
-
-   if (IDGG().gridTopo() != Hexagon) {
+   
+   const DgZOrderStringRF* zsRF = dynamic_cast<const DgZOrderStringRF*>(&toFrame());
+   if (!zsRF) {
       report("DgZOrderToZOrderStringConverter::DgZOrderToZOrderStringConverter(): "
-         "only implemented for hexagon grids", DgBase::Fatal);
+         " toFrame not of type DgZOrderStringRF", DgBase::Fatal);
+   }
+   
+   if (zsRF->aperture() != zRF->aperture() || zsRF->res() != zRF->res()) {
+      report("DgZOrderToZOrderStringConverter::DgZOrderToZOrderStringConverter(): "
+         " fromFrame and toFrame apertures or resolutions do not match", DgBase::Fatal);
    }
 
-   effRes_ = IDGG().res();       // effective resolution
-   effRadix_ = IDGG().radix();   // effective radix
-   if (IDGG().aperture() == 3) {
-       effRadix_ = 3;
-       // effRes_ is the number of Class I resolutions
-       effRes_ = (effRes_ + 1) / 2;
-   }
-
-   if (IDGG().gridTopo() == Triangle) effRes_++; // adjust for long double j
+   // store the res
+   res_ = zRF->res();
 
 } // DgZOrderStringtoZOrderConverter::DgZOrderStringtoZOrderConverter 
 
@@ -226,7 +226,7 @@ DgZOrderToZOrderStringConverter::convertTypedAddress (const DgZOrderCoord& addIn
    int quadNum = ZORDER_GET_QUADNUM(z);
    string s = dgg::util::to_string(quadNum, 2);
 
-   for (int r = 1; r <= MAX_ZORDER_RES; r++) {
+   for (int r = 1; r <= res_; r++) {
       // get the integer digit
       char d = ZORDER_GET_INDEX_DIGIT(z, r);
       // convert to char
