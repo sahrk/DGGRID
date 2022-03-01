@@ -44,10 +44,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgIDGG::DgIDGG (const DgIDGGSBase* dggs, unsigned int aperture, int res, const string& name,
-       DgGridTopology gridTopoIn, DgGridMetric gridMetric, unsigned int precision,
+       DgGridTopology gridTopo, DgGridMetric gridMetric, const string& projType,
        bool isMixed43, int numAp4, bool isSuperfund, int sfRes, bool isApSeq,
-       const DgApSeq& apSeq)
-   : DgIDGGBase (dggs, dggs->geoRF(), aperture, res, name, gridTopoIn, gridMetric, precision),
+       const DgApSeq& apSeq, unsigned int precision)
+   : DgIDGGBase (dggs, dggs->geoRF(), aperture, res, name, gridTopo, gridMetric, precision),
      isApSeq_ (isApSeq), apSeq_ (apSeq), isMixed43_(isMixed43),
      numAp4_(numAp4), isSuperfund_(isSuperfund), sfRes_ (sfRes)
 {
@@ -56,6 +56,25 @@ DgIDGG::DgIDGG (const DgIDGGSBase* dggs, unsigned int aperture, int res, const s
       initialize();
 
 } // DgIDGG::DgIDGG
+
+/*
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+DgIDGG::DgIDGG (const DgIDGGSBase* dggs, const DgGeoSphRF& geoRF, const DgGeoCoord& vert0,
+       long double azDegs, unsigned int aperture, int res, const string& name,
+       DgGridTopology gridTopo, DgGridMetric gridMetric, const string& projType,
+       bool isMixed43, int numAp4, bool isSuperfund, int sfRes, bool isApSeq,
+       const DgApSeq& apSeq, unsigned int precision)
+   : DgIDGGBase (dggs, dggs->geoRF(), dggs->aperture, dggs->res, name, gridTopo, gridMetric, precision),
+     //geoRF_(dggs->geoRF), vert0_(vert0), azDegs_(azDegs),
+     //projType_(projType), 
+isApSeq_ (isApSeq), apSeq_ (apSeq), isMixed43_(isMixed43),
+     numAp4_(numAp4), isSuperfund_(isSuperfund), sfRes_ (sfRes)
+{
+   initialize();
+
+} // DgIDGG::DgIDGG
+*/
 
 ////////////////////////////////////////////////////////////////////////////////
 DgIDGG::DgIDGG (const DgIDGG& rfIn)
