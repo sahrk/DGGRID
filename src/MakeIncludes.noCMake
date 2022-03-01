@@ -55,6 +55,7 @@ SHIP_CC_FLAGS = -O3 -Wall -pedantic
 ADD_CC_FLAGS = $(SHIP_CC_FLAGS)
 #ADD_CC_FLAGS = $(DEBUG_CC_FLAGS)
 ADD_CC_FLAGS = $(MEMCHECK_CC_FLAGS)
+ADD_CC_FLAGS = -g -O0 -Wall -W -fsanitize=undefined -fno-omit-frame-pointer -fsanitize=address -Wall -pedantic
 
 ### the variables below are used by the Makefiles ###
 # any extra C++ flags

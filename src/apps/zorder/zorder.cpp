@@ -66,7 +66,7 @@ int main (int argc, char* argv[])
 
    // all DGGS's must be created using a factory makeRF method
    // the DGGS is memory managed by the DgRFNetwork
-   const DgIDGGS3H* idggsPtr = DgIDGGS3H::makeRF(net0, geoRF, vert0, azimuth, 12); 
+   const DgIDGGS3H* idggsPtr = DgIDGGS3H::makeRF(net0, geoRF, vert0, azimuth, 33); 
    const DgIDGGS3H& idggs = *idggsPtr;
 
    // get the resolution res dgg from the dggs
@@ -111,8 +111,9 @@ exit(1);
    cout << "* is cell " << *thePt << endl;
 
    delete thePt;
-exit(1);
+//exit(1);
    cout << "=========" << endl;
+   int count = 0;
    DgLocation* addLoc = new DgLocation(dgg.bndRF().first());
    while (dgg.bndRF().validLocation(*addLoc)) {
 
@@ -131,6 +132,10 @@ exit(1);
       cout << endl;
 
       dgg.bndRF().incrementLocation(*addLoc);
+
+      count++;
+      if (count > 1000)
+         return 0;
    }
 
    return 0;
