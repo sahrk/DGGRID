@@ -29,26 +29,55 @@
 #include <dglib/DgZOrderRF.h>
 #include <dglib/DgIDGGBase.h>
 #include <dglib/DgRadixString.h>
-/*
-#include <dglib/DgUtil.h>
-#include <dglib/DgIDGG.h>
-#include <dglib/DgDmdD4Grid2DS.h>
-#include <dglib/DgHexGrid2DS.h>
-#include <dglib/DgTriGrid2DS.h>
-#include <dglib/DgSeriesConverter.h>
-#include <dglib/DgBoundedIDGG.h>
-#include <dglib/DgProjISEA.h>
-#include <dglib/DgProjFuller.h>
-#include <dglib/DgString.h>
-*/
+
+/** max ZORDER resolution */
+#define MAX_ZORDER_RES 30
+
+/** The number of bits in a ZOrder index. */
+#define ZORDER_NUM_BITS 64
+
+/** The bit offset of the max resolution digit in a ZOrder index. */
+#define ZORDER_MAX_OFFSET 63
+
+/** The bit offset of the quad number in a ZOrder index. */
+#define ZORDER_QUAD_OFFSET 60
+
+/** 1's in the 4 quad number bits, 0's everywhere else. */
+#define ZORDER_QUAD_MASK ((uint64_t)(15) << ZORDER_QUAD_OFFSET)
+
+/** 0's in the 4 mode bits, 1's everywhere else. */
+#define ZORDER_QUAD_MASK_NEGATIVE (~ZORDER_QUAD_MASK)
+
+/** The number of bits in a single ZORDER resolution digit. */
+#define ZORDER_PER_DIGIT_OFFSET 2
+
+/** 1's in the 2 bits of highest res digit bits, 0's everywhere else. */
+#define ZORDER_DIGIT_MASK ((uint64_t)(3))
+
+/** Gets the integer quad number of a ZOrder index. */
+#define ZORDER_GET_QUADNUM(z) ((int)((((z)&ZORDER_QUAD_MASK) >> ZORDER_QUAD_OFFSET)))
+
+/** Sets the integer mode of z to v. */
+#define ZORDER_SET_QUADNUM(z, v) \
+    (z) = (((z)&ZORDER_QUAD_MASK_NEGATIVE) | (((uint64_t)(v)) << ZORDER_QUAD_OFFSET))
+
+/** Gets the resolution res integer digit of z. */
+#define ZORDER_GET_INDEX_DIGIT(z, res)                                        \
+    ((int)((((z) >> ((MAX_ZORDER_RES - (res)) * ZORDER_PER_DIGIT_OFFSET)) & \
+                  ZORDER_DIGIT_MASK)))
+
+/** Sets the resolution res digit of z to the integer digit */
+#define ZORDER_SET_INDEX_DIGIT(z, res, digit)                                  \
+    (z) = (((z) & ~((ZORDER_DIGIT_MASK                                        \
+                       << ((MAX_ZORDER_RES - (res)) * ZORDER_PER_DIGIT_OFFSET)))) | \
+            (((uint64_t)(digit))                                            \
+             << ((MAX_ZORDER_RES - (res)) * ZORDER_PER_DIGIT_OFFSET)))
 
 ////////////////////////////////////////////////////////////////////////////////
 const char*
 DgZOrderRF::str2add (DgZOrderCoord* add, const char* str, 
                          char delimiter) const
 {
-   if (!add) add = new DgZOrderCoord();
-
    char delimStr[2];
    delimStr[0] = delimiter;
    delimStr[1] = '\0';
@@ -57,8 +86,19 @@ DgZOrderRF::str2add (DgZOrderCoord* add, const char* str,
    strcpy(tmpStr, str);
    char* tok = strtok(tmpStr, delimStr);
 
-   add->setValString(tok);
+   // convert to a unit64_t
+   if (tok.length() != 15)
+      report("DgZOrderRF::str2add(): valid ZORDER indexes are 15 digits long", 
+             DgBase::Fatal);
 
+   uint64_t val = 0;
+   if (!sscanf(tok, "%" PRIx64, &val)
+      report("DgZOrderRF::str2add(): invalid ZORDER index", DgBase::Fatal);
+
+   if (!add) add = new DgZOrderCoord();
+   add->setValue(val);
+
+   // cleanup
    delete[] tmpStr;
 
    unsigned long offset = strlen(tok) + 1;
@@ -66,6 +106,16 @@ DgZOrderRF::str2add (DgZOrderCoord* add, const char* str,
    else return &str[offset];
 
 } // const char* DgZOrderRF::str2add
+
+////////////////////////////////////////////////////////////////////////////////
+const string& 
+DgZOrderRF::valString (void) const
+{
+   char str[17]; // max 16 digits plus 1 for the null terminator
+   sprintf(str, "%" PRIx64, value_);
+   return string(str);
+
+} // const string& DgZOrderRF::valString
 
 ////////////////////////////////////////////////////////////////////////////////
 DgZOrderStringtoZOrderConverter::DgZOrderStringtoZOrderConverter 
@@ -102,36 +152,39 @@ DgZOrderStringtoZOrderConverter::DgZOrderStringtoZOrderConverter
 DgZOrderCoord 
 DgZOrderStringtoZOrderConverter::convertTypedAddress (const DgZOrderStringCoord& addIn) const
 {
-   string qstr = dgg::util::to_string(addIn.quadNum(), 2);
+//dgcout << " -> " << addIn << endl;
 
-//dgcout << "** addIn " << addIn << endl;
-   DgRadixString rs1(effRadix_, (int) addIn.coord().i(), effRes_);
-   DgRadixString rs2(effRadix_, (int) addIn.coord().j(), effRes_);
+   string addstr = addIn.valString();
+   uint64_t z = 0;
 
-//dgcout << "rs1 " << rs1 << endl;
-//dgcout << "rs2 " << rs2 << endl;
+   // first get the quad number and add to the val
+   string qstr = addstr.substr(0, 2);
+   if (qstr[0] == '0') // leading 0
+      qstr = qstr.substr(1, 1);
+   int quadNum = std::stoi(qstr);
+   ZORDER_SET_QUADNUM(z, quadNum);
 
-   string addstr = qstr;
-/*
-   if (IDGG().aperture() == 3) {
-      dgcout << "Class " << ((IDGG().isClassI()) ? "I" : "II") << endl;
+   int index = 2; // skip the two quad digits
+
+   // the rest is the radix string
+   string radStr = addstr.substr(index);
+
+   // now get the digits
+   int r = 1;
+   for (const char& digit: radStr) {
+      int d = digit - '0'; // convert to int
+      ZORDER_SET_INDEX_DIGIT(z, r, d);
+      r++;
    }
-*/
-   addstr = addstr + 
-     DgRadixString::digitInterleave(rs1, rs2, !((IDGG().aperture() == 3)));
 
-//dgcout << "addstr " << addstr << endl;
-   // trim last digit if Class II
-   if (IDGG().aperture() == 3 && !IDGG().isClassI() && addstr.length()) {
-      addstr.pop_back();
-   }
-//dgcout << "trimmed " << addstr << endl;
+   //dgcout << "qstr: " << qstr << " rad1: " << rad1 << " rad2: " << rad2 << endl;
 
-   DgZOrderCoord zorder;
-   zorder.setValString(addstr);
-//dgcout << "zorder " << zorder << endl;
+   DgZOrderCoord coord();
+   coord.setValue(z);
 
-   return zorder;
+   //dgcout << "coord: " << coord << endl;
+
+   return coord;
 
 } // DgZOrderCoord DgZOrderStringtoZOrderConverter::convertTypedAddress 
 
@@ -170,67 +223,23 @@ DgZOrderToZOrderStringConverter::DgZOrderToZOrderStringConverter
 DgZOrderStringCoord 
 DgZOrderToZOrderStringConverter::convertTypedAddress (const DgZOrderCoord& addIn) const
 {
-//dgcout << " -> " << addIn << endl;
-   string addstr = addIn.valString();
+   uint64_t z = addIn.value();
 
-   // first get the quad number
-   string qstr = addstr.substr(0, 2);
-   if (qstr[0] == '0') // leading 0
-      qstr = qstr.substr(1, 1);
-   int quadNum = std::stoi(qstr);
+   int quadNum = ZORDER_GET_QUADNUM(z);
+   string s = dgg::util::to_string(quadNum, 2);
 
-   int index = 2; // skip the two quad digits
-
-   // the rest is the radix string
-   string radStr = addstr.substr(index);
-
-   // split out the interleaved digits
-   string radStr1 = "";
-   string radStr2 = "";
-
-   if (IDGG().aperture() == 3) {
-      bool isIdigit = true; // first char is an i digit
-      int lastIdigit = 0;
-      for (const char& digit: radStr) {
-         if (isIdigit) {
-            radStr1 += dgg::util::to_string(digit);
-            lastIdigit = digit - '0';
-         } else
-            radStr2 += dgg::util::to_string(digit);
-
-         isIdigit = !isIdigit;
-      }
-
-      if (!IDGG().isClassI()) {
-         // add the last j digit based on the last i digit
-         string jDigits[] = { "0", "2", "1" };
-         radStr2 += jDigits[lastIdigit];
-      }
-
-   } else {
-
-      for (const char& digit: radStr) {
-
-         // break out the interleaved digits
-         int d = digit - '0'; // convert to int
-         int c1 = (int) (d / effRadix_);
-
-         int c2 = (d % effRadix_);
-
-         radStr1 += dgg::util::to_string(c1);
-         radStr2 += dgg::util::to_string(c2);
-      }
+   for (int r = 1; r <= MAX_ZORDER_RES; r++) {
+      char digit = ZORDER_GET_INDEX_DIGIT(z, r);
+      string d = string((char) (digit + '0')); 
+      s += d;
    }
 
-   DgRadixString rad1(effRadix_, radStr1);
-   DgRadixString rad2(effRadix_, radStr2);
+   DgZOrderStringCoord zStr;
+   zStr.setValString(s);
 
-   //dgcout << "qstr: " << qstr << " rad1: " << rad1 << " rad2: " << rad2 << endl;
+//dgcout << "zorderStr " << zStr << endl;
 
-   DgZOrderStringCoord q2di(quadNum, DgIVec2D(rad1.value(), rad2.value()));
-   //dgcout << "q2di: " << q2di << endl;
-
-   return q2di;
+   return zorder;
 
 } // DgZOrderStringCoord DgZOrderToZOrderStringConverter::convertTypedAddress 
 

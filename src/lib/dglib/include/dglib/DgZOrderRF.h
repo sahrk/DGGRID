@@ -31,6 +31,7 @@
 #include <dglib/DgConverter.h>
 #include <dglib/Dg2WayConverter.h>
 
+class DgZOrderCoord;
 class DgZOrderStringCoord;
 class DgIDGGBase;
 class DgZOrderCoord;
@@ -105,33 +106,35 @@ class DgZOrderCoord  {
 
       static const DgZOrderCoord undefDgZOrderCoord;
 
-      DgZOrderCoord (void) { }
+      DgZOrderCoord (void) : value_ (0) { }
 
       DgZOrderCoord (const DgZOrderCoord& coord)
-              { valString_ = coord.valString(); }
+              { value_ = coord.value(); }
 
-      void setValString (const string strIn) { valString_ = strIn; }
+      void setValue (uint64_t value) { value_ = value; }
 
-      const string& valString (void) const { return valString_; }
+      uint64_t value (void) const { return value_; }
 
       operator string (void) const { return valString(); }
 
+      const string& valString (void) const;
+
       bool operator== (const DgZOrderCoord& c) const
-          { return valString() == c.valString(); }
+          { return value() == c.value(); }
 
       bool operator!= (const DgZOrderCoord& c) const
           { return !(*this == c); }
 
       DgZOrderCoord& operator= (const DgZOrderCoord& add)
           {
-             if (add != *this) setValString(add.valString());
+             if (add != *this) setValue(add.value());
 
              return *this;
           }
 
    private:
 
-      string valString_;
+      uint64_t value_;
 };
 
 ////////////////////////////////////////////////////////////////////////////////

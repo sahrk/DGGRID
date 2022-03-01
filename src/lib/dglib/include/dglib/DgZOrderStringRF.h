@@ -33,6 +33,7 @@
 
 class DgQ2DICoord;
 class DgIDGGBase;
+class DgZOrderCoord;
 class DgZOrderStringCoord;
 
 using namespace std;

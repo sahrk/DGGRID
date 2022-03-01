@@ -193,7 +193,7 @@ DgIDGGBase::createConverters (void)
 
    Dg2WayConverter* toZOrderStr = NULL;
    Dg2WayConverter* toZOrder = NULL;
-   if (zorderStringRF()) {
+   if (zorderStrRF()) {
       toZOrderStr = new Dg2WayZOrderStringConverter(*this, *zorderStrRF());
 
       if (zorderRF())
@@ -245,11 +245,18 @@ DgIDGGBase::createConverters (void)
 
    // vertexRF -> zorderStrRF
    if (zorderStrRF()) {
-      sc.push_back(c3to4);
-      sc.push_back(c4to5);
+      sc.push_back(network().getConverter(vertexRF(), *this));
       sc.push_back(&toZOrderStr->forward());
       new DgSeriesConverter(sc, true);
       sc.resize(0);
+
+      // vertexRF -> zorderRF
+      if (zorderRF()) {
+         sc.push_back(network().getConverter(vertexRF(), *zorderStrRF()));
+         sc.push_back(&toZOrder->forward());
+         new DgSeriesConverter(sc, true);
+         sc.resize(0);
+      }
    }
 
    /// now do from projTriRF
@@ -273,10 +280,18 @@ DgIDGGBase::createConverters (void)
 
    // projTriRF -> zorderStrRF
    if (zorderStrRF()) {
-      sc.push_back(c2to3);
-      sc.push_back(network().getConverter(vertexRF(), *zorderStrRF()));
+      sc.push_back(network().getConverter(projTriRF(), *this));
+      sc.push_back(&toZOrderStr->forward());
       new DgSeriesConverter(sc, true);
       sc.resize(0);
+      
+      // projTriRF -> zorderRF
+      if (zorderRF()) {
+         sc.push_back(network().getConverter(projTriRF(), *zorderStrRF()));
+         sc.push_back(&toZOrder->forward());
+         new DgSeriesConverter(sc, true);
+         sc.resize(0);
+      }
    }
 
    /// do from Q2DD
@@ -304,10 +319,18 @@ DgIDGGBase::createConverters (void)
 
    // Q2DD -> zorderStrRF
    if (zorderStrRF()) {
-      sc.push_back(c4to3);
-      sc.push_back(network().getConverter(vertexRF(), *zorderStrRF()));
+      sc.push_back(network().getConverter(q2ddRF(), *this));
+      sc.push_back(&toZOrderStr->forward());
       new DgSeriesConverter(sc, true);
       sc.resize(0);
+      
+      // Q2DD -> zorderRF
+      if (zorderRF()) {
+         sc.push_back(network().getConverter(q2ddRF(), *zorderStrRF()));
+         sc.push_back(&toZOrder->forward());
+         new DgSeriesConverter(sc, true);
+         sc.resize(0);
+      }
    }
 
    /// do from Q2DI
@@ -334,6 +357,14 @@ DgIDGGBase::createConverters (void)
 
    // Q2DI -> Q2DD is c5to4 above
    // Q2DI -> zorderStrRF is toZOrderStr->forward() above
+
+   // Q2DI -> zorderRF
+   if (zorderStrRF() && zorderRF()) {
+      sc.push_back(&toZOrderStr->forward());
+      sc.push_back(&toZOrder->forward());
+      new DgSeriesConverter(sc, true);
+      sc.resize(0);
+   }
 
    /// finally from geoRF
 
@@ -363,9 +394,83 @@ DgIDGGBase::createConverters (void)
    // geoRF -> zorderStrRF
    if (zorderStrRF()) {
       sc.push_back(network().getConverter(geoRF(), *this));
-      sc.push_back(&toZOrder->forward());
+      sc.push_back(&toZOrderStr->forward());
       new DgSeriesConverter(sc, true);
       sc.resize(0);
+      
+      // geoRF -> zorderRF
+      if (zorderRF()) {
+         sc.push_back(network().getConverter(geoRF(), *zorderStrRF()));
+         sc.push_back(&toZOrder->forward());
+         new DgSeriesConverter(sc, true);
+         sc.resize(0);
+      }
+   }
+
+   // zorderStrRF -> all
+   if (zorderStrRF()) {
+      // -> vertexRF
+      sc.push_back(&toZOrderStr->inverse());
+      sc.push_back(network().getConverter(*this, vertexRF()));
+      new DgSeriesConverter(sc, true);
+      sc.resize(0);
+      
+      // -> projTriRF
+      sc.push_back(&toZOrderStr->inverse());
+      sc.push_back(network().getConverter(*this, projTriRF()));
+      new DgSeriesConverter(sc, true);
+      sc.resize(0);
+      
+      // -> planeRF
+      sc.push_back(&toZOrderStr->inverse());
+      sc.push_back(network().getConverter(*this, planeRF()));
+      new DgSeriesConverter(sc, true);
+      sc.resize(0);
+      
+      // -> q2ddRF
+      sc.push_back(&toZOrderStr->inverse());
+      sc.push_back(network().getConverter(*this, q2ddRF()));
+      new DgSeriesConverter(sc, true);
+      sc.resize(0);
+      
+      // -> geoRF
+      sc.push_back(&toZOrderStr->inverse());
+      sc.push_back(network().getConverter(*this, geoRF()));
+      new DgSeriesConverter(sc, true);
+      sc.resize(0);
+      
+      // zorderRF -> all
+      if (zorderRF()) {
+         // -> vertexRF
+         sc.push_back(&toZOrder->inverse());
+         sc.push_back(network().getConverter(*zorderStrRF(), vertexRF()));
+         new DgSeriesConverter(sc, true);
+         sc.resize(0);
+
+         // -> projTriRF
+         sc.push_back(&toZOrder->inverse());
+         sc.push_back(network().getConverter(*zorderStrRF(), projTriRF()));
+         new DgSeriesConverter(sc, true);
+         sc.resize(0);
+
+         // -> planeRF
+         sc.push_back(&toZOrder->inverse());
+         sc.push_back(network().getConverter(*zorderStrRF(), planeRF()));
+         new DgSeriesConverter(sc, true);
+         sc.resize(0);
+
+         // -> q2ddRF
+         sc.push_back(&toZOrder->inverse());
+         sc.push_back(network().getConverter(*zorderStrRF(), q2ddRF()));
+         new DgSeriesConverter(sc, true);
+         sc.resize(0);
+
+         // -> geoRF
+         sc.push_back(&toZOrder->inverse());
+         sc.push_back(network().getConverter(*zorderStrRF(), geoRF()));
+         new DgSeriesConverter(sc, true);
+         sc.resize(0);
+      }
    }
 
 } // DgIDGGBase::createConverters
