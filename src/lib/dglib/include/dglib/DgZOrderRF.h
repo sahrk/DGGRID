@@ -117,7 +117,7 @@ class DgZOrderCoord  {
 
       operator string (void) const { return valString(); }
 
-      const string& valString (void) const;
+      string valString (void) const;
 
       bool operator== (const DgZOrderCoord& c) const
           { return value() == c.value(); }

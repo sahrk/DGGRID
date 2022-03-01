@@ -25,8 +25,10 @@
 #include <cmath>
 #include <climits>
 #include <cfloat>
+#include <inttypes.h>
 
 #include <dglib/DgZOrderRF.h>
+#include <dglib/DgZOrderStringRF.h>
 #include <dglib/DgIDGGBase.h>
 #include <dglib/DgRadixString.h>
 
@@ -87,12 +89,8 @@ DgZOrderRF::str2add (DgZOrderCoord* add, const char* str,
    char* tok = strtok(tmpStr, delimStr);
 
    // convert to a unit64_t
-   if (tok.length() != 15)
-      report("DgZOrderRF::str2add(): valid ZORDER indexes are 15 digits long", 
-             DgBase::Fatal);
-
    uint64_t val = 0;
-   if (!sscanf(tok, "%" PRIx64, &val)
+   if (!sscanf(tok, "%" PRIx64, &val))
       report("DgZOrderRF::str2add(): invalid ZORDER index", DgBase::Fatal);
 
    if (!add) add = new DgZOrderCoord();
@@ -108,8 +106,8 @@ DgZOrderRF::str2add (DgZOrderCoord* add, const char* str,
 } // const char* DgZOrderRF::str2add
 
 ////////////////////////////////////////////////////////////////////////////////
-const string& 
-DgZOrderRF::valString (void) const
+string 
+DgZOrderCoord::valString (void) const
 {
    char str[17]; // max 16 digits plus 1 for the null terminator
    sprintf(str, "%" PRIx64, value_);
@@ -179,7 +177,7 @@ DgZOrderStringtoZOrderConverter::convertTypedAddress (const DgZOrderStringCoord&
 
    //dgcout << "qstr: " << qstr << " rad1: " << rad1 << " rad2: " << rad2 << endl;
 
-   DgZOrderCoord coord();
+   DgZOrderCoord coord;
    coord.setValue(z);
 
    //dgcout << "coord: " << coord << endl;
@@ -229,8 +227,11 @@ DgZOrderToZOrderStringConverter::convertTypedAddress (const DgZOrderCoord& addIn
    string s = dgg::util::to_string(quadNum, 2);
 
    for (int r = 1; r <= MAX_ZORDER_RES; r++) {
-      char digit = ZORDER_GET_INDEX_DIGIT(z, r);
-      string d = string((char) (digit + '0')); 
+      // get the integer digit
+      char d = ZORDER_GET_INDEX_DIGIT(z, r);
+      // convert to char
+      d += '0';
+      // append to index string
       s += d;
    }
 
@@ -239,7 +240,7 @@ DgZOrderToZOrderStringConverter::convertTypedAddress (const DgZOrderCoord& addIn
 
 //dgcout << "zorderStr " << zStr << endl;
 
-   return zorder;
+   return zStr;
 
 } // DgZOrderStringCoord DgZOrderToZOrderStringConverter::convertTypedAddress 
 

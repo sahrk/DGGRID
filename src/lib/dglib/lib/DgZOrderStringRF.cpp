@@ -68,7 +68,7 @@ DgZOrderStringRF::str2add (DgZOrderStringCoord* add, const char* str,
 } // const char* DgZOrderStringRF::str2add
 
 ////////////////////////////////////////////////////////////////////////////////
-DgQ2DItoZOrderConverter::DgQ2DItoZOrderConverter 
+DgQ2DItoZOrderStringConverter::DgQ2DItoZOrderStringConverter 
                 (const DgRF<DgQ2DICoord, long long int>& from,
                  const DgRF<DgZOrderStringCoord, long long int>& to)
         : DgConverter<DgQ2DICoord, long long int, DgZOrderStringCoord, long long int> (from, to),
@@ -77,12 +77,12 @@ DgQ2DItoZOrderConverter::DgQ2DItoZOrderConverter
    pIDGG_ = dynamic_cast<const DgIDGGBase*>(&fromFrame());
 
    if (!pIDGG_) {
-      report("DgQ2DItoZOrderConverter::DgQ2DItoZOrderConverter(): "
+      report("DgQ2DItoZOrderStringConverter::DgQ2DItoZOrderStringConverter(): "
          " fromFrame not of type DgIDGGBase", DgBase::Fatal);
    }
 
    if (IDGG().gridTopo() != Hexagon) {
-      report("DgQ2DItoZOrderConverter::DgQ2DItoZOrderConverter(): "
+      report("DgQ2DItoZOrderStringConverter::DgQ2DItoZOrderStringConverter(): "
          "only implemented for hexagon grids", DgBase::Fatal);
    }
 
@@ -96,11 +96,11 @@ DgQ2DItoZOrderConverter::DgQ2DItoZOrderConverter
 
    if (IDGG().gridTopo() == Triangle) effRes_++; // adjust for long double j
 
-} // DgQ2DItoZOrderConverter::DgQ2DItoZOrderConverter 
+} // DgQ2DItoZOrderStringConverter::DgQ2DItoZOrderStringConverter 
 
 ////////////////////////////////////////////////////////////////////////////////
 DgZOrderStringCoord 
-DgQ2DItoZOrderConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
+DgQ2DItoZOrderStringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
 {
    string qstr = dgg::util::to_string(addIn.quadNum(), 2);
 
@@ -133,10 +133,10 @@ DgQ2DItoZOrderConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
 
    return zorder;
 
-} // DgZOrderStringCoord DgQ2DItoZOrderConverter::convertTypedAddress 
+} // DgZOrderStringCoord DgQ2DItoZOrderStringConverter::convertTypedAddress 
 
 ////////////////////////////////////////////////////////////////////////////////
-DgZOrderToQ2DIConverter::DgZOrderToQ2DIConverter            
+DgZOrderStringToQ2DIConverter::DgZOrderStringToQ2DIConverter            
                 (const DgRF<DgZOrderStringCoord, long long int>& from,
                  const DgRF<DgQ2DICoord, long long int>& to)
         : DgConverter<DgZOrderStringCoord, long long int, DgQ2DICoord, long long int> (from, to),
@@ -145,12 +145,12 @@ DgZOrderToQ2DIConverter::DgZOrderToQ2DIConverter
    pIDGG_ = dynamic_cast<const DgIDGGBase*>(&toFrame());
 
    if (!pIDGG_) {
-      report("DgZOrderToQ2DIConverter::DgZOrderToQ2DIConverter(): "
+      report("DgZOrderStringToQ2DIConverter::DgZOrderStringToQ2DIConverter(): "
          " toFrame not of type DgIDGGBase", DgBase::Fatal);
    }
 
    if (IDGG().gridTopo() != Hexagon) {
-      report("DgZOrderToQ2DIConverter::DgZOrderToQ2DIConverter(): "
+      report("DgZOrderStringToQ2DIConverter::DgZOrderStringToQ2DIConverter(): "
          "only implemented for hexagon grids", DgBase::Fatal);
    }
 
@@ -164,11 +164,11 @@ DgZOrderToQ2DIConverter::DgZOrderToQ2DIConverter
 
    if (IDGG().gridTopo() == Triangle) effRes_++; // adjust for long double j
 
-} // DgQ2DItoZOrderConverter::DgQ2DItoZOrderConverter 
+} // DgQ2DItoZOrderStringConverter::DgQ2DItoZOrderStringConverter 
 
 ////////////////////////////////////////////////////////////////////////////////
 DgQ2DICoord 
-DgZOrderToQ2DIConverter::convertTypedAddress (const DgZOrderStringCoord& addIn) const
+DgZOrderStringToQ2DIConverter::convertTypedAddress (const DgZOrderStringCoord& addIn) const
 {
 //dgcout << " -> " << addIn << endl;
    string addstr = addIn.valString();
@@ -232,7 +232,7 @@ DgZOrderToQ2DIConverter::convertTypedAddress (const DgZOrderStringCoord& addIn) 
 
    return q2di;
 
-} // DgQ2DICoord DgZOrderToQ2DIConverter::convertTypedAddress 
+} // DgQ2DICoord DgZOrderStringToQ2DIConverter::convertTypedAddress 
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

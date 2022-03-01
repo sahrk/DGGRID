@@ -32,6 +32,7 @@ using namespace std;
 #include <dglib/DgIDGGS4D.h>
 #include <dglib/DgBoundedIDGG.h>
 #include <dglib/DgZOrderRF.h>
+#include <dglib/DgZOrderStringRF.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 int main (int argc, char* argv[])
@@ -79,9 +80,9 @@ cout << *thePt << endl;
 exit(1);
 */
 
-   DgZOrderRF& zRF = *(DgZOrderRF::makeRF(net0, "zRF"));
-   new Dg2WayZOrderConverter(dgg, zRF);
-   zRF.convert(thePt);
+   const DgZOrderStringRF& zStrRF = *dgg.zorderStrRF();
+   const DgZOrderRF& zRF = *dgg.zorderRF();
+   zStrRF.convert(thePt);
    cout << "* zorder " << *thePt << endl;
    dgg.convert(thePt);
    cout << "* is cell " << *thePt << endl;
@@ -94,7 +95,7 @@ exit(1);
 
       DgQ2DICoord start = *dgg.getAddress(*addLoc);
       cout << (*addLoc) << " -> ";
-      zRF.convert(addLoc);
+      zStrRF.convert(addLoc);
       cout << (*addLoc) << " -> ";
       dgg.convert(addLoc);
       cout << (*addLoc);

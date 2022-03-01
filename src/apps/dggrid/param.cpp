@@ -96,8 +96,8 @@ MainParam::addressTypeToRF (MainParam& dp, const DgIDGGBase& dgg, bool isInput)
             ::report("input_address_type of ZORDER_STRING not supported for dggs_aperture_type of SEQUENCE", 
                      DgBase::Fatal);
 
-         if (dgg.zorderStringRF())
-            rf = dgg.zorderStringRF();
+         if (dgg.zorderStrRF())
+            rf = dgg.zorderStrRF();
          else
             ::report("addressTypeToRF(): ZORDER_STRING only supported for aperture 3 or 4",
                      DgBase::Fatal);

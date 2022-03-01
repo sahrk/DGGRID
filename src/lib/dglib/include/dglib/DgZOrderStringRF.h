@@ -39,12 +39,12 @@ class DgZOrderStringCoord;
 using namespace std;
 
 ////////////////////////////////////////////////////////////////////////////////
-class DgQ2DItoZOrderConverter :
+class DgQ2DItoZOrderStringConverter :
         public DgConverter<DgQ2DICoord, long long int, DgZOrderStringCoord, long long int>
 {
    public:
 
-      DgQ2DItoZOrderConverter (const DgRF<DgQ2DICoord, long long int>& from,
+      DgQ2DItoZOrderStringConverter (const DgRF<DgQ2DICoord, long long int>& from,
                                    const DgRF<DgZOrderStringCoord, long long int>& to);
 
       const DgIDGGBase& IDGG (void) const { return *pIDGG_; }
@@ -83,13 +83,13 @@ class DgZOrderStringToQ2DIConverter :
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-class Dg2WayZOrderConverter : public Dg2WayConverter {
+class Dg2WayZOrderStringConverter : public Dg2WayConverter {
 
    public:
 
-      Dg2WayZOrderConverter (const DgRF<DgQ2DICoord, long long int>& fromFrame,
+      Dg2WayZOrderStringConverter (const DgRF<DgQ2DICoord, long long int>& fromFrame,
               const DgRF<DgZOrderStringCoord, long long int>& toFrame)
-         : Dg2WayConverter (*(new DgQ2DItoZOrderConverter(fromFrame, toFrame)),
+         : Dg2WayConverter (*(new DgQ2DItoZOrderStringConverter(fromFrame, toFrame)),
               *(new DgZOrderStringToQ2DIConverter(toFrame, fromFrame))) {}
 };
 
