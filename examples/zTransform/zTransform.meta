@@ -22,12 +22,14 @@ dggs_type ISEA3H
 dggs_res_spec 9
 
 # specify bin controls
-input_file_name inputfiles/20k.txt
+input_file_name inputfiles/geo.txt
 input_address_type GEO
+#input_file_name inputfiles/zorder.txt
+#input_address_type ZORDER
 input_delimiter " "
 
 # specify the output
-output_file_name outputfiles/cities3h9.txt
+output_file_name outputfiles/output.txt
 output_address_type ZORDER
 #output_address_type ZORDER_STRING
-output_delimiter ","
+output_delimiter " "

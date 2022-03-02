@@ -236,10 +236,12 @@ GridGenParam::GridGenParam (DgParamList& plist)
          report("dggs_type of SUPERFUND requires "
                    "output_cell_label_type of SUPERFUND", DgBase::Fatal);
 
-      if (outLblType == "ENUMERATION")
+      useEnumLbl = false;
+      outSeqNum = false;
+      if (outLblType == "GLOBAL_SEQUENCE") 
+         outSeqNum = true;
+      if (outLblType == "ENUMERATION") 
          useEnumLbl = true;
-      else
-         useEnumLbl = false;
 
       doRandPts = false;
       if (randPtsOutType != "NONE")
@@ -1078,10 +1080,15 @@ void outputCellAdd2D (GridGenParam& dp, const DgIDGGSBase& dggs,
 
    unsigned long long int sn = dgg.bndRF().seqNum(add2D);
    string *label;
-   if (dp.useEnumLbl)
-      label = new string(dgg::util::to_string(dp.nCellsAccepted));
-   else
+   if (dp.outSeqNum)
       label = new string(dgg::util::to_string(sn));
+   else if (dp.useEnumLbl)
+      label = new string(dgg::util::to_string(dp.nCellsAccepted));
+   else {
+      DgLocation tmpLoc(add2D);
+      dp.pOutRF->convert(&tmpLoc);
+      label = new string(tmpLoc.asString(dp.outputDelimiter));
+   }
 
    outputCell(dp, dggs, dgg, add2D, verts, deg, *label);
    delete label;
@@ -1105,6 +1112,20 @@ void genGrid (GridGenParam& dp)
 
    // set-up to convert to degrees
    const DgGeoSphDegRF& deg = *(DgGeoSphDegRF::makeRF(geoRF, geoRF.name() + "Deg"));
+
+   // set-up the input reference frame
+   MainParam::addressTypeToRF(dp, dgg, true);
+   if (!dp.pInRF)
+      ::report("genGrid(): invalid input RF", DgBase::Fatal);
+
+   // set-up the output reference frame
+   if (dp.outSeqNum || dp.useEnumLbl)
+      dp.pOutRF = &dgg;
+   else if (!dp.isSuperfund) { // use input address type
+      MainParam::addressTypeToRF(dp, dgg, false);
+      if (!dp.pOutRF)
+         ::report("genGrid(): invalid output RF", DgBase::Fatal);
+   }
 
    // create output files that rely on having the RF's created
 

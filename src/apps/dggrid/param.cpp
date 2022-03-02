@@ -722,10 +722,11 @@ DgGridPList::init2 (void)
    // precision <int> (0 <= v <= 30)
    insertParam(new DgIntParam("precision", DEFAULT_PRECISION, 0, INT_MAX));
 
-   // output_cell_label_type <GLOBAL_SEQUENCE | ENUMERATION | SUPERFUND>
+   // output_cell_label_type <GLOBAL_SEQUENCE | ENUMERATION | SUPERFUND | OUTPUT_ADDRESS_TYPE >
    choices.push_back(new string("GLOBAL_SEQUENCE"));
    choices.push_back(new string("ENUMERATION"));
    choices.push_back(new string("SUPERFUND"));
+   choices.push_back(new string("OUTPUT_ADDRESS_TYPE"));
    insertParam(new DgStringChoiceParam("output_cell_label_type", "GLOBAL_SEQUENCE", 
                &choices));
    dgg::util::release(choices);
