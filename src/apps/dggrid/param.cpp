@@ -65,9 +65,11 @@ MainParam::addressTypeToRF (MainParam& dp, const DgIDGGBase& dgg, bool isInput)
          break;
 
       case SeqNum:
+/*
          if (dp.isApSeq)
             ::report("input_address_type of SEQNUM not supported for dggs_aperture_type of SEQUENCE",
                   DgBase::Fatal);
+*/
 
          seqNum = true;
          rf = &dgg;
