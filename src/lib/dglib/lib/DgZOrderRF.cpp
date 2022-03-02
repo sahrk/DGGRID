@@ -96,10 +96,8 @@ DgZOrderRF::str2add (DgZOrderCoord* add, const char* str,
    if (!add) add = new DgZOrderCoord();
    add->setValue(val);
 
-   // cleanup
-   delete[] tmpStr;
-
    unsigned long offset = strlen(tok) + 1;
+   delete[] tmpStr;
    if (offset >= strlen(str)) return 0;
    else return &str[offset];
 
