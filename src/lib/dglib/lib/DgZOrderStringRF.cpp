@@ -113,7 +113,9 @@ DgZOrderStringCoord
 DgQ2DItoZOrderStringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
 {
    string qstr = dgg::util::to_string(addIn.quadNum(), 2);
+   string addstr = qstr;
 
+   if (effRes_ > 0) {
 //dgcout << "** addIn " << addIn << endl;
    DgRadixString rs1(effRadix_, (int) addIn.coord().i(), effRes_);
    DgRadixString rs2(effRadix_, (int) addIn.coord().j(), effRes_);
@@ -121,7 +123,6 @@ DgQ2DItoZOrderStringConverter::convertTypedAddress (const DgQ2DICoord& addIn) co
 //dgcout << "rs1 " << rs1 << endl;
 //dgcout << "rs2 " << rs2 << endl;
 
-   string addstr = qstr;
 /*
    if (IDGG().aperture() == 3) {
       dgcout << "Class " << ((IDGG().isClassI()) ? "I" : "II") << endl;
@@ -136,6 +137,7 @@ DgQ2DItoZOrderStringConverter::convertTypedAddress (const DgQ2DICoord& addIn) co
       addstr.pop_back();
    }
 //dgcout << "trimmed " << addstr << endl;
+   }
 
    DgZOrderStringCoord zorder;
    zorder.setValString(addstr);
