@@ -411,11 +411,11 @@ void binPresPartial (BinPresenceParam& dp)
             *dp.outFile << sNum << dp.outputDelimiter;
          else
          {
-            DgLocation* tloc = dgg.bndRF().locFromSeqNum(sNum);
+            //DgLocation* tloc = dgg.bndRF().locFromSeqNum(sNum);
             outRF.convert(tloc);
             *dp.outFile << tloc->asString(dp.outputDelimiter)
                         << dp.outputDelimiter;
-            delete tloc;
+            //delete tloc;
          }
 
          if (dp.outputCount) *dp.outFile << count << dp.outputDelimiter;
