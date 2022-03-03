@@ -31,22 +31,22 @@
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutNeighborsFile::DgOutNeighborsFile (const string& fileName, 
-         const DgRFBase* outRF, const string& suffix, DgReportLevel failLevel)
-   : outRF_ (outRF), DgOutputStream (fileName, suffix, failLevel)
+         const DgIDGGBase& dgg, const DgRFBase* outRF, const string& suffix, 
+         DgReportLevel failLevel)
+   : DgOutputStream (fileName, suffix, failLevel), dgg_ (dgg), outRF_ (outRF)
 {
 
 } // DgOutNeighborsFile::DgOutNeighborsFile
 
 ////////////////////////////////////////////////////////////////////////////////
 DgOutNeighborsFile& 
-DgOutNeighborsFile::insert (const DgIDGGBase& dgg, const DgLocation& center,
-           DgLocVector& vec)
+DgOutNeighborsFile::insert (const DgLocation& center, DgLocVector& vec)
 {
    if (!outRF_) { // indicates seqnum output
-      unsigned long long int sn = dgg.bndRF().seqNum(center);
+      unsigned long long int sn = dgg_.bndRF().seqNum(center);
       *this << sn;
       for (int i = 0; i < vec.size(); i++)
-         *this << " " << dgg.bndRF().seqNum(vec[i]);
+         *this << " " << dgg_.bndRF().seqNum(vec[i]);
    } else {
       DgLocation tmpLoc(center);
       outRF_->convert(&tmpLoc);
