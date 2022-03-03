@@ -66,7 +66,7 @@ MainParam::addressTypeToRF (MainParam& dp, const DgIDGGBase& dgg, bool isInput)
 
       case SeqNum:
 /*
-         if (dp.isApSeq)
+         if (isInput && dp.isApSeq)
             ::report("input_address_type of SEQNUM not supported for dggs_aperture_type of SEQUENCE",
                   DgBase::Fatal);
 */
@@ -654,7 +654,8 @@ DgGridPList::DgGridPList (void)
    // geodetic_densify <long double: decimal degrees> (v >= 0.0)
    insertParam(new DgDoubleParam("geodetic_densify", 0.0, 0.0, 360.0));
 
-   // clip_subset_type <WHOLE_EARTH | AIGEN | SHAPEFILE | GDAL | SEQNUMS | ADDRESSES | COARSE_CELLS >
+   // clip_subset_type <WHOLE_EARTH | AIGEN | SHAPEFILE | GDAL | SEQNUMS | ADDRESSES |
+   //                    COARSE_CELLS | INPUT_ADDRESS_TYPE >
    choices.push_back(new string("WHOLE_EARTH"));
    choices.push_back(new string("AIGEN"));
    choices.push_back(new string("SHAPEFILE"));
@@ -665,6 +666,7 @@ DgGridPList::DgGridPList (void)
    choices.push_back(new string("ADDRESSES"));
    choices.push_back(new string("POINTS"));
    choices.push_back(new string("COARSE_CELLS"));
+   choices.push_back(new string("INPUT_ADDRESS_TYPE"));
    insertParam(new DgStringChoiceParam("clip_subset_type", "WHOLE_EARTH", 
                &choices));
    dgg::util::release(choices);

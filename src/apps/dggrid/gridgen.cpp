@@ -72,7 +72,8 @@ using namespace dgg::topo;
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 GridGenParam::GridGenParam (DgParamList& plist)
-      : MainParam(plist), wholeEarth (false), regionClip (false), seqToPoly(false), pointClip (false),
+      : MainParam(plist), wholeEarth (false), regionClip (false), seqToPoly(false), 
+        indexToPoly (false), pointClip (false),
         cellClip (false), useGDAL (false),
         clipAIGen (false), clipGDAL(false), clipShape(false), clipCellRes (0), nClipCellDensify (1),
         nRandPts (0), clipRandPts (false), nDensify (1),
@@ -94,7 +95,8 @@ GridGenParam::GridGenParam (DgParamList& plist)
       clipAIGen = false;
       clipGDAL = false;
       seqToPoly = false;
-      if (dummy == "WHOLE_EARTH")
+      indexToPoly = false;
+      if (dummy == "WHOLE_EARTH") 
          wholeEarth = true;
       else if (dummy == "AIGEN"){
          regionClip = true;
@@ -119,6 +121,11 @@ GridGenParam::GridGenParam (DgParamList& plist)
          pointClip = true;
       } else if (dummy == "COARSE_CELLS") {
          cellClip = true;
+      } else if (dummy == "INPUT_ADDRESS_TYPE") {
+         if (inAddType == dgg::addtype::SeqNum)
+            seqToPoly = true;
+         else
+            indexToPoly = true;
       } else
          ::report("Unrecognised value for 'clip_subset_type'", DgBase::Fatal);
 
@@ -564,7 +571,6 @@ fflush(stdout);
 */
                        // check if the hole contains the hex
                        if (clipHole.hole.Contains(hex)) {
-//cout << "HEX IN HOLE" << endl;
                           accepted = false;
                           break;
                        }
@@ -1226,31 +1232,48 @@ void genGrid (GridGenParam& dp)
 
    ////// do applicable clipping mode /////
 
-   if (dp.seqToPoly) {
+   char delimStr[2];
+   delimStr[0] = dp.inputDelimiter;
+   delimStr[1] = '\0';
+   const int maxLine = 1000;
+   char buff[maxLine];
+   if (dp.seqToPoly || dp.indexToPoly) {
       dp.nCellsAccepted = 0;
       dp.nCellsTested = 0;
 
-      set<unsigned long int> seqnums; //To ensure each cell is printed once
+      // convert any incoming addresses to seqnums
+      // use a set to ensure each cell is printed only once
+      set<unsigned long int> seqnums; 
 
       // read-in the sequence numbers
-      for (const auto &regionfile: dp.regionFiles)
-      {
+       for (const auto &regionfile: dp.regionFiles) {
          DgInputStream fin(regionfile.c_str(), "", DgBase::Fatal);
-         //unsigned long int seqnum;
-         const int maxLine = 1000;
-         char buff[maxLine];
 
          while (1) {
-           dp.nCellsTested++;
+            dp.nCellsTested++;
 
-           fin.getline(buff, maxLine);
-           if (fin.eof()) break;
+            // get the next line
+            fin.getline(buff, maxLine);
+            if (fin.eof()) break;
 
-           unsigned long int sNum;
-           if (sscanf(buff, "%lu", &sNum) != 1)
-             ::report("doTransform(): invalid SEQNUM " + string(buff), DgBase::Fatal);
+            unsigned long int sNum = 0;
+            if (dp.seqToPoly) {
+              if (sscanf(buff, "%lu", &sNum) != 1)
+                 ::report("doTransform(): invalid SEQNUM " + string(buff), DgBase::Fatal);
+            } else { // must be indexToPoly
+               // parse the address
+               DgLocation* tmpLoc = NULL;
+               tmpLoc = new DgLocation(*dp.pInRF);
+               tmpLoc->fromString(buff, dp.inputDelimiter);
+cout << *tmpLoc << endl;
+               dgg.convert(tmpLoc);
+cout << *tmpLoc << endl;
+               
+               sNum = static_cast<const DgIDGGBase&>(dgg).bndRF().seqNum(*tmpLoc);
+               delete tmpLoc;
+            }
 
-           seqnums.insert(sNum);
+            seqnums.insert(sNum);
          }
 
          fin.close();
@@ -1572,8 +1595,8 @@ void genGrid (GridGenParam& dp)
 
    dgcout << "\n** grid generation complete **" << endl;
    outputStatus(dp, true);
-   if (!dp.wholeEarth && !dp.seqToPoly)
-      dgcout << "acceptance rate is " <<
+   if (!dp.wholeEarth && !dp.seqToPoly && !dp.indexToPoly)
+      dgcout << "acceptance rate is " << 
           100.0 * (long double) dp.nCellsAccepted / (long double) dp.nCellsTested <<
           "%" << endl;
 

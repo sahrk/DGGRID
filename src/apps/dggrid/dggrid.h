@@ -186,6 +186,7 @@ class GridGenParam : public MainParam {
       bool wholeEarth;       // generate entire grid?
       bool regionClip;       // whether user wants to generate using regions
       bool seqToPoly;        // whether user wants polys from seqnum
+      bool indexToPoly;      // whether user wants polys from any index type
       bool pointClip;        // whether user wants to generate using points
       bool cellClip;         // whether user wants to generate using coarse cells
       bool useGDAL;          // use GDAL for either input or output
