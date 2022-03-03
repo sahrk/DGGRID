@@ -44,6 +44,7 @@ class DgOutNeighborsFile : public DgOutputStream {
    public:
 
       DgOutNeighborsFile (const string& fileName,
+                        const DgRFBase* outRF = NULL, 
                         const string& suffix = string("nbr"),
                         DgReportLevel failLevel = DgBase::Fatal);
 
@@ -54,6 +55,10 @@ class DgOutNeighborsFile : public DgOutputStream {
               { return DgOutputStream::open(fileName, failLevel); }
 
       virtual void close (void) { DgOutputStream::close(); }
+
+   private:
+
+      const DgRFBase* outRF_;
 };
 
 inline DgOutNeighborsFile& operator<< (DgOutNeighborsFile& file, const char* str)

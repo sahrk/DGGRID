@@ -932,7 +932,7 @@ void outputCell (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dg
 
          string fileName = dp.neighborsOutFileName + string("_") +
                                        dgg::util::to_string(dp.nOutputFile);
-         dp.nbrOut = new DgOutNeighborsFile(fileName);
+         dp.nbrOut = new DgOutNeighborsFile(fileName, ((dp.outSeqNum) ? NULL : dp.pOutRF), "nbr");
       }
 
       if (dp.chdOut) {
@@ -1034,8 +1034,21 @@ void outputCell (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dg
          ::report("Neighbors not implemented for Triangle grids", DgBase::Fatal);
 
       dgg.setNeighbors(add2D, neighbors);
-      if (dp.nbrOut) dp.nbrOut->insert(dgg, add2D, neighbors);
-
+      if (dp.nbrOut) 
+         dp.nbrOut->insert(dgg, add2D, neighbors);
+/*
+      else {
+         if (dp.outSeqNum)
+            dp.nbrOut->insert(dgg, add2D, neighbors);
+         else {
+            DgLocation* tmpLoc = new DgLocation(add2D);
+            dp.pOutRF->convert(tmpLoc);
+            DgInterleaveCoord intCoord = *dgg.intRF().getAddress(*tmpLoc);
+            delete tmpLoc;
+         }
+      }
+*/
+ 
       for (int i = 0; i < neighbors.size(); i++)
          dp.runStats.push(dgg.geoRF().dist(ctrGeo, neighbors[i]));
    }
@@ -1209,7 +1222,8 @@ void genGrid (GridGenParam& dp)
    ///// PlanetRisk /////
    dp.nbrOut = NULL;
    if (dp.neighborsOutType == "TEXT")
-      dp.nbrOut = new DgOutNeighborsFile(neighborsOutFileName, "nbr");
+      dp.nbrOut = new DgOutNeighborsFile(neighborsOutFileName, 
+             ((dp.outSeqNum) ? NULL : dp.pOutRF), "nbr");
 
    dp.chdOut = NULL;
    if (dp.childrenOutType == "TEXT")
