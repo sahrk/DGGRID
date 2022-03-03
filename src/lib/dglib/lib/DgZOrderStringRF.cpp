@@ -43,6 +43,9 @@
 */
 
 ////////////////////////////////////////////////////////////////////////////////
+const DgZOrderStringCoord DgZOrderStringCoord::undefDgZOrderStringCoord("99");
+
+////////////////////////////////////////////////////////////////////////////////
 const char*
 DgZOrderStringRF::str2add (DgZOrderStringCoord* add, const char* str, 
                          char delimiter) const

@@ -106,6 +106,9 @@ class DgZOrderStringCoord  {
 
       DgZOrderStringCoord (void) { }
 
+      DgZOrderStringCoord (const string& valStrIn)
+         : valString_ (valStrIn) { }
+
       DgZOrderStringCoord (const DgZOrderStringCoord& coord)
               { valString_ = coord.valString(); }
 
@@ -175,7 +178,7 @@ class DgZOrderStringRF : public DgRF<DgZOrderStringCoord, long long int> {
                        { return dist; }
 
       virtual const DgZOrderStringCoord& undefAddress (void) const
-                       { static DgZOrderStringCoord undef; return undef; }
+                       { return DgZOrderStringCoord::undefDgZOrderStringCoord; }
 
    protected:
 

@@ -131,22 +131,7 @@ GridGenParam::GridGenParam (DgParamList& plist)
 
       getParamValue(plist, "clip_cell_res", clipCellRes, false);
       getParamValue(plist, "clip_cell_densification", nClipCellDensify, false);
-
-      string clipCellsStr;
-      getParamValue(plist, "clip_cell_seqnums", clipCellsStr, false);
-
-      vector<string> clipCellAddressStrs;
-      util::ssplit(clipCellsStr, clipCellAddressStrs);
-
-      // parse the clip cell sequence numbers
-      for (const auto &seqStr: clipCellAddressStrs) {
-           unsigned long int sNum;
-           if (sscanf(seqStr.c_str(), "%lu", &sNum) != 1)
-             ::report("gridgen(): invalid cell sequence number in clip_cell_seqnums" +
-               string(seqStr), DgBase::Fatal);
-
-           clipSeqNums.insert(sNum);
-      }
+      getParamValue(plist, "clip_cell_addresses", clipCellsStr, false);
 
       //// region file names
 
@@ -1246,7 +1231,7 @@ void genGrid (GridGenParam& dp)
       set<unsigned long int> seqnums; 
 
       // read-in the sequence numbers
-       for (const auto &regionfile: dp.regionFiles) {
+      for (const auto &regionfile: dp.regionFiles) {
          DgInputStream fin(regionfile.c_str(), "", DgBase::Fatal);
 
          while (1) {
@@ -1259,15 +1244,13 @@ void genGrid (GridGenParam& dp)
             unsigned long int sNum = 0;
             if (dp.seqToPoly) {
               if (sscanf(buff, "%lu", &sNum) != 1)
-                 ::report("doTransform(): invalid SEQNUM " + string(buff), DgBase::Fatal);
+                 ::report("genGrid(): invalid SEQNUM " + string(buff), DgBase::Fatal);
             } else { // must be indexToPoly
                // parse the address
                DgLocation* tmpLoc = NULL;
                tmpLoc = new DgLocation(*dp.pInRF);
                tmpLoc->fromString(buff, dp.inputDelimiter);
-cout << *tmpLoc << endl;
                dgg.convert(tmpLoc);
-cout << *tmpLoc << endl;
                
                sNum = static_cast<const DgIDGGBase&>(dgg).bndRF().seqNum(*tmpLoc);
                delete tmpLoc;

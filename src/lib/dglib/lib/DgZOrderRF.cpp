@@ -76,6 +76,9 @@
              << ((MAX_ZORDER_RES - (res)) * ZORDER_PER_DIGIT_OFFSET)))
 
 ////////////////////////////////////////////////////////////////////////////////
+const DgZOrderCoord DgZOrderCoord::undefDgZOrderCoord(0xffffffffffffffff);
+
+////////////////////////////////////////////////////////////////////////////////
 const char*
 DgZOrderRF::str2add (DgZOrderCoord* add, const char* str, 
                          char delimiter) const
@@ -146,8 +149,6 @@ DgZOrderStringtoZOrderConverter::DgZOrderStringtoZOrderConverter
 DgZOrderCoord 
 DgZOrderStringtoZOrderConverter::convertTypedAddress (const DgZOrderStringCoord& addIn) const
 {
-//dgcout << " -> " << addIn << endl;
-
    string addstr = addIn.valString();
    uint64_t z = 0;
 
@@ -175,12 +176,8 @@ DgZOrderStringtoZOrderConverter::convertTypedAddress (const DgZOrderStringCoord&
       r++;
    }
 
-   //dgcout << "qstr: " << qstr << " rad1: " << rad1 << " rad2: " << rad2 << endl;
-
    DgZOrderCoord coord;
    coord.setValue(z);
-
-   //dgcout << "coord: " << coord << endl;
 
    return coord;
 
@@ -235,8 +232,6 @@ DgZOrderToZOrderStringConverter::convertTypedAddress (const DgZOrderCoord& addIn
 
    DgZOrderStringCoord zStr;
    zStr.setValString(s);
-
-//dgcout << "zorderStr " << zStr << endl;
 
    return zStr;
 

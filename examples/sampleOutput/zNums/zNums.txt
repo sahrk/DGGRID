@@ -21,7 +21,7 @@ dggs_res_spec 4 (user set)
 rng_type RAND (default)
 geodetic_densify 0 (default)
 clip_subset_type INPUT_ADDRESS_TYPE (user set)
-clip_cell_seqnums  (default)
+clip_cell_addresses  (default)
 clip_cell_res 1 (default)
 clip_cell_densification 1 (default)
 clip_region_files inputfiles/zorder1.txt inputfiles/zorder2.txt (user set)
@@ -63,28 +63,6 @@ output_address_type ZORDER (user set)
 output_delimiter " " (default)
 input_address_type ZORDER (user set)
 
-IDGGS04zorder{1020000000000000}
-IDGGS04{q01:(0, 2)}
-IDGGS04zorder{1010000000000000}
-IDGGS04{q01:(0, 1)}
-IDGGS04zorder{1020000000000000}
-IDGGS04{q01:(0, 2)}
-IDGGS04zorder{1010000000000000}
-IDGGS04{q01:(0, 1)}
-IDGGS04zorder{1010000000000000}
-IDGGS04{q01:(0, 1)}
-IDGGS04zorder{1100000000000000}
-IDGGS04{q01:(0, 3)}
-IDGGS04zorder{1010000000000000}
-IDGGS04{q01:(0, 1)}
-IDGGS04zorder{1010000000000000}
-IDGGS04{q01:(0, 1)}
-IDGGS04zorder{1120000000000000}
-IDGGS04{q01:(0, 5)}
-IDGGS04zorder{1020000000000000}
-IDGGS04{q01:(0, 2)}
-IDGGS04zorder{1200000000000000}
-IDGGS04{q01:(0, 6)}
 
 ** grid generation complete **
 accepted 5 cells / 13 tested

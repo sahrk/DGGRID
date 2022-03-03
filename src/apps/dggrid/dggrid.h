@@ -195,7 +195,7 @@ class GridGenParam : public MainParam {
       bool clipShape;        // clip using Shapefiles
       vector<string> regionFiles;
       int clipCellRes;       // resolution of the clipping cell indexes
-      set<unsigned long int> clipSeqNums; // coarse clipping cells
+      string clipCellsStr;   // input line of coarse clipping cells
       int nClipCellDensify;  // number of points-per-edge of densification for clipping cells
       int nRandPts;          // # of random pts generated for each hex
       bool clipRandPts;      // clip randpts to polys

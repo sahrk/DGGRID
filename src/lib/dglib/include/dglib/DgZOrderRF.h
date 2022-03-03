@@ -98,6 +98,8 @@ class DgZOrderCoord  {
 
       DgZOrderCoord (void) : value_ (0) { }
 
+      DgZOrderCoord (uint64_t valIn) : value_ (valIn) { }
+
       DgZOrderCoord (const DgZOrderCoord& coord)
               { value_ = coord.value(); }
 
@@ -168,7 +170,7 @@ class DgZOrderRF : public DgRF<DgZOrderCoord, long long int> {
                        { return dist; }
 
       virtual const DgZOrderCoord& undefAddress (void) const
-                       { static DgZOrderCoord undef; return undef; }
+                            { return DgZOrderCoord::undefDgZOrderCoord; }
 
    protected:
 
