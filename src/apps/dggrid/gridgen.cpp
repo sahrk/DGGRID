@@ -1069,8 +1069,10 @@ void outputCell (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dg
       dp.collectOut->insert(dgg, cell,
             (dp.pointOutType == "GDAL_COLLECTION"),
             (dp.cellOutType == "GDAL_COLLECTION"),
+            dp.pOutRF,
             ((dp.neighborsOutType == "GDAL_COLLECTION") ? &neighbors : NULL),
-            ((dp.childrenOutType == "GDAL_COLLECTION") ? &children : NULL));
+            ((dp.childrenOutType == "GDAL_COLLECTION") ? &children : NULL),
+            NULL);
    }
 
 } // void outputCell

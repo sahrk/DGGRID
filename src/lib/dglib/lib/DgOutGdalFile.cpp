@@ -160,8 +160,8 @@ DgOutGdalFile::insert(const DgDVec2D&)
 
 ////////////////////////////////////////////////////////////////////////////////
 void
-DgOutGdalFile::createSeqnumsProperty (const DgIDGGBase& dgg, OGRFeature* feature,
-           const char* fieldName, const DgLocVector& vec)
+DgOutGdalFile::createAddressesProperty (const DgIDGGBase& dgg, OGRFeature* feature,
+           const char* fieldName, const DgLocVector& vec, const DgRFBase* outRF)
 {
    // create the string list
    int n = vec.size();
@@ -170,8 +170,14 @@ DgOutGdalFile::createSeqnumsProperty (const DgIDGGBase& dgg, OGRFeature* feature
    for (int i = 0; i < n; i++) {
       DgLocation tmpLoc(vec[i]);
       dgg.convert(&tmpLoc);
-
-      std::string str = std::to_string(dgg.bndRF().seqNum(tmpLoc));
+      std::string str;
+      if (!outRF) { // assumed seqnum
+         str = std::to_string(dgg.bndRF().seqNum(tmpLoc));
+      } else {
+         outRF->convert(&tmpLoc);
+         str = tmpLoc.asString(' ');
+      }
+      
       strArr[i] = new char[str.length() + 1];
       strcpy(strArr[i], str.c_str());
    }
@@ -188,8 +194,9 @@ DgOutGdalFile::createSeqnumsProperty (const DgIDGGBase& dgg, OGRFeature* feature
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
 DgOutGdalFile::insert (const DgIDGGBase& dgg, DgCell& cell,
-           bool outputPoint, bool outputRegion,
-           const DgLocVector* neighbors, const DgLocVector* children)
+           bool outputPoint, bool outputRegion, const DgRFBase* outRF,
+           const DgLocVector* neighbors, const DgLocVector* children,
+           const DgRFBase* childOutRF)
 {
    if (_mode != Collection)
       ::report("invalid GDAL output file mode encountered.", DgBase::Fatal);
@@ -227,11 +234,11 @@ DgOutGdalFile::insert (const DgIDGGBase& dgg, DgCell& cell,
    if (children) {
       const DgIDGGSBase& dggs = *(dgg.dggs());
       const DgIDGGBase& dggr = dggs.idggBase(dgg.res() + 1);
-      createSeqnumsProperty (dggr, feature, "children", *children);
+      createAddressesProperty (dggr, feature, "children", *children, childOutRF);
    }
 
-   if (neighbors)
-      createSeqnumsProperty (dgg, feature, "neighbors", *neighbors);
+   if (neighbors) 
+      createAddressesProperty(dgg, feature, "neighbors", *neighbors, outRF);
 
    addFeature(feature);
 
