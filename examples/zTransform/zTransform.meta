@@ -2,15 +2,7 @@
 ################################################################################
 #
 # zTransform.meta - example of a dggrid meta-file which performs address
-#                  conversion with ZOrder indexes
-#
-# Determine the cells in which some Oregon cities are located in resolution 9 
-# an ISEA3H DGGS.
-#
-# Created by Kevin Sahr, November 11, 2001
-# Revised by Kevin Sahr, June 20, 2003
-# Revised by Kevin Sahr, October 20, 2014
-# Revised by Kevin Sahr, November 11, 2014
+#                   conversion with ZOrder indexes
 #
 ################################################################################
 
