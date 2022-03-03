@@ -40,28 +40,36 @@ using namespace dgg::addtype;
 void 
 MainParam::addressTypeToRF (MainParam& dp, const DgIDGGBase& dgg, bool isInput)
 {
+   const DgIDGGSBase& dggs = *(dgg.dggs());
+   dp.chdDgg = &dggs.idggBase(dgg.res() + 1);
+
    bool seqNum = false;
    const DgRFBase* rf = NULL;
    dgg::addtype::DgAddressType type = ((isInput) ? dp.inAddType : dp.outAddType);
    switch (type) {
       case Geo:
          rf = &dgg.geoRF();
+         dp.pChdOutRF = &dp.chdDgg->geoRF();
          break;
 
       case Plane:
          rf = &dgg.planeRF();
+         dp.pChdOutRF = &dp.chdDgg->planeRF();
          break;
 
       case ProjTri:
          rf = &dgg.projTriRF();
+         dp.pChdOutRF = &dp.chdDgg->projTriRF();
          break;
 
       case Q2DD:
          rf = &dgg.q2ddRF();
+         dp.pChdOutRF = &dp.chdDgg->q2ddRF();
          break;
 
       case Q2DI:
          rf = &dgg;
+         dp.pChdOutRF = dp.chdDgg;
          break;
 
       case SeqNum:
@@ -73,10 +81,12 @@ MainParam::addressTypeToRF (MainParam& dp, const DgIDGGBase& dgg, bool isInput)
 
          seqNum = true;
          rf = &dgg;
+         dp.pChdOutRF = dp.chdDgg;
          break;
 
       case Vertex2DD:
          rf = &dgg.vertexRF();
+         dp.pChdOutRF = &dp.chdDgg->vertexRF();
          break;
 
       case ZOrder:
@@ -84,23 +94,24 @@ MainParam::addressTypeToRF (MainParam& dp, const DgIDGGBase& dgg, bool isInput)
             ::report("input_address_type of ZORDER not supported for dggs_aperture_type of SEQUENCE", 
                      DgBase::Fatal);
 
-         if (dgg.zorderRF())
+         if (dgg.zorderRF()) {
             rf = dgg.zorderRF();
-         else
+            dp.pChdOutRF = dp.chdDgg->zorderRF();
+         } else
             ::report("addressTypeToRF(): ZORDER only supported for aperture 3 or 4",
                      DgBase::Fatal);
 
          break;
-
 
       case ZOrderString:
          if (dp.isApSeq)
             ::report("input_address_type of ZORDER_STRING not supported for dggs_aperture_type of SEQUENCE", 
                      DgBase::Fatal);
 
-         if (dgg.zorderStrRF())
+         if (dgg.zorderStrRF()) {
             rf = dgg.zorderStrRF();
-         else
+            dp.pChdOutRF = dp.chdDgg->zorderStrRF();
+         } else
             ::report("addressTypeToRF(): ZORDER_STRING only supported for aperture 3 or 4",
                      DgBase::Fatal);
 

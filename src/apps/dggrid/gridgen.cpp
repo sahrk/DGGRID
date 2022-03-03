@@ -943,8 +943,9 @@ void outputCell (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dg
 
          string fileName = dp.childrenOutFileName + string("_") +
                                        dgg::util::to_string(dp.nOutputFile);
-         dp.chdOut = new DgOutChildrenFile(fileName, "chd");
-       }
+         dp.chdOut = new DgOutChildrenFile(fileName, dgg, *dp.chdDgg, 
+               ((dp.outSeqNum || dp.useEnumLbl) ? NULL : dp.pOutRF), dp.pChdOutRF, "chd"); 
+       } 
    }
 
    DgLocation* tmpLoc = new DgLocation(add2D);
@@ -1050,18 +1051,19 @@ void outputCell (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dg
 
       dggs.setAllChildren(q2diR, children);
 
-      if (dp.chdOut)
-         dp.chdOut->insert(dgg, add2D, children);
+      if (dp.chdOut) 
+         dp.chdOut->insert(add2D, children);
    }
 
    if (dp.collectOut) {
       dp.collectOut->insert(dgg, cell,
             (dp.pointOutType == "GDAL_COLLECTION"),
             (dp.cellOutType == "GDAL_COLLECTION"),
+            *(dp.chdDgg),
             ((dp.outSeqNum || dp.useEnumLbl) ? NULL : dp.pOutRF),
+            ((dp.outSeqNum || dp.useEnumLbl) ? NULL : dp.pChdOutRF),
             ((dp.neighborsOutType == "GDAL_COLLECTION") ? &neighbors : NULL),
-            ((dp.childrenOutType == "GDAL_COLLECTION") ? &children : NULL),
-            NULL);
+            ((dp.childrenOutType == "GDAL_COLLECTION") ? &children : NULL));
    }
 
 } // void outputCell
@@ -1218,7 +1220,8 @@ void genGrid (GridGenParam& dp)
 
    dp.chdOut = NULL;
    if (dp.childrenOutType == "TEXT")
-      dp.chdOut = new DgOutChildrenFile(childrenOutFileName, "chd");
+         dp.chdOut = new DgOutChildrenFile(childrenOutFileName, dgg, *dp.chdDgg, 
+               ((dp.outSeqNum || dp.useEnumLbl) ? NULL : dp.pOutRF), dp.pChdOutRF, "chd"); 
 
    ////// do applicable clipping mode /////
 

@@ -194,9 +194,9 @@ DgOutGdalFile::createAddressesProperty (const DgIDGGBase& dgg, OGRFeature* featu
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
 DgOutGdalFile::insert (const DgIDGGBase& dgg, DgCell& cell,
-           bool outputPoint, bool outputRegion, const DgRFBase* outRF,
-           const DgLocVector* neighbors, const DgLocVector* children,
-           const DgRFBase* childOutRF)
+           bool outputPoint, bool outputRegion, const DgIDGGBase& chdDgg, 
+           const DgRFBase* outRF, const DgRFBase* chdOutRF,
+           const DgLocVector* neighbors, const DgLocVector* children)
 {
    if (_mode != Collection)
       ::report("invalid GDAL output file mode encountered.", DgBase::Fatal);
@@ -232,9 +232,7 @@ DgOutGdalFile::insert (const DgIDGGBase& dgg, DgCell& cell,
       ::report( "No geometry specified for GDAL collection feature.", DgBase::Fatal );
 
    if (children) {
-      const DgIDGGSBase& dggs = *(dgg.dggs());
-      const DgIDGGBase& dggr = dggs.idggBase(dgg.res() + 1);
-      createAddressesProperty (dggr, feature, "children", *children, childOutRF);
+      createAddressesProperty (chdDgg, feature, "children", *children, chdOutRF);
    }
 
    if (neighbors) 

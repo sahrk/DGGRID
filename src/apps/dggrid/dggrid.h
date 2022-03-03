@@ -149,7 +149,9 @@ class MainParam {
       bool inSeqNum;           // is the input sequence numbers?
       char inputDelimiter;
       string inFormatStr;
-      const DgRFBase* pOutRF;   // RF for output addresses
+      const DgIDGGBase* chdDgg;   // child res dgg
+      const DgRFBase* pOutRF;     // RF for output addresses
+      const DgRFBase* pChdOutRF;  // RF for output addresses at child resolution
       dgg::addtype::DgAddressType outAddType; // output address form
       bool outSeqNum;      // is the output sequence numbers?
       char outputDelimiter;
