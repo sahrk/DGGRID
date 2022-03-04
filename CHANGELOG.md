@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 All changes are by Kevin Sahr, unless otherwise noted.
 
+## [7.521] - 2022-03-03
+### Fixed
+- refactor DgHexIDGG class hierarchy to avoid potential memory errors
+
 ## [7.52] - 2022-02-19
 ### Added
 - support for dggridR output
