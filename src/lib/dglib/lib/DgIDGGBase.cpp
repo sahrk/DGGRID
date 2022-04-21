@@ -73,6 +73,9 @@ const DgQuadEdgeCells DgIDGGBase::edgeTable_[12] = {
 const char*
 DgIDGGBase::str2add (DgQ2DICoord* add, const char* str, char delimiter) const
 {
+   if (!str || strlen(str) == 0)
+      ::report("DgQ2DIRF::fromString() invalid input ", DgBase::Fatal);
+
    if (!add) add = new DgQ2DICoord();
 
    char delimStr[2];
@@ -85,14 +88,19 @@ DgIDGGBase::str2add (DgQ2DICoord* add, const char* str, char delimiter) const
    // get the quadNum
 
    char* tok = strtok(tmpStr, delimStr);
+   if (!tok || strlen(tok) == 0)
+      ::report("DgQ2DIRF::fromString() invalid input ", DgBase::Fatal);
+
    int q;
-   if (sscanf(tok, "%d", &q) != 1)
-   {
+   if (sscanf(tok, "%d", &q) != 1) {
       ::report("DgQ2DIRF::fromString() invalid value in string " +
                string(tok), DgBase::Fatal);
    }
 
    const char* tmp = &(str[strlen(tok) + 1]);
+   if (!tmp || strlen(tmp) == 0)
+      ::report("DgQ2DIRF::fromString() invalid input ", DgBase::Fatal);
+
    DgIVec2D vec;
    tmp = vec.fromString(tmp, delimiter);
 
