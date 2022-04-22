@@ -241,7 +241,7 @@ void binPresPartial (BinPresenceParam& dp)
    DgRFNetwork net0;
    const DgGeoSphRF& geoRF = *(DgGeoSphRF::makeRF(net0, dp.datum, dp.earthRadius));
       const DgIDGGSBase *idggs = DgIDGGSBase::makeRF(net0, geoRF, dp.vert0,
-             dp.azimuthDegs, dp.aperture, dp.actualRes+1, dp.gridTopo, 
+             dp.azimuthDegs, dp.aperture, dp.actualRes+2, dp.gridTopo, 
              dp.gridMetric, "IDGGS", dp.projType, dp.isMixed43, dp.numAp4, 
              dp.isSuperfund, dp.isApSeq, dp.apSeq);
       const DgIDGGBase& dgg = idggs->idggBase(dp.actualRes);
