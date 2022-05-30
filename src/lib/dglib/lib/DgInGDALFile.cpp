@@ -87,6 +87,32 @@ DgInGDALFile::extract (DgLocVector& vec)
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
+void
+DgInGDALFile::ogrPolyToDg (OGRPolygon* oPolygon, DgPolygon& poly)
+{
+   // Now we get the points out of the Polygon
+   // You can't iterate over the points of an OGRPolygon
+   // We need to get the OGRLinearRing
+   OGRLinearRing* oLinearRing = oPolygon->getExteriorRing();
+   int numPoints = oLinearRing->getNumPoints();
+   long double x, y;
+   OGRPoint oPoint;
+   for (int i = 0; i < numPoints; i++) {
+      oLinearRing->getPoint(i, &oPoint);
+      x = oPoint.getX();
+      y = oPoint.getY();
+      DgAddressBase* add = rf().vecAddress(DgDVec2D(x, y));
+      poly.addressVec().push_back(add);
+   }
+
+   // remove the duplicate first/last vertex
+   DgAddressBase* lastPt = *(poly.addressVec().end() - 1);
+   poly.addressVec().erase(poly.addressVec().end() - 1);
+   delete lastPt;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 DgInLocFile&
 DgInGDALFile::extract (DgPolygon& poly)
 //
@@ -105,14 +131,6 @@ DgInGDALFile::extract (DgPolygon& poly)
        }
 
        OGRLayer* oLayer = gdalDataset_->GetLayer(0);
-/*
-       if (curLayer_ < gdalDataset_->GetLayerCount()) {
-           oLayer = gdalDataset_->GetLayer(curLayer_++);
-       } else {
-           setstate(ios_base::eofbit);
-           return *this;
-       }
-*/
        if (oFeature_) OGRFeature::DestroyFeature(oFeature_);
 
        if ((oFeature_ = oLayer->GetNextFeature()) == NULL) {
@@ -150,9 +168,10 @@ DgInGDALFile::extract (DgPolygon& poly)
        }
     }
 
+/*
     // Now we get the points out of the Polygon
     // You can't iterate over the points of an OGRPolygon
-    // We need to cast it to an OGRLinearRing
+    // We need to get the OGRLinearRing
     OGRLinearRing* oLinearRing = oPolygon->getExteriorRing();
     int numPoints = oLinearRing->getNumPoints();
     long double x, y;
@@ -169,10 +188,21 @@ DgInGDALFile::extract (DgPolygon& poly)
     DgAddressBase* lastPt = *(poly.addressVec().end() - 1);
     poly.addressVec().erase(poly.addressVec().end() - 1);
     delete lastPt;
+*/
+
+    // convert the exterior ring to a DgPolygon
+    ogrPolyToDg(oPolygon, poly);
+
+cout << "HOLES?" << endl;
 /*
-    // remove the duplicate first/last vertex
-    poly.addressVec().erase(poly.addressVec().end() - 1);
-    */
+    // first one is the outer ring and, all the next ones are the 
+    // inner rings/holes
+    for (int i = 1; i < oPolygon->GetGeometryCount(); i++) {
+      const OGRLinearRing* oLinearRing = oPolygon->GetGeometryRef(i);
+
+      cout << "hole i: " << i << endl;
+    }
+*/
 
     return *this;
 
