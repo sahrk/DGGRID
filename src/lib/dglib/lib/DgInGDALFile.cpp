@@ -124,6 +124,7 @@ DgInGDALFile::extract (DgPolygon& poly)
     rf().convert(poly);
 
     OGRPolygon* oPolygon = NULL;
+    OGRGeometry* oGeometry = NULL;
     if (!insideMultiPoly_) {
 
        if (gdalDataset_->GetLayerCount() != 1) {
@@ -139,7 +140,8 @@ DgInGDALFile::extract (DgPolygon& poly)
        }
 
        // Get the polygon stored in Geometry, with special handling for MultiPolygon
-       OGRGeometry* oGeometry = oFeature_->GetGeometryRef();
+       //OGRGeometry* oGeometry = oFeature_->GetGeometryRef();
+       oGeometry = oFeature_->GetGeometryRef();
        OGRwkbGeometryType geomType = wkbFlatten((oGeometry->getGeometryType()));
        if (oGeometry != NULL && geomType == wkbPolygon) {
            oPolygon = (OGRPolygon*) oGeometry;
@@ -156,7 +158,8 @@ DgInGDALFile::extract (DgPolygon& poly)
 
     // now we either have a polygon or we are inside a multi-polygon
     if (insideMultiPoly_) {
-       OGRGeometry* oGeometry = oFeature_->GetGeometryRef();
+       //OGRGeometry* oGeometry = oFeature_->GetGeometryRef();
+       oGeometry = oFeature_->GetGeometryRef();
        OGRMultiPolygon* oMultiPolygon = (OGRMultiPolygon*) oGeometry;
        oPolygon = (OGRPolygon*) oMultiPolygon->getGeometryRef(multiPolyIndex_);
        multiPolyIndex_++;
@@ -168,41 +171,18 @@ DgInGDALFile::extract (DgPolygon& poly)
        }
     }
 
-/*
-    // Now we get the points out of the Polygon
-    // You can't iterate over the points of an OGRPolygon
-    // We need to get the OGRLinearRing
-    OGRLinearRing* oLinearRing = oPolygon->getExteriorRing();
-    int numPoints = oLinearRing->getNumPoints();
-    long double x, y;
-    OGRPoint oPoint;
-    for (int i = 0; i < numPoints; i++) {
-        oLinearRing->getPoint(i, &oPoint);
-        x = oPoint.getX();
-        y = oPoint.getY();
-        DgAddressBase* add = rf().vecAddress(DgDVec2D(x, y));
-        poly.addressVec().push_back(add);
-    }
-
-    // remove the duplicate first/last vertex
-    DgAddressBase* lastPt = *(poly.addressVec().end() - 1);
-    poly.addressVec().erase(poly.addressVec().end() - 1);
-    delete lastPt;
-*/
-
     // convert the exterior ring to a DgPolygon
     ogrPolyToDg(oPolygon, poly);
 
 cout << "HOLES?" << endl;
-/*
     // first one is the outer ring and, all the next ones are the 
     // inner rings/holes
-    for (int i = 1; i < oPolygon->GetGeometryCount(); i++) {
-      const OGRLinearRing* oLinearRing = oPolygon->GetGeometryRef(i);
+    oPolygon = (OGRPolygon*) oGeometry;
+    for (int i = 0; i < oPolygon->getNumInteriorRings(); i++) {
+      OGRLinearRing* oLinearRing = oPolygon->getInteriorRing(i);
 
       cout << "hole i: " << i << endl;
     }
-*/
 
     return *this;
 
