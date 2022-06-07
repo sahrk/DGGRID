@@ -41,8 +41,7 @@ DgLocVector::clearAddress (void)
 {
    tmpLoc_.address_ = 0;
 
-   for (long long int i = 0; i < size(); i++)
-   {
+   for (long long int i = 0; i < size(); i++) {
       delete vec_[i];
       vec_[i] = 0;
    }

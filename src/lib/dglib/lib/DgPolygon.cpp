@@ -26,6 +26,19 @@
 #include <dglib/DgContCartRF.h>
 
 ////////////////////////////////////////////////////////////////////////////////
+DgPolygon::~DgPolygon (void)
+{
+   if (hasHoles()) {
+      for (long long int i = 0; i < holes_.size(); i++) {
+         delete holes_[i];
+         holes_[i] = 0;
+      }
+
+      holes_.resize(0);
+   }
+}
+
+////////////////////////////////////////////////////////////////////////////////
 void 
 DgPolygon::densify (int ptsPerEdge)
 { 
@@ -40,8 +53,8 @@ DgPolygon::densify (int ptsPerEdge)
    vector<DgAddressBase*>& v1 = densVerts.addressVec();
 
    // for each edge
-   for (unsigned long i = 0; i < v0.size(); i++)
-   {
+   for (unsigned long i = 0; i < v0.size(); i++) {
+
       DgDVec2D p1 = dynamic_cast< DgAddress<DgDVec2D>& >(*v0[i]).address();
       DgDVec2D p2 = dynamic_cast< DgAddress<DgDVec2D>& >( 
                                           *v0[(i + 1) % v0.size()]).address();
@@ -70,6 +83,17 @@ DgPolygon::densify (int ptsPerEdge)
 
    *this = densVerts;
 
+   // now densify any holes
+   if (hasHoles())
+      for (long long int i = 0; i < holes_.size(); i++)
+         holes_[i]->densify(ptsPerEdge);
+
 } // DgPolygon::densify
 
 ////////////////////////////////////////////////////////////////////////////////
+void
+DgPolygon::addHole (DgPolygon* hole)
+{
+   holes_.push_back(hole);
+}
+

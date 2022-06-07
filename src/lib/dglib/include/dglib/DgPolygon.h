@@ -25,6 +25,7 @@
 #ifndef DGPOLYGON_H
 #define DGPOLYGON_H
 
+#include <vector>
 #include <dglib/DgLocVector.h>
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -43,6 +44,8 @@ class DgPolygon : public DgLocVector {
       DgPolygon (const DgRFBase& rfIn, int sizeIn = 0)
          : DgLocVector (rfIn, sizeIn) { }
 
+     ~DgPolygon (void);
+
       const DgPolygon& operator= (const DgPolygon& vec) // deep copy
          { return reinterpret_cast<DgPolygon&>(DgLocVector::operator=(vec)); }
 
@@ -53,6 +56,17 @@ class DgPolygon : public DgLocVector {
             { return !operator==(vec); }
 
       void densify (int ptsPerEdge);
+
+      bool hasHoles (void) { return holes_.size() > 0; }
+ 
+      void addHole (DgPolygon* hole);
+
+      const vector<DgPolygon*>& holes (void) { return holes_; }
+
+   protected:
+
+      // takes ownership of holes' memory
+      vector<DgPolygon*> holes_;
 
 };
 
