@@ -88,12 +88,8 @@ DgInGDALFile::extract (DgLocVector& vec)
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 void
-DgInGDALFile::ogrPolyToDg (OGRPolygon* oPolygon, DgPolygon& poly)
+DgInGDALFile::ogrLinearRingToDg (OGRLinearRing* oLinearRing, DgPolygon& poly)
 {
-   // Now we get the points out of the Polygon
-   // You can't iterate over the points of an OGRPolygon
-   // We need to get the OGRLinearRing
-   OGRLinearRing* oLinearRing = oPolygon->getExteriorRing();
    int numPoints = oLinearRing->getNumPoints();
    long double x, y;
    OGRPoint oPoint;
@@ -109,6 +105,18 @@ DgInGDALFile::ogrPolyToDg (OGRPolygon* oPolygon, DgPolygon& poly)
    DgAddressBase* lastPt = *(poly.addressVec().end() - 1);
    poly.addressVec().erase(poly.addressVec().end() - 1);
    delete lastPt;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+void
+DgInGDALFile::ogrPolyToDg (OGRPolygon* oPolygon, DgPolygon& poly)
+{
+   // Now we get the points out of the Polygon
+   // You can't iterate over the points of an OGRPolygon
+   // We need to get the OGRLinearRing
+   OGRLinearRing* oLinearRing = oPolygon->getExteriorRing();
+   ogrLinearRingToDg(oLinearRing, poly);
 
 //OGRPolygon polygon;
 OGRPolygon* polygon = (OGRPolygon*) OGRGeometryFactory::createGeometry(wkbPolygon);

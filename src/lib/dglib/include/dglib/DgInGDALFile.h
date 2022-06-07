@@ -63,6 +63,7 @@ public:
 
 protected:
 
+    void ogrLinearRingToDg (OGRLinearRing* oLinearRing, DgPolygon& poly);
     void ogrPolyToDg (OGRPolygon* oPolygon, DgPolygon& poly);
 
 private:
