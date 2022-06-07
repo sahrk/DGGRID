@@ -57,11 +57,11 @@ class DgPolygon : public DgLocVector {
 
       void densify (int ptsPerEdge);
 
-      bool hasHoles (void) { return holes_.size() > 0; }
+      bool hasHoles (void) const { return holes_.size() > 0; }
  
       void addHole (DgPolygon* hole);
 
-      const vector<DgPolygon*>& holes (void) { return holes_; }
+      const vector<DgPolygon*>& holes (void) const { return holes_; }
 
    protected:
 
@@ -71,5 +71,24 @@ class DgPolygon : public DgLocVector {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+inline ostream& operator<< (ostream& stream, const DgPolygon& poly)
+{
+   stream << poly.rf().name() << " {\n";
+
+   if (poly.hasHoles())
+      stream << "[\n";
+
+   for (int i = 0; i < poly.size(); i++) stream << poly[i] << "\n";
+ 
+   if (poly.hasHoles()) {
+      stream << "][\n";
+      for (int i = 0; i < poly.holes().size(); i++) stream << *poly.holes()[i];
+      stream << "]\n";
+   }
+
+   return stream << "}" << endl;
+
+} // inline ostream& operator<<
 
 #endif

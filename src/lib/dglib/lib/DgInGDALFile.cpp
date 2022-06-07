@@ -112,12 +112,18 @@ DgInGDALFile::ogrLinearRingToDg (OGRLinearRing* oLinearRing, DgPolygon& poly)
 void
 DgInGDALFile::ogrPolyToDg (OGRPolygon* oPolygon, DgPolygon& poly)
 {
-   // Now we get the points out of the Polygon
-   // You can't iterate over the points of an OGRPolygon
-   // We need to get the OGRLinearRing
    OGRLinearRing* oLinearRing = oPolygon->getExteriorRing();
    ogrLinearRingToDg(oLinearRing, poly);
+   for (int i = 0; i < oPolygon->getNumInteriorRings(); i++) {
+      oLinearRing = oPolygon->getInteriorRing(i);
 
+      DgPolygon* hole = new DgPolygon(rf());
+      ogrLinearRingToDg(oLinearRing, *hole);
+      // poly takes ownership of the hole memory
+      poly.addHole(hole);
+   }
+
+/*
 //OGRPolygon polygon;
 OGRPolygon* polygon = (OGRPolygon*) OGRGeometryFactory::createGeometry(wkbPolygon);
 polygon->addRingDirectly(oLinearRing);
@@ -136,6 +142,7 @@ hole->addRingDirectly(oLinearRing);
 cout << " contained? " << polygon->Contains(hole) << " " <<
      hole->Contains(polygon) << endl;
     }
+*/
 
 }
 
@@ -170,7 +177,6 @@ DgInGDALFile::extract (DgPolygon& poly)
        // Get the polygon stored in Geometry, with special handling for MultiPolygon
        //OGRGeometry* oGeometry = oFeature_->GetGeometryRef();
        oGeometry = oFeature_->GetGeometryRef();
-//oGeometry->Normalize();
        OGRwkbGeometryType geomType = wkbFlatten((oGeometry->getGeometryType()));
        if (oGeometry != NULL && geomType == wkbPolygon) {
            oPolygon = (OGRPolygon*) oGeometry;
@@ -202,6 +208,7 @@ DgInGDALFile::extract (DgPolygon& poly)
 
     // convert the exterior ring to a DgPolygon
     ogrPolyToDg(oPolygon, poly);
+//cout << "=====\n" << poly << endl;
 
     return *this;
 
