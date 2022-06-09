@@ -252,8 +252,8 @@ DgOutGdalFile::createPoint (const DgLocation& loc) const
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-OGRPolygon*
-DgOutGdalFile::createPolygon (const DgPolygon& poly) const
+OGRLinearRing*
+DgOutGdalFile::createLinearRing (const DgPolygon& poly) const
 {
    // first create a linearRing
    OGRLinearRing *linearRing;
@@ -270,9 +270,25 @@ DgOutGdalFile::createPolygon (const DgPolygon& poly) const
    DgDVec2D pt = rf().getVecAddress(*v[0]);
    linearRing->addPoint(pt.x(), pt.y());
    
+   return linearRing;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+OGRPolygon*
+DgOutGdalFile::createPolygon (const DgPolygon& poly) const
+{
+   // first create a linearRing
+   OGRLinearRing *linearRing = createLinearRing(poly);
+
    // create an OGRPolygon and attach ring to it
    OGRPolygon* polygon = (OGRPolygon*) OGRGeometryFactory::createGeometry(wkbPolygon);
    polygon->addRingDirectly(linearRing);
+
+   // add any holes
+   for (long long int i = 0; i < poly.holes().size(); i++) {
+      OGRLinearRing* hole = createLinearRing(*poly.holes()[i]);
+      polygon->addRingDirectly(hole);
+   }
 
    return polygon;
 }
