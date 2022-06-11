@@ -40,6 +40,7 @@ using namespace std;
 class DgConverterBase;
 class DgLocation;
 class DgLocVector;
+class DgPolygon;
 class DgDistanceBase;
 class DgAddressBase;
 class NuCell;
@@ -65,6 +66,8 @@ class DgRFBase {
       const DgRFBase* connectFrom (void) const { return connectFrom_; }
 
       DgLocation* convert (DgLocation* loc) const; // converts in place
+
+      DgPolygon& convert (DgPolygon& poly) const; // converts in place
 
       DgLocVector& convert (DgLocVector& vec) const; // converts in place
 
