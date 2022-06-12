@@ -35,31 +35,30 @@ class DgPolygon : public DgLocVector {
 
       DgPolygon (void) { }
 
-      DgPolygon (const DgLocVector& vec)    // deep copy
-         : DgLocVector (vec) { }
+      DgPolygon (const DgLocVector& poly)  // deep copy
+         : DgLocVector (poly) { }
 
-      DgPolygon (const DgPolygon& vec)    // deep copy
-         : DgLocVector (vec) { }
+      DgPolygon (const DgPolygon& poly);   // deep copy
 
       DgPolygon (const DgRFBase& rfIn, int sizeIn = 0)
          : DgLocVector (rfIn, sizeIn) { }
 
      ~DgPolygon (void);
 
-      const DgPolygon& operator= (const DgPolygon& vec) // deep copy
-         { return reinterpret_cast<DgPolygon&>(DgLocVector::operator=(vec)); }
+      const DgPolygon& operator= (const DgPolygon& vec); // deep copy
 
-      bool operator== (const DgPolygon& vec) const
-         { return DgLocVector::operator==(vec); }
+      bool operator== (const DgPolygon& vec) const;
 
       bool operator!= (const DgPolygon& vec) const
             { return !operator==(vec); }
 
       void densify (int ptsPerEdge);
 
+      void clearHoles (void);
+
       bool hasHoles (void) const { return holes_.size() > 0; }
- 
-      void addHole (DgPolygon* hole);
+
+      void addHole (DgPolygon* hole); // does not make copy
 
       const vector<DgPolygon*>& holes (void) const { return holes_; }
 
@@ -80,7 +79,7 @@ inline ostream& operator<< (ostream& stream, const DgPolygon& poly)
       stream << "[\n";
 
    for (int i = 0; i < poly.size(); i++) stream << poly[i] << "\n";
- 
+
    if (poly.hasHoles()) {
       stream << "][\n";
       for (int i = 0; i < poly.holes().size(); i++) stream << *poly.holes()[i];

@@ -26,7 +26,52 @@
 #include <dglib/DgContCartRF.h>
 
 ////////////////////////////////////////////////////////////////////////////////
-DgPolygon::~DgPolygon (void)
+DgPolygon::DgPolygon (const DgPolygon& poly)
+         : DgLocVector (poly) 
+{
+   if (poly.hasHoles()) {
+      for (long long int i = 0; i < poly.holes().size(); i++)
+         holes_.push_back(new DgPolygon(*poly.holes()[i]));
+   }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+const DgPolygon& 
+DgPolygon::operator= (const DgPolygon& poly)
+{
+   reinterpret_cast<DgPolygon&>(DgLocVector::operator=(poly));
+   clearHoles();
+   if (poly.hasHoles()) {
+      for (long long int i = 0; i < holes_.size(); i++)
+         holes_.push_back(new DgPolygon(*poly.holes()[i]));
+   }
+
+   return *this;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+bool 
+DgPolygon::operator== (const DgPolygon& poly) const
+{
+   bool isEqual = DgLocVector::operator==(poly) &&
+                       holes_.size() == poly.holes().size();
+
+   // check holes
+   if (isEqual) {
+      for (long long int i = 0; i < holes_.size(); i++) {
+         if (*holes_[i] != *poly.holes()[i]) {
+            isEqual = false;
+            break;
+         }
+      }
+   }
+
+   return isEqual;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+void
+DgPolygon::clearHoles (void)
 {
    if (hasHoles()) {
       for (long long int i = 0; i < holes_.size(); i++) {
@@ -36,6 +81,12 @@ DgPolygon::~DgPolygon (void)
 
       holes_.resize(0);
    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+DgPolygon::~DgPolygon (void)
+{
+   clearHoles();
 }
 
 ////////////////////////////////////////////////////////////////////////////////

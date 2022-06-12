@@ -65,16 +65,13 @@ intersectPolyWithQuad (const DgPolygon& v, const GridGenParam& dp,
 // caller takes responsibility for the returned memory
 //
 {
+   //// create a local copy and project to gnomonic
    DgPolygon polyVec(v);
-
    if (dp.megaVerbose) dgcout << "input polyVec(v): " << polyVec << endl;
-
    clipRegion.gnomProj().convert(polyVec);
-
    if (dp.megaVerbose) dgcout << " -> input: " << polyVec << endl;
 
    //// now create a clipper poly version
-
    ClipperLib::Paths clpPoly(1);
 
    for (int i = 0; i < polyVec.size(); i++) {
@@ -156,9 +153,8 @@ void processOneClipPoly (DgPolygon& v, GridGenParam& dp, const DgIDGGBase& dgg,
             }
          }
 
-         if (allGood) {
+         if (allGood)
             if (dp.megaVerbose) dgcout << "intersects quad " << q << endl;
-         }
       }
    }
 
@@ -172,8 +168,6 @@ void processOneClipPoly (DgPolygon& v, GridGenParam& dp, const DgIDGGBase& dgg,
       if (!quadInt[q]) continue;
 
       if (dp.megaVerbose) dgcout << "INTERSECTING quad " << q << endl;
-
-      //// create a local copy and project to gnomonic
 
       if (dp.megaVerbose) dgcout << "input: " << v << endl;
 
@@ -223,7 +217,6 @@ void processOneClipPoly (DgPolygon& v, GridGenParam& dp, const DgIDGGBase& dgg,
          // add the intersection to our clipper list
 
          ClipperLib::Paths cfinVerts(1);
-
          for (int j = 0; j < locv.size(); j++) {
 
             const DgQ2DDCoord& qc = *dgg.q2ddRF().getAddress(locv[j]);
