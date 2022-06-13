@@ -441,15 +441,14 @@ bool evalCell (GridGenParam& dp,  const DgIDGGBase& dgg, const DgContCartRF& cc1
 
    // start by checking the points
    set<DgIVec2D>::iterator it = clipRegion.points().find(add2D);
-   if (it != clipRegion.points().end())
-   {
+   if (it != clipRegion.points().end()) {
+
       accepted = true;
       clipRegion.points().erase(it);
 
-      if (dp.buildShapeFileAttributes)
-      {
-         // add the fields for this point
+      if (dp.buildShapeFileAttributes) {
 
+         // add the fields for this point
          map<DgIVec2D, set<DgDBFfield> >::iterator itFields =
                            clipRegion.ptFields().find(add2D);
          const set<DgDBFfield>& fields = itFields->second;
@@ -458,8 +457,7 @@ bool evalCell (GridGenParam& dp,  const DgIDGGBase& dgg, const DgContCartRF& cc1
             dp.curFields.insert(*it);
 
          clipRegion.ptFields().erase(itFields);
-      }
-      else // only need one intersection
+      } else // only need one intersection
          return accepted;
    }
     
@@ -498,31 +496,37 @@ bool evalCell (GridGenParam& dp,  const DgIDGGBase& dgg, const DgContCartRF& cc1
       if (!(okminx && okmaxx) || !(okminy && okmaxy)) {
          accepted = false;
       } else { 
-      ClipperLib::Paths cellPoly(1);
-      for (int i = 0; i < verts.size(); i++)
-        cellPoly[0] << ClipperLib::IntPoint( dp.clipperFactor*cc1.getAddress((verts)[i])->x() , dp.clipperFactor*cc1.getAddress((verts)[i])->y() );
-      for (unsigned int i = 0; i < clipRegion.clpPolys().size(); i++){
-        ClipperLib::Clipper c;
-        c.AddPaths(cellPoly,                 ClipperLib::ptSubject, true);
-        c.AddPaths(clipRegion.clpPolys()[i], ClipperLib::ptClip,    true);
+         ClipperLib::Paths cellPoly(1);
+         for (int i = 0; i < verts.size(); i++)
+           cellPoly[0] << 
+              ClipperLib::IntPoint(dp.clipperFactor * cc1.getAddress((verts)[i])->x(), 
+                                   dp.clipperFactor * cc1.getAddress((verts)[i])->y());
+
+         for (unsigned int i = 0; i < clipRegion.clpPolys().size(); i++) {
+
+           ClipperLib::Clipper c;
+           c.AddPaths(cellPoly, ClipperLib::ptSubject, true);
+           c.AddPaths(clipRegion.clpPolys()[i].exterior, ClipperLib::ptClip, true);
  
-        ClipperLib::Paths solution;
-        c.Execute(ClipperLib::ctIntersection, solution, ClipperLib::pftNonZero, ClipperLib::pftNonZero);
+           ClipperLib::Paths solution;
+           c.Execute(ClipperLib::ctIntersection, solution, ClipperLib::pftNonZero, 
+                     ClipperLib::pftNonZero);
  
-        if (solution.size()!=0){
-         accepted = true;
-         failure  = false;
-          if (dp.buildShapeFileAttributes) {
-              // add the fields for this polygon
-              const set<DgDBFfield>& fields = clipRegion.polyFields()[i];
-              for (set<DgDBFfield>::iterator it = fields.begin();
-                     it != fields.end(); it++)
-                 dp.curFields.insert(*it);
-          } else { // only need one intersection
-            goto EVALCELL_FINISH;
-          }
+           if (solution.size() != 0) {
+//// KEVIN check holes here
+              accepted = true;
+              failure  = false;
+              if (dp.buildShapeFileAttributes) {
+                 // add the fields for this polygon
+                 const set<DgDBFfield>& fields = clipRegion.polyFields()[i];
+                 for (set<DgDBFfield>::iterator it = fields.begin();
+                          it != fields.end(); it++)
+                   dp.curFields.insert(*it);
+              } else { // only need one intersection
+                 goto EVALCELL_FINISH;
+              }
+           }
         }
-       }
      }
 
      // If we are here, we did not fail:
@@ -532,7 +536,7 @@ bool evalCell (GridGenParam& dp,  const DgIDGGBase& dgg, const DgContCartRF& cc1
            
 EVALCELL_FINISH:
 
-     if(failure)
+     if (failure)
       throw "Out of memory in evalCell()";
    }
 

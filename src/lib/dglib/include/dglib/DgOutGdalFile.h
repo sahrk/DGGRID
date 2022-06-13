@@ -46,6 +46,9 @@ class DgOutGdalFile : public DgOutLocFile
 
    public:
 
+      static OGRLinearRing* createLinearRing (const DgPolygon& poly);
+      static OGRPolygon*    createPolygon (const DgPolygon& poly);
+
       DgOutGdalFile(const DgGeoSphDegRF& rf, const std::string& filename = "", 
                const std::string& gdalDriver = "GeoJSON", 
                DgOutGdalFileMode mode = InvalidMode, int precision = 7,
@@ -84,8 +87,6 @@ class DgOutGdalFile : public DgOutLocFile
 
       OGRFeature* createFeature (const string& label) const;
       OGRPoint* createPoint (const DgLocation& loc) const;
-      OGRLinearRing* createLinearRing (const DgPolygon& poly) const;
-      OGRPolygon* createPolygon (const DgPolygon& poly) const;
       OGRGeometryCollection* createCollection (const DgCell& cell) const;
       void createSeqnumsProperty (const DgIDGGBase& dgg, OGRFeature* feature,
            const char* fieldName, const DgLocVector& vec);

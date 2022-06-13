@@ -38,6 +38,7 @@ using namespace std;
 #include <dglib/DgOutShapefile.h>
 #include <dglib/DgInShapefileAtt.h>
 #include <dglib/DgOutLocFile.h>
+#include <dglib/DgOutGdalFile.h>
 #include <dglib/DgIDGGBase.h>
 #include <dglib/DgBoundedIDGG.h>
 #include <dglib/DgGeoSphRF.h>
@@ -97,21 +98,21 @@ intersectPolyWithQuad (const DgPolygon& v, const GridGenParam& dp,
 }
 
 //////////////////////////////////////////////////////////////////////////////
-void processOneClipPoly (DgPolygon& v, GridGenParam& dp, const DgIDGGBase& dgg,
+void processOneClipPoly (DgPolygon& polyIn, GridGenParam& dp, const DgIDGGBase& dgg,
              DgQuadClipRegion clipRegions[], DgInShapefileAtt* pAttributeFile)
 {
-   if (dp.megaVerbose) dgcout << "input: " << v << endl;
+   if (dp.megaVerbose) dgcout << "input: " << polyIn << endl;
 
    if (dp.geoDens > 0.000000000001)
-      DgGeoSphRF::densify(v, dp.geoDens);
+      DgGeoSphRF::densify(polyIn, dp.geoDens);
 
-   if (dp.megaVerbose) dgcout << "densified: " << v << endl;
+   if (dp.megaVerbose) dgcout << "densified: " << polyIn << endl;
 
    // create a copy to test for intersected quads
 
-   DgPolygon quadVec(v);
+   DgPolygon quadVec(polyIn);
 
-   if (dp.megaVerbose) dgcout << "quadVec(v): " << quadVec << endl;
+   if (dp.megaVerbose) dgcout << "quadVec(polyIn): " << quadVec << endl;
 
    dgg.q2ddRF().convert(quadVec);
 
@@ -128,10 +129,10 @@ void processOneClipPoly (DgPolygon& v, GridGenParam& dp, const DgIDGGBase& dgg,
       quadInt[qc.quadNum()] = true;
    }
 
-   // test for vertices over 90' from the an intersected
+   // test for vertices over 90' from an intersected
    // quad center point, which will make the gnomonic fail
 
-   DgPolygon quadVec2(v);
+   DgPolygon quadVec2(polyIn);
    for (int q = 1; q < 11; q++) {
       if (quadInt[q]) {
          const DgGeoCoord& cp = clipRegions[q].gnomProj().proj0();
@@ -144,7 +145,7 @@ void processOneClipPoly (DgPolygon& v, GridGenParam& dp, const DgIDGGBase& dgg,
                  << dgg::util::to_string(q) << " but a vertex of that polygon is "
                  << "more than 90' from the quad center." << endl;
                dgcerr << "polygon is: " << endl;
-               dgcerr << v << endl;
+               dgcerr << polyIn << endl;
                report("break-up polygon or reorient grid",
                        DgBase::Fatal);
                allGood = false;
@@ -158,8 +159,29 @@ void processOneClipPoly (DgPolygon& v, GridGenParam& dp, const DgIDGGBase& dgg,
       }
    }
 
-   // now perform the intersection for each quad intersected
+#ifdef USE_GDAL
+   //// determine which holes have vertices on which quads
+   const int numHoles = polyIn.holes().size();
+   int** holeQuads = new int*[numHoles];
+   for (int h = 0; h < numHoles; h++) {
 
+      // initialize the counts
+      holeQuads[h] = new int[12];
+      for (int q = 0; q < 12; q++)
+         holeQuads[h][q] = 0;
+
+      DgPolygon quadVec(*polyIn.holes()[h]);
+      dgg.q2ddRF().convert(quadVec);
+
+      // count the quads vertices fall in
+      for (int i = 0; i < quadVec.size(); i++) {
+         const DgQ2DDCoord& qc = *dgg.q2ddRF().getAddress(quadVec[i]);
+         ++holeQuads[h][qc.quadNum()];
+      }
+   }
+#endif
+
+   // now perform the intersection for each quad intersected
    int nQuadsInt = 0;
    for (int q = 1; q < 11; q++) {
 
@@ -169,12 +191,12 @@ void processOneClipPoly (DgPolygon& v, GridGenParam& dp, const DgIDGGBase& dgg,
 
       if (dp.megaVerbose) dgcout << "INTERSECTING quad " << q << endl;
 
-      if (dp.megaVerbose) dgcout << "input: " << v << endl;
+      if (dp.megaVerbose) dgcout << "input: " << polyIn << endl;
 
       ClipperLib::Paths* solution =
-                intersectPolyWithQuad (v, dp, clipRegions[q]);
+                intersectPolyWithQuad (polyIn, dp, clipRegions[q]);
 
-      if (solution->size()==0) {
+      if (solution->size() == 0) {
          if (dp.megaVerbose)
             dgcout << "no intersection in quad " << q << endl;
 
@@ -182,7 +204,6 @@ void processOneClipPoly (DgPolygon& v, GridGenParam& dp, const DgIDGGBase& dgg,
       }
 
       // if we're here we have intersection(s)
-
       if (dp.megaVerbose)
          dgcout << solution->size() << " intersections FOUND in quad " << q << endl;
 
@@ -190,7 +211,6 @@ void processOneClipPoly (DgPolygon& v, GridGenParam& dp, const DgIDGGBase& dgg,
       clipRegions[q].setIsQuadUsed(true);
 
       ////// now convert back to Snyder and add to the clipRegions
-
       DgQuadClipRegion& cr = clipRegions[q];
       for (size_t i = 0; i < solution->size(); i++) {
 
@@ -232,12 +252,46 @@ void processOneClipPoly (DgPolygon& v, GridGenParam& dp, const DgIDGGBase& dgg,
                report("intersect poly crosses quad boundary; adjust "
                    "nudge", DgBase::Fatal);
 
-            cfinVerts[0]<<ClipperLib::IntPoint(dp.clipperFactor * p0.x(),
+            cfinVerts[0] << ClipperLib::IntPoint(dp.clipperFactor * p0.x(),
                                           dp.clipperFactor * p0.y());
          }
 
-         clipRegions[q].clpPolys().push_back(cfinVerts);
-               //TODO: Original code made not of resPoly.hole[i] here
+         // start building the clipping poly definition
+         DgClippingPoly clipPoly;
+         clipPoly.exterior = cfinVerts;
+
+#ifdef USE_GDAL
+         // add the holes
+         for (int h = 0; h < polyIn.holes().size(); h++) {
+
+            // check for vertices in this quad
+            int numVertsInQuad = holeQuads[h][q];
+            if (numVertsInQuad > 0) {
+               DgPolygon theHole(*polyIn.holes()[h]);
+               DgClippingHole clipHole;
+
+               // check if all vertices are on this quad
+               const DgRFBase* rf = NULL;
+               if (numVertsInQuad == theHole.size()) {
+                  clipHole.isGnomonic = false; // use snyder
+                  rf = &dgg.q2ddRF();
+                       // note that we've already done this above
+               } else {
+                  clipHole.isGnomonic = true; // use gnomonic
+                  rf = &cr.gnomProj();
+               }
+
+               rf->convert(theHole);
+               OGRPolygon* ogrPoly = DgOutGdalFile::createPolygon(theHole);
+               clipHole.hole = *ogrPoly;
+               delete ogrPoly;
+
+               clipPoly.holes.push_back(clipHole);
+            }
+         }
+#endif
+         // store the clipping poly definition
+         clipRegions[q].clpPolys().push_back(clipPoly);
 
          //// add the attributes for this polygon
          if (dp.buildShapeFileAttributes) {
@@ -277,6 +331,12 @@ void processOneClipPoly (DgPolygon& v, GridGenParam& dp, const DgIDGGBase& dgg,
 
       delete solution;
    }
+
+#ifdef USE_GDAL
+      for (int h = 0; h < numHoles; h++)
+         delete [] holeQuads[h];
+      delete [] holeQuads;
+#endif
 
 } // void processOneClipPoly
 

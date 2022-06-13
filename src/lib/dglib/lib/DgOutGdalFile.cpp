@@ -253,7 +253,7 @@ DgOutGdalFile::createPoint (const DgLocation& loc) const
 
 ////////////////////////////////////////////////////////////////////////////////
 OGRLinearRing*
-DgOutGdalFile::createLinearRing (const DgPolygon& poly) const
+DgOutGdalFile::createLinearRing (const DgPolygon& poly)
 {
    // first create a linearRing
    OGRLinearRing *linearRing;
@@ -261,13 +261,14 @@ DgOutGdalFile::createLinearRing (const DgPolygon& poly) const
 
    // fill linearRing with points
    const vector<DgAddressBase *>& v = poly.addressVec();
+   const DgRFBase& rf = poly.rf();
    for (vector<DgAddressBase *>::const_iterator i = v.begin(); v.end() != i; ++i) {
-     DgDVec2D pt = rf().getVecAddress(*(*i));
+     DgDVec2D pt = rf.getVecAddress(*(*i));
      linearRing->addPoint(pt.x(), pt.y());
    }
 
    // add the first point to the end
-   DgDVec2D pt = rf().getVecAddress(*v[0]);
+   DgDVec2D pt = rf.getVecAddress(*v[0]);
    linearRing->addPoint(pt.x(), pt.y());
    
    return linearRing;
@@ -275,7 +276,7 @@ DgOutGdalFile::createLinearRing (const DgPolygon& poly) const
 
 ////////////////////////////////////////////////////////////////////////////////
 OGRPolygon*
-DgOutGdalFile::createPolygon (const DgPolygon& poly) const
+DgOutGdalFile::createPolygon (const DgPolygon& poly)
 {
    // first create a linearRing
    OGRLinearRing *linearRing = createLinearRing(poly);

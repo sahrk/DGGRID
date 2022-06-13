@@ -28,6 +28,11 @@
 #include <set>
 #include <map>
 #include <limits>
+// USE_GDAL is set in MakeIncludes
+#ifdef USE_GDAL
+#include <gdal.h>
+#include <ogrsf_frmts.h>
+#endif
 #include "clipper.hpp"
 #include <dglib/DgIVec2D.h>
 #include <dglib/DgProjGnomonicRF.h>
@@ -39,6 +44,32 @@ class DgIDGGBase;
 class DgContCartRF;
 class DgDiscRF2D;
 class DgContCartRF;
+
+////////////////////////////////////////////////////////////////////////////////
+#ifdef USE_GDAL
+struct DgClippingHole {
+
+   // is projection quad gnomonic or quad snyder?
+   bool isGnomonic;
+
+   // the hole
+   OGRPolygon hole;
+};
+#endif
+
+////////////////////////////////////////////////////////////////////////////////
+// clipper region intersection with quads in quad Snyder space with holes
+struct DgClippingPoly {
+
+      // the exterior polygon(s) for clipper intersection
+      ClipperLib::Paths exterior;
+
+#ifdef USE_GDAL
+      // the holes for gdal containment
+      vector<DgClippingHole> holes;
+#endif
+
+};
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgQuadClipRegion {
@@ -55,7 +86,7 @@ class DgQuadClipRegion {
 
      ~DgQuadClipRegion (void) { }
 
-      vector<ClipperLib::Paths>& clpPolys (void) { return clpPolys_; }
+      vector<DgClippingPoly>& clpPolys (void) { return clpPolys_; }
       vector < set<DgDBFfield> >& polyFields (void) { return polyFields_; }
 
       set<DgIVec2D>& points (void) { return points_; }
@@ -98,8 +129,8 @@ class DgQuadClipRegion {
 
       bool isQuadUsed_; // indicates which quads intersect the region
       
-      vector<ClipperLib::Paths> clpPolys_; // clipper region intersection with 
-                               // quads in quad Snyder space
+      vector<DgClippingPoly> clpPolys_; // clipper region intersection with 
+                               // quads with holes in quad Snyder space
 
       vector < set<DgDBFfield> > polyFields_; // shapefile attribute fields
 
