@@ -43,6 +43,7 @@ using namespace std;
 #include <dglib/DgInShapefileAtt.h>
 #include <dglib/DgOutLocFile.h>
 #include <dglib/DgOutKMLfile.h>
+#include <dglib/DgOutGdalFile.h>
 #include <dglib/DgOutPRPtsFile.h>
 #include <dglib/DgOutPRCellsFile.h>
 #include <dglib/DgOutNeighborsFile.h>
@@ -513,8 +514,45 @@ bool evalCell (GridGenParam& dp,  const DgIDGGBase& dgg, const DgContCartRF& cc1
                      ClipperLib::pftNonZero);
  
            if (solution.size() != 0) {
-//// KEVIN check holes here
-              accepted = true;
+              accepted = true; // a hole may make this false
+#ifdef USE_GDAL
+              const int numHoles = clipRegion.clpPolys()[i].holes.size();
+              if (numHoles > 0) {
+
+                 // assume quad snyder holes are likely
+                 OGRPolygon* snyderHex = DgOutGdalFile::createPolygon(verts);
+                 // lazy instantiate the quad gnomonic version if needed
+                 OGRPolygon* gnomHex = NULL;
+
+                 for (int h = 0; h < numHoles; h++) {
+                    DgClippingHole clipHole = clipRegion.clpPolys()[i].holes[h];
+
+                    // need to choose correct projection; assume snyder hole
+                    const OGRPolygon* hex = snyderHex;
+                    if (clipHole.isGnomonic) {
+                       if (!gnomHex) {
+                          DgPolygon gHex(verts);
+                          gHex.densify(1);  // make this a parameter?
+                          clipRegion.gnomProj().convert(&gHex);
+                          gnomHex = DgOutGdalFile::createPolygon(gHex);
+                       }
+                       hex = gnomHex;
+                    }
+
+                    // check if the hole contains the hex
+                    if (clipHole.hole.Contains(hex)) {
+                       accepted = false;
+                       break;
+                    }
+                 }
+
+                 delete snyderHex;
+                 if (gnomHex) delete gnomHex;
+              }
+           }
+
+           if (accepted) {
+#endif
               failure  = false;
               if (dp.buildShapeFileAttributes) {
                  // add the fields for this polygon
@@ -537,7 +575,7 @@ bool evalCell (GridGenParam& dp,  const DgIDGGBase& dgg, const DgContCartRF& cc1
 EVALCELL_FINISH:
 
      if (failure)
-      throw "Out of memory in evalCell()";
+        throw "Out of memory in evalCell()";
    }
 
    return accepted;
