@@ -524,6 +524,8 @@ bool evalCell (GridGenParam& dp,  const DgIDGGBase& dgg, const DgContCartRF& cc1
                  // lazy instantiate the quad gnomonic version if needed
                  OGRPolygon* gnomHex = NULL;
 
+char* hexStr = snyderHex->exportToJson();
+printf("snyderHex:\n%s\n", hexStr);
                  for (int h = 0; h < numHoles; h++) {
                     DgClippingHole clipHole = clipRegion.clpPolys()[i].holes[h];
 
@@ -539,6 +541,8 @@ bool evalCell (GridGenParam& dp,  const DgIDGGBase& dgg, const DgContCartRF& cc1
                        hex = gnomHex;
                     }
 
+char* clpStr = clipHole.hole.exportToJson();
+printf("hole #%d:\n%s\n", h, clpStr);
                     // check if the hole contains the hex
                     if (clipHole.hole.Contains(hex)) {
                        accepted = false;
