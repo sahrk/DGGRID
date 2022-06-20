@@ -435,8 +435,11 @@ bool evalCell (GridGenParam& dp,  const DgIDGGBase& dgg, const DgContCartRF& cc1
 
    dp.nCellsTested++;
 
-   if (dp.megaVerbose) 
+   if (dp.megaVerbose) {
       dgcout << "Testing #" << dp.nCellsTested << ": " << add2D << endl;
+      if (dp.nCellsTested == 4635)
+         dgcout << "BINGO" << endl;
+   }
 
    bool accepted = false; 
 
@@ -532,9 +535,27 @@ printf("snyderHex:\n%s\n", hexStr);
                     // need to choose correct projection; assume snyder hole
                     const OGRPolygon* hex = snyderHex;
                     if (clipHole.isGnomonic) {
+                       // lazy instantiate gnomHex
                        if (!gnomHex) {
-                          DgPolygon gHex(verts);
-                          gHex.densify(1);  // make this a parameter?
+                          DgLocation* tLoc = dgg.makeLocation(
+                                  DgQ2DICoord(clipRegion.quadNum(), add2D));
+                          DgPolygon gHex(dgg);
+                          dgg.setVertices(*tLoc, gHex, 
+                                ((dp.nDensify > 1) ? dp.nDensify : 1));
+                          delete tLoc;
+/*
+                          DgPolygon densHex(verts);
+                          densHex.densify(1);  // make this a named constant
+                          DgPolygon gHex(dgg.q2ddRF());
+                          for (int i = 0; i < densHex.size(); i++) {
+                             const DgDVec2D& v = *cc1.getAddress(densHex[i]);
+                             DgLocation* tloc = dgg.q2ddRF().makeLocation(
+                                      DgQ2DDCoord(clipRegion.quadNum(), v));
+                             gHex.push_back(*tloc);
+                             delete tloc;
+                          }
+*/
+
                           clipRegion.gnomProj().convert(&gHex);
                           gnomHex = DgOutGdalFile::createPolygon(gHex);
                        }
@@ -542,9 +563,12 @@ printf("snyderHex:\n%s\n", hexStr);
                     }
 
 char* clpStr = clipHole.hole.exportToJson();
-printf("hole #%d:\n%s\n", h, clpStr);
+char* hexStr = hex->exportToJson();
+printf("testing hex:\n%s\n in hole #%d:\n%s\n", hexStr, h, clpStr);
+fflush(stdout);
                     // check if the hole contains the hex
                     if (clipHole.hole.Contains(hex)) {
+cout << "HEX IN HOLE" << endl;
                        accepted = false;
                        break;
                     }

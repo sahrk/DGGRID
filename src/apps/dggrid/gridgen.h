@@ -92,6 +92,9 @@ class DgQuadClipRegion {
       set<DgIVec2D>& points (void) { return points_; }
       map<DgIVec2D, set<DgDBFfield> >& ptFields (void) { return ptFields_; }
 
+      int quadNum (void) const { return quadNum_; }
+      void setQuadNum (int q) { quadNum_ = q; }
+
       bool isQuadUsed (void) const { return isQuadUsed_; }
       void setIsQuadUsed (bool isQuadUsedIn) { isQuadUsed_ = isQuadUsedIn; }
 
@@ -127,10 +130,13 @@ class DgQuadClipRegion {
 
    private:
 
-      bool isQuadUsed_; // indicates which quads intersect the region
+
+      int quadNum_;
+
+      bool isQuadUsed_; // does input intersect this quad?
       
       vector<DgClippingPoly> clpPolys_; // clipper region intersection with 
-                               // quads with holes in quad Snyder space
+                               // quad with holes in quad Snyder space
 
       vector < set<DgDBFfield> > polyFields_; // shapefile attribute fields
 

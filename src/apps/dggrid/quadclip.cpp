@@ -276,6 +276,7 @@ cout << "polyIn: " << polyIn << endl;
                if (numVertsInQuad == theHole.size()) {
                   clipHole.isGnomonic = false; // use snyder
                   dgg.q2ddRF().convert(theHole);
+cout << "q2ddHole: " << theHole << endl;
                        // note that we've already done this above
 
                   DgPolygon ccHole(dgg.ccFrame());
@@ -365,9 +366,9 @@ void createClipRegions (GridGenParam& dp, const DgIDGGBase& dgg,
    dgcout << "\n* building clipping regions..." << endl;
 
    // initialize the i,j bounds
-
    for (int q = 1; q < 11; q++)
    {
+      clipRegions[q].setQuadNum(q);
       clipRegions[q].setOffset(DgIVec2D(dgg.maxD(), dgg.maxJ()));
       clipRegions[q].setUpperRight(DgIVec2D(0, 0));
    }
