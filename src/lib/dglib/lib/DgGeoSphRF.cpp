@@ -167,9 +167,12 @@ DgGeoSphRF::densify (DgPolygon& p, long double maxDist, bool rads)
       densify(*hole, maxDist, rads);
       densVerts.addHole(hole);
    }
+cout << "densify densVerts: " << densVerts << endl;
 
    // now replace the original with the densified version
    p = densVerts;
+cout << "densify p: " << p << endl;
+
 
 } // void DgGeoSphRF::densify
 

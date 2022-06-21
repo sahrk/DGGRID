@@ -30,8 +30,8 @@ DgPolygon::DgPolygon (const DgPolygon& poly)
          : DgLocVector (poly) 
 {
    if (poly.hasHoles()) {
-      for (long long int i = 0; i < poly.holes().size(); i++)
-         holes_.push_back(new DgPolygon(*poly.holes()[i]));
+      for (long int h = 0; h < poly.holes().size(); h++)
+         holes_.push_back(new DgPolygon(*poly.holes()[h]));
    }
 }
 
@@ -42,8 +42,8 @@ DgPolygon::operator= (const DgPolygon& poly)
    reinterpret_cast<DgPolygon&>(DgLocVector::operator=(poly));
    clearHoles();
    if (poly.hasHoles()) {
-      for (long long int i = 0; i < holes_.size(); i++)
-         holes_.push_back(new DgPolygon(*poly.holes()[i]));
+      for (long int h = 0; h < poly.holes().size(); h++)
+         holes_.push_back(new DgPolygon(*poly.holes()[h]));
    }
 
    return *this;
@@ -58,7 +58,7 @@ DgPolygon::operator== (const DgPolygon& poly) const
 
    // check holes
    if (isEqual) {
-      for (long long int i = 0; i < holes_.size(); i++) {
+      for (long int i = 0; i < holes_.size(); i++) {
          if (*holes_[i] != *poly.holes()[i]) {
             isEqual = false;
             break;
@@ -74,9 +74,9 @@ void
 DgPolygon::clearHoles (void)
 {
    if (hasHoles()) {
-      for (long long int i = 0; i < holes_.size(); i++) {
-         delete holes_[i];
-         holes_[i] = 0;
+      for (unsigned long int h = 0; h < holes_.size(); h++) {
+         delete holes_[h];
+         holes_[h] = 0;
       }
 
       holes_.resize(0);
@@ -136,7 +136,7 @@ DgPolygon::densify (int ptsPerEdge)
 
    // now densify any holes
    if (hasHoles())
-      for (long long int i = 0; i < holes_.size(); i++)
+      for (long int i = 0; i < holes_.size(); i++)
          holes_[i]->densify(ptsPerEdge);
 
 } // DgPolygon::densify
