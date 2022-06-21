@@ -77,12 +77,12 @@ GridGenParam::GridGenParam (DgParamList& plist)
         clipAIGen (false), clipGDAL(false), clipShape(false), clipCellRes (0), nClipCellDensify (1),
         nRandPts (0), clipRandPts (false), nDensify (1),
         lonWrapMode (DgGeoSphRF::Wrap), unwrapPts (true),
-        nudge (0.001), ptsRand (0), doPointInPoly (true), 
-        doPolyIntersect (false), sampleCount(0), nSamplePts(0), 
-        doRandPts (true), cellOut (0), ptOut (0), collectOut (0), randPtsOut (0), 
-        cellOutShp (0), ptOutShp (0), concatPtOut (true), useEnumLbl (false), 
+        nudge (0.001), ptsRand (0), doPointInPoly (true),
+        doPolyIntersect (false), sampleCount(0), nSamplePts(0),
+        doRandPts (true), cellOut (0), ptOut (0), collectOut (0), randPtsOut (0),
+        cellOutShp (0), ptOutShp (0), concatPtOut (true), useEnumLbl (false),
         nCellsTested(0), nCellsAccepted (0)
-{ 
+{
       using namespace dgg;
 
       /////// fill state variables from the parameter list //////////
@@ -94,24 +94,24 @@ GridGenParam::GridGenParam (DgParamList& plist)
       clipAIGen = false;
       clipGDAL = false;
       seqToPoly = false;
-      if (dummy == "WHOLE_EARTH") 
+      if (dummy == "WHOLE_EARTH")
          wholeEarth = true;
       else if (dummy == "AIGEN"){
          regionClip = true;
          clipAIGen  = true;
       } else if (dummy == "SHAPEFILE"){
          regionClip = true;
-         clipShape  = true; 
+         clipShape  = true;
 // USE_GDAL is set in MakeIncludes
 #ifdef USE_GDAL
       } else if (dummy == "GDAL") {
          regionClip = true;
          useGDAL = true;
-         clipGDAL  = true; 
+         clipGDAL  = true;
 #endif
       } else if (dummy == "SEQNUMS") {
          if (isApSeq)
-            ::report("clip_subset_type of SEQNUMS not supported for dggs_aperture_type of SEQUENCE", 
+            ::report("clip_subset_type of SEQNUMS not supported for dggs_aperture_type of SEQUENCE",
                      DgBase::Fatal);
 
          seqToPoly = true;
@@ -127,7 +127,7 @@ GridGenParam::GridGenParam (DgParamList& plist)
 
       string clipCellsStr;
       getParamValue(plist, "clip_cell_seqnums", clipCellsStr, false);
-      
+
       vector<string> clipCellAddressStrs;
       util::ssplit(clipCellsStr, clipCellAddressStrs);
 
@@ -135,7 +135,7 @@ GridGenParam::GridGenParam (DgParamList& plist)
       for (const auto &seqStr: clipCellAddressStrs) {
            unsigned long int sNum;
            if (sscanf(seqStr.c_str(), "%lu", &sNum) != 1)
-             ::report("gridgen(): invalid cell sequence number in clip_cell_seqnums" + 
+             ::report("gridgen(): invalid cell sequence number in clip_cell_seqnums" +
                string(seqStr), DgBase::Fatal);
 
            clipSeqNums.insert(sNum);
@@ -202,15 +202,15 @@ GridGenParam::GridGenParam (DgParamList& plist)
       getParamValue(plist, "children_output_file_name", childrenOutFileNameBase,
                       false);
 
-      getParamValue(plist, "cell_output_file_name", cellOutFileNameBase, 
+      getParamValue(plist, "cell_output_file_name", cellOutFileNameBase,
                        false);
-      getParamValue(plist, "point_output_file_name", ptOutFileNameBase, 
+      getParamValue(plist, "point_output_file_name", ptOutFileNameBase,
                        false);
-      getParamValue(plist, "randpts_output_file_name", randPtsOutFileNameBase, 
+      getParamValue(plist, "randpts_output_file_name", randPtsOutFileNameBase,
                        false);
-      getParamValue(plist, "collection_output_file_name", collectOutFileNameBase, 
+      getParamValue(plist, "collection_output_file_name", collectOutFileNameBase,
                        false);
-      getParamValue(plist, "shapefile_id_field_length", shapefileIdLen, 
+      getParamValue(plist, "shapefile_id_field_length", shapefileIdLen,
                        false);
       getParamValue(plist, "kml_default_color", kmlColor, false);
       getParamValue(plist, "kml_default_width", kmlWidth, false);
@@ -232,7 +232,7 @@ GridGenParam::GridGenParam (DgParamList& plist)
          report("dggs_type of SUPERFUND requires "
                    "output_cell_label_type of SUPERFUND", DgBase::Fatal);
 
-      if (outLblType == "ENUMERATION") 
+      if (outLblType == "ENUMERATION")
          useEnumLbl = true;
       else
          useEnumLbl = false;
@@ -278,7 +278,7 @@ GridGenParam::GridGenParam (DgParamList& plist)
 >          buildClipFileAttributes = false;
 >       }
 
-      
+
       if (buildShapeFileAttributes)
       {
          if (!clipShape)
@@ -296,11 +296,11 @@ GridGenParam::GridGenParam (DgParamList& plist)
                    "cell or point output.", DgBase::Fatal);
       }
 
-      getParamValue(plist, "shapefile_attribute_default_int", 
+      getParamValue(plist, "shapefile_attribute_default_int",
                      shapefileDefaultInt, false);
-      getParamValue(plist, "shapefile_attribute_default_double", 
+      getParamValue(plist, "shapefile_attribute_default_double",
                      shapefileDefaultDouble, false);
-      getParamValue(plist, "shapefile_attribute_default_string", 
+      getParamValue(plist, "shapefile_attribute_default_string",
                      shapefileDefaultString, false);
 
 >       if (buildShapeFileAttributes && !buildClipFileAttributes)
@@ -319,7 +319,7 @@ GridGenParam::~GridGenParam ()
  delete ptsRand;
 
  // Flush and close any input files we may have used:
- delete cellOut; 
+ delete cellOut;
  delete ptOut;
  delete collectOut;
  delete randPtsOut;
@@ -333,17 +333,17 @@ GridGenParam::~GridGenParam ()
 ////////////////////////////////////////////////////////////////////////////////
 void outputStatus (const GridGenParam& dp, bool force)
 {
-   if (force || (dp.nCellsTested && 
+   if (force || (dp.nCellsTested &&
              (dp.updateFreq && (dp.nCellsTested % dp.updateFreq == 0))))
    {
       if (dp.wholeEarth)
-         dgcout << "* generated " << dgg::util::addCommas(dp.nCellsAccepted) 
+         dgcout << "* generated " << dgg::util::addCommas(dp.nCellsAccepted)
               << " cells" << endl;
       else
       {
-         dgcout << "accepted " << dgg::util::addCommas(dp.nCellsAccepted) 
+         dgcout << "accepted " << dgg::util::addCommas(dp.nCellsAccepted)
               << " cells / ";
-         dgcout << dgg::util::addCommas(dp.nCellsTested) << " tested" << endl; 
+         dgcout << dgg::util::addCommas(dp.nCellsTested) << " tested" << endl;
       }
    }
 }
@@ -355,21 +355,21 @@ void GridGenParam::dump (void)
    MainParam::dump();
 
    dgcout << "BEGIN GEN PARAMETER DUMP" << endl;
-   
+
    dgcout << " wholeEarth: " << wholeEarth << endl;
    dgcout << " useGDAL: " << useGDAL << endl;
    dgcout << " clipAIGen: " << clipAIGen << endl;
    dgcout << " clipShape: " << clipShape << endl;
    dgcout << " clipGDAL: " << clipGDAL << endl;
-   
+
    dgcout << " regionFiles: " << endl;
    for (unsigned long i = 0; i < regionFiles.size(); i++)
       dgcout << "  " << i << " " << regionFiles[i] << endl;
-   
+
    dgcout << " nRandPts: " << nRandPts << endl;
    //cout << " clipRandPts: " << clipRandPts << endl;
    dgcout << " nDensify: " << nDensify << endl;
-   dgcout << " lonWrapMode: " << 
+   dgcout << " lonWrapMode: " <<
         DgGeoSphRF::lonWrapModeStrings[lonWrapMode] << endl;
    dgcout << " precision: " << precision << endl;
    dgcout << " nudge: " << nudge << endl;
@@ -378,7 +378,7 @@ void GridGenParam::dump (void)
    if (ptsRand)
       dgcout << "(allocated)" << endl;
    else
-      dgcout << "null" << endl; 
+      dgcout << "null" << endl;
 
    dgcout << " cellOutType: " << cellOutType << endl;
    dgcout << " pointOutType: " << pointOutType << endl;
@@ -397,19 +397,19 @@ void GridGenParam::dump (void)
    if (cellOut)
       dgcout << "(allocated)" << endl;
    else
-      dgcout << "null" << endl; 
+      dgcout << "null" << endl;
 
    dgcout << " *ptOut: ";
    if (cellOut)
       dgcout << "(allocated)" << endl;
    else
-      dgcout << "null" << endl; 
+      dgcout << "null" << endl;
 
    dgcout << " *randPtsOut: ";
    if (randPtsOut)
       dgcout << "(allocated)" << endl;
    else
-      dgcout << "null" << endl; 
+      dgcout << "null" << endl;
 
    dgcout << " concatPtOut: " << concatPtOut << endl;
    dgcout << " formatStr: " << formatStr << endl;
@@ -419,7 +419,7 @@ void GridGenParam::dump (void)
    dgcout << " geoDens: " << geoDens << endl;
    dgcout << " updateFreq: " << updateFreq << endl;
    dgcout << " maxCellsPerFile: " << maxCellsPerFile << endl;
-   
+
    dgcout << "END GEN PARAMETER DUMP" << endl;
 
 } // void GridGenParam::dump
@@ -435,13 +435,10 @@ bool evalCell (GridGenParam& dp,  const DgIDGGBase& dgg, const DgContCartRF& cc1
 
    dp.nCellsTested++;
 
-   if (dp.megaVerbose) {
+   if (dp.megaVerbose)
       dgcout << "Testing #" << dp.nCellsTested << ": " << add2D << endl;
-      if (dp.nCellsTested == 4635)
-         dgcout << "BINGO" << endl;
-   }
 
-   bool accepted = false; 
+   bool accepted = false;
 
    // start by checking the points
    set<DgIVec2D>::iterator it = clipRegion.points().find(add2D);
@@ -464,7 +461,7 @@ bool evalCell (GridGenParam& dp,  const DgIDGGBase& dgg, const DgContCartRF& cc1
       } else // only need one intersection
          return accepted;
    }
-    
+
    // generate the boundary
 
    DgLocation* loc = grid.makeLocation(add2D);
@@ -496,14 +493,14 @@ bool evalCell (GridGenParam& dp,  const DgIDGGBase& dgg, const DgContCartRF& cc1
          if (!okmaxx && p0.x() < clipRegion.maxx()) okmaxx = true;
          if (!okmaxy && p0.y() < clipRegion.maxy()) okmaxy = true;
       }
-      
+
       if (!(okminx && okmaxx) || !(okminy && okmaxy)) {
          accepted = false;
-      } else { 
+      } else {
          ClipperLib::Paths cellPoly(1);
          for (int i = 0; i < verts.size(); i++)
-           cellPoly[0] << 
-              ClipperLib::IntPoint(dp.clipperFactor * cc1.getAddress((verts)[i])->x(), 
+           cellPoly[0] <<
+              ClipperLib::IntPoint(dp.clipperFactor * cc1.getAddress((verts)[i])->x(),
                                    dp.clipperFactor * cc1.getAddress((verts)[i])->y());
 
          for (unsigned int i = 0; i < clipRegion.clpPolys().size(); i++) {
@@ -511,11 +508,11 @@ bool evalCell (GridGenParam& dp,  const DgIDGGBase& dgg, const DgContCartRF& cc1
            ClipperLib::Clipper c;
            c.AddPaths(cellPoly, ClipperLib::ptSubject, true);
            c.AddPaths(clipRegion.clpPolys()[i].exterior, ClipperLib::ptClip, true);
- 
+
            ClipperLib::Paths solution;
-           c.Execute(ClipperLib::ctIntersection, solution, ClipperLib::pftNonZero, 
+           c.Execute(ClipperLib::ctIntersection, solution, ClipperLib::pftNonZero,
                      ClipperLib::pftNonZero);
- 
+
            if (solution.size() != 0) {
               accepted = true; // a hole may make this false
 #ifdef USE_GDAL
@@ -527,8 +524,10 @@ bool evalCell (GridGenParam& dp,  const DgIDGGBase& dgg, const DgContCartRF& cc1
                  // lazy instantiate the quad gnomonic version if needed
                  OGRPolygon* gnomHex = NULL;
 
+/*
 char* hexStr = snyderHex->exportToJson();
 printf("snyderHex:\n%s\n", hexStr);
+*/
                  for (int h = 0; h < numHoles; h++) {
                     DgClippingHole clipHole = clipRegion.clpPolys()[i].holes[h];
 
@@ -540,7 +539,7 @@ printf("snyderHex:\n%s\n", hexStr);
                           DgLocation* tLoc = dgg.makeLocation(
                                   DgQ2DICoord(clipRegion.quadNum(), add2D));
                           DgPolygon gHex(dgg);
-                          dgg.setVertices(*tLoc, gHex, 
+                          dgg.setVertices(*tLoc, gHex,
                                 ((dp.nDensify > 1) ? dp.nDensify : 1));
                           delete tLoc;
 /*
@@ -562,13 +561,15 @@ printf("snyderHex:\n%s\n", hexStr);
                        hex = gnomHex;
                     }
 
+/*
 char* clpStr = clipHole.hole.exportToJson();
 char* hexStr = hex->exportToJson();
 printf("testing hex:\n%s\n in hole #%d:\n%s\n", hexStr, h, clpStr);
 fflush(stdout);
+*/
                     // check if the hole contains the hex
                     if (clipHole.hole.Contains(hex)) {
-cout << "HEX IN HOLE" << endl;
+//cout << "HEX IN HOLE" << endl;
                        accepted = false;
                        break;
                     }
@@ -599,7 +600,7 @@ cout << "HEX IN HOLE" << endl;
      failure = false;
 
      goto EVALCELL_FINISH;
-           
+
 EVALCELL_FINISH:
 
      if (failure)
@@ -648,7 +649,7 @@ bool evalCell (DgEvalData* data, DgIVec2D& add2D)
 
    if (data->dp.buildShapeFileAttributes && accepted)
    {
-      evalCell(data->dp, data->dgg, data->cc1, data->grid, 
+      evalCell(data->dp, data->dgg, data->cc1, data->grid,
                       data->clipRegion, add2D);
       return true;
    }
@@ -657,13 +658,13 @@ bool evalCell (DgEvalData* data, DgIVec2D& add2D)
        add2D.j() < data->lLeft.j() || add2D.j() > data->uRight.j())
       return false;
    else
-      return evalCell(data->dp, data->dgg, data->cc1, data->grid, 
+      return evalCell(data->dp, data->dgg, data->cc1, data->grid,
                       data->clipRegion, add2D);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-void genPoints (GridGenParam& dp, const DgIDGGBase& dgg, const DgQ2DICoord& add2D, 
+void genPoints (GridGenParam& dp, const DgIDGGBase& dgg, const DgQ2DICoord& add2D,
                 const DgContCartRF& deg, const string& label)
 {
    const DgDiscRF2D& grid = dgg.grid2D();
@@ -683,7 +684,7 @@ void genPoints (GridGenParam& dp, const DgIDGGBase& dgg, const DgQ2DICoord& add2
    DgDVec2D cpv00 = *ccRF.getAddress(*cp);
 
    if (dp.megaVerbose) dgcout << " " << *cp;
-   
+
    delete cp;
 
    if (dp.megaVerbose)
@@ -706,15 +707,15 @@ void genPoints (GridGenParam& dp, const DgIDGGBase& dgg, const DgQ2DICoord& add2
    for (int i = 0; i < dp.nRandPts; i++)
    {
       // first generate point on (0,0) diamond
-        
+
       DgDVec2D rp(dp.ptsRand->randInRange(0.0, 1.0),
          dp.ptsRand->randInRange(0.0, 2.0 * DgDmdD4Grid2D::yOff()));
 
-      if (dp.megaVerbose) dgcout << i << " " << rp; 
-   
+      if (dp.megaVerbose) dgcout << i << " " << rp;
+
       rp.setX(rp.x() - (sqrt(3.0) / 3.0) * rp.y()); // shear
 
-      if (dp.megaVerbose) dgcout << " " << rp; 
+      if (dp.megaVerbose) dgcout << " " << rp;
 
       DgLocation* nloc = 0;
       if (dp.gridTopo != Diamond)
@@ -746,7 +747,7 @@ void genPoints (GridGenParam& dp, const DgIDGGBase& dgg, const DgQ2DICoord& add2
 
                int ndx = dp.ptsRand->nextInt() % 6;
                rp.rotate(-60.0 * ndx);
-   
+
                // adjust for class I
 
                if (dgg.isClassI()) rp.rotate(30.0);
@@ -756,12 +757,12 @@ void genPoints (GridGenParam& dp, const DgIDGGBase& dgg, const DgQ2DICoord& add2
                goodPt = true;
                if (add2D.coord() == DgIVec2D(0, 0)) // pentagon
                {
-                  DgLocation* tLoc = 
+                  DgLocation* tLoc =
                          dgg.q2ddRF().makeLocation(DgQ2DDCoord(q, rp));
 
                   dgg.vertexRF().convert(tLoc);
-                            
-                  const DgAddress<DgVertex2DDCoord>& vc = 
+
+                  const DgAddress<DgVertex2DDCoord>& vc =
                                         *dgg.vertexRF().getAddress(*tLoc);
 
                   if (!vc.address().keep()) goodPt = false;
@@ -774,12 +775,12 @@ void genPoints (GridGenParam& dp, const DgIDGGBase& dgg, const DgQ2DICoord& add2
          }
 
          rp += anchor;
-         if (dp.megaVerbose) dgcout << " =final rp: " << rp; 
+         if (dp.megaVerbose) dgcout << " =final rp: " << rp;
 
          DgLocation* tloc = ccRF.makeLocation(rp);
          dgg.ccFrame().convert(tloc);
 
-         if (dp.megaVerbose) dgcout << "->" << *tloc; 
+         if (dp.megaVerbose) dgcout << "->" << *tloc;
 
          nloc = dgg.q2ddRF().makeLocation(
                        DgQ2DDCoord(q, *dgg.ccFrame().getAddress(*tloc)));
@@ -843,15 +844,15 @@ void outputCell (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dg
          delete dp.collectOut;
          dp.collectOut = NULL;
 
-         string fileName = dp.collectOutFileName + string("_") + 
+         string fileName = dp.collectOutFileName + string("_") +
                                     dgg::util::to_string(dp.nOutputFile);
 
          dp.collectOut = DgOutLocFile::makeOutLocFile(dp.cellOutType, fileName,
                          dp.gdalCollectDriver,
                          deg, false, dp.precision, DgOutLocFile::Collection, dp.shapefileIdLen,
-                         dp.kmlColor, dp.kmlWidth, dp.kmlName, 
+                         dp.kmlColor, dp.kmlWidth, dp.kmlName,
                          dp.kmlDescription);
-   
+
       }
 
       if (dp.cellOut) {
@@ -859,14 +860,14 @@ void outputCell (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dg
          dp.cellOut = NULL;
          dp.cellOutShp = NULL;
 
-         string fileName = dp.cellOutFileName + string("_") + 
+         string fileName = dp.cellOutFileName + string("_") +
                                        dgg::util::to_string(dp.nOutputFile);
          dp.cellOut = DgOutLocFile::makeOutLocFile(dp.cellOutType, fileName,
-                dp.gdalCellDriver, deg, false, dp.precision, 
+                dp.gdalCellDriver, deg, false, dp.precision,
                 DgOutLocFile::Polygon, dp.shapefileIdLen,
-                dp.kmlColor, dp.kmlWidth, dp.kmlName, 
+                dp.kmlColor, dp.kmlWidth, dp.kmlName,
                 dp.kmlDescription);
-   
+
          if (dp.outCellAttributes) {
             dp.cellOutShp = static_cast<DgOutShapefile*>(dp.cellOut);
             dp.cellOutShp->setDefIntAttribute(dp.shapefileDefaultInt);
@@ -879,17 +880,17 @@ void outputCell (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dg
          delete dp.prCellOut;
          dp.prCellOut = NULL;
 
-         string fileName = dp.cellOutFileName + string("_") + 
+         string fileName = dp.cellOutFileName + string("_") +
                                        dgg::util::to_string(dp.nOutputFile);
          dp.prCellOut = new DgOutPRCellsFile(deg, fileName, dp.precision);
-      } 
+      }
 
       if (dp.ptOut) {
          delete dp.ptOut;
          dp.ptOut = NULL;
          dp.ptOutShp = NULL;
 
-         string fileName = dp.ptOutFileName + string("_") + 
+         string fileName = dp.ptOutFileName + string("_") +
                                        dgg::util::to_string(dp.nOutputFile);
          dp.ptOut = DgOutLocFile::makeOutLocFile(dp.pointOutType, fileName,
                       dp.gdalPointDriver,
@@ -905,11 +906,11 @@ void outputCell (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dg
 
             dp.ptOutShp->addFields(dp.allFields);
          }
-      } else if (dp.prPtOut) {  
+      } else if (dp.prPtOut) {
          delete dp.prPtOut;
          dp.prPtOut = NULL;
-      
-         string fileName = dp.ptOutFileName + string("_") + 
+
+         string fileName = dp.ptOutFileName + string("_") +
                                        dgg::util::to_string(dp.nOutputFile);
          dp.prPtOut = new DgOutPRPtsFile(deg, fileName, dp.precision);
       }
@@ -919,7 +920,7 @@ void outputCell (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dg
          delete dp.randPtsOut;
          dp.randPtsOut = NULL;
 
-         string fileName = dp.randPtsOutFileName + string("_") + 
+         string fileName = dp.randPtsOutFileName + string("_") +
                                        dgg::util::to_string(dp.nOutputFile);
          if (dp.curGrid == 1 || !dp.concatPtOut)
          {
@@ -927,7 +928,7 @@ void outputCell (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dg
                dp.randPtsOut = new DgOutRandPtsText(deg, fileName, dp.precision);
             else
                dp.randPtsOut = DgOutLocFile::makeOutLocFile(dp.randPtsOutType,
-                    fileName, dp.gdalPointDriver, deg, true, dp.precision, 
+                    fileName, dp.gdalPointDriver, deg, true, dp.precision,
                     DgOutLocFile::Point, dp.shapefileIdLen,
                     dp.kmlColor, dp.kmlWidth, dp.kmlName, dp.kmlDescription);
          }
@@ -954,8 +955,8 @@ void outputCell (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dg
 
          string fileName = dp.childrenOutFileName + string("_") +
                                        dgg::util::to_string(dp.nOutputFile);
-         dp.chdOut = new DgOutChildrenFile(fileName, "chd"); 
-       } 
+         dp.chdOut = new DgOutChildrenFile(fileName, "chd");
+       }
    }
 
    DgLocation* tmpLoc = new DgLocation(add2D);
@@ -982,14 +983,14 @@ void outputCell (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dg
    // create the cell to output
    DgCell cell(dgg.geoRF(), label, *tmpLoc, unwrappedVerts);
 
-/* 
+/*
    //output cell area
    dgg.geoRF().convert(tmpLoc);
-   long double area = 
+   long double area =
          DgGeoCoord::geoPolyArea(verts, *dgg.geoRF().getAddress(*tmpLoc));
    dgcout << std::setprecision(15);
-   dgcout << label << " " << area << " " 
-        << area * dgg.geoRF().earthRadiusKM() * dgg.geoRF().earthRadiusKM() 
+   dgcout << label << " " << area << " "
+        << area * dgg.geoRF().earthRadiusKM() * dgg.geoRF().earthRadiusKM()
         << endl;
 */
 
@@ -1001,8 +1002,8 @@ void outputCell (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dg
    DgInterleaveCoord intCoord = *dgg.intRF().getAddress(*tmpLoc);
    delete tmpLoc;
 */
-         
-   if (dp.megaVerbose) 
+
+   if (dp.megaVerbose)
       dgcout << "accepted " << label << " " << add2D << endl;
 
    const DgQ2DICoord& q2di = *dgg.getAddress(add2D);
@@ -1033,7 +1034,7 @@ void outputCell (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dg
    }
 
    ///// generate random points if applicable ///
-   if (dp.doRandPts) 
+   if (dp.doRandPts)
       genPoints(dp, dgg, *dgg.getAddress(add2D), deg, cell.label());
 
    ///// neighbor/children output files /////
@@ -1060,13 +1061,13 @@ void outputCell (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dg
 
       dggs.setAllChildren(q2diR, children);
 
-      if (dp.chdOut) 
+      if (dp.chdOut)
          dp.chdOut->insert(dgg, add2D, children);
    }
 
    if (dp.collectOut) {
-      dp.collectOut->insert(dgg, cell, 
-            (dp.pointOutType == "GDAL_COLLECTION"), 
+      dp.collectOut->insert(dgg, cell,
+            (dp.pointOutType == "GDAL_COLLECTION"),
             (dp.cellOutType == "GDAL_COLLECTION"),
             ((dp.neighborsOutType == "GDAL_COLLECTION") ? &neighbors : NULL),
             ((dp.childrenOutType == "GDAL_COLLECTION") ? &children : NULL));
@@ -1075,8 +1076,8 @@ void outputCell (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dg
 } // void outputCell
 
 ////////////////////////////////////////////////////////////////////////////////
-void outputCellAdd2D (GridGenParam& dp, const DgIDGGSBase& dggs, 
-                 const DgIDGGBase& dgg, const DgLocation& add2D, 
+void outputCellAdd2D (GridGenParam& dp, const DgIDGGSBase& dggs,
+                 const DgIDGGBase& dgg, const DgLocation& add2D,
                  const DgPolygon& verts, const DgContCartRF& deg)
 {
    // create the various output forms
@@ -1102,8 +1103,8 @@ void genGrid (GridGenParam& dp)
    DgRFNetwork net0;
    const DgGeoSphRF& geoRF = *(DgGeoSphRF::makeRF(net0, dp.datum, dp.earthRadius));
    const DgIDGGSBase *dggs = DgIDGGSBase::makeRF(net0, geoRF, dp.vert0,
-             dp.azimuthDegs, dp.aperture, dp.actualRes+2, dp.gridTopo, 
-             dp.gridMetric, "IDGGS", dp.projType, dp.isMixed43, dp.numAp4, 
+             dp.azimuthDegs, dp.aperture, dp.actualRes+2, dp.gridTopo,
+             dp.gridMetric, "IDGGS", dp.projType, dp.isMixed43, dp.numAp4,
              dp.isSuperfund, dp.isApSeq, dp.apSeq);
 
    const DgIDGGBase& dgg = dggs->idggBase(dp.actualRes);
@@ -1133,7 +1134,7 @@ void genGrid (GridGenParam& dp)
       neighborsOutFileName += numStr;
       childrenOutFileName += numStr;
    }
-   
+
    dp.prCellOut = NULL;
    dp.cellOut = NULL;
    if (dp.cellOutType == "TEXT")
@@ -1141,8 +1142,8 @@ void genGrid (GridGenParam& dp)
    else if (dp.cellOutType == "GDAL_COLLECTION")
       makeCollectFile = true;
    else
-      dp.cellOut = DgOutLocFile::makeOutLocFile(dp.cellOutType, cellOutFileName, 
-                   dp.gdalCellDriver, deg, false, dp.precision, 
+      dp.cellOut = DgOutLocFile::makeOutLocFile(dp.cellOutType, cellOutFileName,
+                   dp.gdalCellDriver, deg, false, dp.precision,
                    DgOutLocFile::Polygon, dp.shapefileIdLen,
                    dp.kmlColor, dp.kmlWidth, dp.kmlName, dp.kmlDescription);
 
@@ -1159,12 +1160,12 @@ void genGrid (GridGenParam& dp)
    if (dp.pointOutType == "GDAL_COLLECTION")
       makeCollectFile = true;
    else
-      dp.ptOut = DgOutLocFile::makeOutLocFile(dp.pointOutType, 
-           ptOutFileName, dp.gdalPointDriver, deg, true, dp.precision, 
+      dp.ptOut = DgOutLocFile::makeOutLocFile(dp.pointOutType,
+           ptOutFileName, dp.gdalPointDriver, deg, true, dp.precision,
            DgOutLocFile::Point, dp.shapefileIdLen,
            dp.kmlColor, dp.kmlWidth, dp.kmlName, dp.kmlDescription);
 
-   if (!makeCollectFile && 
+   if (!makeCollectFile &&
          ((dp.childrenOutType == "GDAL_COLLECTION") ||
           (dp.neighborsOutType == "GDAL_COLLECTION")))
       ::report("GDAL_COLLECTION must include cell and/or point data",
@@ -1172,8 +1173,8 @@ void genGrid (GridGenParam& dp)
 
    dp.collectOut = NULL;
    if (makeCollectFile)
-      dp.collectOut = DgOutLocFile::makeOutLocFile("GDAL_COLLECTION", 
-             collectOutFileName, dp.gdalCollectDriver, deg, false, 
+      dp.collectOut = DgOutLocFile::makeOutLocFile("GDAL_COLLECTION",
+             collectOutFileName, dp.gdalCollectDriver, deg, false,
              dp.precision, DgOutLocFile::Collection, dp.shapefileIdLen,
              dp.kmlColor, dp.kmlWidth, dp.kmlName, dp.kmlDescription);
 
@@ -1192,8 +1193,8 @@ void genGrid (GridGenParam& dp)
             dp.randPtsOut = new DgOutRandPtsText(deg, randPtsOutFileName,
                       dp.precision);
          else
-            dp.randPtsOut = DgOutLocFile::makeOutLocFile(dp.randPtsOutType, 
-                      randPtsOutFileName, dp.gdalPointDriver, deg, true, dp.precision, 
+            dp.randPtsOut = DgOutLocFile::makeOutLocFile(dp.randPtsOutType,
+                      randPtsOutFileName, dp.gdalPointDriver, deg, true, dp.precision,
                       DgOutLocFile::Point, dp.shapefileIdLen,
                       dp.kmlColor, dp.kmlWidth, dp.kmlName, dp.kmlDescription);
       }
@@ -1274,11 +1275,11 @@ void genGrid (GridGenParam& dp)
          regionFile >> points;
          regionFile.close();
          delete pRegionFile;
-   
+
          if (dp.megaVerbose) dgcout << "input: " << points << endl;
 
          dgg.convert(&points);
-   
+
          if (dp.megaVerbose) dgcout << " -> " << points << endl;
 
          list<DgLocBase*>::const_iterator it;
@@ -1337,7 +1338,7 @@ void genGrid (GridGenParam& dp)
                dp.nCellsAccepted++;
                dp.nCellsTested++;
                outputStatus(dp);
-   
+
                DgPolygon* verts = new DgPolygon(dgg);
                dgg.setVertices(*addLoc, *verts, dp.nDensify);
 
@@ -1399,16 +1400,16 @@ void genGrid (GridGenParam& dp)
       {
          if (overageSet[q].empty() && !clipRegions[q].isQuadUsed())
          {
-            dgcout << string("* No intersections in quad ") 
+            dgcout << string("* No intersections in quad ")
                  << dgg::util::to_string(q) << "." << endl;
             continue;
          }
 
-         dgcout << string("* Testing quad ") << dgg::util::to_string(q) 
+         dgcout << string("* Testing quad ") << dgg::util::to_string(q)
               << "... " << endl;
 
-         if (dp.megaVerbose) 
-            dgcout << "Generating: " << q << " " << clipRegions[q].offset() 
+         if (dp.megaVerbose)
+            dgcout << "Generating: " << q << " " << clipRegions[q].offset()
                  << " " << clipRegions[q].upperRight() << endl;
 
          DgIVec2D lLeft;
@@ -1434,7 +1435,7 @@ void genGrid (GridGenParam& dp)
          {
             DgBoundedRF2D b1(grid, DgIVec2D(0, 0), (uRight - lLeft));
             DgIVec2D tCoord = lLeft; // where are we on the grid?
-            while (!overageSet[q].empty() || clipRegions[q].isQuadUsed()) 
+            while (!overageSet[q].empty() || clipRegions[q].isQuadUsed())
             {
                DgIVec2D coord = tCoord;
                bool accepted = false;
@@ -1451,15 +1452,15 @@ void genGrid (GridGenParam& dp)
                         accepted = true;
                         overageSet[q].erase(it);
                         if (dp.megaVerbose) dgcout << "found OVERAGE coord " << coord << endl;
- 
+
                         tCoord -= lLeft;
                         tCoord = b1.incrementAddress(tCoord);
-                        if (tCoord == b1.invalidAdd()) 
+                        if (tCoord == b1.invalidAdd())
                            clipRegions[q].setIsQuadUsed(false);
 
                         tCoord += lLeft;
                      }
-                     else 
+                     else
                      {
                         set<DgIVec2D>::iterator it = overageSet[q].begin();
                         if (*it < tCoord)
@@ -1473,7 +1474,7 @@ void genGrid (GridGenParam& dp)
                         {
                            tCoord -= lLeft;
                            tCoord = b1.incrementAddress(tCoord);
-                           if (tCoord == b1.invalidAdd()) 
+                           if (tCoord == b1.invalidAdd())
                               clipRegions[q].setIsQuadUsed(false);
 
                            tCoord += lLeft;
@@ -1493,7 +1494,7 @@ void genGrid (GridGenParam& dp)
                {
                   tCoord -= lLeft;
                   tCoord = b1.incrementAddress(tCoord);
-                  if (tCoord == b1.invalidAdd()) 
+                  if (tCoord == b1.invalidAdd())
                      clipRegions[q].setIsQuadUsed(false);
 
                   tCoord += lLeft;
@@ -1503,7 +1504,7 @@ void genGrid (GridGenParam& dp)
                // (this should all be done using the seqNum methods, would be
                // much cleaner)
 
-               if (!dgg.isClassI()) 
+               if (!dgg.isClassI())
 	          if ((coord.j() + coord.i()) % 3) continue;
 
                outputStatus(dp);
@@ -1525,7 +1526,7 @@ void genGrid (GridGenParam& dp)
                outputCellAdd2D(dp, *dggs, dgg, *addLoc, verts, deg);
 	       delete addLoc;
 
-               // check for special cases 
+               // check for special cases
                if (q == 0 || q == 11) break; // only one cell
             }
          } // else !dp.isSuperfund
@@ -1552,7 +1553,7 @@ void genGrid (GridGenParam& dp)
    dgcout << "\n** grid generation complete **" << endl;
    outputStatus(dp, true);
    if (!dp.wholeEarth && !dp.seqToPoly)
-      dgcout << "acceptance rate is " << 
+      dgcout << "acceptance rate is " <<
           100.0 * (long double) dp.nCellsAccepted / (long double) dp.nCellsTested <<
           "%" << endl;
 
@@ -1568,32 +1569,32 @@ void doGridGen (GridGenParam& dp, DgGridPList& plist)
       dp.ptOutFileName = dp.ptOutFileNameBase;
       dp.collectOutFileName = dp.collectOutFileNameBase;
       dp.randPtsOutFileName = dp.randPtsOutFileNameBase;
-      dp.metaOutFileName = dp.metaOutFileNameBase; 
+      dp.metaOutFileName = dp.metaOutFileNameBase;
       dp.neighborsOutFileName = dp.neighborsOutFileNameBase;
       dp.childrenOutFileName = dp.childrenOutFileNameBase;
 
-      if (dp.placeRandom && dp.ptsRand != 0) 
-         plist.setParam("randpts_seed", 
+      if (dp.placeRandom && dp.ptsRand != 0)
+         plist.setParam("randpts_seed",
            dgg::util::to_string(dp.ptsRand->status()));
 
       orientGrid(dp, plist);
 
-      if (dp.numGrids > 1) 
+      if (dp.numGrids > 1)
       {
          string suffix = string(".") + dgg::util::to_string(dp.curGrid, 4);
-         dp.metaOutFileName = dp.metaOutFileName + suffix; 
-         dp.cellOutFileName = dp.cellOutFileName + suffix; 
+         dp.metaOutFileName = dp.metaOutFileName + suffix;
+         dp.cellOutFileName = dp.cellOutFileName + suffix;
          dp.ptOutFileName = dp.ptOutFileName + suffix;
          dp.collectOutFileName = dp.collectOutFileName + suffix;
 
          if (!dp.concatPtOut)
             dp.randPtsOutFileName = dp.randPtsOutFileName + suffix;
       }
-      
+
       // open the output files as applicable; most files need to wait for
       // the RFs to be created
 
-      if (dp.numGrids > 1 || dp.placeRandom) 
+      if (dp.numGrids > 1 || dp.placeRandom)
       {
          ofstream metaOutFile;
          metaOutFile.open(dp.metaOutFileName.c_str());

@@ -262,7 +262,6 @@ void processOneClipPoly (DgPolygon& polyIn, GridGenParam& dp, const DgIDGGBase& 
 
 #ifdef USE_GDAL
          // add the holes
-cout << "polyIn: " << polyIn << endl;
          for (int h = 0; h < polyIn.holes().size(); h++) {
 
             // check for vertices in this quad
@@ -276,7 +275,6 @@ cout << "polyIn: " << polyIn << endl;
                if (numVertsInQuad == theHole.size()) {
                   clipHole.isGnomonic = false; // use snyder
                   dgg.q2ddRF().convert(theHole);
-cout << "q2ddHole: " << theHole << endl;
                        // note that we've already done this above
 
                   DgPolygon ccHole(dgg.ccFrame());
@@ -289,17 +287,17 @@ cout << "q2ddHole: " << theHole << endl;
 
                   theHole = ccHole;
 
-cout << "snyderHole: " << theHole << endl;
                } else {
                   clipHole.isGnomonic = true; // use gnomonic
                   cr.gnomProj().convert(theHole);
                   rf = &cr.gnomProj();
-cout << "gnomonicHole: " << theHole << endl;
                }
 
                OGRPolygon* ogrPoly = DgOutGdalFile::createPolygon(theHole);
+/*
 char* clpStr = ogrPoly->exportToJson();
 printf("ogrPoly:\n%s\n", clpStr);
+*/
 
                clipHole.hole = *ogrPoly;
                delete ogrPoly;

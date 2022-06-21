@@ -27,7 +27,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 DgPolygon::DgPolygon (const DgPolygon& poly)
-         : DgLocVector (poly) 
+         : DgLocVector (poly)
 {
    if (poly.hasHoles()) {
       for (long int h = 0; h < poly.holes().size(); h++)
@@ -36,7 +36,7 @@ DgPolygon::DgPolygon (const DgPolygon& poly)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-const DgPolygon& 
+const DgPolygon&
 DgPolygon::operator= (const DgPolygon& poly)
 {
    reinterpret_cast<DgPolygon&>(DgLocVector::operator=(poly));
@@ -50,7 +50,7 @@ DgPolygon::operator= (const DgPolygon& poly)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-bool 
+bool
 DgPolygon::operator== (const DgPolygon& poly) const
 {
    bool isEqual = DgLocVector::operator==(poly) &&
@@ -90,9 +90,9 @@ DgPolygon::~DgPolygon (void)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
+void
 DgPolygon::densify (int ptsPerEdge)
-{ 
+{
    if (ptsPerEdge <= 0) return;
 
    const DgContCartRF* cc = dynamic_cast<const DgContCartRF*>(&rf());
@@ -107,7 +107,7 @@ DgPolygon::densify (int ptsPerEdge)
    for (unsigned long i = 0; i < v0.size(); i++) {
 
       DgDVec2D p1 = dynamic_cast< DgAddress<DgDVec2D>& >(*v0[i]).address();
-      DgDVec2D p2 = dynamic_cast< DgAddress<DgDVec2D>& >( 
+      DgDVec2D p2 = dynamic_cast< DgAddress<DgDVec2D>& >(
                                           *v0[(i + 1) % v0.size()]).address();
 
       long double fracStep = 1.0 / (ptsPerEdge + 1);
