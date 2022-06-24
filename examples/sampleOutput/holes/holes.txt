@@ -38,7 +38,7 @@ randpts_output_type NONE (default)
 cell_output_gdal_format GeoJSON (default)
 point_output_gdal_format GeoJSON (default)
 collection_output_gdal_format GeoJSON (default)
-clip_using_holes false (default)
+clip_using_holes true (user set)
 cell_output_file_name ./outputfiles/res17 (user set)
 point_output_file_name centers (default)
 randpts_output_file_name randPts (default)
@@ -79,6 +79,6 @@ Registering GDAL drivers...
 * No intersections in quad 11.
 
 ** grid generation complete **
-accepted 4,261 cells / 9,714 tested
-acceptance rate is 43.8645%
+accepted 4,201 cells / 9,714 tested
+acceptance rate is 43.2469%
 
