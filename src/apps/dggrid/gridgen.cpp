@@ -179,6 +179,10 @@ GridGenParam::GridGenParam (DgParamList& plist)
          doPointInPoly = true;
       }
 
+#ifdef USE_GDAL
+      getParamValue(plist, "clip_using_holes", useHoles, false);
+#endif
+
       getParamValue(plist, "clipper_scale_factor", clipperFactor, false);
       invClipperFactor = 1.0L / clipperFactor;
 
@@ -516,50 +520,39 @@ bool evalCell (GridGenParam& dp,  const DgIDGGBase& dgg, const DgContCartRF& cc1
            if (solution.size() != 0) {
               accepted = true; // a hole may make this false
 #ifdef USE_GDAL
-              const int numHoles = clipRegion.clpPolys()[i].holes.size();
-              if (numHoles > 0) {
+              if (dp.useHoles) {
+                 const int numHoles = clipRegion.clpPolys()[i].holes.size();
+                 if (numHoles > 0) {
 
-                 // assume quad snyder holes are likely
-                 OGRPolygon* snyderHex = DgOutGdalFile::createPolygon(verts);
-                 // lazy instantiate the quad gnomonic version if needed
-                 OGRPolygon* gnomHex = NULL;
+                    // assume quad snyder holes are likely
+                    OGRPolygon* snyderHex = DgOutGdalFile::createPolygon(verts);
+                    // lazy instantiate the quad gnomonic version if needed
+                    OGRPolygon* gnomHex = NULL;
 
 /*
 char* hexStr = snyderHex->exportToJson();
 printf("snyderHex:\n%s\n", hexStr);
 */
-                 for (int h = 0; h < numHoles; h++) {
-                    DgClippingHole clipHole = clipRegion.clpPolys()[i].holes[h];
+                    for (int h = 0; h < numHoles; h++) {
+                       DgClippingHole clipHole = clipRegion.clpPolys()[i].holes[h];
 
-                    // need to choose correct projection; assume snyder hole
-                    const OGRPolygon* hex = snyderHex;
-                    if (clipHole.isGnomonic) {
-                       // lazy instantiate gnomHex
-                       if (!gnomHex) {
-                          DgLocation* tLoc = dgg.makeLocation(
+                       // need to choose correct projection; assume snyder hole
+                       const OGRPolygon* hex = snyderHex;
+                       if (clipHole.isGnomonic) {
+                          // lazy instantiate gnomHex
+                          if (!gnomHex) {
+                             DgLocation* tLoc = dgg.makeLocation(
                                   DgQ2DICoord(clipRegion.quadNum(), add2D));
-                          DgPolygon gHex(dgg);
-                          dgg.setVertices(*tLoc, gHex,
+                             DgPolygon gHex(dgg);
+                             dgg.setVertices(*tLoc, gHex,
                                 ((dp.nDensify > 1) ? dp.nDensify : 1));
-                          delete tLoc;
-/*
-                          DgPolygon densHex(verts);
-                          densHex.densify(1);  // make this a named constant
-                          DgPolygon gHex(dgg.q2ddRF());
-                          for (int i = 0; i < densHex.size(); i++) {
-                             const DgDVec2D& v = *cc1.getAddress(densHex[i]);
-                             DgLocation* tloc = dgg.q2ddRF().makeLocation(
-                                      DgQ2DDCoord(clipRegion.quadNum(), v));
-                             gHex.push_back(*tloc);
-                             delete tloc;
-                          }
-*/
+                             delete tLoc;
 
-                          clipRegion.gnomProj().convert(&gHex);
-                          gnomHex = DgOutGdalFile::createPolygon(gHex);
+                             clipRegion.gnomProj().convert(&gHex);
+                             gnomHex = DgOutGdalFile::createPolygon(gHex);
+                          }
+                          hex = gnomHex;
                        }
-                       hex = gnomHex;
-                    }
 
 /*
 char* clpStr = clipHole.hole.exportToJson();
@@ -567,16 +560,17 @@ char* hexStr = hex->exportToJson();
 printf("testing hex:\n%s\n in hole #%d:\n%s\n", hexStr, h, clpStr);
 fflush(stdout);
 */
-                    // check if the hole contains the hex
-                    if (clipHole.hole.Contains(hex)) {
+                       // check if the hole contains the hex
+                       if (clipHole.hole.Contains(hex)) {
 //cout << "HEX IN HOLE" << endl;
-                       accepted = false;
-                       break;
+                          accepted = false;
+                          break;
+                       }
                     }
-                 }
 
-                 delete snyderHex;
-                 if (gnomHex) delete gnomHex;
+                    delete snyderHex;
+                    if (gnomHex) delete gnomHex;
+                 }
               }
            }
 

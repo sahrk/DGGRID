@@ -17,6 +17,7 @@ dggs_res_spec 17
 # control the generation
 clip_subset_type GDAL
 clip_region_files ./inputfiles/holes00.geojson
+clip_using_holes TRUE
 geodetic_densify 0.01 
 
 # specify the output

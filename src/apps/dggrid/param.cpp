@@ -676,6 +676,9 @@ DgGridPList::init2 (void)
 
    // collection_output_gdal_format <gdal driver type>
    insertParam(new DgStringParam("collection_output_gdal_format", "GeoJSON"));
+
+   // clip_using_holes <TRUE | FALSE> 
+   insertParam(new DgBoolParam("clip_using_holes", false));
 #endif
 
    // cell_output_file_name <outputFileName>

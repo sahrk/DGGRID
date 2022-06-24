@@ -160,23 +160,27 @@ void processOneClipPoly (DgPolygon& polyIn, GridGenParam& dp, const DgIDGGBase& 
    }
 
 #ifdef USE_GDAL
-   //// determine which holes have vertices on which quads
-   const int numHoles = polyIn.holes().size();
-   int** holeQuads = new int*[numHoles];
-   for (int h = 0; h < numHoles; h++) {
+   int numHoles = 0;
+   int** holeQuads = NULL;
+   if (dp.useHoles) {
+      //// determine which holes have vertices on which quads
+      numHoles = polyIn.holes().size();
+      holeQuads = new int*[numHoles];
+      for (int h = 0; h < numHoles; h++) {
 
-      // initialize the counts
-      holeQuads[h] = new int[12];
-      for (int q = 0; q < 12; q++)
-         holeQuads[h][q] = 0;
+         // initialize the counts
+         holeQuads[h] = new int[12];
+         for (int q = 0; q < 12; q++)
+            holeQuads[h][q] = 0;
 
-      DgPolygon quadVec(*polyIn.holes()[h]);
-      dgg.q2ddRF().convert(quadVec);
+         DgPolygon quadVec(*polyIn.holes()[h]);
+         dgg.q2ddRF().convert(quadVec);
 
-      // count the quads vertices fall in
-      for (int i = 0; i < quadVec.size(); i++) {
-         const DgQ2DDCoord& qc = *dgg.q2ddRF().getAddress(quadVec[i]);
-         ++holeQuads[h][qc.quadNum()];
+         // count the quads vertices fall in
+         for (int i = 0; i < quadVec.size(); i++) {
+            const DgQ2DDCoord& qc = *dgg.q2ddRF().getAddress(quadVec[i]);
+            ++holeQuads[h][qc.quadNum()];
+         }
       }
    }
 #endif
@@ -261,48 +265,50 @@ void processOneClipPoly (DgPolygon& polyIn, GridGenParam& dp, const DgIDGGBase& 
          clipPoly.exterior = cfinVerts;
 
 #ifdef USE_GDAL
-         // add the holes
-         for (int h = 0; h < polyIn.holes().size(); h++) {
+         if (dp.useHoles) {
+            // add the holes
+            for (int h = 0; h < polyIn.holes().size(); h++) {
 
-            // check for vertices in this quad
-            int numVertsInQuad = holeQuads[h][q];
-            if (numVertsInQuad > 0) {
-               DgPolygon theHole(*polyIn.holes()[h]);
-               DgClippingHole clipHole;
+               // check for vertices in this quad
+               int numVertsInQuad = holeQuads[h][q];
+               if (numVertsInQuad > 0) {
+                  DgPolygon theHole(*polyIn.holes()[h]);
+                  DgClippingHole clipHole;
 
-               // check if all vertices are on this quad
-               const DgRFBase* rf = NULL;
-               if (numVertsInQuad == theHole.size()) {
-                  clipHole.isGnomonic = false; // use snyder
-                  dgg.q2ddRF().convert(theHole);
+                  // check if all vertices are on this quad
+                  const DgRFBase* rf = NULL;
+                  if (numVertsInQuad == theHole.size()) {
+                     clipHole.isGnomonic = false; // use snyder
+                     dgg.q2ddRF().convert(theHole);
                        // note that we've already done this above
 
-                  DgPolygon ccHole(dgg.ccFrame());
-                  for (int i = 0; i < theHole.size(); i++) {
-                     const DgQ2DDCoord& q2v = *dgg.q2ddRF().getAddress(theHole[i]);
-                     DgLocation* tloc = dgg.ccFrame().makeLocation(q2v.coord());
-                     ccHole.push_back(*tloc);
-                     delete tloc;
+                     DgPolygon ccHole(dgg.ccFrame());
+                     for (int i = 0; i < theHole.size(); i++) {
+                        const DgQ2DDCoord& q2v = *dgg.q2ddRF().getAddress(theHole[i]);
+                        DgLocation* tloc = dgg.ccFrame().makeLocation(q2v.coord());
+                        ccHole.push_back(*tloc);
+                        delete tloc;
+                     }
+
+                     theHole = ccHole;
+
+                  } else {
+                     clipHole.isGnomonic = true; // use gnomonic
+                     cr.gnomProj().convert(theHole);
+                     rf = &cr.gnomProj();
                   }
 
-                  theHole = ccHole;
-
-               } else {
-                  clipHole.isGnomonic = true; // use gnomonic
-                  cr.gnomProj().convert(theHole);
-                  rf = &cr.gnomProj();
-               }
-
-               OGRPolygon* ogrPoly = DgOutGdalFile::createPolygon(theHole);
+                  OGRPolygon* ogrPoly = DgOutGdalFile::createPolygon(theHole);
 /*
 char* clpStr = ogrPoly->exportToJson();
 printf("ogrPoly:\n%s\n", clpStr);
 */
 
-               clipHole.hole = *ogrPoly;
-               delete ogrPoly;
+                  clipHole.hole = *ogrPoly;
+                  delete ogrPoly;
 
-               clipPoly.holes.push_back(clipHole);
+                  clipPoly.holes.push_back(clipHole);
+               }
             }
          }
 #endif
@@ -349,9 +355,11 @@ printf("ogrPoly:\n%s\n", clpStr);
    }
 
 #ifdef USE_GDAL
-      for (int h = 0; h < numHoles; h++)
-         delete [] holeQuads[h];
-      delete [] holeQuads;
+      if (dp.useHoles) {
+         for (int h = 0; h < numHoles; h++)
+            delete [] holeQuads[h];
+         delete [] holeQuads;
+      }
 #endif
 
 } // void processOneClipPoly
