@@ -50,6 +50,8 @@ class DgRFBase {
 
    public:
 
+      static const unsigned int maxFmtStr = 50;
+
       virtual ~DgRFBase (void);
 
       int id (void) const { return id_; }
@@ -157,7 +159,7 @@ class DgRFBase {
    private:
 
       void setFormatStr (void)
-            { sprintf(formatStr_, "%%#.%dLF", precision()); }
+            { snprintf(formatStr_, DgRFBase::maxFmtStr, "%%#.%dLF", precision()); }
 
       string toString        (const DgLocBase& lb) const;
       string toString        (const DgLocBase& lb, char delimiter) const;
@@ -186,7 +188,7 @@ class DgRFBase {
 
       int id_;
 
-      char formatStr_[20];
+      char formatStr_[maxFmtStr];
 
       DgRFNetwork* network_;
 
