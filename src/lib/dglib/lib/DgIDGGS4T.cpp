@@ -80,7 +80,7 @@ DgIDGGS4T::~DgIDGGS4T (void)
 
 ////////////////////////////////////////////////////////////////////////////////
 DgIDGGS4T&
-DgIDGGS4T::operator= (const DgIDGGS4T& rf)
+DgIDGGS4T::operator= (const DgIDGGS4T&)
 {
    report("DgIDGGS4T::operator=() not implemented", DgBase::Fatal);
 
@@ -94,8 +94,7 @@ DgIDGGS4T::setAddParents (const DgResAdd<DgQ2DICoord>& add,
                                DgLocVector& vec) const
 {
 //cout << "   setAddParents: " << add << endl;
-   if (isCongruent())
-   {
+   if (isCongruent()) {
       DgLocation* tmpLoc = makeLocation(add);
       grids()[add.res() - 1]->convert(tmpLoc);
       convert(tmpLoc);
@@ -103,9 +102,7 @@ DgIDGGS4T::setAddParents (const DgResAdd<DgQ2DICoord>& add,
       vec.push_back(*tmpLoc);
 
       delete tmpLoc;
-   }
-   else
-   {
+   } else {
       report("DgIDGGS4T::DgIDGGS4T() only congruent triangle grid "
              "systems implemented", DgBase::Fatal);
    }
@@ -174,15 +171,12 @@ DgIDGGS4T::setAddInteriorChildren (const DgResAdd<DgQ2DICoord>& add,
 
 ////////////////////////////////////////////////////////////////////////////////
 void
-DgIDGGS4T::setAddBoundaryChildren (const DgResAdd<DgQ2DICoord>& add,
-                                        DgLocVector& vec) const
+DgIDGGS4T::setAddBoundaryChildren (const DgResAdd<DgQ2DICoord>&,
+                                        DgLocVector&) const
 {
-   if (isCongruent())
-   {
+   if (isCongruent()) {
       // no boundary children in this topology; leave vec empty
-   }
-   else
-   {
+   } else {
       report("DgIDGGS4T::DgIDGGS4T() only congruent triangle grid "
              "systems implemented", DgBase::Fatal);
    }
