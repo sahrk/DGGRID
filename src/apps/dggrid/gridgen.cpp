@@ -259,7 +259,7 @@ GridGenParam::GridGenParam (DgParamList& plist)
          }
       }
 
-      sprintf(formatStr, ", %%#.%dLF, %%#.%dLF\n", precision, precision);
+      sprintf(formatStr, MAX_FMT_STR, ", %%#.%dLF, %%#.%dLF\n", precision, precision);
 
       ///// attribute files
 
