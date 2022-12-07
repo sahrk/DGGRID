@@ -122,7 +122,11 @@ extern "C" void report (const string& message,
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 inline void
+#if DGDEBUG
 DgBase::debug (const string& message) const
+#else
+DgBase::debug (const string&) const // unused parameter
+#endif
 //
 // Print-out a debugging message if the DGDEBUG flag is set. Otherwise this
 // is a null operation.
@@ -131,9 +135,7 @@ DgBase::debug (const string& message) const
 {
 
 #if DGDEBUG
-
    dgcout << "DEBUG: [" << instanceName_ << "] " << message << endl;
-
 #endif
 
 } // void DgBase::debug
