@@ -82,7 +82,8 @@ inline ostream& operator<< (ostream& stream, const DgPolygon& poly)
 
    if (poly.hasHoles()) {
       stream << "][\n";
-      for (int i = 0; i < poly.holes().size(); i++) stream << *poly.holes()[i];
+      for (unsigned long i = 0; i < poly.holes().size(); i++) 
+         stream << *poly.holes()[i];
       stream << "]\n";
    }
 

@@ -35,7 +35,7 @@ DgBoundedRF<A, B, DB>::DgBoundedRF (const DgDiscRF<A, B, DB>& rfIn,
 
 ////////////////////////////////////////////////////////////////////////////////
 template<class A, class B, class DB> bool
-DgBoundedRF<A, B, DB>::validLocation (const DgLocation& loc, bool convert) const
+DgBoundedRF<A, B, DB>::validLocation (const DgLocation& loc, bool /* convert */) const
 {
    return validAddress(*discRF().getAddress(loc));
 
@@ -43,7 +43,7 @@ DgBoundedRF<A, B, DB>::validLocation (const DgLocation& loc, bool convert) const
 
 ////////////////////////////////////////////////////////////////////////////////
 template<class A, class B, class DB> DgLocation&
-DgBoundedRF<A, B, DB>::incrementLocation (DgLocation& loc, bool convert) const
+DgBoundedRF<A, B, DB>::incrementLocation (DgLocation& loc, bool /* convert */) const
 {
    const A* add = discRF().getAddress(loc);
 
@@ -55,7 +55,7 @@ DgBoundedRF<A, B, DB>::incrementLocation (DgLocation& loc, bool convert) const
 
 ////////////////////////////////////////////////////////////////////////////////
 template<class A, class B, class DB> DgLocation&
-DgBoundedRF<A, B, DB>::decrementLocation (DgLocation& loc, bool convert) const
+DgBoundedRF<A, B, DB>::decrementLocation (DgLocation& loc, bool /* convert */) const
 {
    const A* add = discRF().getAddress(loc);
 
@@ -67,7 +67,7 @@ DgBoundedRF<A, B, DB>::decrementLocation (DgLocation& loc, bool convert) const
 
 ////////////////////////////////////////////////////////////////////////////////
 template<class A, class B, class DB> unsigned long long int
-DgBoundedRF<A, B, DB>::seqNum (const DgLocation& loc, bool convert) const
+DgBoundedRF<A, B, DB>::seqNum (const DgLocation& loc, bool /* convert */) const
 {
    const A* add = discRF().getAddress(loc);
 

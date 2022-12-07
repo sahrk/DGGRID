@@ -114,16 +114,16 @@ class DgRFBase {
       // the following routines are "back-doors" included for speed;
       // use with care!
 
-      virtual DgAddressBase* vecAddress (const DgDVec2D& v) const
+      virtual DgAddressBase* vecAddress (const DgDVec2D&) const
                     { return 0; }
 
-      virtual DgLocation* vecLocation (const DgDVec2D& v) const
+      virtual DgLocation* vecLocation (const DgDVec2D&) const
                     { return 0; }
 
-      virtual DgDVec2D getVecAddress (const DgAddressBase& add) const
+      virtual DgDVec2D getVecAddress (const DgAddressBase&) const
                     { return DgDVec2D::undefDgDVec2D; }
 
-      virtual DgDVec2D getVecLocation (const DgLocation& loc) const
+      virtual DgDVec2D getVecLocation (const DgLocation&) const
                     { return DgDVec2D::undefDgDVec2D; }
 
    protected:
