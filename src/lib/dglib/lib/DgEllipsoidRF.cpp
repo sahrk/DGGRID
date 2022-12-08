@@ -77,7 +77,7 @@ DgGeoCoord::gcDist (const DgGeoCoord& g1, const DgGeoCoord& g2,
 ////////////////////////////////////////////////////////////////////////////////
 DgGeoCoord
 DgGeoCoord::gcIntersect (const DgGeoCoord& g11, const DgGeoCoord& g12,
-          const DgGeoCoord& g21, const DgGeoCoord& g22)
+          const DgGeoCoord& g21, const DgGeoCoord& /* g22 */)
 /*
    Return point of intersection of the two great circle arc segments g11-g12
    and g21-g22.

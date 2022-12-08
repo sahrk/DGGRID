@@ -63,7 +63,7 @@ DgOutPRPtsFile::insert (const DgDVec2D& pt)
    char buff[maxBuffSize];
 
    // want latitude, longitude
-   sprintf(buff, formatStr(), pt.y(), pt.x());
+   snprintf(buff, maxBuffSize, formatStr(), pt.y(), pt.x());
 
    *this << buff;
 
@@ -112,8 +112,7 @@ DgOutPRPtsFile::insert (DgLocation& loc, const string& type,
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutPRPtsFile::insert (DgLocVector& vec, const string* label,
-                     const DgLocation* cent)
+DgOutPRPtsFile::insert (DgLocVector&, const string*, const DgLocation*)
 //
 // Put the polyline vec.
 //
@@ -127,15 +126,13 @@ DgOutPRPtsFile::insert (DgLocVector& vec, const string* label,
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutPRPtsFile::insert (DgPolygon& poly, const string* label,
-                     const DgLocation* cent)
+DgOutPRPtsFile::insert (DgPolygon&, const string*, const DgLocation*)
 //
 // Put the polygon poly.
 //
 ////////////////////////////////////////////////////////////////////////////////
 {
    DgOutputStream::report("DgOutPRPtsFile::insert(DgPolygon): not defined.", DgBase::Fatal);
-   return *this;
 
    return *this;
 

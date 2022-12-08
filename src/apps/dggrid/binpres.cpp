@@ -558,8 +558,8 @@ void binPresPartial (BinPresenceParam& dp)
 ////////////////////////////////////////////////////////////////////////////////
 void doBinPresence (BinPresenceParam& dp, DgGridPList& plist)
 {
-   char tmpStr[100];
-   sprintf(tmpStr, "%%lf%c%%lf%c", dp.inputDelimiter, dp.inputDelimiter);
+   char tmpStr[DgRFBase::maxFmtStr];
+   snprintf(tmpStr, DgRFBase::maxFmtStr, "%%lf%c%%lf%c", dp.inputDelimiter, dp.inputDelimiter);
    dp.inFormatStr = tmpStr;
 
    for (dp.curGrid = 1; dp.curGrid <= dp.numGrids; dp.curGrid++)

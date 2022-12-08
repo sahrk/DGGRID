@@ -40,7 +40,6 @@ class DgPolygon;
 ////////////////////////////////////////////////////////////////////////////////
 class DgInGDALFile : public DgInLocTextFile
 {
-
 public:
 
     DgInGDALFile (const DgRFBase& rfIn, const string* fileNameIn = NULL,
@@ -61,6 +60,11 @@ public:
     virtual DgInLocFile& extract (DgPolygon& poly);
     virtual DgInLocFile& extract (DgLocation& loc);
     virtual DgInLocFile& extract (DgCell& cell);
+
+protected:
+
+    void ogrLinearRingToDg (OGRLinearRing* oLinearRing, DgPolygon& poly);
+    void ogrPolyToDg (OGRPolygon* oPolygon, DgPolygon& poly);
 
 private:
 

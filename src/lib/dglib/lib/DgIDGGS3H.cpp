@@ -50,7 +50,7 @@ DgIDGGS3H::~DgIDGGS3H (void)
 
 ////////////////////////////////////////////////////////////////////////////////
 DgIDGGS3H&
-DgIDGGS3H::operator= (const DgIDGGS3H& rf)
+DgIDGGS3H::operator= (const DgIDGGS3H&)
 {
    report("DgIDGGS3H::operator=() not implemented", DgBase::Fatal);
 

@@ -30,7 +30,7 @@ using namespace std;
 #include <dglib/DgIDGGS4H.h>
 
 ////////////////////////////////////////////////////////////////////////////////
-int main (int argc, char* argv[])
+int main (int, char**)
 {
    ///// create the DGG /////
 

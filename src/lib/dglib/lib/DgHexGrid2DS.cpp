@@ -213,7 +213,7 @@ DgHexGrid2DS::~DgHexGrid2DS (void)
 
 ////////////////////////////////////////////////////////////////////////////////
 DgHexGrid2DS&
-DgHexGrid2DS::operator= (const DgHexGrid2DS& rf)
+DgHexGrid2DS::operator= (const DgHexGrid2DS&)
 {
    report("DgHexGrid2DS::operator=() ", DgBase::Fatal);
 

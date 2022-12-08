@@ -182,7 +182,7 @@ DgOutShapefile::addFields (const set<DgDBFfield>& fields)
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutShapefile::insert (const DgDVec2D& pt)
+DgOutShapefile::insert (const DgDVec2D&)
 //
 // Put the point pt.
 //
@@ -298,8 +298,7 @@ DgOutShapefile::insert (DgLocation& loc, const string* label)
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutShapefile::insert (DgLocVector& vec, const string* label,
-                     const DgLocation* cent)
+DgOutShapefile::insert (DgLocVector&, const string*, const DgLocation*)
 //
 // Put the polyline vec.
 //
@@ -316,7 +315,7 @@ DgOutShapefile::insert (DgLocVector& vec, const string* label,
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
 DgOutShapefile::insert (DgPolygon& poly, const string* label,
-                     const DgLocation* cent)
+                     const DgLocation* /* cent */)
 //
 // Put the polygon poly.
 //

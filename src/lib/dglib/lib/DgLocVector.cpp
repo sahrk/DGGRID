@@ -41,8 +41,7 @@ DgLocVector::clearAddress (void)
 {
    tmpLoc_.address_ = 0;
 
-   for (long long int i = 0; i < size(); i++)
-   {
+   for (long long int i = 0; i < size(); i++) {
       delete vec_[i];
       vec_[i] = 0;
    }
@@ -70,7 +69,7 @@ DgLocVector::operator== (const DgLocVector& vec) const
 
 ////////////////////////////////////////////////////////////////////////////////
 void 
-DgLocVector::setLoc (int ndx, const DgLocation& loc, bool conv)
+DgLocVector::setLoc (int ndx, const DgLocation& loc, bool /* conv */)
 {
    if (rf() == loc.rf()) 
    {
@@ -88,7 +87,7 @@ DgLocVector::setLoc (int ndx, const DgLocation& loc, bool conv)
 
 ////////////////////////////////////////////////////////////////////////////////
 void 
-DgLocVector::push_back (const DgLocation& loc, bool conv)
+DgLocVector::push_back (const DgLocation& loc, bool /* conv */)
 {
    if (rf() == loc.rf()) 
    {

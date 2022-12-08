@@ -155,7 +155,7 @@ DgOutKMLfile::insert(const DgDVec2D& pt)
    const int maxBuffSize = 200;
    char buff[maxBuffSize];
 
-   sprintf(buff, formatStr(), pt.x(), pt.y());
+   snprintf(buff, maxBuffSize, formatStr(), pt.x(), pt.y());
 
    o << "            " << buff;
 
@@ -189,7 +189,7 @@ DgOutKMLfile::insert (DgLocation& loc, const string* label)
 }
 
 DgOutLocFile&
-DgOutKMLfile::insert (DgLocVector& vec, const string* label, const DgLocation* cent)
+DgOutKMLfile::insert (DgLocVector& vec, const string* label, const DgLocation* /* cent */)
 {
    DgOutKMLfile& o(*this);
 
@@ -219,7 +219,7 @@ DgOutKMLfile::insert (DgLocVector& vec, const string* label, const DgLocation* c
 }
 
 DgOutLocFile&
-DgOutKMLfile::insert (DgPolygon& poly, const string* label, const DgLocation* cent)
+DgOutKMLfile::insert (DgPolygon& poly, const string* label, const DgLocation* /* cent */)
 {
    DgOutKMLfile& o(*this);
 

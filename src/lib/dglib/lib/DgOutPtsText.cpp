@@ -60,7 +60,7 @@ DgOutPtsText::insert (const DgDVec2D& pt)
    const int maxBuffSize = 200;
    char buff[maxBuffSize];
 
-   sprintf(buff, formatStr(), pt.x(), pt.y());
+   snprintf(buff, maxBuffSize, formatStr(), pt.x(), pt.y());
 
    *this << buff;
 
@@ -93,8 +93,7 @@ DgOutPtsText::insert (DgLocation& loc, const string* label)
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutPtsText::insert (DgLocVector& vec, const string* label,
-                     const DgLocation* cent)
+DgOutPtsText::insert (DgLocVector&, const string*, const DgLocation*)
 //
 // Put the polyline vec.
 //
@@ -108,15 +107,13 @@ DgOutPtsText::insert (DgLocVector& vec, const string* label,
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutPtsText::insert (DgPolygon& poly, const string* label,
-                     const DgLocation* cent)
+DgOutPtsText::insert (DgPolygon&, const string*, const DgLocation*)
 //
 // Put the polygon poly.
 //
 ////////////////////////////////////////////////////////////////////////////////
 {
    DgOutputStream::report("DgOutPtsText::insert(DgPolygon): not defined.", DgBase::Fatal);
-   return *this;
 
    return *this;
 

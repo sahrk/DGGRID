@@ -83,7 +83,7 @@ DgOutGeoJSONFile::insert(const DgDVec2D& pt)
    const int maxBuffSize = 200;
    char buff[maxBuffSize];
 
-   sprintf(buff, formatStr(), pt.x(), pt.y());
+   snprintf(buff, maxBuffSize, formatStr(), pt.x(), pt.y());
 
    o << buff;
 
@@ -118,7 +118,7 @@ DgOutGeoJSONFile::insert (DgLocation& loc, const string* label)
 
 DgOutLocFile&
 DgOutGeoJSONFile::insert (DgLocVector& vec, const string* label,
-   const DgLocation* cent)
+   const DgLocation* /* cent */)
 {
    DgOutGeoJSONFile& o(*this);
 
@@ -151,7 +151,7 @@ DgOutGeoJSONFile::insert (DgLocVector& vec, const string* label,
 
 DgOutLocFile&
 DgOutGeoJSONFile::insert (DgPolygon& poly, const string* label,
-   const DgLocation* cent)
+   const DgLocation* /* cent */)
 {
    DgOutGeoJSONFile& o(*this);
 
