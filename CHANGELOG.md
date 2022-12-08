@@ -5,7 +5,7 @@ All changes are by Kevin Sahr, unless otherwise noted.
 
 ## [7.7] - 2022-12-08
 ### Added
-- handles holes in input clipping polygons. Uses new parameter clip_using_holes
+- handles holes in input clipping polygons. Uses new parameter clip_using_holes and example named holes
 ### Fixed
 - replaced deprecated sprintf with snprintf throughout
 - suppressed unused parameter compiler warnings 
