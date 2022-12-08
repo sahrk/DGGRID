@@ -43,7 +43,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 DgOutGdalFile::DgOutGdalFile (const DgGeoSphDegRF& rf,
                     const std::string& filename, const std::string& gdalDriver, 
-                    DgOutGdalFileMode mode, int precision, bool isPointFile, 
+                    DgOutGdalFileMode mode, int /* precision */, bool isPointFile, 
                     DgReportLevel failLevel)
     : DgOutLocFile (filename, rf, isPointFile, failLevel), _mode (mode),
          _gdalDriver(""), _driver(NULL), _dataset(NULL), _oLayer(NULL),  
@@ -152,7 +152,7 @@ DgOutGdalFile::createFeature (const string& label) const
 
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutGdalFile::insert(const DgDVec2D& pt)
+DgOutGdalFile::insert(const DgDVec2D&)
 {
    //Probably isn't needed but keep in for safety
    return *this;
@@ -345,8 +345,7 @@ DgOutGdalFile::insert (DgLocation& loc, const string* label)
 
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutGdalFile::insert (DgLocVector& vec, const string* label,
-                          const DgLocation* cent)
+DgOutGdalFile::insert (DgLocVector&, const string*, const DgLocation*)
 {
    ::report( "polyline output not supported for GDAL file output", DgBase::Fatal );
    return *this;
@@ -355,7 +354,7 @@ DgOutGdalFile::insert (DgLocVector& vec, const string* label,
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
 DgOutGdalFile::insert (DgPolygon& poly, const string* label,
-                          const DgLocation* cent)
+                          const DgLocation* /* cent */)
 {
    if (_mode != Polygon)
       ::report( "invalid GDAL output file mode encountered.", DgBase::Fatal );

@@ -69,7 +69,7 @@ DgLocVector::operator== (const DgLocVector& vec) const
 
 ////////////////////////////////////////////////////////////////////////////////
 void 
-DgLocVector::setLoc (int ndx, const DgLocation& loc, bool conv)
+DgLocVector::setLoc (int ndx, const DgLocation& loc, bool /* conv */)
 {
    if (rf() == loc.rf()) 
    {
@@ -87,7 +87,7 @@ DgLocVector::setLoc (int ndx, const DgLocation& loc, bool conv)
 
 ////////////////////////////////////////////////////////////////////////////////
 void 
-DgLocVector::push_back (const DgLocation& loc, bool conv)
+DgLocVector::push_back (const DgLocation& loc, bool /* conv */)
 {
    if (rf() == loc.rf()) 
    {

@@ -93,8 +93,7 @@ DgOutRandPtsText::insert (DgLocation& loc, const string* label)
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutRandPtsText::insert (DgLocVector& vec, const string* label,
-                     const DgLocation* cent)
+DgOutRandPtsText::insert (DgLocVector&, const string*, const DgLocation*)
 //
 // Put the polyline vec.
 //
@@ -108,15 +107,13 @@ DgOutRandPtsText::insert (DgLocVector& vec, const string* label,
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutRandPtsText::insert (DgPolygon& poly, const string* label,
-                     const DgLocation* cent)
+DgOutRandPtsText::insert (DgPolygon&, const string*, const DgLocation*)
 //
 // Put the polygon poly.
 //
 ////////////////////////////////////////////////////////////////////////////////
 {
    DgOutputStream::report("DgOutRandPtsText::insert(DgPolygon): not defined.", DgBase::Fatal);
-   return *this;
 
    return *this;
 

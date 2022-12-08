@@ -57,8 +57,8 @@ class DgOutGdalFile : public DgOutLocFile
       ~DgOutGdalFile();
 
       // direct the DgOutLocFile abstract methods to the DgOutputStream ones
-      virtual bool open (const string& fileName,
-                       DgReportLevel failLevel = DgBase::Fatal) {
+      virtual bool open (const string& /* fileName */,
+                       DgReportLevel /* failLevel = DgBase::Fatal */) {
          return true;
       }
 

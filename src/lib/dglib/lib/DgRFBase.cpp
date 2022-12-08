@@ -112,7 +112,7 @@ DgRFBase::convert (DgPolygon& poly) const
 
    convert((DgLocVector&) poly);
    if (poly.hasHoles()) {
-      for (long long int i = 0; i < poly.holes().size(); i++)
+      for (unsigned long i = 0; i < poly.holes().size(); i++)
          convert(*poly.holes()[i]);
    }
 

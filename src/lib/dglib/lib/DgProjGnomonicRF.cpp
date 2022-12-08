@@ -56,7 +56,7 @@ DgProjGnomonicRF::DgProjGnomonicRF(DgRFNetwork& networkIn, const string& nameIn,
 ////////////////////////////////////////////////////////////////////////////////
 DgDVec2D
 DgProjGnomonicRF::projForward (const DgGeoCoord& addIn,
-                               const DgEllipsoidRF& e) const
+                               const DgEllipsoidRF&) const
 {
    //cout << "gnom projForward: " << *this << " coord: " << addIn << endl;
 
@@ -117,7 +117,7 @@ DgProjGnomonicRF::projForward (const DgGeoCoord& addIn,
 ////////////////////////////////////////////////////////////////////////////////
 DgGeoCoord
 DgProjGnomonicRF::projInverse (const DgDVec2D& addIn, 
-                               const DgEllipsoidRF& e) const
+                               const DgEllipsoidRF&) const
 //
 // spheroid only; needs to be verified at some point
 //
