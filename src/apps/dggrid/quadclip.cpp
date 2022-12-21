@@ -629,6 +629,8 @@ void createClipRegions (GridGenParam& dp, const DgIDGGBase& dgg,
       vector<string> clipCellAddressStrs;
       dgg::util::ssplit(dp.clipCellsStr, clipCellAddressStrs);
 
+//cout << "INRF: " << *dp.pInRF << endl;
+//cout << "CLIPDGG: " << clipDgg << endl;
       // the coarse clipping cells
       // use a set to avoid duplicates
       set<unsigned long int> clipSeqNums; 
@@ -645,9 +647,11 @@ void createClipRegions (GridGenParam& dp, const DgIDGGBase& dgg,
             DgLocation* tmpLoc = NULL;
             tmpLoc = new DgLocation(*dp.pInRF);
             tmpLoc->fromString(seqStr.c_str(), dp.inputDelimiter);
-            dgg.convert(tmpLoc);
+//cout << "seqStr: " << seqStr << " tmpLoc: " << *tmpLoc << " -> ";
+            clipDgg.convert(tmpLoc);
 
-            sNum = static_cast<const DgIDGGBase&>(dgg).bndRF().seqNum(*tmpLoc);
+            sNum = static_cast<const DgIDGGBase&>(clipDgg).bndRF().seqNum(*tmpLoc);
+//cout << *tmpLoc << " sNum: " << sNum << endl;
             delete tmpLoc;
          }
 

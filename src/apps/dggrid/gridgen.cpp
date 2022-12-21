@@ -65,6 +65,8 @@ using namespace std;
 #include <dglib/DgDmdD4Grid2DS.h>
 #include <dglib/DgTriGrid2D.h>
 #include <dglib/DgOutRandPtsText.h>
+#include <dglib/DgZOrderRF.h>
+#include <dglib/DgZOrderStringRF.h>
 #include "DgHexSF.h"
 
 using namespace dgg::topo;
@@ -1111,7 +1113,27 @@ void genGrid (GridGenParam& dp)
    const DgGeoSphDegRF& deg = *(DgGeoSphDegRF::makeRF(geoRF, geoRF.name() + "Deg"));
 
    // set-up the input reference frame
-   MainParam::addressTypeToRF(dp, dgg, true);
+   if (dp.cellClip &&  dp.inAddType != dgg::addtype::SeqNum) {
+      if (dp.clipCellRes < 0 || dp.clipCellRes > dp.actualRes)
+         ::report("genGrid(): invalid clipCellRes", DgBase::Fatal);
+
+      const DgRFBase* rf = NULL;
+      switch (dp.inAddType) {
+         case dgg::addtype::ZOrder:
+            rf = dgg.dggs()->idggBase(dp.clipCellRes).zorderRF();
+            break;
+         case dgg::addtype::ZOrderString:
+            rf = dgg.dggs()->idggBase(dp.clipCellRes).zorderStrRF();
+            break;
+         default:
+            ::report("genGrid(): invalid coarse clip address type", DgBase::Fatal);
+      }
+      dp.pInRF = rf;
+      dp.inSeqNum = false;
+   } else {
+      MainParam::addressTypeToRF(dp, dgg, true);
+   }
+
    if (!dp.pInRF)
       ::report("genGrid(): invalid input RF", DgBase::Fatal);
 
