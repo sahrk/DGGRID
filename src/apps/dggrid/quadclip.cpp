@@ -637,7 +637,6 @@ void createClipRegions (GridGenParam& dp, const DgIDGGBase& dgg,
       // parse the clip cell sequence numbers
       for (const auto &seqStr: clipCellAddressStrs) {
 
-//cout << "seqStr: " << seqStr;
          unsigned long int sNum = 0;
          if (dp.inSeqNum) {
             if (sscanf(seqStr.c_str(), "%lu", &sNum) != 1)
@@ -648,11 +647,9 @@ void createClipRegions (GridGenParam& dp, const DgIDGGBase& dgg,
             DgLocation* tmpLoc = NULL;
             tmpLoc = new DgLocation(*dp.pInRF);
             tmpLoc->fromString(seqStr.c_str(), dp.inputDelimiter);
-cout << "seqStr: " << seqStr << " tmpLoc: " << *tmpLoc << " -> ";
             clipDgg.convert(tmpLoc);
 
             sNum = static_cast<const DgIDGGBase&>(clipDgg).bndRF().seqNum(*tmpLoc);
-cout << *tmpLoc << " sNum: " << sNum << endl;
             delete tmpLoc;
          }
 
