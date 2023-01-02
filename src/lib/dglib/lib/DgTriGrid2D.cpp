@@ -81,7 +81,7 @@ DgTriGrid2D::setAddNeighbors (const DgIVec2D& add, DgLocVector& vec) const
 } // void DgTriGrid2D::setAddNeighbors
 
 ////////////////////////////////////////////////////////////////////////////////
-DgIVec2D 
+DgIVec2D
 DgTriGrid2D::quantify (const DgDVec2D& point) const
 {
    DgDVec2D p(point);  // p prime
@@ -110,10 +110,10 @@ DgTriGrid2D::quantify (const DgDVec2D& point) const
 } // DgIVec2D DgTriGrid2D::quantify
 
 ////////////////////////////////////////////////////////////////////////////////
-DgDVec2D 
+DgDVec2D
 DgTriGrid2D::invQuantify (const DgIVec2D& add) const
 {
-   long double x = ((long double) add.i() * e()) - 
+   long double x = ((long double) add.i() * e()) -
                  ((long double) ((add.j() + 1) / 2) * e() / 2.0);
    long double y = 1.5 * (long double) (add.j() / 2) + 0.5 * (long double) (add.j() % 2);
 

@@ -35,13 +35,13 @@
 using namespace dgg::topo;
 
 ////////////////////////////////////////////////////////////////////////////////
-DgDmdD8Grid2DS::DgDmdD8Grid2DS (DgRFNetwork& networkIn, 
-               const DgRF<DgDVec2D, long double>& backFrameIn, int nResIn, 
+DgDmdD8Grid2DS::DgDmdD8Grid2DS (DgRFNetwork& networkIn,
+               const DgRF<DgDVec2D, long double>& backFrameIn, int nResIn,
                unsigned int apertureIn, bool isCongruentIn, bool isAlignedIn,
                const string& nameIn)
         : DgDiscRFS2D (networkIn, backFrameIn, nResIn, apertureIn, Diamond, D8,
-                       isCongruentIn, isAlignedIn, nameIn) 
-{ 
+                       isCongruentIn, isAlignedIn, nameIn)
+{
    // determine the radix
 
    radix_ = static_cast<int>(sqrt(static_cast<float>(aperture())));
@@ -59,7 +59,7 @@ DgDmdD8Grid2DS::DgDmdD8Grid2DS (DgRFNetwork& networkIn,
    }
 
    // do the grids
-   
+
    long double fac = 1;
 
    DgDVec2D trans;
@@ -91,7 +91,7 @@ DgDmdD8Grid2DS::DgDmdD8Grid2DS (DgRFNetwork& networkIn,
 
       const DgContCartRF* ccRF = DgContCartRF::makeRF(network(), newName + string("bf"));
 
-      Dg2WayContAffineConverter (backFrame(), *ccRF, (long double) fac, 0.0, trans); 
+      Dg2WayContAffineConverter (backFrame(), *ccRF, (long double) fac, 0.0, trans);
 
       (*grids_)[i] = DgDmdD8Grid2D::makeRF(network(), *ccRF, newName);
       Dg2WayResAddConverter<DgIVec2D, DgDVec2D, long double> (*this, *(grids()[i]), i);
@@ -102,7 +102,7 @@ DgDmdD8Grid2DS::DgDmdD8Grid2DS (DgRFNetwork& networkIn,
 } // DgDmdD8Grid2DS::DgDmdD8Grid2DS
 
 ////////////////////////////////////////////////////////////////////////////////
-DgDmdD8Grid2DS::DgDmdD8Grid2DS (const DgDmdD8Grid2DS& rf) 
+DgDmdD8Grid2DS::DgDmdD8Grid2DS (const DgDmdD8Grid2DS& rf)
   : DgDiscRFS2D (rf)
 {
    report("DgDmdD8Grid2DS::operator=() not implemented yet", DgBase::Fatal);
@@ -126,8 +126,8 @@ DgDmdD8Grid2DS::operator= (const DgDmdD8Grid2DS&)
 } // DgDmdD8Grid2DS& DgDmdD8Grid2DS::operator=
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgDmdD8Grid2DS::setAddParents (const DgResAdd<DgIVec2D>& add, 
+void
+DgDmdD8Grid2DS::setAddParents (const DgResAdd<DgIVec2D>& add,
                                DgLocVector& vec) const
 {
 //cout << "   setAddParents: " << add << endl;
@@ -160,10 +160,10 @@ DgDmdD8Grid2DS::setAddParents (const DgResAdd<DgIVec2D>& add,
       {
          bool found = false;
 
-         for (int j = 0; j < vec.size(); j++) 
+         for (int j = 0; j < vec.size(); j++)
          {
 //cout << "  " << i << " " << j << " " << (*verts)[i] << " " << vec[j];
-            if ((*verts)[i] == vec[j]) 
+            if ((*verts)[i] == vec[j])
             {
 //cout << " YES" << endl;
                found = true;
@@ -171,7 +171,7 @@ DgDmdD8Grid2DS::setAddParents (const DgResAdd<DgIVec2D>& add,
             }
 //cout << " NO" << endl;
          }
-         
+
          if (!found) vec.push_back((*verts)[i]);
       }
 //cout << "   parents: " << vec << endl;
@@ -182,8 +182,8 @@ DgDmdD8Grid2DS::setAddParents (const DgResAdd<DgIVec2D>& add,
 } // void DgDmdD8Grid2DS::setAddParents
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgDmdD8Grid2DS::setAddInteriorChildren (const DgResAdd<DgIVec2D>& add, 
+void
+DgDmdD8Grid2DS::setAddInteriorChildren (const DgResAdd<DgIVec2D>& add,
                                         DgLocVector& vec) const
 {
    if (isCongruent() || radix() == 3)
@@ -196,7 +196,7 @@ DgDmdD8Grid2DS::setAddInteriorChildren (const DgResAdd<DgIVec2D>& add,
          for (int j = 0; j < radix(); j++)
          {
             v.push_back(new DgAddress< DgResAdd<DgIVec2D> >(
-             DgResAdd<DgIVec2D>(DgIVec2D(lowerLeft.i() + i, lowerLeft.j() + j), 
+             DgResAdd<DgIVec2D>(DgIVec2D(lowerLeft.i() + i, lowerLeft.j() + j),
                                add.res() + 1)));
          }
       }
@@ -211,12 +211,12 @@ DgDmdD8Grid2DS::setAddInteriorChildren (const DgResAdd<DgIVec2D>& add,
 
       delete tmpLoc;
    }
-   
+
 } // void DgDmdD8Grid2DS::setAddInteriorChildren
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgDmdD8Grid2DS::setAddBoundaryChildren (const DgResAdd<DgIVec2D>& add, 
+void
+DgDmdD8Grid2DS::setAddBoundaryChildren (const DgResAdd<DgIVec2D>& add,
                                         DgLocVector& vec) const
 {
    if (isCongruent() || radix() == 3)
@@ -236,8 +236,8 @@ DgDmdD8Grid2DS::setAddBoundaryChildren (const DgResAdd<DgIVec2D>& add,
 } // void DgDmdD8Grid2DS::setAddBoundaryChildren
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgDmdD8Grid2DS::setAddAllChildren (const DgResAdd<DgIVec2D>& add, 
+void
+DgDmdD8Grid2DS::setAddAllChildren (const DgResAdd<DgIVec2D>& add,
                                    DgLocVector& vec) const
 {
    setAddInteriorChildren(add, vec);

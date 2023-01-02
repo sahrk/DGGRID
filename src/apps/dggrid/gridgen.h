@@ -76,12 +76,12 @@ class DgQuadClipRegion {
 
    public:
 
-      DgQuadClipRegion (void) 
+      DgQuadClipRegion (void)
            : isQuadUsed_ (false), gnomProj_ (0),
-	     overI_ (false), overJ_ (false), 
-             minx_ (numeric_limits<long double>::max()), 
+	     overI_ (false), overJ_ (false),
+             minx_ (numeric_limits<long double>::max()),
              miny_ (numeric_limits<long double>::max()),
-	     maxx_ (numeric_limits<long double>::min()), 
+	     maxx_ (numeric_limits<long double>::min()),
              maxy_ (numeric_limits<long double>::min()) { }
 
      ~DgQuadClipRegion (void) { }
@@ -102,11 +102,11 @@ class DgQuadClipRegion {
       void setOffset (const DgIVec2D& offsetIn) { offset_ = offsetIn; }
 
       const DgIVec2D& upperRight (void) const { return upperRight_; }
-      void setUpperRight (const DgIVec2D& upperRightIn) 
+      void setUpperRight (const DgIVec2D& upperRightIn)
              { upperRight_ = upperRightIn; }
 
       const DgProjGnomonicRF& gnomProj (void) const { return *gnomProj_; }
-      void setGnomProj (const DgProjGnomonicRF* gnomProjIn) 
+      void setGnomProj (const DgProjGnomonicRF* gnomProjIn)
                                   { gnomProj_ = gnomProjIn; }
 
       ClipperLib::Paths& gnomBndry (void) { return gnomBndry_; }
@@ -134,8 +134,8 @@ class DgQuadClipRegion {
       int quadNum_;
 
       bool isQuadUsed_; // does input intersect this quad?
-      
-      vector<DgClippingPoly> clpPolys_; // clipper region intersection with 
+
+      vector<DgClippingPoly> clpPolys_; // clipper region intersection with
                                // quad with holes in quad Snyder space
 
       vector < set<DgDBFfield> > polyFields_; // shapefile attribute fields
@@ -170,24 +170,24 @@ class DgEvalData {
       GridGenParam& dp;
       const DgIDGGBase& dgg;
       const DgContCartRF& cc1;
-      const DgDiscRF2D& grid; 
+      const DgDiscRF2D& grid;
       DgQuadClipRegion& clipRegion;
-      set<DgIVec2D>& overageSet; 
+      set<DgIVec2D>& overageSet;
       map<DgIVec2D, set<DgDBFfield> > overageFields;
       const DgContCartRF& deg;
       const DgIVec2D& lLeft;
       const DgIVec2D& uRight;
 
-      DgEvalData (GridGenParam& dpIn, const DgIDGGBase& dggIn, 
-               const DgContCartRF& cc1In, const DgDiscRF2D& gridIn, 
+      DgEvalData (GridGenParam& dpIn, const DgIDGGBase& dggIn,
+               const DgContCartRF& cc1In, const DgDiscRF2D& gridIn,
                DgQuadClipRegion& clipRegionIn, set<DgIVec2D>& overageSetIn,
                map<DgIVec2D, set<DgDBFfield> >& overageFieldsIn,
-               const DgContCartRF& degIn, const DgIVec2D& lLeftIn, 
+               const DgContCartRF& degIn, const DgIVec2D& lLeftIn,
                const DgIVec2D& uRightIn)
-      : dp (dpIn), dgg (dggIn), cc1 (cc1In), grid (gridIn), 
+      : dp (dpIn), dgg (dggIn), cc1 (cc1In), grid (gridIn),
                clipRegion (clipRegionIn), overageSet (overageSetIn),
                overageFields (overageFieldsIn),
-               deg (degIn), lLeft (lLeftIn), uRight (uRightIn) 
+               deg (degIn), lLeft (lLeftIn), uRight (uRightIn)
         { }
 };
 

@@ -55,22 +55,22 @@ class DgHexSF {
       static const string cs3rE;
       static const string cs3rF;
 
-      DgHexSF (void) 
-         : type_ ('A'), res_ (0), ijkCoord_(0, 0, 0), classI_ (true), 
+      DgHexSF (void)
+         : type_ ('A'), res_ (0), ijkCoord_(0, 0, 0), classI_ (true),
            quadNum_ (0) { }
 
-      DgHexSF (const DgHexSF& h) 
-         : type_ (h.type_), res_ (h.res_), ijkCoord_(0, 0, 0), classI_ (true), 
+      DgHexSF (const DgHexSF& h)
+         : type_ (h.type_), res_ (h.res_), ijkCoord_(0, 0, 0), classI_ (true),
            quadNum_ (h.quadNum_) { }
 
-      DgHexSF (const DgIVec3D& ijk, int res = 0, bool classI = true, 
-               int quadNum = 0) 
-         : type_ ('A'), res_ (res), ijkCoord_ (ijk), classI_ (classI), 
+      DgHexSF (const DgIVec3D& ijk, int res = 0, bool classI = true,
+               int quadNum = 0)
+         : type_ ('A'), res_ (res), ijkCoord_ (ijk), classI_ (classI),
            quadNum_ (quadNum) { }
 
-      DgHexSF (int i, int j, int k, int res = 0, bool classI = true, 
+      DgHexSF (int i, int j, int k, int res = 0, bool classI = true,
                int quadNum = 0)
-         : type_ ('A'), res_ (res), ijkCoord_ (i, j, k), classI_ (classI), 
+         : type_ ('A'), res_ (res), ijkCoord_ (i, j, k), classI_ (classI),
            quadNum_ (quadNum) { }
 
      ~DgHexSF (void) { }
@@ -109,11 +109,11 @@ class DgHexSF {
       bool operator!= (const DgHexSF& h) const
             { return !operator==(h); }
 
-      unsigned long long int depthFirstTraversal (GridGenParam& dp, 
-                  const DgIDGGSBase& dggs, const DgIDGGBase& dgg, 
+      unsigned long long int depthFirstTraversal (GridGenParam& dp,
+                  const DgIDGGSBase& dggs, const DgIDGGBase& dgg,
                   const DgContCartRF& deg, int numAp4Res, DgEvalData* ed = NULL);
 
-      unsigned long long int visitMe (GridGenParam& dp, const DgIDGGSBase& dggs, 
+      unsigned long long int visitMe (GridGenParam& dp, const DgIDGGSBase& dggs,
                   const DgIDGGBase& dgg, const DgContCartRF& deg, DgEvalData* ed);
 
       DgHexSF downAp4 (void);
@@ -151,9 +151,9 @@ DgHexSF::superFundIndex (void) const
       if (sfNdx_.length() > 0) res1 = sfNdx_[0] - '1'; // assumes startDigit is 1
       res1tile = 11 + (quadNum_ - 1) * 4 + res1;
    }
-   
+
    //string completeNdx = dgg::util::to_string(quadNum_, 2) + sfNdx_;
-   
+
    string remainder = "";
    if (sfNdx_.length() > 1) remainder = sfNdx_.substr(1, sfNdx_.length() - 1);
 
@@ -167,13 +167,13 @@ DgHexSF::superFundIndex (void) const
 inline void
 DgHexSF::addSf3Digit (int digit)
 // assumes the previous res and this res are both aperture 3
-{ 
+{
    string dStr = dgg::util::to_string(digit);
    if (!classI_ || sfNdx_.length() < 1)
       sfNdx_ += dStr;
    else
    {
-      string pairs[] = { 
+      string pairs[] = {
         "11", "12", "13", "21", "22", "23", "31", "32", "33" };
         //"00", "01", "02", "10", "11", "12", "20", "21", "22" };
       string digits[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
@@ -190,7 +190,7 @@ DgHexSF::addSf3Digit (int digit)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-inline DgHexSF& 
+inline DgHexSF&
 DgHexSF::operator= (const DgHexSF& h)
 {
    if (this != &h)
@@ -209,8 +209,8 @@ DgHexSF::operator= (const DgHexSF& h)
 ////////////////////////////////////////////////////////////////////////////////
 inline DgHexSF::operator string (void) const
 {
-   return string("{ ") + type_ + ", " + ((classI_) ? "I" : "II") + ", res " + 
-                 dgg::util::to_string(res_) + ", quad " + 
+   return string("{ ") + type_ + ", " + ((classI_) ? "I" : "II") + ", res " +
+                 dgg::util::to_string(res_) + ", quad " +
                  dgg::util::to_string(quadNum_) + string(ijkCoord_) + " } " +
                  ciNdx_ + " " + sfNdx_;
 

@@ -49,8 +49,8 @@ class DgOutGdalFile : public DgOutLocFile
       static OGRLinearRing* createLinearRing (const DgPolygon& poly);
       static OGRPolygon*    createPolygon (const DgPolygon& poly);
 
-      DgOutGdalFile(const DgGeoSphDegRF& rf, const std::string& filename = "", 
-               const std::string& gdalDriver = "GeoJSON", 
+      DgOutGdalFile(const DgGeoSphDegRF& rf, const std::string& filename = "",
+               const std::string& gdalDriver = "GeoJSON",
                DgOutGdalFileMode mode = InvalidMode, int precision = 7,
                bool isPointFile = false, DgReportLevel failLevel = DgBase::Fatal);
 
@@ -74,7 +74,7 @@ class DgOutGdalFile : public DgOutLocFile
 
       // collection output
       virtual DgOutLocFile& insert (const DgIDGGBase& dgg, DgCell& cell,
-                      bool outputPoint, bool outputRegion, 
+                      bool outputPoint, bool outputRegion,
                       const DgLocVector* neighbors, const DgLocVector* children);
 
       virtual void setFormatStr(void) { }

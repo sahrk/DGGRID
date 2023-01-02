@@ -46,8 +46,8 @@ const string DgHexSF::cs3rD = "BA2A4567";
 const string DgHexSF::cs3rE = "B1BA4567";
 const string DgHexSF::cs3rF = "A1A345B7";
 
-unsigned long long int 
-DgHexSF::visitMe (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dgg, 
+unsigned long long int
+DgHexSF::visitMe (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dgg,
                   const DgContCartRF& deg, DgEvalData* ed)
 {
    DgIVec2D coord2d;
@@ -73,11 +73,11 @@ DgHexSF::visitMe (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& d
          {
             accepted = true;
             ed->overageSet.erase(it);
-            if (dp.megaVerbose) 
+            if (dp.megaVerbose)
                dgcout << "found OVERAGE coord " << coord2d << endl;
          }
       }
-      
+
       if (!accepted)
          accepted = ::evalCell(ed, coord2d);
    }
@@ -86,7 +86,7 @@ DgHexSF::visitMe (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& d
    {
       dp.nCellsAccepted++;
 /*
-cout << "accepted: " << quadNum_ << " " << coord2d 
+cout << "accepted: " << quadNum_ << " " << coord2d
      << " " << superFundIndex() << endl;
 */
       DgLocation* addLoc = dgg.makeLocation(DgQ2DICoord(quadNum_, coord2d));
@@ -101,23 +101,23 @@ cout << "accepted: " << quadNum_ << " " << coord2d
 
    outputStatus(dp);
 
-   if (dp.megaVerbose) 
+   if (dp.megaVerbose)
       dgcout << coord2d << " " << ciNdx_ << " " << sfNdx_ << endl;
 
    return 1;
 }
 
-unsigned long long int 
-DgHexSF::depthFirstTraversal (GridGenParam& dp, const DgIDGGSBase& dggs, 
+unsigned long long int
+DgHexSF::depthFirstTraversal (GridGenParam& dp, const DgIDGGSBase& dggs,
        const DgIDGGBase& dgg, const DgContCartRF& deg, int numAp4Res,
        DgEvalData* ed)
 {
 /*
-cout << "depthFirstTrav res: " << res_ 
+cout << "depthFirstTrav res: " << res_
      <<  " ijk: " << ijkCoord() << endl;
 */
 
-   if (res_ == dgg.res()) 
+   if (res_ == dgg.res())
       return visitMe(dp, dggs, dgg, deg, ed);
 
    // otherwise recursively descend
@@ -149,7 +149,7 @@ cout << "depthFirstTrav res: " << res_
          center.setSfNdx(sfNdx_);
          center.addSf3Digit(startSFDigit);
       }
-   
+
       numAccepted = center.depthFirstTraversal(dp, dggs, dgg, deg, numAp4Res, ed);
    }
    else // quadNum 1-10
@@ -164,18 +164,18 @@ cout << "depthFirstTrav res: " << res_
 
          // all base tiles (except for the upper right)
          // contain some portion of the quad edge
-         if (!ed->overageSet.empty() && (i != 1 || j != 1)) 
+         if (!ed->overageSet.empty() && (i != 1 || j != 1))
             useTile = true;
 
          const DgQuadClipRegion& cr = ed->clipRegion;
          if (!useTile && cr.isQuadUsed())
          {
             // find bounds of children at target res
-           
+
             long long int midI = (dgg.maxI() + 1) / 2;
             long long int midJ = (dgg.maxJ() + 1) / 2;
             long long int left = 0, right = 0, top = 0, bottom = 0;
-         
+
             if (i == 0) // base tile child 1 or 2
             {
                left = 0;
@@ -187,9 +187,9 @@ cout << "depthFirstTrav res: " << res_
                right = dgg.maxI();
             }
             else
-               ::report("depthFirstTraversal(). Invalid res 1 tile.", 
+               ::report("depthFirstTraversal(). Invalid res 1 tile.",
                         DgBase::Fatal);
-     
+
             if (j == 0) // base tile child 1 or 3
             {
                bottom = 0;
@@ -201,9 +201,9 @@ cout << "depthFirstTrav res: " << res_
                top = dgg.maxJ();
             }
             else
-               ::report("depthFirstTraversal(). Invalid res 1 tile.", 
+               ::report("depthFirstTraversal(). Invalid res 1 tile.",
                         DgBase::Fatal);
-            
+
             useTile = cr.offset().i() <= right &&
                       cr.upperRight().i() >= left &&
                       cr.offset().j() <= top &&
@@ -211,7 +211,7 @@ cout << "depthFirstTrav res: " << res_
          }
 
 /*
-         cout << "QUAD: " << quadNum_ << " TILE: " << ijkCoord() 
+         cout << "QUAD: " << quadNum_ << " TILE: " << ijkCoord()
               << ((useTile) ? " USED" : " SKIPPED") << endl;
 */
 
@@ -262,14 +262,14 @@ cout << "depthFirstTrav res: " << res_
          center.setSfNdx(sfNdx_);
          center.addSf3Digit(startSFDigit);
       }
-   
-      unsigned long long int numAccepted = 
+
+      unsigned long long int numAccepted =
             center.depthFirstTraversal(dp, dggs, dgg, deg, numAp4Res, ed);
 
       int sfDigit = startSFDigit + 1;
       for (int d = 1; d < 8; d++)
       {
-         char childType = cs[d];   
+         char childType = cs[d];
          if (isalpha(childType))
          {
             DgHexSF h = center.dirFromCenter(d);
@@ -294,7 +294,7 @@ cout << "depthFirstTrav res: " << res_
    return numAccepted;
 }
 
-DgHexSF 
+DgHexSF
 DgHexSF::downAp4 (void)
 {
    int i, j, k;
@@ -302,11 +302,11 @@ DgHexSF::downAp4 (void)
    i = (int) ijkCoord_.i() * 2;
    j = (int) ijkCoord_.j() * 2;
    k = (int) ijkCoord_.k() * 2;
-      
+
    return DgHexSF(i, j, k, res_ + 1);
 }
 
-DgHexSF 
+DgHexSF
 DgHexSF::downAp3 (void)
 {
    // res r unit vectors in res r+1
@@ -319,11 +319,11 @@ DgHexSF::downAp3 (void)
    kVec *= ijkCoord_.k();
 
    DgIVec3D sum = iVec + jVec + kVec;
-   
+
    return DgHexSF(sum, res_ + 1);
 }
 
-DgHexSF 
+DgHexSF
 DgHexSF::downAp3r (void)
 {
    // res r unit vectors in res r+1
@@ -336,11 +336,11 @@ DgHexSF::downAp3r (void)
    kVec *= ijkCoord_.k();
 
    DgIVec3D sum = iVec + jVec + kVec;
-   
+
    return DgHexSF(sum, res_ + 1);
 }
 
-DgHexSF 
+DgHexSF
 DgHexSF::dirFromCenter (int digit)
 {
    int i = (int) ijkCoord_.i();
@@ -349,8 +349,8 @@ DgHexSF::dirFromCenter (int digit)
 
    switch (digit)
    {
-      case 0: 
-      case 7: 
+      case 0:
+      case 7:
          break;
       case 1:
          i += 0;
@@ -383,7 +383,7 @@ DgHexSF::dirFromCenter (int digit)
          k += 0;
          break;
       default:
-         ::report(string("ERROR: invalid digit ") + dgg::util::to_string(digit) 
+         ::report(string("ERROR: invalid digit ") + dgg::util::to_string(digit)
             + string(" in HexHeir.dirFromCenter()."), DgBase::Fatal);
    }
 

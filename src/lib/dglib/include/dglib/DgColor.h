@@ -37,16 +37,16 @@ class DgColor {
 
       static const float undefColor;
 
-      static void linearSpreadRGB (const DgColor& col1, const DgColor& col2, 
+      static void linearSpreadRGB (const DgColor& col1, const DgColor& col2,
                                    std::vector<DgColor*>& spread, int steps);
 
-      static void linearSpreadHLS (const DgColor& col1, const DgColor& col2, 
+      static void linearSpreadHLS (const DgColor& col1, const DgColor& col2,
                                    std::vector<DgColor*>& spread, int steps);
 
       // constructors
 
-      DgColor (void) 
-         : red_ (0.0), green_ (0.0), blue_ (0.0) 
+      DgColor (void)
+         : red_ (0.0), green_ (0.0), blue_ (0.0)
          { static const std::string defName("#000000"); name_ = defName; }
 
       DgColor (const std::string& name) { set(name); }
@@ -57,7 +57,7 @@ class DgColor {
       DgColor (const short* rgbVec)                 { set(rgbVec); }
       DgColor (float red, float green, float blue)  { set(red, green, blue); }
 
-      DgColor (float cyan, float magenta, float yellow, float black)  
+      DgColor (float cyan, float magenta, float yellow, float black)
                                      { set(cyan, magenta, yellow, black); }
 
       // set functions
@@ -75,11 +75,11 @@ class DgColor {
 
       void set (float red, float green, float blue);
 
-      void set (float cyan, float magenta, float yellow, float black);  
+      void set (float cyan, float magenta, float yellow, float black);
 
       void setHLS (float hue, float lightness = 0.5, float saturation = 1.0);
 
-      DgColor& operator= (const DgColor& color) 
+      DgColor& operator= (const DgColor& color)
            { name_ = color.name(); red_ = color.red(); green_ = color.green();
              blue_ = color.blue(); return *this; }
 
@@ -95,7 +95,7 @@ class DgColor {
 
       // CMYK
 
-      void cmyk (float* cyan, float* magenta, float* yellow, 
+      void cmyk (float* cyan, float* magenta, float* yellow,
                                                float* black) const;
 
       float cyan    (void) const;
@@ -122,10 +122,10 @@ class DgColor {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-inline bool operator== (const DgColor& color1, const DgColor& color2) 
+inline bool operator== (const DgColor& color1, const DgColor& color2)
              { return (color1.name() == color2.name()); }
 
-inline bool operator!= (const DgColor& color1, const DgColor& color2) 
+inline bool operator!= (const DgColor& color1, const DgColor& color2)
              { return !(color1 == color2); }
 
 inline ostream& operator<< (ostream& stream, const DgColor& color)

@@ -35,9 +35,9 @@ class DgBoundedHexC2RF2D : public DgBoundedRF2D {
 
    public:
 
-      DgBoundedHexC2RF2D (const DgDiscRF<DgIVec2D, DgDVec2D, long double>& rf, 
+      DgBoundedHexC2RF2D (const DgDiscRF<DgIVec2D, DgDVec2D, long double>& rf,
                 const DgIVec2D& lowerLeft, const DgIVec2D& upperRight);
-                    
+
       virtual DgIVec2D& incrementAddress (DgIVec2D& add) const;
       virtual DgIVec2D& decrementAddress (DgIVec2D& add) const;
 

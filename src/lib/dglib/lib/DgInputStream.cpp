@@ -21,7 +21,7 @@
 // DgInputStream.C: DgInputStream class implementation
 //
 //   This class provides wrappers around some basic input stream functionality
-//   to increase ease of use. 
+//   to increase ease of use.
 //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -45,7 +45,7 @@ DgInputStream::DgInputStream (const string& fileNameIn, const string& suffixIn,
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-bool 
+bool
 DgInputStream::open (string fileNameIn, DgReportLevel failLevel)
 //
 // Open fileName as an input file. Report with a report level of failLevel
@@ -57,7 +57,7 @@ DgInputStream::open (string fileNameIn, DgReportLevel failLevel)
    // make sure we are not already open
 
    if ((rdbuf())->is_open()) close();
-   
+
    // get all the possible name variations
 
    string names[4];
@@ -81,11 +81,11 @@ DgInputStream::open (string fileNameIn, DgReportLevel failLevel)
          close();
          clear();
       }
-   } 
+   }
 
-   if (i == 4) 
+   if (i == 4)
    {
-      report("DgInputStream::open() unable to open file " + fileNameIn, 
+      report("DgInputStream::open() unable to open file " + fileNameIn,
              failLevel);
       return false;
    }
@@ -94,7 +94,7 @@ DgInputStream::open (string fileNameIn, DgReportLevel failLevel)
       debug("DgInputStream::open() opened file " + fileName_);
       return true;
    }
-   
+
 } // DgInputStream::open
 
 ////////////////////////////////////////////////////////////////////////////////

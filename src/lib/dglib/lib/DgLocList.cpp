@@ -128,7 +128,7 @@ DgLocList::operator= (const DgLocList& list)
 
 ////////////////////////////////////////////////////////////////////////////////
 /*
-bool 
+bool
 DgLocList::operator== (const DgLocList& list) const
 {
    if (this == &list) return true;
@@ -137,7 +137,7 @@ DgLocList::operator== (const DgLocList& list) const
 */
 
 ////////////////////////////////////////////////////////////////////////////////
-string 
+string
 DgLocList::asString (void) const
 {
    string str;
@@ -151,7 +151,7 @@ DgLocList::asString (void) const
 } // DgLocList::asString
 
 ////////////////////////////////////////////////////////////////////////////////
-string 
+string
 DgLocList::asString (char delimiter) const
 {
    string str;
@@ -163,7 +163,7 @@ DgLocList::asString (char delimiter) const
 } // DgLocList::asString
 
 ////////////////////////////////////////////////////////////////////////////////
-const char* 
+const char*
 DgLocList::fromString (const char* str, char delimiter)
 {
    destroy();
@@ -174,7 +174,7 @@ DgLocList::fromString (const char* str, char delimiter)
    {
       DgLocation* tloc = new DgLocation(rf());
       tmp = tloc->fromString(tmp, delimiter);
-      push_back(tloc); 
+      push_back(tloc);
       if (*tmp == delimiter) tmp++;
    }
 
@@ -183,14 +183,14 @@ DgLocList::fromString (const char* str, char delimiter)
 } // DgLocList::fromString
 
 ////////////////////////////////////////////////////////////////////////////////
-string 
+string
 DgLocList::asAddressString (void) const
 {
    string str;
    str = "[[\n";
 
    list<DgLocBase*>::const_iterator it;
-   for (it = begin(); it != end(); it++) 
+   for (it = begin(); it != end(); it++)
     str += (*it)->asAddressString();
 
    str += "]]\n";
@@ -199,20 +199,20 @@ DgLocList::asAddressString (void) const
 } // DgLocList::asAddressString
 
 ////////////////////////////////////////////////////////////////////////////////
-string 
+string
 DgLocList::asAddressString (char delimiter) const
 {
    string str;
 
    list<DgLocBase*>::const_iterator it;
-   for (it = begin(); it != end(); it++) 
+   for (it = begin(); it != end(); it++)
       str += (*it)->asAddressString(delimiter);
 
    return str;
 } // DgLocList::asAddressString
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
+void
 DgLocList::convertTo (const DgRFBase& rfIn)
 {
    if (!rf_ || rf() != rfIn)
@@ -227,9 +227,9 @@ DgLocList::convertTo (const DgRFBase& rfIn)
 ////////////////////////////////////////////////////////////////////////////////
 void
 DgLocList::push_back (DgLocBase* loc)
-{ 
-   rf().convert(loc); 
-   list<DgLocBase*>::push_back(loc); 
+{
+   rf().convert(loc);
+   list<DgLocBase*>::push_back(loc);
 }
 
 ////////////////////////////////////////////////////////////////////////////////

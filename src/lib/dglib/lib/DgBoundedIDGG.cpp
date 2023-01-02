@@ -63,23 +63,23 @@ DgBoundedIDGG::DgBoundedIDGG (const DgIDGGBase& IDGGin)
       if (idgg().isClassIII())
       {
          if (idgg().isClassI()) // Class I/III
-            bnd2D_ = new DgBoundedHexC3RF2D(idgg().grid2D(), DgIVec2D(0, 0), 
-                  DgIVec2D(idgg().maxI(), idgg().maxJ()), 
+            bnd2D_ = new DgBoundedHexC3RF2D(idgg().grid2D(), DgIVec2D(0, 0),
+                  DgIVec2D(idgg().maxI(), idgg().maxJ()),
                   idgg().gridStats().nCells());
          else // Class II/III
-            bnd2D_ = new DgBoundedHexC3C2RF2D(idgg().grid2D(), DgIVec2D(0, 0), 
-                  DgIVec2D(idgg().maxI(), idgg().maxJ()), 
+            bnd2D_ = new DgBoundedHexC3C2RF2D(idgg().grid2D(), DgIVec2D(0, 0),
+                  DgIVec2D(idgg().maxI(), idgg().maxJ()),
                   idgg().gridStats().nCells());
       }
       else if (!idgg().isClassI()) // Class II
-         bnd2D_ = new DgBoundedHexC2RF2D(idgg().grid2D(), DgIVec2D(0, 0), 
+         bnd2D_ = new DgBoundedHexC2RF2D(idgg().grid2D(), DgIVec2D(0, 0),
               DgIVec2D(idgg().maxI(), idgg().maxJ()));
       else // Class I
-         bnd2D_ = new DgBoundedRF2D(idgg().grid2D(), DgIVec2D(0, 0), 
+         bnd2D_ = new DgBoundedRF2D(idgg().grid2D(), DgIVec2D(0, 0),
                             DgIVec2D(idgg().maxI(), idgg().maxJ()));
    }
    else
-      bnd2D_ = new DgBoundedRF2D(idgg().grid2D(), DgIVec2D(0, 0), 
+      bnd2D_ = new DgBoundedRF2D(idgg().grid2D(), DgIVec2D(0, 0),
                                  DgIVec2D(idgg().maxI(), idgg().maxJ()));
 
    // calculate the total size
@@ -108,7 +108,7 @@ cout  << "quadNum: " << firstAdd().quadNum() << ", offsetPerQuad: " << offsetPer
 ////////////////////////////////////////////////////////////////////////////////
 bool
 DgBoundedIDGG::validAddress (const DgQ2DICoord& add) const
-{ 
+{
    if (add == invalidAdd()) return false;
 
    if (add.quadNum() == 0 || add.quadNum() == 11)
@@ -116,7 +116,7 @@ DgBoundedIDGG::validAddress (const DgQ2DICoord& add) const
       if (firstAdd().quadNum() == 0)
       {
          if (add.coord() == DgIVec2D(0, 0)) return true;
-         else return false; 
+         else return false;
       }
       else
          return false;
@@ -167,10 +167,10 @@ DgBoundedIDGG::decrementAddress (DgQ2DICoord& add) const
       if (add.quadNum() == 1)
          return add = DgQ2DICoord(0, DgIVec2D(0, 0));
 
-      return add = DgQ2DICoord(add.quadNum() - 1, 
+      return add = DgQ2DICoord(add.quadNum() - 1,
                                DgIVec2D(idgg().maxI(), idgg().maxJ()));
    }
-   
+
    DgIVec2D tmpCoord(add.coord());
    bnd2D().decrementAddress(tmpCoord);
    add.setCoord(tmpCoord);
@@ -180,7 +180,7 @@ DgBoundedIDGG::decrementAddress (DgQ2DICoord& add) const
 } // DgQ2DICoord& DgBoundedIDGG::decrementAddress
 
 ////////////////////////////////////////////////////////////////////////////////
-unsigned long long int 
+unsigned long long int
 DgBoundedIDGG::seqNumAddress (const DgQ2DICoord& add) const
 {
    unsigned long long int offset = 0;
@@ -198,42 +198,42 @@ DgBoundedIDGG::seqNumAddress (const DgQ2DICoord& add) const
 
    unsigned long long int sNum = offset + bnd2D().seqNumAddress(add.coord());
 
-   if (!zeroBased()) 
+   if (!zeroBased())
     sNum++;
 
    return sNum;
 
-} 
+}
 
 ////////////////////////////////////////////////////////////////////////////////
-DgQ2DICoord 
+DgQ2DICoord
 DgBoundedIDGG::addFromSeqNum (unsigned long long int sNum) const
 {
-   if (!zeroBased()) 
+   if (!zeroBased())
     sNum--;
 
-   if (sNum >= size()) 
+   if (sNum >= size())
     return invalidAdd();
 
-   if (sNum == 0) 
+   if (sNum == 0)
     return firstAdd();
 
    // adjust for quad 0 if applicable
 
-   if (firstAdd().quadNum() == 0) 
+   if (firstAdd().quadNum() == 0)
     sNum--;
 
    // determine quad and adjust accordingly
 
    unsigned long long int q = sNum / offsetPerQuad() + 1; // note int division
    sNum -= (q - 1) * offsetPerQuad();
-   
+
    return DgQ2DICoord((int) q, bnd2D().addFromSeqNum(sNum));
-} 
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 /// Take a point that may lie off it's quad and get it on the correct quad
-DgQ2DICoord 
+DgQ2DICoord
 DgBoundedIDGG::q2dixToQ2di (const DgQ2DICoord& add) const
 {
    int q = add.quadNum();
@@ -275,7 +275,7 @@ DgBoundedIDGG::q2dixToQ2di (const DgQ2DICoord& add) const
             offset = DgIVec2D(i, j);
          } else
             good = true;
-   
+
       } // q == 0
       else if (q <= 5)
       {
@@ -438,7 +438,7 @@ DgBoundedIDGG::q2dixToQ2di (const DgQ2DICoord& add) const
          }
          else
             good = true;
-   
+
       } // q == 11
 
 //offset = c;
@@ -451,13 +451,13 @@ DgBoundedIDGG::q2dixToQ2di (const DgQ2DICoord& add) const
 
       result = DgQ2DICoord(q, c);
       if (!good && result == last)
-         report("DgBoundedIDGG::q2dix2q2di() infinite loop", 
+         report("DgBoundedIDGG::q2dix2q2di() infinite loop",
                 DgBase::Fatal);
       else
       {
          last = result;
          if (++numTries >= 10)
-            report("DgBoundedIDGG::q2dix2q2di() ABORT", 
+            report("DgBoundedIDGG::q2dix2q2di() ABORT",
                 DgBase::Fatal);
       }
 

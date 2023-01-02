@@ -22,7 +22,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 //
-//  The DgCell class defines an object with a point node, a region, and a 
+//  The DgCell class defines an object with a point node, a region, and a
 //  label.
 //
 ////////////////////////////////////////////////////////////////////////////////
@@ -33,34 +33,34 @@
 #include <dglib/DgPolygon.h>
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgCell::convertTo (const DgRFBase& rfIn) 
-{ 
+void
+DgCell::convertTo (const DgRFBase& rfIn)
+{
    if (!rf_ || rf() != rfIn)
    {
       rf_ = &rfIn;
-      rfIn.convert(&node_); 
+      rfIn.convert(&node_);
       if (hasRegion()) rfIn.convert(*region_);
    }
 
 } // DgCell::convertTo
 
 ////////////////////////////////////////////////////////////////////////////////
-string 
+string
 DgCell::asString (void) const
-{ 
+{
    string tmp = "[" + node().asString();
    if (hasRegion()) tmp += ":" + region().asString();
-   tmp += "]"; 
+   tmp += "]";
 
    return tmp;
 
 } // DgCell::asString
 
 ////////////////////////////////////////////////////////////////////////////////
-string 
+string
 DgCell::asString (char delimiter) const
-{ 
+{
    string tmp = node().asString(delimiter);
    if (hasRegion()) tmp += delimiter + region().asString(delimiter);
 
@@ -69,21 +69,21 @@ DgCell::asString (char delimiter) const
 } // DgCell::asString
 
 ////////////////////////////////////////////////////////////////////////////////
-string 
+string
 DgCell::asAddressString (void) const
-{ 
+{
    string tmp = "[" + node().asAddressString();
    if (hasRegion()) tmp += ":" + region().asAddressString();
-   tmp += "]"; 
+   tmp += "]";
 
    return tmp;
 
 } // DgCell::asAddressString
 
 ////////////////////////////////////////////////////////////////////////////////
-string 
+string
 DgCell::asAddressString (char delimiter) const
-{ 
+{
    string tmp = node().asAddressString(delimiter);
    if (hasRegion()) tmp += delimiter + region().asAddressString(delimiter);
 

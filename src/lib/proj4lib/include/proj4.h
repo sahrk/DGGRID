@@ -1,5 +1,5 @@
 //
-// this is an adapted version of the projects.h file in Gerald Evenden's 
+// this is an adapted version of the projects.h file in Gerald Evenden's
 // USGS PROJ4 projection system
 // Version 6.1 - Kevin Sahr, 5/23/13
 ////////////////////////////////////////////////////////////////////////////////

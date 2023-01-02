@@ -59,10 +59,10 @@ DgIVec3D::fromString (const char* str, char delimiter)
 
    	tok = strtok(NULL, delimStr);
    	kIn = dgg::util::from_string<long long int>(tok);
-    }  
+    }
    catch(...)
     {
-      ::report("DgIVec3D::fromString() invalid value in string " + string(tok), 
+      ::report("DgIVec3D::fromString() invalid value in string " + string(tok),
                DgBase::Fatal);
     }
 
@@ -71,7 +71,7 @@ DgIVec3D::fromString (const char* str, char delimiter)
    setK(kIn);
 
    unsigned long long int offset = (tok - tmpStr) + strlen(tok) + 1;
-   if (offset >= strlen(str)) 
+   if (offset >= strlen(str))
     return 0;
 
    return &str[offset];

@@ -42,18 +42,18 @@ DgHexIDGG::DgHexIDGG (const DgHexIDGGS& dggs, unsigned int aperture,
               int res, const string& name, unsigned int precision)
    : DgIDGG (&dggs, aperture, res, name, Hexagon, D6, precision),
 	   scaleFac_ (1.0L), rotRads_ (0.0L)
-{ 
+{
    initialize();
 
 } // DgHexIDGG::DgHexIDGG
 
 ////////////////////////////////////////////////////////////////////////////////
 DgHexIDGG::DgHexIDGG (const DgHexIDGG& rfIn)
-   : DgIDGG (rfIn.dggs(), rfIn.aperture(), 
+   : DgIDGG (rfIn.dggs(), rfIn.aperture(),
                  rfIn.res(), rfIn.name(), rfIn.gridTopo(), rfIn.gridMetric(),
                  rfIn.precision()),
 	scaleFac_ (rfIn.scaleFac()), rotRads_ (rfIn.rotRads())
-{ 
+{
    initialize();
 
 } // DgHexIDGG::DgHexIDGG
@@ -62,8 +62,8 @@ DgHexIDGG::DgHexIDGG (const DgHexIDGG& rfIn)
 DgHexIDGG::~DgHexIDGG (void) { }
 
 ////////////////////////////////////////////////////////////////////////////////
-const DgHexIDGGS& 
-DgHexIDGG::hexDggs (void) const 
+const DgHexIDGGS&
+DgHexIDGG::hexDggs (void) const
 { return *(static_cast<const DgHexIDGGS*>(dggs())); }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -72,21 +72,21 @@ DgHexIDGG::initialize (void)
 {
    // verify parameter validity
 
-   string apErrStr = string("DgHexIDGG::initialize(): invalid aperture " + 
-             dgg::util::to_string(aperture()) + string(" for grid topo ") + 
+   string apErrStr = string("DgHexIDGG::initialize(): invalid aperture " +
+             dgg::util::to_string(aperture()) + string(" for grid topo ") +
              to_string(gridTopo()));
 
    if (gridTopo() != Hexagon)
    {
-      report("DgHexIDGG::initialize(): invalid grid topo " + 
+      report("DgHexIDGG::initialize(): invalid grid topo " +
              to_string(gridTopo()), DgBase::Fatal);
 
-      if (aperture() != 3 && aperture() != 4 && aperture() != 7) 
+      if (aperture() != 3 && aperture() != 4 && aperture() != 7)
          report(apErrStr, DgBase::Fatal);
    }
 
    // create some internal data structures
-   setUndefLoc(makeLocation(undefAddress())); 
+   setUndefLoc(makeLocation(undefAddress()));
    sphIcosa_ = new DgSphIcosa(vert0(), azDegs());
 
    radix_ = (int) sqrt((long double) aperture());
@@ -101,7 +101,7 @@ DgHexIDGG::initialize (void)
    unsigned long long int parentNCells = 1;
 
    // get actual parent values if there is a parent grid
-   if (res() > 0) 
+   if (res() > 0)
    {
       const DgHexIDGG& parentIDGG = hexDggs().hexIdgg(res() - 1);
 
@@ -130,10 +130,10 @@ DgHexIDGG::initialize (void)
    }
 
    allocRes_ = res();
-   if (!isClassI() || isClassIII()) 
+   if (!isClassI() || isClassIII())
       ++allocRes_;
 
-   // set-up local network to scale so that quad (and consequently tri) edge 
+   // set-up local network to scale so that quad (and consequently tri) edge
    // length is 1.0
    ccFrame_ = DgContCartRF::makeRF(locNet_, name() + "CC1");
    grid2DS_ = DgHexGrid2DS::makeRF(locNet_, ccFrame(), allocRes() + 1, hexDggs().apSeq(),
@@ -210,11 +210,11 @@ DgHexIDGG::initialize (void)
 
       // a = globeArea / ((#cells - 12) + (12 * 5/6))
       //   = globeArea / (#cells - 2);
-      gridStats_.setCellAreaKM(DgGeoSphRF::totalAreaKM() / 
+      gridStats_.setCellAreaKM(DgGeoSphRF::totalAreaKM() /
                        (gridStats_.nCells() - 2));
 
-   gridStats_.setCLS(2.0L * 2.0L * DgGeoSphRF::earthRadiusKM() * 
-                     asinl(sqrt(gridStats_.cellAreaKM() / M_PI) / 
+   gridStats_.setCLS(2.0L * 2.0L * DgGeoSphRF::earthRadiusKM() *
+                     asinl(sqrt(gridStats_.cellAreaKM() / M_PI) /
                      (2.0L * DgGeoSphRF::earthRadiusKM())));
 
 } // DgHexIDGG::initialize

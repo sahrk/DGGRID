@@ -53,7 +53,7 @@ class DgInAIGenFile : public DgInLocTextFile {
       virtual DgInLocFile& extract (DgCell& cell);
 
    private:
-      
+
       bool forcePolyLine_;
       bool forceCells_;
 

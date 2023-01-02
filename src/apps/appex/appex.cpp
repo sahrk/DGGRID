@@ -49,7 +49,7 @@ int main (int, char**)
 
    // all DGGS's must be created using a factory makeRF method
    // the DGGS is memory managed by the DgRFNetwork
-   const DgIDGGS4H* idggsPtr = DgIDGGS4H::makeRF(net0, geoRF, vert0, azimuth, 10); 
+   const DgIDGGS4H* idggsPtr = DgIDGGS4H::makeRF(net0, geoRF, vert0, azimuth, 10);
    const DgIDGGS4H& idggs = *idggsPtr;
 
    // get the resolution 7 dgg from the dggs
@@ -83,20 +83,20 @@ int main (int, char**)
    const DgGeoCoord& centCoord = *geoRF.getAddress(*thePt);
    double latRads = centCoord.lat();
    double lonRads = centCoord.lon();
-   cout << "* center point lon,lat in radians: " 
+   cout << "* center point lon,lat in radians: "
         << lonRads << ", " << latRads << endl;
 
    const DgGeoCoord& firstVert = *geoRF.getAddress(verts[0]);
    double latDegs = firstVert.latDegs();
    double lonDegs = firstVert.lonDegs();
-   cout << "* first boundary vertex lon,lat in degrees: " 
+   cout << "* first boundary vertex lon,lat in degrees: "
         << lonDegs << ", " << latDegs << endl;
 
    delete thePt;
 
    return 0;
 
-} // main 
+} // main
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

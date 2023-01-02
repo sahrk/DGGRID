@@ -18,7 +18,7 @@
 *******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
-// DgRunningStats.h: keep running statistics for a stream of numbers 
+// DgRunningStats.h: keep running statistics for a stream of numbers
 //
 // Adapted from John D. Cook's implementation of an Knuth's algorithm.
 // http://www.johndcook.com/blog/standard_deviation
@@ -63,9 +63,9 @@ class DgRunningStats {
 
                 if (x > max_)
                    max_ = x;
-    
+
                 // set up for next iteration
-                m_oldM = m_newM; 
+                m_oldM = m_newM;
                 m_oldS = m_newS;
             }
         }

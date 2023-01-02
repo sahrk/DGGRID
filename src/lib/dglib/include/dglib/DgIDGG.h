@@ -53,7 +53,7 @@ class DgIDGG : public DgIDGGBase {
       }
 */
 
-      DgIDGG (const DgIDGGSBase* dggs, 
+      DgIDGG (const DgIDGGSBase* dggs,
               unsigned int apertureIn, int resIn,
               const string& nameIn = "IDGG",
               DgGridTopology gridTopoIn = Hexagon,

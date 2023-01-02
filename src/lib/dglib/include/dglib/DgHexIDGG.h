@@ -25,7 +25,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef DGHEXIDGG_H 
+#ifndef DGHEXIDGG_H
 #define DGHEXIDGG_H
 
 #include <dglib/DgIDGG.h>
@@ -44,7 +44,7 @@ class DgHexIDGG : public DgIDGG {
    public:
 
       DgHexIDGG (const DgHexIDGGS& dggs, unsigned int aperture = 4,
-              int res = 0, const string& name = "HexIDGG", 
+              int res = 0, const string& name = "HexIDGG",
               unsigned int precision = DEFAULT_PRECISION);
 
       DgHexIDGG (const DgHexIDGG& grd);
@@ -56,7 +56,7 @@ class DgHexIDGG : public DgIDGG {
       long double scaleFac (void) const { return scaleFac_; }
       long double rotRads  (void) const { return rotRads_; }
       long double rotDegs  (void) const { return 180.0L * rotRads_ / M_PI; }
- 
+
    protected:
 
       virtual void initialize (void);

@@ -26,11 +26,11 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-DgOutLocTextFile::DgOutLocTextFile (const string& fileName, const DgRFBase& rf, 
+DgOutLocTextFile::DgOutLocTextFile (const string& fileName, const DgRFBase& rf,
                     bool isPointFile,  const string& suffix, int precision,
                     DgReportLevel failLevel)
    : DgOutputStream (fileName, suffix, failLevel),
-     DgOutLocFile (fileName, rf, isPointFile, failLevel), 
+     DgOutLocFile (fileName, rf, isPointFile, failLevel),
      precision_ (precision)
 {
 } // DgOutLocTextFile::DgOutLocTextFile
