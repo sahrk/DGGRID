@@ -182,7 +182,7 @@ void error(void);
 /*                             openfiles()                              */
 /************************************************************************/
 
-void openfiles() {
+void openfiles(void) {
 /* -------------------------------------------------------------------- */
 /*      Open the DBF file.                                              */
 /* -------------------------------------------------------------------- */
@@ -287,7 +287,7 @@ int i;
 /*	Find matching fields in the append file.                        */
 /*      Output file must have zero records to add any new fields.       */
 /* -------------------------------------------------------------------- */
-void mergefields()
+void mergefields(void)
 {
     int i,j;
     ti = DBFGetFieldCount( hDBF );
@@ -350,7 +350,7 @@ void mergefields()
 }
 
 
-void findselect()
+void findselect(void)
 {
     /* Find the select field name */
     iselectitem = -1;
@@ -371,7 +371,7 @@ void findselect()
 
 }
 
-void showitems()
+void showitems(void)
 {
     char      stmp[40],slow[40],shigh[40];
     double    dtmp,dlow,dhigh,dsum,mean;
@@ -456,7 +456,7 @@ void showitems()
     dgprintf("\n");
 }
 
-int selectrec()
+int selectrec(void)
 {
     long int value, ty;
 
@@ -488,7 +488,7 @@ int selectrec()
 }
 
 
-void check_theme_bnd()
+void check_theme_bnd(void)
 {
     if ( (adfBoundsMin[0] >= cxmin) && (adfBoundsMax[0] <= cxmax) &&
          (adfBoundsMin[1] >= cymin) && (adfBoundsMax[1] <= cymax) )
@@ -510,7 +510,7 @@ void check_theme_bnd()
         puts("WARNING: Theme is outside the clip area."); /** SKIP THEME  **/
 }
 
-int clip_boundary()
+int clip_boundary(void)
 {
     int  inside;
     int  prev_outside;
@@ -689,7 +689,7 @@ double findunit(char *unit)
 /* -------------------------------------------------------------------- */
 /*      Display a usage message.                                        */
 /* -------------------------------------------------------------------- */
-void error()
+void error(void)
 {	
     puts( "The program will append to an existing shape file or it will" );
     puts( "create a new file if needed." );
