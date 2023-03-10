@@ -31,6 +31,8 @@ and include them appropriately.
 
 By default cmake will search for `GDAL` and link __DGGRID__ with it if found. If `GDAL` is present on your system and you want to force a build of __DGGRID__ without `GDAL`, call cmake with `-DWITH_GDAL=OFF`.
 
+By default cmake will use an included vendored version of SHAPELIB. You can build also build and link against a system-provided version of shapelib. You can activate it by calling cmake with `-DWITH_EXT_SHAPELIB=ON`, and cmake search for `shapelib` and link __DGGRID__ with it if found. In addition you can provide `-DSHAPELIB_ROOT_DIR=/usr/..` as the search path.
+
 You can also build DGGRID with extra debugging info. Doing this requires
 emptying your `build/` directory first or making a new `build_debug/` directory.
 
