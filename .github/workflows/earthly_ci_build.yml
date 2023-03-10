@@ -1,0 +1,21 @@
+name: GitHub Actions CI
+
+on:
+  push:
+    branches: [master,deva]
+  pull_request:
+    branches: [master]
+
+jobs:
+  tests:
+    name: example earthly test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: earthly/actions-setup@v1
+        with:
+          version: "latest"
+      - uses: actions/checkout@v2
+      - name: what version is installed?
+        run: earthly --version
+      - name: run the earthly hello world
+        run: earthly +test
