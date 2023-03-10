@@ -9,20 +9,30 @@ find_package(Doxygen)
 
 #Adds aggressive warnings to all compilation
 if(MSVC)
-  add_compile_options(/W4 /WX)
+  # add_compile_options(/W4 /WX)
+  add_compile_options(/W2)
 else()
   add_compile_options(-Wall -pedantic)
 endif()
 
+
 option(WITH_GDAL "Build with external GDAL" ON)
+option(WITH_EXT_SHAPELIB "Build with external SHAPELIB" OFF)
 
 if(WITH_GDAL)
     find_package(GDAL)
 endif()
 
+if(WITH_EXT_SHAPELIB)
+  list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/src/lib/shapelib_ext)
+  find_package(shapelib REQUIRED)
+else()
+  add_subdirectory(src/lib/shapelib)
+endif()
+
 add_subdirectory(src/lib/dglib)
 add_subdirectory(src/lib/proj4lib)
-add_subdirectory(src/lib/shapelib)
+# add_subdirectory(src/lib/shapelib)
 
 add_subdirectory(src/apps/dggrid)
 add_subdirectory(src/apps/appex)
