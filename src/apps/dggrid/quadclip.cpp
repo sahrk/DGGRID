@@ -717,8 +717,10 @@ void createClipRegions (GridGenParam& dp, const DgIDGGBase& dgg,
 
    if (!dgg.isCongruent()) {
       for (int q = 1; q < 11; q++) {
-         if (dp.verbosity > 0) dgcout << "Checking OVERAGE quad " << q << endl;
          if (!clipRegions[q].isQuadUsed()) continue;
+
+         if (dp.verbosity > 0)
+            dgcout << "Checking OVERAGE quad " << q << endl;
 
          // check for over J
 

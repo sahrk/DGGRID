@@ -1498,7 +1498,12 @@ void genGrid (GridGenParam& dp)
                // (this should all be done using the seqNum methods, would be
                // much cleaner)
 
-               if (!dgg.isClassI())
+               if (dp.megaVerbose) {
+                  dgcout << "# testing coord: " << coord << endl;
+                  //dgcout << "DGG: " << dgg << endl;
+               }
+
+               if (dp.gridTopo == Hexagon && !dgg.isClassI())
 	          if ((coord.j() + coord.i()) % 3) continue;
 
                outputStatus(dp);
