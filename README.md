@@ -38,14 +38,13 @@ You should have received a copy of the GNU Affero General Public License along w
 
 ## Credits
 
-__DGGRID__ was primarily written in C++ by [Kevin Sahr](https://inside.sou.edu/cs/kevinsahr.html). See the file `CHANGELOG.md` 
-for additional contributors. 
+__DGGRID__ was primarily written in C++ by [Kevin Sahr](http://www.linkedin.com/in/Kevin-Sahr). See the file `CHANGELOG.md` for additional contributors. 
 
 The original __DGGRID__ specifications were developed by (in alphabetical order): 
 A. Ross Kiester, Tony Olsen, Barbara Rosenbaum, Kevin Sahr, Ann Whelan, and 
 Denis White.
 
-__DGGRID__ was made possible in part by funding from the __US Environmental Protection Agency__, __PlanetRisk, Inc.__, and __Culmen International__.
+__DGGRID__ was made possible in part by funding from the __US Environmental Protection Agency__, __PlanetRisk, Inc.__, __Culmen International__, __the Ruhr-University Bochum/GeoInsight Project__, and the __Turtle Conservancy__.
 
 ## Dependencies
 

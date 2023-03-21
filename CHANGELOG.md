@@ -3,11 +3,13 @@ All notable changes to this project will be documented in this file.
 
 All changes are by Kevin Sahr, unless otherwise noted.
 
-## [7.71] - 2023-03-18
+## [7.71] - 2023-03-21
 ### Added
 - added DGGRID dockerfile image (thanks to @allixender)
 ### Fixed
-- clipping with input polygons now works (again) in diamond and triangle grid
+- clipping with input polygons now works (again) in diamond and triangle grids
+### Changed
+- updated README.md
 
 ## [7.7] - 2022-12-08
 ### Added
