@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 All changes are by Kevin Sahr, unless otherwise noted.
 
 ## [7.71] - 2023-03-18
+### Added
+- added DGGRID dockerfile image (thanks to @allixender)
 ### Fixed
 - clipping with input polygons now works (again) in diamond and triangle grid
 
@@ -63,7 +65,7 @@ without longitude wrapping (to facilitate 2D display)
 ### Added
 - DGGRIDR compiler flag to allow for dggridR-specific code. Used in the DgBase::report() method.
 ### Fixed
-- suppress compiler warnings (r-barnes)
+- suppress compiler warnings (thanks to r-barnes)
 
 ## [7.32] - 2021-10-05
 ### Changed
@@ -71,26 +73,26 @@ without longitude wrapping (to facilitate 2D display)
 
 ## [7.312] - 2021-09-28
 ### Added
-- modify find_package(GDAL) calls to allow user to toggle on/off (Crghilardi)
+- modify find_package(GDAL) calls to allow user to toggle on/off (thanks to Crghilardi)
 ### Fixed
 - cmake USE_GDAL flag in dggrid CMakeLists.txt
 - initialized instance variables in DgResAdd template
 
 ## [7.311] - 2021-09-27
 ### Fixed
-- code improvements (R. Barnes)
-- set C STANDARD target property in shapelib CMakeLists.txt (Crghilardi)
+- code improvements (thanks to @r-barnes)
+- set C STANDARD target property in shapelib CMakeLists.txt (thanks to Crghilardi)
 - incorrect nulib include in DgRF.hpp
 
 ## [7.31] - 2021-06-04
 ### Fixed
-- fixed shapelib include search for cmake (R. Barnes)
+- fixed shapelib include search for cmake (thanks to @r-barnes)
 
 ## [7.3] - 2021-04-29
 ### Fixed
 - all build warnings
 ### Added
-- cmake build system (thanks to R. Barnes)
+- cmake build system (thanks to @r-barnes)
 
 ## [7.2] - 2021-04-06
 ### Fixed
@@ -112,7 +114,7 @@ without longitude wrapping (to facilitate 2D display)
 
 ## [7.1] - 2021-03-15
 ### Fixed
-- ensure C++ version of streampos is used (r-barnes)
+- ensure C++ version of streampos is used (thanks to r-barnes)
 - outdated tags in Doxyfile
 ### Added
 - BUILD_WITH_GDAL build flag in MakeIncludes to allow building DGGRID without gdal installed
@@ -128,7 +130,7 @@ without longitude wrapping (to facilitate 2D display)
 ### Fixed
 - invalid gridStats in hexagon DGGS when not created using the factory
 method makeRF(); hex DGGS are now all sub-classes of DgHexIDGGS
-- fix inappropriately escaped bracket (r-barnes)
+- fix inappropriately escaped bracket (thanks to r-barnes)
 - remove unused instance variable curLayer_ from DgInGDALFile
 
 ## [7.06] - 2020-04-10
@@ -205,7 +207,7 @@ found the error in H3)
 ## [6.4] - 2018-09-18
 ### Added
 - added parameter clipper_scale_factor
-- added SEQNUMS choice to parameter clip_subset_type (thanks to R. Barnes)
+- added SEQNUMS choice to parameter clip_subset_type (thanks to @r-barnes)
 - example seqnums
 ### Fixed
 - shapelib header file directory include in MakeIncludes
@@ -217,11 +219,11 @@ found the error in H3)
 ### Added
 - this file CHANGELOG.md
 ### Fixed
-- gcc v6 compiler errors (from R. Barnes)
+- gcc v6 compiler errors (thanks to @r-barnes)
 - llvm compile error in DgLocVector.h
 ### Changed
 - released under an AGPL license
-- using clipper for polygon intersection (thanks to R. Barnes)
+- using clipper for polygon intersection (thanks to @r-barnes)
 - cleaned-up examples
 ### Deleted
 - unused hypot.c from proj4lib
@@ -234,7 +236,7 @@ found the error in H3)
 - restored v4.3b TRANSFORM_POINTS operation and supporting parameters
 - restored v4.3b BIN_POINT_VALS operation and supporting parameters
 - restored v4.3b BIN_POINT_PRESENCE operation and supporting parameters
-- added GeoJSON output format (Matt Gregory)
+- added GeoJSON output format (thanks to Matt Gregory)
 - added parameters kml_name and kml_description
 - added new examples
 - corrected/suppressed (as applicable) various compiler warnings
@@ -281,14 +283,14 @@ found the error in H3)
 - includes the Superfund_500m hierarchically indexed mixed
   aperture DGGS
 - added ESRI Shapefile format for input and output
-- added KML format for output (Jesse Williamson)
+- added KML format for output (thanks to Jesse Williamson)
 - added ability to break-up large output files by setting
   the max number of cells to write to a single file
 - added operation that outputs DGGS characteristics table
 - improved feedback during execution
 - improved Makefiles
 - builds cleanly on MacOS 10.8.2 using gcc 4.2.1 and on 
-  Ubuntu 11.04 with gcc 4.5.2 (Jesse Williamson)
+  Ubuntu 11.04 with gcc 4.5.2 (thanks to Jesse Williamson)
 
 ## [4.3b] - 2003-06-21
 - first public release
