@@ -50,7 +50,7 @@ public:
     bool forcePolyLine (void) const { return forcePolyLine_; }
     bool forceCells    (void) const { return forceCells_; }
 
-    void setForcePolyLine (bool forcePolyLine = false) 
+    void setForcePolyLine (bool forcePolyLine = false)
                            { forcePolyLine_ = forcePolyLine; }
 
     void setForceCells (bool forceCells = false) { forceCells_ = forceCells; }

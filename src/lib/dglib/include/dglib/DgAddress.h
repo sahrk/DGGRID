@@ -45,7 +45,7 @@ template <class A> class DgAddress : public DgAddressBase {
 
       const A& address (void) const { return address_; }
 
-      DgAddress<A>& operator= (const DgAddress<A>& add) 
+      DgAddress<A>& operator= (const DgAddress<A>& add)
                                     { address_ = add.address(); return *this; }
 
    protected:

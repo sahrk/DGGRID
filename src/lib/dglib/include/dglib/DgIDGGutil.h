@@ -335,7 +335,7 @@ class DgVertex2DDRF : public DgRF<DgVertex2DDCoord, long double> {
 
    public:
 
-      static const DgVertex2DDRF* makeRF (DgRFNetwork& networkIn, 
+      static const DgVertex2DDRF* makeRF (DgRFNetwork& networkIn,
                 const string& nameIn = "DgVertex2DDRF")
          { return new DgVertex2DDRF(networkIn, nameIn); }
 

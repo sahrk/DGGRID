@@ -24,7 +24,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef DGDMDIDGG_H 
+#ifndef DGDMDIDGG_H
 #define DGDMDIDGG_H
 
 #include "DgIDGGBase.h"
@@ -43,7 +43,7 @@ class DgDmdIDGG : public DgIDGGBase {
    public:
 
       DgDmdIDGG (const DgIDGGS4D& dggs, unsigned int aperture = 4,
-              int res = 0, const string& name = "DmdIDGG", 
+              int res = 0, const string& name = "DmdIDGG",
               DgGridMetric gridMetric = D4,
               unsigned int precision = DEFAULT_PRECISION);
 

@@ -74,7 +74,7 @@ DgParamList::loadParams (const string& fileName)
    while (!metaFile.eof())
    {
       metaFile.getline(nextLine, maxLine);
-        
+
       if (metaFile.eof()) break;
 
       if (strlen(nextLine) <= 1 || nextLine[0] == '#') continue;
@@ -105,7 +105,7 @@ DgParamList::setParam (const string& nameIn, const string& strValIn)
    DgAssoc* existing = getParam(nameIn, false);
    if (!existing)
    {
-      report(string("DgParamList::setParam() unknown parameter ") 
+      report(string("DgParamList::setParam() unknown parameter ")
              + nameIn, DgBase::Fatal);
    }
    else // already exists
@@ -132,7 +132,7 @@ DgParamList::setPresetParam (const string& nameIn, const string& strValIn)
    DgAssoc* existing = getParam(nameIn, false);
    if (!existing)
    {
-      report(string("DgParamList::setPresetParam() unknown parameter ") 
+      report(string("DgParamList::setPresetParam() unknown parameter ")
              + nameIn, DgBase::Fatal);
    }
    else // already exists
@@ -186,7 +186,7 @@ DgParamList::getParam (const string& nameIn, bool setToIsApplicable) const
 
    for (unsigned int i = 0; i < parameters.size(); i++)
    {
-      if (parameters[i]->name() == lower) 
+      if (parameters[i]->name() == lower)
       {
        if (setToIsApplicable)
           parameters[i]->setIsApplicable(true);

@@ -35,7 +35,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-DgIDGGS3H::DgIDGGS3H (const DgIDGGS3H& rf) 
+DgIDGGS3H::DgIDGGS3H (const DgIDGGS3H& rf)
   : DgHexIDGGS (rf)
 {
    report("DgIDGGS3H::operator=() not implemented yet", DgBase::Fatal);
@@ -59,8 +59,8 @@ DgIDGGS3H::operator= (const DgIDGGS3H&)
 } // DgIDGGS3H& DgIDGGS3H::operator=
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgIDGGS3H::setAddParents (const DgResAdd<DgQ2DICoord>& add, 
+void
+DgIDGGS3H::setAddParents (const DgResAdd<DgQ2DICoord>& add,
                              DgLocVector& vec) const
 {
    DgPolygon verts;
@@ -92,8 +92,8 @@ DgIDGGS3H::setAddParents (const DgResAdd<DgQ2DICoord>& add,
 } // void DgIDGGS3H::setAddParents
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgIDGGS3H::setAddInteriorChildren (const DgResAdd<DgQ2DICoord>& add, 
+void
+DgIDGGS3H::setAddInteriorChildren (const DgResAdd<DgQ2DICoord>& add,
                                         DgLocVector& vec) const
 {
    DgLocVector verts;
@@ -106,8 +106,8 @@ DgIDGGS3H::setAddInteriorChildren (const DgResAdd<DgQ2DICoord>& add,
 } // void DgIDGGS3H::setAddInteriorChildren
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgIDGGS3H::setAddBoundaryChildren (const DgResAdd<DgQ2DICoord>& add, 
+void
+DgIDGGS3H::setAddBoundaryChildren (const DgResAdd<DgQ2DICoord>& add,
                                         DgLocVector& vec) const
 {
    DgPolygon verts;
@@ -139,8 +139,8 @@ DgIDGGS3H::setAddBoundaryChildren (const DgResAdd<DgQ2DICoord>& add,
 } // void DgIDGGS3H::setAddBoundaryChildren
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgIDGGS3H::setAddAllChildren (const DgResAdd<DgQ2DICoord>& add, 
+void
+DgIDGGS3H::setAddAllChildren (const DgResAdd<DgQ2DICoord>& add,
                                    DgLocVector& vec) const
 {
    setAddInteriorChildren(add, vec);

@@ -30,7 +30,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 template<class A, class B, class DB> void
-DgDiscRFS<A, B, DB>::setAddNeighbors (const DgResAdd<A>& add, 
+DgDiscRFS<A, B, DB>::setAddNeighbors (const DgResAdd<A>& add,
                                             DgLocVector& vec) const
 {
    grids()[add.res()]->convert(vec);
@@ -42,10 +42,10 @@ DgDiscRFS<A, B, DB>::setAddNeighbors (const DgResAdd<A>& add,
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 template<class A, class B, class DB> void
-DgDiscRFS<A, B, DB>::setParents (int res, const DgLocation& loc, 
+DgDiscRFS<A, B, DB>::setParents (int res, const DgLocation& loc,
                                                 DgLocVector& vec) const
 {
-   vec.clearAddress(); 
+   vec.clearAddress();
    this->convert(vec);
 
    if (res > 0 && res < nRes())
@@ -61,10 +61,10 @@ DgDiscRFS<A, B, DB>::setParents (int res, const DgLocation& loc,
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 template<class A, class B, class DB> void
-DgDiscRFS<A, B, DB>::setInteriorChildren (int res, const DgLocation& loc, 
+DgDiscRFS<A, B, DB>::setInteriorChildren (int res, const DgLocation& loc,
                                    DgLocVector& vec) const
 {
-   vec.clearAddress(); 
+   vec.clearAddress();
    this->convert(vec);
 
    if (res >= 0 && res < (nRes() - 1))
@@ -80,11 +80,11 @@ DgDiscRFS<A, B, DB>::setInteriorChildren (int res, const DgLocation& loc,
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 template<class A, class B, class DB> void
-DgDiscRFS<A, B, DB>::setBoundaryChildren (int res, const DgLocation& loc, 
+DgDiscRFS<A, B, DB>::setBoundaryChildren (int res, const DgLocation& loc,
                                    DgLocVector& vec) const
 {
-   vec.clearAddress(); 
-   this->convert(vec); 
+   vec.clearAddress();
+   this->convert(vec);
    if (res >= 0 && res < (nRes() - 1))
    {
       DgLocation tmpLoc(loc);
@@ -97,11 +97,11 @@ DgDiscRFS<A, B, DB>::setBoundaryChildren (int res, const DgLocation& loc,
 
 ////////////////////////////////////////////////////////////////////////////////
 template<class A, class B, class DB> void
-DgDiscRFS<A, B, DB>::setBoundary2Children (int res, const DgLocation& loc, 
+DgDiscRFS<A, B, DB>::setBoundary2Children (int res, const DgLocation& loc,
                                    DgLocVector& vec) const
 {
-   vec.clearAddress(); 
-   this->convert(vec); 
+   vec.clearAddress();
+   this->convert(vec);
    if (res >= 0 && res < (nRes() - 1))
    {
       DgLocation tmpLoc(loc);
@@ -115,10 +115,10 @@ DgDiscRFS<A, B, DB>::setBoundary2Children (int res, const DgLocation& loc,
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 template<class A, class B, class DB> void
-DgDiscRFS<A, B, DB>::setAllChildren (int res, const DgLocation& loc, 
+DgDiscRFS<A, B, DB>::setAllChildren (int res, const DgLocation& loc,
                               DgLocVector& vec) const
 {
-   vec.clearAddress(); 
+   vec.clearAddress();
    this->convert(vec);
 
    if (res >= 0 && res < (nRes() - 1))

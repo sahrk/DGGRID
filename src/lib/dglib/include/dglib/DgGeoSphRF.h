@@ -84,7 +84,7 @@ class DgGeoSphRF : public DgEllipsoidRF {
       // densify polygon in geodetic coordinates
       static void densify (DgPolygon& p, long double maxDist, bool rads = true);
 
-      // unwrap a point based on longitude wrap mode (assumes the point is 
+      // unwrap a point based on longitude wrap mode (assumes the point is
       // associated with a cell being wrapped
       static int lonWrap (DgGeoCoord& g, DgLonWrapMode wrapMode);
 

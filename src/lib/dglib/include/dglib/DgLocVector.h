@@ -47,9 +47,9 @@ class DgLocVector : public DgLocBase {
 
       DgLocVector (const DgRFBase& rfIn, int sizeIn = 0);
 
-     ~DgLocVector (void) { 
+     ~DgLocVector (void) {
          tmpLoc_.address_ = 0;
-         clearAddress(); 
+         clearAddress();
       }
 
       DgLocVector& operator= (const DgLocVector& vec); // deep copy

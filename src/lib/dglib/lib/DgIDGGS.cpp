@@ -36,9 +36,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 const DgIDGGS*
 DgIDGGS::makeRF (DgRFNetwork& network, const DgGeoSphRF& backFrame,
-          const DgGeoCoord& vert0, long double azDegs, unsigned int apertureIn, 
-          int nRes, DgGridTopology gridTopo, DgGridMetric gridMetric, 
-          const string& name, const string& projTypeIn, bool isMixed43In, 
+          const DgGeoCoord& vert0, long double azDegs, unsigned int apertureIn,
+          int nRes, DgGridTopology gridTopo, DgGridMetric gridMetric,
+          const string& name, const string& projTypeIn, bool isMixed43In,
           int numAp4In, bool isSuperfundIn, bool isApSeqIn, const DgApSeq& apSeqIn)
 {
    if (isApSeqIn)
@@ -56,11 +56,11 @@ DgIDGGS::makeRF (DgRFNetwork& network, const DgGeoSphRF& backFrame,
    if (gridTopo == Hexagon) {
       if (defaultName) {
          if (!isMixed43In) {
-            if (apertureIn == 4) 
+            if (apertureIn == 4)
                theName = projTypeIn + string("4H");
-            else if (apertureIn == 3) 
+            else if (apertureIn == 3)
                theName = projTypeIn + string("3H");
-            else 
+            else
                report(apErrStr, DgBase::Fatal);
          } else
             theName = projTypeIn + string("43H");
@@ -81,12 +81,12 @@ DgIDGGS::makeRF (DgRFNetwork& network, const DgGeoSphRF& backFrame,
 //cout << " makeRF isD4: " << ((isD4) ? "true" : "false") << endl;
 
       if (defaultName) theName = projTypeIn + nameSuffix;
-      dg0 = DgIDGGS4D::makeRF(network, backFrame, vert0, azDegs, nRes, 
+      dg0 = DgIDGGS4D::makeRF(network, backFrame, vert0, azDegs, nRes,
                        theName, projTypeIn, gridMetric);
    } else if (gridTopo == Triangle) {
       if (apertureIn == 4) {
          if (defaultName) theName = projTypeIn + string("4T");
-         dg0 = DgIDGGS4T::makeRF(network, backFrame, vert0, azDegs, nRes, 
+         dg0 = DgIDGGS4T::makeRF(network, backFrame, vert0, azDegs, nRes,
                        theName, projTypeIn);
       } else
             report(apErrStr, DgBase::Fatal);
@@ -102,18 +102,18 @@ DgIDGGS::makeRF (DgRFNetwork& network, const DgGeoSphRF& backFrame,
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgIDGGS::DgIDGGS (DgRFNetwork& network, const DgGeoSphRF& backFrame,
-                  const DgGeoCoord& vert0, long double azDegs, 
+                  const DgGeoCoord& vert0, long double azDegs,
                   unsigned int aperture, int nRes, DgGridTopology gridTopo,
                   DgGridMetric gridMetric,
-                  const string& name, const string& projType, bool isMixed43, 
+                  const string& name, const string& projType, bool isMixed43,
                   int numAp4, bool isSuperfund, bool isApSeq,
                   const DgApSeq& apSeq)
-        : DgIDGGSBase (network, backFrame, vert0, azDegs, nRes, aperture, name, 
+        : DgIDGGSBase (network, backFrame, vert0, azDegs, nRes, aperture, name,
                        gridTopo, gridMetric, projType, !(isMixed43 || isApSeq)),
           numAp4_ (numAp4), isSuperfund_ (isSuperfund), isApSeq_ (isApSeq),
           apSeq_ (apSeq)
 {
-   
+
    setUndefLoc(makeLocation(undefAddress()));
 
 /* all of this has been moved to topology-specfic files

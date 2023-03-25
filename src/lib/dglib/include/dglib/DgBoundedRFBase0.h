@@ -36,22 +36,22 @@ class DgPolygon;
 class DgBoundedRFBase0 {
 
    public:
-   
+
       virtual ~DgBoundedRFBase0 (void);
-      
+
       const DgRFBase& rf (void) const { return rf_; }
-      
+
       operator const DgRFBase& (void) const { return rf(); }
-      
-      virtual bool validLocation (const DgLocation& loc, 
+
+      virtual bool validLocation (const DgLocation& loc,
                                   bool convert = true) const = 0;
 
-      virtual DgLocation& incrementLocation (DgLocation& loc, 
+      virtual DgLocation& incrementLocation (DgLocation& loc,
                                              bool convert = true) const = 0;
-                       
-      virtual DgLocation& decrementLocation (DgLocation& loc, 
-                                             bool convert = true) const = 0; 
-                                     
+
+      virtual DgLocation& decrementLocation (DgLocation& loc,
+                                             bool convert = true) const = 0;
+
       const DgLocation& first (void) const { return *first_; }
       const DgLocation& last  (void) const { return *last_; }
       const DgLocation& end   (void) const { return *end_; }
@@ -63,9 +63,9 @@ class DgBoundedRFBase0 {
       void setZeroBased (bool zBasedIn) { zeroBased_ = zBasedIn; }
 
       virtual unsigned long long int seqNum (const DgLocation& loc,
-                                        bool convert = true) const = 0; 
+                                        bool convert = true) const = 0;
 
-      virtual bool lessThan (const DgLocation& loc1, 
+      virtual bool lessThan (const DgLocation& loc1,
                      const DgLocation& loc2, bool convert = true) const
                  { return (seqNum(loc1, convert) < seqNum(loc2, convert)); }
 
@@ -77,10 +77,10 @@ class DgBoundedRFBase0 {
          s += "\n   -- last: " + last().asString();
 
          return s;
-      } 
+      }
 
       virtual DgLocation* locFromSeqNum (unsigned long long int sNum) const = 0;
-      
+
       // provide a generic interface to the discrete grid functionality
 
       virtual string dist2str (const long long int& dist) const = 0;
@@ -88,7 +88,7 @@ class DgBoundedRFBase0 {
 
       virtual unsigned long long int dist2int (const long long int& dist) const = 0;
 
-      virtual void setPoint (const DgLocation& loc, DgLocation& point) 
+      virtual void setPoint (const DgLocation& loc, DgLocation& point)
                                                                      const = 0;
 
       virtual void setPoint (const DgLocation& loc, const DgRFBase& rf,
@@ -96,7 +96,7 @@ class DgBoundedRFBase0 {
 
       virtual DgLocation* makePoint (const DgLocation& loc) const = 0;
 
-      virtual void setVertices (const DgLocation& loc, DgPolygon& vec) 
+      virtual void setVertices (const DgLocation& loc, DgPolygon& vec)
                                                                      const = 0;
 
       virtual void setVertices (const DgLocation& loc, const DgRFBase& rf,
@@ -104,25 +104,25 @@ class DgBoundedRFBase0 {
 
       virtual DgPolygon* makeVertices (const DgLocation& loc) const = 0;
 
-      virtual void setNeighbors (const DgLocation& loc, DgLocVector& vec) 
+      virtual void setNeighbors (const DgLocation& loc, DgLocVector& vec)
                                                                      const = 0;
 
       virtual DgLocVector* makeNeighbors (const DgLocation& loc) const = 0;
 
    protected:
 
-      DgBoundedRFBase0 (const DgRFBase& rfIn, DgLocation* firstIn, 
+      DgBoundedRFBase0 (const DgRFBase& rfIn, DgLocation* firstIn,
                        DgLocation* lastIn, DgLocation* endIn,
                        bool zBasedIn = true)
-         : size_(0), validSize_(false), rf_ (rfIn), 
+         : size_(0), validSize_(false), rf_ (rfIn),
 	   first_ (firstIn), last_ (lastIn), end_ (endIn),
 	   zeroBased_ (zBasedIn) {}
-         
+
    protected:
 
       unsigned long long int size_;
       bool validSize_;
-   
+
       const DgRFBase& rf_;
       DgLocation *first_;
       DgLocation *last_;
@@ -130,7 +130,7 @@ class DgBoundedRFBase0 {
 
       bool zeroBased_; // seq starts with 0 (or 1)?
 
-}; 
+};
 
 ////////////////////////////////////////////////////////////////////////////////
 template<class B, class DB> inline

@@ -24,7 +24,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef DGHEXC3GRID2D_H 
+#ifndef DGHEXC3GRID2D_H
 #define DGHEXC3GRID2D_H
 
 #include <cmath>
@@ -42,7 +42,7 @@ class DgHexC3Grid2D : public DgDiscRF2D {
 
    public:
 
-      static const DgHexC3Grid2D* makeRF (DgRFNetwork& networkIn, 
+      static const DgHexC3Grid2D* makeRF (DgRFNetwork& networkIn,
                      const DgRF<DgDVec2D, long double>& ccFrameIn,
                      bool isClassI = true, const string& nameIn = "HexC3D")
          { return new DgHexC3Grid2D (networkIn, ccFrameIn, isClassI, nameIn); }
@@ -65,13 +65,13 @@ class DgHexC3Grid2D : public DgDiscRF2D {
            s += "   -- isClassI: " + dgg::util::to_string(isClassI());
            s += "\n   -- surrogate: " + string(*surrogate_);
            s += "\n   -- substrate: " + string(*substrate_);
-           
+
            return s;
-        }  
+        }
 
    protected:
 
-      DgHexC3Grid2D (DgRFNetwork& networkIn, 
+      DgHexC3Grid2D (DgRFNetwork& networkIn,
                      const DgRF<DgDVec2D, long double>& ccFrameIn,
                      bool isClassI = true, const string& nameIn = "HexC3D");
 
@@ -84,9 +84,9 @@ class DgHexC3Grid2D : public DgDiscRF2D {
 
       virtual void setAddVertices (const DgIVec2D& add, DgPolygon& vec) const;
 
-      virtual void setAddNeighbors 
+      virtual void setAddNeighbors
                                   (const DgIVec2D& add, DgLocVector& vec) const;
-      virtual void setAddNeighborsBdry2 
+      virtual void setAddNeighborsBdry2
                                   (const DgIVec2D& add, DgLocVector& vec) const;
 
       virtual DgIVec2D quantify (const DgDVec2D& point) const;

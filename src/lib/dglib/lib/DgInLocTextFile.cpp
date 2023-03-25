@@ -26,7 +26,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-DgInLocTextFile::DgInLocTextFile (const DgRFBase& rfIn, 
+DgInLocTextFile::DgInLocTextFile (const DgRFBase& rfIn,
               const string* fileNameIn, bool isPointFileIn,
               DgReportLevel failLevel)
          : DgInLocFile (rfIn, fileNameIn, isPointFileIn, failLevel)
@@ -40,7 +40,7 @@ DgInLocTextFile::DgInLocTextFile (const DgRFBase& rfIn,
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-bool 
+bool
 DgInLocTextFile::open (const string *fileNameIn, DgReportLevel failLevel)
 //
 // Open fileName as an input file. Report with a report level of failLevel
@@ -52,7 +52,7 @@ DgInLocTextFile::open (const string *fileNameIn, DgReportLevel failLevel)
    // make sure we are not already open
 
    if ((rdbuf())->is_open()) close();
-   
+
    if (fileNameIn)
       fileName_ = *fileNameIn;
 
@@ -64,11 +64,11 @@ DgInLocTextFile::open (const string *fileNameIn, DgReportLevel failLevel)
    }
    else
    {
-      report("DgInLocTextFile::open() unable to open file " + fileName_, 
+      report("DgInLocTextFile::open() unable to open file " + fileName_,
              failLevel);
       return false;
    }
-   
+
 } // DgInLocTextFile::open
 
 ////////////////////////////////////////////////////////////////////////////////

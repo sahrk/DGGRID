@@ -30,7 +30,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-DgOutNeighborsFile::DgOutNeighborsFile (const string& fileName, 
+DgOutNeighborsFile::DgOutNeighborsFile (const string& fileName,
          const string& suffix, DgReportLevel failLevel)
    : DgOutputStream (fileName, suffix, failLevel)
 {
@@ -38,7 +38,7 @@ DgOutNeighborsFile::DgOutNeighborsFile (const string& fileName,
 } // DgOutNeighborsFile::DgOutNeighborsFile
 
 ////////////////////////////////////////////////////////////////////////////////
-DgOutNeighborsFile& 
+DgOutNeighborsFile&
 DgOutNeighborsFile::insert (const DgIDGGBase& dgg, const DgLocation& center,
            DgLocVector& vec)
 {

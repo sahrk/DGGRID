@@ -21,7 +21,7 @@
 // DgOutputStream.C: DgOutputStream class implementation
 //
 //   This class provides wrappers around some basic output stream functionality
-//   to increase ease of use. 
+//   to increase ease of use.
 //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -43,7 +43,7 @@ DgOutputStream::DgOutputStream (const string& fileName, const string& suffix,
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-bool 
+bool
 DgOutputStream::open (string fileName, DgReportLevel failLevel)
 //
 // Open fileName as an output file. Report with a report level of failLevel
@@ -55,17 +55,17 @@ DgOutputStream::open (string fileName, DgReportLevel failLevel)
    // make sure we are not already open
 
    if ((rdbuf())->is_open()) close();
-   
+
    // get all the possible name variations
 
-   fileName_ 
-      = (suffix() == string("")) ? fileName : 
+   fileName_
+      = (suffix() == string("")) ? fileName :
                                      fileName + string(".") + suffix();
 
    ofstream::open(fileName_.c_str(), ios::out);
-   if (!good()) 
+   if (!good())
    {
-      report("DgOutputStream::open() unable to open file " + fileName_, 
+      report("DgOutputStream::open() unable to open file " + fileName_,
              failLevel);
       return false;
    }
@@ -74,7 +74,7 @@ DgOutputStream::open (string fileName, DgReportLevel failLevel)
       debug("DgOutputStream::open() opened file " + fileName_);
       return true;
    }
-   
+
 } // DgOutputStream::open
 
 ////////////////////////////////////////////////////////////////////////////////

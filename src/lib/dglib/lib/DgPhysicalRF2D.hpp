@@ -27,7 +27,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 template<class C>
 DgPhysicalRF2D<C>::DgPhysicalRF2D (const DgBoundedRF2D& rfIn, bool allocate)
-   : DgPhysicalRF<DgIVec2D, C> (rfIn), boundedRF2D_ (rfIn) 
+   : DgPhysicalRF<DgIVec2D, C> (rfIn), boundedRF2D_ (rfIn)
 {
    matrix_ = new (C (**[boundedRF2D().numI()]));
    for (int i = 0; i < boundedRF2D().numI(); i++)
@@ -54,7 +54,7 @@ DgPhysicalRF2D<C>::replaceAddContents (const DgIVec2D& add, C* cont)
 {
    if (!boundedRF2D().validAddress(add))
    {
-      report("DgPhysicalRF2D<C>::replaceAddContents() invalid address", 
+      report("DgPhysicalRF2D<C>::replaceAddContents() invalid address",
       DgBase::Fatal);
    }
 
@@ -70,12 +70,12 @@ DgPhysicalRF2D<C>::setAddContents (const DgIVec2D& add, const C& cont)
 {
    if (!boundedRF2D().validAddress(add))
    {
-      report("DgPhysicalRF2D<C>::setAddContents() invalid address", 
+      report("DgPhysicalRF2D<C>::setAddContents() invalid address",
       DgBase::Fatal);
    }
 
    DgIVec2D tmp = add - boundedRF2D().lowerLeft();
-   if (!matrix_[tmp.i()][tmp.j()]) 
+   if (!matrix_[tmp.i()][tmp.j()])
    {
       matrix_[tmp.i()][tmp.j()] = new C();
 
@@ -93,12 +93,12 @@ DgPhysicalRF2D<C>::getAddContents (const DgIVec2D& add, bool allocate) const
 {
    if (!boundedRF2D().validAddress(add))
    {
-      report("DgPhysicalRF2D<C>::getAddContents() invalid address", 
+      report("DgPhysicalRF2D<C>::getAddContents() invalid address",
       DgBase::Fatal);
    }
 
    DgIVec2D tmp = add - boundedRF2D().lowerLeft();
-   if (matrix_[tmp.i()][tmp.j()] == 0 && allocate) 
+   if (matrix_[tmp.i()][tmp.j()] == 0 && allocate)
    {
       matrix_[tmp.i()][tmp.j()] = new C();
       DgLocation* tmpLoc = discRF().makeLocation(add);

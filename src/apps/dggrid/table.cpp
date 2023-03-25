@@ -43,13 +43,13 @@ void doTable (MainParam& dp, DgGridPList& plist)
    DgRFNetwork net0;
    const DgGeoSphRF& geoRF = *(DgGeoSphRF::makeRF(net0, dp.datum, dp.earthRadius));
    const DgIDGGSBase *idggs = DgIDGGSBase::makeRF(net0, geoRF, dp.vert0,
-          dp.azimuthDegs, dp.aperture, dp.actualRes+1, dp.gridTopo, 
-          dp.gridMetric, "IDGGS", dp.projType, dp.isMixed43, dp.numAp4, 
+          dp.azimuthDegs, dp.aperture, dp.actualRes+1, dp.gridTopo,
+          dp.gridMetric, "IDGGS", dp.projType, dp.isMixed43, dp.numAp4,
           dp.isSuperfund, dp.isApSeq, dp.apSeq);
 
    int numRes = dp.actualRes + 1;
 
-   dgcout << "Earth Radius: " 
+   dgcout << "Earth Radius: "
         << dgg::util::addCommas(geoRF.earthRadiusKM(), dp.precision)
         << "\n" << endl;
 
@@ -83,12 +83,12 @@ void doTable (MainParam& dp, DgGridPList& plist)
       {
          const DgGridStats& gs = idggs->idggBase(r).gridStats();
          dgcout << setw(resWidth)  << idggs->idggBase(r).outputRes()
-           << setw(nCellsWidth) << dgg::util::addCommas(gs.nCells()) 
-           << setw(areaWidth) << dgg::util::addCommas(gs.cellAreaKM(), 
-                                                dp.precision) 
-//           << setw(spcWidth) << dgg::util::addCommas(gs.cellDistKM(), 
-//                                                dp.precision) 
-           << setw(clsWidth) << dgg::util::addCommas(gs.cls(), 
+           << setw(nCellsWidth) << dgg::util::addCommas(gs.nCells())
+           << setw(areaWidth) << dgg::util::addCommas(gs.cellAreaKM(),
+                                                dp.precision)
+//           << setw(spcWidth) << dgg::util::addCommas(gs.cellDistKM(),
+//                                                dp.precision)
+           << setw(clsWidth) << dgg::util::addCommas(gs.cls(),
                                                 dp.precision) << endl;
       }
    }

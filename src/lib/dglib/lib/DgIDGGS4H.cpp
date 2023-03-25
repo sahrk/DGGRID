@@ -35,7 +35,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-DgIDGGS4H::DgIDGGS4H (const DgIDGGS4H& rf) 
+DgIDGGS4H::DgIDGGS4H (const DgIDGGS4H& rf)
   : DgHexIDGGS (rf)
 {
    report("DgIDGGS4H::operator=() not implemented yet", DgBase::Fatal);
@@ -59,8 +59,8 @@ DgIDGGS4H::operator= (const DgIDGGS4H&)
 } // DgIDGGS4H& DgIDGGS4H::operator=
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgIDGGS4H::setAddParents (const DgResAdd<DgQ2DICoord>& add, 
+void
+DgIDGGS4H::setAddParents (const DgResAdd<DgQ2DICoord>& add,
                              DgLocVector& vec) const
 {
    DgPolygon verts;
@@ -78,7 +78,7 @@ DgIDGGS4H::setAddParents (const DgResAdd<DgQ2DICoord>& add,
       DgDVec2D pt2 = *(grids()[add.res()]->backFrame().getAddress(
                                            verts[(i + 1) % verts.size()]));
 
-      DgLocation* tmpLoc = 
+      DgLocation* tmpLoc =
          grids()[add.res()]->backFrame().makeLocation(
                                            DgDVec2D::midPoint(pt1, pt2));
 
@@ -109,8 +109,8 @@ DgIDGGS4H::setAddParents (const DgResAdd<DgQ2DICoord>& add,
 } // void DgIDGGS4H::setAddParents
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgIDGGS4H::setAddInteriorChildren (const DgResAdd<DgQ2DICoord>& add, 
+void
+DgIDGGS4H::setAddInteriorChildren (const DgResAdd<DgQ2DICoord>& add,
                                         DgLocVector& vec) const
 {
    DgLocVector verts;
@@ -123,8 +123,8 @@ DgIDGGS4H::setAddInteriorChildren (const DgResAdd<DgQ2DICoord>& add,
 } // void DgIDGGS4H::setAddInteriorChildren
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgIDGGS4H::setAddBoundaryChildren (const DgResAdd<DgQ2DICoord>& add, 
+void
+DgIDGGS4H::setAddBoundaryChildren (const DgResAdd<DgQ2DICoord>& add,
                                         DgLocVector& vec) const
 {
    DgPolygon verts;
@@ -141,7 +141,7 @@ DgIDGGS4H::setAddBoundaryChildren (const DgResAdd<DgQ2DICoord>& add,
 
       DgDVec2D pt2 = *(grids()[add.res()]->backFrame().getAddress(
                                            verts[(i + 1) % verts.size()]));
-      DgLocation* tmpLoc = 
+      DgLocation* tmpLoc =
          grids()[add.res()]->backFrame().makeLocation(
                                               DgDVec2D::midPoint(pt1, pt2));
 
@@ -172,8 +172,8 @@ DgIDGGS4H::setAddBoundaryChildren (const DgResAdd<DgQ2DICoord>& add,
 } // void DgIDGGS4H::setAddBoundaryChildren
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgIDGGS4H::setAddAllChildren (const DgResAdd<DgQ2DICoord>& add, 
+void
+DgIDGGS4H::setAddAllChildren (const DgResAdd<DgQ2DICoord>& add,
                                    DgLocVector& vec) const
 {
    setAddInteriorChildren(add, vec);

@@ -32,11 +32,11 @@
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgBoundedIDGGS::DgBoundedIDGGS (const DgIDGGS& rf)
-   : DgBoundedRF< DgResAdd<DgQ2DICoord>, DgGeoCoord, long double > (rf, 
+   : DgBoundedRF< DgResAdd<DgQ2DICoord>, DgGeoCoord, long double > (rf,
                   DgResAdd<DgQ2DICoord> (DgQ2DICoord(0, DgIVec2D(0, 0)), 0),
-                  DgResAdd<DgQ2DICoord> (DgQ2DICoord(0, DgIVec2D(0, 0)), 0), 
+                  DgResAdd<DgQ2DICoord> (DgQ2DICoord(0, DgIVec2D(0, 0)), 0),
                   rf.undefAddress()), IDGGS_ (rf)
-{ 
+{
    // allocate the grids
 
    grids_ = new vector<const DgBoundedIDGG*>(IDGGS().nRes());
@@ -93,7 +93,7 @@ DgBoundedIDGGS::incrementAddress (DgResAdd<DgQ2DICoord>& add) const
    if (add.address() == grid.endAdd())
    {
       if (add.res() == (IDGGS().nRes() - 1)) return add = endAdd();
-      else 
+      else
       {
          int newRes = add.res() + 1;
          add = DgResAdd<DgQ2DICoord>(grids()[newRes]->firstAdd(), newRes);
@@ -107,7 +107,7 @@ DgBoundedIDGGS::incrementAddress (DgResAdd<DgQ2DICoord>& add) const
        add.address() == grid.endAdd())
    {
       if (add.res() == (IDGGS().nRes() - 1)) return add = endAdd();
-      else 
+      else
       {
          int newRes = add.res() + 1;
          return add = DgResAdd<DgQ2DICoord>(grids()[newRes]->firstAdd(), newRes);
@@ -144,7 +144,7 @@ DgBoundedIDGGS::decrementAddress (DgResAdd<DgQ2DICoord>& add) const
 } // DgResAdd<DgQ2DICoord>& DgBoundedIDGGS::decrementAddress
 
 ////////////////////////////////////////////////////////////////////////////////
-unsigned long long int 
+unsigned long long int
 DgBoundedIDGGS::seqNumAddress (const DgResAdd<DgQ2DICoord>& add) const
 {
    if (!validSize())
@@ -166,7 +166,7 @@ DgBoundedIDGGS::seqNumAddress (const DgResAdd<DgQ2DICoord>& add) const
 } // unsigned long long int DgBoundedIDGGS::seqNumAddress
 
 ////////////////////////////////////////////////////////////////////////////////
-DgResAdd<DgQ2DICoord> 
+DgResAdd<DgQ2DICoord>
 DgBoundedIDGGS::addFromSeqNum (unsigned long long int sNum) const
 {
    if (!validSize())

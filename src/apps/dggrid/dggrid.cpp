@@ -18,7 +18,7 @@
 *******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
-// dggrid.cpp: DGGRID main program 
+// dggrid.cpp: DGGRID main program
 //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -66,13 +66,13 @@ void orientGrid (MainParam& dp, DgGridPList& plist)
       getParamValue(plist, "region_center_lon", lonc, false);
       getParamValue(plist, "region_center_lat", latc, false);
 
-      const DgProjGnomonicRF& gnomc = *(DgProjGnomonicRF::makeRF(netc, "cgnom", DgGeoCoord(lonc, latc, false))); 
+      const DgProjGnomonicRF& gnomc = *(DgProjGnomonicRF::makeRF(netc, "cgnom", DgGeoCoord(lonc, latc, false)));
       Dg2WayGeoProjConverter(geoRF, gnomc);
 
-      DgLocation* gloc = gnomc.makeLocation(DgDVec2D(-7289214.618283, 
+      DgLocation* gloc = gnomc.makeLocation(DgDVec2D(-7289214.618283,
                                                       7289214.618283));
       geoRF.convert(gloc);
-   
+
       DgGeoCoord p0 = *geoRF.getAddress(*gloc);
       delete gloc;
 
@@ -113,7 +113,7 @@ int main (int argc, char* argv[])
 
    dgcout << "\n** loading meta file " << metaFileName << "..." << endl;
 
-   // first parse the meta file 
+   // first parse the meta file
    DgGridPList plist; // builds the parameter list
    plist.loadParams(metaFileName);
 
@@ -123,13 +123,13 @@ int main (int argc, char* argv[])
    MainParam* pdp = 0;
    if (tmp == "GENERATE_GRID")
       pdp = new GridGenParam(plist);
-   else if (tmp == "OUTPUT_STATS")   
+   else if (tmp == "OUTPUT_STATS")
       pdp = new MainParam(plist);
-   else if (tmp == "BIN_POINT_VALS")     
+   else if (tmp == "BIN_POINT_VALS")
       pdp = new BinValsParam(plist);
    else if (tmp == "BIN_POINT_PRESENCE")
       pdp = new BinPresenceParam(plist);
-   else if (tmp == "TRANSFORM_POINTS")   
+   else if (tmp == "TRANSFORM_POINTS")
       pdp = new TransformParam(plist);
 
    // echo the parameter list
@@ -142,25 +142,25 @@ int main (int argc, char* argv[])
    // execute the operation
    if (tmp == "GENERATE_GRID")
       doGridGen(static_cast<GridGenParam&>(*pdp), plist);
-   else if (tmp == "OUTPUT_STATS")   
+   else if (tmp == "OUTPUT_STATS")
       doTable(*pdp, plist);
-   else if (tmp == "BIN_POINT_VALS")     
+   else if (tmp == "BIN_POINT_VALS")
       doBinVals(static_cast<BinValsParam&>(*pdp), plist);
    else if (tmp == "BIN_POINT_PRESENCE")
       doBinPresence(static_cast<BinPresenceParam&>(*pdp), plist);
-   else if (tmp == "TRANSFORM_POINTS")   
+   else if (tmp == "TRANSFORM_POINTS")
       doTransforms(static_cast<TransformParam&>(*pdp), plist);
 
    bool pauseBeforeExit = pdp->pauseBeforeExit;
 
    delete pdp;
-   
-   if (pauseBeforeExit) 
+
+   if (pauseBeforeExit)
       pause("before exit");
 
    return 0;
 
-} // main 
+} // main
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

@@ -45,8 +45,8 @@ DgPhysicalRFBase<C>::initAllCells (void)
 ////////////////////////////////////////////////////////////////////////////////
 template<class C> ostream& operator<< (ostream& stream,
                                        const DgPhysicalRFBase<C>& rfIn)
-{ 
-   return stream << "Phys-" << rfIn.boundedRFBase(); 
+{
+   return stream << "Phys-" << rfIn.boundedRFBase();
 
 } // ostream& operator<<
 

@@ -35,7 +35,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 DgInShapefileAtt::DgInShapefileAtt (const DgGeoSphRF& geoRFIn,
             const string* fileNameIn, DgReportLevel failLevelIn)
-   : DgInShapefile (geoRFIn, fileNameIn, failLevelIn), 
+   : DgInShapefile (geoRFIn, fileNameIn, failLevelIn),
       dbfFile_ (NULL), numFields_ (0)
 {
    if (fileNameIn)
@@ -46,7 +46,7 @@ DgInShapefileAtt::DgInShapefileAtt (const DgGeoSphRF& geoRFIn,
 } // DgInShapefileAtt::DgInShapefileAtt
 
 ////////////////////////////////////////////////////////////////////////////////
-bool 
+bool
 DgInShapefileAtt::open (const string* fileNameIn, DgReportLevel failLevelIn)
 {
    if (!DgInShapefile::open(fileNameIn, failLevelIn))
@@ -69,8 +69,8 @@ DgInShapefileAtt::open (const string* fileNameIn, DgReportLevel failLevelIn)
       type = DBFGetFieldInfo(dbfFile_, i, fName, &w, &p);
       if (type == FTInvalid)
       {
-         report("DgInShapefileAtt::open() invalid field #" + 
-                dgg::util::to_string(i) + " in dbf file " + 
+         report("DgInShapefileAtt::open() invalid field #" +
+                dgg::util::to_string(i) + " in dbf file " +
                 fileName_, failLevelIn);
          return false;
       }
@@ -83,9 +83,9 @@ DgInShapefileAtt::open (const string* fileNameIn, DgReportLevel failLevelIn)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgInShapefileAtt::close (void) 
-{ 
+void
+DgInShapefileAtt::close (void)
+{
    if (dbfFile_)
    {
       DBFClose(dbfFile_);
@@ -103,7 +103,7 @@ void
 DgInShapefileAtt::getNextEntity (void)
 {
    DgInShapefile::getNextEntity();
-   
+
    curObjFields_.clear();
 
    for (set<DgDBFfield>::iterator it = fields_.begin(); it != fields_.end(); it++)

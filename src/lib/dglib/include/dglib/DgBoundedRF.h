@@ -140,7 +140,7 @@ template<class A, class B, class DB> class DgBoundedRF
 
    protected:
 
-      void setFirstAdd (const A& firstAddIn) 
+      void setFirstAdd (const A& firstAddIn)
          { firstAdd_ = firstAddIn;
            discRF().forceAddress(DgBoundedRFBase0::first_, firstAddIn); }
 

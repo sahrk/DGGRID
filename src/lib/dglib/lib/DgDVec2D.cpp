@@ -47,7 +47,7 @@ DgDVec2D::operator= (const DgDVec3D& pt)
 } // DgDVec2D& DgDVec2D::operator=
 
 ////////////////////////////////////////////////////////////////////////////////
-const char* 
+const char*
 DgDVec2D::fromString (const char* str, char delimiter)
 {
    char delimStr[2];
@@ -65,7 +65,7 @@ DgDVec2D::fromString (const char* str, char delimiter)
    long double xIn;
    if (sscanf(tok, "%LF", &xIn) != 1)
    {
-      ::report("DgDVec2D::fromString() invalid value in string " + string(tok), 
+      ::report("DgDVec2D::fromString() invalid value in string " + string(tok),
                DgBase::Fatal);
    }
 
@@ -75,7 +75,7 @@ DgDVec2D::fromString (const char* str, char delimiter)
    long double yIn;
    if (sscanf(tok, "%LF", &yIn) != 1)
    {
-      ::report("DgDVec2D::fromString() invalid value in string " + string(tok), 
+      ::report("DgDVec2D::fromString() invalid value in string " + string(tok),
                DgBase::Fatal);
    }
 
@@ -84,9 +84,9 @@ DgDVec2D::fromString (const char* str, char delimiter)
 
    unsigned long offset = (tok - tmpStr) + strlen(tok) + 1;
    delete [] tmpStr;
-   if (offset >= strlen(str)) 
+   if (offset >= strlen(str))
     return 0;
-   else 
+   else
     return &str[offset];
 } // const char* DgDVec2D::fromString
 

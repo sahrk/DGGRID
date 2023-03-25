@@ -43,7 +43,7 @@ DgRFBase::~DgRFBase (void)
 } // DgRFBase::~DgRFBase
 
 ////////////////////////////////////////////////////////////////////////////////
-DgLocation* 
+DgLocation*
 DgRFBase::convert (DgLocation* loc) const
 {
    if (loc->rf_ == 0)
@@ -51,7 +51,7 @@ DgRFBase::convert (DgLocation* loc) const
       loc->rf_ = this;
       return loc;
    }
-   
+
    if (network() != loc->rf().network())
    {
       report("DgRFBase::convert() from/to network mismatch",
@@ -66,7 +66,7 @@ DgRFBase::convert (DgLocation* loc) const
       loc->rf_ = this;
       return loc;
    }
-   
+
    // if we're here we need to convert
 
    const DgConverterBase* conv = network().getConverter(loc->rf(), *this);
@@ -81,14 +81,14 @@ DgRFBase::convert (DgLocation* loc) const
 } // DgLocation* DgRFBase::convert
 
 ////////////////////////////////////////////////////////////////////////////////
-DgPolygon& 
+DgPolygon&
 DgRFBase::convert (DgPolygon& poly) const
 {
    if (poly.rf_ == 0) {
       poly.rf_ = this;
       return poly;
    }
-   
+
    if (network() != poly.rf().network()) {
       report("DgRFBase::convert() from/to network mismatch",
              DgBase::Fatal);
@@ -101,7 +101,7 @@ DgRFBase::convert (DgPolygon& poly) const
       poly.rf_ = this;
       return poly;
    }
-   
+
    // if we're here we need to convert
 
    const DgConverterBase* conv = network().getConverter(poly.rf(), *this);
@@ -121,14 +121,14 @@ DgRFBase::convert (DgPolygon& poly) const
 } // DgPolygon& DgRFBase::convert
 
 ////////////////////////////////////////////////////////////////////////////////
-DgLocVector& 
+DgLocVector&
 DgRFBase::convert (DgLocVector& vec) const
 {
    if (vec.rf_ == 0) {
       vec.rf_ = this;
       return vec;
    }
-   
+
    if (network() != vec.rf().network()) {
       report("DgRFBase::convert() from/to network mismatch",
              DgBase::Fatal);
@@ -141,7 +141,7 @@ DgRFBase::convert (DgLocVector& vec) const
       vec.rf_ = this;
       return vec;
    }
-   
+
    // if we're here we need to convert
 
    const DgConverterBase* conv = network().getConverter(vec.rf(), *this);
@@ -152,7 +152,7 @@ DgRFBase::convert (DgLocVector& vec) const
 
    vector<DgAddressBase*>& v = vec.addressVec();
    for (unsigned long i = 0; i < v.size(); i++) {
-      if (v[i]) { 
+      if (v[i]) {
          DgAddressBase* addIn = v[i];
          DgAddressBase* newAdd = conv->createConvertedAddress(*addIn);
          v[i] = newAdd;
@@ -168,7 +168,7 @@ DgRFBase::convert (DgLocVector& vec) const
 } // DgLocVector& DgRFBase::convert
 
 ////////////////////////////////////////////////////////////////////////////////
-DgLocation* 
+DgLocation*
 DgRFBase::createLocation (void) const
 {
    return new DgLocation(*this, 0);
@@ -176,7 +176,7 @@ DgRFBase::createLocation (void) const
 } // DgLocation* DgRFBase::createLocation
 
 ////////////////////////////////////////////////////////////////////////////////
-DgLocation* 
+DgLocation*
 DgRFBase::buildLocation (DgAddressBase* addIn) const
 {
    return new DgLocation(*this, addIn);
@@ -235,7 +235,7 @@ DgRFBase::traceToGround (ostream& stream) const
    list<const DgRFBase*>::iterator it = rev.begin();
    for (; it != rev.end(); it++) stream << "  => " << (*it)->name() << "\n";
 
-   return stream << " => " << name() << " }" << endl;  
+   return stream << " => " << name() << " }" << endl;
 
 } // void DgRFBase::traceToGround
 
@@ -272,8 +272,8 @@ DgRFBase::toAddressString (const DgLocBase& lb, char delimiter) const
 } // string DgRFBase::toAddressString
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgRFBase::setUndefLoc (DgLocation* undefLoc) 
+void
+DgRFBase::setUndefLoc (DgLocation* undefLoc)
 {
    if (undefLoc_) delete undefLoc_;
    undefLoc_ = undefLoc;

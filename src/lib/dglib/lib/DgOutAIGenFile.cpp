@@ -159,7 +159,7 @@ DgOutAIGenFile::insert (DgPolygon& poly, const string* label,
    const vector<DgAddressBase*>& v = poly.addressVec();
    for (int i = (int) (v.size() - 1); i >= 0; i--)
       this->insert(rf().getVecAddress(*v[i]));
- 
+
    // rewrite the first vertex
    this->insert(rf().getVecAddress(*v[v.size() - 1]));
 

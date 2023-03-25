@@ -66,7 +66,7 @@ DgPhysicalRF<A, C>::getContents (const DgLocation& loc, bool convert,
 
 ////////////////////////////////////////////////////////////////////////////////
 template<class A, class C> void
-DgPhysicalRF<A, C>::replaceContents (const DgLocation& loc, C* cont, 
+DgPhysicalRF<A, C>::replaceContents (const DgLocation& loc, C* cont,
                                         bool convert)
 {
    DgLocation* pLoc = discRF().createLocation(loc, convert);
@@ -86,7 +86,7 @@ DgPhysicalRF<A, C>::replaceContents (const DgLocation& loc, C* cont,
 
 ////////////////////////////////////////////////////////////////////////////////
 template<class A, class C> void
-DgPhysicalRF<A, C>::setContents (const DgLocation& loc, const C& cont, 
+DgPhysicalRF<A, C>::setContents (const DgLocation& loc, const C& cont,
                                     bool convert)
 {
    DgLocation* pLoc = discRF().createLocation(loc, convert);

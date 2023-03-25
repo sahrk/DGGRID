@@ -129,7 +129,7 @@ OGRPolygon* polygon = (OGRPolygon*) OGRGeometryFactory::createGeometry(wkbPolygo
 polygon->addRingDirectly(oLinearRing);
 
 cout << "HOLES?" << endl;
-    // first one is the outer ring and, all the next ones are the 
+    // first one is the outer ring and, all the next ones are the
     // inner rings/holes
     //oPolygon = (OGRPolygon*) oGeometry;
     for (int i = 0; i < oPolygon->getNumInteriorRings(); i++) {

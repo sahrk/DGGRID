@@ -34,7 +34,7 @@
 using namespace std;
 
 #define DGDEBUG         0
-#define DGGRID_VERSION  "7.7" 
+#define DGGRID_VERSION  "7.7"
 
 // adapted from stackoverflow user Pierre
 #define WHERE fprintf(stderr,"[LOG]%s:%s#%d\n",__PRETTY_FUNCTION__,__FILE__,__LINE__);
@@ -80,24 +80,24 @@ class DgBase {
 
       static DgReportLevel minReportLevel (void) { return minReportLevel_; }
 
-      static bool testArgEqual (int argc, int expected, 
+      static bool testArgEqual (int argc, int expected,
                      const string& message = string("invalid argument count"),
                      DgReportLevel level = Fatal);
 
-      static bool testArgEqual (int argc, char* argv[], int expected, 
+      static bool testArgEqual (int argc, char* argv[], int expected,
                      const string& message = string("invalid argument count"));
 
-      static bool testArgMin (int argc, int minExpected, 
+      static bool testArgMin (int argc, int minExpected,
                      const string& message = string("invalid argument count"),
                      DgReportLevel level = Fatal);
 
-      static bool testArgMin (int argc, char* argv[], int minExpected, 
+      static bool testArgMin (int argc, char* argv[], int minExpected,
                      const string& message = string("invalid argument count"));
 
       DgBase (const string& instanceName = defaultName);
 
       DgBase (const string* instanceName = NULL);
-      
+
       void setInstanceName (const string& instanceName)
               { instanceName_ = instanceName; }
 
@@ -116,7 +116,7 @@ class DgBase {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-extern "C" void report (const string& message, 
+extern "C" void report (const string& message,
                         DgBase::DgReportLevel level = DgBase::Info);
 
 ////////////////////////////////////////////////////////////////////////////////

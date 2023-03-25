@@ -39,16 +39,16 @@ static const string& emptyStr = "";
 using namespace dgg::topo;
 
 ////////////////////////////////////////////////////////////////////////////////
-DgHexGrid2DS::DgHexGrid2DS (DgRFNetwork& networkIn, 
-               const DgRF<DgDVec2D, long double>& backFrameIn, int nResIn, 
-               const DgApSeq& apSeqIn, const string& nameIn) 
+DgHexGrid2DS::DgHexGrid2DS (DgRFNetwork& networkIn,
+               const DgRF<DgDVec2D, long double>& backFrameIn, int nResIn,
+               const DgApSeq& apSeqIn, const string& nameIn)
         : DgDiscRFS2D (networkIn, backFrameIn, nResIn, 4,
-                       //apSeqIn.getAperture(apSeqIn.lastRes()).aperture(), 
-                       Hexagon, D6, 0, 1, nameIn), 
+                       //apSeqIn.getAperture(apSeqIn.lastRes()).aperture(),
+                       Hexagon, D6, 0, 1, nameIn),
           apSeq_ (apSeqIn),
           // these are deprecated and not used by this constructor
           isMixed43_ (0), numAp4_ (0), isSuperfund_ (0), isApSeq_ (0)
-{ 
+{
    //frequency_ = sqrt((long double) aperture());
 
    // do the grids
@@ -69,10 +69,10 @@ DgHexGrid2DS::DgHexGrid2DS (DgRFNetwork& networkIn,
       const DgContCartRF* ccRF = DgContCartRF::makeRF(network(), newName + string("bf"));
 
       // this creates the forward and inverse converters, which are memory
-      // managed by the DgRFNetwork. but 2Way converters  are not themselves 
+      // managed by the DgRFNetwork. but 2Way converters  are not themselves
       // converters
-      Dg2WayContAffineConverter(backFrame(), *ccRF, (long double) fac, M_ZERO, 
-                                    DgDVec2D(M_ZERO, M_ZERO)); 
+      Dg2WayContAffineConverter(backFrame(), *ccRF, (long double) fac, M_ZERO,
+                                    DgDVec2D(M_ZERO, M_ZERO));
 
       if (isClassIII)
          (*grids_)[r] = DgHexC3Grid2D::makeRF(network(), *ccRF, isClassI, newName);
@@ -111,17 +111,17 @@ DgHexGrid2DS::DgHexGrid2DS (DgRFNetwork& networkIn,
 
 ////////////////////////////////////////////////////////////////////////////////
 // this constructor is deprecated
-DgHexGrid2DS::DgHexGrid2DS (DgRFNetwork& networkIn, 
-               const DgRF<DgDVec2D, long double>& backFrameIn, int nResIn, 
+DgHexGrid2DS::DgHexGrid2DS (DgRFNetwork& networkIn,
+               const DgRF<DgDVec2D, long double>& backFrameIn, int nResIn,
                unsigned int apertureIn, bool isCongruentIn, bool isAlignedIn,
-               const string& nameIn, bool isMixed43In, int numAp4In, 
+               const string& nameIn, bool isMixed43In, int numAp4In,
                bool isSuperfundIn, bool isApSeqIn, const DgApSeq& apSeqIn)
         : DgDiscRFS2D (networkIn, backFrameIn, nResIn, apertureIn, Hexagon, D6,
-              isCongruentIn, isAlignedIn, nameIn), 
+              isCongruentIn, isAlignedIn, nameIn),
           apSeq_ (apSeqIn),
           isMixed43_ (isMixed43In), numAp4_ (numAp4In), isSuperfund_ (isSuperfundIn),
           isApSeq_ (isApSeqIn)
-{ 
+{
    if (isApSeq())
       report("DgHexGrid2DS::DgHexGrid2DS() isApSeq should be false in this constructor",
        DgBase::Fatal);
@@ -161,16 +161,16 @@ DgHexGrid2DS::DgHexGrid2DS (DgRFNetwork& networkIn,
 
       const DgContCartRF* ccRF = DgContCartRF::makeRF(network(), newName + string("bf"));
 
-      Dg2WayContAffineConverter(backFrame(), *ccRF, (long double) fac, M_ZERO, 
-                                    DgDVec2D(M_ZERO, M_ZERO)); 
+      Dg2WayContAffineConverter(backFrame(), *ccRF, (long double) fac, M_ZERO,
+                                    DgDVec2D(M_ZERO, M_ZERO));
 
       bool isClassI;
       if (!isMixed43()) {
-         if (aperture() == 4) 
+         if (aperture() == 4)
             isClassI = true;
          else // ap 3
             isClassI = !(i % 2);
-      } else { // mixed43 
+      } else { // mixed43
          if (i <= numAp4())
             isClassI = true;
          else
@@ -200,7 +200,7 @@ DgHexGrid2DS::DgHexGrid2DS (DgRFNetwork& networkIn,
 } // DgHexGrid2DS::DgHexGrid2DS
 
 ////////////////////////////////////////////////////////////////////////////////
-DgHexGrid2DS::DgHexGrid2DS (const DgHexGrid2DS& rf) 
+DgHexGrid2DS::DgHexGrid2DS (const DgHexGrid2DS& rf)
   : DgDiscRFS2D (rf), apSeq_ (DgApSeq::defaultApSeq)
 {
    report("DgHexGrid2DS::operator=() not implemented yet", DgBase::Fatal);
@@ -222,8 +222,8 @@ DgHexGrid2DS::operator= (const DgHexGrid2DS&)
 } // DgHexGrid2DS& DgHexGrid2DS::operator=
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgHexGrid2DS::setAddParents (const DgResAdd<DgIVec2D>& add, 
+void
+DgHexGrid2DS::setAddParents (const DgResAdd<DgIVec2D>& add,
                              DgLocVector& vec) const
 {
    DgPolygon verts;
@@ -269,7 +269,7 @@ DgHexGrid2DS::setAddParents (const DgResAdd<DgIVec2D>& add,
          DgDVec2D pt2 = *(grids()[add.res()]->backFrame().getAddress(
                                               verts[(i + 1) % verts.size()]));
 
-         DgLocation* tmpLoc = 
+         DgLocation* tmpLoc =
             grids()[add.res()]->backFrame().makeLocation(
                                               DgDVec2D::midPoint(pt1, pt2));
 
@@ -301,8 +301,8 @@ DgHexGrid2DS::setAddParents (const DgResAdd<DgIVec2D>& add,
 } // void DgHexGrid2DS::setAddParents
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgHexGrid2DS::setAddInteriorChildren (const DgResAdd<DgIVec2D>& add, 
+void
+DgHexGrid2DS::setAddInteriorChildren (const DgResAdd<DgIVec2D>& add,
                                         DgLocVector& vec) const
 {
    DgLocVector verts;
@@ -315,8 +315,8 @@ DgHexGrid2DS::setAddInteriorChildren (const DgResAdd<DgIVec2D>& add,
 } // void DgHexGrid2DS::setAddInteriorChildren
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgHexGrid2DS::setAddBoundaryChildren (const DgResAdd<DgIVec2D>& add, 
+void
+DgHexGrid2DS::setAddBoundaryChildren (const DgResAdd<DgIVec2D>& add,
                                         DgLocVector& vec) const
 {
    DgPolygon verts;
@@ -362,7 +362,7 @@ DgHexGrid2DS::setAddBoundaryChildren (const DgResAdd<DgIVec2D>& add,
          DgDVec2D pt2 = *(grids()[add.res()]->backFrame().getAddress(
                                               verts[(i + 1) % verts.size()]));
 
-         DgLocation* tmpLoc = 
+         DgLocation* tmpLoc =
             grids()[add.res()]->backFrame().makeLocation(
                                               DgDVec2D::midPoint(pt1, pt2));
 
@@ -394,8 +394,8 @@ DgHexGrid2DS::setAddBoundaryChildren (const DgResAdd<DgIVec2D>& add,
 } // void DgHexGrid2DS::setAddBoundaryChildren
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgHexGrid2DS::setAddAllChildren (const DgResAdd<DgIVec2D>& add, 
+void
+DgHexGrid2DS::setAddAllChildren (const DgResAdd<DgIVec2D>& add,
                                    DgLocVector& vec) const
 {
    setAddInteriorChildren(add, vec);

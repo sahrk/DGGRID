@@ -32,7 +32,7 @@
 
 using namespace dgg::topo;
 
-void 
+void
 MainParam::determineRes (const DgParamList& plist)
 {
    int maxRes = (apertureType != "SEQUENCE") ? MAX_DGG_RES : apSeq.lastRes();
@@ -58,7 +58,7 @@ MainParam::determineRes (const DgParamList& plist)
       else
       {
          area = false;
-         getParamValue(plist, "dggs_res_specify_intercell_distance", value, 
+         getParamValue(plist, "dggs_res_specify_intercell_distance", value,
                        false);
       }
 
@@ -75,7 +75,7 @@ MainParam::determineRes (const DgParamList& plist)
 
       long double last = 0.0;
       res = maxRes + 1;
-      for (int i = 1; i <= maxRes; i++) 
+      for (int i = 1; i <= maxRes; i++)
       {
          const DgGridStats& gs = idggs->idggBase(i).gridStats();
          long double next = (area) ? gs.cellAreaKM() : gs.cellDistKM();
@@ -111,14 +111,14 @@ MainParam::determineRes (const DgParamList& plist)
 MainParam::MainParam (DgParamList& plist)
    : operation (""), dggsType (""), gridTopo (dgg::topo::InvalidTopo),
      gridMetric (dgg::topo::InvalidMetric), aperture (4),
-     projType ("ISEA"), res (5), actualRes (5), 
+     projType ("ISEA"), res (5), actualRes (5),
      placeRandom (false), orientCenter (false), orientRand (0),
      numGrids (1), curGrid (1), lastGrid (false), azimuthDegs (0.0),
-     datum (""), precision (DEFAULT_PRECISION), verbosity (0), 
-     megaVerbose (false), pauseOnStart (false), pauseBeforeExit (false), 
+     datum (""), precision (DEFAULT_PRECISION), verbosity (0),
+     megaVerbose (false), pauseOnStart (false), pauseBeforeExit (false),
      metaOutFileNameBase (""), metaOutFileName (""), apertureType (""),
      isMixed43 (false), isSuperfund (false), isApSeq (false)
-{ 
+{
    /////// fill state variables from the parameter list //////////
 
    getParamValue(plist, "dggrid_operation", operation, false);
@@ -209,7 +209,7 @@ MainParam::MainParam (DgParamList& plist)
    string gridTopoStr = "";
    getParamValue(plist, "dggs_topology", gridTopoStr, false);
    gridTopo = dgg::topo::stringToGridTopology(gridTopoStr);
-   
+
 /* metric not exposed to user yet; D8 is broken
    string gridMetricStr = "";
    getParamValue(plist, "dggs_metric", gridMetricStr, false);
@@ -231,9 +231,9 @@ MainParam::MainParam (DgParamList& plist)
    }
 
    getParamValue(plist, "dggs_aperture_type", apertureType, false);
-   if (apertureType == "MIXED43") 
+   if (apertureType == "MIXED43")
       isMixed43 = true;
-   else if (apertureType == "SEQUENCE") 
+   else if (apertureType == "SEQUENCE")
       isApSeq = true;
 
    numAp4 = 0;
@@ -315,7 +315,7 @@ MainParam::MainParam (DgParamList& plist)
    getParamValue(plist, "pause_on_startup", pauseOnStart, false);
    getParamValue(plist, "pause_before_exit", pauseBeforeExit, false);
 
-   getParamValue(plist, "dggs_orient_output_file_name", metaOutFileNameBase, 
+   getParamValue(plist, "dggs_orient_output_file_name", metaOutFileNameBase,
                  false);
    getParamValue(plist, "dggs_orient_specify_type", dummy, false);
    if (dummy == string("SPECIFIED"))
@@ -339,7 +339,7 @@ MainParam::MainParam (DgParamList& plist)
 
 MainParam::~MainParam()
 {
- delete orientRand; 
+ delete orientRand;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -347,7 +347,7 @@ MainParam::~MainParam()
 void MainParam::dump (void)
 {
    dgcout << "BEGIN MAIN PARAMETER DUMP" << endl;
-   
+
    dgcout << " dggsType: " << dggsType << endl;
    dgcout << " curGrid: " << curGrid << endl;
    dgcout << " lastGrid: " << lastGrid << endl;
@@ -373,7 +373,7 @@ void MainParam::dump (void)
    if (orientRand)
       dgcout << *orientRand << endl;
    else
-      dgcout << "null" << endl; 
+      dgcout << "null" << endl;
 
    dgcout << " metaOutFileNameBase: " << metaOutFileNameBase << endl;
 
@@ -392,34 +392,34 @@ DgGridPList::DgGridPList (void)
    choices.push_back(new string("BIN_POINT_PRESENCE"));
    choices.push_back(new string("TRANSFORM_POINTS"));
    choices.push_back(new string("OUTPUT_STATS"));
-   insertParam(new DgStringChoiceParam("dggrid_operation", "GENERATE_GRID", 
+   insertParam(new DgStringChoiceParam("dggrid_operation", "GENERATE_GRID",
                &choices));
    dgg::util::release(choices);
 
-   // dggs_type <CUSTOM | SUPERFUND | PLANETRISK | 
+   // dggs_type <CUSTOM | SUPERFUND | PLANETRISK |
    //            ISEA3H | ISEA4H | ISEA7H | ISEA43H | ISEA4T | ISEA4D |
    //            FULLER3H | FULLER4H | FULLER7H | FULLER43H | FULLER4T | FULLER4D>
    choices.push_back(new string("CUSTOM"));
    choices.push_back(new string("SUPERFUND"));
    choices.push_back(new string("PLANETRISK"));
-   choices.push_back(new string("ISEA3H")); 
-   choices.push_back(new string("ISEA4H")); 
-   choices.push_back(new string("ISEA7H")); 
-   choices.push_back(new string("ISEA43H")); 
-   choices.push_back(new string("ISEA4T")); 
-   choices.push_back(new string("ISEA4D")); 
-   choices.push_back(new string("FULLER3H")); 
-   choices.push_back(new string("FULLER4H")); 
-   choices.push_back(new string("FULLER7H")); 
-   choices.push_back(new string("FULLER43H")); 
-   choices.push_back(new string("FULLER4T")); 
+   choices.push_back(new string("ISEA3H"));
+   choices.push_back(new string("ISEA4H"));
+   choices.push_back(new string("ISEA7H"));
+   choices.push_back(new string("ISEA43H"));
+   choices.push_back(new string("ISEA4T"));
+   choices.push_back(new string("ISEA4D"));
+   choices.push_back(new string("FULLER3H"));
+   choices.push_back(new string("FULLER4H"));
+   choices.push_back(new string("FULLER7H"));
+   choices.push_back(new string("FULLER43H"));
+   choices.push_back(new string("FULLER4T"));
    choices.push_back(new string("FULLER4D"));
    insertParam(new DgStringChoiceParam("dggs_type", "CUSTOM", &choices));
    dgg::util::release(choices);
 
    // dggs_base_poly <ICOSAHEDRON>
    choices.push_back(new string("ICOSAHEDRON"));
-   insertParam(new DgStringChoiceParam("dggs_base_poly", "ICOSAHEDRON", 
+   insertParam(new DgStringChoiceParam("dggs_base_poly", "ICOSAHEDRON",
                &choices));
    dgg::util::release(choices);
 
@@ -441,7 +441,7 @@ DgGridPList::DgGridPList (void)
    choices.push_back(new string("PURE"));
    choices.push_back(new string("MIXED43"));
    choices.push_back(new string("SEQUENCE"));
-   insertParam(new DgStringChoiceParam("dggs_aperture_type", "PURE", 
+   insertParam(new DgStringChoiceParam("dggs_aperture_type", "PURE",
              &choices));
    dgg::util::release(choices);
 
@@ -449,12 +449,12 @@ DgGridPList::DgGridPList (void)
    choices.push_back(new string("3"));
    choices.push_back(new string("4"));
    choices.push_back(new string("7"));
-   insertParam(new DgStringChoiceParam("dggs_aperture", "4", 
+   insertParam(new DgStringChoiceParam("dggs_aperture", "4",
              &choices));
    dgg::util::release(choices);
 
    // dggs_aperture_sequence < apertureSequence >
-   insertParam(new DgStringParam("dggs_aperture_sequence", 
+   insertParam(new DgStringParam("dggs_aperture_sequence",
                      "333333333333"));
 
 /*
@@ -469,7 +469,7 @@ DgGridPList::DgGridPList (void)
    choices.push_back(new string("WGS84_AUTHALIC_SPHERE"));
    choices.push_back(new string("WGS84_MEAN_SPHERE"));
    choices.push_back(new string("CUSTOM_SPHERE"));
-   insertParam(new DgStringChoiceParam("proj_datum", 
+   insertParam(new DgStringChoiceParam("proj_datum",
                "WGS84_AUTHALIC_SPHERE", &choices));
    dgg::util::release(choices);
 
@@ -483,7 +483,7 @@ DgGridPList::DgGridPList (void)
    choices.push_back(new string("RANDOM"));
    choices.push_back(new string("SPECIFIED"));
    choices.push_back(new string("REGION_CENTER"));
-   insertParam(new DgStringChoiceParam("dggs_orient_specify_type", "SPECIFIED", 
+   insertParam(new DgStringChoiceParam("dggs_orient_specify_type", "SPECIFIED",
                &choices));
    dgg::util::release(choices);
 
@@ -491,7 +491,7 @@ DgGridPList::DgGridPList (void)
    insertParam(new DgIntParam("dggs_num_placements", 1, 1, INT_MAX, true));
 
    // dggs_orient_output_file_name <whatever.meta>
-   insertParam(new DgStringParam("dggs_orient_output_file_name", 
+   insertParam(new DgStringParam("dggs_orient_output_file_name",
                      "grid.meta"));
 
    // dggs_orient_rand_seed <unsigned long int int>
@@ -517,21 +517,21 @@ DgGridPList::DgGridPList (void)
    choices.push_back(new string("SPECIFIED"));
    choices.push_back(new string("CELL_AREA"));
    choices.push_back(new string("INTERCELL_DISTANCE"));
-   insertParam(new DgStringChoiceParam("dggs_res_specify_type", "SPECIFIED", 
+   insertParam(new DgStringChoiceParam("dggs_res_specify_type", "SPECIFIED",
                &choices));
    dgg::util::release(choices);
 
    // dggs_res_specify_area <long double: km^2> (v > 0.0)
-   insertParam(new DgDoubleParam("dggs_res_specify_area", 100.0, 
+   insertParam(new DgDoubleParam("dggs_res_specify_area", 100.0,
                                  0.0, 4.0 * M_PI * 6500.0 * 6500.0));
 
    // dggs_res_specify_intercell_distance <long double: km> (v > 0.0)
-   insertParam(new DgDoubleParam("dggs_res_specify_intercell_distance", 100.0, 
+   insertParam(new DgDoubleParam("dggs_res_specify_intercell_distance", 100.0,
                                  0.0, 2.0 * M_PI * 6500.0));
 
    // dggs_res_specify_rnd_down <TRUE | FALSE> (true indicates round down, false up)
    insertParam(new DgBoolParam("dggs_res_specify_rnd_down", true));
- 
+
    // dggs_res_spec <int> (0 <= v <= MAX_DGG_RES)
    insertParam(new DgIntParam("dggs_res_spec", 9, 0, MAX_DGG_RES));
 
@@ -554,7 +554,7 @@ DgGridPList::DgGridPList (void)
    choices.push_back(new string("SEQNUMS"));
    choices.push_back(new string("POINTS"));
    choices.push_back(new string("COARSE_CELLS"));
-   insertParam(new DgStringChoiceParam("clip_subset_type", "WHOLE_EARTH", 
+   insertParam(new DgStringChoiceParam("clip_subset_type", "WHOLE_EARTH",
                &choices));
    dgg::util::release(choices);
 
@@ -572,7 +572,7 @@ DgGridPList::DgGridPList (void)
 
    // clip_type <POLY_INTERSECT>
    choices.push_back(new string("POLY_INTERSECT"));
-   insertParam(new DgStringChoiceParam("clip_type", "POLY_INTERSECT", 
+   insertParam(new DgStringChoiceParam("clip_type", "POLY_INTERSECT",
                &choices));
    dgg::util::release(choices);
 
@@ -589,7 +589,7 @@ DgGridPList::DgGridPList (void)
 void
 DgGridPList::init2 (void)
 //
-// This method was created solely because gcc optimiziation choked when 
+// This method was created solely because gcc optimiziation choked when
 // everything was in the constructor.
 //
 {
@@ -602,11 +602,11 @@ DgGridPList::init2 (void)
    choices.push_back(new string("WRAP"));
    choices.push_back(new string("UNWRAP_WEST"));
    choices.push_back(new string("UNWRAP_EAST"));
-   insertParam(new DgStringChoiceParam("longitude_wrap_mode", "WRAP", 
+   insertParam(new DgStringChoiceParam("longitude_wrap_mode", "WRAP",
                &choices));
    dgg::util::release(choices);
 
-   // unwrap_points <TRUE | FALSE> (true indicates unwrap center point 
+   // unwrap_points <TRUE | FALSE> (true indicates unwrap center point
    //        longitude to match the cell boundary, false allow to wrap)
    insertParam(new DgBoolParam("unwrap_points", true));
 
@@ -617,7 +617,7 @@ DgGridPList::init2 (void)
    choices.push_back(new string("GLOBAL_SEQUENCE"));
    choices.push_back(new string("ENUMERATION"));
    choices.push_back(new string("SUPERFUND"));
-   insertParam(new DgStringChoiceParam("output_cell_label_type", "GLOBAL_SEQUENCE", 
+   insertParam(new DgStringChoiceParam("output_cell_label_type", "GLOBAL_SEQUENCE",
                &choices));
    dgg::util::release(choices);
 
@@ -634,7 +634,7 @@ DgGridPList::init2 (void)
    choices.push_back(new string("SHAPEFILE"));
    choices.push_back(new string("GDAL_COLLECTION"));
    //choices.push_back(new string("TEXT"));
-   insertParam(new DgStringChoiceParam("cell_output_type", "AIGEN", 
+   insertParam(new DgStringChoiceParam("cell_output_type", "AIGEN",
                &choices));
    dgg::util::release(choices);
 
@@ -649,7 +649,7 @@ DgGridPList::init2 (void)
    choices.push_back(new string("SHAPEFILE"));
    choices.push_back(new string("TEXT"));
    choices.push_back(new string("GDAL_COLLECTION"));
-   insertParam(new DgStringChoiceParam("point_output_type", "NONE", 
+   insertParam(new DgStringChoiceParam("point_output_type", "NONE",
                &choices));
    dgg::util::release(choices);
 
@@ -663,7 +663,7 @@ DgGridPList::init2 (void)
    choices.push_back(new string("SHAPEFILE"));
    choices.push_back(new string("GEOJSON"));
    choices.push_back(new string("TEXT"));
-   insertParam(new DgStringChoiceParam("randpts_output_type", "NONE", 
+   insertParam(new DgStringChoiceParam("randpts_output_type", "NONE",
                &choices));
    dgg::util::release(choices);
 
@@ -677,7 +677,7 @@ DgGridPList::init2 (void)
    // collection_output_gdal_format <gdal driver type>
    insertParam(new DgStringParam("collection_output_gdal_format", "GeoJSON"));
 
-   // clip_using_holes <TRUE | FALSE> 
+   // clip_using_holes <TRUE | FALSE>
    insertParam(new DgBoolParam("clip_using_holes", false));
 #endif
 
@@ -697,19 +697,19 @@ DgGridPList::init2 (void)
    insertParam(new DgIntParam("shapefile_id_field_length", 11, 1, 50));
 
    // kml_default_width <int> (1 <= v <= 100)
-   insertParam(new DgIntParam("kml_default_width", 
+   insertParam(new DgIntParam("kml_default_width",
                DgOutLocFile::defaultKMLWidth, 1, 100));
 
    // kml_default_color <string> <hexadecmial color>
-   insertParam(new DgStringParam("kml_default_color", 
+   insertParam(new DgStringParam("kml_default_color",
                DgOutLocFile::defaultKMLColor));
 
    // kml_name <string> <string name>
-   insertParam(new DgStringParam("kml_name", 
+   insertParam(new DgStringParam("kml_name",
                DgOutLocFile::defaultKMLName));
 
    // kml_description <string> <string description>
-   insertParam(new DgStringParam("kml_description", 
+   insertParam(new DgStringParam("kml_description",
                DgOutLocFile::defaultKMLDescription));
 
    ///// PlanetRisk output formats /////
@@ -738,7 +738,7 @@ DgGridPList::init2 (void)
 
    ///// additional random points parameters /////
 
-   // randpts_concatenate_output <TRUE | FALSE> 
+   // randpts_concatenate_output <TRUE | FALSE>
    insertParam(new DgBoolParam("randpts_concatenate_output", true));
 
    // randpts_num_per_cell <int> (v >= 0)
@@ -755,7 +755,7 @@ DgGridPList::init2 (void)
    insertParam(new DgStringParam("randpts_clipped_file_name", "clippedRandPts"));
 */
 
-/* // quad_bndry_nudge <long double> (0.0 <= v < 1.0) 
+/* // quad_bndry_nudge <long double> (0.0 <= v < 1.0)
    insertParam(new DgDoubleParam("quad_bndry_nudge", 0.001, 0.0, 1.0));
 */
 /*** shapefile attribute stuff
@@ -776,7 +776,7 @@ DgGridPList::init2 (void)
    choices.push_back(new string("NONE"));
    choices.push_back(new string("CLIP_FILES"));
    choices.push_back(new string("SHAPEFILES"));
-   insertParam(new DgStringChoiceParam("build_shapefile_attributes_source", 
+   insertParam(new DgStringChoiceParam("build_shapefile_attributes_source",
                "NONE", &choices));
    dgg::util::release(choices);
 
@@ -799,17 +799,17 @@ DgGridPList::init2 (void)
    //  verbosity <int> (0 <= v <= 3)
    insertParam(new DgIntParam("verbosity", 0, 0, 3));
 
-   // pause_on_startup <TRUE | FALSE> 
+   // pause_on_startup <TRUE | FALSE>
    insertParam(new DgBoolParam("pause_on_startup", false));
 
-   // pause_before_exit <TRUE | FALSE> 
+   // pause_before_exit <TRUE | FALSE>
    insertParam(new DgBoolParam("pause_before_exit", false));
 
    ///// binvals parameters /////
 
    // bin_method <ARITHMETIC_MEAN>
    choices.push_back(new string("ARITHMETIC_MEAN"));
-   insertParam(new DgStringChoiceParam("bin_method", "ARITHMETIC_MEAN", 
+   insertParam(new DgStringChoiceParam("bin_method", "ARITHMETIC_MEAN",
                                        &choices));
    dgg::util::release(choices);
 
@@ -829,18 +829,18 @@ DgGridPList::init2 (void)
 
    insertParam(new DgStringParam("output_file_name", "valsout.txt"));
 
-   // output_address_type <GEO | Q2DI | SEQNUM | INTERLEAVE | PLANE | Q2DD | 
+   // output_address_type <GEO | Q2DI | SEQNUM | INTERLEAVE | PLANE | Q2DD |
    //                      PROJTRI | VERTEX2DD | AIGEN >
-   choices.push_back(new string("GEO")); 
-   choices.push_back(new string("Q2DI")); 
-   choices.push_back(new string("SEQNUM")); 
-   choices.push_back(new string("INTERLEAVE")); 
-   choices.push_back(new string("PLANE")); 
-   choices.push_back(new string("Q2DD")); 
-   choices.push_back(new string("PROJTRI")); 
+   choices.push_back(new string("GEO"));
+   choices.push_back(new string("Q2DI"));
+   choices.push_back(new string("SEQNUM"));
+   choices.push_back(new string("INTERLEAVE"));
+   choices.push_back(new string("PLANE"));
+   choices.push_back(new string("Q2DD"));
+   choices.push_back(new string("PROJTRI"));
    choices.push_back(new string("VERTEX2DD"));
    choices.push_back(new string("AIGEN"));
-   insertParam(new DgStringChoiceParam("output_address_type", 
+   insertParam(new DgStringChoiceParam("output_address_type",
                "SEQNUM", &choices));
    dgg::util::release(choices);
 
@@ -848,9 +848,9 @@ DgGridPList::init2 (void)
    insertParam(new DgStringParam("output_delimiter", " "));
 
    // cell_output_control <OUTPUT_ALL | OUTPUT_OCCUPIED>
-   choices.push_back(new string("OUTPUT_ALL")); 
+   choices.push_back(new string("OUTPUT_ALL"));
    choices.push_back(new string("OUTPUT_OCCUPIED"));
-   insertParam(new DgStringChoiceParam("cell_output_control", "OUTPUT_ALL", 
+   insertParam(new DgStringChoiceParam("cell_output_control", "OUTPUT_ALL",
                                        &choices));
    dgg::util::release(choices);
 
@@ -859,22 +859,22 @@ DgGridPList::init2 (void)
    // input_file_name <fileName>
    insertParam(new DgStringParam("input_file_name", "valsin.txt"));
 
-   // input_address_type <GEO | Q2DI | SEQNUM | INTERLEAVE | PLANE | Q2DD | 
+   // input_address_type <GEO | Q2DI | SEQNUM | INTERLEAVE | PLANE | Q2DD |
    //                      PROJTRI | VERTEX2DD>
-   choices.push_back(new string("GEO")); 
-   choices.push_back(new string("Q2DI")); 
-   choices.push_back(new string("SEQNUM")); 
+   choices.push_back(new string("GEO"));
+   choices.push_back(new string("Q2DI"));
+   choices.push_back(new string("SEQNUM"));
    //choices.push_back(new string("INTERLEAVE")); // NOT IMPLEMENTED
-   //choices.push_back(new string("PLANE")); 
-   choices.push_back(new string("Q2DD")); 
-   choices.push_back(new string("PROJTRI")); 
+   //choices.push_back(new string("PLANE"));
+   choices.push_back(new string("Q2DD"));
+   choices.push_back(new string("PROJTRI"));
    choices.push_back(new string("VERTEX2DD"));
-   insertParam(new DgStringChoiceParam("input_address_type", 
+   insertParam(new DgStringChoiceParam("input_address_type",
                "SEQNUM", &choices));
    dgg::util::release(choices);
 
-   // output_count <TRUE | FALSE> 
+   // output_count <TRUE | FALSE>
    insertParam(new DgBoolParam("output_count", true));
-   
+
 } // DgGridPList::init2
 
