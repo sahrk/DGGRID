@@ -110,8 +110,10 @@ DgZOrderRF::str2add (DgZOrderCoord* add, const char* str,
 string 
 DgZOrderCoord::valString (void) const
 {
-   char str[17]; // max 16 digits plus 1 for the null terminator
-   sprintf(str, "%016" PRIx64, value_);
+   const int maxStrSize = 17; // max 16 digits plus 1 for the null terminator
+   char str[maxStrSize];
+   snprintf(str, maxStrSize, "%016" PRIx64, value_);
+
    return string(str);
 
 } // const string& DgZOrderRF::valString
