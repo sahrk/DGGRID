@@ -87,9 +87,10 @@ class DgOutGdalFile : public DgOutLocFile
       virtual DgOutLocFile& insert(const DgDVec2D& pt);
 
       OGRFeature* createFeature (const string& label) const;
-      OGRPoint createPoint (const DgLocation& loc) const;
-      OGRPolygon createPolygon (const DgPolygon& poly) const;
-      OGRGeometryCollection createCollection (const DgCell& cell) const;
+      OGRPoint* createPoint (const DgLocation& loc) const;
+      //OGRPolygon createPolygon (const DgPolygon& poly) const;
+      OGRGeometryCollection* createCollection (const DgCell& cell) const;
+
       void createAddressesProperty (const DgIDGGBase& dgg, OGRFeature* feature,
            const char* fieldName, const DgLocVector& vec, const DgRFBase* outRF);
 
