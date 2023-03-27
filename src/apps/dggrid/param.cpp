@@ -203,18 +203,12 @@ MainParam::MainParam (DgParamList& plist)
      projType ("ISEA"), res (5), actualRes (5),
      placeRandom (false), orientCenter (false), orientRand (0),
      numGrids (1), curGrid (1), lastGrid (false), azimuthDegs (0.0),
-<<<<<<< HEAD
-     datum (""), precision (DEFAULT_PRECISION), verbosity (0),
-     megaVerbose (false), pauseOnStart (false), pauseBeforeExit (false),
-     metaOutFileNameBase (""), metaOutFileName (""), apertureType (""),
-=======
      datum (""), precision (DEFAULT_PRECISION), verbosity (0), 
      megaVerbose (false), pauseOnStart (false), pauseBeforeExit (false), 
      metaOutFileNameBase (""), metaOutFileName (""), 
      pInRF (0), inAddType (dgg::addtype::InvalidAddressType), inSeqNum (false),
      inputDelimiter (' '), pOutRF (0), outAddType (dgg::addtype::InvalidAddressType), 
      outSeqNum (false), outputDelimiter (' '), apertureType (""),
->>>>>>> zorder
      isMixed43 (false), isSuperfund (false), isApSeq (false)
 {
    /////// fill state variables from the parameter list //////////
@@ -466,11 +460,7 @@ MainParam::MainParam (DgParamList& plist)
 
 MainParam::~MainParam()
 {
-<<<<<<< HEAD
- delete orientRand;
-=======
    delete orientRand; 
->>>>>>> zorder
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -687,12 +677,8 @@ DgGridPList::DgGridPList (void)
    choices.push_back(new string("ADDRESSES"));
    choices.push_back(new string("POINTS"));
    choices.push_back(new string("COARSE_CELLS"));
-<<<<<<< HEAD
-   insertParam(new DgStringChoiceParam("clip_subset_type", "WHOLE_EARTH",
-=======
    choices.push_back(new string("INPUT_ADDRESS_TYPE"));
    insertParam(new DgStringChoiceParam("clip_subset_type", "WHOLE_EARTH", 
->>>>>>> zorder
                &choices));
    dgg::util::release(choices);
 
@@ -755,12 +741,8 @@ DgGridPList::init2 (void)
    choices.push_back(new string("GLOBAL_SEQUENCE"));
    choices.push_back(new string("ENUMERATION"));
    choices.push_back(new string("SUPERFUND"));
-<<<<<<< HEAD
-   insertParam(new DgStringChoiceParam("output_cell_label_type", "GLOBAL_SEQUENCE",
-=======
    choices.push_back(new string("OUTPUT_ADDRESS_TYPE"));
    insertParam(new DgStringChoiceParam("output_cell_label_type", "GLOBAL_SEQUENCE", 
->>>>>>> zorder
                &choices));
    dgg::util::release(choices);
 
@@ -972,20 +954,6 @@ DgGridPList::init2 (void)
 
    insertParam(new DgStringParam("output_file_name", "valsout.txt"));
 
-<<<<<<< HEAD
-   // output_address_type <GEO | Q2DI | SEQNUM | INTERLEAVE | PLANE | Q2DD |
-   //                      PROJTRI | VERTEX2DD | AIGEN >
-   choices.push_back(new string("GEO"));
-   choices.push_back(new string("Q2DI"));
-   choices.push_back(new string("SEQNUM"));
-   choices.push_back(new string("INTERLEAVE"));
-   choices.push_back(new string("PLANE"));
-   choices.push_back(new string("Q2DD"));
-   choices.push_back(new string("PROJTRI"));
-   choices.push_back(new string("VERTEX2DD"));
-   choices.push_back(new string("AIGEN"));
-   insertParam(new DgStringChoiceParam("output_address_type",
-=======
    // output_address_type < GEO | PLANE | PROJTRI | Q2DD | Q2DI | 
    //        SEQNUM | VERTEX2DD | ZORDER | ZORDER_STRING >
    for (int i = 0; ; i++) {
@@ -994,7 +962,6 @@ DgGridPList::init2 (void)
       choices.push_back(new string(addTypeStrings[i])); 
    }
    insertParam(new DgStringChoiceParam("output_address_type", 
->>>>>>> zorder
                "SEQNUM", &choices));
    dgg::util::release(choices);
 
@@ -1013,19 +980,6 @@ DgGridPList::init2 (void)
    // input_file_name <fileName>
    insertParam(new DgStringParam("input_file_name", "valsin.txt"));
 
-<<<<<<< HEAD
-   // input_address_type <GEO | Q2DI | SEQNUM | INTERLEAVE | PLANE | Q2DD |
-   //                      PROJTRI | VERTEX2DD>
-   choices.push_back(new string("GEO"));
-   choices.push_back(new string("Q2DI"));
-   choices.push_back(new string("SEQNUM"));
-   //choices.push_back(new string("INTERLEAVE")); // NOT IMPLEMENTED
-   //choices.push_back(new string("PLANE"));
-   choices.push_back(new string("Q2DD"));
-   choices.push_back(new string("PROJTRI"));
-   choices.push_back(new string("VERTEX2DD"));
-   insertParam(new DgStringChoiceParam("input_address_type",
-=======
    // input_address_type < GEO | PLANE | PROJTRI | Q2DD | Q2DI | 
    //        SEQNUM | VERTEX2DD | ZORDER | ZORDER_STRING >
    for (int i = 0; ; i++) {
@@ -1034,7 +988,6 @@ DgGridPList::init2 (void)
       choices.push_back(new string(addTypeStrings[i])); 
    }
    insertParam(new DgStringChoiceParam("input_address_type", 
->>>>>>> zorder
                "SEQNUM", &choices));
    dgg::util::release(choices);
 
