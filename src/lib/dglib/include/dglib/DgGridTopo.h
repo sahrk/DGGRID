@@ -29,33 +29,31 @@
 
 #include <iostream>
 
-using namespace std;
-
 namespace dgg { namespace topo {
 
 enum DgGridTopology { Hexagon, Triangle, Square, Diamond, InvalidTopo };
 enum DgGridMetric { D3, D4, D6, D8, InvalidMetric };
 
-DgGridTopology stringToGridTopology (const string& str);
-DgGridMetric stringToGridMetric (const string& str);
-const string& to_string (DgGridTopology t);
-const string& to_string (DgGridMetric m);
+DgGridTopology stringToGridTopology (const std::string& str);
+DgGridMetric stringToGridMetric (const std::string& str);
+const std::string& to_string (DgGridTopology t);
+const std::string& to_string (DgGridMetric m);
 
 ////////////////////////////////////////////////////////////////////////////////
-inline ostream&
-operator<< (ostream& stream, DgGridTopology obj)
+inline std::ostream&
+operator<< (std::ostream& stream, DgGridTopology obj)
 {
    return stream << to_string(obj);
 
-} // ostream& operator<<
+} // std::ostream& operator<<
 
 ////////////////////////////////////////////////////////////////////////////////
-inline ostream&
-operator<< (ostream& stream, DgGridMetric obj)
+inline std::ostream&
+operator<< (std::ostream& stream, DgGridMetric obj)
 {
    return stream << to_string(obj);
 
-} // ostream& operator<<
+} // std::ostream& operator<<
 
 }} // end namespace
 

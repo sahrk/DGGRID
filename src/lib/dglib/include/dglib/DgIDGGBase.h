@@ -31,6 +31,8 @@
 #include <dglib/DgIDGGutil.h>
 
 class DgIDGGSBase;
+class DgZOrderRF;
+class DgZOrderStringRF;
 
 using namespace dgg::topo;
 
@@ -86,8 +88,11 @@ class DgIDGGBase : public DgDiscRF<DgQ2DICoord, DgGeoCoord, long double> {
       const DgVertex2DDRF&  vertexRF  (void) const { return *vertexRF_; }
       const DgQ2DDRF&       q2ddRF    (void) const { return *q2ddRF_; }
       const DgBoundedIDGG&  bndRF     (void) const { return *bndRF_; }
-      const DgInterleaveRF& intRF     (void) const { return *intRF_; }
       const DgPlaneTriRF&   planeRF   (void) const { return *planeRF_; }
+
+      // these are only defined for aperture 3 and 4 so must be NULL-able
+      const DgZOrderRF*       zorderRF     (void) const { return zorderRF_; }
+      const DgZOrderStringRF* zorderStrRF  (void) const { return zorderStrRF_; }
 
       const DgContCartRF&   ccFrame (void) const { return *ccFrame_; }
       const DgDiscRF2D&     grid2D  (void) const { return *grid2D_; }
@@ -206,8 +211,11 @@ class DgIDGGBase : public DgDiscRF<DgQ2DICoord, DgGeoCoord, long double> {
       const DgVertex2DDRF* vertexRF_;
       const DgQ2DDRF* q2ddRF_;
       const DgBoundedIDGG* bndRF_;
-      const DgInterleaveRF* intRF_;
       const DgPlaneTriRF* planeRF_;
+
+      // possible I/O RFs
+      const DgZOrderRF*       zorderRF_;
+      const DgZOrderStringRF* zorderStrRF_;
 
    friend class DgQ2DItoDConverter;
    friend class DgQ2DDtoIConverter;

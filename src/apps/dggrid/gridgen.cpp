@@ -65,6 +65,8 @@ using namespace std;
 #include <dglib/DgDmdD4Grid2DS.h>
 #include <dglib/DgTriGrid2D.h>
 #include <dglib/DgOutRandPtsText.h>
+#include <dglib/DgZOrderRF.h>
+#include <dglib/DgZOrderStringRF.h>
 #include "DgHexSF.h"
 
 using namespace dgg::topo;
@@ -72,7 +74,8 @@ using namespace dgg::topo;
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 GridGenParam::GridGenParam (DgParamList& plist)
-      : MainParam(plist), wholeEarth (false), regionClip (false), seqToPoly(false), pointClip (false),
+      : MainParam(plist), wholeEarth (false), regionClip (false), seqToPoly(false), 
+        indexToPoly (false), pointClip (false),
         cellClip (false), useGDAL (false),
         clipAIGen (false), clipGDAL(false), clipShape(false), clipCellRes (0), nClipCellDensify (1),
         nRandPts (0), clipRandPts (false), nDensify (1),
@@ -94,7 +97,8 @@ GridGenParam::GridGenParam (DgParamList& plist)
       clipAIGen = false;
       clipGDAL = false;
       seqToPoly = false;
-      if (dummy == "WHOLE_EARTH")
+      indexToPoly = false;
+      if (dummy == "WHOLE_EARTH") 
          wholeEarth = true;
       else if (dummy == "AIGEN"){
          regionClip = true;
@@ -119,27 +123,17 @@ GridGenParam::GridGenParam (DgParamList& plist)
          pointClip = true;
       } else if (dummy == "COARSE_CELLS") {
          cellClip = true;
+      } else if (dummy == "INPUT_ADDRESS_TYPE") {
+         if (inAddType == dgg::addtype::SeqNum)
+            seqToPoly = true;
+         else
+            indexToPoly = true;
       } else
          ::report("Unrecognised value for 'clip_subset_type'", DgBase::Fatal);
 
       getParamValue(plist, "clip_cell_res", clipCellRes, false);
       getParamValue(plist, "clip_cell_densification", nClipCellDensify, false);
-
-      string clipCellsStr;
-      getParamValue(plist, "clip_cell_seqnums", clipCellsStr, false);
-
-      vector<string> clipCellAddressStrs;
-      util::ssplit(clipCellsStr, clipCellAddressStrs);
-
-      // parse the clip cell sequence numbers
-      for (const auto &seqStr: clipCellAddressStrs) {
-           unsigned long int sNum;
-           if (sscanf(seqStr.c_str(), "%lu", &sNum) != 1)
-             ::report("gridgen(): invalid cell sequence number in clip_cell_seqnums" +
-               string(seqStr), DgBase::Fatal);
-
-           clipSeqNums.insert(sNum);
-      }
+      getParamValue(plist, "clip_cell_addresses", clipCellsStr, false);
 
       //// region file names
 
@@ -236,10 +230,12 @@ GridGenParam::GridGenParam (DgParamList& plist)
          report("dggs_type of SUPERFUND requires "
                    "output_cell_label_type of SUPERFUND", DgBase::Fatal);
 
-      if (outLblType == "ENUMERATION")
+      useEnumLbl = false;
+      outSeqNum = false;
+      if (outLblType == "GLOBAL_SEQUENCE") 
+         outSeqNum = true;
+      if (outLblType == "ENUMERATION") 
          useEnumLbl = true;
-      else
-         useEnumLbl = false;
 
       doRandPts = false;
       if (randPtsOutType != "NONE")
@@ -562,7 +558,6 @@ fflush(stdout);
 */
                        // check if the hole contains the hex
                        if (clipHole.hole.Contains(hex)) {
-//cout << "HEX IN HOLE" << endl;
                           accepted = false;
                           break;
                        }
@@ -939,7 +934,8 @@ void outputCell (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dg
 
          string fileName = dp.neighborsOutFileName + string("_") +
                                        dgg::util::to_string(dp.nOutputFile);
-         dp.nbrOut = new DgOutNeighborsFile(fileName);
+         dp.nbrOut = new DgOutNeighborsFile(fileName, dgg, 
+                                  ((dp.outSeqNum || dp.useEnumLbl) ? NULL : dp.pOutRF), "nbr");
       }
 
       if (dp.chdOut) {
@@ -949,8 +945,9 @@ void outputCell (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dg
 
          string fileName = dp.childrenOutFileName + string("_") +
                                        dgg::util::to_string(dp.nOutputFile);
-         dp.chdOut = new DgOutChildrenFile(fileName, "chd");
-       }
+         dp.chdOut = new DgOutChildrenFile(fileName, dgg, *dp.chdDgg, 
+               ((dp.outSeqNum || dp.useEnumLbl) ? NULL : dp.pOutRF), dp.pChdOutRF, "chd"); 
+       } 
    }
 
    DgLocation* tmpLoc = new DgLocation(add2D);
@@ -1041,7 +1038,8 @@ void outputCell (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dg
          ::report("Neighbors not implemented for Triangle grids", DgBase::Fatal);
 
       dgg.setNeighbors(add2D, neighbors);
-      if (dp.nbrOut) dp.nbrOut->insert(dgg, add2D, neighbors);
+      if (dp.nbrOut) 
+         dp.nbrOut->insert(add2D, neighbors);
 
       for (int i = 0; i < neighbors.size(); i++)
          dp.runStats.push(dgg.geoRF().dist(ctrGeo, neighbors[i]));
@@ -1055,14 +1053,17 @@ void outputCell (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dg
 
       dggs.setAllChildren(q2diR, children);
 
-      if (dp.chdOut)
-         dp.chdOut->insert(dgg, add2D, children);
+      if (dp.chdOut) 
+         dp.chdOut->insert(add2D, children);
    }
 
    if (dp.collectOut) {
       dp.collectOut->insert(dgg, cell,
             (dp.pointOutType == "GDAL_COLLECTION"),
             (dp.cellOutType == "GDAL_COLLECTION"),
+            *(dp.chdDgg),
+            ((dp.outSeqNum || dp.useEnumLbl) ? NULL : dp.pOutRF),
+            ((dp.outSeqNum || dp.useEnumLbl) ? NULL : dp.pChdOutRF),
             ((dp.neighborsOutType == "GDAL_COLLECTION") ? &neighbors : NULL),
             ((dp.childrenOutType == "GDAL_COLLECTION") ? &children : NULL));
    }
@@ -1078,10 +1079,15 @@ void outputCellAdd2D (GridGenParam& dp, const DgIDGGSBase& dggs,
 
    unsigned long long int sn = dgg.bndRF().seqNum(add2D);
    string *label;
-   if (dp.useEnumLbl)
-      label = new string(dgg::util::to_string(dp.nCellsAccepted));
-   else
+   if (dp.outSeqNum)
       label = new string(dgg::util::to_string(sn));
+   else if (dp.useEnumLbl)
+      label = new string(dgg::util::to_string(dp.nCellsAccepted));
+   else {
+      DgLocation tmpLoc(add2D);
+      dp.pOutRF->convert(&tmpLoc);
+      label = new string(tmpLoc.asString(dp.outputDelimiter));
+   }
 
    outputCell(dp, dggs, dgg, add2D, verts, deg, *label);
    delete label;
@@ -1105,6 +1111,40 @@ void genGrid (GridGenParam& dp)
 
    // set-up to convert to degrees
    const DgGeoSphDegRF& deg = *(DgGeoSphDegRF::makeRF(geoRF, geoRF.name() + "Deg"));
+
+   // set-up the input reference frame
+   if (dp.cellClip &&  dp.inAddType != dgg::addtype::SeqNum) {
+      if (dp.clipCellRes < 0 || dp.clipCellRes > dp.actualRes)
+         ::report("genGrid(): invalid clipCellRes", DgBase::Fatal);
+
+      const DgRFBase* rf = NULL;
+      switch (dp.inAddType) {
+         case dgg::addtype::ZOrder:
+            rf = dgg.dggs()->idggBase(dp.clipCellRes).zorderRF();
+            break;
+         case dgg::addtype::ZOrderString:
+            rf = dgg.dggs()->idggBase(dp.clipCellRes).zorderStrRF();
+            break;
+         default:
+            ::report("genGrid(): invalid coarse clip address type", DgBase::Fatal);
+      }
+      dp.pInRF = rf;
+      dp.inSeqNum = false;
+   } else {
+      MainParam::addressTypeToRF(dp, dgg, true);
+   }
+
+   if (!dp.pInRF)
+      ::report("genGrid(): invalid input RF", DgBase::Fatal);
+
+   // set-up the output reference frame
+   if (dp.outSeqNum || dp.useEnumLbl)
+      dp.pOutRF = &dgg;
+   else if (!dp.isSuperfund) { // use input address type
+      MainParam::addressTypeToRF(dp, dgg, false);
+      if (!dp.pOutRF)
+         ::report("genGrid(): invalid output RF", DgBase::Fatal);
+   }
 
    // create output files that rely on having the RF's created
 
@@ -1197,39 +1237,56 @@ void genGrid (GridGenParam& dp)
    ///// PlanetRisk /////
    dp.nbrOut = NULL;
    if (dp.neighborsOutType == "TEXT")
-      dp.nbrOut = new DgOutNeighborsFile(neighborsOutFileName, "nbr");
+      dp.nbrOut = new DgOutNeighborsFile(neighborsOutFileName, dgg,
+             ((dp.outSeqNum || dp.useEnumLbl) ? NULL : dp.pOutRF), "nbr");
 
    dp.chdOut = NULL;
    if (dp.childrenOutType == "TEXT")
-      dp.chdOut = new DgOutChildrenFile(childrenOutFileName, "chd");
+         dp.chdOut = new DgOutChildrenFile(childrenOutFileName, dgg, *dp.chdDgg, 
+               ((dp.outSeqNum || dp.useEnumLbl) ? NULL : dp.pOutRF), dp.pChdOutRF, "chd"); 
 
    ////// do applicable clipping mode /////
 
-   if (dp.seqToPoly) {
+   char delimStr[2];
+   delimStr[0] = dp.inputDelimiter;
+   delimStr[1] = '\0';
+   const int maxLine = 1000;
+   char buff[maxLine];
+   if (dp.seqToPoly || dp.indexToPoly) {
       dp.nCellsAccepted = 0;
       dp.nCellsTested = 0;
 
-      set<unsigned long int> seqnums; //To ensure each cell is printed once
+      // convert any incoming addresses to seqnums
+      // use a set to ensure each cell is printed only once
+      set<unsigned long int> seqnums; 
 
       // read-in the sequence numbers
-      for (const auto &regionfile: dp.regionFiles)
-      {
+      for (const auto &regionfile: dp.regionFiles) {
          DgInputStream fin(regionfile.c_str(), "", DgBase::Fatal);
-         //unsigned long int seqnum;
-         const int maxLine = 1000;
-         char buff[maxLine];
 
          while (1) {
-           dp.nCellsTested++;
+            dp.nCellsTested++;
 
-           fin.getline(buff, maxLine);
-           if (fin.eof()) break;
+            // get the next line
+            fin.getline(buff, maxLine);
+            if (fin.eof()) break;
 
-           unsigned long int sNum;
-           if (sscanf(buff, "%lu", &sNum) != 1)
-             ::report("doTransform(): invalid SEQNUM " + string(buff), DgBase::Fatal);
+            unsigned long int sNum = 0;
+            if (dp.seqToPoly) {
+              if (sscanf(buff, "%lu", &sNum) != 1)
+                 ::report("genGrid(): invalid SEQNUM " + string(buff), DgBase::Fatal);
+            } else { // must be indexToPoly
+               // parse the address
+               DgLocation* tmpLoc = NULL;
+               tmpLoc = new DgLocation(*dp.pInRF);
+               tmpLoc->fromString(buff, dp.inputDelimiter);
+               dgg.convert(tmpLoc);
+               
+               sNum = static_cast<const DgIDGGBase&>(dgg).bndRF().seqNum(*tmpLoc);
+               delete tmpLoc;
+            }
 
-           seqnums.insert(sNum);
+            seqnums.insert(sNum);
          }
 
          fin.close();
@@ -1551,8 +1608,8 @@ void genGrid (GridGenParam& dp)
 
    dgcout << "\n** grid generation complete **" << endl;
    outputStatus(dp, true);
-   if (!dp.wholeEarth && !dp.seqToPoly)
-      dgcout << "acceptance rate is " <<
+   if (!dp.wholeEarth && !dp.seqToPoly && !dp.indexToPoly)
+      dgcout << "acceptance rate is " << 
           100.0 * (long double) dp.nCellsAccepted / (long double) dp.nCellsTested <<
           "%" << endl;
 

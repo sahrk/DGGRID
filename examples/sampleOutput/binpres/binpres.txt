@@ -30,6 +30,7 @@ output_file_name outputfiles/popclass3h7.txt (user set)
 output_address_type SEQNUM (user set)
 output_delimiter "," (user set)
 cell_output_control OUTPUT_OCCUPIED (user set)
+input_address_type SEQNUM (default)
 output_count true (user set)
 
 Res 7 DGG Statistics (calculated in projection space):

@@ -1,0 +1,31 @@
+################################################################################
+#
+# zCellClip.meta - example of generating part of an ISEA3H grid using
+#      coarser resolution cells specified as ZORDER indexes as the 
+#      clipping polygons 
+#
+################################################################################
+
+# specify the operation
+dggrid_operation GENERATE_GRID
+
+# specify the DGG
+dggs_type ISEA3H
+dggs_res_spec 5
+
+# control the generation
+clip_subset_type COARSE_CELLS
+input_address_type ZORDER
+clip_cell_res 1
+clip_cell_addresses 8400000000000000 a400000000000000 b000000000000000
+
+clip_cell_densification 1
+geodetic_densify 0.0
+
+# specify the output
+cell_output_type KML
+cell_output_file_name outputfiles/cells
+point_output_type KML
+point_output_file_name outputfiles/points
+densification 0
+precision 6

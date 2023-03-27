@@ -44,11 +44,22 @@ class DgOutChildrenFile : public DgOutputStream {
    public:
 
       DgOutChildrenFile (const string& fileName,
+                        const DgIDGGBase& dgg,
+                        const DgIDGGBase& chdDgg,
+                        const DgRFBase* outRF = NULL,
+                        const DgRFBase* chdOutRF = NULL,
                         const string& suffix = string("chd"),
                         DgReportLevel failLevel = DgBase::Fatal);
 
-      virtual DgOutChildrenFile& insert (const DgIDGGBase& dgg,
-                   const DgLocation& center, DgLocVector& vec);
+      virtual DgOutChildrenFile& insert (const DgLocation& center, DgLocVector& vec);
+
+   private:
+
+      const DgIDGGBase& dgg_;    // primary res dgg
+      const DgIDGGBase& chdDgg_; // child res dgg
+      const DgRFBase* outRF_;    // primary res output RF (NULL indictes seqNum)
+      const DgRFBase* chdOutRF_; // child res output RF
+
 };
 
 inline DgOutChildrenFile& operator<< (DgOutChildrenFile& file, const char* str)

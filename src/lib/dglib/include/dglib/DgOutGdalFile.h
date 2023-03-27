@@ -74,8 +74,9 @@ class DgOutGdalFile : public DgOutLocFile
 
       // collection output
       virtual DgOutLocFile& insert (const DgIDGGBase& dgg, DgCell& cell,
-                      bool outputPoint, bool outputRegion,
-                      const DgLocVector* neighbors, const DgLocVector* children);
+           bool outputPoint, bool outputRegion, const DgIDGGBase& chdDgg, 
+           const DgRFBase* outRF, const DgRFBase* chdOutRF,
+           const DgLocVector* neighbors, const DgLocVector* children);
 
       virtual void setFormatStr(void) { }
 
@@ -87,9 +88,11 @@ class DgOutGdalFile : public DgOutLocFile
 
       OGRFeature* createFeature (const string& label) const;
       OGRPoint* createPoint (const DgLocation& loc) const;
+      //OGRPolygon createPolygon (const DgPolygon& poly) const;
       OGRGeometryCollection* createCollection (const DgCell& cell) const;
-      void createSeqnumsProperty (const DgIDGGBase& dgg, OGRFeature* feature,
-           const char* fieldName, const DgLocVector& vec);
+
+      void createAddressesProperty (const DgIDGGBase& dgg, OGRFeature* feature,
+           const char* fieldName, const DgLocVector& vec, const DgRFBase* outRF);
 
       void addFeature (OGRFeature *feature);
 
