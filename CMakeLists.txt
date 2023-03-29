@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 3.9)
 
 project (dggrid
-  VERSION 7.51
+  VERSION 7.8
   LANGUAGES C CXX
 )
 
@@ -27,8 +27,7 @@ add_subdirectory(src/lib/shapelib)
 add_subdirectory(src/apps/dggrid)
 add_subdirectory(src/apps/appex)
 add_subdirectory(src/apps/zorder)
-
-
+add_subdirectory(src/apps/z3)
 
 if(DOXYGEN_FOUND)
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/src/Doxyfile ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile.in @ONLY)

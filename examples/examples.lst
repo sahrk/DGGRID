@@ -23,6 +23,10 @@ seqnums
 superfundGrid
 table
 transform
+z3Collection
+z3Nums
+z3Transform
+z3CellClip
 zCellClip
 zCollection
 zNums

@@ -2,6 +2,7 @@ include ./MakeIncludes.noCMake
 DGGRID_DIR := ./apps/dggrid
 APPEX_DIR := ./apps/appex
 ZORDER_DIR := ./apps/zorder
+Z3_DIR := ./apps/z3
 DG_DIR := ./lib/dglib
 SHP_DIR := ./lib/shapelib
 PROJ4_DIR := ./lib/proj4lib
@@ -9,17 +10,18 @@ LIB_DIRS := $(DG_DIR)/lib $(SHP_DIR)/lib $(PROJ4_DIR)/lib
 
 .PHONY: all $(DGGRID_DIR) $(LIB_DIRS)
 
-all: $(DGGRID_DIR) $(APPEX_DIR) $(ZORDER_DIR)
+all: $(DGGRID_DIR) $(APPEX_DIR) $(ZORDER_DIR) $(Z3_DIR)
 
-$(DGGRID_DIR) $(APPEX_DIR) $(ZORDER_DIR) $(LIB_DIRS):
+$(DGGRID_DIR) $(APPEX_DIR) $(ZORDER_DIR) $(Z3_DIR) $(LIB_DIRS):
 	$(DOMAKE) --directory=$@
 
-$(DGGRID_DIR) $(APPEX_DIR) $(ZORDER_DIR): $(LIB_DIRS)
+$(DGGRID_DIR) $(APPEX_DIR) $(ZORDER_DIR) $(Z3_DIR): $(LIB_DIRS)
 
 clean:
 	cd $(DGGRID_DIR); $(DOMAKE) clean
 	cd $(APPEX_DIR); $(DOMAKE) clean
 	cd $(ZORDER_DIR); $(DOMAKE) clean
+	cd $(Z3_DIR); $(DOMAKE) clean
 	cd $(SHP_DIR)/lib; $(DOMAKE) clean
 	cd $(PROJ4_DIR)/lib; $(DOMAKE) clean
 	cd $(DG_DIR)/lib; $(DOMAKE) clean
