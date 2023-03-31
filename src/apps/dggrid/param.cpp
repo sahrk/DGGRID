@@ -31,6 +31,8 @@
 #include <dglib/DgOutKMLfile.h>
 #include <dglib/DgZOrderRF.h>
 #include <dglib/DgZOrderStringRF.h>
+#include <dglib/DgZ3RF.h>
+#include <dglib/DgZ3StringRF.h>
 #include <dglib/DgAddressType.h>
 
 using namespace dgg::topo;
@@ -87,6 +89,34 @@ MainParam::addressTypeToRF (MainParam& dp, const DgIDGGBase& dgg, bool isInput)
       case Vertex2DD:
          rf = &dgg.vertexRF();
          dp.pChdOutRF = &dp.chdDgg->vertexRF();
+         break;
+
+      case Z3:
+         if (dp.isApSeq)
+            ::report("input_address_type of Z3 not supported for dggs_aperture_type of SEQUENCE", 
+                     DgBase::Fatal);
+
+         if (dgg.z3RF()) {
+            rf = dgg.z3RF();
+            dp.pChdOutRF = dp.chdDgg->z3RF();
+         } else
+            ::report("addressTypeToRF(): Z3 only supported for aperture 3 hexagon grids",
+                     DgBase::Fatal);
+
+         break;
+
+      case Z3String:
+         if (dp.isApSeq)
+            ::report("input_address_type of Z3_STRING not supported for dggs_aperture_type of SEQUENCE", 
+                     DgBase::Fatal);
+
+         if (dgg.z3StrRF()) {
+            rf = dgg.z3StrRF();
+            dp.pChdOutRF = dp.chdDgg->z3StrRF();
+         } else
+            ::report("addressTypeToRF(): Z3_STRING only supported for aperture 3 hexagon grids",
+                     DgBase::Fatal);
+
          break;
 
       case ZOrder:
