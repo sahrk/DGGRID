@@ -98,6 +98,8 @@ add_library(dglib
   lib/DgTriGrid2DS.cpp
   lib/DgTriIDGG.cpp
   lib/DgUtil.cpp
+  lib/DgZ3RF.cpp
+  lib/DgZ3StringRF.cpp
   lib/DgZOrderRF.cpp
   lib/DgZOrderStringRF.cpp
 )
