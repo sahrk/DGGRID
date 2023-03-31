@@ -1121,17 +1121,17 @@ void genGrid (GridGenParam& dp)
 
       const DgRFBase* rf = NULL;
       switch (dp.inAddType) {
+         case dgg::addtype::Z3:
+            rf = dgg.dggs()->idggBase(dp.clipCellRes).z3RF();
+            break;
+         case dgg::addtype::Z3String:
+            rf = dgg.dggs()->idggBase(dp.clipCellRes).z3StrRF();
+            break;
          case dgg::addtype::ZOrder:
             rf = dgg.dggs()->idggBase(dp.clipCellRes).zorderRF();
             break;
          case dgg::addtype::ZOrderString:
             rf = dgg.dggs()->idggBase(dp.clipCellRes).zorderStrRF();
-            break;
-         case dgg::addtype::Z3:
-            rf = dgg.dggs()->idggBase(dp.clipCellRes).z3RF();
-            break;
-         case dgg::addtype::ZOrderString:
-            rf = dgg.dggs()->idggBase(dp.clipCellRes).z3StrRF();
             break;
          default:
             ::report("genGrid(): invalid coarse clip address type", DgBase::Fatal);
