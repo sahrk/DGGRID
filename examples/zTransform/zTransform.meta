@@ -3,6 +3,10 @@
 # zTransform.meta - example of a dggrid meta-file which performs address
 #                   conversion with ZOrder indexes
 #
+# Note that the inputfiles directory contains GEO, ZORDER, and ZORDER_STRING 
+# files, all describing the same set of cells. You can experiment with these
+# by changing the input_ (and output_) parameters.
+#
 ################################################################################
 
 # specify the operation
@@ -13,14 +17,11 @@ dggs_type ISEA3H
 dggs_res_spec 9
 
 # specify bin controls
-input_file_name inputfiles/geo.txt
-input_address_type GEO
-#input_file_name inputfiles/zorder.txt
-#input_address_type ZORDER
+input_file_name inputfiles/zorderStr.txt
+input_address_type ZORDER_STRING
 input_delimiter " "
 
 # specify the output
-output_file_name outputfiles/output.txt
+output_file_name outputfiles/zorder.txt
 output_address_type ZORDER
-#output_address_type ZORDER_STRING
 output_delimiter " "
