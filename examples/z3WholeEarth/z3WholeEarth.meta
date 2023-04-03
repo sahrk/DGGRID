@@ -14,10 +14,10 @@ dggs_res_spec 4
 
 # specify the output
 output_cell_label_type OUTPUT_ADDRESS_TYPE
-output_address_type Z3_STRING
+output_address_type Z3
 cell_output_type KML
-cell_output_file_name outputfiles/z3strCells4
+cell_output_file_name outputfiles/z3cells
 point_output_type KML
-point_output_file_name outputfiles/z3strPoints4
+point_output_file_name outputfiles/z3points
 densification 0
 precision 6
