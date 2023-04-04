@@ -1,7 +1,11 @@
 ################################################################################
 #
 # z3Transform.meta - example of a dggrid meta-file which performs address
-#                   conversion with Z3 indexes
+#                   conversion from GEO to Z3 indexes
+#
+# Note that the inputfiles directory contains GEO, Z3, Z3_STRING, and
+# SEQNUM files, all describing the same set of cells. You can experiment with 
+# transforming between these by changing the input_* (and output_*) parameters.
 #
 ################################################################################
 
@@ -15,13 +19,9 @@ dggs_res_spec 9
 # specify bin controls
 input_file_name inputfiles/geo.txt
 input_address_type GEO
-input_file_name inputfiles/z3Str.txt
-input_address_type Z3_STRING
 input_delimiter " "
 
 # specify the output
-output_file_name outputfiles/seqNum.txt
+output_file_name outputfiles/z3.txt
 output_address_type Z3
-output_address_type Z3_STRING
-output_address_type SEQNUM
 output_delimiter " "

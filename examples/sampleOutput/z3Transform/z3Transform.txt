@@ -1,7 +1,7 @@
 ** executing DGGRID version 7.7 **
 type sizes: big int: 64 bits / big double: 128 bits
 
-** loading meta file zTransform.meta...
+** loading meta file z3Transform.meta...
 * using parameter values:
 dggrid_operation TRANSFORM_POINTS (user set)
 dggs_type ISEA3H (user set)
@@ -25,8 +25,8 @@ verbosity 0 (default)
 pause_on_startup false (default)
 pause_before_exit false (default)
 input_delimiter " " (user set)
-output_file_name outputfiles/zorder.txt (user set)
-output_address_type ZORDER (user set)
+output_file_name outputfiles/z3.txt (user set)
+output_address_type Z3 (user set)
 output_delimiter " " (user set)
 input_file_name inputfiles/geo.txt (user set)
 input_address_type GEO (user set)
