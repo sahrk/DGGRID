@@ -64,4 +64,7 @@ output_address_type Z3 (user set)
 output_delimiter " " (default)
 input_address_type SEQNUM (default)
 
-FATAL ERROR: [DgInputStream:inputfiles/seqnums.txt] DgInputStream::DgInputStream() unable to open file inputfiles/seqnums.txt
+
+** grid generation complete **
+accepted 4 cells / 5 tested
+
