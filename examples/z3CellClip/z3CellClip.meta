@@ -17,12 +17,16 @@ dggs_res_spec 5
 clip_subset_type COARSE_CELLS
 input_address_type Z3
 clip_cell_res 1
-clip_cell_addresses 8400000000000000 a400000000000000 b000000000000000
+clip_cell_addresses 2000000000000000 3800000000000000 1800000000000000
 
 clip_cell_densification 1
 geodetic_densify 0.0
 
 # specify the output
+
+output_cell_label_type OUTPUT_ADDRESS_TYPE
+output_address_type Z3
+
 cell_output_type KML
 cell_output_file_name outputfiles/cells
 point_output_type KML
