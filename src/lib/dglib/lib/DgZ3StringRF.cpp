@@ -196,8 +196,6 @@ DgZ3StringToQ2DIConverter::DgZ3StringToQ2DIConverter
 DgQ2DICoord 
 DgZ3StringToQ2DIConverter::convertTypedAddress (const DgZ3StringCoord& addIn) const
 {
-dgcout << " -> " << addIn << endl;
-dgcout << " effRes_ " << effRes_ << endl;
    string addstr = addIn.valString();
 
    // first get the quad number

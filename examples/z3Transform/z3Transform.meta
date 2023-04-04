@@ -20,8 +20,8 @@ input_address_type Z3_STRING
 input_delimiter " "
 
 # specify the output
-output_file_name outputfiles/z3.txt
+output_file_name outputfiles/seqNum.txt
 output_address_type Z3
-#output_address_type Z3_STRING
-#output_address_type SEQNUM
+output_address_type Z3_STRING
+output_address_type SEQNUM
 output_delimiter " "
