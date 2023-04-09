@@ -20,6 +20,7 @@ Building DGGRID
 
 Build the application dggrid by executing:
 
+    cd DGGRID                           # enter the cloned repo
     mkdir build                         # Make a directory to compile into
     cd build                            # Switch into build directory
     cmake -DCMAKE_BUILD_TYPE=Release .. # Prepare to compile
