@@ -1001,8 +1001,10 @@ void outputCell (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dg
       dgcout << "accepted " << label << " " << add2D << endl;
 
    const DgQ2DICoord& q2di = *dgg.getAddress(add2D);
-   if (dp.cellOut)
-   {
+   if (dp.cellOut) {
+      if (dp.megaVerbose) 
+         dgcout << "outputting region: " << cell << endl;
+
       if (dp.prCellOut) {
          dp.prCellOut->insert(cell.region(), &(cell.label()));
       } else {
@@ -1013,10 +1015,11 @@ void outputCell (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dg
       }
    }
 	
-   if (dp.ptOut)
-   {
-      if (dp.prPtOut)
-      {
+   if (dp.ptOut) {
+      if (dp.megaVerbose) 
+         dgcout << "outputting point: " << cell << endl;
+
+      if (dp.prPtOut) {
          string type = (q2di.coord() == DgIVec2D(0, 0)) ? "P" : "H";
          dp.prPtOut->insert(cell.node(), type, &(cell.label()));
       } else {
