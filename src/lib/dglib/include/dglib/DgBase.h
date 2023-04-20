@@ -33,7 +33,7 @@
 
 using namespace std;
 
-#define DGDEBUG         0
+#define DGDEBUG         1
 #define DGGRID_VERSION  "7.7"
 
 // adapted from stackoverflow user Pierre

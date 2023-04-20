@@ -242,7 +242,7 @@ dgcout << "BEGIN series conversion" << endl;
       pAdd0 = pAdd1;
       if (isTraceOn())
          traceStream() << std::string(seriesDepth, '*') << "  --> "
-                       << fromFrame().name() << ": " << *pAdd0 << endl;
+                       << toFrame().name() << ": " << *pAdd0 << endl;
    }
 #if DGDEBUG
 dgcout << "END series conversion" << endl;

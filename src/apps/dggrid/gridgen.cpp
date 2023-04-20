@@ -1002,7 +1002,7 @@ void outputCell (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dg
 
    const DgQ2DICoord& q2di = *dgg.getAddress(add2D);
    if (dp.cellOut) {
-      if (dp.megaVerbose) 
+      if (dp.megaVerbose)
          dgcout << "outputting region: " << cell << endl;
 
       if (dp.prCellOut) {
@@ -1016,7 +1016,7 @@ void outputCell (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dg
    }
 	
    if (dp.ptOut) {
-      if (dp.megaVerbose) 
+      if (dp.megaVerbose)
          dgcout << "outputting point: " << cell << endl;
 
       if (dp.prPtOut) {

@@ -176,7 +176,7 @@ DgBase::DgBase (const string& instanceName)
    : instanceName_ (instanceName)
 
 {
-   debug("DgBase::constructor()");
+   //debug("DgBase::constructor()");
 
 } // DgBase::DgBase
 
@@ -184,7 +184,7 @@ DgBase::DgBase (const string& instanceName)
 ////////////////////////////////////////////////////////////////////////////////
 DgBase::DgBase (const string* instanceName)
 {
-   debug("DgBase::constructor()");
+   //debug("DgBase::constructor()");
 
    if (instanceName)
       instanceName_ = *instanceName;

@@ -338,13 +338,13 @@ DgQ2DDtoIConverter::convertTypedAddress (const DgQ2DDCoord& addIn) const
    DgLocation* loc = IDGG().ccFrame().makeLocation(addIn.coord());
 
 #if DGDEBUG
-dgcout << "DgQ2DDtoIConverter::convertTypedAddress loc: " << *loc << endl;
+dgcout << "\nDgQ2DDtoIConverter::convertTypedAddress loc: " << *loc << endl;
 #endif
 
     IDGG().grid2D().convert(loc);
 
 #if DGDEBUG
-dgcout << " ---> " << *loc << endl;
+dgcout << " ---> A. " << *loc << endl;
 #endif
 
    DgIVec2D coord = *IDGG().grid2D().getAddress(*loc);
@@ -366,10 +366,14 @@ dgcout << " ---> " << *loc << endl;
       delete loc;
    }
 
+#if DGDEBUG
+dgcout << " ---> B. " << coord << endl;
+#endif
+
    long long int edgeI = IDGG().maxI() + 1;
    long long int edgeJ = IDGG().maxJ() + 1;
-   if (coord.i() > edgeI || coord.j() > edgeJ) // maybe round-off error?
-   {
+   if (coord.i() > edgeI || coord.j() > edgeJ) { // maybe round-off error?
+
       DgDVec2D tmp(addIn.coord());
 
       tmp.setX(tmp.x() - nudge);
@@ -381,59 +385,49 @@ dgcout << " ---> " << *loc << endl;
       delete loc;
    }
 
+#if DGDEBUG
+dgcout << " ---> C. " << coord << endl;
+#endif
+
    if (coord.i() < 0 || coord.j() < 0 ||
-       coord.i() > edgeI || coord.j() > edgeJ)
-   {
+       coord.i() > edgeI || coord.j() > edgeJ) {
       report("DgQ2DDtoIConverter::convertTypedAddress(): "
              " coordinate out of range: " + (string) coord, DgBase::Fatal);
-   }
-   else if (coord.i() == edgeI || coord.j() == edgeJ)
-   {
+   } else if (coord.i() == edgeI || coord.j() == edgeJ) {
       const DgQuadEdgeCells& ec = IDGG().edgeTable(quadNum);
 
-      if (ec.isType0())
-      {
-         if (coord.j() == edgeJ)
-         {
-            if (coord.i() == 0)
-            {
+      if (ec.isType0()) {
+         if (coord.j() == edgeJ) {
+            if (coord.i() == 0) {
                quadNum = ec.loneVert();
                coord = DgIVec2D(0, 0);
-            }
-            else
-            {
+            } else {
                quadNum = ec.upQuad();
                coord = DgIVec2D(0, edgeI - coord.i());
             }
-         }
-         else // i == edgeI
-         {
+         } else { // i == edgeI
             quadNum = ec.rightQuad();
             coord.setI(0);
          }
-      }
-      else // type 1
-      {
-         if (coord.i() == edgeI)
-         {
-            if (coord.j() == 0)
-            {
+      } else { // type 1
+         if (coord.i() == edgeI) {
+            if (coord.j() == 0) {
                quadNum = ec.loneVert();
                coord = DgIVec2D(0, 0);
-            }
-            else
-            {
+            } else {
                quadNum = ec.rightQuad();
                coord = DgIVec2D(edgeJ - coord.j(), 0);
             }
-         }
-         else // j == edgeJ
-         {
+         } else { // j == edgeJ
             quadNum = ec.upQuad();
             coord.setJ(0);
          }
       }
    }
+
+#if DGDEBUG
+dgcout << " ---> D. " << coord << endl;
+#endif
 
    DgQ2DICoord result(quadNum, coord);
 

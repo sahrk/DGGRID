@@ -26,7 +26,12 @@
 #include <dglib/DgString.h>
 #include <dglib/DgConverterBase.h>
 
+#if DGDEBUG
+bool DgConverterBase::isTraceOn_ = true;
+#else
 bool DgConverterBase::isTraceOn_ = false;
+#endif
+
 ostream* DgConverterBase::traceStream_ = &dgcout;
 
 ////////////////////////////////////////////////////////////////////////////////
