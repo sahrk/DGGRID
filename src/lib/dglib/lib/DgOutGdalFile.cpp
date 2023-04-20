@@ -319,7 +319,7 @@ DgOutGdalFile::addFeature (OGRFeature *feature) {
         ::report( "Failed to create feature in file", DgBase::Fatal );
 
    // clean up the feature and ready for the next one
-   OGRFeature::DestroyFeature( feature );
+   //OGRFeature::DestroyFeature( feature );
 }
 
 ////////////////////////////////////////////////////////////////////////////////
