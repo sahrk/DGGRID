@@ -6,6 +6,8 @@ All changes are by Kevin Sahr, unless otherwise noted.
 ## [7.72] - 2023-04-19
 ### Added
 - additional debugging statements to help in tracking down some issues
+### Changed
+- removed DestroyFeature from DgOutGdalFile.cpp
 
 ## [7.71] - 2023-03-21
 ### Added
