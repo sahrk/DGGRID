@@ -220,10 +220,10 @@ class DgIDGGBase : public DgDiscRF<DgQ2DICoord, DgGeoCoord, long double> {
       const DgPlaneTriRF* planeRF_;
 
       // possible I/O RFs
-      const DgZ3RF*       z3RF_;
-      const DgZ3StringRF* z3StrRF_;
       const DgZOrderRF*       zorderRF_;
       const DgZOrderStringRF* zorderStrRF_;
+      const DgZ3RF*       z3RF_;
+      const DgZ3StringRF* z3StrRF_;
 
    friend class DgQ2DItoDConverter;
    friend class DgQ2DDtoIConverter;

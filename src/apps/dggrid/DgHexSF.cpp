@@ -263,7 +263,7 @@ cout << "depthFirstTrav res: " << res_
          center.addSf3Digit(startSFDigit);
       }
 
-      unsigned long long int numAccepted =
+      numAccepted =
             center.depthFirstTraversal(dp, dggs, dgg, deg, numAp4Res, ed);
 
       int sfDigit = startSFDigit + 1;

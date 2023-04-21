@@ -942,7 +942,7 @@ SHPRestoreSHX ( const char * pszLayer, const char * pszAccess, SAHooks *psHooks 
     size_t          nMessageLen;
     char            *pszMessage;
 
-    unsigned int    nCurrentRecordOffset = 0;
+    //unsigned int    nCurrentRecordOffset = 0;
     unsigned int    nCurrentSHPOffset = 100;
     size_t          nRealSHXContentSize = 100;
 
@@ -1076,7 +1076,7 @@ SHPRestoreSHX ( const char * pszLayer, const char * pszAccess, SAHooks *psHooks 
             if ( !bBigEndian ) SwapWord( 4, &nRecordOffset );
             if ( !bBigEndian ) SwapWord( 4, &nRecordLength );
             nRecordOffset += nRecordLength + 4;
-            nCurrentRecordOffset += 8;
+            //nCurrentRecordOffset += 8;
             nCurrentSHPOffset += 8 + nRecordLength * 2;
 
             psHooks->FSeek( fpSHP, nCurrentSHPOffset, 0 );

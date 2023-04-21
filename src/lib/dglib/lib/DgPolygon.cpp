@@ -39,7 +39,7 @@ DgPolygon::DgPolygon (const DgPolygon& poly)
 const DgPolygon&
 DgPolygon::operator= (const DgPolygon& poly)
 {
-   reinterpret_cast<DgPolygon&>(DgLocVector::operator=(poly));
+   DgLocVector::operator=(poly);
    clearHoles();
    if (poly.hasHoles()) {
       for (unsigned long h = 0; h < poly.holes().size(); h++)
