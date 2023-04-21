@@ -7,6 +7,8 @@ All changes are by Kevin Sahr, unless otherwise noted.
 ### Fixed
 - several compiler warnings
 ### Added
+- cmake switch WITH_EXT_SHAPELIB to build with an external version of the 
+shapelib library; see details in INSTALL.md (thanks to @allixender)
 - (all changes below are not yet documented in the manual; but see the
 new examples listed below)
 - added choice OUTPUT_ADDRESS_TYPE to parameter output_cell_label_type
