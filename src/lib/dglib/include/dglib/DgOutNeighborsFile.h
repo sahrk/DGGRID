@@ -45,14 +45,14 @@ class DgOutNeighborsFile : public DgOutputStream {
 
       DgOutNeighborsFile (const string& fileName,
                         const DgIDGGBase& dgg,
-                        const DgRFBase* outRF = NULL, 
+                        const DgRFBase* outRF = NULL,
                         const string& suffix = string("nbr"),
                         DgReportLevel failLevel = DgBase::Fatal);
 
-      virtual DgOutNeighborsFile& insert (const DgLocation& center, 
+      virtual DgOutNeighborsFile& insert (const DgLocation& center,
                                           DgLocVector& vec);
 
-      virtual bool open (const string& fileName, 
+      virtual bool open (const string& fileName,
                          DgReportLevel failLevel = DgBase::Fatal)
               { return DgOutputStream::open(fileName, failLevel); }
 

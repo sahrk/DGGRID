@@ -147,7 +147,7 @@ class DgZ3StringRF : public DgRF<DgZ3StringCoord, long long int> {
 
    public:
 
-      static DgZ3StringRF* makeRF (DgRFNetwork& networkIn, 
+      static DgZ3StringRF* makeRF (DgRFNetwork& networkIn,
                const string& nameIn, int resIn)
          { return new DgZ3StringRF (networkIn, nameIn, resIn); }
 
@@ -182,7 +182,7 @@ class DgZ3StringRF : public DgRF<DgZ3StringCoord, long long int> {
 
    protected:
 
-      DgZ3StringRF (DgRFNetwork& networkIn, const string& nameIn, 
+      DgZ3StringRF (DgRFNetwork& networkIn, const string& nameIn,
                          int resIn)
          : DgRF<DgZ3StringCoord, long long int>(networkIn, nameIn),
            res_ (resIn) { }

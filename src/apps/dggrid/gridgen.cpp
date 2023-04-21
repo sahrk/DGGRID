@@ -76,7 +76,7 @@ using namespace dgg::topo;
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 GridGenParam::GridGenParam (DgParamList& plist)
-      : MainParam(plist), wholeEarth (false), regionClip (false), seqToPoly(false), 
+      : MainParam(plist), wholeEarth (false), regionClip (false), seqToPoly(false),
         indexToPoly (false), pointClip (false),
         cellClip (false), useGDAL (false),
         clipAIGen (false), clipGDAL(false), clipShape(false), clipCellRes (0), nClipCellDensify (1),
@@ -100,7 +100,7 @@ GridGenParam::GridGenParam (DgParamList& plist)
       clipGDAL = false;
       seqToPoly = false;
       indexToPoly = false;
-      if (dummy == "WHOLE_EARTH") 
+      if (dummy == "WHOLE_EARTH")
          wholeEarth = true;
       else if (dummy == "AIGEN"){
          regionClip = true;
@@ -234,9 +234,9 @@ GridGenParam::GridGenParam (DgParamList& plist)
 
       useEnumLbl = false;
       outSeqNum = false;
-      if (outLblType == "GLOBAL_SEQUENCE") 
+      if (outLblType == "GLOBAL_SEQUENCE")
          outSeqNum = true;
-      if (outLblType == "ENUMERATION") 
+      if (outLblType == "ENUMERATION")
          useEnumLbl = true;
 
       doRandPts = false;
@@ -936,7 +936,7 @@ void outputCell (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dg
 
          string fileName = dp.neighborsOutFileName + string("_") +
                                        dgg::util::to_string(dp.nOutputFile);
-         dp.nbrOut = new DgOutNeighborsFile(fileName, dgg, 
+         dp.nbrOut = new DgOutNeighborsFile(fileName, dgg,
                                   ((dp.outSeqNum || dp.useEnumLbl) ? NULL : dp.pOutRF), "nbr");
       }
 
@@ -947,9 +947,9 @@ void outputCell (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dg
 
          string fileName = dp.childrenOutFileName + string("_") +
                                        dgg::util::to_string(dp.nOutputFile);
-         dp.chdOut = new DgOutChildrenFile(fileName, dgg, *dp.chdDgg, 
-               ((dp.outSeqNum || dp.useEnumLbl) ? NULL : dp.pOutRF), dp.pChdOutRF, "chd"); 
-       } 
+         dp.chdOut = new DgOutChildrenFile(fileName, dgg, *dp.chdDgg,
+               ((dp.outSeqNum || dp.useEnumLbl) ? NULL : dp.pOutRF), dp.pChdOutRF, "chd");
+       }
    }
 
    DgLocation* tmpLoc = new DgLocation(add2D);
@@ -1043,7 +1043,7 @@ void outputCell (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dg
          ::report("Neighbors not implemented for Triangle grids", DgBase::Fatal);
 
       dgg.setNeighbors(add2D, neighbors);
-      if (dp.nbrOut) 
+      if (dp.nbrOut)
          dp.nbrOut->insert(add2D, neighbors);
 
       for (int i = 0; i < neighbors.size(); i++)
@@ -1058,7 +1058,7 @@ void outputCell (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dg
 
       dggs.setAllChildren(q2diR, children);
 
-      if (dp.chdOut) 
+      if (dp.chdOut)
          dp.chdOut->insert(add2D, children);
    }
 
@@ -1253,8 +1253,8 @@ void genGrid (GridGenParam& dp)
 
    dp.chdOut = NULL;
    if (dp.childrenOutType == "TEXT")
-         dp.chdOut = new DgOutChildrenFile(childrenOutFileName, dgg, *dp.chdDgg, 
-               ((dp.outSeqNum || dp.useEnumLbl) ? NULL : dp.pOutRF), dp.pChdOutRF, "chd"); 
+         dp.chdOut = new DgOutChildrenFile(childrenOutFileName, dgg, *dp.chdDgg,
+               ((dp.outSeqNum || dp.useEnumLbl) ? NULL : dp.pOutRF), dp.pChdOutRF, "chd");
 
    ////// do applicable clipping mode /////
 
@@ -1269,7 +1269,7 @@ void genGrid (GridGenParam& dp)
 
       // convert any incoming addresses to seqnums
       // use a set to ensure each cell is printed only once
-      set<unsigned long int> seqnums; 
+      set<unsigned long int> seqnums;
 
       // read-in the sequence numbers
       for (const auto &regionfile: dp.regionFiles) {
@@ -1292,7 +1292,7 @@ void genGrid (GridGenParam& dp)
                tmpLoc = new DgLocation(*dp.pInRF);
                tmpLoc->fromString(buff, dp.inputDelimiter);
                dgg.convert(tmpLoc);
-               
+
                sNum = static_cast<const DgIDGGBase&>(dgg).bndRF().seqNum(*tmpLoc);
                delete tmpLoc;
             }
@@ -1620,7 +1620,7 @@ void genGrid (GridGenParam& dp)
    dgcout << "\n** grid generation complete **" << endl;
    outputStatus(dp, true);
    if (!dp.wholeEarth && !dp.seqToPoly && !dp.indexToPoly)
-      dgcout << "acceptance rate is " << 
+      dgcout << "acceptance rate is " <<
           100.0 * (long double) dp.nCellsAccepted / (long double) dp.nCellsTested <<
           "%" << endl;
 

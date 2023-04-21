@@ -74,7 +74,7 @@ class DgOutGdalFile : public DgOutLocFile
 
       // collection output
       virtual DgOutLocFile& insert (const DgIDGGBase& dgg, DgCell& cell,
-           bool outputPoint, bool outputRegion, const DgIDGGBase& chdDgg, 
+           bool outputPoint, bool outputRegion, const DgIDGGBase& chdDgg,
            const DgRFBase* outRF, const DgRFBase* chdOutRF,
            const DgLocVector* neighbors, const DgLocVector* children);
 

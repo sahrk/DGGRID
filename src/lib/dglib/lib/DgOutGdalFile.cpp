@@ -177,7 +177,7 @@ DgOutGdalFile::createAddressesProperty (const DgIDGGBase& dgg, OGRFeature* featu
          outRF->convert(&tmpLoc);
          str = tmpLoc.asString(' ');
       }
-      
+
       strArr[i] = new char[str.length() + 1];
       strcpy(strArr[i], str.c_str());
    }
@@ -194,7 +194,7 @@ DgOutGdalFile::createAddressesProperty (const DgIDGGBase& dgg, OGRFeature* featu
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
 DgOutGdalFile::insert (const DgIDGGBase& dgg, DgCell& cell,
-           bool outputPoint, bool outputRegion, const DgIDGGBase& chdDgg, 
+           bool outputPoint, bool outputRegion, const DgIDGGBase& chdDgg,
            const DgRFBase* outRF, const DgRFBase* chdOutRF,
            const DgLocVector* neighbors, const DgLocVector* children)
 {
@@ -235,7 +235,7 @@ DgOutGdalFile::insert (const DgIDGGBase& dgg, DgCell& cell,
       createAddressesProperty (chdDgg, feature, "children", *children, chdOutRF);
    }
 
-   if (neighbors) 
+   if (neighbors)
       createAddressesProperty(dgg, feature, "neighbors", *neighbors, outRF);
 
    addFeature(feature);

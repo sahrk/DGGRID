@@ -40,7 +40,7 @@ using namespace std;
 ////////////////////////////////////////////////////////////////////////////////
 BinPresenceParam::BinPresenceParam (DgParamList& plist)
       : MainParam(plist), wholeEarth (true), outFile (0), outputAllCells (true)
-{ 
+{
       /////// fill state variables from the parameter list //////////
 
       string dummy;
@@ -123,8 +123,8 @@ void binPresGlobal (BinPresenceParam& dp)
    DgRFNetwork net0;
    const DgGeoSphRF& geoRF = *(DgGeoSphRF::makeRF(net0, dp.datum, dp.earthRadius));
    const DgIDGGSBase *idggs = DgIDGGSBase::makeRF(net0, geoRF, dp.vert0,
-             dp.azimuthDegs, dp.aperture, dp.actualRes+2, dp.gridTopo, 
-             dp.gridMetric, "IDGGS", dp.projType, dp.isMixed43, dp.numAp4, 
+             dp.azimuthDegs, dp.aperture, dp.actualRes+2, dp.gridTopo,
+             dp.gridMetric, "IDGGS", dp.projType, dp.isMixed43, dp.numAp4,
              dp.isSuperfund, dp.isApSeq, dp.apSeq);
    const DgIDGGBase& dgg = idggs->idggBase(dp.actualRes);
 
@@ -241,8 +241,8 @@ void binPresPartial (BinPresenceParam& dp)
    DgRFNetwork net0;
    const DgGeoSphRF& geoRF = *(DgGeoSphRF::makeRF(net0, dp.datum, dp.earthRadius));
       const DgIDGGSBase *idggs = DgIDGGSBase::makeRF(net0, geoRF, dp.vert0,
-             dp.azimuthDegs, dp.aperture, dp.actualRes+2, dp.gridTopo, 
-             dp.gridMetric, "IDGGS", dp.projType, dp.isMixed43, dp.numAp4, 
+             dp.azimuthDegs, dp.aperture, dp.actualRes+2, dp.gridTopo,
+             dp.gridMetric, "IDGGS", dp.projType, dp.isMixed43, dp.numAp4,
              dp.isSuperfund, dp.isApSeq, dp.apSeq);
       const DgIDGGBase& dgg = idggs->idggBase(dp.actualRes);
 

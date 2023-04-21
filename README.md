@@ -2,23 +2,23 @@
 
 ## General Information
 
-__DGGRID__ version 7.7 released December 8, 2022  
+__DGGRID__ version 7.8 released April 21, 2023
 
-__Southern Terra Cognita Laboratory__  
-www.discreteglobalgrids.org  
+__Southern Terra Cognita Laboratory__
+www.discreteglobalgrids.org
 [Kevin Sahr](http://www.linkedin.com/in/Kevin-Sahr), Director
 
-__DGGRID__ is a command-line application for generating and manipulating 
+__DGGRID__ is a command-line application for generating and manipulating
 icosahedral discrete global grids (DGGs).
 
 Three directories should be included herein:
 
-- `src`: contains complete source code for __DGGRID__ 
+- `src`: contains complete source code for __DGGRID__
 
    There are two ways that you can build __DGGRID__: you may use `cmake`
    (see [INSTALL.md](INSTALL.md) for instructions),
    or you can use the legacy build system from previous versions of __DGGRID__
-   (see the text file README.NOCMAKE for instructions). 
+   (see the text file README.NOCMAKE for instructions).
 
 - `examples`: contains examples of using __DGGRID__ with pre-computed outputs.
 
@@ -38,10 +38,10 @@ You should have received a copy of the GNU Affero General Public License along w
 
 ## Credits
 
-__DGGRID__ was primarily written in C++ by [Kevin Sahr](http://www.linkedin.com/in/Kevin-Sahr). See the file `CHANGELOG.md` for additional contributors. 
+__DGGRID__ was primarily written in C++ by [Kevin Sahr](http://www.linkedin.com/in/Kevin-Sahr). See the file `CHANGELOG.md` for additional contributors.
 
-The original __DGGRID__ specifications were developed by (in alphabetical order): 
-A. Ross Kiester, Tony Olsen, Barbara Rosenbaum, Kevin Sahr, Ann Whelan, and 
+The original __DGGRID__ specifications were developed by (in alphabetical order):
+A. Ross Kiester, Tony Olsen, Barbara Rosenbaum, Kevin Sahr, Ann Whelan, and
 Denis White.
 
 __DGGRID__ was made possible in part by funding from the __US Environmental Protection Agency__, __PlanetRisk, Inc.__, __Culmen International__, __the Ruhr-University Bochum/GeoInsight Project__, and the __Turtle Conservancy__.
@@ -52,7 +52,7 @@ __DGGRID__ will make use of the following external library, if available (not in
 
 - The Open Source Geospatial Foundation’s GDAL translator library for raster and vector geospatial data formats (see http://www.gdal.org)
 
-__DGGRID__ uses the following external libraries (included with the __DGGRID__ source 
+__DGGRID__ uses the following external libraries (included with the __DGGRID__ source
 code):
 
 - Angus Johnson’s Clipper library; see http://www.angusj.com.

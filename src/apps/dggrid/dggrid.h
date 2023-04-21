@@ -107,7 +107,7 @@ class MainParam {
 
    public:
 
-      static void addressTypeToRF (MainParam& dp, const DgIDGGBase& dgg, 
+      static void addressTypeToRF (MainParam& dp, const DgIDGGBase& dgg,
                    bool isInput = false);
 
       MainParam (DgParamList& plist);
@@ -138,7 +138,7 @@ class MainParam {
       string datum;            // datum used to determine the earthRadius
       int precision;     // number of digits after decimal pt to output
       int verbosity;     // debugging info verbosity
-      bool megaVerbose;       
+      bool megaVerbose;
       bool pauseOnStart;
       bool pauseBeforeExit;
       bool useMother;         // use Mother RNG?

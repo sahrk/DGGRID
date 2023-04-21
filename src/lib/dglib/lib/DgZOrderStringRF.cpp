@@ -47,7 +47,7 @@ const DgZOrderStringCoord DgZOrderStringCoord::undefDgZOrderStringCoord("99");
 
 ////////////////////////////////////////////////////////////////////////////////
 const char*
-DgZOrderStringRF::str2add (DgZOrderStringCoord* add, const char* str, 
+DgZOrderStringRF::str2add (DgZOrderStringCoord* add, const char* str,
                          char delimiter) const
 {
    if (!add) add = new DgZOrderStringCoord();
@@ -71,12 +71,12 @@ DgZOrderStringRF::str2add (DgZOrderStringCoord* add, const char* str,
 } // const char* DgZOrderStringRF::str2add
 
 ////////////////////////////////////////////////////////////////////////////////
-DgQ2DItoZOrderStringConverter::DgQ2DItoZOrderStringConverter 
+DgQ2DItoZOrderStringConverter::DgQ2DItoZOrderStringConverter
                 (const DgRF<DgQ2DICoord, long long int>& from,
                  const DgRF<DgZOrderStringCoord, long long int>& to)
         : DgConverter<DgQ2DICoord, long long int, DgZOrderStringCoord, long long int> (from, to),
           pIDGG_ (NULL), effRes_ (0), effRadix_ (0)
-{ 
+{
    pIDGG_ = dynamic_cast<const DgIDGGBase*>(&fromFrame());
    if (!pIDGG_) {
       report("DgQ2DItoZOrderStringConverter::DgQ2DItoZOrderStringConverter(): "
@@ -109,10 +109,10 @@ DgQ2DItoZOrderStringConverter::DgQ2DItoZOrderStringConverter
 
    if (IDGG().gridTopo() == Triangle) effRes_++; // adjust for long double j
 
-} // DgQ2DItoZOrderStringConverter::DgQ2DItoZOrderStringConverter 
+} // DgQ2DItoZOrderStringConverter::DgQ2DItoZOrderStringConverter
 
 ////////////////////////////////////////////////////////////////////////////////
-DgZOrderStringCoord 
+DgZOrderStringCoord
 DgQ2DItoZOrderStringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
 {
    string qstr = dgg::util::to_string(addIn.quadNum(), 2);
@@ -131,7 +131,7 @@ DgQ2DItoZOrderStringConverter::convertTypedAddress (const DgQ2DICoord& addIn) co
       dgcout << "Class " << ((IDGG().isClassI()) ? "I" : "II") << endl;
    }
 */
-   addstr = addstr + 
+   addstr = addstr +
      DgRadixString::digitInterleave(rs1, rs2, !((IDGG().aperture() == 3)));
 
 //dgcout << "addstr " << addstr << endl;
@@ -148,15 +148,15 @@ DgQ2DItoZOrderStringConverter::convertTypedAddress (const DgQ2DICoord& addIn) co
 
    return zorder;
 
-} // DgZOrderStringCoord DgQ2DItoZOrderStringConverter::convertTypedAddress 
+} // DgZOrderStringCoord DgQ2DItoZOrderStringConverter::convertTypedAddress
 
 ////////////////////////////////////////////////////////////////////////////////
-DgZOrderStringToQ2DIConverter::DgZOrderStringToQ2DIConverter            
+DgZOrderStringToQ2DIConverter::DgZOrderStringToQ2DIConverter
                 (const DgRF<DgZOrderStringCoord, long long int>& from,
                  const DgRF<DgQ2DICoord, long long int>& to)
         : DgConverter<DgZOrderStringCoord, long long int, DgQ2DICoord, long long int> (from, to),
           pIDGG_ (NULL), effRes_ (0), effRadix_ (0)
-{ 
+{
    pIDGG_ = dynamic_cast<const DgIDGGBase*>(&toFrame());
    if (!pIDGG_) {
       report("DgZOrderStringToQ2DIConverter::DgZOrderStringToQ2DIConverter(): "
@@ -171,7 +171,7 @@ DgZOrderStringToQ2DIConverter::DgZOrderStringToQ2DIConverter
 
    if (IDGG().aperture() != zRF->aperture() || IDGG().res() != zRF->res()) {
       report("DgQ2DItoZOrderStringConverter::DgQ2DItoZOrderStringConverter(): "
-         " fromFrame and toFrame apertures or resolutions do not match", DgBase::Fatal); 
+         " fromFrame and toFrame apertures or resolutions do not match", DgBase::Fatal);
    }
 
    if (IDGG().gridTopo() != Hexagon) {
@@ -189,10 +189,10 @@ DgZOrderStringToQ2DIConverter::DgZOrderStringToQ2DIConverter
 
    if (IDGG().gridTopo() == Triangle) effRes_++; // adjust for long double j
 
-} // DgQ2DItoZOrderStringConverter::DgQ2DItoZOrderStringConverter 
+} // DgQ2DItoZOrderStringConverter::DgQ2DItoZOrderStringConverter
 
 ////////////////////////////////////////////////////////////////////////////////
-DgQ2DICoord 
+DgQ2DICoord
 DgZOrderStringToQ2DIConverter::convertTypedAddress (const DgZOrderStringCoord& addIn) const
 {
 //dgcout << " -> " << addIn << endl;
@@ -257,7 +257,7 @@ DgZOrderStringToQ2DIConverter::convertTypedAddress (const DgZOrderStringCoord& a
 
    return q2di;
 
-} // DgQ2DICoord DgZOrderStringToQ2DIConverter::convertTypedAddress 
+} // DgQ2DICoord DgZOrderStringToQ2DIConverter::convertTypedAddress
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

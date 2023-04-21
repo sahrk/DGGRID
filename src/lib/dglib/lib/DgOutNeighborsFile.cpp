@@ -30,8 +30,8 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-DgOutNeighborsFile::DgOutNeighborsFile (const string& fileName, 
-         const DgIDGGBase& dgg, const DgRFBase* outRF, const string& suffix, 
+DgOutNeighborsFile::DgOutNeighborsFile (const string& fileName,
+         const DgIDGGBase& dgg, const DgRFBase* outRF, const string& suffix,
          DgReportLevel failLevel)
    : DgOutputStream (fileName, suffix, failLevel), dgg_ (dgg), outRF_ (outRF)
 {
@@ -39,7 +39,7 @@ DgOutNeighborsFile::DgOutNeighborsFile (const string& fileName,
 } // DgOutNeighborsFile::DgOutNeighborsFile
 
 ////////////////////////////////////////////////////////////////////////////////
-DgOutNeighborsFile& 
+DgOutNeighborsFile&
 DgOutNeighborsFile::insert (const DgLocation& center, DgLocVector& vec)
 {
    if (!outRF_) { // indicates seqnum output

@@ -5,23 +5,23 @@ These instructions assume you are on a Unix/Linux system.
 
 **1. Go into the DGGRID source directory, DGGRID/src.
 
-**2. Some basic Make settings are given in the text file 
-src/MakeIncludes.noCMake, and are used by the Makefiles in the 
+**2. Some basic Make settings are given in the text file
+src/MakeIncludes.noCMake, and are used by the Makefiles in the
 sub-directories. Edit this file if you want to add or remove build flags.
 
 In particular, the variable BUILD_WITH_GDAL indicates whether or not
-DGGRID should be built with the GDAL library (the default is TRUE). If 
-building with GDAL you must set GDAL_HDR_LIB to the location of the gdal 
-header files and GDAL_LIB to the gdal library file you want to link to 
+DGGRID should be built with the GDAL library (the default is TRUE). If
+building with GDAL you must set GDAL_HDR_LIB to the location of the gdal
+header files and GDAL_LIB to the gdal library file you want to link to
 DGGRID.
 
-**3. Build DGGRID by executing: 
+**3. Build DGGRID by executing:
 
    make -f Makefile.noCMake
 
-**4. If/when the make is successful there will be a command line 
-executable file "dggrid" in the directory DGGRID/src/apps/dggrid. 
-This is the DGGRID program. Assuming dggrid is in your command search 
+**4. If/when the make is successful there will be a command line
+executable file "dggrid" in the directory DGGRID/src/apps/dggrid.
+This is the DGGRID program. Assuming dggrid is in your command search
 path you may execute it with:
 
 dggrid someMetaFileName.meta
@@ -49,6 +49,6 @@ by going into DGGRID/src and executing:
 This will create a directory DGGRID/src/docs containing the generated
 source code documentation in pdf and html formats.
 
-Note: Step 3 also builds the sample application DGGRID/src/apps/appex/appex, 
-which is intended as a simple demonstration of using calls to the dglib 
+Note: Step 3 also builds the sample application DGGRID/src/apps/appex/appex,
+which is intended as a simple demonstration of using calls to the dglib
 library to manipulate DGG cells in source code.

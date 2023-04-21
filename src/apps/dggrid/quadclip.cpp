@@ -633,14 +633,14 @@ void createClipRegions (GridGenParam& dp, const DgIDGGBase& dgg,
 //cout << "CLIPDGG: " << clipDgg << endl;
       // the coarse clipping cells
       // use a set to avoid duplicates
-      set<unsigned long int> clipSeqNums; 
+      set<unsigned long int> clipSeqNums;
       // parse the clip cell sequence numbers
       for (const auto &seqStr: clipCellAddressStrs) {
 
          unsigned long int sNum = 0;
          if (dp.inSeqNum) {
             if (sscanf(seqStr.c_str(), "%lu", &sNum) != 1)
-               ::report("gridgen(): invalid cell sequence number in clip_cell_addresses" + 
+               ::report("gridgen(): invalid cell sequence number in clip_cell_addresses" +
                          string(seqStr), DgBase::Fatal);
          } else { // must be indexToPoly
             // parse the address
@@ -658,7 +658,7 @@ void createClipRegions (GridGenParam& dp, const DgIDGGBase& dgg,
       }
 
       // add the cell boundaries to the clip regions
-      for (set<unsigned long int>::iterator i = clipSeqNums.begin(); 
+      for (set<unsigned long int>::iterator i = clipSeqNums.begin();
              i != clipSeqNums.end(); i++){
 
         DgLocation* loc = static_cast<const DgIDGG&>(clipDgg).bndRF().locFromSeqNum(*i);

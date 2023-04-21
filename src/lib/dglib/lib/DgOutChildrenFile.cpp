@@ -32,8 +32,8 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-DgOutChildrenFile::DgOutChildrenFile (const string& fileName, 
-                    const DgIDGGBase& dgg, const DgIDGGBase& chdDgg, 
+DgOutChildrenFile::DgOutChildrenFile (const string& fileName,
+                    const DgIDGGBase& dgg, const DgIDGGBase& chdDgg,
                     const DgRFBase* outRF, const DgRFBase* chdOutRF,
                     const string& suffix, DgReportLevel failLevel)
    : DgOutputStream (fileName, suffix, failLevel), dgg_ (dgg), chdDgg_ (chdDgg),
@@ -43,7 +43,7 @@ DgOutChildrenFile::DgOutChildrenFile (const string& fileName,
 } // DgOutChildrenFile::DgOutChildrenFile
 
 ////////////////////////////////////////////////////////////////////////////////
-DgOutChildrenFile& 
+DgOutChildrenFile&
 DgOutChildrenFile::insert (const DgLocation& center, DgLocVector& vec)
 {
 //cout << "@@@@@ DgOutChildrenFile::insert:" << endl;

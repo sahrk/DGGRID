@@ -31,7 +31,7 @@ using namespace std;
 namespace dgg { namespace addtype {
 
 /*
-static const string addTypeStrings[] = { "GEO", "PLANE", "PROJTRI", "Q2DD", 
+static const string addTypeStrings[] = { "GEO", "PLANE", "PROJTRI", "Q2DD",
     "Q2DI", "SEQNUM", "VERTEX2DD", "ZORDER", "ZORDER_STRING", "INVALID" };
 */
 

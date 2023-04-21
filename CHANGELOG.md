@@ -10,13 +10,13 @@ All changes are by Kevin Sahr, unless otherwise noted.
 - (all changes below are not yet documented in the manual; but see the
 new examples listed below)
 - added choice OUTPUT_ADDRESS_TYPE to parameter output_cell_label_type
-- added new hierarchical index address types ZORDER, ZORDER_STRING, Z3, 
+- added new hierarchical index address types ZORDER, ZORDER_STRING, Z3,
 and Z3_STRING to parameters input_address_type and output_address_type
-- operations BIN_POINT_VALS and BIN_POINT_PRESENCE now output addresses 
+- operations BIN_POINT_VALS and BIN_POINT_PRESENCE now output addresses
 using output_address_type
 - replaced parameter clip_cell_seqnums with clip_cell_addresses, which uses
 cell addresses as specified by input_address_type.
-- added new examples isea4t, isea4d, z3CellClip, z3Nums, z3WholeEarth, 
+- added new examples isea4t, isea4d, z3CellClip, z3Nums, z3WholeEarth,
 zCollection, zTransform, z3Collection, z3Transform, zCellClip, and zNums
 
 ## [7.72] - 2023-04-19
@@ -38,7 +38,7 @@ zCollection, zTransform, z3Collection, z3Transform, zCellClip, and zNums
 - handles holes in GDAL input clipping polygons. Added new parameter clip_using_holes and example named holes
 ### Fixed
 - replaced deprecated sprintf with snprintf throughout
-- suppressed unused parameter compiler warnings 
+- suppressed unused parameter compiler warnings
 ### Changed
 - updated manual to version 7.7
 
@@ -67,7 +67,7 @@ type parameters
 - updated manual to version 7.5
 
 ## [7.41] - 2022-01-19
-### Added 
+### Added
 - choice COARSE_CELLS to parameter clip_subset_type so grid generation
 clipping region can be specified using lower resolution cells
 - parameters clip_cell_res, clip_cell_seqnums, and clip_cell_densification
@@ -85,7 +85,7 @@ without longitude wrapping (to facilitate 2D display)
 
 ## [7.33] - 2022-01-07
 ### Changed
-- commented-out possible overflow warning messages pending a better implementation 
+- commented-out possible overflow warning messages pending a better implementation
 ### Added
 - DGGRIDR compiler flag to allow for dggridR-specific code. Used in the DgBase::report() method.
 ### Fixed
@@ -159,7 +159,7 @@ method makeRF(); hex DGGS are now all sub-classes of DgHexIDGGS
 
 ## [7.06] - 2020-04-10
 ### Added
-- a warning in MakeIncludes about potential gdal building issues 
+- a warning in MakeIncludes about potential gdal building issues
 
 ## [7.05] - 2020-01-27
 ### Fixed
@@ -181,16 +181,16 @@ method makeRF(); hex DGGS are now all sub-classes of DgHexIDGGS
 - removed (for now) my failed attempt at optimizing the gnomonic quad bounds code; put back PROJ4
 
 ## [7.01] - 2019-08-05
-### Added 
+### Added
 - added DgInterleaveToQ2DIConverter, though not yet wired-up to handle INTERLEAVE input
 ### Changed
 - refactored quadclip gnomonic bounds check
 
 ## [7.0] - 2019-08-01
 ### Added
-- added PLANETRISK choice to parameter dggs_type 
-- added ISEA7H and FULLER7H choices to parameter dggs_type 
-- added aperture 7 choice to parameter dggs_aperture 
+- added PLANETRISK choice to parameter dggs_type
+- added ISEA7H and FULLER7H choices to parameter dggs_type
+- added aperture 7 choice to parameter dggs_aperture
 - added SEQUENCE choice to parameter dggs_aperture_type
 - added new parameter dggs_aperture_sequence
 - added GDAL choice to parameter clip_subset_type
@@ -266,11 +266,11 @@ found the error in H3)
 - corrected/suppressed (as applicable) various compiler warnings
 - added the metafile editor program MFeditor.jar (available
   separately from www.discreteglobalgrids.org); MFeditor was
-  written by Michael Paradis and Benjamin Harris, and updated 
+  written by Michael Paradis and Benjamin Harris, and updated
   for DGGRID 6.2b by Jeremy Anders and Anthony Serna.
 
 ## [6.1] - 2013-05-28
-- fixed vertex ordering in ArcInfo Generate file output 
+- fixed vertex ordering in ArcInfo Generate file output
   polygons (bug introduced in version 6.02b)
 - fixed bug that caused Superfund cells that straddle
   quad boundaries to not be appropriately clipped in some
@@ -280,15 +280,15 @@ found the error in H3)
 ## [6.02b] - 2013-04-07
 - corrected reversed winding order on output shapefile polygons
 - added dglib code usage demo in src/apps/appex
-- completed manual appendices A (DGGRID Metafile Parameters) and C 
+- completed manual appendices A (DGGRID Metafile Parameters) and C
   (Characteristics of DGGRID Hexagonal DGGs)
 - changed output_cell_label_type parameter value "LINEAR_INDEX"
   to the more descriptive value "GLOBAL_SEQUENCE"
-- for naming consistency changed parameter concatenate_randpts_output 
-  to randpts_concatenate_output and num_randpts_per_cell to 
+- for naming consistency changed parameter concatenate_randpts_output
+  to randpts_concatenate_output and num_randpts_per_cell to
   randpts_num_per_cell
 - changed DgParamList.h to correctly handle strict c++ two-pass
-  template compiling without -fpermissive 
+  template compiling without -fpermissive
 - fixed rare crashes caused by abstract classes with missing
   virtual destructors
 - numerous small changes to allow or improve compilation on a
@@ -299,10 +299,10 @@ found the error in H3)
 - increased precision throughout allowing for higher
   resolution DGGs
 - added preset DGGS parameter types
-- added mixed aperture 4 and 3 hexagon DGGSs, greatly 
+- added mixed aperture 4 and 3 hexagon DGGSs, greatly
   increasing the number of grid choices
-- can generate DGGSs using Fuller's icosahedral projection (projection 
-  was written in R by Denis White and then ported to C++ by James 
+- can generate DGGSs using Fuller's icosahedral projection (projection
+  was written in R by Denis White and then ported to C++ by James
   Scharmann)
 - includes the Superfund_500m hierarchically indexed mixed
   aperture DGGS
@@ -313,7 +313,7 @@ found the error in H3)
 - added operation that outputs DGGS characteristics table
 - improved feedback during execution
 - improved Makefiles
-- builds cleanly on MacOS 10.8.2 using gcc 4.2.1 and on 
+- builds cleanly on MacOS 10.8.2 using gcc 4.2.1 and on
   Ubuntu 11.04 with gcc 4.5.2 (thanks to Jesse Williamson)
 
 ## [4.3b] - 2003-06-21
@@ -323,5 +323,5 @@ found the error in H3)
 
 ## [0.9b] - 2001-10-01
 - initial port of Kevin Sahr's tclib to dglib
-- Lian Song wrote many of the spherical trigonometry routines and the 
+- Lian Song wrote many of the spherical trigonometry routines and the
   original implementation of the ISEA projection.

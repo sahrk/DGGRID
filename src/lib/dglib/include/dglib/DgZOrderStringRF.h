@@ -147,7 +147,7 @@ class DgZOrderStringRF : public DgRF<DgZOrderStringCoord, long long int> {
 
    public:
 
-      static DgZOrderStringRF* makeRF (DgRFNetwork& networkIn, 
+      static DgZOrderStringRF* makeRF (DgRFNetwork& networkIn,
                const string& nameIn, int resIn, int apertureIn)
          { return new DgZOrderStringRF (networkIn, nameIn, resIn, apertureIn); }
 
@@ -182,7 +182,7 @@ class DgZOrderStringRF : public DgRF<DgZOrderStringCoord, long long int> {
 
    protected:
 
-      DgZOrderStringRF (DgRFNetwork& networkIn, const string& nameIn, 
+      DgZOrderStringRF (DgRFNetwork& networkIn, const string& nameIn,
                          int resIn, int apertureIn)
          : DgRF<DgZOrderStringCoord, long long int>(networkIn, nameIn),
            res_ (resIn), aperture_ (apertureIn) { }

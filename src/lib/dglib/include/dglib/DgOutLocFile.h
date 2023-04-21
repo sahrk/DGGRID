@@ -85,7 +85,7 @@ class DgOutLocFile : public DgBase {
       // collection output; does nothing by default
 /* with parameter names
       virtual DgOutLocFile& insert (const DgIDGGBase& dgg, DgCell& cell,
-           bool outputPoint, bool outputRegion, const DgIDGGBase& chdDgg, 
+           bool outputPoint, bool outputRegion, const DgIDGGBase& chdDgg,
            const DgRFBase* outRF, const DgRFBase* chdOutRF,
            const DgLocVector* neighbors, const DgLocVector* children)
 */

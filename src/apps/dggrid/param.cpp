@@ -39,7 +39,7 @@ using namespace dgg::topo;
 using namespace dgg::addtype;
 
 // choose a reference frame based on address type
-void 
+void
 MainParam::addressTypeToRF (MainParam& dp, const DgIDGGBase& dgg, bool isInput)
 {
    const DgIDGGSBase& dggs = *(dgg.dggs());
@@ -93,7 +93,7 @@ MainParam::addressTypeToRF (MainParam& dp, const DgIDGGBase& dgg, bool isInput)
 
       case Z3:
          if (dp.isApSeq)
-            ::report("input_address_type of Z3 not supported for dggs_aperture_type of SEQUENCE", 
+            ::report("input_address_type of Z3 not supported for dggs_aperture_type of SEQUENCE",
                      DgBase::Fatal);
 
          if (dgg.z3RF()) {
@@ -107,7 +107,7 @@ MainParam::addressTypeToRF (MainParam& dp, const DgIDGGBase& dgg, bool isInput)
 
       case Z3String:
          if (dp.isApSeq)
-            ::report("input_address_type of Z3_STRING not supported for dggs_aperture_type of SEQUENCE", 
+            ::report("input_address_type of Z3_STRING not supported for dggs_aperture_type of SEQUENCE",
                      DgBase::Fatal);
 
          if (dgg.z3StrRF()) {
@@ -121,7 +121,7 @@ MainParam::addressTypeToRF (MainParam& dp, const DgIDGGBase& dgg, bool isInput)
 
       case ZOrder:
          if (dp.isApSeq)
-            ::report("input_address_type of ZORDER not supported for dggs_aperture_type of SEQUENCE", 
+            ::report("input_address_type of ZORDER not supported for dggs_aperture_type of SEQUENCE",
                      DgBase::Fatal);
 
          if (dgg.zorderRF()) {
@@ -135,7 +135,7 @@ MainParam::addressTypeToRF (MainParam& dp, const DgIDGGBase& dgg, bool isInput)
 
       case ZOrderString:
          if (dp.isApSeq)
-            ::report("input_address_type of ZORDER_STRING not supported for dggs_aperture_type of SEQUENCE", 
+            ::report("input_address_type of ZORDER_STRING not supported for dggs_aperture_type of SEQUENCE",
                      DgBase::Fatal);
 
          if (dgg.zorderStrRF()) {
@@ -233,11 +233,11 @@ MainParam::MainParam (DgParamList& plist)
      projType ("ISEA"), res (5), actualRes (5),
      placeRandom (false), orientCenter (false), orientRand (0),
      numGrids (1), curGrid (1), lastGrid (false), azimuthDegs (0.0),
-     datum (""), precision (DEFAULT_PRECISION), verbosity (0), 
-     megaVerbose (false), pauseOnStart (false), pauseBeforeExit (false), 
-     metaOutFileNameBase (""), metaOutFileName (""), 
+     datum (""), precision (DEFAULT_PRECISION), verbosity (0),
+     megaVerbose (false), pauseOnStart (false), pauseBeforeExit (false),
+     metaOutFileNameBase (""), metaOutFileName (""),
      pInRF (0), inAddType (dgg::addtype::InvalidAddressType), inSeqNum (false),
-     inputDelimiter (' '), pOutRF (0), outAddType (dgg::addtype::InvalidAddressType), 
+     inputDelimiter (' '), pOutRF (0), outAddType (dgg::addtype::InvalidAddressType),
      outSeqNum (false), outputDelimiter (' '), apertureType (""),
      isMixed43 (false), isSuperfund (false), isApSeq (false)
 {
@@ -490,7 +490,7 @@ MainParam::MainParam (DgParamList& plist)
 
 MainParam::~MainParam()
 {
-   delete orientRand; 
+   delete orientRand;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -708,7 +708,7 @@ DgGridPList::DgGridPList (void)
    choices.push_back(new string("POINTS"));
    choices.push_back(new string("COARSE_CELLS"));
    choices.push_back(new string("INPUT_ADDRESS_TYPE"));
-   insertParam(new DgStringChoiceParam("clip_subset_type", "WHOLE_EARTH", 
+   insertParam(new DgStringChoiceParam("clip_subset_type", "WHOLE_EARTH",
                &choices));
    dgg::util::release(choices);
 
@@ -772,7 +772,7 @@ DgGridPList::init2 (void)
    choices.push_back(new string("ENUMERATION"));
    choices.push_back(new string("SUPERFUND"));
    choices.push_back(new string("OUTPUT_ADDRESS_TYPE"));
-   insertParam(new DgStringChoiceParam("output_cell_label_type", "GLOBAL_SEQUENCE", 
+   insertParam(new DgStringChoiceParam("output_cell_label_type", "GLOBAL_SEQUENCE",
                &choices));
    dgg::util::release(choices);
 
@@ -984,14 +984,14 @@ DgGridPList::init2 (void)
 
    insertParam(new DgStringParam("output_file_name", "valsout.txt"));
 
-   // output_address_type < GEO | PLANE | PROJTRI | Q2DD | Q2DI | 
+   // output_address_type < GEO | PLANE | PROJTRI | Q2DD | Q2DI |
    //        SEQNUM | VERTEX2DD | ZORDER | ZORDER_STRING >
    for (int i = 0; ; i++) {
       if (addTypeStrings[i] == "INVALID")
          break;
-      choices.push_back(new string(addTypeStrings[i])); 
+      choices.push_back(new string(addTypeStrings[i]));
    }
-   insertParam(new DgStringChoiceParam("output_address_type", 
+   insertParam(new DgStringChoiceParam("output_address_type",
                "SEQNUM", &choices));
    dgg::util::release(choices);
 
@@ -1010,14 +1010,14 @@ DgGridPList::init2 (void)
    // input_file_name <fileName>
    insertParam(new DgStringParam("input_file_name", "valsin.txt"));
 
-   // input_address_type < GEO | PLANE | PROJTRI | Q2DD | Q2DI | 
+   // input_address_type < GEO | PLANE | PROJTRI | Q2DD | Q2DI |
    //        SEQNUM | VERTEX2DD | ZORDER | ZORDER_STRING >
    for (int i = 0; ; i++) {
       if (addTypeStrings[i] == "INVALID")
          break;
-      choices.push_back(new string(addTypeStrings[i])); 
+      choices.push_back(new string(addTypeStrings[i]));
    }
-   insertParam(new DgStringChoiceParam("input_address_type", 
+   insertParam(new DgStringChoiceParam("input_address_type",
                "SEQNUM", &choices));
    dgg::util::release(choices);
 

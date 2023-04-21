@@ -80,7 +80,7 @@ const DgZ3Coord DgZ3Coord::undefDgZ3Coord(0xffffffffffffffff);
 
 ////////////////////////////////////////////////////////////////////////////////
 const char*
-DgZ3RF::str2add (DgZ3Coord* add, const char* str, 
+DgZ3RF::str2add (DgZ3Coord* add, const char* str,
                          char delimiter) const
 {
    char delimStr[2];
@@ -107,7 +107,7 @@ DgZ3RF::str2add (DgZ3Coord* add, const char* str,
 } // const char* DgZ3RF::str2add
 
 ////////////////////////////////////////////////////////////////////////////////
-string 
+string
 DgZ3Coord::valString (void) const
 {
    const int maxStrSize = 17; // max 16 digits plus 1 for the null terminator
@@ -119,11 +119,11 @@ DgZ3Coord::valString (void) const
 } // const string& DgZ3RF::valString
 
 ////////////////////////////////////////////////////////////////////////////////
-DgZ3StringtoZ3Converter::DgZ3StringtoZ3Converter 
+DgZ3StringtoZ3Converter::DgZ3StringtoZ3Converter
                 (const DgRF<DgZ3StringCoord, long long int>& from,
                  const DgRF<DgZ3Coord, long long int>& to)
    : DgConverter<DgZ3StringCoord, long long int, DgZ3Coord, long long int> (from, to)
-{ 
+{
    // validate the to/from RF's
    const DgZ3StringRF* zsRF = dynamic_cast<const DgZ3StringRF*>(&fromFrame());
    if (!zsRF) {
@@ -139,16 +139,16 @@ DgZ3StringtoZ3Converter::DgZ3StringtoZ3Converter
 
    if (zsRF->aperture() != zRF->aperture() || zsRF->res() != zRF->res()) {
       report("DgZ3StringtoZ3Converter::DgZ3StringtoZ3Converter(): "
-         " fromFrame and toFrame apertures or resolutions do not match", DgBase::Fatal); 
+         " fromFrame and toFrame apertures or resolutions do not match", DgBase::Fatal);
    }
 
    // store the res
    res_ = zRF->res();
 
-} // DgZ3StringtoZ3Converter::DgZ3StringtoZ3Converter 
+} // DgZ3StringtoZ3Converter::DgZ3StringtoZ3Converter
 
 ////////////////////////////////////////////////////////////////////////////////
-DgZ3Coord 
+DgZ3Coord
 DgZ3StringtoZ3Converter::convertTypedAddress (const DgZ3StringCoord& addIn) const
 {
    string addstr = addIn.valString();
@@ -183,27 +183,27 @@ DgZ3StringtoZ3Converter::convertTypedAddress (const DgZ3StringCoord& addIn) cons
 
    return coord;
 
-} // DgZ3Coord DgZ3StringtoZ3Converter::convertTypedAddress 
+} // DgZ3Coord DgZ3StringtoZ3Converter::convertTypedAddress
 
 ////////////////////////////////////////////////////////////////////////////////
-DgZ3ToZ3StringConverter::DgZ3ToZ3StringConverter            
+DgZ3ToZ3StringConverter::DgZ3ToZ3StringConverter
                 (const DgRF<DgZ3Coord, long long int>& from,
                  const DgRF<DgZ3StringCoord, long long int>& to)
         : DgConverter<DgZ3Coord, long long int, DgZ3StringCoord, long long int> (from, to)
-{ 
+{
    // validate the to/from RF's
    const DgZ3RF* zRF = dynamic_cast<const DgZ3RF*>(&fromFrame());
    if (!zRF) {
       report("DgZ3ToZ3StringConverter::DgZ3ToZ3StringConverter(): "
          " fromFrame not of type DgZ3RF", DgBase::Fatal);
    }
-   
+
    const DgZ3StringRF* zsRF = dynamic_cast<const DgZ3StringRF*>(&toFrame());
    if (!zsRF) {
       report("DgZ3ToZ3StringConverter::DgZ3ToZ3StringConverter(): "
          " toFrame not of type DgZ3StringRF", DgBase::Fatal);
    }
-   
+
    if (zsRF->aperture() != zRF->aperture() || zsRF->res() != zRF->res()) {
       report("DgZ3ToZ3StringConverter::DgZ3ToZ3StringConverter(): "
          " fromFrame and toFrame apertures or resolutions do not match", DgBase::Fatal);
@@ -212,10 +212,10 @@ DgZ3ToZ3StringConverter::DgZ3ToZ3StringConverter
    // store the res
    res_ = zRF->res();
 
-} // DgZ3StringtoZ3Converter::DgZ3StringtoZ3Converter 
+} // DgZ3StringtoZ3Converter::DgZ3StringtoZ3Converter
 
 ////////////////////////////////////////////////////////////////////////////////
-DgZ3StringCoord 
+DgZ3StringCoord
 DgZ3ToZ3StringConverter::convertTypedAddress (const DgZ3Coord& addIn) const
 {
    uint64_t z = addIn.value();
@@ -237,7 +237,7 @@ DgZ3ToZ3StringConverter::convertTypedAddress (const DgZ3Coord& addIn) const
 
    return zStr;
 
-} // DgZ3StringCoord DgZ3ToZ3StringConverter::convertTypedAddress 
+} // DgZ3StringCoord DgZ3ToZ3StringConverter::convertTypedAddress
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

@@ -29,7 +29,7 @@
 
 namespace dgg { namespace addtype {
 
-enum DgAddressType { Geo, Plane, ProjTri, Q2DD, Q2DI, SeqNum, Vertex2DD, 
+enum DgAddressType { Geo, Plane, ProjTri, Q2DD, Q2DI, SeqNum, Vertex2DD,
                      ZOrder, ZOrderString, Z3, Z3String, InvalidAddressType };
 
 static const std::string addTypeStrings[] = { "GEO", "PLANE", "PROJTRI", "Q2DD",

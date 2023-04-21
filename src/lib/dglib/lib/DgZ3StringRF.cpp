@@ -36,7 +36,7 @@ const DgZ3StringCoord DgZ3StringCoord::undefDgZ3StringCoord("99");
 
 ////////////////////////////////////////////////////////////////////////////////
 const char*
-DgZ3StringRF::str2add (DgZ3StringCoord* add, const char* str, 
+DgZ3StringRF::str2add (DgZ3StringCoord* add, const char* str,
                          char delimiter) const
 {
    if (!add) add = new DgZ3StringCoord();
@@ -60,12 +60,12 @@ DgZ3StringRF::str2add (DgZ3StringCoord* add, const char* str,
 } // const char* DgZ3StringRF::str2add
 
 ////////////////////////////////////////////////////////////////////////////////
-DgQ2DItoZ3StringConverter::DgQ2DItoZ3StringConverter 
+DgQ2DItoZ3StringConverter::DgQ2DItoZ3StringConverter
                 (const DgRF<DgQ2DICoord, long long int>& from,
                  const DgRF<DgZ3StringCoord, long long int>& to)
         : DgConverter<DgQ2DICoord, long long int, DgZ3StringCoord, long long int> (from, to),
           pIDGG_ (NULL), effRes_ (0), effRadix_ (0)
-{ 
+{
    pIDGG_ = dynamic_cast<const DgIDGGBase*>(&fromFrame());
    if (!pIDGG_) {
       report("DgQ2DItoZ3StringConverter::DgQ2DItoZ3StringConverter(): "
@@ -93,10 +93,10 @@ DgQ2DItoZ3StringConverter::DgQ2DItoZ3StringConverter
    // effRes_ is the number of Class I resolutions
    effRes_ = (IDGG().res() + 1) / 2;
 
-} // DgQ2DItoZ3StringConverter::DgQ2DItoZ3StringConverter 
+} // DgQ2DItoZ3StringConverter::DgQ2DItoZ3StringConverter
 
 ////////////////////////////////////////////////////////////////////////////////
-DgZ3StringCoord 
+DgZ3StringCoord
 DgQ2DItoZ3StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
 {
    string qstr = dgg::util::to_string(addIn.quadNum(), 2);
@@ -133,13 +133,13 @@ DgQ2DItoZ3StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
       // class I (i,j) coordinates
       static const string z3digits[3][3] = {
        // j = 0     1     2
-           {"00", "22", "21"}, // i == 0 
-           {"01", "02", "20"}, // i == 1 
-           {"12", "10", "11"}  // i == 2 
+           {"00", "22", "21"}, // i == 0
+           {"01", "02", "20"}, // i == 1
+           {"12", "10", "11"}  // i == 2
       };
 
       for (unsigned int i = 0; i < digits1.length(); i++) {
-         addstr = addstr + 
+         addstr = addstr +
               z3digits[digits1[i] - '0'][digits2[i] - '0'];
       }
 
@@ -154,15 +154,15 @@ DgQ2DItoZ3StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
 
    return zorder;
 
-} // DgZ3StringCoord DgQ2DItoZ3StringConverter::convertTypedAddress 
+} // DgZ3StringCoord DgQ2DItoZ3StringConverter::convertTypedAddress
 
 ////////////////////////////////////////////////////////////////////////////////
-DgZ3StringToQ2DIConverter::DgZ3StringToQ2DIConverter            
+DgZ3StringToQ2DIConverter::DgZ3StringToQ2DIConverter
                 (const DgRF<DgZ3StringCoord, long long int>& from,
                  const DgRF<DgQ2DICoord, long long int>& to)
         : DgConverter<DgZ3StringCoord, long long int, DgQ2DICoord, long long int> (from, to),
           pIDGG_ (NULL), effRes_ (0), effRadix_ (0)
-{ 
+{
    pIDGG_ = dynamic_cast<const DgIDGGBase*>(&toFrame());
    if (!pIDGG_) {
       report("DgZ3StringToQ2DIConverter::DgZ3StringToQ2DIConverter(): "
@@ -177,7 +177,7 @@ DgZ3StringToQ2DIConverter::DgZ3StringToQ2DIConverter
 
    if (IDGG().dggs()->aperture() != zRF->aperture() || IDGG().res() != zRF->res()) {
       report("DgQ2DItoZ3StringConverter::DgQ2DItoZ3StringConverter(): "
-         " fromFrame and toFrame apertures or resolutions do not match", DgBase::Fatal); 
+         " fromFrame and toFrame apertures or resolutions do not match", DgBase::Fatal);
    }
 
    if (IDGG().gridTopo() != Hexagon || IDGG().dggs()->aperture() != 3) {
@@ -190,10 +190,10 @@ DgZ3StringToQ2DIConverter::DgZ3StringToQ2DIConverter
    // effRes_ is the number of Class I resolutions
    effRes_ = (IDGG().res() + 1) / 2;
 
-} // DgQ2DItoZ3StringConverter::DgQ2DItoZ3StringConverter 
+} // DgQ2DItoZ3StringConverter::DgQ2DItoZ3StringConverter
 
 ////////////////////////////////////////////////////////////////////////////////
-DgQ2DICoord 
+DgQ2DICoord
 DgZ3StringToQ2DIConverter::convertTypedAddress (const DgZ3StringCoord& addIn) const
 {
    string addstr = addIn.valString();
@@ -268,7 +268,7 @@ DgZ3StringToQ2DIConverter::convertTypedAddress (const DgZ3StringCoord& addIn) co
 
    return q2di;
 
-} // DgQ2DICoord DgZ3StringToQ2DIConverter::convertTypedAddress 
+} // DgQ2DICoord DgZ3StringToQ2DIConverter::convertTypedAddress
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

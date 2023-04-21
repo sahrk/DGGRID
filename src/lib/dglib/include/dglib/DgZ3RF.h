@@ -139,7 +139,7 @@ class DgZ3RF : public DgRF<DgZ3Coord, long long int> {
 
    public:
 
-      static DgZ3RF* makeRF (DgRFNetwork& networkIn, const std::string& nameIn, 
+      static DgZ3RF* makeRF (DgRFNetwork& networkIn, const std::string& nameIn,
                                   int resIn)
          { return new DgZ3RF (networkIn, nameIn, resIn); }
 
@@ -174,9 +174,9 @@ class DgZ3RF : public DgRF<DgZ3Coord, long long int> {
 
    protected:
 
-      DgZ3RF (DgRFNetwork& networkIn, const std::string& nameIn, 
+      DgZ3RF (DgRFNetwork& networkIn, const std::string& nameIn,
                     int resIn)
-         : DgRF<DgZ3Coord, long long int>(networkIn, nameIn), 
+         : DgRF<DgZ3Coord, long long int>(networkIn, nameIn),
            res_ (resIn) { }
 
       int res_;

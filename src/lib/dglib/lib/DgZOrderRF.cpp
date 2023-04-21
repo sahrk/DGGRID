@@ -80,7 +80,7 @@ const DgZOrderCoord DgZOrderCoord::undefDgZOrderCoord(0xffffffffffffffff);
 
 ////////////////////////////////////////////////////////////////////////////////
 const char*
-DgZOrderRF::str2add (DgZOrderCoord* add, const char* str, 
+DgZOrderRF::str2add (DgZOrderCoord* add, const char* str,
                          char delimiter) const
 {
    char delimStr[2];
@@ -107,7 +107,7 @@ DgZOrderRF::str2add (DgZOrderCoord* add, const char* str,
 } // const char* DgZOrderRF::str2add
 
 ////////////////////////////////////////////////////////////////////////////////
-string 
+string
 DgZOrderCoord::valString (void) const
 {
    const int maxStrSize = 17; // max 16 digits plus 1 for the null terminator
@@ -119,11 +119,11 @@ DgZOrderCoord::valString (void) const
 } // const string& DgZOrderRF::valString
 
 ////////////////////////////////////////////////////////////////////////////////
-DgZOrderStringtoZOrderConverter::DgZOrderStringtoZOrderConverter 
+DgZOrderStringtoZOrderConverter::DgZOrderStringtoZOrderConverter
                 (const DgRF<DgZOrderStringCoord, long long int>& from,
                  const DgRF<DgZOrderCoord, long long int>& to)
    : DgConverter<DgZOrderStringCoord, long long int, DgZOrderCoord, long long int> (from, to)
-{ 
+{
    // validate the to/from RF's
    const DgZOrderStringRF* zsRF = dynamic_cast<const DgZOrderStringRF*>(&fromFrame());
    if (!zsRF) {
@@ -139,16 +139,16 @@ DgZOrderStringtoZOrderConverter::DgZOrderStringtoZOrderConverter
 
    if (zsRF->aperture() != zRF->aperture() || zsRF->res() != zRF->res()) {
       report("DgZOrderStringtoZOrderConverter::DgZOrderStringtoZOrderConverter(): "
-         " fromFrame and toFrame apertures or resolutions do not match", DgBase::Fatal); 
+         " fromFrame and toFrame apertures or resolutions do not match", DgBase::Fatal);
    }
 
    // store the res
    res_ = zRF->res();
 
-} // DgZOrderStringtoZOrderConverter::DgZOrderStringtoZOrderConverter 
+} // DgZOrderStringtoZOrderConverter::DgZOrderStringtoZOrderConverter
 
 ////////////////////////////////////////////////////////////////////////////////
-DgZOrderCoord 
+DgZOrderCoord
 DgZOrderStringtoZOrderConverter::convertTypedAddress (const DgZOrderStringCoord& addIn) const
 {
    string addstr = addIn.valString();
@@ -183,27 +183,27 @@ DgZOrderStringtoZOrderConverter::convertTypedAddress (const DgZOrderStringCoord&
 
    return coord;
 
-} // DgZOrderCoord DgZOrderStringtoZOrderConverter::convertTypedAddress 
+} // DgZOrderCoord DgZOrderStringtoZOrderConverter::convertTypedAddress
 
 ////////////////////////////////////////////////////////////////////////////////
-DgZOrderToZOrderStringConverter::DgZOrderToZOrderStringConverter            
+DgZOrderToZOrderStringConverter::DgZOrderToZOrderStringConverter
                 (const DgRF<DgZOrderCoord, long long int>& from,
                  const DgRF<DgZOrderStringCoord, long long int>& to)
         : DgConverter<DgZOrderCoord, long long int, DgZOrderStringCoord, long long int> (from, to)
-{ 
+{
    // validate the to/from RF's
    const DgZOrderRF* zRF = dynamic_cast<const DgZOrderRF*>(&fromFrame());
    if (!zRF) {
       report("DgZOrderToZOrderStringConverter::DgZOrderToZOrderStringConverter(): "
          " fromFrame not of type DgZOrderRF", DgBase::Fatal);
    }
-   
+
    const DgZOrderStringRF* zsRF = dynamic_cast<const DgZOrderStringRF*>(&toFrame());
    if (!zsRF) {
       report("DgZOrderToZOrderStringConverter::DgZOrderToZOrderStringConverter(): "
          " toFrame not of type DgZOrderStringRF", DgBase::Fatal);
    }
-   
+
    if (zsRF->aperture() != zRF->aperture() || zsRF->res() != zRF->res()) {
       report("DgZOrderToZOrderStringConverter::DgZOrderToZOrderStringConverter(): "
          " fromFrame and toFrame apertures or resolutions do not match", DgBase::Fatal);
@@ -212,10 +212,10 @@ DgZOrderToZOrderStringConverter::DgZOrderToZOrderStringConverter
    // store the res
    res_ = zRF->res();
 
-} // DgZOrderStringtoZOrderConverter::DgZOrderStringtoZOrderConverter 
+} // DgZOrderStringtoZOrderConverter::DgZOrderStringtoZOrderConverter
 
 ////////////////////////////////////////////////////////////////////////////////
-DgZOrderStringCoord 
+DgZOrderStringCoord
 DgZOrderToZOrderStringConverter::convertTypedAddress (const DgZOrderCoord& addIn) const
 {
    uint64_t z = addIn.value();
@@ -237,7 +237,7 @@ DgZOrderToZOrderStringConverter::convertTypedAddress (const DgZOrderCoord& addIn
 
    return zStr;
 
-} // DgZOrderStringCoord DgZOrderToZOrderStringConverter::convertTypedAddress 
+} // DgZOrderStringCoord DgZOrderToZOrderStringConverter::convertTypedAddress
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
