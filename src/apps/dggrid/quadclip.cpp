@@ -276,7 +276,7 @@ void processOneClipPoly (DgPolygon& polyIn, GridGenParam& dp, const DgIDGGBase& 
                   DgClippingHole clipHole;
 
                   // check if all vertices are on this quad
-                  const DgRFBase* rf = NULL;
+                  //const DgRFBase* rf = NULL;
                   if (numVertsInQuad == theHole.size()) {
                      clipHole.isGnomonic = false; // use snyder
                      dgg.q2ddRF().convert(theHole);
@@ -295,7 +295,7 @@ void processOneClipPoly (DgPolygon& polyIn, GridGenParam& dp, const DgIDGGBase& 
                   } else {
                      clipHole.isGnomonic = true; // use gnomonic
                      cr.gnomProj().convert(theHole);
-                     rf = &cr.gnomProj();
+                     //rf = &cr.gnomProj();
                   }
 
                   OGRPolygon* ogrPoly = DgOutGdalFile::createPolygon(theHole);
