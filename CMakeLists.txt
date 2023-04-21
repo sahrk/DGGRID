@@ -26,8 +26,6 @@ add_subdirectory(src/lib/shapelib)
 
 add_subdirectory(src/apps/dggrid)
 add_subdirectory(src/apps/appex)
-add_subdirectory(src/apps/zorder)
-add_subdirectory(src/apps/z3)
 
 if(DOXYGEN_FOUND)
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/src/Doxyfile ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile.in @ONLY)

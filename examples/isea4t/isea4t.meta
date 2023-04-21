@@ -1,0 +1,24 @@
+################################################################################
+#
+# isea4t.meta - example of a DGGRID metafile that generates a resolution 
+#     7 ISEA4T triangle grid for the state of Oregon (with a 100 mile buffer)
+#
+# Kevin Sahr, 04/29/23
+#
+################################################################################
+
+# specify the operation
+dggrid_operation GENERATE_GRID
+
+# specify an ISEA4T DGG; override the default resolution
+dggs_type ISEA4T
+dggs_res_spec 7
+
+# control grid generation
+clip_subset_type SHAPEFILE
+clip_region_files ./inputfiles/orbuff.shp
+
+# specify the output
+cell_output_type KML
+cell_output_file_name ./outputfiles/orgrid
+densification 3
