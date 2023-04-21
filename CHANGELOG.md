@@ -3,6 +3,22 @@ All notable changes to this project will be documented in this file.
 
 All changes are by Kevin Sahr, unless otherwise noted.
 
+## [7.8] - 2023-04-19
+### Fixed
+- several compiler warnings
+### Added
+- (all changes below are not yet documented in the manual; but see the
+new examples listed below)
+- added choice OUTPUT_ADDRESS_TYPE to parameter output_cell_label_type
+- added new hierarchical index address types ZORDER, ZORDER_STRING, Z3, 
+and Z3_STRING to parameters input_address_type and output_address_type
+- operations BIN_POINT_VALS and BIN_POINT_PRESENCE now output addresses 
+using output_address_type
+- replaced parameter clip_cell_seqnums with clip_cell_addresses, which uses
+cell addresses as specified by input_address_type.
+- added new examples isea4t, isea4d, z3CellClip, z3Nums, z3WholeEarth, 
+zCollection, zTransform, z3Collection, z3Transform, zCellClip, and zNums
+
 ## [7.72] - 2023-04-19
 ### Added
 - additional debugging statements to help in tracking down some issues
