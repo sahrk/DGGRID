@@ -3,7 +3,7 @@ All notable changes to this project will be documented in this file.
 
 All changes are by Kevin Sahr, unless otherwise noted.
 
-## [7.8] - 2023-04-19
+## [7.8] - 2023-04-21
 ### Fixed
 - several compiler warnings
 ### Added
