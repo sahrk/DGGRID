@@ -3,11 +3,8 @@
 ## General Information
 
 __DGGRID__ version 7.8 released April 21, 2023
-
 __Southern Terra Cognita Laboratory__
-
 www.discreteglobalgrids.org
-
 [Kevin Sahr](http://www.linkedin.com/in/Kevin-Sahr), Director
 
 __DGGRID__ is a command-line application for generating and manipulating
