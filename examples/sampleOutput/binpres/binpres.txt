@@ -1,4 +1,4 @@
-** executing DGGRID version 7.7 **
+** executing DGGRID version 7.8 **
 type sizes: big int: 64 bits / big double: 128 bits
 
 ** loading meta file binpres.meta...
@@ -30,6 +30,7 @@ output_file_name outputfiles/popclass3h7.txt (user set)
 output_address_type SEQNUM (user set)
 output_delimiter "," (user set)
 cell_output_control OUTPUT_OCCUPIED (user set)
+input_address_type SEQNUM (default)
 output_count true (user set)
 
 Res 7 DGG Statistics (calculated in projection space):

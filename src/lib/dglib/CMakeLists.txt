@@ -2,6 +2,7 @@ cmake_minimum_required (VERSION 3.9)
 
 add_library(dglib
   lib/DgAddressBase.cpp
+  lib/DgAddressType.cpp
   lib/DgApSeq.cpp
   lib/DgBase.cpp
   lib/DgBoundedHexC2RF2D.cpp
@@ -97,6 +98,10 @@ add_library(dglib
   lib/DgTriGrid2DS.cpp
   lib/DgTriIDGG.cpp
   lib/DgUtil.cpp
+  lib/DgZ3RF.cpp
+  lib/DgZ3StringRF.cpp
+  lib/DgZOrderRF.cpp
+  lib/DgZOrderStringRF.cpp
 )
 
 if(GDAL_FOUND)

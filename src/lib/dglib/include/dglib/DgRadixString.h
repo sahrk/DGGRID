@@ -41,14 +41,12 @@ class DgRadixString {
                                      const DgRadixString& s2,
                                      bool combineDigits = true)
           {
-             if (s1.base() != s2.base())
-             {
+             if (s1.base() != s2.base()) {
                 report("DgRadixString::digitInterleave(): "
                        "bases do not match", DgBase::Fatal);
              }
 
-             if (s1.digits()[0] == '-' || s2.digits()[0] == '-')
-             {
+             if (s1.digits()[0] == '-' || s2.digits()[0] == '-') {
                 report("DgRadixString::digitInterleave(): "
                        "negative value input", DgBase::Fatal);
              }
@@ -61,12 +59,9 @@ class DgRadixString {
 
              // pad shorter one with 0's
 
-             if (n2 < n1)
-             {
+             if (n2 < n1) {
                 for (int i = 0; i < (n1 - n2); i++) tmp2 = "0" + tmp2;
-             }
-             else
-             {
+             } else {
                 for (int i = 0; i < (n2 - n1); i++) tmp1 = "0" + tmp1;
              }
 
@@ -75,20 +70,15 @@ class DgRadixString {
              string result;
              char c1[] = " ";
              char c2[] = " ";
-             if (!combineDigits)
-             {
-                for (unsigned int i = 0; i < tmp1.length(); i++)
-                {
+             if (!combineDigits) {
+                for (unsigned int i = 0; i < tmp1.length(); i++) {
                    c1[0] = tmp1[i];
                    c2[0] = tmp2[i];
 
                    result += string(c1) + string(c2);
                 }
-             }
-             else
-             {
-                for (unsigned int i = 0; i < tmp1.length(); i++)
-                {
+             } else {
+                for (unsigned int i = 0; i < tmp1.length(); i++) {
                    c1[0] = tmp1[i];
                    c2[0] = tmp2[i];
 
@@ -152,7 +142,7 @@ class DgRadixString {
 
             int d = digits()[index] - '0'; // convert digit to int
             val += d * exponent;
-dgcout << " ==== d: " << d << " exp: " << exponent << " val: " << val << endl;
+//dgcout << " ==== d: " << d << " exp: " << exponent << " val: " << val << endl;
             exponent *= base();
          }
 

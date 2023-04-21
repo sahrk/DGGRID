@@ -1,0 +1,35 @@
+################################################################################
+#
+# zCollection.meta - example of a DGGRID metafile that outputs to a GDAL
+#     collection file using ZOrder cell indexes.
+#
+################################################################################
+
+# specify the operation
+dggrid_operation GENERATE_GRID
+
+# specify the DGG
+dggs_type ISEA3H
+dggs_res_spec 2
+
+# control grid generation
+clip_subset_type SEQNUMS
+clip_region_files inputfiles/seqnums.txt
+longitude_wrap_mode UNWRAP_EAST
+unwrap_points TRUE
+
+# specify output address information
+output_cell_label_type OUTPUT_ADDRESS_TYPE
+output_address_type ZORDER
+
+# specify the output collection file used
+# when GDAL_COLLECTION is specified below
+collection_output_gdal_format GeoJSON
+collection_output_file_name ./outputfiles/everything.geojson
+
+# specify which output you want to put together in a GDAL_COLLECTION
+# this must include cell and/or point output
+cell_output_type GDAL_COLLECTION
+point_output_type GDAL_COLLECTION
+children_output_type GDAL_COLLECTION
+neighbor_output_type GDAL_COLLECTION

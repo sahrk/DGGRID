@@ -26,6 +26,8 @@
 
 #include <cmath>
 
+using namespace std;
+
 namespace dgg { namespace topo {
 
 static const string topoStrings[] =

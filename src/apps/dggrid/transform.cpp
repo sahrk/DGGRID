@@ -45,8 +45,7 @@ using namespace std;
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 TransformParam::TransformParam (DgParamList& plist)
-      : MainParam(plist), inSeqNum (0), outSeqNum (false), inputDelimiter (' '),
-        outputDelimiter (' '), nDensify (1)
+      : MainParam(plist), nDensify (1)
 {
       using namespace dgg;
 
@@ -56,47 +55,13 @@ TransformParam::TransformParam (DgParamList& plist)
 
       getParamValue(plist, "input_file_name", inFileName, false);
 
-      // input address type
-
-      getParamValue(plist, "input_address_type", inAddType, false);
-
-      // input delimiter
-
-      string dummy;
-      getParamValue(plist, "input_delimiter", dummy, false);
-      if (dummy.length() != 3 || dummy.c_str()[0] != '"' ||
-          dummy.c_str()[2] != '"')
-      {
-         ::report(
-          "invalid input_delimiter; must be a single char in double quotes",
-          DgBase::Fatal);
-      }
-      inputDelimiter = dummy.c_str()[1];
-
       // output file name
 
       getParamValue(plist, "output_file_name", outFileNameBase, false);
 
-      // output address type
-
-      getParamValue(plist, "output_address_type", outAddType, false);
-
-      // output delimiter
-
-      getParamValue(plist, "output_delimiter", dummy, false);
-      if (dummy.length() != 3 || dummy.c_str()[0] != '"' ||
-          dummy.c_str()[2] != '"')
-      {
-         ::report(
-          "invalid output_delimiter; must be a single char in double quotes",
-          DgBase::Fatal);
-      }
-      outputDelimiter = dummy.c_str()[1];
-
       getParamValue(plist, "densification", nDensify, false);
 
-      if (inAddType == "GEO" && outAddType == "GEO")
-      {
+      if (inAddType == dgg::addtype::Geo && outAddType == dgg::addtype::Geo) {
          ::report("TransformParam::TransformParam() At least one of the " +
                   string("address types must be non-GEO"), DgBase::Fatal);
       }
@@ -114,16 +79,14 @@ void TransformParam::dump (void)
    dgcout << " outFileNameBase: " << outFileNameBase << endl;
    dgcout << " outFileName: " << outFileName << endl;
    dgcout << " outAddType: " << outAddType << endl;
-   dgcout << " outSeqNum: " << outSeqNum << endl;
    dgcout << " outputDelimiter: " << outputDelimiter << endl;
    dgcout << " nDensify: " << nDensify << endl;
 
    dgcout << " inFileName: " << inFileName << endl;
    dgcout << " inAddType: " << inAddType << endl;
    dgcout << " inSeqNum: " << inSeqNum << endl;
-   dgcout << " inputDelimiter: " << inputDelimiter << endl;
 
-   dgcout << "END TRANSFORM PARAMETER DUMP" << endl;
+  dgcout << "END TRANSFORM PARAMETER DUMP" << endl;
 
 } // void TransformParam::dump
 
@@ -135,7 +98,7 @@ void doTransform (TransformParam& dp)
    DgRFNetwork net0;
    const DgGeoSphRF& geoRF = *(DgGeoSphRF::makeRF(net0, dp.datum, dp.earthRadius));
    const DgIDGGSBase *idggs = DgIDGGSBase::makeRF(net0, geoRF, dp.vert0,
-             dp.azimuthDegs, dp.aperture, dp.actualRes+1, dp.gridTopo,
+             dp.azimuthDegs, dp.aperture, dp.actualRes+2, dp.gridTopo,
              dp.gridMetric, "IDGGS", dp.projType, dp.isMixed43, dp.numAp4,
              dp.isSuperfund, dp.isApSeq, dp.apSeq);
 
@@ -147,51 +110,16 @@ void doTransform (TransformParam& dp)
    DgGeoSphDegRF::makeRF(geoRF, geoRF.name() + "Deg");
 
    // set-up the input reference frame
-
-   dp.inSeqNum = false;
-   const DgRFBase* pInRF = NULL;
-   if (dp.inAddType == "GEO") pInRF = &geoRF;
-   else if (dp.inAddType == "PROJTRI") pInRF = &dgg.projTriRF();
-   else if (dp.inAddType == "VERTEX2DD") pInRF = &dgg.vertexRF();
-   else if (dp.inAddType == "Q2DD") pInRF = &dgg.q2ddRF();
-   else if (dp.inAddType == "INTERLEAVE") pInRF = &dgg.intRF();
-   else if (dp.inAddType == "PLANE") pInRF = &dgg.planeRF();
-   else if (dp.inAddType == "Q2DI") pInRF = &dgg;
-   else if (dp.inAddType == "SEQNUM")
-   {
-      if (dp.isApSeq)
-         ::report("input_address_type of SEQNUM not supported for dggs_aperture_type of SEQUENCE",
-                  DgBase::Fatal);
-
-      dp.inSeqNum = true;
-      pInRF = &dgg;
-   }
-   const DgRFBase& inRF = *pInRF;
+   MainParam::addressTypeToRF(dp, dgg, true);
+   if (!dp.pInRF)
+      ::report("doTransform(): invalid input RF", DgBase::Fatal);
+   const DgRFBase& inRF = *dp.pInRF;
 
    // set-up the output reference frame
-
-   bool outAIG = (dp.outAddType == "AIGEN");
-   dp.outSeqNum = false;
-   const DgRFBase* pOutRF = NULL;
-   if (dp.outAddType == "GEO") pOutRF = &geoRF;
-   else if (dp.outAddType == "PROJTRI") pOutRF = &dgg.projTriRF();
-   else if (dp.outAddType == "VERTEX2DD") pOutRF = &dgg.vertexRF();
-   else if (dp.outAddType == "Q2DD") pOutRF = &dgg.q2ddRF();
-   else if (dp.outAddType == "INTERLEAVE") {
-      if (dp.isApSeq)
-         ::report("output_address_type of INTERLEAVE not supported for dggs_aperture_type of SEQUENCE",
-                  DgBase::Fatal);
-
-      pOutRF = &dgg.intRF();
-   } else if (dp.outAddType == "PLANE") pOutRF = &dgg.planeRF();
-   else if (dp.outAddType == "Q2DI") pOutRF = &dgg;
-   else if (outAIG) pOutRF = &dgg;
-   else if (dp.outAddType == "SEQNUM")
-   {
-      dp.outSeqNum = true;
-      pOutRF = &dgg;
-   }
-   const DgRFBase& outRF = *pOutRF;
+   MainParam::addressTypeToRF(dp, dgg, false);
+   if (!dp.pOutRF)
+      ::report("doTransform(): invalid output RF", DgBase::Fatal);
+   const DgRFBase& outRF = *dp.pOutRF;
 
    // set the precision
 
@@ -207,10 +135,7 @@ void doTransform (TransformParam& dp)
 
    DgInputStream inFile(dp.inFileName, "", DgBase::Fatal);
    ofstream* pOutFile;
-   if (outAIG)
-      pOutFile = new DgOutAIGenFile(geoRF, dp.outFileName);
-   else
-      pOutFile = new DgOutputStream(dp.outFileName, "", DgBase::Fatal);
+   pOutFile = new DgOutputStream(dp.outFileName, "", DgBase::Fatal);
 
    ofstream& outFile = *pOutFile;
 
@@ -228,22 +153,18 @@ void doTransform (TransformParam& dp)
       // parse the address
 
       DgLocation* loc = NULL;
-      if (dp.inSeqNum)
-      {
+      if (dp.inSeqNum) {
          char* snStr;
          snStr = strtok(buff, delimStr);
          unsigned long int sNum;
-         if (sscanf(snStr, "%lu", &sNum) != 1)
-         {
+         if (sscanf(snStr, "%lu", &sNum) != 1) {
             ::report("doTransform(): invalid SEQNUM " + string(snStr),
                      DgBase::Fatal);
          }
 
          loc = static_cast<const DgIDGGBase&>(inRF).bndRF().locFromSeqNum(sNum);
          remainder = &(buff[strlen(snStr) + 1]);
-      }
-      else
-      {
+      } else {
          loc = new DgLocation(inRF);
          remainder = loc->fromString(buff, dp.inputDelimiter);
       }
@@ -253,23 +174,20 @@ void doTransform (TransformParam& dp)
 
       // output the converted line
 
-      if (outAIG)
-      {
+/*
+      if (outAIG) {
          const DgIDGGBase& idgg = static_cast<const DgIDGGBase&>(outRF);
          unsigned long int sn = idgg.bndRF().seqNum(*loc);
          DgPolygon verts(idgg);
          idgg.setVertices(*loc, verts, dp.nDensify);
          DgCell cell(geoRF, dgg::util::to_string(sn), *loc, new DgPolygon(verts));
          static_cast<DgOutAIGenFile&>(outFile) << cell;
-      }
-      else
-      {
-         if (dp.outSeqNum)
-         {
+      } else
+*/
+
+         if (dp.outSeqNum) {
             outFile << static_cast<const DgIDGGBase&>(outRF).bndRF().seqNum(*loc);
-         }
-         else
-         {
+         } else {
             outFile << loc->asString(dp.outputDelimiter);
          }
 
@@ -278,7 +196,6 @@ void doTransform (TransformParam& dp)
             outFile << dp.outputDelimiter << remainder << endl;
          else
             outFile << endl;
-      }
 
       delete loc;
 

@@ -40,6 +40,7 @@
 #include "util.h"
 #include <dglib/DgRunningStats.h>
 #include <dglib/DgGridTopo.h>
+#include <dglib/DgAddressType.h>
 
 #include <iostream>
 #include <set>
@@ -106,6 +107,9 @@ class MainParam {
 
    public:
 
+      static void addressTypeToRF (MainParam& dp, const DgIDGGBase& dgg, 
+                   bool isInput = false);
+
       MainParam (DgParamList& plist);
 
       virtual ~MainParam();
@@ -119,38 +123,50 @@ class MainParam {
       dgg::topo::DgGridTopology gridTopo;      // Diamond/Hexagon/Triangle
       dgg::topo::DgGridMetric   gridMetric;    // D4/D8
       int aperture;      // aperture
-      string projType;              // projection type
+      string projType;   // projection type
       int res;           // resolution (may be adjusted)
       int actualRes;     // original, actual resolution
-      bool placeRandom;             // random grid placement?
-      bool orientCenter;            // grid placement based on quad center point?
-      DgRandom* orientRand;             // RNG for generating random orientation
+      bool placeRandom;  // random grid placement?
+      bool orientCenter; // grid placement based on quad center point?
+      DgRandom* orientRand; // RNG for generating random orientation
       int numGrids;      // number of grids to generate
       int curGrid;       // grid counter
-      bool lastGrid;                    // last grid?
-      DgGeoCoord vert0;                 // placement vert
-      long double azimuthDegs;               // orientation azimuth
-      long double earthRadius;               // earth radius in km
-      string datum;               // datum used to determine the earthRadius
+      bool lastGrid;     // last grid?
+      DgGeoCoord vert0;  // placement vert
+      long double azimuthDegs; // orientation azimuth
+      long double earthRadius; // earth radius in km
+      string datum;            // datum used to determine the earthRadius
       int precision;     // number of digits after decimal pt to output
       int verbosity;     // debugging info verbosity
-      bool megaVerbose;                 //
+      bool megaVerbose;       
       bool pauseOnStart;
       bool pauseBeforeExit;
-      bool useMother;                   // use Mother RNG?
+      bool useMother;         // use Mother RNG?
       string metaOutFileNameBase;
       string metaOutFileName;
-      string apertureType;		// "PURE", "MIXED43", "SUPERFUND", or "SEQUENCE"
-      bool   isMixed43;		// are we using mixed43 aperture?
-      int numAp4;      // # of leading ap 4 resolutions in a mixed grid
+      const DgRFBase* pInRF;   // RF for input addresses
+      dgg::addtype::DgAddressType inAddType; // input address form
+      bool inSeqNum;           // is the input sequence numbers?
+      char inputDelimiter;
+      string inFormatStr;
+      const DgIDGGBase* chdDgg;   // child res dgg
+      const DgRFBase* pOutRF;     // RF for output addresses
+      const DgRFBase* pChdOutRF;  // RF for output addresses at child resolution
+      dgg::addtype::DgAddressType outAddType; // output address form
+      bool outSeqNum;      // is the output sequence numbers?
+      char outputDelimiter;
+      string apertureType; // "PURE", "MIXED43", "SUPERFUND", or "SEQUENCE"
+      bool   isMixed43;	   // are we using mixed43 aperture?
+      int numAp4;          // # of leading ap 4 resolutions in a mixed grid
       bool   isSuperfund;
-      bool   isApSeq;		// are we using an aperture sequence?
+      bool   isApSeq;      // are we using an aperture sequence?
       DgApSeq apSeq;
       int   sfRes; // superfund digit resolution
 
    protected:
 
       void determineRes (const DgParamList& plist);
+
       DgGridStats genStats (int res);
 
 };
@@ -172,6 +188,7 @@ class GridGenParam : public MainParam {
       bool wholeEarth;       // generate entire grid?
       bool regionClip;       // whether user wants to generate using regions
       bool seqToPoly;        // whether user wants polys from seqnum
+      bool indexToPoly;      // whether user wants polys from any index type
       bool pointClip;        // whether user wants to generate using points
       bool cellClip;         // whether user wants to generate using coarse cells
       bool useGDAL;          // use GDAL for either input or output
@@ -180,7 +197,7 @@ class GridGenParam : public MainParam {
       bool clipShape;        // clip using Shapefiles
       vector<string> regionFiles;
       int clipCellRes;       // resolution of the clipping cell indexes
-      set<unsigned long int> clipSeqNums; // coarse clipping cells
+      string clipCellsStr;   // input line of coarse clipping cells
       int nClipCellDensify;  // number of points-per-edge of densification for clipping cells
       int nRandPts;          // # of random pts generated for each hex
       bool clipRandPts;      // clip randpts to polys
@@ -288,11 +305,6 @@ class BinValsParam : public MainParam {
       string outFileNameBase;
       ofstream* outFile;
       vector<string> inputFiles;
-      string outAddType;
-      bool outSeqNum;
-      char inputDelimiter;
-      char outputDelimiter;
-      string inFormatStr;
       bool outputAllCells;   // or only occupied ones?
 };
 
@@ -316,11 +328,6 @@ class BinPresenceParam : public MainParam {
       string outFileNameBase;
       ofstream* outFile;
       vector<string> inputFiles;
-      string outAddType;
-      bool outSeqNum;
-      char inputDelimiter;
-      char outputDelimiter;
-      string inFormatStr;
       bool outputAllCells;   // or only occupied ones?
       bool outputCount;
 
@@ -340,18 +347,11 @@ class TransformParam : public MainParam {
       // the parameters
 
       string inFileName;
-      string inAddType;
-
-      bool inSeqNum;
-      bool outSeqNum;
-      char inputDelimiter;
-      char outputDelimiter;
 
       string outFileName;
       string outFileNameBase;
       string outFileNameAIG;
       string outFileNameKML;
-      string outAddType;
 
       int nDensify;
       DgGeoSphRF::DgLonWrapMode lonWrapMode;

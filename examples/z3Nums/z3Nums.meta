@@ -1,0 +1,28 @@
+################################################################################
+#
+# z3Nums.meta - example of a DGGRID metafile that generates kml cells for a 
+#     resolution 4 ISEA3H grid for Z3 indexes specified in text files.
+#
+################################################################################
+
+# specify the operation
+dggrid_operation GENERATE_GRID
+
+# specify a ISEA3H; override the default resolution
+dggs_type ISEA3H
+dggs_res_spec 9
+
+# control grid generation
+clip_subset_type INPUT_ADDRESS_TYPE
+input_address_type Z3
+clip_region_files inputfiles/z3a.txt inputfiles/z3b.txt
+
+# specify output address information
+output_cell_label_type OUTPUT_ADDRESS_TYPE
+output_address_type Z3
+
+# specify the output
+cell_output_type KML
+cell_output_file_name ./outputfiles/zcells
+point_output_type KML
+point_output_file_name ./outputfiles/zpoints

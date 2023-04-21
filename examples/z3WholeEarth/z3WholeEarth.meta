@@ -1,0 +1,23 @@
+################################################################################
+#
+# z3WholeEarth.meta - example of generating a whole earth resolution 4 ISEA3H 
+#      grid with Z3 indexes.
+#
+################################################################################
+
+# specify the operation
+dggrid_operation GENERATE_GRID
+
+# specify the DGG
+dggs_type ISEA3H
+dggs_res_spec 4
+
+# specify the output
+output_cell_label_type OUTPUT_ADDRESS_TYPE
+output_address_type Z3
+cell_output_type KML
+cell_output_file_name outputfiles/z3cells
+point_output_type KML
+point_output_file_name outputfiles/z3points
+densification 0
+precision 6
