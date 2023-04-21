@@ -24,7 +24,7 @@ Build the application dggrid by executing:
     mkdir build                          # Make a directory to compile into
     cd build                             # Switch into build directory
     cmake -DCMAKE_BUILD_TYPE=Release ..  # Prepare to compile
-    make                                 # Build code. 
+    make                                 # Build code.
     make install                         # Optionally install on your machine
 
 cmake will automatically detect where libraries are installed on your machine
@@ -32,7 +32,7 @@ and include them appropriately.
 
 By default cmake will search for `GDAL` and link __DGGRID__ with it if found. If `GDAL` is present on your system and you want to force a build of __DGGRID__ without `GDAL`, call cmake with `-DWITH_GDAL=OFF`.
 
-By default cmake will use the `shapelib` library included with the source code. 
+By default cmake will use the `shapelib` library included with the source code.
 To build using an external system-provided version of `shapelib` execute `cmake`
 with `-DWITH_EXT_SHAPELIB=ON`. To specify a specific directory path to search for
 `shapelib` add `-DSHAPELIB_ROOT_DIR=/..`.
