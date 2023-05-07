@@ -56,7 +56,7 @@ with:
 
     dggrid someMetaFileName.meta
 
-or with either or both of the informational flags:
+and/or with either of the informational flags:
 
     dggrid -v
     dggrid -h
