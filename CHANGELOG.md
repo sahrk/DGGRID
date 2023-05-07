@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 All changes are by Kevin Sahr, unless otherwise noted.
 
+## [7.81] - 2023-05-06
+### Added
+- command-line -v and -h flags
+
 ## [7.8] - 2023-04-21
 ### Fixed
 - several compiler warnings

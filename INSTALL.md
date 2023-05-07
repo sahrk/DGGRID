@@ -56,6 +56,11 @@ with:
 
     dggrid someMetaFileName.meta
 
+or with either or both of the informational flags:
+
+    dggrid -v
+    dggrid -h
+
 See the DGGRID documentation and examples for details of metafile contents.
 
 Building also produces the sample application
