@@ -102,8 +102,82 @@ int main (int argc, char* argv[])
 
    //// parse the command line parameters ////
 
-   DgBase::testArgEqual(argc, argv, 1, string("metaFileName"));
-   string metaFileName(argv[1]);
+   // could have up to 2 flags and a metafile
+   if (argc < 2 || argc > 4) {
+      DgBase::testArgEqual(argc, argv, 1, string("metaFileName"));
+   }
+
+   // if we're here we have a reasonable # of cla's
+   bool flagErr = false;
+   bool hFlag = false;
+   bool vFlag = false;
+   bool hasMetaFile = false;
+   string metaFileName;
+   for (int i = 1; i < argc; i++) {
+      // check if it's a flag
+      if (*argv[i] == '-') {
+         int numFlags = strlen(argv[i]) - 1;
+         if (numFlags == 0 || numFlags > 2) {
+            flagErr = true;
+         } else { // 1 or 2 flags
+
+            if (argv[i][1] == 'h')
+               hFlag = true;
+            else if (argv[i][1] == 'v')
+               vFlag = true;
+            else {
+               flagErr = true;
+               break;
+            }
+
+            if (!flagErr && numFlags > 1) {
+               if (argv[i][2] == 'h')
+                  hFlag = true;
+               else if (argv[i][2] == 'v')
+                  vFlag = true;
+               else {
+                  flagErr = true;
+               }
+            }
+         }
+      } else if (hasMetaFile) { // metafileName already encountered
+         report(string("invalid command line argument ") + string(argv[i]), DgBase::Fatal);
+      } else { // must be the metafileName
+         hasMetaFile = true;
+         metaFileName = string(argv[i]);
+      }
+
+      if (flagErr) {
+         report(string("invalid command line flag ") + string(argv[i]), DgBase::Fatal);
+      }
+   }
+
+   if (hFlag || (hFlag && vFlag)) { // output is currently redundant
+      dgcout << "DGGRID version " << DGGRID_VERSION << " released " << DGGRID_RELEASE_DATE << endl;
+      dgcout << "How to use:" << endl;
+      dgcout << endl;
+      dgcout << "dggrid metafileName" << endl;
+      dgcout << endl;
+      dgcout << "dggrid -v" << endl;
+      dgcout << "dggrid -h" << endl;
+      dgcout << endl;
+      dgcout << "Credits:" << endl;
+      dgcout << "Southern Terra Cognita Laboratory" << endl;
+      dgcout << "website: http://www.discreteglobalgrids.org/" << endl;
+      dgcout << "Kevin Sahr, Director" << endl;
+      dgcout << "http://www.linkedin.com/in/Kevin-Sahr" << endl;
+      dgcout << endl;
+      dgcout << "License: GNU Affero General Public License v3.0" << endl;
+      dgcout << endl;
+      dgcout << "Github development:" << endl;
+      dgcout << "https://github.com/sahrk/DGGRID" << endl;
+   } else if (vFlag) {
+      dgcout << "DGGRID version " << DGGRID_VERSION << " released " << DGGRID_RELEASE_DATE << endl;
+   }
+
+   if (!hasMetaFile)
+      exit(0);
+
 
    //// build and load the parameter list ////
 
