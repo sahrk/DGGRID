@@ -10,7 +10,7 @@ ENV DEBIAN_FRONTEND noninteractive
 ENV DEBCONF_NONINTERACTIVE_SEEN true
 
 # install dependencies
-RUN apt-get update && apt-get install -y build-essential cmake libgdal30 libgdal-dev
+RUN apt-get update && apt-get install -y libgdal30
 
 WORKDIR /code
 
@@ -21,6 +21,7 @@ code:
 build:
   FROM +code
   RUN mkdir build
+  RUN apt-get install -y build-essential cmake libgdal-dev
   RUN cd build && cmake -D CMAKE_BUILD_TYPE=Release ..
   # cache cmake temp files to prevent rebuilding .o files
   # when the .cpp files don't change
@@ -48,7 +49,6 @@ test:
   RUN cd /code/examples/icosahedron && /bin/dggrid icosahedron.meta | tee -a outputfiles/icosahedron.txt
   RUN cd /code/examples/isea4d && /bin/dggrid isea4d.meta | tee -a outputfiles/isea4d.txt 
   RUN cd /code/examples/isea4t && /bin/dggrid isea4t.meta | tee -a outputfiles/isea4t.txt
-
   RUN cd /code/examples/isea7hGen && /bin/dggrid isea7hGen.meta | tee -a outputfiles/isea7hGen.txt
   RUN cd /code/examples/mixedAperture && /bin/dggrid mixedAperture.meta | tee -a outputfiles/mixedAperture.txt
   RUN cd /code/examples/planetRiskGridGen && /bin/dggrid planetRiskGridGen.meta | tee -a outputfiles/planetRiskGridGen.txt
@@ -71,8 +71,15 @@ test:
   RUN cd /code/examples/zTransform && /bin/dggrid zTransform.meta | tee -a outputfiles/zTransform.txt
 
 
-docker:
+docker-local:
   COPY +build/dggrid /bin/dggrid
   ENTRYPOINT ["/bin/dggrid"]
-  SAVE IMAGE  dggrid:dev
+  SAVE IMAGE  dggrid:latest
+
+docker-github:
+  ARG imagetag
+  COPY +build/dggrid /bin/dggrid
+  ENTRYPOINT ["/bin/dggrid"]
+  RUN echo "trying to push to $imagetag"
+  SAVE IMAGE --push ${imagetag}
 
