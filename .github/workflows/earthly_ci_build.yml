@@ -37,4 +37,4 @@ jobs:
           echo VERSION=$VERSION
           # docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
           # docker push $IMAGE_ID:$VERSION
-          earthly +docker-github --imagetag=$IMAGE_ID:$VERSION
+          earthly --push +docker-github --imagetag=$IMAGE_ID:$VERSION
