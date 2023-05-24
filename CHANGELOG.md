@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-All changes are by Kevin Sahr, unless otherwise noted
+All changes are by Kevin Sahr, unless otherwise noted.
 
 ## [7.81] - 2023-05-06
 ### Added
