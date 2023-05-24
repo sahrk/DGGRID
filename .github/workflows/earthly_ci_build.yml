@@ -18,7 +18,7 @@ jobs:
       - name: what version is installed?
         run: earthly --version
       - name: Login to Github Docker Registry
-        run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ github.repository_owner }} --password-stdin
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.repository_owner }} --password-stdin
       - name: run the Earthly +test target
         run: earthly +test
       - name: Push image
