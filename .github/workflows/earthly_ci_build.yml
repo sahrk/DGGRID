@@ -2,7 +2,7 @@ name: DGGRID GitHub Actions CI
 
 on:
   push:
-    branches: [master,win-math]
+    branches: [master,win-math,dev,develop,'patch-','feature-']
   pull_request:
     branches: [master]
 
@@ -17,11 +17,13 @@ jobs:
       - uses: actions/checkout@v2
       - name: what version is installed?
         run: earthly --version
-      - name: Login to Github Docker Registry
+      - name: Login to Github Docker Registry (id not PULL)
+        if: ${{ github.event_name != 'pull_request' }}
         run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ github.repository_owner }} --password-stdin
       - name: run the Earthly +test target
         run: earthly +test
-      - name: Push image
+      - name: Push image (if not PULL)
+        if: ${{ github.event_name != 'pull_request' }}
         run: |
           IMAGE_ID=ghcr.io/${{ github.repository_owner }}/dggrid
 
