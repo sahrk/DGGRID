@@ -2,7 +2,7 @@ name: DGGRID GitHub Actions CI
 
 on:
   push:
-    branches: [master,deva]
+    branches: [master,win-math]
   pull_request:
     branches: [master]
 
