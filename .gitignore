@@ -58,3 +58,5 @@ junk
 .DS_Store
 .gdb_history
 
+.idea/
+cmake-build-debug/
