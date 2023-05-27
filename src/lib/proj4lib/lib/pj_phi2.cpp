@@ -4,6 +4,9 @@
 #endif
 #include "proj4.h"
 
+#define _USE_MATH_DEFINES
+#include <math.h>
+
 #define TOL 1.0e-10
 #define N_ITER 15
 
