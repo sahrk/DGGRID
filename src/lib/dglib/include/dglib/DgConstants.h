@@ -30,6 +30,9 @@
 #ifndef DGCONSTANTS_H
 #define DGCONSTANTS_H
 
+#define _USE_MATH_DEFINES
+#include <math.h>
+
 /* precise 12 digits after dec pt */
 constexpr long double M_EPSILON =   0.00000000000050000000000000000000000000000L;
 constexpr long double M_ZERO =      0.00000000000000000000000000000000000000000L;
