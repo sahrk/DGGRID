@@ -25,7 +25,8 @@
 #include <cmath>
 #include <climits>
 #include <cfloat>
-#include <inttypes.h>
+// #include <inttypes.h>
+#include <cinttypes>
 
 #include <dglib/DgZ3RF.h>
 #include <dglib/DgZ3StringRF.h>
