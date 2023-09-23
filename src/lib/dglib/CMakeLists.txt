@@ -17,6 +17,8 @@ add_library(dglib
   lib/DgCell.cpp
   lib/DgColor.cpp
   lib/DgConverterBase.cpp
+  lib/DgDataFieldBase.cpp
+  lib/DgDataList.cpp
   lib/DgDiscRF.hpp
   lib/DgDiscRFS2D.cpp
   lib/DgDiscRFS.hpp
@@ -49,7 +51,8 @@ add_library(dglib
   lib/DgIDGGS.cpp
   lib/DgIDGGutil.cpp
   lib/DgInAIGenFile.cpp
-  lib/DgInGDALFile.cpp
+  lib/DgInGdalFile.cpp
+  lib/DgInLocStreamFile.cpp
   lib/DgInLocTextFile.cpp
   lib/DgInputStream.cpp
   lib/DgInShapefileAtt.cpp
@@ -74,7 +77,6 @@ add_library(dglib
   lib/DgOutputStream.cpp
   lib/DgOutRandPtsText.cpp
   lib/DgOutShapefile.cpp
-  lib/DgParamList.cpp
   lib/DgPhysicalRF2D.hpp
   lib/DgPhysicalRFBase.hpp
   lib/DgPhysicalRF.hpp

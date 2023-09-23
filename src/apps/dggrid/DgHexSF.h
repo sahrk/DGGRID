@@ -1,5 +1,5 @@
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -30,14 +30,18 @@
 #include <string>
 #include <iostream>
 #include <dglib/DgIVec3D.h>
+#include "SubOpGen.h"
 
 using namespace std;
 
+class MainParam;
 class GridGenParam;
 class DgIDGGSBase;
 class DgIDGGBase;
 class DgContCartRF;
 class DgEvalData;
+
+struct OpBasic;
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgHexSF {
@@ -55,23 +59,23 @@ class DgHexSF {
       static const string cs3rE;
       static const string cs3rF;
 
-      DgHexSF (void)
+      DgHexSF (SubOpGen& _genOp)
          : type_ ('A'), res_ (0), ijkCoord_(0, 0, 0), classI_ (true),
-           quadNum_ (0) { }
+           quadNum_ (0), op_ (_genOp.op), genOp_ (_genOp) { }
 
       DgHexSF (const DgHexSF& h)
          : type_ (h.type_), res_ (h.res_), ijkCoord_(0, 0, 0), classI_ (true),
-           quadNum_ (h.quadNum_) { }
+           quadNum_ (h.quadNum_), op_ (h.op_), genOp_ (h.genOp_) { }
 
-      DgHexSF (const DgIVec3D& ijk, int res = 0, bool classI = true,
+      DgHexSF (SubOpGen& _genOp, const DgIVec3D& ijk, int res = 0, bool classI = true,
                int quadNum = 0)
          : type_ ('A'), res_ (res), ijkCoord_ (ijk), classI_ (classI),
-           quadNum_ (quadNum) { }
+           quadNum_ (quadNum), op_ (_genOp.op), genOp_ (_genOp) { }
 
-      DgHexSF (int i, int j, int k, int res = 0, bool classI = true,
+      DgHexSF (SubOpGen& _genOp, int i, int j, int k, int res = 0, bool classI = true,
                int quadNum = 0)
          : type_ ('A'), res_ (res), ijkCoord_ (i, j, k), classI_ (classI),
-           quadNum_ (quadNum) { }
+           quadNum_ (quadNum), op_ (_genOp.op), genOp_ (_genOp) { }
 
      ~DgHexSF (void) { }
 
@@ -95,6 +99,9 @@ class DgHexSF {
       void setSfNdx    (string sfNdx)      { sfNdx_ = sfNdx; }
       void setQuadNum  (int quadNum)       { quadNum_ = quadNum; }
 
+      OpBasic&  op    (void) { return op_; }
+      SubOpGen& genOp (void) { return genOp_; }
+
       string cpiNdx (void) const;
 
       void addSf3Digit (int digit);
@@ -109,11 +116,11 @@ class DgHexSF {
       bool operator!= (const DgHexSF& h) const
             { return !operator==(h); }
 
-      unsigned long long int depthFirstTraversal (GridGenParam& dp,
-                  const DgIDGGSBase& dggs, const DgIDGGBase& dgg,
-                  const DgContCartRF& deg, int numAp4Res, DgEvalData* ed = NULL);
+      unsigned long long int depthFirstTraversal (const DgIDGGSBase& dggs,
+                  const DgIDGGBase& dgg, const DgContCartRF& deg, int numAp4Res,
+                  DgEvalData* ed = NULL);
 
-      unsigned long long int visitMe (GridGenParam& dp, const DgIDGGSBase& dggs,
+      unsigned long long int visitMe (const DgIDGGSBase& dggs,
                   const DgIDGGBase& dgg, const DgContCartRF& deg, DgEvalData* ed);
 
       DgHexSF downAp4 (void);
@@ -133,6 +140,9 @@ class DgHexSF {
       string ciNdx_;
       string sfNdx_;
       int quadNum_;
+
+      OpBasic& op_;
+      SubOpGen& genOp_;
 };
 
 ////////////////////////////////////////////////////////////////////////////////

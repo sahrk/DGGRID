@@ -1,5 +1,5 @@
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -28,6 +28,7 @@
 #include <dglib/DgAddressBase.h>
 #include <dglib/DgLocBase.h>
 #include <dglib/DgRFBase.h>
+#include <dglib/DgDataList.h>
 
 #include <iostream>
 #include <string>
@@ -35,6 +36,7 @@
 using namespace std;
 
 class DgDistanceBase;
+class DgDataList;
 class NuCell;
 class NuCellVector;
 
@@ -109,6 +111,47 @@ class DgLocation : public DgLocBase {
    template<class A, class D> friend class DgRF;
    template<class A, class B, class DB> friend class DgBoundedRF;
 
+};
+
+////////////////////////////////////////////////////////////////////////////////
+class DgLocationData : public DgLocation {
+
+   public:
+
+      DgLocationData (void) : dataList_ (nullptr) { }
+
+      DgLocationData (const DgRFBase& rfIn, DgDataList* _dataList = nullptr)
+         : DgLocation (rfIn), dataList_ (_dataList) { }
+
+      DgLocationData (const DgLocation& loc, DgDataList* _dataList = nullptr)
+         : DgLocation (loc), dataList_ (_dataList) { }
+
+     ~DgLocationData (void);
+
+      virtual string asString (void) const
+               {
+                 std::stringstream ss;
+                 ss << DgLocation::asString();
+                 if (dataList_) ss << ":" << *dataList_;
+                 return ss.str();
+               }
+
+      virtual string asString (char delimiter) const
+               {
+                 std::stringstream ss;
+                 ss << DgLocation::asString(delimiter);
+                 if (dataList_) ss << ":" << *dataList_;
+                 return ss.str();
+               }
+
+      DgDataList* dataList (void) { return dataList_; }
+      const DgDataList* dataList (void) const { return dataList_; }
+
+      void setDataList (DgDataList* _dataList) { dataList_ = _dataList; }
+
+   private:
+
+      DgDataList* dataList_;
 };
 
 ////////////////////////////////////////////////////////////////////////////////

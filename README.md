@@ -2,7 +2,7 @@
 
 ## General Information
 
-__DGGRID__ version 7.8 released April 21, 2023  
+__DGGRID__ version 8.0b released October 1, 2023
 __Southern Terra Cognita Laboratory__  
 www.discreteglobalgrids.org  
 [Kevin Sahr](http://www.linkedin.com/in/Kevin-Sahr), Director
@@ -43,7 +43,7 @@ The original __DGGRID__ specifications were developed by (in alphabetical order)
 A. Ross Kiester, Tony Olsen, Barbara Rosenbaum, Kevin Sahr, Ann Whelan, and
 Denis White.
 
-__DGGRID__ was made possible in part by funding from the __US Environmental Protection Agency__, __PlanetRisk, Inc.__, __Culmen International__, __the Ruhr-University Bochum/GeoInsight Project__, and the __Turtle Conservancy__.
+__DGGRID__ was made possible in part by funding from the __US Environmental Protection Agency__, __PlanetRisk, Inc.__, __Culmen International__, __the Ruhr-University Bochum/GeoInsight Project__, __Turtle Conservancy__, and the __University of Tartu Landscape Geoinformatics Lab__.
 
 ## Dependencies
 

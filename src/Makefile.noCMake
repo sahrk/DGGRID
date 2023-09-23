@@ -2,9 +2,10 @@ include ./MakeIncludes.noCMake
 DGGRID_DIR := ./apps/dggrid
 APPEX_DIR := ./apps/appex
 DG_DIR := ./lib/dglib
+DGAP_DIR := ./lib/dgaplib
 SHP_DIR := ./lib/shapelib
 PROJ4_DIR := ./lib/proj4lib
-LIB_DIRS := $(DG_DIR)/lib $(SHP_DIR)/lib $(PROJ4_DIR)/lib
+LIB_DIRS := $(DG_DIR)/lib $(DGAP_DIR)/lib $(SHP_DIR)/lib $(PROJ4_DIR)/lib
 
 .PHONY: all $(DGGRID_DIR) $(LIB_DIRS)
 
@@ -21,3 +22,4 @@ clean:
 	cd $(SHP_DIR)/lib; $(DOMAKE) clean
 	cd $(PROJ4_DIR)/lib; $(DOMAKE) clean
 	cd $(DG_DIR)/lib; $(DOMAKE) clean
+	cd $(DGAP_DIR)/lib; $(DOMAKE) clean

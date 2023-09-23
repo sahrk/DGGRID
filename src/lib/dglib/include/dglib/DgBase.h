@@ -1,5 +1,5 @@
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -20,9 +20,6 @@
 //
 // DgBase.h: DgBase class definitions
 //
-// Version 7.0 - Kevin Sahr, 11/15/14
-// Version 6.1 - Kevin Sahr, 5/23/13
-//
 ////////////////////////////////////////////////////////////////////////////////
 
 #ifndef DGBASE_H
@@ -34,8 +31,8 @@
 using namespace std;
 
 #define DGDEBUG             0
-#define DGGRID_VERSION      "7.8"
-#define DGGRID_RELEASE_DATE "April 21, 2023"
+#define DGGRID_VERSION      "8.0b"
+#define DGGRID_RELEASE_DATE "October 1, 2023"
 
 // adapted from stackoverflow user Pierre
 #define WHERE fprintf(stderr,"[LOG]%s:%s#%d\n",__PRETTY_FUNCTION__,__FILE__,__LINE__);

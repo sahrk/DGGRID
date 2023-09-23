@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 3.9)
 
 project (dggrid
-  VERSION 7.8
+  VERSION 8.0
   LANGUAGES C CXX
 )
 
@@ -31,6 +31,7 @@ else()
 endif()
 
 add_subdirectory(src/lib/dglib)
+add_subdirectory(src/lib/dgaplib)
 add_subdirectory(src/lib/proj4lib)
 # add_subdirectory(src/lib/shapelib)
 

@@ -2,7 +2,6 @@
 #ifndef lint
 //static const char SCCSID[]="@(#)pj_tsfn.c	4.3	93/06/12	GIE	REL";
 #endif
-#define _USE_MATH_DEFINES
 #include <math.h>
 	long double
 pj_tsfn(long double phi, long double sinphi, long double e) {

@@ -3,6 +3,18 @@ All notable changes to this project will be documented in this file.
 
 All changes are by Kevin Sahr, unless otherwise noted.
 
+## [8.0b] - 2023-10-01
+### Added
+- dgaplib glue library for dglib application development
+- example multipleOrientations to demonstrate/test creating multiple random grid placements
+- new version 8 examples binpresV8, binvalsV8, genPtsV8, and transformV8.
+### Changed
+- complete re-architecture of DGGRID application to use dgaplib approach
+- all operations now use complete cell output infrastructure previously used by GENERATE_GRID.
+- added operation GENERATE_GRID_FROM_POINTS
+- operations GENERATE_GRID_FROM_POINTS, BIN_POINT_VALS, and BIN_POINT_PRESENCE can use GDAL file input
+- see new V8 examples for new parameter information
+
 ## [7.81] - 2023-05-06
 ### Added
 - command-line -v and -h flags

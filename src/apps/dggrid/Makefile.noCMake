@@ -4,13 +4,15 @@ OBJS = $(SRCS:.cpp=.o)
 DEPS = $(SRCS:.cpp=.depends)
 include ../../MakeIncludes.noCMake
 DGLIBDIR = ../../lib/dglib
+DGAPLIBDIR = ../../lib/dgaplib
 SHPLIBDIR = ../../lib/shapelib
 PROJ4LIBDIR = ../../lib/proj4lib
 NULIBDIR = ../../lib/nulib
-INCDIRS = -I$(DGLIBDIR)/include -I$(SHPLIBDIR)/include  -I$(SHPLIBDIR)/include/shapelib \
+INCDIRS = -I$(DGLIBDIR)/include -I$(DGAPLIBDIR)/include -I$(SHPLIBDIR)/include  -I$(SHPLIBDIR)/include/shapelib \
    -I$(PROJ4LIBDIR)/include $(ADD_INC_DIRS)
 CCFLAGS  = ${INCDIRS} ${ADD_CPP_FLAGS} 
 LDLIBS= $(DGLIBDIR)/lib/dglib.a \
+        $(DGAPLIBDIR)/lib/dgaplib.a \
         $(SHPLIBDIR)/lib/shapelib.a \
         $(PROJ4LIBDIR)/lib/proj4lib.a ${ADD_LD_LIBS}
 
@@ -34,6 +36,7 @@ $(LDLIBS):
 	cd $(SHPLIBDIR)/lib; ${DOMAKE}
 	cd $(PROJ4LIBDIR)/lib; ${DOMAKE}
 	cd $(DGLIBDIR)/lib; ${DOMAKE}
+	cd $(DGAPLIBDIR)/lib; ${DOMAKE}
 
 clean:
 	rm -rf $(OBJS) $(DEPS) ${TARGET} core ti_files ii_files

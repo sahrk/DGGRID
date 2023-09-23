@@ -1,5 +1,5 @@
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -73,7 +73,8 @@ DgOutAIGenFile::insert (const DgDVec2D& pt)
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutAIGenFile::insert (DgLocation& loc, const string* label)
+DgOutAIGenFile::insert (DgLocation& loc, const string* label,
+                  const DgDataList* /* dataList */)
 //
 // Put the point loc.
 //
@@ -96,7 +97,8 @@ DgOutAIGenFile::insert (DgLocation& loc, const string* label)
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
 DgOutAIGenFile::insert (DgLocVector& vec, const string* label,
-                     const DgLocation* cent)
+                     const DgLocation* cent,
+                  const DgDataList* /* dataList */)
 //
 // Put the polyline vec.
 //
@@ -133,7 +135,8 @@ DgOutAIGenFile::insert (DgLocVector& vec, const string* label,
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
 DgOutAIGenFile::insert (DgPolygon& poly, const string* label,
-                     const DgLocation* cent)
+                     const DgLocation* cent,
+                     const DgDataList* /* dataList */)
 //
 // Put the polygon poly.
 //

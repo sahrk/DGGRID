@@ -1,5 +1,5 @@
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -614,9 +614,9 @@ operator<< (ostream& stream, const DgGridStats& gs)
 
   stream << "DGG Statistics (calculated in projection space):\n";
   stream << " total #cells: " << dgg::util::addCommas(gs.nCells()) << "\n";
-  stream << " intercell distance: "
+  stream << " approximate intercell distance: "
          << dgg::util::addCommas(gs.cellDistKM(), prec) << " km\n";
-  stream << " cell area: "
+  stream << " average hex cell area: "
          << dgg::util::addCommas(gs.cellAreaKM(), prec) << " km^2\n";
   stream << " characteristic length scale: "
          << dgg::util::addCommas(gs.cls(), prec) << " km" << endl;

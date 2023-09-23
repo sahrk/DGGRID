@@ -1,5 +1,5 @@
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -29,9 +29,6 @@
 
 #ifndef DGCONSTANTS_H
 #define DGCONSTANTS_H
-
-#define _USE_MATH_DEFINES
-#include <math.h>
 
 /* precise 12 digits after dec pt */
 constexpr long double M_EPSILON =   0.00000000000050000000000000000000000000000L;

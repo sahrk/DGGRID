@@ -1,5 +1,5 @@
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -71,7 +71,8 @@ DgOutPtsText::insert (const DgDVec2D& pt)
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutPtsText::insert (DgLocation& loc, const string* label)
+DgOutPtsText::insert (DgLocation& loc, const string* label,
+                  const DgDataList* /* dataList */)
 //
 // Put the point loc.
 //
@@ -93,7 +94,8 @@ DgOutPtsText::insert (DgLocation& loc, const string* label)
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutPtsText::insert (DgLocVector&, const string*, const DgLocation*)
+DgOutPtsText::insert (DgLocVector&, const string*, const DgLocation*,
+                  const DgDataList*)
 //
 // Put the polyline vec.
 //
@@ -107,7 +109,8 @@ DgOutPtsText::insert (DgLocVector&, const string*, const DgLocation*)
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutPtsText::insert (DgPolygon&, const string*, const DgLocation*)
+DgOutPtsText::insert (DgPolygon&, const string*, const DgLocation*,
+                  const DgDataList*)
 //
 // Put the polygon poly.
 //

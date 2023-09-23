@@ -1,6 +1,6 @@
 {
 "type": "FeatureCollection",
-"name": "outputfiles\/points.geojson",
+"name": "points.geojson",
 "features": [
 { "type": "Feature", "properties": { "name": "1" }, "geometry": { "type": "Point", "coordinates": [ 11.250000000628775, 58.282525589545017 ] } },
 { "type": "Feature", "properties": { "name": "2" }, "geometry": { "type": "Point", "coordinates": [ -168.749999995427913, 58.282525583136795 ] } },

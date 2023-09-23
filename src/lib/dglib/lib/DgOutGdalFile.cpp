@@ -1,5 +1,5 @@
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -67,22 +67,29 @@ DgOutGdalFile::~DgOutGdalFile()
 
 ////////////////////////////////////////////////////////////////////////////////
 void
-DgOutGdalFile::init (bool outputPoint, bool outputRegion, bool outputNeighbors,
-                      bool outputChildren)
+DgOutGdalFile::init (bool outputPoint, bool outputRegion,
+                     bool outputNeighbors, bool outputChildren,
+                     const DgDataList* dataList)
 {
    fileNameOnly_ = DgOutLocFile::fileName();
 
-   GDALAllRegister();
+   //GDALAllRegister();
+//const char* path = "C:/Test/test.shp";
+   OGRRegisterAll();
+//OGRDataSource *hDS;
+//OGRSFDriver *driver;
+   OGRSFDriverRegistrar *registrar =  OGRSFDriverRegistrar::GetRegistrar();
 
-   delete _driver;
-   _driver = GetGDALDriverManager()->GetDriverByName(_gdalDriver.c_str());
+   _driver = registrar->GetDriverByName(_gdalDriver.c_str());
    if (_driver == NULL)
         ::report( _gdalDriver + " driver not available.",  DgBase::Fatal);
 
-   delete _dataset;
-   _dataset = _driver->Create( fileNameOnly_.c_str(), 0, 0, 0, GDT_Unknown, NULL );
+//GDALDataset *poDS;
+
+   _dataset = _driver->Create(fileNameOnly_.c_str(), 0, 0, 0, GDT_Unknown, NULL );
    if (_dataset == NULL)
-      ::report( "Creation of output file failed.", DgBase::Fatal );
+      ::report( "Creation of output file '" + fileNameOnly_ + "' failed.",
+          DgBase::Fatal );
 
    delete _oLayer;
    _oLayer = NULL;
@@ -108,7 +115,9 @@ DgOutGdalFile::init (bool outputPoint, bool outputRegion, bool outputNeighbors,
       default:
          ::report( "Invalid GDAL file mode.", DgBase::Fatal );
    }
-   _oLayer = _dataset->CreateLayer( fileNameOnly_.c_str(), NULL, geomType, NULL );
+
+   string baseName = dgg::util::baseName(fileNameOnly_);
+   _oLayer = _dataset->CreateLayer(baseName.c_str(), NULL, geomType, NULL );
    if (_oLayer == NULL)
       ::report( "Layer creation failed.", DgBase::Fatal );
 
@@ -119,6 +128,11 @@ DgOutGdalFile::init (bool outputPoint, bool outputRegion, bool outputNeighbors,
       ::report("Creating name field failed.", DgBase::Fatal );
    delete fldDfn;
    fldDfn = NULL;
+
+   // create the data fields
+   if (dataList) {
+      dataList->createFields(_oLayer);
+   }
 
    if (outputNeighbors) {
       fldDfn = new OGRFieldDefn( "neighbors", OFTStringList );
@@ -202,7 +216,7 @@ DgOutGdalFile::insert (const DgIDGGBase& dgg, DgCell& cell,
       ::report("invalid GDAL output file mode encountered.", DgBase::Fatal);
 
    if (!_oLayer)
-      init(outputPoint, outputRegion, neighbors, children);
+      init(outputPoint, outputRegion, neighbors, children, cell.dataList());
 
    // first build the geometry
 
@@ -210,6 +224,11 @@ DgOutGdalFile::insert (const DgIDGGBase& dgg, DgCell& cell,
 
    // create the named feature
    OGRFeature *feature = createFeature(cell.label());
+
+   // set the data fields
+   if (cell.dataList()) {
+      cell.dataList()->setFields(feature);
+   }
 
    // determine the geometry
 
@@ -291,7 +310,7 @@ DgOutGdalFile::createPolygon (const DgPolygon& poly)
    polygon->addRingDirectly(linearRing);
 
    // add any holes
-   for (long long int i = 0; i < poly.holes().size(); i++) {
+   for (unsigned long int i = 0; i < poly.holes().size(); i++) {
       OGRLinearRing* hole = createLinearRing(*poly.holes()[i]);
       polygon->addRingDirectly(hole);
    }
@@ -329,16 +348,22 @@ DgOutGdalFile::addFeature (OGRFeature *feature) {
 
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutGdalFile::insert (DgLocation& loc, const string* label)
+DgOutGdalFile::insert (DgLocation& loc, const string* label,
+                  const DgDataList* dataList)
 {
    if (_mode != Point)
       ::report( "invalid GDAL output file mode encountered.", DgBase::Fatal );
 
    if (!_oLayer)
-      init(true, false);
+      init(true, false, false, false, dataList);
 
    // create the feature
    OGRFeature *feature = createFeature(*label);
+
+   // set the data fields
+   if (dataList) {
+      dataList->setFields(feature);
+   }
 
    OGRPoint* oPt = createPoint(loc);
    feature->SetGeometry(oPt);
@@ -350,7 +375,8 @@ DgOutGdalFile::insert (DgLocation& loc, const string* label)
 
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutGdalFile::insert (DgLocVector&, const string*, const DgLocation*)
+DgOutGdalFile::insert (DgLocVector&, const string*, const DgLocation*,
+                  const DgDataList*)
 {
    ::report( "polyline output not supported for GDAL file output", DgBase::Fatal );
    return *this;
@@ -359,17 +385,24 @@ DgOutGdalFile::insert (DgLocVector&, const string*, const DgLocation*)
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
 DgOutGdalFile::insert (DgPolygon& poly, const string* label,
-                          const DgLocation* /* cent */)
+                  const DgLocation* /* cent */,
+                  const DgDataList* dataList)
 {
    if (_mode != Polygon)
       ::report( "invalid GDAL output file mode encountered.", DgBase::Fatal );
 
    if (!_oLayer)
-      init(false, true);
+      init(false, true, false, false, dataList);
 
    OGRPolygon* polygon = createPolygon(poly);
 
    OGRFeature *feature = createFeature(*label);
+
+   // set the data fields
+   if (dataList) {
+      dataList->setFields(feature);
+   }
+
    feature->SetGeometry(polygon);
 
    addFeature(feature);

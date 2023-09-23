@@ -1,5 +1,5 @@
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -39,6 +39,7 @@ class DgCell;
 class DgRFBase;
 class DgDVec2D;
 class DgIDGGBase;
+class DgDataList;
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgOutLocFile : public DgBase {
@@ -96,13 +97,16 @@ class DgOutLocFile : public DgBase {
 
       // abstract virtual methods
       virtual DgOutLocFile& insert (DgLocation& loc,
-                                const string* label = NULL) = 0;
+                                const string* label = nullptr,
+                                const DgDataList* dataList = nullptr) = 0;
 
-      virtual DgOutLocFile& insert (DgLocVector& vec, const string* label = NULL,
-                                const DgLocation* cent = NULL) = 0;
+      virtual DgOutLocFile& insert (DgLocVector& vec, const string* label = nullptr,
+                                const DgLocation* cent = nullptr,
+                                const DgDataList* dataList = nullptr) = 0;
 
-      virtual DgOutLocFile& insert (DgPolygon& poly, const string* label = NULL,
-                                const DgLocation* cent = NULL) = 0;
+      virtual DgOutLocFile& insert (DgPolygon& poly, const string* label = nullptr,
+                                const DgLocation* cent = nullptr,
+                                const DgDataList* dataList = nullptr) = 0;
 
    protected:
 

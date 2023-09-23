@@ -1,5 +1,5 @@
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -165,7 +165,8 @@ DgOutKMLfile::insert(const DgDVec2D& pt)
 }
 
 DgOutLocFile&
-DgOutKMLfile::insert (DgLocation& loc, const string* label)
+DgOutKMLfile::insert (DgLocation& loc, const string* label,
+                  const DgDataList* /* dataList */)
 {
    DgOutKMLfile& o(*this);
 
@@ -189,7 +190,8 @@ DgOutKMLfile::insert (DgLocation& loc, const string* label)
 }
 
 DgOutLocFile&
-DgOutKMLfile::insert (DgLocVector& vec, const string* label, const DgLocation* /* cent */)
+DgOutKMLfile::insert (DgLocVector& vec, const string* label, const DgLocation* /* cent */,
+                  const DgDataList* /* dataList */)
 {
    DgOutKMLfile& o(*this);
 
@@ -219,7 +221,8 @@ DgOutKMLfile::insert (DgLocVector& vec, const string* label, const DgLocation* /
 }
 
 DgOutLocFile&
-DgOutKMLfile::insert (DgPolygon& poly, const string* label, const DgLocation* /* cent */)
+DgOutKMLfile::insert (DgPolygon& poly, const string* label, const DgLocation* /* cent */,
+                         const DgDataList* /* dataList */)
 {
    DgOutKMLfile& o(*this);
 

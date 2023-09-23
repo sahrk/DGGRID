@@ -1,5 +1,5 @@
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -147,8 +147,7 @@ DgInShapefile::extract (DgLocVector& vec)
 //
 ////////////////////////////////////////////////////////////////////////////////
 {
-   if (!isPointFile())
-   {
+   if (!isPointFile()) {
       report("DgInShapefile::extract() not implemented for polylines.",
           failLevel());
 
@@ -211,21 +210,6 @@ DgInShapefile::extract (DgPolygon& poly)
          poly.addressVec().push_back(add); // polygon should delete when done
       }
    }
-
-   return *this;
-
-} // DgInShapefile& DgInShapefile::extract
-
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-DgInLocFile&
-DgInShapefile::extract (DgCell&)
-//
-// Get the next cell from me and put it in cell.
-//
-////////////////////////////////////////////////////////////////////////////////
-{
-   report("DgInShapefile::extract() not implemented for cells.", failLevel());
 
    return *this;
 

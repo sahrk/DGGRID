@@ -1,5 +1,5 @@
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -67,7 +67,6 @@ class DgInShapefile : public DgInLocFile {
       virtual DgInLocFile& extract (DgLocVector& vec);
       virtual DgInLocFile& extract (DgPolygon&   poly);
       virtual DgInLocFile& extract (DgLocation&  loc);
-      virtual DgInLocFile& extract (DgCell&      cell);
 
       const DgGeoSphRF& geoRF (void) const { return geoRF_; }
 
@@ -87,6 +86,7 @@ class DgInShapefile : public DgInLocFile {
       bool isEOF_;
 };
 
+/*
 inline DgInLocFile& operator>> (DgInShapefile& input, DgLocList& list)
               { return input.extract(list); }
 
@@ -101,6 +101,7 @@ inline DgInLocFile& operator>> (DgInShapefile& input, DgLocation& loc)
 
 inline DgInLocFile& operator>> (DgInShapefile& input, DgCell& cell)
               { return input.extract(cell); }
+*/
 
 ////////////////////////////////////////////////////////////////////////////////
 

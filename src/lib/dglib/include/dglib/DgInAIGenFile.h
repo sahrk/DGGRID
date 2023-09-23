@@ -1,5 +1,5 @@
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -25,12 +25,12 @@
 #ifndef DGINAIGENFILE_H
 #define DGINAIGENFILE_H
 
-#include "DgInLocTextFile.h"
+#include "DgInLocStreamFile.h"
 
 class DgPolygon;
 
 ////////////////////////////////////////////////////////////////////////////////
-class DgInAIGenFile : public DgInLocTextFile {
+class DgInAIGenFile : public DgInLocStreamFile {
 
    public:
 

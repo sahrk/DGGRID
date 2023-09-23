@@ -1,5 +1,5 @@
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -47,11 +47,17 @@ class DgOutAIGenFile : public DgOutLocTextFile {
 
       virtual void close (void) { *this << "END" << endl; ofstream::close(); }
 
-      virtual DgOutLocFile& insert (DgLocation& loc, const string* label = NULL);
-      virtual DgOutLocFile& insert (DgLocVector& vec, const string* label = NULL,
-                                const DgLocation* cent = NULL);
-      virtual DgOutLocFile& insert (DgPolygon& poly, const string* label = NULL,
-                                const DgLocation* cent = NULL);
+      virtual DgOutLocFile& insert (DgLocation& loc, const string* label = nullptr,
+                                const DgDataList* dataList = nullptr);
+
+      virtual DgOutLocFile& insert (DgLocVector& vec, const string* label = nullptr,
+                                const DgLocation* cent = nullptr,
+                                const DgDataList* dataList = nullptr);
+
+      virtual DgOutLocFile& insert (DgPolygon& poly, const string* label = nullptr,
+                                const DgLocation* cent = nullptr,
+                                const DgDataList* dataList = nullptr);
+
 
    protected:
 

@@ -30,6 +30,6 @@ input_delimiter " "
 output_file_name outputfiles/popclass3h7.txt
 output_address_type SEQNUM
 output_delimiter ","
-output_count TRUE
+output_num_classes TRUE
 cell_output_control OUTPUT_OCCUPIED
 

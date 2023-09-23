@@ -1,5 +1,5 @@
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -26,10 +26,9 @@
 
 #include <ctype.h>
 #include <dglib/DgBase.h>
-#include "DgHexSF.h"
-#include "dggrid.h"
 #include <dglib/DgIDGGBase.h>
-#include "gridgen.h"
+#include "DgHexSF.h"
+#include "OpBasic.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -39,15 +38,15 @@ const string DgHexSF::all = "AAAAAAA7";
 const string DgHexSF::cs4 = "A1A3B5B7";
 const string DgHexSF::cs3A = "A123F5D7";
 const string DgHexSF::cs3B = "E123C5B7";
-const string DgHexSF::cs3rA = "A123B5B7";
-const string DgHexSF::cs3rB = "A123BA67";
+const string DgHexSF::cs3rA = "A123B5B7"; const string DgHexSF::cs3rB = "A123BA67";
 const string DgHexSF::cs3rC = "BA234B67";
 const string DgHexSF::cs3rD = "BA2A4567";
 const string DgHexSF::cs3rE = "B1BA4567";
 const string DgHexSF::cs3rF = "A1A345B7";
 
+////////////////////////////////////////////////////////////////////////////////
 unsigned long long int
-DgHexSF::visitMe (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& dgg,
+DgHexSF::visitMe (const DgIDGGSBase& dggs, const DgIDGGBase& dgg,
                   const DgContCartRF& deg, DgEvalData* ed)
 {
    DgIVec2D coord2d;
@@ -59,9 +58,9 @@ DgHexSF::visitMe (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& d
 //cout << "Visiting: " << coord2d << endl;
 
    bool accepted = false;
-   dp.nCellsTested++;
+   op().outOp.nCellsTested++;
 
-   if (dp.wholeEarth)
+   if (genOp().wholeEarth)
       accepted = true;
    else
    {
@@ -73,42 +72,42 @@ DgHexSF::visitMe (GridGenParam& dp, const DgIDGGSBase& dggs, const DgIDGGBase& d
          {
             accepted = true;
             ed->overageSet.erase(it);
-            if (dp.megaVerbose)
+            if (op().mainOp.megaVerbose)
                dgcout << "found OVERAGE coord " << coord2d << endl;
          }
       }
 
       if (!accepted)
-         accepted = ::evalCell(ed, coord2d);
+         accepted = genOp().evalCell(ed, coord2d);
    }
 
    if (accepted)
    {
-      dp.nCellsAccepted++;
+      op().outOp.nCellsAccepted++;
 /*
 cout << "accepted: " << quadNum_ << " " << coord2d
      << " " << superFundIndex() << endl;
 */
       DgLocation* addLoc = dgg.makeLocation(DgQ2DICoord(quadNum_, coord2d));
 
-      DgPolygon verts(dgg);
-      dgg.setVertices(*addLoc, verts, dp.nDensify);
-
-      ::outputCell(dp, dggs, dgg, *addLoc, verts, deg, superFundIndex());
+      string label = superFundIndex();
+      op().outOp.outputCellAdd2D(*addLoc, &label);
 
       delete addLoc;
    }
 
-   outputStatus(dp);
+   genOp().outputStatus();
 
-   if (dp.megaVerbose)
+   if (op().mainOp.megaVerbose)
       dgcout << coord2d << " " << ciNdx_ << " " << sfNdx_ << endl;
 
    return 1;
-}
 
+} // unsigned long long int DgHexSF::visitMe
+
+////////////////////////////////////////////////////////////////////////////////
 unsigned long long int
-DgHexSF::depthFirstTraversal (GridGenParam& dp, const DgIDGGSBase& dggs,
+DgHexSF::depthFirstTraversal (const DgIDGGSBase& dggs,
        const DgIDGGBase& dgg, const DgContCartRF& deg, int numAp4Res,
        DgEvalData* ed)
 {
@@ -118,7 +117,7 @@ cout << "depthFirstTrav res: " << res_
 */
 
    if (res_ == dgg.res())
-      return visitMe(dp, dggs, dgg, deg, ed);
+      return visitMe(dggs, dgg, deg, ed);
 
    // otherwise recursively descend
 
@@ -132,12 +131,12 @@ cout << "depthFirstTrav res: " << res_
       aperture = 3;
       if (numAp3 % 2) childClassI = false;
    }
-   DgHexSF center;
+   DgHexSF center(genOp_);
 
    unsigned long long int numAccepted = 0;
    if (quadNum_ == 0 || quadNum_ == 11) // only one child
    {
-      center = DgHexSF(0, 0, 0, childRes);
+      center = DgHexSF(genOp_, 0, 0, 0, childRes);
       center.classI_ = childClassI;
       center.type_ = type_; // singleton pentagon
       center.quadNum_ = quadNum_;
@@ -150,7 +149,7 @@ cout << "depthFirstTrav res: " << res_
          center.addSf3Digit(startSFDigit);
       }
 
-      numAccepted = center.depthFirstTraversal(dp, dggs, dgg, deg, numAp4Res, ed);
+      numAccepted = center.depthFirstTraversal(dggs, dgg, deg, numAp4Res, ed);
    }
    else // quadNum 1-10
    {
@@ -264,7 +263,7 @@ cout << "depthFirstTrav res: " << res_
       }
 
       numAccepted =
-            center.depthFirstTraversal(dp, dggs, dgg, deg, numAp4Res, ed);
+            center.depthFirstTraversal(dggs, dgg, deg, numAp4Res, ed);
 
       int sfDigit = startSFDigit + 1;
       for (int d = 1; d < 8; d++)
@@ -285,15 +284,16 @@ cout << "depthFirstTrav res: " << res_
                h.addSf3Digit(sfDigit);
             }
 
-            numAccepted += h.depthFirstTraversal(dp, dggs, dgg, deg, numAp4Res, ed);
+            numAccepted += h.depthFirstTraversal(dggs, dgg, deg, numAp4Res, ed);
             sfDigit++;
          }
       } // else quad 1-10
    }
 
    return numAccepted;
-}
+} // unsigned long long int DgHexSF::depthFirstTraversal
 
+////////////////////////////////////////////////////////////////////////////////
 DgHexSF
 DgHexSF::downAp4 (void)
 {
@@ -303,9 +303,10 @@ DgHexSF::downAp4 (void)
    j = (int) ijkCoord_.j() * 2;
    k = (int) ijkCoord_.k() * 2;
 
-   return DgHexSF(i, j, k, res_ + 1);
+   return DgHexSF(genOp_, i, j, k, res_ + 1);
 }
 
+////////////////////////////////////////////////////////////////////////////////
 DgHexSF
 DgHexSF::downAp3 (void)
 {
@@ -320,9 +321,10 @@ DgHexSF::downAp3 (void)
 
    DgIVec3D sum = iVec + jVec + kVec;
 
-   return DgHexSF(sum, res_ + 1);
+   return DgHexSF(genOp_, sum, res_ + 1);
 }
 
+////////////////////////////////////////////////////////////////////////////////
 DgHexSF
 DgHexSF::downAp3r (void)
 {
@@ -337,9 +339,10 @@ DgHexSF::downAp3r (void)
 
    DgIVec3D sum = iVec + jVec + kVec;
 
-   return DgHexSF(sum, res_ + 1);
+   return DgHexSF(genOp_, sum, res_ + 1);
 }
 
+////////////////////////////////////////////////////////////////////////////////
 DgHexSF
 DgHexSF::dirFromCenter (int digit)
 {
@@ -387,7 +390,7 @@ DgHexSF::dirFromCenter (int digit)
             + string(" in HexHeir.dirFromCenter()."), DgBase::Fatal);
    }
 
-   return DgHexSF(i, j, k, res_);
+   return DgHexSF(genOp_, i, j, k, res_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////

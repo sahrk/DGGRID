@@ -22,6 +22,6 @@ input_address_type GEO
 input_delimiter " "
 
 # specify the output
-output_file_name outputfiles/z3.txt
-output_address_type Z3
+output_file_name outputfiles/z3str.txt
+output_address_type Z3_STRING
 output_delimiter " "

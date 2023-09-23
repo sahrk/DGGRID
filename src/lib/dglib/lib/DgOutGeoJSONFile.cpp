@@ -1,5 +1,5 @@
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -93,7 +93,8 @@ DgOutGeoJSONFile::insert(const DgDVec2D& pt)
 }
 
 DgOutLocFile&
-DgOutGeoJSONFile::insert (DgLocation& loc, const string* label)
+DgOutGeoJSONFile::insert (DgLocation& loc, const string* label,
+                  const DgDataList* /* dataList */)
 {
    DgOutGeoJSONFile& o(*this);
 
@@ -118,7 +119,8 @@ DgOutGeoJSONFile::insert (DgLocation& loc, const string* label)
 
 DgOutLocFile&
 DgOutGeoJSONFile::insert (DgLocVector& vec, const string* label,
-   const DgLocation* /* cent */)
+   const DgLocation* /* cent */,
+                  const DgDataList* /* dataList */)
 {
    DgOutGeoJSONFile& o(*this);
 
@@ -151,7 +153,8 @@ DgOutGeoJSONFile::insert (DgLocVector& vec, const string* label,
 
 DgOutLocFile&
 DgOutGeoJSONFile::insert (DgPolygon& poly, const string* label,
-   const DgLocation* /* cent */)
+   const DgLocation* /* cent */,
+   const DgDataList* /* dataList */)
 {
    DgOutGeoJSONFile& o(*this);
 

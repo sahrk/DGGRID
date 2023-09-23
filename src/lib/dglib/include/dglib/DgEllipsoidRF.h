@@ -1,5 +1,5 @@
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -31,6 +31,7 @@
 #include <dglib/DgConstants.h>
 #include <dglib/DgDVec2D.h>
 #include <dglib/DgGeoDatumRF.h>
+//#include <dglib/DgDataList.h>
 
 using namespace std;
 
@@ -123,6 +124,45 @@ operator<< (ostream& stream, const DgGeoCoord& pt)
    return stream << string(pt);
 
 } // ostream& operator<<
+
+/*
+////////////////////////////////////////////////////////////////////////////////
+class DgGeoCoordData : public DgGeoCoord {
+
+   public:
+
+      DgGeoCoordData (void) { }
+
+      //DgGeoCoordData (const DgGeoCoordData& coord) = default;
+
+      DgGeoCoordData (const DgDVec2D& coord, bool rads = true,
+              DgDataList* _dataList = nullptr)
+        : DgGeoCoord (coord, rads), dataList_ (_dataList) { }
+
+      DgGeoCoordData (long double lon, long double lat, bool rads = true,
+              DgDataList* _dataList = nullptr)
+        : DgGeoCoord (lon, lat, rads), dataList_ (_dataList) { }
+
+      DgDataList* dataList (void) { return dataList_; }
+      const DgDataList* dataList (void) const { return dataList_; }
+
+      void setDataList (DgDataList* _dataList) { dataList_ = _dataList; }
+
+   private:
+
+      DgDataList* dataList_;
+};
+
+////////////////////////////////////////////////////////////////////////////////
+inline ostream&
+operator<< (ostream& stream, const DgGeoCoordData& pt)
+{
+   stream << string(pt);
+   if (pt.dataList()) stream << ":" << *pt.dataList();
+   return stream << endl;
+
+} // ostream& operator<<
+*/
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

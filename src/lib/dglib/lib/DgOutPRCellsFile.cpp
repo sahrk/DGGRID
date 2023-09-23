@@ -1,5 +1,5 @@
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -74,7 +74,8 @@ DgOutPRCellsFile::insert (const DgDVec2D& pt)
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutPRCellsFile::insert (DgLocation&, const string*)
+DgOutPRCellsFile::insert (DgLocation&, const string*,
+                  const DgDataList* /* dataList */)
 //
 // Put the point loc.
 //
@@ -88,7 +89,8 @@ DgOutPRCellsFile::insert (DgLocation&, const string*)
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutPRCellsFile::insert (DgLocVector&, const string*, const DgLocation*)
+DgOutPRCellsFile::insert (DgLocVector&, const string*, const DgLocation*,
+            const DgDataList*)
 //
 // Put the polyline vec.
 //
@@ -103,7 +105,8 @@ DgOutPRCellsFile::insert (DgLocVector&, const string*, const DgLocation*)
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
 DgOutPRCellsFile::insert (DgPolygon& poly, const string* label,
-                     const DgLocation* /* cent */)
+                     const DgLocation* /* cent */,
+                  const DgDataList* /* dataList */)
 //
 // Put the polygon poly.
 //

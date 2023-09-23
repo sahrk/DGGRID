@@ -1,6 +1,6 @@
 {
 "type": "FeatureCollection",
-"name": ".\/outputfiles\/corvallisPts.geojson",
+"name": "corvallisPts.geojson",
 "features": [
 { "type": "Feature", "properties": { "name": "22090054" }, "geometry": { "type": "Point", "coordinates": [ -123.294732599793718, 44.577975943933893 ] } },
 { "type": "Feature", "properties": { "name": "22094856" }, "geometry": { "type": "Point", "coordinates": [ -123.279917428236431, 44.578004004992003 ] } },

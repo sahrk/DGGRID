@@ -1,5 +1,5 @@
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -30,21 +30,23 @@
 #include <dglib/DgLocation.h>
 #include <dglib/DgLocBase.h>
 #include <dglib/DgPolygon.h>
+#include <dglib/DgDataList.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgCell : public DgLocBase {
 
    public:
 
-      DgCell (void) : region_ (0) {}
+      DgCell (void) : region_ (nullptr), dataList_ (nullptr) {}
 
       DgCell (const DgRFBase& rfIn, const string& labelIn,
-              const DgLocation& nodeIn, DgPolygon* regionIn = 0)
+              const DgLocation& nodeIn, DgPolygon* regionIn = nullptr,
+              DgDataList* dataListIn = nullptr, bool ownDataIn = true)
          : DgLocBase(rfIn), label_ (labelIn), node_ (nodeIn),
-           region_ (regionIn)
+           region_ (regionIn), dataList_ (dataListIn), ownData_ (ownDataIn)
       { rf().convert(&node_); if (hasRegion()) rf().convert(region_); }
 
-     ~DgCell (void) { delete region_; }
+     ~DgCell (void) { delete region_; if (ownData_) delete dataList_; }
 
       const string&     label  (void) const { return label_; }
       const DgLocation& node   (void) const { return node_; }
@@ -54,12 +56,18 @@ class DgCell : public DgLocBase {
       DgLocation& node   (void) { return node_; }
       DgPolygon&  region (void) { return *region_; }
 
+      DgDataList* dataList (void) { return dataList_; }
+      const DgDataList* dataList (void) const { return dataList_; }
+
+      void setDataList (DgDataList* _dataList, bool _ownData = true)
+              { dataList_ = _dataList;  ownData_ = _ownData; }
+
       bool hasRegion (void) const { return (region_ != 0); }
 
       void setLabel (const string& labelIn) { label_ = labelIn; }
 
       virtual void setNode (const DgLocation& nodeIn)
-           { node_ = nodeIn; if (node_.rf() != rf()) rf().convert(&node_); }
+           { node_ = nodeIn; if (rf_ && node_.rf() != rf()) rf().convert(&node_); }
 
       void setRegion (DgPolygon* regionIn)
            {
@@ -116,17 +124,20 @@ class DgCell : public DgLocBase {
       string label_;
       DgLocation node_;
       DgPolygon* region_;
+      DgDataList* dataList_;
+      bool ownData_; // is this cell responsible for deleting dataList_?
 
    friend class DgInArcGen;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
 inline ostream& operator<< (ostream& stream, const DgCell& cell)
-            {
-              stream << "[" << cell.label() << ":" << cell.node();
-              if (cell.hasRegion()) stream << ":" << cell.region();
-              return stream << endl;
-            }
+{
+   stream << "[" << cell.label() << ":" << cell.node();
+   if (cell.hasRegion()) stream << ":" << cell.region();
+   if (cell.dataList()) stream << ":" << *cell.dataList();
+   return stream << "]" << endl;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 

@@ -1,5 +1,5 @@
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -25,8 +25,7 @@
 #include <cmath>
 #include <climits>
 #include <cfloat>
-// #include <inttypes.h>
-#include <cinttypes>
+#include <inttypes.h>
 
 #include <dglib/DgZ3RF.h>
 #include <dglib/DgZ3StringRF.h>

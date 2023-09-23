@@ -1,5 +1,5 @@
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -27,65 +27,9 @@
 using namespace std;
 
 #include <dglib/DgConstants.h>
-#include "dggrid.h"
-#include <dglib/DgProjGnomonicRF.h>
-#include <dglib/DgGeoProjConverter.h>
+#include <dglib/DgBase.h>
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-void orientGrid (MainParam& dp, DgGridPList& plist)
-//
-// Set the orientation parameters if not specified
-//
-{
-   if (dp.placeRandom) // randomize grid orientation
-   {
-      dp.vert0 = dp.orientRand->nextGeo();
-
-      dp.azimuthDegs = dp.orientRand->randInRange(0.0, 360.0);
-
-      // set the paramlist to match so we can print it back out
-
-      plist.setParam("dggs_orient_specify_type", "SPECIFIED");
-      plist.setParam("dggs_num_placements", dgg::util::to_string(1));
-      plist.setParam("dggs_vert0_lon", dgg::util::to_string(dp.vert0.lonDegs()));
-      plist.setParam("dggs_vert0_lat", dgg::util::to_string(dp.vert0.latDegs()));
-      plist.setParam("dggs_vert0_azimuth", dgg::util::to_string(dp.azimuthDegs));
-
-      dgcout << "Grid " << dp.curGrid <<
-           " #####################################################" << endl;
-      dgcout << "grid #" << dp.curGrid << " orientation randomized to: " << endl;
-      dgcout << plist << endl;
-   }
-   else if (dp.orientCenter && dp.curGrid == 1)
-   {
-      DgRFNetwork netc;
-      const DgGeoSphRF& geoRF = *(DgGeoSphRF::makeRF(netc, "GS0", dp.earthRadius));
-
-      long double lonc = 0.0, latc = 0.0;
-      getParamValue(plist, "region_center_lon", lonc, false);
-      getParamValue(plist, "region_center_lat", latc, false);
-
-      const DgProjGnomonicRF& gnomc = *(DgProjGnomonicRF::makeRF(netc, "cgnom", DgGeoCoord(lonc, latc, false)));
-      Dg2WayGeoProjConverter(geoRF, gnomc);
-
-      DgLocation* gloc = gnomc.makeLocation(DgDVec2D(-7289214.618283,
-                                                      7289214.618283));
-      geoRF.convert(gloc);
-
-      DgGeoCoord p0 = *geoRF.getAddress(*gloc);
-      delete gloc;
-
-      gloc = gnomc.makeLocation(DgDVec2D(2784232.232959, 2784232.232959));
-      geoRF.convert(gloc);
-      DgGeoCoord p1 = *geoRF.getAddress(*gloc);
-      delete gloc;
-
-      dp.vert0 = p0;
-      dp.azimuthDegs = DgGeoSphRF::azimuth(p0, p1, false);
-   }
-
-} // void orientGrid
+#include "OpBasic.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 void pause (const string& where)
@@ -95,6 +39,7 @@ void pause (const string& where)
    scanf("%*c");
 }
 
+////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 int main (int argc, char* argv[])
 {
@@ -178,56 +123,31 @@ int main (int argc, char* argv[])
    if (!hasMetaFile)
       exit(0);
 
-
    //// build and load the parameter list ////
 
    dgcout << "** executing DGGRID version " << DGGRID_VERSION << " **\n";
    dgcout << "type sizes: big int: " << sizeof(long long int) * 8 << " bits / ";
    dgcout << "big double: " << sizeof(long double) * 8 << " bits\n";
+   dgcout << "\n** using meta file " << metaFileName << "..." << endl;
 
-   dgcout << "\n** loading meta file " << metaFileName << "..." << endl;
-
-   // first parse the meta file
-   DgGridPList plist; // builds the parameter list
-   plist.loadParams(metaFileName);
-
-   // now build our "global parameters" structure
-   string tmp;
-   getParamValue(plist, "dggrid_operation", tmp, false);
-   MainParam* pdp = 0;
-   if (tmp == "GENERATE_GRID")
-      pdp = new GridGenParam(plist);
-   else if (tmp == "OUTPUT_STATS")
-      pdp = new MainParam(plist);
-   else if (tmp == "BIN_POINT_VALS")
-      pdp = new BinValsParam(plist);
-   else if (tmp == "BIN_POINT_PRESENCE")
-      pdp = new BinPresenceParam(plist);
-   else if (tmp == "TRANSFORM_POINTS")
-      pdp = new TransformParam(plist);
+   // create the operation object using parameters in the meta file
+   OpBasic theOperation(metaFileName);
+   theOperation.initialize();
 
    // echo the parameter list
-   dgcout << "* using parameter values:\n";
-   dgcout << plist << endl;
+   dgcout << "* parameter values:\n";
+   dgcout << theOperation.pList << endl;
 
-   if (pdp->pauseOnStart)
+   if (theOperation.mainOp.pauseOnStart)
       pause("parameters loaded");
 
-   // execute the operation
-   if (tmp == "GENERATE_GRID")
-      doGridGen(static_cast<GridGenParam&>(*pdp), plist);
-   else if (tmp == "OUTPUT_STATS")
-      doTable(*pdp, plist);
-   else if (tmp == "BIN_POINT_VALS")
-      doBinVals(static_cast<BinValsParam&>(*pdp), plist);
-   else if (tmp == "BIN_POINT_PRESENCE")
-      doBinPresence(static_cast<BinPresenceParam&>(*pdp), plist);
-   else if (tmp == "TRANSFORM_POINTS")
-      doTransforms(static_cast<TransformParam&>(*pdp), plist);
+   // do the operation
+   theOperation.execute();
 
-   bool pauseBeforeExit = pdp->pauseBeforeExit;
+   // grab the value before the op is cleaned
+   bool pauseBeforeExit = theOperation.mainOp.pauseBeforeExit;
 
-   delete pdp;
+   theOperation.cleanupAll();
 
    if (pauseBeforeExit)
       pause("before exit");

@@ -28,11 +28,10 @@ bin_coverage PARTIAL
 input_files inputfiles/20k.txt inputfiles/50k.txt inputfiles/100k.txt inputfiles/200k.txt
 input_delimiter " "
 
-# specify the output
-
+# specify text file output
+output_file_type TEXT
 output_file_name outputfiles/popval3h9.txt
 output_address_type SEQNUM
 output_delimiter ","
-output_count TRUE
+precision 7
 cell_output_control OUTPUT_OCCUPIED
-

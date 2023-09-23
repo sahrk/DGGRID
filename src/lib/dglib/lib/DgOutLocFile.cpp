@@ -1,5 +1,5 @@
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -146,9 +146,9 @@ DgOutLocFile::insert (DgCell& cell)
    rf().convert(&cell);
 
    if (!isPointFile() && cell.hasRegion())
-      this->insert(cell.region(), &(cell.label()), &(cell.node()));
+      this->insert(cell.region(), &(cell.label()), &(cell.node()), cell.dataList());
    else
-      this->insert(cell.node(), &(cell.label()));
+      this->insert(cell.node(), &(cell.label()), cell.dataList());
 
    return *this;
 

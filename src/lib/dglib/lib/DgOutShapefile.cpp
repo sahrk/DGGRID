@@ -1,5 +1,5 @@
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -263,7 +263,8 @@ DgOutShapefile::writeDbf (const string& id)
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutShapefile::insert (DgLocation& loc, const string* label)
+DgOutShapefile::insert (DgLocation& loc, const string* label,
+                  const DgDataList* /* dataList */)
 //
 // Put the point loc.
 //
@@ -298,7 +299,8 @@ DgOutShapefile::insert (DgLocation& loc, const string* label)
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutShapefile::insert (DgLocVector&, const string*, const DgLocation*)
+DgOutShapefile::insert (DgLocVector&, const string*, const DgLocation*,
+        const DgDataList*)
 //
 // Put the polyline vec.
 //
@@ -315,7 +317,8 @@ DgOutShapefile::insert (DgLocVector&, const string*, const DgLocation*)
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
 DgOutShapefile::insert (DgPolygon& poly, const string* label,
-                     const DgLocation* /* cent */)
+                     const DgLocation* /* cent */,
+                  const DgDataList* /* dataList */)
 //
 // Put the polygon poly.
 //

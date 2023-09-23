@@ -1,5 +1,5 @@
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -30,6 +30,17 @@ DgLocation::~DgLocation (void)
    // virtual destructor
 
    delete address_;
+   address_ = nullptr;
+
+} // DgLocation::~DgLocation
+
+////////////////////////////////////////////////////////////////////////////////
+DgLocationData::~DgLocationData (void)
+{
+   // virtual destructor
+
+   delete dataList_;
+   dataList_ = nullptr;
 
 } // DgLocation::~DgLocation
 

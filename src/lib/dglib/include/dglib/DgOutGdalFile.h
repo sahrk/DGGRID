@@ -1,5 +1,5 @@
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -66,11 +66,16 @@ class DgOutGdalFile : public DgOutLocFile
          GDALClose( _dataset );
       }
 
-      virtual DgOutLocFile& insert (DgLocation& loc, const string* label = NULL);
-      virtual DgOutLocFile& insert (DgLocVector& vec, const string* label = NULL,
-                                    const DgLocation* cent = NULL);
-      virtual DgOutLocFile& insert (DgPolygon& poly, const string* label = NULL,
-                                    const DgLocation* cent = NULL);
+      virtual DgOutLocFile& insert (DgLocation& loc, const string* label = nullptr,
+                                const DgDataList* dataList = nullptr);
+
+      virtual DgOutLocFile& insert (DgLocVector& vec, const string* label = nullptr,
+                                const DgLocation* cent = nullptr,
+                                const DgDataList* dataList = nullptr);
+
+      virtual DgOutLocFile& insert (DgPolygon& poly, const string* label = nullptr,
+                                const DgLocation* cent = nullptr,
+                                const DgDataList* dataList = nullptr);
 
       // collection output
       virtual DgOutLocFile& insert (const DgIDGGBase& dgg, DgCell& cell,
@@ -107,7 +112,8 @@ class DgOutGdalFile : public DgOutLocFile
       std::string fileNameOnly_;
 
       void init (bool outputPoint, bool outputRegion = false,
-              bool outputNeighbors = false, bool outputChildren = false);
+              bool outputNeighbors = false, bool outputChildren = false,
+              const DgDataList* dataList = nullptr);
 };
 
 #endif
