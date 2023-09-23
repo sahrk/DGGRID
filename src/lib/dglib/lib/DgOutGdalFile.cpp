@@ -73,14 +73,15 @@ DgOutGdalFile::init (bool outputPoint, bool outputRegion,
 {
    fileNameOnly_ = DgOutLocFile::fileName();
 
-   //GDALAllRegister();
+   GDALAllRegister();
 //const char* path = "C:/Test/test.shp";
-   OGRRegisterAll();
+   //OGRRegisterAll();
 //OGRDataSource *hDS;
 //OGRSFDriver *driver;
-   OGRSFDriverRegistrar *registrar =  OGRSFDriverRegistrar::GetRegistrar();
+   //OGRSFDriverRegistrar *registrar =  OGRSFDriverRegistrar::GetRegistrar();
 
-   _driver = registrar->GetDriverByName(_gdalDriver.c_str());
+   //_driver = registrar->GetDriverByName(_gdalDriver.c_str());
+   _driver = GetGDALDriverManager()->GetDriverByName(_gdalDriver.c_str());
    if (_driver == NULL)
         ::report( _gdalDriver + " driver not available.",  DgBase::Fatal);
 
