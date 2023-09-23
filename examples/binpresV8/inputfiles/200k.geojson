@@ -1,0 +1,7 @@
+{
+"type": "FeatureCollection",
+"name": "inputfiles\/200k.geojson",
+"features": [
+   { "type": "Feature", "properties": { "name": "Portland", "pop": 535700 }, "geometry": { "type": "Point", "coordinates": [ -122.66, 45.54 ] } }
+]
+}

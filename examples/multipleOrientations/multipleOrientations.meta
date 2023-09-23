@@ -1,0 +1,35 @@
+################################################################################
+#
+# multipleOrientations.meta - example of a DGGRID metafile that generates 
+#     multiple orientations of a resolution 2 ISEA aperture 3 grid. The whole
+#     earth is output in KML format. Each output file contains a maximum of
+#     50 cells.
+#
+################################################################################
+
+# specify the operation
+dggrid_operation GENERATE_GRID
+
+# specify the DGG
+dggs_type ISEA3H
+dggs_res_spec 2
+
+# control the generation
+clip_subset_type WHOLE_EARTH
+geodetic_densify 0.0
+
+# create four orientations randomly
+dggs_num_placements 4
+dggs_orient_specify_type RANDOM
+dggs_orient_rand_seed 1013
+dggs_orient_output_file_name outputfiles/isea3h2.meta
+
+# specify the output
+max_cells_per_output_file 50
+cell_output_type KML
+cell_output_file_name outputfiles/isea3h2
+point_output_type KML
+point_output_file_name outputfiles/isea3h2p
+kml_default_width 2
+kml_default_color ff0000ff
+precision 5

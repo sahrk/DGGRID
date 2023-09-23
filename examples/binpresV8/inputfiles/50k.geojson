@@ -1,0 +1,12 @@
+{
+"type": "FeatureCollection",
+"name": "inputfiles\/50k.geojson",
+"features": [
+   { "type": "Feature", "properties": { "name": "Gresham", "pop": 91300 }, "geometry": { "type": "Point", "coordinates": [ -122.44, 45.50 ] } },
+   { "type": "Feature", "properties": { "name": "Beaverton", "pop": 77100 }, "geometry": { "type": "Point", "coordinates": [ -122.82, 45.48 ] } },
+   { "type": "Feature", "properties": { "name": "Hillsboro", "pop": 71100 }, "geometry": { "type": "Point", "coordinates": [ -122.94, 45.53 ] } },
+   { "type": "Feature", "properties": { "name": "Medford", "pop": 63900 }, "geometry": { "type": "Point", "coordinates": [ -122.85, 42.34 ] } },
+   { "type": "Feature", "properties": { "name": "Springfield", "pop": 53500 }, "geometry": { "type": "Point", "coordinates": [ -122.98, 44.05 ] } },
+   { "type": "Feature", "properties": { "name": "Bend", "pop": 52700 }, "geometry": { "type": "Point", "coordinates": [ -121.31, 44.07 ] } }
+]
+}

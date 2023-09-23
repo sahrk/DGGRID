@@ -1,0 +1,148 @@
+/*******************************************************************************
+    Copyright (C) 2023 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
+////////////////////////////////////////////////////////////////////////////////
+//
+// DgDataField.h: DgDataField class definitions
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#ifndef DGDATAFIELD_H
+#define DGDATAFIELD_H
+
+#include <dglib/DgDataFieldBase.h>
+
+class DgDistanceBase;
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+template <class T> class DgDataField : public DgDataFieldBase {
+
+   public:
+
+      DgDataField (void) {}
+      DgDataField (string _name, DgDataType _type, T _value)
+         : DgDataFieldBase (_name, _type), value_ (_value)
+      { }
+
+      void setValue (const T& value) { value_ = value; }
+
+      T& value (void) { return value_; }
+      const T& value (void) const { return value_; }
+
+      virtual string valString (void) const = 0;
+
+#ifdef USE_GDAL
+      virtual void setField (OGRFeature* feature) const
+         {  feature->SetField(name().c_str(), value()); }
+#endif
+
+   protected:
+
+      virtual ostream& writeTo (ostream& stream) const
+                          { return stream << value_; }
+
+      T value_;
+};
+
+////////////////////////////////////////////////////////////////////////////////
+/*
+still to implement:
+   FIELD_INT64 = OFTInteger64;
+*/
+
+////////////////////////////////////////////////////////////////////////////////
+class DgDataFieldDouble : public DgDataField<double> {
+
+   public:
+
+      DgDataFieldDouble (string _name, double _value = 0.0,
+                string _fmtStr = "%#.6LF")
+         : DgDataField<double> (_name, FIELD_DOUBLE, _value),
+           fmtStr (_fmtStr)
+      { }
+
+      virtual int toDouble (double& val) const {
+            val = value_;
+            return 0;
+         }
+
+      virtual string valString (void) const {
+         return dgg::util::to_string(value_, fmtStr.c_str());
+      }
+
+      string fmtStr;
+
+};
+
+////////////////////////////////////////////////////////////////////////////////
+class DgDataFieldInt : public DgDataField<int> {
+
+   public:
+
+      DgDataFieldInt (string _name, int _value = 0.0)
+         : DgDataField<int> (_name, FIELD_INT, _value)
+      { }
+
+      virtual int toDouble (double& val) const {
+            val = value_;
+            return 0;
+         }
+
+      virtual string valString (void) const {
+         return dgg::util::to_string(value_);
+      }
+};
+
+////////////////////////////////////////////////////////////////////////////////
+class DgDataFieldString : public DgDataField<char*> {
+
+   public:
+
+      DgDataFieldString (const string& _name, char* _value = nullptr, int _fldWdth = 32)
+         : DgDataField<char*> (_name, FIELD_STRING, _value),
+           fldWdth_ (_fldWdth)
+      { }
+
+      DgDataFieldString (const string& _name, const string& _value = "", int _fldWdth = 32)
+         : DgDataField<char*> (_name, FIELD_STRING, nullptr),
+           fldWdth_ (_fldWdth)
+      {
+         char* valStr = new char[_value.length() + 1];
+         strcpy(valStr, _value.c_str());
+         setValue(valStr);
+      }
+
+      ~DgDataFieldString (void) { delete value_; }
+
+      virtual int toDouble (double& val) const {
+            //val = value_;
+            return 1;
+         }
+
+      virtual string valString (void) const {
+         return string(value_);
+      }
+
+      int fldWdth_;
+};
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+#endif

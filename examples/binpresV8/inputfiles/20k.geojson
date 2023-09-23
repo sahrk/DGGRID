@@ -1,0 +1,21 @@
+{
+"type": "FeatureCollection",
+"name": "inputfiles\/20k.geojson",
+"features": [
+   { "type": "Feature", "properties": { "name": "Corvallis", "pop": 49900 }, "geometry": { "type": "Point", "coordinates": [ -123.28, 44.57 ] } },
+   { "type": "Feature", "properties": { "name": "Aloha", "pop": 42300 }, "geometry": { "type": "Point", "coordinates": [ -122.87, 45.49 ] } },
+   { "type": "Feature", "properties": { "name": "Tigard", "pop": 41700 }, "geometry": { "type": "Point", "coordinates": [ -122.77, 45.43 ] } },
+   { "type": "Feature", "properties": { "name": "Albany", "pop": 41400 }, "geometry": { "type": "Point", "coordinates": [ -123.09, 44.62 ] } },
+   { "type": "Feature", "properties": { "name": "LakeOswego", "pop": 35700 }, "geometry": { "type": "Point", "coordinates": [ -122.70, 45.41 ] } },
+   { "type": "Feature", "properties": { "name": "Keizer", "pop": 32600 }, "geometry": { "type": "Point", "coordinates": [ -123.02, 45.00 ] } },
+   { "type": "Feature", "properties": { "name": "MacMinnville", "pop": 26800 }, "geometry": { "type": "Point", "coordinates": [ -123.19, 45.21 ] } },
+   { "type": "Feature", "properties": { "name": "OregonCity", "pop": 26100 }, "geometry": { "type": "Point", "coordinates": [ -122.60, 45.34 ] } },
+   { "type": "Feature", "properties": { "name": "GrantsPass", "pop": 23300 }, "geometry": { "type": "Point", "coordinates": [ -123.32, 42.44 ] } },
+   { "type": "Feature", "properties": { "name": "Tualatin", "pop": 23100 }, "geometry": { "type": "Point", "coordinates": [ -122.77, 45.38 ] } },
+   { "type": "Feature", "properties": { "name": "WestLinn", "pop": 22500 }, "geometry": { "type": "Point", "coordinates": [ -122.64, 45.37 ] } },
+   { "type": "Feature", "properties": { "name": "Milwaukie", "pop": 20700 }, "geometry": { "type": "Point", "coordinates": [ -122.62, 45.44 ] } },
+   { "type": "Feature", "properties": { "name": "CitrusPark", "pop": 20600 }, "geometry": { "type": "Point", "coordinates": [ -121.17, 45.60 ] } },
+   { "type": "Feature", "properties": { "name": "Woodburn", "pop": 20400 }, "geometry": { "type": "Point", "coordinates": [ -122.86, 45.15 ] } },
+   { "type": "Feature", "properties": { "name": "Roseburg", "pop": 20300 }, "geometry": { "type": "Point", "coordinates": [ -123.36, 43.22 ] } }
+]
+}

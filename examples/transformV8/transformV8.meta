@@ -1,0 +1,42 @@
+################################################################################
+################################################################################
+#
+# transformV8.meta - example of a dggrid meta-file which performs address
+#       conversion with GDAL cell geometry output
+#
+# Transformation from GEO to DGGS cells effectively determines the cell in which 
+# each of the input Oregon cities are located in a resolution 8 ISEA3H DGGS.
+#
+################################################################################
+
+# specify the operation
+dggrid_operation TRANSFORM_POINTS
+
+# specify the DGG
+dggs_type ISEA3H
+dggs_res_spec 9
+
+# specify bin controls
+input_files inputfiles/100k.txt inputfiles/200k.txt inputfiles/20k.txt inputfiles/50k.txt
+input_address_type GEO
+input_delimiter " "
+
+# specify the output
+output_address_type SEQNUM
+output_delimiter ","
+
+# version 7 style text output parameters
+# for backwards compatibility the text file is output by default.
+output_file_name outputfiles/cities3h9.txt
+# Set to NONE for no text output.
+output_file_type TEXT
+
+# specify the output collection file used
+# when GDAL_COLLECTION is specified below
+collection_output_gdal_format GeoJSON
+collection_output_file_name ./outputfiles/cities3h9.geojson
+
+# specify which output you want to put together in a GDAL_COLLECTION
+# this must include cell and/or point output
+cell_output_type GDAL_COLLECTION
+point_output_type GDAL_COLLECTION

@@ -1,0 +1,56 @@
+################################################################################
+################################################################################
+#
+# binpresV8.meta - example of a dggrid meta-file which performs point 
+#                presence/absence binning with GDAL input and output files
+#
+# Determine the presence/absence of Oregon cities with various population sizes
+# in the cells of resolution 7 of an ISEA3H DGGS.
+#
+################################################################################
+
+# specify the operation
+dggrid_operation BIN_POINT_VALS
+
+# specify the operation
+dggrid_operation BIN_POINT_PRESENCE
+
+# specify the DGG
+dggs_type ISEA3H
+dggs_res_spec 7
+
+# specify bin controls
+bin_coverage PARTIAL
+
+# specify input files
+point_input_file_type GDAL
+input_files inputfiles/20k.geojson inputfiles/50k.geojson inputfiles/100k.geojson inputfiles/200k.geojson
+
+# specify the output
+cell_output_control OUTPUT_OCCUPIED
+output_cell_label_type OUTPUT_ADDRESS_TYPE
+output_address_type SEQNUM
+output_delimiter ","
+precision 7
+
+# data fields to output
+# note Shapefile field names must be 10 characters or less
+output_presence_vector_field_name classes
+# output a count of all cities in each cell?
+output_count TRUE
+output_count_field_name numCities
+# output the number of population classes present in each cell
+output_num_classes TRUE
+output_num_classes_field_name numClass
+
+# version 7 style text output parameters
+# for backwards compatibility the text file is output by default. 
+output_file_name outputfiles/popclass3h7.txt
+# Set to NONE for no text output.
+output_file_type TEXT
+
+# specify the per-cell output using GDAL-supported file formats
+# output the points
+point_output_type GDAL
+point_output_gdal_format GeoJSON
+point_output_file_name outputfiles/points.geojson

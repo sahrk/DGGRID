@@ -1,0 +1,77 @@
+################################################################################
+################################################################################
+#
+# binvalsV8.meta - example of a dggrid meta-file which performs point value
+#      binning that uses GDAL Shapefiles for input and output.
+#
+# Determine the number of Oregon bridges and their total and mean lengths in the
+# cells of resolution 10 of an ISEA3H DGGS.
+#
+################################################################################
+
+# specify the operation
+dggrid_operation BIN_POINT_VALS
+
+# specify the DGG
+
+dggs_type ISEA3H
+dggs_res_spec 10
+
+# specify bin controls
+
+# indicate that we're only using a small part of the globe
+# this helps DGGRID use memory more efficiently
+bin_coverage PARTIAL
+
+# specify the input
+input_files inputfiles/bridges_2020_WGS84/bridges_2020_WGS84.shp
+point_input_file_type GDAL
+input_delimiter " "
+input_value_field_name LENGTH_FT
+
+# specify the output
+cell_output_control OUTPUT_OCCUPIED
+output_cell_label_type OUTPUT_ADDRESS_TYPE
+output_address_type SEQNUM
+
+output_delimiter ","
+precision 7
+
+# what data to output for each cell?
+# note Shapefile field names must be 10 characters or less
+output_count TRUE
+output_count_field_name numBridges
+output_total TRUE
+output_total_field_name totLenFt
+output_mean TRUE
+output_mean_field_name meanLenFt
+
+# version 7 style text output parameters
+# for backwards compatibility the text file is output by default. 
+output_file_name outputfiles/textOutput.txt
+# Set to NONE for no text output.
+output_file_type TEXT
+
+# specify the per-cell output using GDAL-supported file formats
+
+# specify which output you want to put together in a GDAL_COLLECTION
+# this must include cell and/or point output
+cell_output_type GDAL
+cell_output_gdal_format "ESRI Shapefile"
+cell_output_file_name outputfiles/cells
+
+# output the points to a seperate file
+point_output_type GDAL
+point_output_gdal_format "ESRI Shapefile"
+point_output_file_name outputfiles/points
+
+# other output parameters
+densification 0
+precision 7
+
+# force cells who straddle the anti-meridian to "unwrap" to the east 
+# (i.e., all vertices output with a positive longitude)
+longitude_wrap_mode UNWRAP_EAST
+# force points to follow the associated cells when the cell is "unwrapped"
+unwrap_points TRUE
+

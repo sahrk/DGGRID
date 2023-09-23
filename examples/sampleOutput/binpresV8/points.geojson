@@ -1,0 +1,13 @@
+{
+"type": "FeatureCollection",
+"name": "points.geojson",
+"features": [
+{ "type": "Feature", "properties": { "name": "1172", "numCities": 12, "numClass": 3, "classes": "1101" }, "geometry": { "type": "Point", "coordinates": [ -123.22120348103455, 45.871202130972875 ] } },
+{ "type": "Feature", "properties": { "name": "1199", "numCities": 2, "numClass": 1, "classes": "1000" }, "geometry": { "type": "Point", "coordinates": [ -124.049541508546838, 44.429076922597133 ] } },
+{ "type": "Feature", "properties": { "name": "1200", "numCities": 1, "numClass": 1, "classes": "1000" }, "geometry": { "type": "Point", "coordinates": [ -121.158009117890003, 46.134907804637884 ] } },
+{ "type": "Feature", "properties": { "name": "1227", "numCities": 3, "numClass": 2, "classes": "1010" }, "geometry": { "type": "Point", "coordinates": [ -122.038800490606093, 44.713512193905501 ] } },
+{ "type": "Feature", "properties": { "name": "1253", "numCities": 3, "numClass": 3, "classes": "1110" }, "geometry": { "type": "Point", "coordinates": [ -122.87839806918079, 43.285916039648832 ] } },
+{ "type": "Feature", "properties": { "name": "1280", "numCities": 2, "numClass": 2, "classes": "1100" }, "geometry": { "type": "Point", "coordinates": [ -123.68067180576773, 41.851007308653664 ] } },
+{ "type": "Feature", "properties": { "name": "1281", "numCities": 1, "numClass": 1, "classes": "0100" }, "geometry": { "type": "Point", "coordinates": [ -120.902933652983904, 43.535607997395935 ] } }
+]
+}
