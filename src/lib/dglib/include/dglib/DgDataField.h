@@ -61,12 +61,6 @@ template <class T> class DgDataField : public DgDataFieldBase {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-/*
-still to implement:
-   FIELD_INT64 = OFTInteger64;
-*/
-
-////////////////////////////////////////////////////////////////////////////////
 class DgDataFieldDouble : public DgDataField<double> {
 
    public:
@@ -97,6 +91,25 @@ class DgDataFieldInt : public DgDataField<int> {
 
       DgDataFieldInt (string _name, int _value = 0.0)
          : DgDataField<int> (_name, FIELD_INT, _value)
+      { }
+
+      virtual int toDouble (double& val) const {
+            val = value_;
+            return 0;
+         }
+
+      virtual string valString (void) const {
+         return dgg::util::to_string(value_);
+      }
+};
+
+////////////////////////////////////////////////////////////////////////////////
+class DgDataFieldInt64 : public DgDataField<int64_t> {
+
+   public:
+
+      DgDataFieldInt64 (string _name, int _value = 0.0)
+         : DgDataField<int64_t> (_name, FIELD_INT64, _value)
       { }
 
       virtual int toDouble (double& val) const {
