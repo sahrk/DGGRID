@@ -28,6 +28,8 @@
 // USE_GDAL is set in MakeIncludes
 #ifdef USE_GDAL
 
+#include <ogrsf_frmts.h>
+
 #include <dglib/DgInGdalFile.h>
 #include <dglib/DgLocation.h>
 #include <dglib/DgLocList.h>
@@ -39,8 +41,6 @@
 #include <dglib/DgGeoSphRF.h>
 #include <dglib/DgDataList.h>
 #include <dglib/DgDataField.h>
-
-#include <ogrsf_frmts.h>
 
 #include <sstream>
 

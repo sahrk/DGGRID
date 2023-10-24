@@ -89,7 +89,7 @@ class DgDataFieldInt : public DgDataField<int> {
 
    public:
 
-      DgDataFieldInt (string _name, int _value = 0.0)
+      DgDataFieldInt (string _name, int _value = 0)
          : DgDataField<int> (_name, FIELD_INT, _value)
       { }
 
@@ -102,6 +102,27 @@ class DgDataFieldInt : public DgDataField<int> {
          return dgg::util::to_string(value_);
       }
 };
+
+////////////////////////////////////////////////////////////////////////////////
+/*
+class DgDataFieldLong : public DgDataField<long int> {
+
+   public:
+
+      DgDataFieldLong (string _name, long int _value = 0)
+         : DgDataField<long int> (_name, FIELD_INT64, _value)
+      { }
+
+      virtual int toDouble (double& val) const {
+            val = value_;
+            return 0;
+         }
+
+      virtual string valString (void) const {
+         return dgg::util::to_string(value_);
+      }
+};
+*/
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgDataFieldInt64 : public DgDataField<int64_t> {
