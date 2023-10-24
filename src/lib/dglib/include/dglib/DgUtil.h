@@ -27,6 +27,7 @@
 
 #include <algorithm>
 #include <vector>
+#include <string>
 
 // make sure we have the necessary C99 support in our gcc version
 
