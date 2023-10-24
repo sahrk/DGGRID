@@ -81,10 +81,12 @@ SubOpIn::initializeOp (void)
    pList().insertParam(new DgStringChoiceParam("point_input_file_type", def, &choices));
    dgg::util::release(choices);
 
+/*
 #ifdef USE_GDAL
    // point_input_gdal_format <gdal driver type>
    pList().insertParam(new DgStringParam("point_input_gdal_format", "GeoJSON"));
 #endif
+*/
 
    // input_address_type < GEO | PLANE | PROJTRI | Q2DD | Q2DI |
    //        SEQNUM | VERTEX2DD | ZORDER | ZORDER_STRING >
@@ -155,10 +157,12 @@ SubOpIn::setupOp (void)
    getParamValue(pList(), "point_input_file_type", pointInputFileType, false);
    isPointInput = (pointInputFileType != "NONE");
 
+/*
 #ifdef USE_GDAL
    // input gdal driver
    getParamValue(pList(), "point_input_gdal_format", gdalDriver, false);
 #endif
+*/
 
    // input address type
    string dummy;
