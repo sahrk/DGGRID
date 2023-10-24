@@ -31,7 +31,7 @@ class DgDistanceBase;
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-template <class T> class DgDataField : public DgDataFieldBase {
+template <typename T> class DgDataField : public DgDataFieldBase {
 
    public:
 
@@ -58,8 +58,46 @@ template <class T> class DgDataField : public DgDataFieldBase {
                           { return stream << value_; }
 
       T value_;
+
 };
 
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+template<> 
+class DgDataField<long int> : public DgDataFieldBase {
+
+   public:
+
+      DgDataField (void) {}
+      DgDataField (string _name, DgDataType _type, long int _value)
+         : DgDataFieldBase (_name, _type), value_ (_value)
+      { }
+
+      void setValue (const long int& value) { value_ = value; }
+
+      long int& value (void) { return value_; }
+      const long int& value (void) const { return value_; }
+
+      virtual string valString (void) const {
+         return dgg::util::to_string(value_);
+      }
+
+#ifdef USE_GDAL
+      virtual void setField (OGRFeature* feature) const
+         {  GIntBig v = value();
+            feature->SetField(name().c_str(), v); }
+#endif
+
+   protected:
+
+      virtual ostream& writeTo (ostream& stream) const
+                          { return stream << value_; }
+
+      long int value_;
+
+};
+
+////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 class DgDataFieldDouble : public DgDataField<double> {
 
@@ -163,6 +201,8 @@ class DgDataFieldString : public DgDataField<char*> {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
+//template class DgDataField<long int>;
+
 ////////////////////////////////////////////////////////////////////////////////
 
 #endif

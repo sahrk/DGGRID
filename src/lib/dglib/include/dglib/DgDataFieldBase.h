@@ -57,8 +57,7 @@ class DgDataFieldBase {
 
    public:
 
-      DgDataFieldBase (string _name = "value",
-             DgDataType _fieldType = FIELD_DOUBLE)
+      DgDataFieldBase (string _name, DgDataType _fieldType = FIELD_DOUBLE)
          : name_ (_name), fieldType_ (_fieldType)
       { }
 
