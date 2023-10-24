@@ -23,6 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <climits>
+#include <string.h>
 
 #include <dglib/DgBase.h>
 #include <dglib/DgIVec3D.h>

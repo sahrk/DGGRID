@@ -26,6 +26,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include <cfloat>
+#include <climits>
+#include <cmath>
+#include <string.h>
+
 #include <dglib/DgBoundedIDGG.h>
 #include <dglib/DgDmdD4Grid2DS.h>
 #include <dglib/DgHexGrid2DS.h>
@@ -40,10 +45,6 @@
 #include <dglib/DgZOrderStringRF.h>
 #include <dglib/DgZ3RF.h>
 #include <dglib/DgZ3StringRF.h>
-
-#include <cfloat>
-#include <climits>
-#include <cmath>
 
 ////////////////////////////////////////////////////////////////////////////////
 const DgGeoSphRF& DgIDGGBase::geoRF      (void) const { return dggs()->geoRF(); }

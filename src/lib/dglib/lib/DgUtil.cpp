@@ -24,6 +24,7 @@
 
 #include <cmath>
 #include <iostream>
+#include <string.h>
 
 #include <dglib/DgUtil.h>
 

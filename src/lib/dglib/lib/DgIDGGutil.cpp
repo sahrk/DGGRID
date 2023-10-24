@@ -28,6 +28,7 @@
 #include <cmath>
 #include <climits>
 #include <cfloat>
+#include <string.h>
 
 #include <dglib/DgIDGGutil.h>
 #include <dglib/DgIDGGBase.h>

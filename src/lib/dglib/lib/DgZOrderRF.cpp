@@ -26,6 +26,7 @@
 #include <climits>
 #include <cfloat>
 #include <inttypes.h>
+#include <string.h>
 
 #include <dglib/DgZOrderRF.h>
 #include <dglib/DgZOrderStringRF.h>

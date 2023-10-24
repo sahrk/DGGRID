@@ -23,6 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <cfloat>
+#include <string.h>
 
 #include <dglib/DgBase.h>
 #include <dglib/DgDVec2D.h>
