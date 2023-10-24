@@ -104,27 +104,6 @@ class DgDataFieldInt : public DgDataField<int> {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-/*
-class DgDataFieldLong : public DgDataField<long int> {
-
-   public:
-
-      DgDataFieldLong (string _name, long int _value = 0)
-         : DgDataField<long int> (_name, FIELD_INT64, _value)
-      { }
-
-      virtual int toDouble (double& val) const {
-            val = value_;
-            return 0;
-         }
-
-      virtual string valString (void) const {
-         return dgg::util::to_string(value_);
-      }
-};
-*/
-
-////////////////////////////////////////////////////////////////////////////////
 class DgDataFieldInt64 : public DgDataField<int64_t> {
 
    public:
@@ -141,6 +120,13 @@ class DgDataFieldInt64 : public DgDataField<int64_t> {
       virtual string valString (void) const {
          return dgg::util::to_string(value_);
       }
+
+#ifdef USE_GDAL
+      virtual void setField (OGRFeature* feature) const
+         {  GIntBig v = value();
+            feature->SetField(name().c_str(), v); }
+#endif
+
 };
 
 ////////////////////////////////////////////////////////////////////////////////
