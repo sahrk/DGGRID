@@ -10,9 +10,6 @@
 ################################################################################
 
 # specify the operation
-dggrid_operation BIN_POINT_VALS
-
-# specify the operation
 dggrid_operation BIN_POINT_PRESENCE
 
 # specify the DGG
