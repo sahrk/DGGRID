@@ -58,5 +58,6 @@ std::string baseName (const std::string& path) {
   return path.substr(path.find_last_of("/\\") + 1);
 }
 
+////////////////////////////////////////////////////////////////////////////////
 
 }} // namespace dgg::util
