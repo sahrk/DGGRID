@@ -60,7 +60,10 @@ DgHexIDGGS::DgHexIDGGS (DgRFNetwork& network, const DgGeoSphRF& backFrame,
       else
          for (r = 0; r < nRes - 1; r++)
             apSeq_.addAperture(DgAperture((aperture == 3) ? 3 : 4));
+            //apSeq_.addAperture(DgAperture(aperture));
    }
+
+cout << "KEVIN: apSeq " << apSeq_ << endl;
 
    if (nRes > apSeq_.nRes() + 1) // remember +1 resolution for res 0
       report("DgHexIDGGS::DgHexIDGGS res " + dgg::util::to_string(nRes) +
