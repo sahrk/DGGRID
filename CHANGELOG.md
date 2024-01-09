@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 All changes are by Kevin Sahr, unless otherwise noted.
 
+## [8.01b] - 2024-01-08
+### Changed
+- removed altitude component from built-in GeoJSON and KML output files
+
 ## [8.0b] - 2023-10-24
 ### Added
 - dgaplib glue library for dglib application development
