@@ -54,7 +54,7 @@ DgBoundedRFS2D::DgBoundedRFS2D (const DgDiscRFS2D& rf,
    int totTicks = 1;
    long long int numI = upperRight0.i() + 1;
    long long int numJ = upperRight0.j() + 1;
-   if (rf.aperture() == 3) // better be hex!  {
+   if (rf.aperture() == 3) { // better be hex!
       for (int i = 0; i < discRFS().nRes(); i++) {
          bool isClassI = !(i % 2);
          if (isClassI) {

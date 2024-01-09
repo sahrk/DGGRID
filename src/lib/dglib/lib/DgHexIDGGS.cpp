@@ -45,25 +45,20 @@ DgHexIDGGS::DgHexIDGGS (DgRFNetwork& network, const DgGeoSphRF& backFrame,
                        isSuperfund, isApSeq, apSeq),
           apSeq_ (apSeq)
 {
-   if (!isApSeq) // need to build the apSeq
-   {
+   if (!isApSeq) { // need to build the apSeq
+
       int r;
 
-      if (isMixed43)
-      {
+      if (isMixed43) {
          for (r = 0; r < numAp4; r++)
             apSeq_.addAperture(DgAperture(4));
 
          for (; r < nRes - 1; r++)
             apSeq_.addAperture(DgAperture(3));
-      }
-      else
+      } else
          for (r = 0; r < nRes - 1; r++)
-            apSeq_.addAperture(DgAperture((aperture == 3) ? 3 : 4));
-            //apSeq_.addAperture(DgAperture(aperture));
+            apSeq_.addAperture(DgAperture((int) aperture));
    }
-
-cout << "KEVIN: apSeq " << apSeq_ << endl;
 
    if (nRes > apSeq_.nRes() + 1) // remember +1 resolution for res 0
       report("DgHexIDGGS::DgHexIDGGS res " + dgg::util::to_string(nRes) +

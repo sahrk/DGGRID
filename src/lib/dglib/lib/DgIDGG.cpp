@@ -109,53 +109,6 @@ DgIDGG::initialize (void)
 
    if (gridTopo() == Hexagon) {
       report("DgIDGG::initialize(): HEXAGON grid should use DgHexIDGG", DgBase::Fatal);
-/*
-      isAligned_ = true;
-      isCongruent_ = false;
-
-      if (!isMixed43())
-      {
-         if (aperture() == 4)
-         {
-            isClassI_ = true;
-            maxD_ = (long long int) pow(2.0L, res()) - 1;
-         }
-         else if (aperture() == 3)
-         {
-            isClassI_ = !(res() % 2);
-            if (!isClassI()) allocRes_ = res() + 1;
-            maxD_ = (long long int) pow(3.0L, (allocRes() / 2)) - 1;
-         }
-         else // aperture 7
-         {
-            isClassI_ = true;
-            //if (!isClassI()) allocRes_ = res() + 1;
-            //maxD_ = (long long int) pow(3.0L, (allocRes() / 2)) - 1;
-         }
-      }
-      else // mixed43
-      {
-         if (res() <= numAp4())
-         {
-            isClassI_ = true;
-            maxD_ = (long long int) pow(2.0L, res()) - 1;
-         }
-         else
-         {
-            isClassI_ = !((res() - numAp4()) % 2);
-            if (!isClassI()) allocRes_ = res() + 1;
-
-            maxD_ = (long long int) (pow(2.0L, numAp4()) *
-                      pow(3.0L, ((allocRes() - numAp4()) / 2))) - 1;
-         }
-         // cout << "MAXD: " << maxD_ << endl;
-      }
-      maxI_ = maxD();
-      maxJ_ = maxD();
-      mag_ = maxD() + 1;
-      firstAdd_ = DgQ2DICoord(0, DgIVec2D(0, 0));
-      lastAdd_ = DgQ2DICoord(11, DgIVec2D(0, 0));
-*/
    } else {
       maxD_ = (long long int) pow((long double) radix(), res()) - 1;
       maxI_ = maxD();

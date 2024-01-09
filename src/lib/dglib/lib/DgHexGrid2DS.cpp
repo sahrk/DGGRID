@@ -92,13 +92,10 @@ DgHexGrid2DS::DgHexGrid2DS (DgRFNetwork& networkIn,
 
       if (ap == 4)
          fac *= 2.0L;
-      else if (ap == 3)
-      {
+      else if (ap == 3) {
          fac *= M_SQRT3;
          isClassI = !isClassI;
-      }
-      else if (ap == 7)
-      {
+      } else if (ap == 7) {
          fac *= M_SQRT7;
          isClassIII = !isClassIII;
       }
@@ -122,6 +119,7 @@ DgHexGrid2DS::DgHexGrid2DS (DgRFNetwork& networkIn,
           isMixed43_ (isMixed43In), numAp4_ (numAp4In), isSuperfund_ (isSuperfundIn),
           isApSeq_ (isApSeqIn)
 {
+cerr << "KEVIN: DEPRECATED DgHexGrid2DS" << endl;
    if (isApSeq())
       report("DgHexGrid2DS::DgHexGrid2DS() isApSeq should be false in this constructor",
        DgBase::Fatal);
