@@ -29,6 +29,8 @@
 #include <dglib/DgIDGGS3H.h>
 #include <dglib/DgIDGGS43H.h>
 #include <dglib/DgIDGGS4H.h>
+#include <dglib/DgIDGGS7H.h>
+#include <dglib/DgIDGGS43H.h>
 #include <dglib/DgIDGGS4D.h>
 #include <dglib/DgIDGGS4T.h>
 #include <dglib/DgSuperfund.h>
@@ -60,6 +62,8 @@ DgIDGGS::makeRF (DgRFNetwork& network, const DgGeoSphRF& backFrame,
                theName = projTypeIn + string("4H");
             else if (apertureIn == 3)
                theName = projTypeIn + string("3H");
+            else if (apertureIn == 7)
+               theName = projTypeIn + string("7H");
             else
                report(apErrStr, DgBase::Fatal);
          } else
@@ -115,31 +119,6 @@ DgIDGGS::DgIDGGS (DgRFNetwork& network, const DgGeoSphRF& backFrame,
 {
 
    setUndefLoc(makeLocation(undefAddress()));
-
-/* all of this has been moved to topology-specfic files
-   // create the DGGs for non-hex DGGS; the grids for hex DGGS are created
-   // in DgHexIDGGS.cpp
-
-   if (gridTopo == Hexagon) {
-         isAligned_ = true;
-         isCongruent_ = false;
-   } else {
-      for (int i = 0; i < nRes; i++) {
-         if (!isSuperfund)
-            (*grids_)[i] = DgIDGG::makeRF(this, backFrame, vert0, azDegs, aperture, i,
-               "DDG", gridTopo, gridMetric, projType, isMixed43, numAp4, isSuperfund);
-         else
-            (*grids_)[i] = DgIDGG::makeRF(this, backFrame, vert0, azDegs, aperture, i,
-               "DDG", gridTopo, gridMetric, projType, isMixed43, numAp4, isSuperfund,
-               actualRes2sfRes(i));
-
-         Dg2WayResAddConverter<DgQ2DICoord, DgGeoCoord, long double>(*this, *(grids()[i]), i);
-
-         isAligned_ = idgg(0).isAligned();
-         isCongruent_ = idgg(0).isCongruent();
-      }
-   }
-*/
 
 } // DgIDGGS::DgIDGGS
 

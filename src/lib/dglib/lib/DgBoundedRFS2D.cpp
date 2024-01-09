@@ -54,40 +54,31 @@ DgBoundedRFS2D::DgBoundedRFS2D (const DgDiscRFS2D& rf,
    int totTicks = 1;
    long long int numI = upperRight0.i() + 1;
    long long int numJ = upperRight0.j() + 1;
-   if (rf.aperture() == 3) // better be hex!
-   {
-      for (int i = 0; i < discRFS().nRes(); i++)
-      {
+   if (rf.aperture() == 3) // better be hex!  {
+      for (int i = 0; i < discRFS().nRes(); i++) {
          bool isClassI = !(i % 2);
-         if (isClassI)
-         {
+         if (isClassI) {
             (*grids_)[i] = new DgBoundedRF2D(*rf.grids()[i], DgIVec2D(0, 0),
                       DgIVec2D(totTicks * numI - 1, totTicks * numJ - 1));
 
             totTicks *= 3;
-         }
-         else
-         {
+         } else {
             (*grids_)[i] = new DgBoundedHexC2RF2D(*rf.grids()[i],
                                 DgIVec2D(0, 0), DgIVec2D(totTicks * numI - 1,
                                                          totTicks * numJ - 1));
          }
       }
-   }
-   else
-   {
+   } else {
       // check that the aperture is a perfect square
 
       int sqrtApp = static_cast<int>(sqrt(static_cast<float>(rf.aperture())));
-      if (static_cast<unsigned int>(sqrtApp * sqrtApp) != rf.aperture())
-      {
+      if (static_cast<unsigned int>(sqrtApp * sqrtApp) != rf.aperture()) {
          report("DgBoundedRFS2DS::DgBoundedRFS2DS() aperture " +
                 dgg::util::to_string(rf.aperture()) + " is not a perfect square",
                 DgBase::Fatal);
       }
 
-      for (int i = 0; i < discRFS().nRes(); i++)
-      {
+      for (int i = 0; i < discRFS().nRes(); i++) {
          (*grids_)[i] = new DgBoundedRF2D(*rf.grids()[i], DgIVec2D(0, 0),
                 DgIVec2D(totTicks * numI - 1, totTicks * numJ - 1));
 
@@ -112,16 +103,14 @@ DgBoundedRFS2D::DgBoundedRFS2D (const DgDiscRFS2D& rf,
    // set the size
 
    size_ = 0;
-   for (int i = 0; i < discRFS().nRes(); i++)
-   {
+   for (int i = 0; i < discRFS().nRes(); i++) {
       unsigned long long int lastSize = size_;
 
       const DgBoundedRF2D* g = (*grids_)[i];
 
       if (g->validSize()) size_ += g->size();
 
-      if (!g->validSize() || size() < lastSize)
-      {
+      if (!g->validSize() || size() < lastSize) {
 /*
          report("DgBoundedRFS2D::DgBoundedRFS2D() invalid size setting due to "
                 "possible overflow", DgBase::Warning);

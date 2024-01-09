@@ -46,6 +46,7 @@ add_library(dglib
   lib/DgIDGGS43H.cpp
   lib/DgIDGGS4D.cpp
   lib/DgIDGGS4H.cpp
+  lib/DgIDGGS7H.cpp
   lib/DgIDGGS4T.cpp
   lib/DgIDGGSBase.cpp
   lib/DgIDGGS.cpp
