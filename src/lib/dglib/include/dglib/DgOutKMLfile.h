@@ -81,7 +81,8 @@ class DgOutKMLfile : public DgOutLocTextFile
       {
           ostringstream os;
           os << "%#." << getPrecision() << "LF,"
-             << "%#." << getPrecision() << "LF,0.0\n";
+             << "%#." << getPrecision() << "LF\n";
+             //<< "%#." << getPrecision() << "LF,0.0\n"; // with altitude
 
           formatStr_ = os.str();
       }

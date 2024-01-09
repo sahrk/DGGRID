@@ -72,7 +72,8 @@ class DgOutGeoJSONFile : public DgOutLocTextFile
       {
           ostringstream os;
           os << "[%#." << getPrecision() << "LF,"
-             << "%#." << getPrecision() << "LF,0.0]";
+             << "%#." << getPrecision() << "LF]";
+             //<< "%#." << getPrecision() << "LF,0.0]";  // with altitude
 
           formatStr_ = os.str();
       }

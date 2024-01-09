@@ -84,6 +84,7 @@ DgOutGeoJSONFile::insert(const DgDVec2D& pt)
    char buff[maxBuffSize];
 
    snprintf(buff, maxBuffSize, formatStr(), pt.x(), pt.y());
+//printf("FORMATSTR: \"%s\" buff: \"%s\"\n", formatStr(), buff);
 
    o << buff;
 

@@ -13,7 +13,7 @@
       <name>1</name>
       <Point>
          <coordinates>
-            11.250000,58.282526,0.0
+            11.250000,58.282526
          </coordinates>
       </Point>
    </Placemark>
@@ -21,7 +21,7 @@
       <name>8</name>
       <Point>
          <coordinates>
-            11.250000,79.189978,0.0
+            11.250000,79.189978
          </coordinates>
       </Point>
    </Placemark>
@@ -29,7 +29,7 @@
       <name>9</name>
       <Point>
          <coordinates>
-            11.250000,72.074068,0.0
+            11.250000,72.074068
          </coordinates>
       </Point>
    </Placemark>
@@ -37,7 +37,7 @@
       <name>10</name>
       <Point>
          <coordinates>
-            11.250000,65.090030,0.0
+            11.250000,65.090030
          </coordinates>
       </Point>
    </Placemark>
@@ -45,7 +45,7 @@
       <name>17</name>
       <Point>
          <coordinates>
-            1.744021,75.390915,0.0
+            1.744021,75.390915
          </coordinates>
       </Point>
    </Placemark>
@@ -53,7 +53,7 @@
       <name>18</name>
       <Point>
          <coordinates>
-            4.599233,68.428203,0.0
+            4.599233,68.428203
          </coordinates>
       </Point>
    </Placemark>
@@ -61,7 +61,7 @@
       <name>19</name>
       <Point>
          <coordinates>
-            5.949260,61.645508,0.0
+            5.949260,61.645508
          </coordinates>
       </Point>
    </Placemark>
@@ -69,7 +69,7 @@
       <name>27</name>
       <Point>
          <coordinates>
-            -4.096836,71.405588,0.0
+            -4.096836,71.405588
          </coordinates>
       </Point>
    </Placemark>
@@ -77,7 +77,7 @@
       <name>28</name>
       <Point>
          <coordinates>
-            -0.509961,64.722394,0.0
+            -0.509961,64.722394
          </coordinates>
       </Point>
    </Placemark>
@@ -85,7 +85,7 @@
       <name>36</name>
       <Point>
          <coordinates>
-            -15.526329,73.849546,0.0
+            -15.526329,73.849546
          </coordinates>
       </Point>
    </Placemark>
@@ -93,7 +93,7 @@
       <name>37</name>
       <Point>
          <coordinates>
-            -8.434252,67.425230,0.0
+            -8.434252,67.425230
          </coordinates>
       </Point>
    </Placemark>
@@ -101,7 +101,7 @@
       <name>45</name>
       <Point>
          <coordinates>
-            -18.093668,69.631104,0.0
+            -18.093668,69.631104
          </coordinates>
       </Point>
    </Placemark>
@@ -109,7 +109,7 @@
       <name>46</name>
       <Point>
          <coordinates>
-            -8.500665,62.435852,0.0
+            -8.500665,62.435852
          </coordinates>
       </Point>
    </Placemark>
@@ -117,7 +117,7 @@
       <name>54</name>
       <Point>
          <coordinates>
-            -29.539671,71.187339,0.0
+            -29.539671,71.187339
          </coordinates>
       </Point>
    </Placemark>
@@ -125,7 +125,7 @@
       <name>55</name>
       <Point>
          <coordinates>
-            -16.498398,64.689397,0.0
+            -16.498398,64.689397
          </coordinates>
       </Point>
    </Placemark>
@@ -133,7 +133,7 @@
       <name>64</name>
       <Point>
          <coordinates>
-            -25.726579,66.417521,0.0
+            -25.726579,66.417521
          </coordinates>
       </Point>
    </Placemark>
@@ -141,7 +141,7 @@
       <name>73</name>
       <Point>
          <coordinates>
-            -23.436724,61.709876,0.0
+            -23.436724,61.709876
          </coordinates>
       </Point>
    </Placemark>
@@ -149,7 +149,7 @@
       <name>82</name>
       <Point>
          <coordinates>
-            -32.120367,63.027198,0.0
+            -32.120367,63.027198
          </coordinates>
       </Point>
    </Placemark>
@@ -157,7 +157,7 @@
       <name>251</name>
       <Point>
          <coordinates>
-            -29.254908,58.497532,0.0
+            -29.254908,58.497532
          </coordinates>
       </Point>
    </Placemark>
@@ -165,7 +165,7 @@
       <name>252</name>
       <Point>
          <coordinates>
-            -15.597585,59.866143,0.0
+            -15.597585,59.866143
          </coordinates>
       </Point>
    </Placemark>
@@ -173,7 +173,7 @@
       <name>253</name>
       <Point>
          <coordinates>
-            -1.684287,59.758557,0.0
+            -1.684287,59.758557
          </coordinates>
       </Point>
    </Placemark>
@@ -181,7 +181,7 @@
       <name>260</name>
       <Point>
          <coordinates>
-            -21.627142,57.024600,0.0
+            -21.627142,57.024600
          </coordinates>
       </Point>
    </Placemark>
@@ -189,7 +189,7 @@
       <name>261</name>
       <Point>
          <coordinates>
-            -8.659371,57.555459,0.0
+            -8.659371,57.555459
          </coordinates>
       </Point>
    </Placemark>
@@ -197,7 +197,7 @@
       <name>262</name>
       <Point>
          <coordinates>
-            3.813414,56.735860,0.0
+            3.813414,56.735860
          </coordinates>
       </Point>
    </Placemark>
@@ -205,7 +205,7 @@
       <name>270</name>
       <Point>
          <coordinates>
-            -14.756340,55.045941,0.0
+            -14.756340,55.045941
          </coordinates>
       </Point>
    </Placemark>
@@ -213,7 +213,7 @@
       <name>271</name>
       <Point>
          <coordinates>
-            -2.892435,54.807555,0.0
+            -2.892435,54.807555
          </coordinates>
       </Point>
    </Placemark>
@@ -221,7 +221,7 @@
       <name>279</name>
       <Point>
          <coordinates>
-            -20.088369,52.295110,0.0
+            -20.088369,52.295110
          </coordinates>
       </Point>
    </Placemark>
@@ -229,7 +229,7 @@
       <name>280</name>
       <Point>
          <coordinates>
-            -8.884095,52.567655,0.0
+            -8.884095,52.567655
          </coordinates>
       </Point>
    </Placemark>
@@ -237,7 +237,7 @@
       <name>288</name>
       <Point>
          <coordinates>
-            -14.220130,50.076659,0.0
+            -14.220130,50.076659
          </coordinates>
       </Point>
    </Placemark>
@@ -245,7 +245,7 @@
       <name>289</name>
       <Point>
          <coordinates>
-            -1.441754,50.676871,0.0
+            -1.441754,50.676871
          </coordinates>
       </Point>
    </Placemark>
@@ -253,7 +253,7 @@
       <name>297</name>
       <Point>
          <coordinates>
-            -18.977739,47.384192,0.0
+            -18.977739,47.384192
          </coordinates>
       </Point>
    </Placemark>
@@ -261,7 +261,7 @@
       <name>298</name>
       <Point>
          <coordinates>
-            -6.984546,48.482056,0.0
+            -6.984546,48.482056
          </coordinates>
       </Point>
    </Placemark>
@@ -269,7 +269,7 @@
       <name>307</name>
       <Point>
          <coordinates>
-            -12.004640,46.046044,0.0
+            -12.004640,46.046044
          </coordinates>
       </Point>
    </Placemark>
@@ -277,7 +277,7 @@
       <name>316</name>
       <Point>
          <coordinates>
-            -5.663596,44.263336,0.0
+            -5.663596,44.263336
          </coordinates>
       </Point>
    </Placemark>
@@ -285,7 +285,7 @@
       <name>325</name>
       <Point>
          <coordinates>
-            -10.424347,41.848648,0.0
+            -10.424347,41.848648
          </coordinates>
       </Point>
    </Placemark>
@@ -293,7 +293,7 @@
       <name>494</name>
       <Point>
          <coordinates>
-            -4.642897,40.005482,0.0
+            -4.642897,40.005482
          </coordinates>
       </Point>
    </Placemark>
@@ -301,7 +301,7 @@
       <name>495</name>
       <Point>
          <coordinates>
-            -0.483599,46.446619,0.0
+            -0.483599,46.446619
          </coordinates>
       </Point>
    </Placemark>
@@ -309,7 +309,7 @@
       <name>496</name>
       <Point>
          <coordinates>
-            4.665569,52.583359,0.0
+            4.665569,52.583359
          </coordinates>
       </Point>
    </Placemark>
@@ -317,7 +317,7 @@
       <name>503</name>
       <Point>
          <coordinates>
-            0.275207,42.238106,0.0
+            0.275207,42.238106
          </coordinates>
       </Point>
    </Placemark>
@@ -325,7 +325,7 @@
       <name>504</name>
       <Point>
          <coordinates>
-            5.175000,48.354208,0.0
+            5.175000,48.354208
          </coordinates>
       </Point>
    </Placemark>
@@ -333,7 +333,7 @@
       <name>505</name>
       <Point>
          <coordinates>
-            11.250000,54.001699,0.0
+            11.250000,54.001699
          </coordinates>
       </Point>
    </Placemark>
@@ -341,7 +341,7 @@
       <name>513</name>
       <Point>
          <coordinates>
-            5.581720,44.154150,0.0
+            5.581720,44.154150
          </coordinates>
       </Point>
    </Placemark>
@@ -349,7 +349,7 @@
       <name>514</name>
       <Point>
          <coordinates>
-            11.250000,49.767897,0.0
+            11.250000,49.767897
          </coordinates>
       </Point>
    </Placemark>
@@ -357,7 +357,7 @@
       <name>522</name>
       <Point>
          <coordinates>
-            5.913403,39.974726,0.0
+            5.913403,39.974726
          </coordinates>
       </Point>
    </Placemark>
@@ -365,7 +365,7 @@
       <name>523</name>
       <Point>
          <coordinates>
-            11.250000,45.573994,0.0
+            11.250000,45.573994
          </coordinates>
       </Point>
    </Placemark>
@@ -373,7 +373,7 @@
       <name>531</name>
       <Point>
          <coordinates>
-            11.250000,41.413408,0.0
+            11.250000,41.413408
          </coordinates>
       </Point>
    </Placemark>
@@ -381,7 +381,7 @@
       <name>532</name>
       <Point>
          <coordinates>
-            17.325000,48.354208,0.0
+            17.325000,48.354208
          </coordinates>
       </Point>
    </Placemark>
@@ -389,7 +389,7 @@
       <name>541</name>
       <Point>
          <coordinates>
-            16.918280,44.154150,0.0
+            16.918280,44.154150
          </coordinates>
       </Point>
    </Placemark>
@@ -397,7 +397,7 @@
       <name>550</name>
       <Point>
          <coordinates>
-            16.586597,39.974726,0.0
+            16.586597,39.974726
          </coordinates>
       </Point>
    </Placemark>
@@ -405,7 +405,7 @@
       <name>559</name>
       <Point>
          <coordinates>
-            22.224793,42.238106,0.0
+            22.224793,42.238106
          </coordinates>
       </Point>
    </Placemark>
@@ -413,7 +413,7 @@
       <name>737</name>
       <Point>
          <coordinates>
-            27.142897,40.005482,0.0
+            27.142897,40.005482
          </coordinates>
       </Point>
    </Placemark>
@@ -421,7 +421,7 @@
       <name>738</name>
       <Point>
          <coordinates>
-            22.983599,46.446619,0.0
+            22.983599,46.446619
          </coordinates>
       </Point>
    </Placemark>
@@ -429,7 +429,7 @@
       <name>739</name>
       <Point>
          <coordinates>
-            17.834431,52.583359,0.0
+            17.834431,52.583359
          </coordinates>
       </Point>
    </Placemark>
@@ -437,7 +437,7 @@
       <name>746</name>
       <Point>
          <coordinates>
-            28.163596,44.263336,0.0
+            28.163596,44.263336
          </coordinates>
       </Point>
    </Placemark>
@@ -445,7 +445,7 @@
       <name>747</name>
       <Point>
          <coordinates>
-            23.941754,50.676871,0.0
+            23.941754,50.676871
          </coordinates>
       </Point>
    </Placemark>
@@ -453,7 +453,7 @@
       <name>748</name>
       <Point>
          <coordinates>
-            18.686586,56.735860,0.0
+            18.686586,56.735860
          </coordinates>
       </Point>
    </Placemark>
@@ -461,7 +461,7 @@
       <name>756</name>
       <Point>
          <coordinates>
-            29.484546,48.482056,0.0
+            29.484546,48.482056
          </coordinates>
       </Point>
    </Placemark>
@@ -469,7 +469,7 @@
       <name>757</name>
       <Point>
          <coordinates>
-            25.392435,54.807555,0.0
+            25.392435,54.807555
          </coordinates>
       </Point>
    </Placemark>
@@ -477,7 +477,7 @@
       <name>765</name>
       <Point>
          <coordinates>
-            34.504640,46.046044,0.0
+            34.504640,46.046044
          </coordinates>
       </Point>
    </Placemark>
@@ -485,7 +485,7 @@
       <name>766</name>
       <Point>
          <coordinates>
-            31.384095,52.567655,0.0
+            31.384095,52.567655
          </coordinates>
       </Point>
    </Placemark>
@@ -493,7 +493,7 @@
       <name>774</name>
       <Point>
          <coordinates>
-            36.720130,50.076659,0.0
+            36.720130,50.076659
          </coordinates>
       </Point>
    </Placemark>
@@ -501,7 +501,7 @@
       <name>775</name>
       <Point>
          <coordinates>
-            31.159371,57.555459,0.0
+            31.159371,57.555459
          </coordinates>
       </Point>
    </Placemark>
@@ -509,7 +509,7 @@
       <name>783</name>
       <Point>
          <coordinates>
-            41.477739,47.384192,0.0
+            41.477739,47.384192
          </coordinates>
       </Point>
    </Placemark>
@@ -517,7 +517,7 @@
       <name>784</name>
       <Point>
          <coordinates>
-            37.256340,55.045941,0.0
+            37.256340,55.045941
          </coordinates>
       </Point>
    </Placemark>
@@ -525,7 +525,7 @@
       <name>793</name>
       <Point>
          <coordinates>
-            42.588369,52.295110,0.0
+            42.588369,52.295110
          </coordinates>
       </Point>
    </Placemark>
@@ -533,7 +533,7 @@
       <name>802</name>
       <Point>
          <coordinates>
-            44.127142,57.024600,0.0
+            44.127142,57.024600
          </coordinates>
       </Point>
    </Placemark>
@@ -541,7 +541,7 @@
       <name>804</name>
       <Point>
          <coordinates>
-            59.836592,-0.000000,0.0
+            59.836592,-0.000000
          </coordinates>
       </Point>
    </Placemark>
@@ -549,7 +549,7 @@
       <name>811</name>
       <Point>
          <coordinates>
-            49.287589,53.959660,0.0
+            49.287589,53.959660
          </coordinates>
       </Point>
    </Placemark>
@@ -557,7 +557,7 @@
       <name>812</name>
       <Point>
          <coordinates>
-            60.141454,-12.108098,0.0
+            60.141454,-12.108098
          </coordinates>
       </Point>
    </Placemark>
@@ -565,7 +565,7 @@
       <name>813</name>
       <Point>
          <coordinates>
-            61.152694,-4.087138,0.0
+            61.152694,-4.087138
          </coordinates>
       </Point>
    </Placemark>
@@ -573,7 +573,7 @@
       <name>814</name>
       <Point>
          <coordinates>
-            61.152694,4.087138,0.0
+            61.152694,4.087138
          </coordinates>
       </Point>
    </Placemark>
@@ -581,7 +581,7 @@
       <name>815</name>
       <Point>
          <coordinates>
-            60.141454,12.108098,0.0
+            60.141454,12.108098
          </coordinates>
       </Point>
    </Placemark>
@@ -589,7 +589,7 @@
       <name>821</name>
       <Point>
          <coordinates>
-            62.761295,-8.131052,0.0
+            62.761295,-8.131052
          </coordinates>
       </Point>
    </Placemark>
@@ -597,7 +597,7 @@
       <name>822</name>
       <Point>
          <coordinates>
-            63.970014,-0.000000,0.0
+            63.970014,-0.000000
          </coordinates>
       </Point>
    </Placemark>
@@ -605,7 +605,7 @@
       <name>823</name>
       <Point>
          <coordinates>
-            62.761295,8.131052,0.0
+            62.761295,8.131052
          </coordinates>
       </Point>
    </Placemark>
@@ -613,7 +613,7 @@
       <name>830</name>
       <Point>
          <coordinates>
-            64.509557,-12.123910,0.0
+            64.509557,-12.123910
          </coordinates>
       </Point>
    </Placemark>
@@ -621,7 +621,7 @@
       <name>831</name>
       <Point>
          <coordinates>
-            65.338178,-4.102057,0.0
+            65.338178,-4.102057
          </coordinates>
       </Point>
    </Placemark>
@@ -629,7 +629,7 @@
       <name>832</name>
       <Point>
          <coordinates>
-            65.338178,4.102057,0.0
+            65.338178,4.102057
          </coordinates>
       </Point>
    </Placemark>
@@ -637,7 +637,7 @@
       <name>833</name>
       <Point>
          <coordinates>
-            64.509557,12.123910,0.0
+            64.509557,12.123910
          </coordinates>
       </Point>
    </Placemark>
@@ -645,7 +645,7 @@
       <name>839</name>
       <Point>
          <coordinates>
-            66.334924,-16.075182,0.0
+            66.334924,-16.075182
          </coordinates>
       </Point>
    </Placemark>
@@ -653,7 +653,7 @@
       <name>840</name>
       <Point>
          <coordinates>
-            67.041864,-8.134494,0.0
+            67.041864,-8.134494
          </coordinates>
       </Point>
    </Placemark>
@@ -661,7 +661,7 @@
       <name>841</name>
       <Point>
          <coordinates>
-            68.082083,-0.000000,0.0
+            68.082083,-0.000000
          </coordinates>
       </Point>
    </Placemark>
@@ -669,7 +669,7 @@
       <name>842</name>
       <Point>
          <coordinates>
-            67.041864,8.134494,0.0
+            67.041864,8.134494
          </coordinates>
       </Point>
    </Placemark>
@@ -677,7 +677,7 @@
       <name>843</name>
       <Point>
          <coordinates>
-            66.334924,16.075182,0.0
+            66.334924,16.075182
          </coordinates>
       </Point>
    </Placemark>
@@ -685,7 +685,7 @@
       <name>848</name>
       <Point>
          <coordinates>
-            68.889503,-12.095072,0.0
+            68.889503,-12.095072
          </coordinates>
       </Point>
    </Placemark>
@@ -693,7 +693,7 @@
       <name>849</name>
       <Point>
          <coordinates>
-            69.526749,-4.104900,0.0
+            69.526749,-4.104900
          </coordinates>
       </Point>
    </Placemark>
@@ -701,7 +701,7 @@
       <name>850</name>
       <Point>
          <coordinates>
-            69.526749,4.104900,0.0
+            69.526749,4.104900
          </coordinates>
       </Point>
    </Placemark>
@@ -709,7 +709,7 @@
       <name>851</name>
       <Point>
          <coordinates>
-            68.889503,12.095072,0.0
+            68.889503,12.095072
          </coordinates>
       </Point>
    </Placemark>
@@ -717,7 +717,7 @@
       <name>857</name>
       <Point>
          <coordinates>
-            70.814615,-16.001412,0.0
+            70.814615,-16.001412
          </coordinates>
       </Point>
    </Placemark>
@@ -725,7 +725,7 @@
       <name>858</name>
       <Point>
          <coordinates>
-            71.344170,-8.100985,0.0
+            71.344170,-8.100985
          </coordinates>
       </Point>
    </Placemark>
@@ -733,7 +733,7 @@
       <name>859</name>
       <Point>
          <coordinates>
-            72.178353,-0.000000,0.0
+            72.178353,-0.000000
          </coordinates>
       </Point>
    </Placemark>
@@ -741,7 +741,7 @@
       <name>860</name>
       <Point>
          <coordinates>
-            71.344170,8.100985,0.0
+            71.344170,8.100985
          </coordinates>
       </Point>
    </Placemark>
@@ -749,7 +749,7 @@
       <name>861</name>
       <Point>
          <coordinates>
-            70.814615,16.001412,0.0
+            70.814615,16.001412
          </coordinates>
       </Point>
    </Placemark>
@@ -757,7 +757,7 @@
       <name>866</name>
       <Point>
          <coordinates>
-            72.799700,-19.871237,0.0
+            72.799700,-19.871237
          </coordinates>
       </Point>
    </Placemark>
@@ -765,7 +765,7 @@
       <name>867</name>
       <Point>
          <coordinates>
-            73.294401,-12.002233,0.0
+            73.294401,-12.002233
          </coordinates>
       </Point>
    </Placemark>
@@ -773,7 +773,7 @@
       <name>868</name>
       <Point>
          <coordinates>
-            73.742447,-4.085315,0.0
+            73.742447,-4.085315
          </coordinates>
       </Point>
    </Placemark>
@@ -781,7 +781,7 @@
       <name>869</name>
       <Point>
          <coordinates>
-            73.742447,4.085315,0.0
+            73.742447,4.085315
          </coordinates>
       </Point>
    </Placemark>
@@ -789,7 +789,7 @@
       <name>870</name>
       <Point>
          <coordinates>
-            73.294401,12.002233,0.0
+            73.294401,12.002233
          </coordinates>
       </Point>
    </Placemark>
@@ -797,7 +797,7 @@
       <name>871</name>
       <Point>
          <coordinates>
-            72.799700,19.871237,0.0
+            72.799700,19.871237
          </coordinates>
       </Point>
    </Placemark>
@@ -805,7 +805,7 @@
       <name>875</name>
       <Point>
          <coordinates>
-            75.313866,-15.839604,0.0
+            75.313866,-15.839604
          </coordinates>
       </Point>
    </Placemark>
@@ -813,7 +813,7 @@
       <name>876</name>
       <Point>
          <coordinates>
-            75.689626,-8.001772,0.0
+            75.689626,-8.001772
          </coordinates>
       </Point>
    </Placemark>
@@ -821,7 +821,7 @@
       <name>877</name>
       <Point>
          <coordinates>
-            76.264191,-0.000000,0.0
+            76.264191,-0.000000
          </coordinates>
       </Point>
    </Placemark>
@@ -829,7 +829,7 @@
       <name>878</name>
       <Point>
          <coordinates>
-            75.689626,8.001772,0.0
+            75.689626,8.001772
          </coordinates>
       </Point>
    </Placemark>
@@ -837,7 +837,7 @@
       <name>879</name>
       <Point>
          <coordinates>
-            75.313866,15.839604,0.0
+            75.313866,15.839604
          </coordinates>
       </Point>
    </Placemark>
@@ -845,7 +845,7 @@
       <name>884</name>
       <Point>
          <coordinates>
-            77.393398,-19.636839,0.0
+            77.393398,-19.636839
          </coordinates>
       </Point>
    </Placemark>
@@ -853,7 +853,7 @@
       <name>885</name>
       <Point>
          <coordinates>
-            77.733540,-11.805698,0.0
+            77.733540,-11.805698
          </coordinates>
       </Point>
    </Placemark>
@@ -861,7 +861,7 @@
       <name>886</name>
       <Point>
          <coordinates>
-            78.030520,-4.000918,0.0
+            78.030520,-4.000918
          </coordinates>
       </Point>
    </Placemark>
@@ -869,7 +869,7 @@
       <name>887</name>
       <Point>
          <coordinates>
-            78.030520,4.000918,0.0
+            78.030520,4.000918
          </coordinates>
       </Point>
    </Placemark>
@@ -877,7 +877,7 @@
       <name>888</name>
       <Point>
          <coordinates>
-            77.733540,11.805698,0.0
+            77.733540,11.805698
          </coordinates>
       </Point>
    </Placemark>
@@ -885,7 +885,7 @@
       <name>889</name>
       <Point>
          <coordinates>
-            77.393398,19.636839,0.0
+            77.393398,19.636839
          </coordinates>
       </Point>
    </Placemark>
@@ -893,7 +893,7 @@
       <name>893</name>
       <Point>
          <coordinates>
-            79.544443,-23.410114,0.0
+            79.544443,-23.410114
          </coordinates>
       </Point>
    </Placemark>
@@ -901,7 +901,7 @@
       <name>894</name>
       <Point>
          <coordinates>
-            79.830549,-15.546265,0.0
+            79.830549,-15.546265
          </coordinates>
       </Point>
    </Placemark>
@@ -909,7 +909,7 @@
       <name>895</name>
       <Point>
          <coordinates>
-            80.093077,-7.755286,0.0
+            80.093077,-7.755286
          </coordinates>
       </Point>
    </Placemark>
@@ -917,7 +917,7 @@
       <name>896</name>
       <Point>
          <coordinates>
-            80.344843,-0.000000,0.0
+            80.344843,-0.000000
          </coordinates>
       </Point>
    </Placemark>
@@ -925,7 +925,7 @@
       <name>897</name>
       <Point>
          <coordinates>
-            80.093077,7.755286,0.0
+            80.093077,7.755286
          </coordinates>
       </Point>
    </Placemark>
@@ -933,7 +933,7 @@
       <name>898</name>
       <Point>
          <coordinates>
-            79.830549,15.546265,0.0
+            79.830549,15.546265
          </coordinates>
       </Point>
    </Placemark>
@@ -941,7 +941,7 @@
       <name>899</name>
       <Point>
          <coordinates>
-            79.544443,23.410114,0.0
+            79.544443,23.410114
          </coordinates>
       </Point>
    </Placemark>
@@ -949,7 +949,7 @@
       <name>902</name>
       <Point>
          <coordinates>
-            81.986166,-19.251283,0.0
+            81.986166,-19.251283
          </coordinates>
       </Point>
    </Placemark>
@@ -957,7 +957,7 @@
       <name>903</name>
       <Point>
          <coordinates>
-            82.192981,-11.415353,0.0
+            82.192981,-11.415353
          </coordinates>
       </Point>
    </Placemark>
@@ -965,7 +965,7 @@
       <name>904</name>
       <Point>
          <coordinates>
-            82.387759,-3.533200,0.0
+            82.387759,-3.533200
          </coordinates>
       </Point>
    </Placemark>
@@ -973,7 +973,7 @@
       <name>905</name>
       <Point>
          <coordinates>
-            82.387759,3.533200,0.0
+            82.387759,3.533200
          </coordinates>
       </Point>
    </Placemark>
@@ -981,7 +981,7 @@
       <name>906</name>
       <Point>
          <coordinates>
-            82.192981,11.415353,0.0
+            82.192981,11.415353
          </coordinates>
       </Point>
    </Placemark>
@@ -989,7 +989,7 @@
       <name>907</name>
       <Point>
          <coordinates>
-            81.986166,19.251283,0.0
+            81.986166,19.251283
          </coordinates>
       </Point>
    </Placemark>
@@ -997,7 +997,7 @@
       <name>912</name>
       <Point>
          <coordinates>
-            84.333920,-15.036441,0.0
+            84.333920,-15.036441
          </coordinates>
       </Point>
    </Placemark>
@@ -1005,7 +1005,7 @@
       <name>913</name>
       <Point>
          <coordinates>
-            84.448931,-7.066366,0.0
+            84.448931,-7.066366
          </coordinates>
       </Point>
    </Placemark>
@@ -1013,7 +1013,7 @@
       <name>914</name>
       <Point>
          <coordinates>
-            84.965960,-0.000000,0.0
+            84.965960,-0.000000
          </coordinates>
       </Point>
    </Placemark>
@@ -1021,7 +1021,7 @@
       <name>915</name>
       <Point>
          <coordinates>
-            84.448931,7.066366,0.0
+            84.448931,7.066366
          </coordinates>
       </Point>
    </Placemark>
@@ -1029,7 +1029,7 @@
       <name>916</name>
       <Point>
          <coordinates>
-            84.333920,15.036441,0.0
+            84.333920,15.036441
          </coordinates>
       </Point>
    </Placemark>
@@ -1037,7 +1037,7 @@
       <name>921</name>
       <Point>
          <coordinates>
-            86.538220,-18.639192,0.0
+            86.538220,-18.639192
          </coordinates>
       </Point>
    </Placemark>
@@ -1045,7 +1045,7 @@
       <name>922</name>
       <Point>
          <coordinates>
-            86.547248,-10.599322,0.0
+            86.547248,-10.599322
          </coordinates>
       </Point>
    </Placemark>
@@ -1053,7 +1053,7 @@
       <name>923</name>
       <Point>
          <coordinates>
-            87.195551,-3.652246,0.0
+            87.195551,-3.652246
          </coordinates>
       </Point>
    </Placemark>
@@ -1061,7 +1061,7 @@
       <name>924</name>
       <Point>
          <coordinates>
-            87.195551,3.652246,0.0
+            87.195551,3.652246
          </coordinates>
       </Point>
    </Placemark>
@@ -1069,7 +1069,7 @@
       <name>925</name>
       <Point>
          <coordinates>
-            86.547248,10.599322,0.0
+            86.547248,10.599322
          </coordinates>
       </Point>
    </Placemark>
@@ -1077,7 +1077,7 @@
       <name>926</name>
       <Point>
          <coordinates>
-            86.538220,18.639192,0.0
+            86.538220,18.639192
          </coordinates>
       </Point>
    </Placemark>
@@ -1085,7 +1085,7 @@
       <name>930</name>
       <Point>
          <coordinates>
-            88.702906,-14.131599,0.0
+            88.702906,-14.131599
          </coordinates>
       </Point>
    </Placemark>
@@ -1093,7 +1093,7 @@
       <name>931</name>
       <Point>
          <coordinates>
-            89.369198,-7.257987,0.0
+            89.369198,-7.257987
          </coordinates>
       </Point>
    </Placemark>
@@ -1101,7 +1101,7 @@
       <name>932</name>
       <Point>
          <coordinates>
-            89.594613,-0.000000,0.0
+            89.594613,-0.000000
          </coordinates>
       </Point>
    </Placemark>
@@ -1109,7 +1109,7 @@
       <name>933</name>
       <Point>
          <coordinates>
-            89.369198,7.257987,0.0
+            89.369198,7.257987
          </coordinates>
       </Point>
    </Placemark>
@@ -1117,7 +1117,7 @@
       <name>934</name>
       <Point>
          <coordinates>
-            88.702906,14.131599,0.0
+            88.702906,14.131599
          </coordinates>
       </Point>
    </Placemark>
@@ -1125,7 +1125,7 @@
       <name>940</name>
       <Point>
          <coordinates>
-            91.563217,-10.830261,0.0
+            91.563217,-10.830261
          </coordinates>
       </Point>
    </Placemark>
@@ -1133,7 +1133,7 @@
       <name>941</name>
       <Point>
          <coordinates>
-            91.875186,-3.650787,0.0
+            91.875186,-3.650787
          </coordinates>
       </Point>
    </Placemark>
@@ -1141,7 +1141,7 @@
       <name>942</name>
       <Point>
          <coordinates>
-            91.875186,3.650787,0.0
+            91.875186,3.650787
          </coordinates>
       </Point>
    </Placemark>
@@ -1149,7 +1149,7 @@
       <name>943</name>
       <Point>
          <coordinates>
-            91.563217,10.830261,0.0
+            91.563217,10.830261
          </coordinates>
       </Point>
    </Placemark>
@@ -1157,7 +1157,7 @@
       <name>949</name>
       <Point>
          <coordinates>
-            93.817028,-14.378949,0.0
+            93.817028,-14.378949
          </coordinates>
       </Point>
    </Placemark>
@@ -1165,7 +1165,7 @@
       <name>950</name>
       <Point>
          <coordinates>
-            94.133909,-7.268494,0.0
+            94.133909,-7.268494
          </coordinates>
       </Point>
    </Placemark>
@@ -1173,7 +1173,7 @@
       <name>951</name>
       <Point>
          <coordinates>
-            94.238452,-0.000000,0.0
+            94.238452,-0.000000
          </coordinates>
       </Point>
    </Placemark>
@@ -1181,7 +1181,7 @@
       <name>952</name>
       <Point>
          <coordinates>
-            94.133909,7.268494,0.0
+            94.133909,7.268494
          </coordinates>
       </Point>
    </Placemark>
@@ -1189,7 +1189,7 @@
       <name>953</name>
       <Point>
          <coordinates>
-            93.817028,14.378949,0.0
+            93.817028,14.378949
          </coordinates>
       </Point>
    </Placemark>
@@ -1197,7 +1197,7 @@
       <name>958</name>
       <Point>
          <coordinates>
-            96.424381,-10.852076,0.0
+            96.424381,-10.852076
          </coordinates>
       </Point>
    </Placemark>
@@ -1205,7 +1205,7 @@
       <name>959</name>
       <Point>
          <coordinates>
-            96.552625,-3.635612,0.0
+            96.552625,-3.635612
          </coordinates>
       </Point>
    </Placemark>
@@ -1213,7 +1213,7 @@
       <name>960</name>
       <Point>
          <coordinates>
-            96.552625,3.635612,0.0
+            96.552625,3.635612
          </coordinates>
       </Point>
    </Placemark>
@@ -1221,7 +1221,7 @@
       <name>961</name>
       <Point>
          <coordinates>
-            96.424381,10.852076,0.0
+            96.424381,10.852076
          </coordinates>
       </Point>
    </Placemark>
@@ -1229,7 +1229,7 @@
       <name>968</name>
       <Point>
          <coordinates>
-            98.875726,-7.240277,0.0
+            98.875726,-7.240277
          </coordinates>
       </Point>
    </Placemark>
@@ -1237,7 +1237,7 @@
       <name>969</name>
       <Point>
          <coordinates>
-            98.905350,-0.000000,0.0
+            98.905350,-0.000000
          </coordinates>
       </Point>
    </Placemark>
@@ -1245,7 +1245,7 @@
       <name>970</name>
       <Point>
          <coordinates>
-            98.875726,7.240277,0.0
+            98.875726,7.240277
          </coordinates>
       </Point>
    </Placemark>
@@ -1253,7 +1253,7 @@
       <name>980</name>
       <Point>
          <coordinates>
-            51.754908,58.497532,0.0
+            51.754908,58.497532
          </coordinates>
       </Point>
    </Placemark>
@@ -1261,7 +1261,7 @@
       <name>981</name>
       <Point>
          <coordinates>
-            38.097585,59.866143,0.0
+            38.097585,59.866143
          </coordinates>
       </Point>
    </Placemark>
@@ -1269,7 +1269,7 @@
       <name>982</name>
       <Point>
          <coordinates>
-            24.184287,59.758557,0.0
+            24.184287,59.758557
          </coordinates>
       </Point>
    </Placemark>
@@ -1277,7 +1277,7 @@
       <name>989</name>
       <Point>
          <coordinates>
-            45.936724,61.709876,0.0
+            45.936724,61.709876
          </coordinates>
       </Point>
    </Placemark>
@@ -1285,7 +1285,7 @@
       <name>990</name>
       <Point>
          <coordinates>
-            31.000665,62.435852,0.0
+            31.000665,62.435852
          </coordinates>
       </Point>
    </Placemark>
@@ -1293,7 +1293,7 @@
       <name>991</name>
       <Point>
          <coordinates>
-            16.550740,61.645508,0.0
+            16.550740,61.645508
          </coordinates>
       </Point>
    </Placemark>
@@ -1301,7 +1301,7 @@
       <name>999</name>
       <Point>
          <coordinates>
-            38.998398,64.689397,0.0
+            38.998398,64.689397
          </coordinates>
       </Point>
    </Placemark>
@@ -1309,7 +1309,7 @@
       <name>1000</name>
       <Point>
          <coordinates>
-            23.009961,64.722394,0.0
+            23.009961,64.722394
          </coordinates>
       </Point>
    </Placemark>
@@ -1317,7 +1317,7 @@
       <name>1008</name>
       <Point>
          <coordinates>
-            48.226579,66.417521,0.0
+            48.226579,66.417521
          </coordinates>
       </Point>
    </Placemark>
@@ -1325,7 +1325,7 @@
       <name>1009</name>
       <Point>
          <coordinates>
-            30.934252,67.425230,0.0
+            30.934252,67.425230
          </coordinates>
       </Point>
    </Placemark>
@@ -1333,7 +1333,7 @@
       <name>1017</name>
       <Point>
          <coordinates>
-            40.593668,69.631104,0.0
+            40.593668,69.631104
          </coordinates>
       </Point>
    </Placemark>
@@ -1341,7 +1341,7 @@
       <name>1018</name>
       <Point>
          <coordinates>
-            17.900767,68.428203,0.0
+            17.900767,68.428203
          </coordinates>
       </Point>
    </Placemark>
@@ -1349,7 +1349,7 @@
       <name>1026</name>
       <Point>
          <coordinates>
-            52.039671,71.187339,0.0
+            52.039671,71.187339
          </coordinates>
       </Point>
    </Placemark>
@@ -1357,7 +1357,7 @@
       <name>1027</name>
       <Point>
          <coordinates>
-            26.596836,71.405588,0.0
+            26.596836,71.405588
          </coordinates>
       </Point>
    </Placemark>
@@ -1365,7 +1365,7 @@
       <name>1036</name>
       <Point>
          <coordinates>
-            38.026329,73.849546,0.0
+            38.026329,73.849546
          </coordinates>
       </Point>
    </Placemark>
@@ -1373,7 +1373,7 @@
       <name>1045</name>
       <Point>
          <coordinates>
-            20.755979,75.390915,0.0
+            20.755979,75.390915
          </coordinates>
       </Point>
    </Placemark>
@@ -1381,7 +1381,7 @@
       <name>1054</name>
       <Point>
          <coordinates>
-            34.942972,78.135141,0.0
+            34.942972,78.135141
          </coordinates>
       </Point>
    </Placemark>
@@ -1389,7 +1389,7 @@
       <name>1533</name>
       <Point>
          <coordinates>
-            -78.750000,-48.586592,0.0
+            -78.750000,-48.586592
          </coordinates>
       </Point>
    </Placemark>
@@ -1397,7 +1397,7 @@
       <name>1534</name>
       <Point>
          <coordinates>
-            -66.907986,-46.620237,0.0
+            -66.907986,-46.620237
          </coordinates>
       </Point>
    </Placemark>
@@ -1405,7 +1405,7 @@
       <name>1541</name>
       <Point>
          <coordinates>
-            -96.820799,-47.451352,0.0
+            -96.820799,-47.451352
          </coordinates>
       </Point>
    </Placemark>
@@ -1413,7 +1413,7 @@
       <name>1542</name>
       <Point>
          <coordinates>
-            -85.080522,-49.729945,0.0
+            -85.080522,-49.729945
          </coordinates>
       </Point>
    </Placemark>
@@ -1421,7 +1421,7 @@
       <name>1543</name>
       <Point>
          <coordinates>
-            -72.419478,-49.729945,0.0
+            -72.419478,-49.729945
          </coordinates>
       </Point>
    </Placemark>
@@ -1429,7 +1429,7 @@
       <name>1544</name>
       <Point>
          <coordinates>
-            -60.679201,-47.451352,0.0
+            -60.679201,-47.451352
          </coordinates>
       </Point>
    </Placemark>
@@ -1437,7 +1437,7 @@
       <name>1550</name>
       <Point>
          <coordinates>
-            -91.679257,-50.792539,0.0
+            -91.679257,-50.792539
          </coordinates>
       </Point>
    </Placemark>
@@ -1445,7 +1445,7 @@
       <name>1551</name>
       <Point>
          <coordinates>
-            -78.750000,-52.720014,0.0
+            -78.750000,-52.720014
          </coordinates>
       </Point>
    </Placemark>
@@ -1453,7 +1453,7 @@
       <name>1552</name>
       <Point>
          <coordinates>
-            -65.820743,-50.792539,0.0
+            -65.820743,-50.792539
          </coordinates>
       </Point>
    </Placemark>
@@ -1461,7 +1461,7 @@
       <name>1559</name>
       <Point>
          <coordinates>
-            -98.503857,-51.580310,0.0
+            -98.503857,-51.580310
          </coordinates>
       </Point>
    </Placemark>
@@ -1469,7 +1469,7 @@
       <name>1560</name>
       <Point>
          <coordinates>
-            -85.721030,-53.885991,0.0
+            -85.721030,-53.885991
          </coordinates>
       </Point>
    </Placemark>
@@ -1477,7 +1477,7 @@
       <name>1561</name>
       <Point>
          <coordinates>
-            -71.778970,-53.885991,0.0
+            -71.778970,-53.885991
          </coordinates>
       </Point>
    </Placemark>
@@ -1485,7 +1485,7 @@
       <name>1562</name>
       <Point>
          <coordinates>
-            -58.996143,-51.580310,0.0
+            -58.996143,-51.580310
          </coordinates>
       </Point>
    </Placemark>
@@ -1493,7 +1493,7 @@
       <name>1568</name>
       <Point>
          <coordinates>
-            -105.473808,-51.993284,0.0
+            -105.473808,-51.993284
          </coordinates>
       </Point>
    </Placemark>
@@ -1501,7 +1501,7 @@
       <name>1569</name>
       <Point>
          <coordinates>
-            -93.014794,-54.952875,0.0
+            -93.014794,-54.952875
          </coordinates>
       </Point>
    </Placemark>
@@ -1509,7 +1509,7 @@
       <name>1570</name>
       <Point>
          <coordinates>
-            -78.750000,-56.832083,0.0
+            -78.750000,-56.832083
          </coordinates>
       </Point>
    </Placemark>
@@ -1517,7 +1517,7 @@
       <name>1571</name>
       <Point>
          <coordinates>
-            -64.485206,-54.952875,0.0
+            -64.485206,-54.952875
          </coordinates>
       </Point>
    </Placemark>
@@ -1525,7 +1525,7 @@
       <name>1572</name>
       <Point>
          <coordinates>
-            -52.026192,-51.993284,0.0
+            -52.026192,-51.993284
          </coordinates>
       </Point>
    </Placemark>
@@ -1533,7 +1533,7 @@
       <name>1577</name>
       <Point>
          <coordinates>
-            -100.569276,-55.684513,0.0
+            -100.569276,-55.684513
          </coordinates>
       </Point>
    </Placemark>
@@ -1541,7 +1541,7 @@
       <name>1578</name>
       <Point>
          <coordinates>
-            -86.522071,-58.039771,0.0
+            -86.522071,-58.039771
          </coordinates>
       </Point>
    </Placemark>
@@ -1549,7 +1549,7 @@
       <name>1579</name>
       <Point>
          <coordinates>
-            -70.977929,-58.039771,0.0
+            -70.977929,-58.039771
          </coordinates>
       </Point>
    </Placemark>
@@ -1557,7 +1557,7 @@
       <name>1580</name>
       <Point>
          <coordinates>
-            -56.930723,-55.684513,0.0
+            -56.930723,-55.684513
          </coordinates>
       </Point>
    </Placemark>
@@ -1565,7 +1565,7 @@
       <name>1586</name>
       <Point>
          <coordinates>
-            -108.264615,-55.975146,0.0
+            -108.264615,-55.975146
          </coordinates>
       </Point>
    </Placemark>
@@ -1573,7 +1573,7 @@
       <name>1587</name>
       <Point>
          <coordinates>
-            -94.683532,-59.114626,0.0
+            -94.683532,-59.114626
          </coordinates>
       </Point>
    </Placemark>
@@ -1581,7 +1581,7 @@
       <name>1588</name>
       <Point>
          <coordinates>
-            -78.750000,-60.928353,0.0
+            -78.750000,-60.928353
          </coordinates>
       </Point>
    </Placemark>
@@ -1589,7 +1589,7 @@
       <name>1589</name>
       <Point>
          <coordinates>
-            -62.816468,-59.114626,0.0
+            -62.816468,-59.114626
          </coordinates>
       </Point>
    </Placemark>
@@ -1597,7 +1597,7 @@
       <name>1590</name>
       <Point>
          <coordinates>
-            -49.235385,-55.975146,0.0
+            -49.235385,-55.975146
          </coordinates>
       </Point>
    </Placemark>
@@ -1605,7 +1605,7 @@
       <name>1595</name>
       <Point>
          <coordinates>
-            -115.936477,-55.779591,0.0
+            -115.936477,-55.779591
          </coordinates>
       </Point>
    </Placemark>
@@ -1613,7 +1613,7 @@
       <name>1596</name>
       <Point>
          <coordinates>
-            -103.144526,-59.768886,0.0
+            -103.144526,-59.768886
          </coordinates>
       </Point>
    </Placemark>
@@ -1621,7 +1621,7 @@
       <name>1597</name>
       <Point>
          <coordinates>
-            -87.540637,-62.214169,0.0
+            -87.540637,-62.214169
          </coordinates>
       </Point>
    </Placemark>
@@ -1629,7 +1629,7 @@
       <name>1598</name>
       <Point>
          <coordinates>
-            -69.959363,-62.214169,0.0
+            -69.959363,-62.214169
          </coordinates>
       </Point>
    </Placemark>
@@ -1637,7 +1637,7 @@
       <name>1599</name>
       <Point>
          <coordinates>
-            -54.355474,-59.768886,0.0
+            -54.355474,-59.768886
          </coordinates>
       </Point>
    </Placemark>
@@ -1645,7 +1645,7 @@
       <name>1600</name>
       <Point>
          <coordinates>
-            -41.563523,-55.779591,0.0
+            -41.563523,-55.779591
          </coordinates>
       </Point>
    </Placemark>
@@ -1653,7 +1653,7 @@
       <name>1604</name>
       <Point>
          <coordinates>
-            -111.721190,-59.898237,0.0
+            -111.721190,-59.898237
          </coordinates>
       </Point>
    </Placemark>
@@ -1661,7 +1661,7 @@
       <name>1605</name>
       <Point>
          <coordinates>
-            -96.795859,-63.296990,0.0
+            -96.795859,-63.296990
          </coordinates>
       </Point>
    </Placemark>
@@ -1669,7 +1669,7 @@
       <name>1606</name>
       <Point>
          <coordinates>
-            -78.750000,-65.014191,0.0
+            -78.750000,-65.014191
          </coordinates>
       </Point>
    </Placemark>
@@ -1677,7 +1677,7 @@
       <name>1607</name>
       <Point>
          <coordinates>
-            -60.704141,-63.296990,0.0
+            -60.704141,-63.296990
          </coordinates>
       </Point>
    </Placemark>
@@ -1685,7 +1685,7 @@
       <name>1608</name>
       <Point>
          <coordinates>
-            -45.778810,-59.898237,0.0
+            -45.778810,-59.898237
          </coordinates>
       </Point>
    </Placemark>
@@ -1693,7 +1693,7 @@
       <name>1613</name>
       <Point>
          <coordinates>
-            -120.169036,-59.470887,0.0
+            -120.169036,-59.470887
          </coordinates>
       </Point>
    </Placemark>
@@ -1701,7 +1701,7 @@
       <name>1614</name>
       <Point>
          <coordinates>
-            -106.396890,-63.837791,0.0
+            -106.396890,-63.837791
          </coordinates>
       </Point>
    </Placemark>
@@ -1709,7 +1709,7 @@
       <name>1615</name>
       <Point>
          <coordinates>
-            -88.809923,-66.457161,0.0
+            -88.809923,-66.457161
          </coordinates>
       </Point>
    </Placemark>
@@ -1717,7 +1717,7 @@
       <name>1616</name>
       <Point>
          <coordinates>
-            -68.690077,-66.457161,0.0
+            -68.690077,-66.457161
          </coordinates>
       </Point>
    </Placemark>
@@ -1725,7 +1725,7 @@
       <name>1617</name>
       <Point>
          <coordinates>
-            -51.103110,-63.837791,0.0
+            -51.103110,-63.837791
          </coordinates>
       </Point>
    </Placemark>
@@ -1733,7 +1733,7 @@
       <name>1618</name>
       <Point>
          <coordinates>
-            -37.330964,-59.470887,0.0
+            -37.330964,-59.470887
          </coordinates>
       </Point>
    </Placemark>
@@ -1741,7 +1741,7 @@
       <name>1622</name>
       <Point>
          <coordinates>
-            -128.245092,-58.497532,0.0
+            -128.245092,-58.497532
          </coordinates>
       </Point>
    </Placemark>
@@ -1749,7 +1749,7 @@
       <name>1623</name>
       <Point>
          <coordinates>
-            -116.049198,-63.750053,0.0
+            -116.049198,-63.750053
          </coordinates>
       </Point>
    </Placemark>
@@ -1757,7 +1757,7 @@
       <name>1624</name>
       <Point>
          <coordinates>
-            -99.423098,-67.527843,0.0
+            -99.423098,-67.527843
          </coordinates>
       </Point>
    </Placemark>
@@ -1765,7 +1765,7 @@
       <name>1625</name>
       <Point>
          <coordinates>
-            -78.750000,-69.094843,0.0
+            -78.750000,-69.094843
          </coordinates>
       </Point>
    </Placemark>
@@ -1773,7 +1773,7 @@
       <name>1626</name>
       <Point>
          <coordinates>
-            -58.076902,-67.527843,0.0
+            -58.076902,-67.527843
          </coordinates>
       </Point>
    </Placemark>
@@ -1781,7 +1781,7 @@
       <name>1627</name>
       <Point>
          <coordinates>
-            -41.450802,-63.750053,0.0
+            -41.450802,-63.750053
          </coordinates>
       </Point>
    </Placemark>
@@ -1789,7 +1789,7 @@
       <name>1628</name>
       <Point>
          <coordinates>
-            -29.254908,-58.497532,0.0
+            -29.254908,-58.497532
          </coordinates>
       </Point>
    </Placemark>
@@ -1797,7 +1797,7 @@
       <name>1631</name>
       <Point>
          <coordinates>
-            -125.379633,-63.027198,0.0
+            -125.379633,-63.027198
          </coordinates>
       </Point>
    </Placemark>
@@ -1805,7 +1805,7 @@
       <name>1632</name>
       <Point>
          <coordinates>
-            -110.482786,-67.895100,0.0
+            -110.482786,-67.895100
          </coordinates>
       </Point>
    </Placemark>
@@ -1813,7 +1813,7 @@
       <name>1633</name>
       <Point>
          <coordinates>
-            -89.562424,-70.821542,0.0
+            -89.562424,-70.821542
          </coordinates>
       </Point>
    </Placemark>
@@ -1821,7 +1821,7 @@
       <name>1634</name>
       <Point>
          <coordinates>
-            -67.937576,-70.821542,0.0
+            -67.937576,-70.821542
          </coordinates>
       </Point>
    </Placemark>
@@ -1829,7 +1829,7 @@
       <name>1635</name>
       <Point>
          <coordinates>
-            -47.017214,-67.895100,0.0
+            -47.017214,-67.895100
          </coordinates>
       </Point>
    </Placemark>
@@ -1837,7 +1837,7 @@
       <name>1636</name>
       <Point>
          <coordinates>
-            -32.120367,-63.027198,0.0
+            -32.120367,-63.027198
          </coordinates>
       </Point>
    </Placemark>
@@ -1845,7 +1845,7 @@
       <name>1641</name>
       <Point>
          <coordinates>
-            -121.463922,-67.514213,0.0
+            -121.463922,-67.514213
          </coordinates>
       </Point>
    </Placemark>
@@ -1853,7 +1853,7 @@
       <name>1642</name>
       <Point>
          <coordinates>
-            -101.962333,-71.812957,0.0
+            -101.962333,-71.812957
          </coordinates>
       </Point>
    </Placemark>
@@ -1861,7 +1861,7 @@
       <name>1643</name>
       <Point>
          <coordinates>
-            -78.750000,-73.715960,0.0
+            -78.750000,-73.715960
          </coordinates>
       </Point>
    </Placemark>
@@ -1869,7 +1869,7 @@
       <name>1644</name>
       <Point>
          <coordinates>
-            -55.537667,-71.812957,0.0
+            -55.537667,-71.812957
          </coordinates>
       </Point>
    </Placemark>
@@ -1877,7 +1877,7 @@
       <name>1645</name>
       <Point>
          <coordinates>
-            -36.036078,-67.514213,0.0
+            -36.036078,-67.514213
          </coordinates>
       </Point>
    </Placemark>
@@ -1885,7 +1885,7 @@
       <name>1650</name>
       <Point>
          <coordinates>
-            -131.773421,-66.417521,0.0
+            -131.773421,-66.417521
          </coordinates>
       </Point>
    </Placemark>
@@ -1893,7 +1893,7 @@
       <name>1651</name>
       <Point>
          <coordinates>
-            -115.151744,-71.943585,0.0
+            -115.151744,-71.943585
          </coordinates>
       </Point>
    </Placemark>
@@ -1901,7 +1901,7 @@
       <name>1652</name>
       <Point>
          <coordinates>
-            -93.476772,-75.488014,0.0
+            -93.476772,-75.488014
          </coordinates>
       </Point>
    </Placemark>
@@ -1909,7 +1909,7 @@
       <name>1653</name>
       <Point>
          <coordinates>
-            -64.023228,-75.488014,0.0
+            -64.023228,-75.488014
          </coordinates>
       </Point>
    </Placemark>
@@ -1917,7 +1917,7 @@
       <name>1654</name>
       <Point>
          <coordinates>
-            -42.348256,-71.943585,0.0
+            -42.348256,-71.943585
          </coordinates>
       </Point>
    </Placemark>
@@ -1925,7 +1925,7 @@
       <name>1655</name>
       <Point>
          <coordinates>
-            -25.726579,-66.417521,0.0
+            -25.726579,-66.417521
          </coordinates>
       </Point>
    </Placemark>
@@ -1933,7 +1933,7 @@
       <name>1659</name>
       <Point>
          <coordinates>
-            -127.960329,-71.187339,0.0
+            -127.960329,-71.187339
          </coordinates>
       </Point>
    </Placemark>
@@ -1941,7 +1941,7 @@
       <name>1660</name>
       <Point>
          <coordinates>
-            -110.491468,-76.104899,0.0
+            -110.491468,-76.104899
          </coordinates>
       </Point>
    </Placemark>
@@ -1949,7 +1949,7 @@
       <name>1661</name>
       <Point>
          <coordinates>
-            -78.750000,-78.344613,0.0
+            -78.750000,-78.344613
          </coordinates>
       </Point>
    </Placemark>
@@ -1957,7 +1957,7 @@
       <name>1662</name>
       <Point>
          <coordinates>
-            -47.008532,-76.104899,0.0
+            -47.008532,-76.104899
          </coordinates>
       </Point>
    </Placemark>
@@ -1965,7 +1965,7 @@
       <name>1663</name>
       <Point>
          <coordinates>
-            -29.539671,-71.187339,0.0
+            -29.539671,-71.187339
          </coordinates>
       </Point>
    </Placemark>
@@ -1973,7 +1973,7 @@
       <name>1668</name>
       <Point>
          <coordinates>
-            -139.406332,-69.631104,0.0
+            -139.406332,-69.631104
          </coordinates>
       </Point>
    </Placemark>
@@ -1981,7 +1981,7 @@
       <name>1669</name>
       <Point>
          <coordinates>
-            -127.417199,-75.508417,0.0
+            -127.417199,-75.508417
          </coordinates>
       </Point>
    </Placemark>
@@ -1989,7 +1989,7 @@
       <name>1670</name>
       <Point>
          <coordinates>
-            -100.140196,-79.945340,0.0
+            -100.140196,-79.945340
          </coordinates>
       </Point>
    </Placemark>
@@ -1997,7 +1997,7 @@
       <name>1671</name>
       <Point>
          <coordinates>
-            -57.359804,-79.945340,0.0
+            -57.359804,-79.945340
          </coordinates>
       </Point>
    </Placemark>
@@ -2005,7 +2005,7 @@
       <name>1672</name>
       <Point>
          <coordinates>
-            -30.082801,-75.508417,0.0
+            -30.082801,-75.508417
          </coordinates>
       </Point>
    </Placemark>
@@ -2013,7 +2013,7 @@
       <name>1678</name>
       <Point>
          <coordinates>
-            -141.973671,-73.849546,0.0
+            -141.973671,-73.849546
          </coordinates>
       </Point>
    </Placemark>
@@ -2021,7 +2021,7 @@
       <name>1679</name>
       <Point>
          <coordinates>
-            -124.584892,-79.841381,0.0
+            -124.584892,-79.841381
          </coordinates>
       </Point>
    </Placemark>
@@ -2029,7 +2029,7 @@
       <name>1680</name>
       <Point>
          <coordinates>
-            -78.750000,-82.988452,0.0
+            -78.750000,-82.988452
          </coordinates>
       </Point>
    </Placemark>
@@ -2037,7 +2037,7 @@
       <name>1681</name>
       <Point>
          <coordinates>
-            -32.915108,-79.841381,0.0
+            -32.915108,-79.841381
          </coordinates>
       </Point>
    </Placemark>
@@ -2045,7 +2045,7 @@
       <name>1682</name>
       <Point>
          <coordinates>
-            -15.526329,-73.849546,0.0
+            -15.526329,-73.849546
          </coordinates>
       </Point>
    </Placemark>
@@ -2053,7 +2053,7 @@
       <name>1687</name>
       <Point>
          <coordinates>
-            -145.057028,-78.135141,0.0
+            -145.057028,-78.135141
          </coordinates>
       </Point>
    </Placemark>
@@ -2061,7 +2061,7 @@
       <name>1688</name>
       <Point>
          <coordinates>
-            -116.557027,-84.062545,0.0
+            -116.557027,-84.062545
          </coordinates>
       </Point>
    </Placemark>
@@ -2069,7 +2069,7 @@
       <name>1689</name>
       <Point>
          <coordinates>
-            -40.942973,-84.062545,0.0
+            -40.942973,-84.062545
          </coordinates>
       </Point>
    </Placemark>
@@ -2077,7 +2077,7 @@
       <name>1690</name>
       <Point>
          <coordinates>
-            -12.442972,-78.135141,0.0
+            -12.442972,-78.135141
          </coordinates>
       </Point>
    </Placemark>
@@ -2085,7 +2085,7 @@
       <name>1696</name>
       <Point>
          <coordinates>
-            -159.244021,-75.390915,0.0
+            -159.244021,-75.390915
          </coordinates>
       </Point>
    </Placemark>
@@ -2093,7 +2093,7 @@
       <name>1697</name>
       <Point>
          <coordinates>
-            -150.689623,-82.382340,0.0
+            -150.689623,-82.382340
          </coordinates>
       </Point>
    </Placemark>
@@ -2101,7 +2101,7 @@
       <name>1698</name>
       <Point>
          <coordinates>
-            -78.750000,-87.655350,0.0
+            -78.750000,-87.655350
          </coordinates>
       </Point>
    </Placemark>
@@ -2109,7 +2109,7 @@
       <name>1699</name>
       <Point>
          <coordinates>
-            -6.810377,-82.382340,0.0
+            -6.810377,-82.382340
          </coordinates>
       </Point>
    </Placemark>
@@ -2117,7 +2117,7 @@
       <name>1784</name>
       <Point>
          <coordinates>
-            11.250000,-79.189978,0.0
+            11.250000,-79.189978
          </coordinates>
       </Point>
    </Placemark>
@@ -2125,7 +2125,7 @@
       <name>1811</name>
       <Point>
          <coordinates>
-            11.250000,-86.387456,0.0
+            11.250000,-86.387456
          </coordinates>
       </Point>
    </Placemark>
@@ -2133,7 +2133,7 @@
       <name>1838</name>
       <Point>
          <coordinates>
-            -168.750000,-86.387456,0.0
+            -168.750000,-86.387456
          </coordinates>
       </Point>
    </Placemark>
@@ -2141,7 +2141,7 @@
       <name>1865</name>
       <Point>
          <coordinates>
-            -168.750000,-79.189978,0.0
+            -168.750000,-79.189978
          </coordinates>
       </Point>
    </Placemark>
@@ -2149,7 +2149,7 @@
       <name>1949</name>
       <Point>
          <coordinates>
-            101.250000,-10.810022,0.0
+            101.250000,-10.810022
          </coordinates>
       </Point>
    </Placemark>
@@ -2157,7 +2157,7 @@
       <name>1950</name>
       <Point>
          <coordinates>
-            101.250000,-3.612544,0.0
+            101.250000,-3.612544
          </coordinates>
       </Point>
    </Placemark>
@@ -2165,7 +2165,7 @@
       <name>1951</name>
       <Point>
          <coordinates>
-            101.250000,3.612544,0.0
+            101.250000,3.612544
          </coordinates>
       </Point>
    </Placemark>
@@ -2173,7 +2173,7 @@
       <name>1952</name>
       <Point>
          <coordinates>
-            101.250000,10.810022,0.0
+            101.250000,10.810022
          </coordinates>
       </Point>
    </Placemark>
