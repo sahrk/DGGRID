@@ -171,7 +171,7 @@ DgBoundedHexC3RF2D::addFromSeqNum (unsigned long long int sNum) const
       case 6: res.setJ(res.j() + 2);
               break;
    }
-   
+
    res += lowerLeft();
 
    return res;
