@@ -3,7 +3,9 @@ All notable changes to this project will be documented in this file.
 
 All changes are by Kevin Sahr, unless otherwise noted.
 
-## [8.01b] - 2024-01-08
+## [8.1b] - 2024-01-10
+### Added
+- pure aperture 7 hexagon grids (ISEA7H/FULLER7H) are now first class DGGS that support all operations (just like aperture 3 and 4 hexagon DGGS)
 ### Changed
 - removed altitude component from built-in GeoJSON and KML output files
 
