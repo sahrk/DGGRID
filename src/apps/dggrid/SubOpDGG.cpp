@@ -444,12 +444,6 @@ SubOpDGG::setupOp (void)
       aperture = dgg::util::from_string<int>(tmp);
    }
 
-   // simulate a pure aperture 7 grid using an aperture sequence
-   if (aperture == 7 && !isApSeq) {
-      isApSeq = true;
-      apSeq = DgApSeq("77777777777777777777777777777777777");
-   }
-
    getParamValue(pList(), "dggs_num_placements", numGrids, false);
    getParamValue(pList(), "dggs_proj", projType, false);
    getParamValue(pList(), "dggs_vert0_azimuth", azimuthDegs, false);
