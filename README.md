@@ -2,7 +2,7 @@
 
 ## General Information
 
-__DGGRID__ version 8.0b released October 24, 2023
+__DGGRID__ version 8.1b released January 10, 2024
 __Southern Terra Cognita Laboratory__  
 www.discreteglobalgrids.org  
 [Kevin Sahr](http://www.linkedin.com/in/Kevin-Sahr), Director
