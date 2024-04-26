@@ -24,7 +24,7 @@ Three directories should be included herein:
 
 - `dockerfiles`: contains a __DGGRID__ dockerfile and instructions for use
 
-User documentation for __DGGRID__ is in `dggridManualV77.pdf`.
+User documentation for __DGGRID__ is in `dggridManualV81b.pdf`.
 
 ## Terms of Use
 
