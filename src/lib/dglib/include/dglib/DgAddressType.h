@@ -30,11 +30,11 @@
 namespace dgg { namespace addtype {
 
 enum DgAddressType { Geo, Plane, ProjTri, Q2DD, Q2DI, SeqNum, Vertex2DD,
-                     ZOrder, ZOrderString, Z3, Z3String, InvalidAddressType };
+                     ZOrder, ZOrderString, Z3, Z3String, Z7, Z7String, InvalidAddressType };
 
 static const std::string addTypeStrings[] = { "GEO", "PLANE", "PROJTRI", "Q2DD",
     "Q2DI", "SEQNUM", "VERTEX2DD", "ZORDER", "ZORDER_STRING", "Z3", "Z3_STRING",
-    "INVALID" };
+    "Z7", "Z7_STRING", "INVALID" };
 
 DgAddressType stringToAddressType (const std::string& str);
 const std::string& to_string (DgAddressType t);

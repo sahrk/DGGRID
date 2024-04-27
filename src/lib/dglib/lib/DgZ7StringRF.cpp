@@ -84,12 +84,12 @@ DgQ2DItoZ7StringConverter::DgQ2DItoZ7StringConverter
          "fromFrame and toFrame apertures or resolutions do not match", DgBase::Fatal);
    }
 
-   if (IDGG().gridTopo() != Hexagon || IDGG().dggs()->aperture() != 3) {
+   if (IDGG().gridTopo() != Hexagon || IDGG().dggs()->aperture() != 7) {
       report("DgQ2DItoZ7StringConverter::DgQ2DItoZ7StringConverter(): "
-         "only implemented for aperture 3 hexagon grids", DgBase::Fatal);
+         "only implemented for aperture 7 hexagon grids", DgBase::Fatal);
    }
 
-   effRadix_ = 3;
+   effRadix_ = 7;
 
    // effRes_ is the number of Class I resolutions
    effRes_ = (IDGG().res() + 1) / 2;
@@ -108,6 +108,7 @@ DgQ2DItoZ7StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
       dgcout << "Class " << ((IDGG().isClassI()) ? "I" : "II") << endl;
    }
 */
+/*
    if (effRes_ > 0) {
 //dgcout << "** addIn " << addIn << endl;
       DgRadixString rs1(effRadix_, (int) addIn.coord().i(), effRes_);
@@ -148,9 +149,10 @@ DgQ2DItoZ7StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
       if (!IDGG().isClassI() && addstr.length())
          addstr.pop_back();
    }
+*/
 
    DgZ7StringCoord zorder;
-   zorder.setValString(addstr);
+//   zorder.setValString(addstr);
 //dgcout << "zorder " << zorder << endl;
 
    return zorder;
@@ -212,50 +214,51 @@ DgZ7StringToQ2DIConverter::convertTypedAddress (const DgZ7StringCoord& addIn) co
    int index = 2; // skip the two quad digits
 
    // the rest is the Z7 digit string
-   string z3str = addstr.substr(index);
+   string z7str = addstr.substr(index);
 
-//dgcout << "z3str in: " << z3str;
+//dgcout << "z7str in: " << z7str;
 
    // adjust if Class II (odd res)
-   if (z3str.length() % 2)
-      z3str += "0";
-//dgcout << " adjusted: " << z3str << endl;
+   if (z7str.length() % 2)
+      z7str += "0";
+//dgcout << " adjusted: " << z7str << endl;
 
+/*
    // build the digit string for i and j from the two-digit
-   // z3 codes
+   // z7 codes
    string radStr1 = "";
    string radStr2 = "";
-   for (int i = 0; i < z3str.length(); i += 2) {
-      string z3code = z3str.substr(i, 2);
-      if (z3code == "00") {
+   for (int i = 0; i < z7str.length(); i += 2) {
+      string z7code = z7str.substr(i, 2);
+      if (z7code == "00") {
          radStr1 += "0";
          radStr2 += "0";
-      } else if (z3code == "22") {
+      } else if (z7code == "22") {
          radStr1 += "0";
          radStr2 += "1";
-      } else if (z3code == "21") {
+      } else if (z7code == "21") {
          radStr1 += "0";
          radStr2 += "2";
-      } else if (z3code == "01") {
+      } else if (z7code == "01") {
          radStr1 += "1";
          radStr2 += "0";
-      } else if (z3code == "02") {
+      } else if (z7code == "02") {
          radStr1 += "1";
          radStr2 += "1";
-      } else if (z3code == "20") {
+      } else if (z7code == "20") {
          radStr1 += "1";
          radStr2 += "2";
-      } else if (z3code == "12") {
+      } else if (z7code == "12") {
          radStr1 += "2";
          radStr2 += "0";
-      } else if (z3code == "10") {
+      } else if (z7code == "10") {
          radStr1 += "2";
          radStr2 += "1";
-      } else if (z3code == "11") {
+      } else if (z7code == "11") {
          radStr1 += "2";
          radStr2 += "2";
       }
-//      dgcout << "z3code: " << z3code << " radStr1: " << radStr1
+//      dgcout << "z7code: " << z7code << " radStr1: " << radStr1
 //             << " radStr2: " << radStr2 << endl;
    }
 
@@ -263,10 +266,12 @@ DgZ7StringToQ2DIConverter::convertTypedAddress (const DgZ7StringCoord& addIn) co
    DgRadixString rad2(effRadix_, radStr2);
 
 //   dgcout << "qstr: " << qstr << " rad1: " << rad1 << " rad2: " << rad2 << endl;
+*/
 
-   DgQ2DICoord q2di(quadNum, DgIVec2D(rad1.value(), rad2.value()));
+   //DgQ2DICoord q2di(quadNum, DgIVec2D(rad1.value(), rad2.value()));
    //dgcout << "q2di: " << q2di << endl;
 
+   DgQ2DICoord q2di(0, DgIVec2D(0, 0));
    return q2di;
 
 } // DgQ2DICoord DgZ7StringToQ2DIConverter::convertTypedAddress
