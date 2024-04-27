@@ -80,7 +80,7 @@ DgQ2DItoZ7StringConverter::DgQ2DItoZ7StringConverter
    }
 
    if (IDGG().dggs()->aperture() != zRF->aperture() || IDGG().res() != zRF->res()) {
-      report("DgQ2DItoZ7StringConverter::DgQ2DItoZ7StringConverter(): "
+       report("DgQ2DItoZ7StringConverter::DgQ2DItoZ7StringConverter(): "
          "fromFrame and toFrame apertures or resolutions do not match", DgBase::Fatal);
    }
 
@@ -183,13 +183,13 @@ DgZ7StringToQ2DIConverter::DgZ7StringToQ2DIConverter
          " fromFrame and toFrame apertures or resolutions do not match", DgBase::Fatal);
    }
 
-   if (IDGG().gridTopo() != Hexagon || IDGG().dggs()->aperture() != 3) {
+   if (IDGG().gridTopo() != Hexagon || IDGG().dggs()->aperture() != 7) {
       report("DgZ7StringToQ2DIConverter::DgZ7StringToQ2DIConverter(): "
          "only implemented for aperture 3 hexagon grids", DgBase::Fatal);
    }
 
    effRes_ = IDGG().res();       // effective resolution
-   effRadix_ = 3;
+   effRadix_ = 7;
    // effRes_ is the number of Class I resolutions
    effRes_ = (IDGG().res() + 1) / 2;
 

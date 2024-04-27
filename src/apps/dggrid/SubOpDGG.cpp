@@ -151,6 +151,34 @@ SubOpDGG::addressTypeToRF (DgAddressType type, const DgRFBase** rf,
 
          break;
 
+      case Z7:
+         if (isApSeq)
+            ::report("input_address_type of Z7 not supported for dggs_aperture_type of SEQUENCE",
+                     DgBase::Fatal);
+
+         if (dgg->z7RF()) {
+            *rf = dgg->z7RF();
+            if (chdRF) *chdRF = chdDgg->z7RF();
+         } else
+            ::report("addressTypeToRF(): Z7 only supported for aperture 7 hexagon grids",
+                     DgBase::Fatal);
+
+         break;
+
+      case Z7String:
+         if (isApSeq)
+            ::report("input_address_type of Z7_STRING not supported for dggs_aperture_type of SEQUENCE",
+                     DgBase::Fatal);
+
+         if (dgg->z7StrRF()) {
+            *rf = dgg->z7StrRF();
+            if (chdRF) *chdRF = chdDgg->z7StrRF();
+         } else
+            ::report("addressTypeToRF(): Z7_STRING only supported for aperture 7 hexagon grids",
+                     DgBase::Fatal);
+
+         break;
+
       case ZOrder:
          if (isApSeq)
             ::report("input_address_type of ZORDER not supported for dggs_aperture_type of SEQUENCE",

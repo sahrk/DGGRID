@@ -62,12 +62,14 @@
 #include <dglib/DgDmdD4Grid2DS.h>
 #include <dglib/DgTriGrid2D.h>
 #include <dglib/DgOutRandPtsText.h>
+/*
 #include <dglib/DgZOrderRF.h>
 #include <dglib/DgZOrderStringRF.h>
 #include <dglib/DgZ3RF.h>
 #include <dglib/DgZ3StringRF.h>
 #include <dglib/DgZ7RF.h>
 #include <dglib/DgZ7StringRF.h>
+*/
 #include "DgHexSF.h"
 
 //using namespace dgg::topo;

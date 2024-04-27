@@ -87,7 +87,7 @@ class Dg2WayZ7ToStringConverter : public Dg2WayConverter {
 
 ////////////////////////////////////////////////////////////////////////////////
 //
-//   Coordinate consisting of a string containing quad number, (aperture 3 hex
+//   Coordinate consisting of a string containing quad number, (aperture 7 hex
 //        level indicator), and digit-interleaved radix string
 //
 class DgZ7Coord  {
@@ -144,7 +144,7 @@ class DgZ7RF : public DgRF<DgZ7Coord, long long int> {
          { return new DgZ7RF (networkIn, nameIn, resIn); }
 
       int res      (void) const { return res_; }
-      int aperture (void) const { return 3; }
+      int aperture (void) const { return 7; }
 
       virtual long long int dist (const DgZ7Coord& add1,
                         const DgZ7Coord& add2) const

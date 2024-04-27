@@ -152,7 +152,7 @@ class DgZ7StringRF : public DgRF<DgZ7StringCoord, long long int> {
          { return new DgZ7StringRF (networkIn, nameIn, resIn); }
 
       int res      (void) const { return res_; }
-      int aperture (void) const { return 3; }
+      int aperture (void) const { return 7; }
 
       virtual long long int dist (const DgZ7StringCoord& add1,
                         const DgZ7StringCoord& add2) const
