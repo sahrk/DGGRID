@@ -32,6 +32,18 @@
 
 const DgIVec3D& DgIVec3D::undefDgIVec3D = DgIVec3D(INT_MAX, INT_MAX, INT_MAX);
 
+/** @brief CoordIJK unit vectors corresponding to the 7 GBT digits.
+ */
+static const DgIVec3D UNIT_VECS[] = {
+    {0, 0, 0},  // direction 0
+    {0, 0, 1},  // direction 1
+    {0, 1, 0},  // direction 2
+    {0, 1, 1},  // direction 3
+    {1, 0, 0},  // direction 4
+    {1, 0, 1},  // direction 5
+    {1, 1, 0}   // direction 6
+};
+
 ////////////////////////////////////////////////////////////////////////////////
 const char*
 DgIVec3D::fromString (const char* str, char delimiter)
@@ -46,9 +58,7 @@ DgIVec3D::fromString (const char* str, char delimiter)
    // Get i, j, and k
    char* tok;
 
-   long long int	iIn(0),
-	   		jIn(0),
-                        kIn(0);
+   long long int iIn(0), jIn(0), kIn(0);
 
    try
     {
@@ -103,7 +113,7 @@ DgIVec3D::ijkPlusNormalize(void) {
     }
 
     // remove the min value if needed
-    int min = i_;
+    long long int min = i_;
     if (j_ < min) min = j_;
     if (k_ < min) min = k_;
     if (min > 0) {
@@ -121,14 +131,14 @@ DgIVec3D::ijkPlusNormalize(void) {
  * @return The H3 digit (0-6) corresponding to the ijk unit vector, zero vector,
  * or INVALID_DIGIT (7) on failure.
  */
-static Direction unitIjkPlusToDigit(const DgIVec3D& ijk) {
+static DgIVec3D::Direction unitIjkPlusToDigit(const DgIVec3D& ijk) {
     DgIVec3D c = ijk;
     c.ijkPlusNormalize();
 
     DgIVec3D::Direction digit = DgIVec3D::INVALID_DIGIT;
-    for (DgIVec3D::Direction i = DgIVec3D::CENTER_DIGIT; i < DgIVec3D::NUM_DIGITS; i++) {
+    for (int i = DgIVec3D::CENTER_DIGIT; i < DgIVec3D::NUM_DIGITS; i++) {
         if (c == UNIT_VECS[i]) {
-            digit = i;
+            digit = (DgIVec3D::Direction) i;
             break;
         }
     }
@@ -145,8 +155,8 @@ static Direction unitIjkPlusToDigit(const DgIVec3D& ijk) {
 void
 DgIVec3D::upAp7(void) {
     // convert to CoordIJ
-    int i = i_ - k_;
-    int j = j_ - k_;
+    long long int i = i_ - k_;
+    long long int j = j_ - k_;
 
     i_ = (int)lround((3 * i - j) / 7.0);
     j_ = (int)lround((i + 2 * j) / 7.0);
@@ -163,8 +173,8 @@ DgIVec3D::upAp7(void) {
 void
 DgIVec3D::upAp7r(void) {
     // convert to CoordIJ
-    int i = i_ - k_;
-    int j = j_ - k_;
+    long long int i = i_ - k_;
+    long long int j = j_ - k_;
 
     i_ = (int)lround((2 * i + j) / 7.0);
     j_ = (int)lround((3 * j - i) / 7.0);
@@ -307,7 +317,7 @@ static DgIVec3D::Direction rotate60ccw(DgIVec3D::Direction digit) {
  *
  * @param digit Indexing digit (between 1 and 6 inclusive)
  */
-static Direction rotate60cw(Direction digit) {
+static DgIVec3D::Direction rotate60cw(DgIVec3D::Direction digit) {
     switch (digit) {
         case DgIVec3D::K_AXES_DIGIT:
             return DgIVec3D::JK_AXES_DIGIT;

@@ -190,7 +190,7 @@ SubOpGen::evalCell (const DgIDGGBase& dgg, const DgContCartRF& cc1,
               accepted = true; // a hole may make this false
 #ifdef USE_GDAL
               if (useHoles) {
-                 const int numHoles = clipRegion.clpPolys()[i].holes.size();
+                 const int numHoles = (int) clipRegion.clpPolys()[i].holes.size();
                  if (numHoles > 0) {
 
                     // assume hole on the snyder quad are most likely
@@ -794,7 +794,7 @@ SubOpGen::processOneClipPoly (DgPolygon& polyIn, const DgIDGGBase& dgg,
    int** holeQuads = NULL;
    if (useHoles) {
       //// determine which holes have vertices on which quads
-      numHoles = polyIn.holes().size();
+      numHoles = (int) polyIn.holes().size();
       holeQuads = new int*[numHoles];
       for (int h = 0; h < numHoles; h++) {
 
