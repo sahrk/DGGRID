@@ -37,6 +37,34 @@ class DgIVec3D {
 
    public:
 
+      //enum Direction { Debug1, Debug0, Info, Warning, Fatal, Silent };
+/** @brief GBT digit representing ijk+ axes direction.
+ * Values will be within the lowest 3 bits of an integer.
+ */
+typedef enum {
+    /** H3 digit in center */
+    CENTER_DIGIT = 0,
+    /** H3 digit in k-axes direction */
+    K_AXES_DIGIT = 1,
+    /** H3 digit in j-axes direction */
+    J_AXES_DIGIT = 2,
+    /** H3 digit in j == k direction */
+    JK_AXES_DIGIT = J_AXES_DIGIT | K_AXES_DIGIT, /* 3 */
+    /** H3 digit in i-axes direction */
+    I_AXES_DIGIT = 4,
+    /** H3 digit in i == k direction */
+    IK_AXES_DIGIT = I_AXES_DIGIT | K_AXES_DIGIT, /* 5 */
+    /** H3 digit in i == j direction */
+    IJ_AXES_DIGIT = I_AXES_DIGIT | J_AXES_DIGIT, /* 6 */
+    /** H3 digit in the invalid direction */
+    INVALID_DIGIT = 7,
+   /** Valid digits will be less than this value. Same value as INVALID_DIGIT.
+     */
+    NUM_DIGITS = INVALID_DIGIT,
+    /** Child digit which is skipped for pentagons */
+    PENTAGON_SKIPPED_DIGIT = K_AXES_DIGIT /* 1 */
+} Direction;
+
       static const DgIVec3D& undefDgIVec3D;
 
       DgIVec3D (long long int i = 0, long long int j = 0,
@@ -79,7 +107,7 @@ class DgIVec3D {
       const char* fromString (const char* str, char delimiter);
 
       inline DgIVec3D& scale (long double iScaleFactor, long double jScaleFactor,
-                 long double zScaleFacgtor);
+                 long double kScaleFactor);
 
       inline operator string (void) const;
       inline operator DgIVec2D  (void) const;
@@ -89,6 +117,25 @@ class DgIVec3D {
       inline DgIVec3D& operator-= (const DgIVec3D& pt);
 
       inline DgIVec3D& operator*= (long double scaleFactor);
+
+      // IJK+ and aperture sequence operators
+      static Direction rotate60ccw(Direction digit);
+      static Direction rotate60cw(Direction digit);
+      static Direction unitIjkPlusToDigit(DgIVec3D& pt) const;
+
+      void ijkPlusNormalize(void);
+      void upAp7(void);
+      void upAp7r(void);
+      void downAp7(void);
+      void downAp7r(void);
+      void downAp3(void);
+      void downAp3r(void);
+      void downAp4(void);
+      void neighbor(Direction digit);
+      void ijkRotate60ccw(void);
+      void ijkRotate60cw(void);
+      //H3Error upAp7Checked(void);
+      //H3Error upAp7rChecked(void);
 
       friend DgIVec3D operator*  (const DgIVec3D& pt, long double scaleFactor);
       friend DgIVec3D operator*  (long double scaleFactor, const DgIVec3D& pt);
