@@ -125,8 +125,8 @@ static Direction unitIjkPlusToDigit(const DgIVec3D& ijk) {
     DgIVec3D c = ijk;
     c.ijkPlusNormalize();
 
-    Direction digit = INVALID_DIGIT;
-    for (Direction i = CENTER_DIGIT; i < NUM_DIGITS; i++) {
+    DgIVec3D::Direction digit = DgIVec3D::INVALID_DIGIT;
+    for (DgIVec3D::Direction i = DgIVec3D::CENTER_DIGIT; i < DgIVec3D::NUM_DIGITS; i++) {
         if (c == UNIT_VECS[i]) {
             digit = i;
             break;
@@ -283,20 +283,20 @@ DgIVec3D::ijkRotate60cw(void) {
  *
  * @param digit Indexing digit (between 1 and 6 inclusive)
  */
-static Direction rotate60ccw(Direction digit) {
+static DgIVec3D::Direction rotate60ccw(DgIVec3D::Direction digit) {
     switch (digit) {
-        case K_AXES_DIGIT:
-            return IK_AXES_DIGIT;
-        case IK_AXES_DIGIT:
-            return I_AXES_DIGIT;
-        case I_AXES_DIGIT:
-            return IJ_AXES_DIGIT;
-        case IJ_AXES_DIGIT:
-            return J_AXES_DIGIT;
-        case J_AXES_DIGIT:
-            return JK_AXES_DIGIT;
-        case JK_AXES_DIGIT:
-            return K_AXES_DIGIT;
+        case DgIVec3D::K_AXES_DIGIT:
+            return DgIVec3D::IK_AXES_DIGIT;
+        case DgIVec3D::IK_AXES_DIGIT:
+            return DgIVec3D::I_AXES_DIGIT;
+        case DgIVec3D::I_AXES_DIGIT:
+            return DgIVec3D::IJ_AXES_DIGIT;
+        case DgIVec3D::IJ_AXES_DIGIT:
+            return DgIVec3D::J_AXES_DIGIT;
+        case DgIVec3D::J_AXES_DIGIT:
+            return DgIVec3D::JK_AXES_DIGIT;
+        case DgIVec3D::JK_AXES_DIGIT:
+            return DgIVec3D::K_AXES_DIGIT;
         default:
             return digit;
     }
@@ -309,18 +309,18 @@ static Direction rotate60ccw(Direction digit) {
  */
 static Direction rotate60cw(Direction digit) {
     switch (digit) {
-        case K_AXES_DIGIT:
-            return JK_AXES_DIGIT;
-        case JK_AXES_DIGIT:
-            return J_AXES_DIGIT;
-        case J_AXES_DIGIT:
-            return IJ_AXES_DIGIT;
-        case IJ_AXES_DIGIT:
-            return I_AXES_DIGIT;
-        case I_AXES_DIGIT:
-            return IK_AXES_DIGIT;
-        case IK_AXES_DIGIT:
-            return K_AXES_DIGIT;
+        case DgIVec3D::K_AXES_DIGIT:
+            return DgIVec3D::JK_AXES_DIGIT;
+        case DgIVec3D::JK_AXES_DIGIT:
+            return DgIVec3D::J_AXES_DIGIT;
+        case DgIVec3D::J_AXES_DIGIT:
+            return DgIVec3D::IJ_AXES_DIGIT;
+        case DgIVec3D::IJ_AXES_DIGIT:
+            return DgIVec3D::I_AXES_DIGIT;
+        case DgIVec3D::I_AXES_DIGIT:
+            return DgIVec3D::IK_AXES_DIGIT;
+        case DgIVec3D::IK_AXES_DIGIT:
+            return DgIVec3D::K_AXES_DIGIT;
         default:
             return digit;
     }
