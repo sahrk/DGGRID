@@ -152,6 +152,8 @@ DgZ7StringtoZ7Converter::DgZ7StringtoZ7Converter
 DgZ7Coord
 DgZ7StringtoZ7Converter::convertTypedAddress (const DgZ7StringCoord& addIn) const
 {
+   printf("DgZ7StringtoZ7Converter::convertTypedAddress()\n"); 
+
    string addstr = addIn.valString();
    uint64_t z = 0;
 
@@ -219,6 +221,8 @@ DgZ7ToZ7StringConverter::DgZ7ToZ7StringConverter
 DgZ7StringCoord
 DgZ7ToZ7StringConverter::convertTypedAddress (const DgZ7Coord& addIn) const
 {
+   printf("DgZ7ToZ7StringConverter::convertTypedAddress\n");
+
    uint64_t z = addIn.value();
 
    int quadNum = ZORDER_GET_QUADNUM(z);

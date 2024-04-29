@@ -388,8 +388,7 @@ SubOpDGG::setupOp (void)
          pList().setPresetParam("dggs_num_aperture_4_res", "2");
          pList().setPresetParam("dggs_aperture_type", "MIXED43");
          pList().setPresetParam("output_cell_label_type", "SUPERFUND");
-      }
-      else if (tmplc == "planetrisk") {
+      } else if (tmplc == "planetrisk") {
          pList().setPresetParam("dggs_topology", "HEXAGON");
          pList().setPresetParam("dggs_proj", "ISEA");
          pList().setPresetParam("dggs_aperture_type", "SEQUENCE");
