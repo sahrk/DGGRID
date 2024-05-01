@@ -30,7 +30,7 @@
 #include <dglib/DgZ7StringRF.h>
 #include <dglib/DgIDGGBase.h>
 #include <dglib/DgIDGGSBase.h>
-#include <dglib/DgRadixString.h>
+#include <dglib/DgIVec3D.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 const DgZ7StringCoord DgZ7StringCoord::undefDgZ7StringCoord("99");
@@ -100,54 +100,66 @@ DgQ2DItoZ7StringConverter::DgQ2DItoZ7StringConverter
 DgZ7StringCoord
 DgQ2DItoZ7StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
 {
-   printf("DgQ2DItoZ7StringConverter::convertTypedAddress\n");
-
-   string qstr = dgg::util::to_string(addIn.quadNum(), 2);
-   string addstr = qstr;
+   //printf("DgQ2DItoZ7StringConverter::convertTypedAddress\n");
 /*
-    // check for res 0/base cell
+   // check for res 0/base cell
     if (res == 0) {
-        if (fijk->coord.i > MAX_FACE_COORD || fijk->coord.j > MAX_FACE_COORD ||
-            fijk->coord.k > MAX_FACE_COORD) {
-            // out of range input
-            return H3_NULL;
-        }
-
         H3_SET_BASE_CELL(h, _faceIjkToBaseCell(fijk));
         return h;
     }
+*/
+    // we need to find the correct base cell for this H3 index;
+    // start with the passed in quad and resolution res ijk coordinates
+    // in that quad's coordinate system
+    DgIVec3D ijk = addIn.coord;
+    int baseCell = addIn.quadNum;
+    int res = IDGG.res();
+    bool isClassIII = res % 2; // odd resolutions are Class III
+    // for Class III effective res of q2di is the Class I substrate 
+    int effectiveRes = (isClassIII) ? res + 1 : res;
 
-    // we need to find the correct base cell FaceIJK for this H3 index;
-    // start with the passed in face and resolution res ijk coordinates
-    // in that face's coordinate system
-    FaceIJK fijkBC = *fijk;
-
-    // build the H3Index from finest res up
+    // build the Z7 index from finest res up
     // adjust r for the fact that the res 0 base cell offsets the indexing
     // digits
-    CoordIJK *ijk = &fijkBC.coord;
-    for (int r = res - 1; r >= 0; r--) {
-        CoordIJK lastIJK = *ijk;
-        CoordIJK lastCenter;
-        if (isResolutionClassIII(r + 1)) {
+    DgIVec3D::Direction digits[res + 1]; // +1 so index == resolution
+    for (int r = 0; r < res+1; r++) digits[r] = 0;
+    bool first = true;
+    for (int r = effectiveRes - 1; r >= 0; r--) {
+        DgIVec3D lastIJK = ijk;
+        DgIVec3D lastCenter;
+        if ((r + 1) % 2) { // finer res is Class III
             // rotate ccw
-            _upAp7(ijk);
-            lastCenter = *ijk;
-            _downAp7(&lastCenter);
+            ijk.upAp7();
+            lastCenter = ijk;
+            lastCenter.downAp7();
         } else {
             // rotate cw
-            _upAp7r(ijk);
-            lastCenter = *ijk;
-            _downAp7r(&lastCenter);
+            ijk.upAp7r();
+            lastCenter = ijk;
+            lastCenter.downAp7r();
         }
 
-        CoordIJK diff;
-        _ijkSub(&lastIJK, &lastCenter, &diff);
-        _ijkNormalize(&diff);
+        // no digit generated for substrate
+        if (first && isClassIII) { 
+           first = false;
+           continue;
+        }
+           
+        DgIVec3D diff = lastIJK.diffVec(lastCenter);
+        // don't need to normalize; done in unitIjkPlusToDigit
+        //diff.ijkPlusNormalize();
 
-        H3_SET_INDEX_DIGIT(h, r + 1, _unitIjkToDigit(&diff));
+        digits[r] = diff.unitIjkPlusToDigit()
+        //H3_SET_INDEX_DIGIT(h, r + 1, _unitIjkToDigit(&diff));
     }
 
+    string bcstr = dgg::util::to_string(baseCell, 2);
+    string addstr = bcstr;
+    for (int r = 1; r < res+1; r++) {
+         addstr = addstr + string((int) digits[r]);
+    }
+
+/*
     // fijkBC should now hold the IJK of the base cell in the
     // coordinate system of the current face
 
@@ -183,60 +195,11 @@ DgQ2DItoZ7StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
     }
  */
 
-   // now
-/*
-   if (IDGG().dggs()->aperture() == 3) {
-      dgcout << "Class " << ((IDGG().isClassI()) ? "I" : "II") << endl;
-   }
-*/
-/*
-   if (effRes_ > 0) {
-//dgcout << "** addIn " << addIn << endl;
-      DgRadixString rs1(effRadix_, (int) addIn.coord().i(), effRes_);
-      DgRadixString rs2(effRadix_, (int) addIn.coord().j(), effRes_);
-//dgcout << "rs1 " << rs1 << endl;
-//dgcout << "rs2 " << rs2 << endl;
+    DgZ7StringCoord z7str;
+    z7str.setValString(addstr);
+    dgcout << "addIn: " << addIn << " z7str: " << z7str << endl;
 
-      string digits1 = rs1.digits();
-      string digits2 = rs2.digits();
-
-      int n1 = (int) digits1.length();
-      int n2 = (int) digits2.length();
-
-      // pad shorter one with leading 0's
-      if (n2 < n1) {
-         for (int i = 0; i < (n1 - n2); i++) digits2 = "0" + digits2;
-      } else {
-         for (int i = 0; i < (n2 - n1); i++) digits1 = "0" + digits1;
-      }
-
-      // convert each coordinate pair into Z7 digits
-
-      // table of Z7 digits corresponding to the
-      // class I (i,j) coordinates
-      static const string z3digits[3][3] = {
-       // j = 0     1     2
-           {"00", "22", "21"}, // i == 0
-           {"01", "02", "20"}, // i == 1
-           {"12", "10", "11"}  // i == 2
-      };
-
-      for (unsigned int i = 0; i < digits1.length(); i++) {
-         addstr = addstr +
-              z3digits[digits1[i] - '0'][digits2[i] - '0'];
-      }
-
-      // trim last digit if Class II
-      if (!IDGG().isClassI() && addstr.length())
-         addstr.pop_back();
-   }
-*/
-
-   DgZ7StringCoord zorder;
-//   zorder.setValString(addstr);
-//dgcout << "zorder " << zorder << endl;
-
-   return zorder;
+    return z7str;
 
 } // DgZ7StringCoord DgQ2DItoZ7StringConverter::convertTypedAddress
 

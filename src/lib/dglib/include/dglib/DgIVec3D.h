@@ -121,7 +121,6 @@ typedef enum {
       // IJK+ and aperture sequence operators
       static Direction rotate60ccw(Direction digit);
       static Direction rotate60cw(Direction digit);
-      static Direction unitIjkPlusToDigit(DgIVec3D& pt);
 
       void ijkPlusNormalize(void);
       void upAp7(void);
@@ -134,6 +133,7 @@ typedef enum {
       void neighbor(Direction digit);
       void ijkRotate60ccw(void);
       void ijkRotate60cw(void);
+      Direction unitIjkPlusToDigit() const;
       //H3Error upAp7Checked(void);
       //H3Error upAp7rChecked(void);
 

@@ -131,8 +131,9 @@ DgIVec3D::ijkPlusNormalize(void) {
  * @return The H3 digit (0-6) corresponding to the ijk unit vector, zero vector,
  * or INVALID_DIGIT (7) on failure.
  */
-static DgIVec3D::Direction unitIjkPlusToDigit(const DgIVec3D& ijk) {
-    DgIVec3D c = ijk;
+DgIVec3D::Direction 
+unitIjkPlusToDigit(void) const {
+    DgIVec3D c = *this;
     c.ijkPlusNormalize();
 
     DgIVec3D::Direction digit = DgIVec3D::INVALID_DIGIT;

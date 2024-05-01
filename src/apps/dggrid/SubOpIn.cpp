@@ -89,7 +89,8 @@ SubOpIn::initializeOp (void)
 */
 
    // input_address_type < GEO | PLANE | PROJTRI | Q2DD | Q2DI |
-   //        SEQNUM | VERTEX2DD | ZORDER | ZORDER_STRING >
+   //        SEQNUM | VERTEX2DD | ZORDER | ZORDER_STRING |
+   //        Z3 | Z3_STRING | Z7 | Z7_STRING >
    for (int i = 0; ; i++) {
       if (dgg::addtype::addTypeStrings[i] == "INVALID")
          break;

@@ -642,9 +642,13 @@ SubOpGen::executeOp (void)
                   dgcout << "# testing coord: " << coord << endl;
                   //dgcout << "DGG: " << dgg << endl;
                }
-
-               if (op.dggOp.gridTopo == Hexagon && !dgg.isClassI())
-	          if ((coord.j() + coord.i()) % 3) continue;
+/* this gets checked in evalCell
+                if (op.dggOp.gridTopo == Hexagon && !dgg.isClassI()) {
+                    printf("HERE\n");
+                    fflush(stdout);
+                    if ((coord.j() + coord.i()) % 3) continue;
+                }
+ */
 
                outputStatus();
 
@@ -660,7 +664,7 @@ SubOpGen::executeOp (void)
 
                DgLocation* addLoc = dgg.makeLocation(DgQ2DICoord(q, coord));
                op.outOp.outputCellAdd2D(*addLoc);
-	       delete addLoc;
+	           delete addLoc;
 
                // check for special cases
                if (q == 0 || q == 11) break; // only one cell
