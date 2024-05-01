@@ -173,17 +173,18 @@ DgIDGGBase::createConverters (void)
    planeRF_ = DgPlaneTriRF::makeRF(network(), name() + string("plane"));
 
     if (gridTopo() == Hexagon) {
-        if (aperture() == 4 || aperture() == 3) {
+        int aperture = dggs()->aperture();
+        if (aperture == 4 || aperture == 3) {
             zorderRF_ = DgZOrderRF::makeRF(network(), name() + string("zorder"),
-                                           res(), aperture());
+                                           res(), aperture);
             zorderStrRF_ = DgZOrderStringRF::makeRF(network(), name() + string("zorderStr"),
-                                                    res(), aperture());
-            if (dggs()->aperture() == 3) {
+                                                    res(), aperture);
+            if (aperture == 3) {
                 z3RF_ = DgZ3RF::makeRF(network(), name() + string("z3"), res());
                 z3StrRF_ = DgZ3StringRF::makeRF(network(), name() + string("z3Str"),
                                                 res());
             }
-        } else if (dggs()->aperture() == 7) {
+        } else if (aperture == 7) {
           z7RF_ = DgZ7RF::makeRF(network(), name() + string("z7"), res());
           z7StrRF_ = DgZ7StringRF::makeRF(network(), name() + string("z7Str"), res());
         }

@@ -111,9 +111,9 @@ DgQ2DItoZ7StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
     // we need to find the correct base cell for this H3 index;
     // start with the passed in quad and resolution res ijk coordinates
     // in that quad's coordinate system
-    DgIVec3D ijk = addIn.coord;
-    int baseCell = addIn.quadNum;
-    int res = IDGG.res();
+    DgIVec3D ijk = addIn.coord();
+    int baseCell = addIn.quadNum();
+    int res = IDGG().res();
     bool isClassIII = res % 2; // odd resolutions are Class III
     // for Class III effective res of q2di is the Class I substrate 
     int effectiveRes = (isClassIII) ? res + 1 : res;
@@ -121,8 +121,9 @@ DgQ2DItoZ7StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
     // build the Z7 index from finest res up
     // adjust r for the fact that the res 0 base cell offsets the indexing
     // digits
-    DgIVec3D::Direction digits[res + 1]; // +1 so index == resolution
-    for (int r = 0; r < res+1; r++) digits[r] = 0;
+    DgIVec3D::Direction* digits =
+        (DgIVec3D::Direction*) malloc((res + 1) * sizeof(DgIVec3D::Direction));
+    for (int r = 0; r < res+1; r++) digits[r] = DgIVec3D::INVALID_DIGIT;
     bool first = true;
     for (int r = effectiveRes - 1; r >= 0; r--) {
         DgIVec3D lastIJK = ijk;
@@ -149,15 +150,18 @@ DgQ2DItoZ7StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
         // don't need to normalize; done in unitIjkPlusToDigit
         //diff.ijkPlusNormalize();
 
-        digits[r] = diff.unitIjkPlusToDigit()
+        digits[r] = diff.unitIjkPlusToDigit();
         //H3_SET_INDEX_DIGIT(h, r + 1, _unitIjkToDigit(&diff));
     }
 
     string bcstr = dgg::util::to_string(baseCell, 2);
     string addstr = bcstr;
     for (int r = 1; r < res+1; r++) {
-         addstr = addstr + string((int) digits[r]);
+         addstr = addstr + to_string((int) digits[r]);
     }
+    
+    free(digits);
+    digits = NULL;
 
 /*
     // fijkBC should now hold the IJK of the base cell in the

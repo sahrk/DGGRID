@@ -37,32 +37,32 @@ class DgIVec3D {
 
    public:
 
-      //enum Direction { Debug1, Debug0, Info, Warning, Fatal, Silent };
 /** @brief GBT digit representing ijk+ axes direction.
  * Values will be within the lowest 3 bits of an integer.
  */
 typedef enum {
-    /** H3 digit in center */
+    /** GBT digit in center */
     CENTER_DIGIT = 0,
-    /** H3 digit in k-axes direction */
+    /** GBT digit in k-axes direction */
     K_AXES_DIGIT = 1,
-    /** H3 digit in j-axes direction */
+    /** GBT digit in j-axes direction */
     J_AXES_DIGIT = 2,
-    /** H3 digit in j == k direction */
+    /** GBT digit in j == k direction */
     JK_AXES_DIGIT = J_AXES_DIGIT | K_AXES_DIGIT, /* 3 */
-    /** H3 digit in i-axes direction */
+    /** GBT digit in i-axes direction */
     I_AXES_DIGIT = 4,
-    /** H3 digit in i == k direction */
+    /** GBT digit in i == k direction */
     IK_AXES_DIGIT = I_AXES_DIGIT | K_AXES_DIGIT, /* 5 */
-    /** H3 digit in i == j direction */
+    /** GBT digit in i == j direction */
     IJ_AXES_DIGIT = I_AXES_DIGIT | J_AXES_DIGIT, /* 6 */
-    /** H3 digit in the invalid direction */
+    /** GBT digit in the invalid direction */
     INVALID_DIGIT = 7,
    /** Valid digits will be less than this value. Same value as INVALID_DIGIT.
      */
     NUM_DIGITS = INVALID_DIGIT,
     /** Child digit which is skipped for pentagons */
     PENTAGON_SKIPPED_DIGIT = K_AXES_DIGIT /* 1 */
+    
 } Direction;
 
       static const DgIVec3D& undefDgIVec3D;
@@ -74,6 +74,10 @@ typedef enum {
 
       DgIVec3D (const DgIVec3D& pt)
        : i_ (pt.i_), j_ (pt.j_), k_ (pt.k_)
+      {}
+
+      DgIVec3D (const DgIVec2D& pt)
+       : i_ (pt.i()), j_ (pt.j()), k_ (0)
       {}
 
       DgIVec3D (const DgDVec2D&  pt)
@@ -113,6 +117,7 @@ typedef enum {
       inline operator DgIVec2D  (void) const;
 
       inline DgIVec3D& operator=  (const DgIVec3D& pt);
+      inline DgIVec3D& operator=  (const DgIVec2D& pt);
       inline DgIVec3D& operator+= (const DgIVec3D& pt);
       inline DgIVec3D& operator-= (const DgIVec3D& pt);
 
@@ -133,7 +138,7 @@ typedef enum {
       void neighbor(Direction digit);
       void ijkRotate60ccw(void);
       void ijkRotate60cw(void);
-      Direction unitIjkPlusToDigit() const;
+      Direction unitIjkPlusToDigit(void) const;
       //H3Error upAp7Checked(void);
       //H3Error upAp7rChecked(void);
 
@@ -208,6 +213,18 @@ DgIVec3D::operator= (const DgIVec3D& pt)
       j_ = pt.j_;
       k_ = pt.k_;
    }
+   return *this;
+
+} // DgIVec3D& DgIVec3D::operator=
+
+////////////////////////////////////////////////////////////////////////////////
+inline DgIVec3D&
+DgIVec3D::operator= (const DgIVec2D& pt)
+{
+   i_ = pt.i();
+   j_ = pt.j();
+   k_ = 0;
+
    return *this;
 
 } // DgIVec3D& DgIVec3D::operator=

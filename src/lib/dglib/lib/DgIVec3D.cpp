@@ -132,7 +132,8 @@ DgIVec3D::ijkPlusNormalize(void) {
  * or INVALID_DIGIT (7) on failure.
  */
 DgIVec3D::Direction 
-unitIjkPlusToDigit(void) const {
+DgIVec3D::unitIjkPlusToDigit(void) const {
+    
     DgIVec3D c = *this;
     c.ijkPlusNormalize();
 
