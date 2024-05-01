@@ -125,7 +125,7 @@ DgQ2DItoZ7StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
         (DgIVec3D::Direction*) malloc((res + 1) * sizeof(DgIVec3D::Direction));
     for (int r = 0; r < res+1; r++) digits[r] = DgIVec3D::INVALID_DIGIT;
     bool first = true;
-    for (int r = effectiveRes - 1; r >= 0; r--) {
+    for (int r = effectiveRes; r >= 0; r--) {
         DgIVec3D lastIJK = ijk;
         DgIVec3D lastCenter;
         if ((r + 1) % 2) { // finer res is Class III
