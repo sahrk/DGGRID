@@ -113,6 +113,7 @@ DgQ2DItoZ7StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
     // in that quad's coordinate system
     DgIVec3D ijk = addIn.coord();
     int baseCell = addIn.quadNum();
+    DgIVec3D baseCellIjk = ijk;
     int res = IDGG().res();
     bool isClassIII = res % 2; // odd resolutions are Class III
     // for Class III effective res of q2di is the Class I substrate 
@@ -140,6 +141,10 @@ DgQ2DItoZ7StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
             lastCenter.downAp7r();
         }
 
+        // res 1 address is our lookup for adjacent base cells
+        if (r == 1)
+            baseCellIjk = ijk;
+        
         // no digit generated for substrate
         if (first && isClassIII) { 
            first = false;
@@ -201,7 +206,7 @@ DgQ2DItoZ7StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
 
     DgZ7StringCoord z7str;
     z7str.setValString(addstr);
-    dgcout << "addIn: " << addIn << " z7str: " << z7str << endl;
+    dgcout << "addIn: " << addIn << " baseijk: " << baseCellIjk << " z7str: " << z7str << endl;
 
     return z7str;
 
