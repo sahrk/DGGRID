@@ -159,6 +159,31 @@ DgQ2DItoZ7StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
         //H3_SET_INDEX_DIGIT(h, r + 1, _unitIjkToDigit(&diff));
     }
 
+    // adjust the base cell if necessary
+    // {i, j} = {0,0}, {1, 0}, {1, 1}, and {0,1}
+    int adjacentBaseCellTable[12][4] = {
+        { 0, 0, 0, 0 },
+        { 1, 6, 2, 0 },
+        { 2, 7, 3, 0 },
+        { 3, 8, 4, 0 },
+        { 4, 9, 5, 0 },
+        { 5, 10, 1, 0 },
+        { 6, 11, 7, 2 },
+        { 7, 11, 8, 3 },
+        { 8, 11, 9, 4 },
+        { 9, 11, 10, 5 },
+        { 10, 11, 6, 1 },
+        { 11, 11, 0, 0 }
+    };
+    
+    if (baseCellIjk.i() == 1) {
+        if (baseCellIjk.j() == 0) // { 1, 0 }
+            baseCell = adjacentBaseCellTable[baseCell][1];
+        else // better be 1
+            baseCell = adjacentBaseCellTable[baseCell][2];
+    } else if (baseCellIjk.j() == 1) // { 0, 1 }
+        baseCell = adjacentBaseCellTable[baseCell][3];
+
     string bcstr = dgg::util::to_string(baseCell, 2);
     string addstr = bcstr;
     for (int r = 1; r < res+1; r++) {
