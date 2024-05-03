@@ -129,7 +129,8 @@ DgQ2DItoZ7StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
     for (int r = effectiveRes; r >= 0; r--) {
         DgIVec3D lastIJK = ijk;
         DgIVec3D lastCenter;
-        if ((r + 1) % 2) { // finer res is Class III
+        //if ((r + 1) % 2) { // finer res is Class III
+        if (!((r + 1) % 2)) { // finer res is Class III
             // rotate ccw
             ijk.upAp7();
             lastCenter = ijk;
