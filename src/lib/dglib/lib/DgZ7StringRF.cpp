@@ -129,8 +129,10 @@ DgQ2DItoZ7StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
     for (int r = effectiveRes; r >= 0; r--) {
         DgIVec3D lastIJK = ijk;
         DgIVec3D lastCenter;
+        // why is H3 different?
         //if ((r + 1) % 2) { // finer res is Class III
-        if (!((r + 1) % 2)) { // finer res is Class III
+        //if (!((r + 1) % 2)) { // finer res is Class I
+        if (r % 2) { // Class III
             // rotate ccw
             ijk.upAp7();
             lastCenter = ijk;
@@ -146,7 +148,7 @@ DgQ2DItoZ7StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
         if (r == 1)
             baseCellIjk = ijk;
         
-        // no digit generated for substrate
+        // no digit generated for Class I substrate
         if (first && isClassIII) { 
            first = false;
            continue;
@@ -161,7 +163,7 @@ DgQ2DItoZ7StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
     }
 
     // adjust the base cell if necessary
-    // {i, j} = {0,0}, {1, 0}, {1, 1}, and {0,1}
+    // {i, j} = {0,0}, {1, 0}, {1, 1}, and {0,1} respectively
     int adjacentBaseCellTable[12][4] = {
         { 0, 0, 0, 0 },
         { 1, 6, 2, 0 },
@@ -177,6 +179,7 @@ DgQ2DItoZ7StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
         { 11, 11, 0, 0 }
     };
     
+    int quadOriginBaseCell = baseCell;
     if (baseCellIjk.i() == 1) {
         if (baseCellIjk.j() == 0) // { 1, 0 }
             baseCell = adjacentBaseCellTable[baseCell][1];
@@ -184,7 +187,31 @@ DgQ2DItoZ7StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
             baseCell = adjacentBaseCellTable[baseCell][2];
     } else if (baseCellIjk.j() == 1) // { 0, 1 }
         baseCell = adjacentBaseCellTable[baseCell][3];
+    
+    // all base cells should be correct except for 0 and 11
+    // Base Cell 0 maps to all 5’s, rotate into correct subdigit, skip 2
+    // BC 1 - 5 skip subsequence 2
+    // BC 6 - 10 skip subsequence 5
+    // BC 11 maps to all 2’s, rotate into position, skip 5
 
+    // handle the single-cell quads 0 and 11
+    if (baseCell != quadOriginBaseCell) {
+        if (baseCell == 0) {
+            // must be quad 1 - 5
+            // rotate once for each quad past 1
+            for (int q = 1; q < quadOriginBaseCell; q++) {
+                DgIVec3D::rotateDigitVecCCW(digits, res, DgIVec3D::PENTAGON_SKIPPED_DIGIT_TYPE1);
+            }
+        } else if (baseCell == 11) {
+            // must be quad 6 - 10
+            // rotate once for each quad less than 10
+            int numRots = 10 - quadOriginBaseCell;
+            for (int q = 0; q < numRots; q++) {
+                DgIVec3D::rotateDigitVecCCW(digits, res, DgIVec3D::PENTAGON_SKIPPED_DIGIT_TYPE2);
+            }
+        }
+    }
+    
     string bcstr = dgg::util::to_string(baseCell, 2);
     string addstr = bcstr;
     for (int r = 1; r < res+1; r++) {
@@ -195,18 +222,6 @@ DgQ2DItoZ7StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
     digits = NULL;
 
 /*
-    // fijkBC should now hold the IJK of the base cell in the
-    // coordinate system of the current face
-
-    if (fijkBC.coord.i > MAX_FACE_COORD || fijkBC.coord.j > MAX_FACE_COORD ||
-        fijkBC.coord.k > MAX_FACE_COORD) {
-        // out of range input
-        return H3_NULL;
-    }
-
-    // lookup the correct base cell
-    int baseCell = _faceIjkToBaseCell(&fijkBC);
-    H3_SET_BASE_CELL(h, baseCell);
 
     // rotate if necessary to get canonical base cell orientation
     // for this base cell

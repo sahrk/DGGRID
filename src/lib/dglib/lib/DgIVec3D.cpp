@@ -295,7 +295,8 @@ DgIVec3D::ijkRotate60cw(void) {
  *
  * @param digit Indexing digit (between 1 and 6 inclusive)
  */
-static DgIVec3D::Direction rotate60ccw(DgIVec3D::Direction digit) {
+DgIVec3D::Direction
+DgIVec3D::rotate60ccw(DgIVec3D::Direction digit) {
     switch (digit) {
         case DgIVec3D::K_AXES_DIGIT:
             return DgIVec3D::IK_AXES_DIGIT;
@@ -319,7 +320,8 @@ static DgIVec3D::Direction rotate60ccw(DgIVec3D::Direction digit) {
  *
  * @param digit Indexing digit (between 1 and 6 inclusive)
  */
-static DgIVec3D::Direction rotate60cw(DgIVec3D::Direction digit) {
+DgIVec3D::Direction
+DgIVec3D::rotate60cw(DgIVec3D::Direction digit) {
     switch (digit) {
         case DgIVec3D::K_AXES_DIGIT:
             return DgIVec3D::JK_AXES_DIGIT;
@@ -335,6 +337,29 @@ static DgIVec3D::Direction rotate60cw(DgIVec3D::Direction digit) {
             return DgIVec3D::K_AXES_DIGIT;
         default:
             return digit;
+    }
+}
+
+void
+DgIVec3D::rotateDigitVecCCW (DgIVec3D::Direction digits[], int maxRes, Direction skipDigit) {
+    
+    // rotate in place; skips any leading skipDigit
+
+    int foundFirstNonZeroDigit = 0;
+    for (int r = 1; r <= maxRes; r++) {
+        // rotate this digit
+        digits[r] = DgIVec3D::rotate60ccw(digits[r]);
+
+        // look for the first non-zero digit so we
+        // can adjust for deleted k-axes sequence
+        // if necessary
+        if (!foundFirstNonZeroDigit && digits[r] != CENTER_DIGIT) {
+            foundFirstNonZeroDigit = 1;
+
+            // adjust for deleted k-axes sequence
+            if (digits[r] == skipDigit)
+                rotateDigitVecCCW(digits, maxRes, INVALID_DIGIT);
+        }
     }
 }
 

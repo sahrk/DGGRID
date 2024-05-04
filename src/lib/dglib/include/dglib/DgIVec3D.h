@@ -61,7 +61,8 @@ typedef enum {
      */
     NUM_DIGITS = INVALID_DIGIT,
     /** Child digit which is skipped for pentagons */
-    PENTAGON_SKIPPED_DIGIT = K_AXES_DIGIT /* 1 */
+    PENTAGON_SKIPPED_DIGIT_TYPE1 = J_AXES_DIGIT /* 2 */,
+    PENTAGON_SKIPPED_DIGIT_TYPE2 = IK_AXES_DIGIT /* 5 */
     
 } Direction;
 
@@ -126,6 +127,7 @@ typedef enum {
       // IJK+ and aperture sequence operators
       static Direction rotate60ccw(Direction digit);
       static Direction rotate60cw(Direction digit);
+      static void rotateDigitVecCCW (Direction digits[], int maxRes, Direction skipDigit);
 
       void ijkPlusNormalize(void);
       void upAp7(void);
