@@ -1,0 +1,22 @@
+################################################################################
+# z7WholeEarth.meta - example of generating a whole earth resolution 4 ISEA7H 
+#      grid with Z7 indexes.
+#
+################################################################################
+
+# specify the operation
+dggrid_operation GENERATE_GRID
+
+# specify the DGG
+dggs_type ISEA7H
+dggs_res_spec 4
+
+# specify the output
+output_cell_label_type OUTPUT_ADDRESS_TYPE
+output_address_type Z7_STRING
+cell_output_type KML
+cell_output_file_name outputfiles/z7cells
+point_output_type KML
+point_output_file_name outputfiles/z7points
+densification 0
+precision 6
