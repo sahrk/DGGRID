@@ -224,6 +224,7 @@ DgQ2DItoZ7StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
     DgZ7StringCoord z7str;
     z7str.setValString(addstr);
     //dgcout << "addIn: " << addIn << " baseijk: " << baseCellIjk << " z7str: " << z7str << endl;
+    dgcout << z7str << " " << addIn << endl;
 
     return z7str;
 
@@ -270,7 +271,7 @@ DgZ7StringToQ2DIConverter::DgZ7StringToQ2DIConverter
 DgQ2DICoord
 DgZ7StringToQ2DIConverter::convertTypedAddress (const DgZ7StringCoord& addIn) const
 {
-   printf("DgZ7StringToQ2DIConverter::convertTypedAddress\n");
+   //printf("DgZ7StringToQ2DIConverter::convertTypedAddress\n");
 
    string addstr = addIn.valString();
 
