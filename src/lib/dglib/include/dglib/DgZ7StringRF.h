@@ -77,9 +77,9 @@ class DgZ7StringToQ2DIConverter :
    protected:
 
       const DgIDGGBase* pIDGG_;
-      int effRes_;
-      int effRadix_;
-
+      int res_;
+      int numClassI_;
+      unsigned long long int unitScaleClassIres_;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
