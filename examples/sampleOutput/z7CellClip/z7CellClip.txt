@@ -22,7 +22,7 @@ dggs_vert0_lon 11.25 (user set)
 dggs_vert0_lat 58.2825 (user set)
 dggs_vert0_azimuth 0 (user set)
 dggs_res_specify_type SPECIFIED (user set)
-dggs_res_spec 4 (user set)
+dggs_res_spec 5 (user set)
 input_files vals.txt (default)
 input_file_name valsin.txt (default)
 point_input_file_type NONE (default)
@@ -63,7 +63,7 @@ clip_using_holes false (default)
 geodetic_densify 0 (user set)
 clip_subset_type COARSE_CELLS (user set)
 clip_cell_addresses 01020 00000 10052 (user set)
-clip_cell_res 1 (user set)
+clip_cell_res 3 (user set)
 clip_cell_densification 1 (user set)
 clip_region_files test.gen (default)
 clip_type POLY_INTERSECT (default)
@@ -71,9 +71,6 @@ clipper_scale_factor 1000000 (default)
 
 
 * building clipping regions...
-DgZ7StringToQ2DIConverter::convertTypedAddress
-DgZ7StringToQ2DIConverter::convertTypedAddress
-DgZ7StringToQ2DIConverter::convertTypedAddress
 
 * Testing quad 0... 
 ...quad 0 complete.
@@ -90,11 +87,13 @@ DgZ7StringToQ2DIConverter::convertTypedAddress
 * No intersections in quad 6.
 * No intersections in quad 7.
 * No intersections in quad 8.
-* No intersections in quad 9.
-* No intersections in quad 10.
+* Testing quad 9... 
+...quad 9 complete.
+* Testing quad 10... 
+...quad 10 complete.
 * No intersections in quad 11.
 
 ** grid generation complete **
-accepted 316 cells / 670 tested
-acceptance rate is 47.1642%
+accepted 172 cells / 1,455 tested
+acceptance rate is 11.8213%
 

@@ -10,17 +10,193 @@
       </LineStyle>
    </Style>
 <Placemark>
-<name>000000</name>
+<name>0802260</name>
       <styleUrl>#lineStyle1</styleUrl>
       <LineString>
          <tessellate>1</tessellate>
          <coordinates>
-            9.8306064,58.0304466
-            11.2500000,57.4923820
-            12.6693935,58.0304466
-            12.1496321,58.9186564
-            10.3503679,58.9186564
-            9.8306064,58.0304466
+            22.4894327,-47.2551050
+            22.0118157,-47.1940086
+            21.7401054,-47.4107336
+            21.9482715,-47.6897117
+            22.4288581,-47.7538319
+            22.6982218,-47.5362001
+            22.4894327,-47.2551050
+         </coordinates>
+      </LineString>
+</Placemark>
+<Placemark>
+<name>0824510</name>
+      <styleUrl>#lineStyle1</styleUrl>
+      <LineString>
+         <tessellate>1</tessellate>
+         <coordinates>
+            23.3374278,-46.0976706
+            22.8699345,-46.0412754
+            22.6070020,-46.2611780
+            22.8139956,-46.5382160
+            23.2836875,-46.5983841
+            23.5441308,-46.3779376
+            23.3374278,-46.0976706
+         </coordinates>
+      </LineString>
+</Placemark>
+<Placemark>
+<name>0824530</name>
+      <styleUrl>#lineStyle1</styleUrl>
+      <LineString>
+         <tessellate>1</tessellate>
+         <coordinates>
+            24.1532331,-44.9302803
+            23.6954571,-44.8782254
+            23.4408012,-45.1010734
+            23.6464491,-45.3763723
+            24.1058461,-45.4327585
+            24.3579419,-45.2096596
+            24.1532331,-44.9302803
+         </coordinates>
+      </LineString>
+</Placemark>
+<Placemark>
+<name>0824050</name>
+      <styleUrl>#lineStyle1</styleUrl>
+      <LineString>
+         <tessellate>1</tessellate>
+         <coordinates>
+            24.9389392,-43.7536275
+            24.4904672,-43.7055693
+            24.2436128,-43.9311398
+            24.4477880,-44.2048896
+            24.8974669,-44.2576556
+            25.1417501,-44.0320604
+            24.9389392,-43.7536275
+         </coordinates>
+      </LineString>
+</Placemark>
+<Placemark>
+<name>0824000</name>
+      <styleUrl>#lineStyle1</styleUrl>
+      <LineString>
+         <tessellate>1</tessellate>
+         <coordinates>
+            25.6964888,-42.5683799
+            25.2569041,-42.5239923
+            25.0174014,-42.7520714
+            25.2200166,-43.0244507
+            25.6605312,-43.0737507
+            25.8975011,-42.8458100
+            25.6964888,-42.5683799
+         </coordinates>
+      </LineString>
+</Placemark>
+<Placemark>
+<name>0824020</name>
+      <styleUrl>#lineStyle1</styleUrl>
+      <LineString>
+         <tessellate>1</tessellate>
+         <coordinates>
+            26.4276875,-41.3751828
+            25.9965734,-41.3341567
+            25.7639964,-41.5645392
+            25.9649983,-41.8357142
+            26.3968798,-41.8816967
+            26.6270025,-41.6515566
+            26.4276875,-41.3751828
+         </coordinates>
+      </LineString>
+</Placemark>
+<Placemark>
+<name>0605242</name>
+      <styleUrl>#lineStyle1</styleUrl>
+      <LineString>
+         <tessellate>1</tessellate>
+         <coordinates>
+            -138.8684715,-5.2134594
+            -139.2081117,-5.2035535
+            -139.3543006,-5.4410725
+            -139.1613629,-5.6892642
+            -138.8224227,-5.6994678
+            -138.6757361,-5.4611930
+            -138.8684715,-5.2134594
+         </coordinates>
+      </LineString>
+</Placemark>
+<Placemark>
+<name>0605262</name>
+      <styleUrl>#lineStyle1</styleUrl>
+      <LineString>
+         <tessellate>1</tessellate>
+         <coordinates>
+            -138.4777049,-4.0176992
+            -138.8189490,-4.0091807
+            -138.9647073,-4.2457753
+            -138.7697918,-4.4916920
+            -138.4294089,-4.5006102
+            -138.2830964,-4.2632235
+            -138.4777049,-4.0176992
+         </coordinates>
+      </LineString>
+</Placemark>
+<Placemark>
+<name>0600512</name>
+      <styleUrl>#lineStyle1</styleUrl>
+      <LineString>
+         <tessellate>1</tessellate>
+         <coordinates>
+            -138.0902113,-2.8279789
+            -138.4333563,-2.8210089
+            -138.5788009,-3.0566519
+            -138.3817267,-3.3001053
+            -138.0396076,-3.3075847
+            -137.8935529,-3.0711134
+            -138.0902113,-2.8279789
+         </coordinates>
+      </LineString>
+</Placemark>
+<Placemark>
+<name>0600532</name>
+      <styleUrl>#lineStyle1</styleUrl>
+      <LineString>
+         <tessellate>1</tessellate>
+         <coordinates>
+            -137.7057104,-1.6445827
+            -138.0510554,-1.6393302
+            -138.1963014,-1.8739985
+            -137.9968840,-2.1147958
+            -137.6527330,-2.1206749
+            -137.5068217,-1.8851429
+            -137.7057104,-1.6445827
+         </coordinates>
+      </LineString>
+</Placemark>
+<Placemark>
+<name>0600052</name>
+      <styleUrl>#lineStyle1</styleUrl>
+      <LineString>
+         <tessellate>1</tessellate>
+         <coordinates>
+            -137.3239324,-0.4677842
+            -137.6717792,-0.4644251
+            -137.8169399,-0.6980994
+            -137.6149905,-0.9360442
+            -137.2685100,-0.9401542
+            -137.1226288,-0.7055817
+            -137.3239324,-0.4677842
+         </coordinates>
+      </LineString>
+</Placemark>
+<Placemark>
+<name>1100000</name>
+      <styleUrl>#lineStyle1</styleUrl>
+      <LineString>
+         <tessellate>1</tessellate>
+         <coordinates>
+            -168.8771818,-58.5498905
+            -168.3033905,-58.4274999
+            -168.3508945,-58.1045521
+            -168.9454697,-58.0270178
+            -169.2730634,-58.3009877
+            -168.8771818,-58.5498905
          </coordinates>
       </LineString>
 </Placemark>

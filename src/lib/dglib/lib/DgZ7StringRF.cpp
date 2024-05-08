@@ -224,7 +224,7 @@ DgQ2DItoZ7StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
     DgZ7StringCoord z7str;
     z7str.setValString(addstr);
     //dgcout << "addIn: " << addIn << " baseijk: " << baseCellIjk << " z7str: " << z7str << endl;
-    dgcout << z7str << " " << addIn << endl;
+    //dgcout << z7str << " " << addIn << endl;
 
     return z7str;
 
@@ -321,9 +321,7 @@ DgZ7StringToQ2DIConverter::convertTypedAddress (const DgZ7StringCoord& addIn) co
    int quadNum = bcNum;
     
     if (ij.i() == 0 && ij.j() == 0) {
-        DgQ2DICoord q2di(quadNum, ij);
-        dgcout << addIn << " " << DgQ2DICoord(quadNum, DgIVec2D(0, 0)) << endl;
-        return DgQ2DICoord(quadNum, DgIVec2D(0, 0));
+         return DgQ2DICoord(quadNum, DgIVec2D(0, 0));
     }
         
     const int inverseAdjacentBaseCellTable[12][2] = {
@@ -448,15 +446,8 @@ DgZ7StringToQ2DIConverter::convertTypedAddress (const DgZ7StringCoord& addIn) co
         }
     }
 
-   //dgcout << addIn << " q: " << quadNum << " z7str: " << z7str << " " << ij << endl;
-
-//dgcout << "z7str in: " << z7str;
-//dgcout << " adjusted: " << z7str << endl;
-
-//   dgcout << "qstr: " << qstr << " rad1: " << rad1 << " rad2: " << rad2 << endl;
-
    DgQ2DICoord q2di(quadNum, ij);
-   dgcout << addIn << " " << q2di << endl;
+   //dgcout << addIn << " " << q2di << endl;
 
    return q2di;
 

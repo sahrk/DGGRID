@@ -22,7 +22,7 @@ dggs_vert0_lon 11.25 (user set)
 dggs_vert0_lat 58.2825 (user set)
 dggs_vert0_azimuth 0 (user set)
 dggs_res_specify_type SPECIFIED (user set)
-dggs_res_spec 4 (user set)
+dggs_res_spec 5 (user set)
 input_files vals.txt (default)
 input_file_name valsin.txt (default)
 point_input_file_type NONE (default)
@@ -69,19 +69,7 @@ clip_region_files inputfiles/z7a.txt inputfiles/z7b.txt (user set)
 clip_type POLY_INTERSECT (default)
 clipper_scale_factor 1000000 (default)
 
-DgZ7StringToQ2DIConverter::convertTypedAddress
-DgZ7StringToQ2DIConverter::convertTypedAddress
-DgZ7StringToQ2DIConverter::convertTypedAddress
-DgZ7StringToQ2DIConverter::convertTypedAddress
-DgZ7StringToQ2DIConverter::convertTypedAddress
-DgZ7StringToQ2DIConverter::convertTypedAddress
-DgZ7StringToQ2DIConverter::convertTypedAddress
-DgZ7StringToQ2DIConverter::convertTypedAddress
-DgZ7StringToQ2DIConverter::convertTypedAddress
-DgZ7StringToQ2DIConverter::convertTypedAddress
-DgZ7StringToQ2DIConverter::convertTypedAddress
-DgZ7StringToQ2DIConverter::convertTypedAddress
 
 ** grid generation complete **
-accepted 1 cells / 14 tested
+accepted 12 cells / 14 tested
 
