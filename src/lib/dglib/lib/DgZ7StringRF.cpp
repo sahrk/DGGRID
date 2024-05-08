@@ -341,7 +341,7 @@ DgZ7StringToQ2DIConverter::convertTypedAddress (const DgZ7StringCoord& addIn) co
         { 11, 11 } // q11
     };
     
-    dgcout << addIn << " " << ij << " ";
+    //dgcout << addIn << " " << ij << " ";
     
     bool negI = ij.i() < 0;
     bool negJ = ij.j() < 0;
@@ -421,6 +421,9 @@ DgZ7StringToQ2DIConverter::convertTypedAddress (const DgZ7StringCoord& addIn) co
                     ij.setI(unitScaleClassIres_ + ij.j());
                     ij.setJ(-origI + ij.j());
                 }
+            } else { // -i, +j
+                quadNum = 10;
+                ij.setI(unitScaleClassIres_ + ij.i());
             }
         }
     } else if (bcNum < 6) { // 1 - 5
