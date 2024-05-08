@@ -320,9 +320,12 @@ DgZ7StringToQ2DIConverter::convertTypedAddress (const DgZ7StringCoord& addIn) co
    DgIVec2D ij = DgIVec2D(ijk);
    int quadNum = bcNum;
     
-    if (ij.i() == 0 && ij.j() == 0)
+    if (ij.i() == 0 && ij.j() == 0) {
+        DgQ2DICoord q2di(quadNum, ij);
+        dgcout << addIn << " " << DgQ2DICoord(quadNum, DgIVec2D(0, 0)) << endl;
         return DgQ2DICoord(quadNum, DgIVec2D(0, 0));
-    
+    }
+        
     const int inverseAdjacentBaseCellTable[12][2] = {
         { 0,  0 }, // q0
         { 5, 10 }, // q1
@@ -358,17 +361,29 @@ DgZ7StringToQ2DIConverter::convertTypedAddress (const DgZ7StringCoord& addIn) co
                 quadNum = 1;
                 ij.setJ(ij.j() + unitScaleClassIres_);
             }
-        } else { // must be -i, -j
-            if (ij.i() < ij.j()) {
-                quadNum = 4;
-                long int origI = ij.i();
-                ij.setI(-ij.j());
-                ij.setJ(unitScaleClassIres_ - (-origI + ij.j()));
-            } else { // i >= j
-                quadNum = 5;
-                long int origI = ij.i();
-                ij.setI(origI - ij.j());
-                ij.setJ(unitScaleClassIres_ + origI);
+        } else { //  -i
+            if (!negJ) {
+                if (ij.j() == 0) {
+                    quadNum = 4;
+                    ij.setJ(unitScaleClassIres_ + ij.i());
+                    ij.setI(0);
+                } else { // -i, i > 0
+                    quadNum = 3;
+                    ij.setI(-ij.i());
+                    ij.setJ(unitScaleClassIres_ - ij.j());
+                }
+            } else { //  -i, j < 0
+                if (ij.i() < ij.j()) {
+                    quadNum = 4;
+                    long int origI = ij.i();
+                    ij.setI(-ij.j());
+                    ij.setJ(unitScaleClassIres_ - (-origI + ij.j()));
+                } else { // i >= j
+                    quadNum = 5;
+                    long int origI = ij.i();
+                    ij.setI(origI - ij.j());
+                    ij.setJ(unitScaleClassIres_ + origI);
+                }
             }
         }
     } else if (bcNum == 11) {

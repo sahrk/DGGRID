@@ -44,10 +44,12 @@ DgInLocTextFile::DgInLocTextFile (const DgRFBase& rfIn, const string* fileNameIn
 {
    // the rf needs to be lat/lon
    degRF_ = dynamic_cast<const DgGeoSphDegRF*>(&rfIn);
+    /*
    if (!degRF_) {
       report("DgInLocTextFile::DgInLocTextFile(): RF " + rfIn.name() +
              " is not longitude/latitude", DgBase::Fatal);
    }
+     */
 
 /* not needed since must be lat/lon
    // test for override of vecAddress
