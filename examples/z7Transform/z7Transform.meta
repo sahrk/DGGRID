@@ -17,8 +17,8 @@ dggs_type ISEA7H
 dggs_res_spec 9
 
 # specify bin controls
-input_file_name inputfiles/geo.txt
-input_address_type GEO
+input_file_name inputfiles/seqNum.txt
+input_address_type SEQNUM
 input_delimiter " "
 
 # specify the output

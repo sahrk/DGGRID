@@ -22,7 +22,7 @@ dggs_vert0_lon 11.25 (user set)
 dggs_vert0_lat 58.2825 (user set)
 dggs_vert0_azimuth 0 (user set)
 dggs_res_specify_type SPECIFIED (user set)
-dggs_res_spec 4 (user set)
+dggs_res_spec 3 (user set)
 input_files vals.txt (default)
 input_file_name valsin.txt (default)
 point_input_file_type NONE (default)
@@ -71,5 +71,5 @@ clipper_scale_factor 1000000 (default)
 
 
 ** grid generation complete **
-* generated 24,012 cells
+* generated 3,432 cells
 

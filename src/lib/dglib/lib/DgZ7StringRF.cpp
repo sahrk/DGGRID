@@ -164,7 +164,7 @@ DgQ2DItoZ7StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
 
     // adjust the base cell if necessary
     // {i, j} = {0,0}, {1, 0}, {1, 1}, and {0,1} respectively
-    int adjacentBaseCellTable[12][4] = {
+    const int adjacentBaseCellTable[12][4] = {
         { 0, 0, 0, 0 },
         { 1, 6, 2, 0 },
         { 2, 7, 3, 0 },
@@ -221,33 +221,10 @@ DgQ2DItoZ7StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
     free(digits);
     digits = NULL;
 
-/*
-
-    // rotate if necessary to get canonical base cell orientation
-    // for this base cell
-    int numRots = _faceIjkToBaseCellCCWrot60(&fijkBC);
-    if (_isBaseCellPentagon(baseCell)) {
-        // force rotation out of missing k-axes sub-sequence
-        if (_h3LeadingNonZeroDigit(h) == K_AXES_DIGIT) {
-            // check for a cw/ccw offset face; default is ccw
-            if (_baseCellIsCwOffset(baseCell, fijkBC.face)) {
-                h = _h3Rotate60cw(h);
-            } else {
-                h = _h3Rotate60ccw(h);
-            }
-        }
-
-        for (int i = 0; i < numRots; i++) h = _h3RotatePent60ccw(h);
-    } else {
-        for (int i = 0; i < numRots; i++) {
-            h = _h3Rotate60ccw(h);
-        }
-    }
- */
-
     DgZ7StringCoord z7str;
     z7str.setValString(addstr);
     //dgcout << "addIn: " << addIn << " baseijk: " << baseCellIjk << " z7str: " << z7str << endl;
+    //dgcout << z7str << " " << addIn << endl;
 
     return z7str;
 
@@ -258,7 +235,7 @@ DgZ7StringToQ2DIConverter::DgZ7StringToQ2DIConverter
                 (const DgRF<DgZ7StringCoord, long long int>& from,
                  const DgRF<DgQ2DICoord, long long int>& to)
         : DgConverter<DgZ7StringCoord, long long int, DgQ2DICoord, long long int> (from, to),
-          pIDGG_ (NULL), effRes_ (0), effRadix_ (0)
+          pIDGG_ (NULL), res_ (0), numClassI_ (0), unitScaleClassIres_ (0)
 {
    pIDGG_ = dynamic_cast<const DgIDGGBase*>(&toFrame());
    if (!pIDGG_) {
@@ -282,92 +259,196 @@ DgZ7StringToQ2DIConverter::DgZ7StringToQ2DIConverter
          "only implemented for aperture 3 hexagon grids", DgBase::Fatal);
    }
 
-   effRes_ = IDGG().res();       // effective resolution
-   effRadix_ = 7;
-   // effRes_ is the number of Class I resolutions
-   effRes_ = (IDGG().res() + 1) / 2;
+   res_ = IDGG().res();
+   numClassI_ = (IDGG().res() + 1) / 2;
+   unitScaleClassIres_ = 1;
+   for (int r = 0; r < numClassI_; r++)
+      unitScaleClassIres_ *= 7;
 
-} // DgQ2DItoZ7StringConverter::DgQ2DItoZ7StringConverter
+} // DgZ7StringToQ2DIConverter::DgZ7StringToQ2DIConverter
 
 ////////////////////////////////////////////////////////////////////////////////
 DgQ2DICoord
 DgZ7StringToQ2DIConverter::convertTypedAddress (const DgZ7StringCoord& addIn) const
 {
-   printf("DgZ7StringToQ2DIConverter::convertTypedAddress\n");
+   //printf("DgZ7StringToQ2DIConverter::convertTypedAddress\n");
 
    string addstr = addIn.valString();
 
-   // first get the quad number
-   string qstr = addstr.substr(0, 2);
-   if (qstr[0] == '0') // leading 0
-      qstr = qstr.substr(1, 1);
-   int quadNum = std::stoi(qstr);
-
-   // res 0 is just the quad number
-   if (effRes_ == 0)
-      return DgQ2DICoord(quadNum, DgIVec2D(0, 0));
-
-   int index = 2; // skip the two quad digits
+   // first get the base cell number
+   string bstr = addstr.substr(0, 2);
+   if (bstr[0] == '0') // leading 0
+      bstr = bstr.substr(1, 1);
+   int bcNum = std::stoi(bstr);
+    if (bcNum < 0 || bcNum > 11) {
+        report("DgZ7StringToQ2DIConverter::convertTypedAddress(): "
+           "index has invalid base cell number", DgBase::Fatal);
+     }
 
    // the rest is the Z7 digit string
+   int index = 2; // skip the two base cell digits
    string z7str = addstr.substr(index);
+    int res = (int) z7str.length();
+    if (res != res_) {
+        report("DgZ7StringToQ2DIConverter::convertTypedAddress(): "
+           "index does not match DGG resolution", DgBase::Fatal);
+     }
 
-//dgcout << "z7str in: " << z7str;
+    // res 0 is just the quad number
+    if (res == 0)
+       return DgQ2DICoord(bcNum, DgIVec2D(0, 0));
 
-   // adjust if Class II (odd res)
-   if (z7str.length() % 2)
-      z7str += "0";
-//dgcout << " adjusted: " << z7str << endl;
+   // adjust if Class III (odd res)
+    if (res % 2) {
+        z7str += "0";
+        res++;
+    }
 
-/*
-   // build the digit string for i and j from the two-digit
-   // z7 codes
-   string radStr1 = "";
-   string radStr2 = "";
-   for (int i = 0; i < z7str.length(); i += 2) {
-      string z7code = z7str.substr(i, 2);
-      if (z7code == "00") {
-         radStr1 += "0";
-         radStr2 += "0";
-      } else if (z7code == "22") {
-         radStr1 += "0";
-         radStr2 += "1";
-      } else if (z7code == "21") {
-         radStr1 += "0";
-         radStr2 += "2";
-      } else if (z7code == "01") {
-         radStr1 += "1";
-         radStr2 += "0";
-      } else if (z7code == "02") {
-         radStr1 += "1";
-         radStr2 += "1";
-      } else if (z7code == "20") {
-         radStr1 += "1";
-         radStr2 += "2";
-      } else if (z7code == "12") {
-         radStr1 += "2";
-         radStr2 += "0";
-      } else if (z7code == "10") {
-         radStr1 += "2";
-         radStr2 += "1";
-      } else if (z7code == "11") {
-         radStr1 += "2";
-         radStr2 += "2";
-      }
-//      dgcout << "z7code: " << z7code << " radStr1: " << radStr1
-//             << " radStr2: " << radStr2 << endl;
+   DgIVec3D ijk = { 0, 0, 0 }; 
+   for (int r = 0; r < res; r++) {
+       if ((r + 1) % 2) { // first res is 1, not 0
+           // Class III == rotate ccw
+           ijk.downAp7();
+       } else {
+           // Class I == rotate cw
+           ijk.downAp7r();
+       }
+
+       ijk.neighbor((DgIVec3D::Direction) (z7str.c_str()[r] - '0'));
    }
 
-   DgRadixString rad1(effRadix_, radStr1);
-   DgRadixString rad2(effRadix_, radStr2);
+   DgIVec2D ij = DgIVec2D(ijk);
+   int quadNum = bcNum;
+    
+    if (ij.i() == 0 && ij.j() == 0) {
+         return DgQ2DICoord(quadNum, DgIVec2D(0, 0));
+    }
+        
+    const int inverseAdjacentBaseCellTable[12][2] = {
+        { 0,  0 }, // q0
+        { 5, 10 }, // q1
+        { 1,  6 }, // q2
+        { 2,  7 }, // q3
+        { 3,  8 }, // q4
+        { 4,  9 }, // q5
+        { 10, 1 }, // q6
+        { 6,  2 }, // q7
+        { 7,  3 }, // q8
+        { 8,  4 }, // q9
+        { 9,  5 }, // q10
+        { 11, 11 } // q11
+    };
+    
+    //dgcout << addIn << " " << ij << " ";
+    
+    bool negI = ij.i() < 0;
+    bool negJ = ij.j() < 0;
+    long int origI = ij.i();
+    if (bcNum == 0) {
+        if (!negI) {
+            if (!negJ) { // +i, +j
+                if (ij.i() > ij.j()) {
+                    quadNum = 2;
+                    ij.setI(ij.j());
+                    ij.setJ(unitScaleClassIres_ - (origI - ij.j()));
+                } else { // i <= j
+                    quadNum = 3;
+                    ij.setI(ij.j() - ij.i());
+                    ij.setJ(unitScaleClassIres_ - origI);
+                }
+            } else { // +i, -j}
+                quadNum = 1;
+                ij.setJ(ij.j() + unitScaleClassIres_);
+            }
+        } else { //  -i
+            if (!negJ) {
+                if (ij.j() == 0) {
+                    quadNum = 4;
+                    ij.setJ(unitScaleClassIres_ + ij.i());
+                    ij.setI(0);
+                } else { // -i, i > 0
+                    quadNum = 3;
+                    ij.setI(-ij.i());
+                    ij.setJ(unitScaleClassIres_ - ij.j());
+                }
+            } else { //  -i, j < 0
+                if (ij.i() < ij.j()) {
+                    quadNum = 4;
+                    ij.setI(-ij.j());
+                    ij.setJ(unitScaleClassIres_ - (-origI + ij.j()));
+                } else { // i >= j
+                    quadNum = 5;
+                    ij.setI(origI - ij.j());
+                    ij.setJ(unitScaleClassIres_ + origI);
+                }
+            }
+        }
+    } else if (bcNum == 11) {
+        if (!negI) { // +i
+            if (!negJ) { // +i, +j
+                if (ij.i() == 0) {
+                    quadNum = 6;
+                    ij.setI(unitScaleClassIres_ - ij.j());
+                    ij.setJ(0);
+                } else if (ij.j() == 0) {
+                    quadNum = 8;
+                    ij.setI(unitScaleClassIres_ - ij.i());
+                    ij.setJ(0);
+                } else if (ij.j() > ij.i()) {
+                    quadNum = 6;
+                    ij.setI(unitScaleClassIres_ - (ij.j() - ij.i()));
+                    ij.setJ(origI);
+                } else { // 0 < j <= i
+                    quadNum = 7;
+                    ij.setI(unitScaleClassIres_ - ij.j());
+                    ij.setJ(origI - ij.j());
+                }
+            } else { // +i, -j
+                quadNum = 8;
+                ij.setI(unitScaleClassIres_ - ij.i());
+                ij.setJ(-ij.j());
+            }
+        } else { // -i
+            if (negJ) {
+                if (ij.i() > ij.j()) {
+                    quadNum = 8;
+                    ij.setI(unitScaleClassIres_ - (-ij.j() + ij.i()));
+                    ij.setJ(-origI);
+                } else {
+                    quadNum = 9;
+                    ij.setI(unitScaleClassIres_ + ij.j());
+                    ij.setJ(-origI + ij.j());
+                }
+            } else { // -i, +j
+                quadNum = 10;
+                ij.setI(unitScaleClassIres_ + ij.i());
+            }
+        }
+    } else if (bcNum < 6) { // 1 - 5
+        if (negJ) {
+            ij.setJ(ij.j() + unitScaleClassIres_);
+            if (negI) { // both negative
+                ij.setI(ij.i() + unitScaleClassIres_);
+                quadNum = inverseAdjacentBaseCellTable[bcNum][0];
+            } else { // only j negative
+                quadNum = inverseAdjacentBaseCellTable[bcNum][1];
+            }
+        }
+    } else { // 6 - 10
+        if (negI) {
+            ij.setI(ij.i() + unitScaleClassIres_);
+            if (negJ) { // both negative
+                ij.setJ(ij.j() + unitScaleClassIres_);
+                quadNum = inverseAdjacentBaseCellTable[bcNum][0];
+            } else { // only i negative
+                quadNum = inverseAdjacentBaseCellTable[bcNum][1];
+            }
+        }
+    }
 
-//   dgcout << "qstr: " << qstr << " rad1: " << rad1 << " rad2: " << rad2 << endl;
-*/
+   DgQ2DICoord q2di(quadNum, ij);
+   //dgcout << addIn << " " << q2di << endl;
 
-   //DgQ2DICoord q2di(quadNum, DgIVec2D(rad1.value(), rad2.value()));
-   //dgcout << "q2di: " << q2di << endl;
-
-   DgQ2DICoord q2di(0, DgIVec2D(0, 0));
    return q2di;
 
 } // DgQ2DICoord DgZ7StringToQ2DIConverter::convertTypedAddress
