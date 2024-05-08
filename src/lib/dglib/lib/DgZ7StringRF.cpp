@@ -341,19 +341,20 @@ DgZ7StringToQ2DIConverter::convertTypedAddress (const DgZ7StringCoord& addIn) co
         { 11, 11 } // q11
     };
     
+    dgcout << addIn << " " << ij << " ";
+    
     bool negI = ij.i() < 0;
     bool negJ = ij.j() < 0;
+    long int origI = ij.i();
     if (bcNum == 0) {
         if (!negI) {
             if (!negJ) { // +i, +j
                 if (ij.i() > ij.j()) {
                     quadNum = 2;
-                    long int origI = ij.i();
                     ij.setI(ij.j());
                     ij.setJ(unitScaleClassIres_ - (origI - ij.j()));
                 } else { // i <= j
                     quadNum = 3;
-                    long int origI = ij.i();
                     ij.setI(ij.j() - ij.i());
                     ij.setJ(unitScaleClassIres_ - origI);
                 }
@@ -375,19 +376,53 @@ DgZ7StringToQ2DIConverter::convertTypedAddress (const DgZ7StringCoord& addIn) co
             } else { //  -i, j < 0
                 if (ij.i() < ij.j()) {
                     quadNum = 4;
-                    long int origI = ij.i();
                     ij.setI(-ij.j());
                     ij.setJ(unitScaleClassIres_ - (-origI + ij.j()));
                 } else { // i >= j
                     quadNum = 5;
-                    long int origI = ij.i();
                     ij.setI(origI - ij.j());
                     ij.setJ(unitScaleClassIres_ + origI);
                 }
             }
         }
     } else if (bcNum == 11) {
-        ;
+        if (!negI) { // +i
+            if (!negJ) { // +i, +j
+                if (ij.i() == 0) {
+                    quadNum = 6;
+                    ij.setI(unitScaleClassIres_ - ij.j());
+                    ij.setJ(0);
+                } else if (ij.j() == 0) {
+                    quadNum = 8;
+                    ij.setI(unitScaleClassIres_ - ij.i());
+                    ij.setJ(0);
+                } else if (ij.j() > ij.i()) {
+                    quadNum = 6;
+                    ij.setI(unitScaleClassIres_ - (ij.j() - ij.i()));
+                    ij.setJ(origI);
+                } else { // 0 < j <= i
+                    quadNum = 7;
+                    ij.setI(unitScaleClassIres_ - ij.j());
+                    ij.setJ(origI - ij.j());
+                }
+            } else { // +i, -j
+                quadNum = 8;
+                ij.setI(unitScaleClassIres_ - ij.i());
+                ij.setJ(-ij.j());
+            }
+        } else { // -i
+            if (negJ) {
+                if (ij.i() > ij.j()) {
+                    quadNum = 8;
+                    ij.setI(unitScaleClassIres_ - (-ij.j() + ij.i()));
+                    ij.setJ(-origI);
+                } else {
+                    quadNum = 9;
+                    ij.setI(unitScaleClassIres_ + ij.j());
+                    ij.setJ(-origI + ij.j());
+                }
+            }
+        }
     } else if (bcNum < 6) { // 1 - 5
         if (negJ) {
             ij.setJ(ij.j() + unitScaleClassIres_);
