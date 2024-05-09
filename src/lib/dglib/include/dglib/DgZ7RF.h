@@ -32,6 +32,7 @@
 #include <dglib/Dg2WayConverter.h>
 
 class DgZ7Coord;
+class DgZ7StringRF;
 class DgZ7StringCoord;
 class DgIDGGBase;
 class DgZ7Coord;
@@ -177,10 +178,14 @@ class DgZ7RF : public DgRF<DgZ7Coord, long long int> {
       DgZ7RF (DgRFNetwork& networkIn, const std::string& nameIn,
                     int resIn)
          : DgRF<DgZ7Coord, long long int>(networkIn, nameIn),
-           res_ (resIn) { }
+           res_ (resIn), z7strRF_ (NULL), z7strToZ7_ (NULL), z7toZ7str_ (NULL) { }
 
       int res_;
+      const DgZ7StringRF* z7strRF_;
+      const DgZ7StringtoZ7Converter* z7strToZ7_;
+      const DgZ7ToZ7StringConverter* z7toZ7str_;
 
+   friend class DgZ7StringtoZ7Converter;
 };
 
 ////////////////////////////////////////////////////////////////////////////////

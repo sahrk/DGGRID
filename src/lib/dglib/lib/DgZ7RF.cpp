@@ -81,29 +81,17 @@ const DgZ7Coord DgZ7Coord::undefDgZ7Coord(0xffffffffffffffff);
 
 ////////////////////////////////////////////////////////////////////////////////
 const char*
-DgZ7RF::str2add (DgZ7Coord* add, const char* str,
-                         char delimiter) const
+DgZ7RF::str2add (DgZ7Coord* add, const char* str, char delimiter) const
 {
-   char delimStr[2];
-   delimStr[0] = delimiter;
-   delimStr[1] = '\0';
+    // convert via a Z7 string coord
+    DgZ7StringCoord z7str;
+    const char* remainStr = z7strRF_->str2add(&z7str, str, delimiter);
+    
+    if (!add) add = new DgZ7Coord();
 
-   char* tmpStr = new char[strlen(str) + 1];
-   strcpy(tmpStr, str);
-   char* tok = strtok(tmpStr, delimStr);
-
-   // convert to a unit64_t
-   uint64_t val = 0;
-   if (!sscanf(tok, "%" PRIx64, &val))
-      report("DgZ7RF::str2add(): invalid ZORDER index", DgBase::Fatal);
-
-   if (!add) add = new DgZ7Coord();
-   add->setValue(val);
-
-   unsigned long offset = strlen(tok) + 1;
-   delete[] tmpStr;
-   if (offset >= strlen(str)) return 0;
-   else return &str[offset];
+    *add = z7strToZ7_->convertTypedAddress(z7str);
+    
+    return remainStr;
 
 } // const char* DgZ7RF::str2add
 
@@ -145,6 +133,7 @@ DgZ7StringtoZ7Converter::DgZ7StringtoZ7Converter
 
    // store the res
    res_ = zRF->res();
+   zRF->z7strRF_ = zsRF;
 
 } // DgZ7StringtoZ7Converter::DgZ7StringtoZ7Converter
 
@@ -214,6 +203,7 @@ DgZ7ToZ7StringConverter::DgZ7ToZ7StringConverter
 
    // store the res
    res_ = zRF->res();
+   z7strRF_ = zsRF;
 
 } // DgZ7StringtoZ7Converter::DgZ7StringtoZ7Converter
 
