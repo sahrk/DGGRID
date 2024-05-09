@@ -175,10 +175,7 @@ class DgZ7RF : public DgRF<DgZ7Coord, long long int> {
 
    protected:
 
-      DgZ7RF (DgRFNetwork& networkIn, const std::string& nameIn,
-                    int resIn)
-         : DgRF<DgZ7Coord, long long int>(networkIn, nameIn),
-           res_ (resIn), z7strRF_ (NULL), z7strToZ7_ (NULL), z7toZ7str_ (NULL) { }
+      DgZ7RF (DgRFNetwork& networkIn, const std::string& nameIn, int resIn);
 
       int res_;
       const DgZ7StringRF* z7strRF_;

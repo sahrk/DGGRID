@@ -174,10 +174,7 @@ class DgZ3RF : public DgRF<DgZ3Coord, long long int> {
 
    protected:
 
-      DgZ3RF (DgRFNetwork& networkIn, const std::string& nameIn,
-                    int resIn)
-         : DgRF<DgZ3Coord, long long int>(networkIn, nameIn),
-           res_ (resIn) { }
+      DgZ3RF (DgRFNetwork& networkIn, const std::string& nameIn, int resIn);
 
       int res_;
 
