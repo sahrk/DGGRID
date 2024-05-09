@@ -84,11 +84,6 @@ DgZ7RF::DgZ7RF (DgRFNetwork& networkIn, const std::string& nameIn, int resIn)
     : DgRF<DgZ7Coord, long long int>(networkIn, nameIn),
       res_ (resIn), z7strRF_ (NULL), z7strToZ7_ (NULL), z7toZ7str_ (NULL)
 {
-    if (res_ > MAX_Z7_RES) {
-      report("DgZ7RF::DgZ7RF(): "
-         " input resolution exceeds max Z7 resolution of 20", DgBase::Fatal);
-    }
-
     z7strRF_ = DgZ7StringRF::makeRF(networkIn, nameIn + "str", resIn);
     Dg2WayZ7ToStringConverter* c2way = new Dg2WayZ7ToStringConverter(*z7strRF_, *this);
     z7strToZ7_ = dynamic_cast<const DgZ7StringtoZ7Converter*>(&c2way->forward());
@@ -156,6 +151,11 @@ DgZ7StringtoZ7Converter::DgZ7StringtoZ7Converter
 DgZ7Coord
 DgZ7StringtoZ7Converter::convertTypedAddress (const DgZ7StringCoord& addIn) const
 {
+   if (res_ > MAX_Z7_RES) {
+     report("DgZ7StringtoZ7Converter::DgZ7StringtoZ7Converter(): "
+        " input resolution exceeds max Z7 resolution of 20", DgBase::Fatal);
+   }
+
    printf("DgZ7StringtoZ7Converter::convertTypedAddress()\n"); 
 
    string addstr = addIn.valString();

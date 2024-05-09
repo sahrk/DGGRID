@@ -83,10 +83,6 @@ const DgZ3Coord DgZ3Coord::undefDgZ3Coord(0xffffffffffffffff);
 DgZ3RF::DgZ3RF (DgRFNetwork& networkIn, const std::string& nameIn, int resIn)
          : DgRF<DgZ3Coord, long long int>(networkIn, nameIn), res_ (resIn) 
 {
-   if (res_ > MAX_Z3_RES) { 
-      report("DgZ3RF::DgZ3RF(): "
-         " input resolution exceeds max Z3 resolution of 30", DgBase::Fatal);
-   }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -162,6 +158,11 @@ DgZ3StringtoZ3Converter::DgZ3StringtoZ3Converter
 DgZ3Coord
 DgZ3StringtoZ3Converter::convertTypedAddress (const DgZ3StringCoord& addIn) const
 {
+   if (res_ > MAX_Z3_RES) { 
+      report("DgZ3StringtoZ3Converter::DgZ3StringtoZ3Converter(): "
+         " input resolution exceeds max Z3 resolution of 30", DgBase::Fatal);
+   }
+
    string addstr = addIn.valString();
    uint64_t z = 0;
 
