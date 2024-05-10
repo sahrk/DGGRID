@@ -13,7 +13,7 @@ dggs_res_spec 3
 
 # specify the output
 output_cell_label_type OUTPUT_ADDRESS_TYPE
-output_address_type Z7_STRING
+output_address_type Z7
 cell_output_type KML
 cell_output_file_name outputfiles/z7cells
 point_output_type KML

@@ -94,15 +94,26 @@ DgZ7RF::DgZ7RF (DgRFNetwork& networkIn, const std::string& nameIn, int resIn)
 const char*
 DgZ7RF::str2add (DgZ7Coord* add, const char* str, char delimiter) const
 {
-    // convert via a Z7 string coord
-    DgZ7StringCoord z7str;
-    const char* remainStr = z7strRF_->str2add(&z7str, str, delimiter);
-    
-    if (!add) add = new DgZ7Coord();
+   char delimStr[2];
+   delimStr[0] = delimiter;
+   delimStr[1] = '\0';
 
-    *add = z7strToZ7_->convertTypedAddress(z7str);
-    
-    return remainStr;
+   char* tmpStr = new char[strlen(str) + 1];
+   strcpy(tmpStr, str);
+   char* tok = strtok(tmpStr, delimStr);
+
+   // convert to a unit64_t
+   uint64_t val = 0;
+   if (!sscanf(tok, "%" PRIx64, &val))
+      report("DgZ7RF::str2add(): invalid Z7 index", DgBase::Fatal);
+
+   if (!add) add = new DgZ7Coord();
+   add->setValue(val);
+
+   unsigned long offset = strlen(tok) + 1;
+   delete[] tmpStr;
+   if (offset >= strlen(str)) return 0;
+   else return &str[offset];
 
 } // const char* DgZ7RF::str2add
 
@@ -156,7 +167,7 @@ DgZ7StringtoZ7Converter::convertTypedAddress (const DgZ7StringCoord& addIn) cons
         " input resolution exceeds max Z7 resolution of 20", DgBase::Fatal);
    }
 
-   printf("DgZ7StringtoZ7Converter::convertTypedAddress()\n"); 
+   //printf("DgZ7StringtoZ7Converter::convertTypedAddress()\n"); 
 
    string addstr = addIn.valString();
    uint64_t z = 0;
@@ -225,7 +236,7 @@ DgZ7ToZ7StringConverter::DgZ7ToZ7StringConverter
 DgZ7StringCoord
 DgZ7ToZ7StringConverter::convertTypedAddress (const DgZ7Coord& addIn) const
 {
-   printf("DgZ7ToZ7StringConverter::convertTypedAddress\n");
+   //printf("DgZ7ToZ7StringConverter::convertTypedAddress\n");
 
    uint64_t z = addIn.value();
 

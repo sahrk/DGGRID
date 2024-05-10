@@ -14,7 +14,7 @@ dggs_res_spec 5
 
 # control grid generation
 clip_subset_type INPUT_ADDRESS_TYPE
-input_address_type Z7_STRING
+input_address_type Z7
 clip_region_files inputfiles/z7a.txt inputfiles/z7b.txt
 
 # specify output address information

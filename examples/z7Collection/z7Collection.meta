@@ -20,7 +20,7 @@ unwrap_points TRUE
 
 # specify output address information
 output_cell_label_type OUTPUT_ADDRESS_TYPE
-output_address_type Z7_STRING
+output_address_type Z7
 
 # specify the output collection file used
 # when GDAL_COLLECTION is specified below
