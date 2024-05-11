@@ -1,7 +1,6 @@
 ################################################################################
-#
 # z7Transform.meta - example of a dggrid meta-file which performs address
-#                   conversion from GEO to Z7 indexes
+#                   conversion from SEQNUM to Z7_STRING indexes
 #
 # Note that the inputfiles directory contains GEO, Z7, Z7_STRING, and
 # SEQNUM files, all describing the same set of cells. You can experiment with 

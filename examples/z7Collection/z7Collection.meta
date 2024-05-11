@@ -1,7 +1,6 @@
 ################################################################################
-#
 # z7Collection.meta - example of a DGGRID metafile that outputs to a GDAL
-#     collection file using Z7 cell indexes.
+#     collection file using Z7_STRING cell indexes.
 #
 ################################################################################
 
