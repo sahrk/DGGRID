@@ -26,7 +26,7 @@ dggs_res_spec 5 (user set)
 input_files vals.txt (default)
 input_file_name valsin.txt (default)
 point_input_file_type NONE (default)
-input_address_type Z7_STRING (user set)
+input_address_type Z7 (user set)
 input_delimiter " " (default)
 output_file_name valsout.txt (default)
 output_file_type NONE (default)
@@ -71,5 +71,5 @@ clipper_scale_factor 1000000 (default)
 
 
 ** grid generation complete **
-accepted 12 cells / 14 tested
+accepted 13 cells / 15 tested
 

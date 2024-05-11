@@ -26,11 +26,11 @@ dggs_res_spec 5 (user set)
 input_files vals.txt (default)
 input_file_name valsin.txt (default)
 point_input_file_type NONE (default)
-input_address_type Z7_STRING (user set)
+input_address_type Z7 (user set)
 input_delimiter " " (default)
 output_file_name valsout.txt (default)
 output_file_type NONE (default)
-output_address_type Z7_STRING (user set)
+output_address_type Z7 (user set)
 output_delimiter " " (default)
 densification 0 (user set)
 longitude_wrap_mode WRAP (default)
@@ -62,7 +62,7 @@ output_last_seqnum 18446744073709551615 (default)
 clip_using_holes false (default)
 geodetic_densify 0 (user set)
 clip_subset_type COARSE_CELLS (user set)
-clip_cell_addresses 01020 00000 10052 (user set)
+clip_cell_addresses 0aefffffffffffff 016fffffffffffff 002fffffffffffff 1037ffffffffffff (user set)
 clip_cell_res 3 (user set)
 clip_cell_densification 1 (user set)
 clip_region_files test.gen (default)
@@ -72,28 +72,22 @@ clipper_scale_factor 1000000 (default)
 
 * building clipping regions...
 
-* Testing quad 0... 
-...quad 0 complete.
+* No intersections in quad 0.
 * Testing quad 1... 
 ...quad 1 complete.
-* Testing quad 2... 
-...quad 2 complete.
-* Testing quad 3... 
-...quad 3 complete.
-* Testing quad 4... 
-...quad 4 complete.
+* No intersections in quad 2.
+* No intersections in quad 3.
+* No intersections in quad 4.
 * Testing quad 5... 
 ...quad 5 complete.
 * No intersections in quad 6.
 * No intersections in quad 7.
 * No intersections in quad 8.
-* Testing quad 9... 
-...quad 9 complete.
-* Testing quad 10... 
-...quad 10 complete.
+* No intersections in quad 9.
+* No intersections in quad 10.
 * No intersections in quad 11.
 
 ** grid generation complete **
-accepted 172 cells / 1,455 tested
-acceptance rate is 11.8213%
+accepted 239 cells / 1,450 tested
+acceptance rate is 16.4828%
 

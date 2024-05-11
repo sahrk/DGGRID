@@ -10,90 +10,98 @@
       </LineStyle>
    </Style>
    <Placemark>
-      <name>0802260</name>
+      <name>0623530</name>
       <Point>
          <coordinates>
-            22.2202725,-47.4724390
+            -128.6931584,28.5500452
          </coordinates>
       </Point>
    </Placemark>
    <Placemark>
-      <name>0824510</name>
+      <name>0623050</name>
       <Point>
          <coordinates>
-            23.0771498,-46.3178147
+            -127.3913233,29.4607376
          </coordinates>
       </Point>
    </Placemark>
    <Placemark>
-      <name>0824530</name>
+      <name>0623000</name>
       <Point>
          <coordinates>
-            23.9012704,-45.1530715
+            -126.0495359,30.3853450
          </coordinates>
       </Point>
    </Placemark>
    <Placemark>
-      <name>0824050</name>
+      <name>0623020</name>
       <Point>
          <coordinates>
-            24.6947624,-43.9789090
+            -124.8068411,31.0289917
          </coordinates>
       </Point>
    </Placemark>
    <Placemark>
-      <name>0824000</name>
+      <name>0623240</name>
       <Point>
          <coordinates>
-            25.4596034,-42.7960007
+            -123.5275236,31.7371938
          </coordinates>
       </Point>
    </Placemark>
    <Placemark>
-      <name>0824020</name>
+      <name>0623260</name>
       <Point>
          <coordinates>
-            26.1976315,-41.6049967
+            -122.2314783,32.4994425
          </coordinates>
       </Point>
    </Placemark>
    <Placemark>
-      <name>0605242</name>
+      <name>0215510</name>
       <Point>
          <coordinates>
-            -139.0148936,-5.4513048
+            -120.9413563,33.3023729
          </coordinates>
       </Point>
    </Placemark>
    <Placemark>
-      <name>0605262</name>
+      <name>0215530</name>
       <Point>
          <coordinates>
-            -138.6237409,-4.2546373
+            -119.6807433,34.1308958
          </coordinates>
       </Point>
    </Placemark>
    <Placemark>
-      <name>0600512</name>
+      <name>0605220</name>
       <Point>
          <coordinates>
-            -138.2359776,-3.0639830
+            -139.7001464,-3.7468802
          </coordinates>
       </Point>
    </Placemark>
    <Placemark>
-      <name>0600532</name>
+      <name>0600140</name>
       <Point>
          <coordinates>
-            -137.8513215,-1.8796297
+            -139.3211711,-2.5648584
          </coordinates>
       </Point>
    </Placemark>
    <Placemark>
-      <name>0600052</name>
+      <name>0600160</name>
       <Point>
          <coordinates>
-            -137.4695013,-0.7018546
+            -138.9462979,-1.3899058
+         </coordinates>
+      </Point>
+   </Placemark>
+   <Placemark>
+      <name>0600010</name>
+      <Point>
+         <coordinates>
+            -138.2678399,0.0000000
          </coordinates>
       </Point>
    </Placemark>
