@@ -31,7 +31,7 @@
 #include <dglib/DgZ7RF.h>
 #include <dglib/DgZ7StringRF.h>
 #include <dglib/DgIDGGBase.h>
-#include <dglib/DgRadixString.h>
+#include <dglib/DgIVec3D.h>
 
 /** max Z7 resolution */
 #define MAX_Z7_RES 20
@@ -195,6 +195,11 @@ DgZ7StringtoZ7Converter::convertTypedAddress (const DgZ7StringCoord& addIn) cons
       Z7_SET_INDEX_DIGIT(z, r, d);
       r++;
    }
+
+   while (r <= MAX_Z7_RES) {
+       Z7_SET_INDEX_DIGIT(z, r, DgIVec3D::INVALID_DIGIT);  
+       r++;
+    }
 
    DgZ7Coord coord;
    coord.setValue(z);
