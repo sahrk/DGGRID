@@ -346,9 +346,14 @@ dgcout << " ---> A. " << *loc << endl;
 dgcout << " ---> B. " << coord << endl;
 #endif
 
-   long long int edgeI = IDGG().maxI() + 1;
-   long long int edgeJ = IDGG().maxJ() + 1;
-   if (coord.i() > edgeI || coord.j() > edgeJ) { // maybe round-off error?
+    long long int maxI = IDGG().maxI();
+    long long int maxJ = IDGG().maxJ();
+   long long int edgeI = maxI + 1;
+   long long int edgeJ = maxJ + 1;
+    long long int maxOverageI = (IDGG().aperture() == 7 && IDGG().isClassI()) ? edgeI + 1 : edgeI;
+    long long int maxOverageJ = (IDGG().aperture() == 7 && IDGG().isClassI()) ? edgeJ + 1 : edgeJ;
+
+   if (coord.i() > maxOverageI || coord.j() > maxOverageJ) { // maybe round-off error?
 
       DgDVec2D tmp(addIn.coord());
 
@@ -366,35 +371,35 @@ dgcout << " ---> C. " << coord << endl;
 #endif
 
    if (coord.i() < 0 || coord.j() < 0 ||
-       coord.i() > edgeI || coord.j() > edgeJ) {
+       coord.i() > maxOverageI || coord.j() > maxOverageJ) {
       report("DgQ2DDtoIConverter::convertTypedAddress(): "
              " coordinate out of range: " + (string) coord, DgBase::Fatal);
-   } else if (coord.i() == edgeI || coord.j() == edgeJ) {
+   } else if (coord.i() > maxI || coord.j() > maxJ) {
       const DgQuadEdgeCells& ec = IDGG().edgeTable(quadNum);
 
       if (ec.isType0()) {
-         if (coord.j() == edgeJ) {
+         if (coord.j() > maxI) {
             if (coord.i() == 0) {
                quadNum = ec.loneVert();
                coord = DgIVec2D(0, 0);
             } else {
                quadNum = ec.upQuad();
-               coord = DgIVec2D(0, edgeI - coord.i());
+               coord = DgIVec2D((maxOverageI - edgeI), maxOverageI - coord.i());
             }
          } else { // i == edgeI
             quadNum = ec.rightQuad();
             coord.setI(0);
          }
       } else { // type 1
-         if (coord.i() == edgeI) {
+         if (coord.i() > maxI) {
             if (coord.j() == 0) {
                quadNum = ec.loneVert();
                coord = DgIVec2D(0, 0);
             } else {
                quadNum = ec.rightQuad();
-               coord = DgIVec2D(edgeJ - coord.j(), 0);
+               coord = DgIVec2D(maxOverageJ - coord.j(), (maxOverageJ - edgeJ));
             }
-         } else { // j == edgeJ
+         } else { // j > maxJ
             quadNum = ec.upQuad();
             coord.setJ(0);
          }

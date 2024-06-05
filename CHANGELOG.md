@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 All changes are by Kevin Sahr, unless otherwise noted.
 
+## [8.2] - 2024-06-05
+### Fixed
+- bug binning some points that are very close to certain icosahedron edges into odd aperture 7 resolutions
+
 ## [8.1b] - 2024-01-10
 ### Added
 - pure aperture 7 hexagon grids (ISEA7H/FULLER7H) are now first class DGGS that support all operations (just like aperture 3 and 4 hexagon DGGS)
