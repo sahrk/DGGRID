@@ -350,8 +350,8 @@ dgcout << " ---> B. " << coord << endl;
     long long int maxJ = IDGG().maxJ();
    long long int edgeI = maxI + 1;
    long long int edgeJ = maxJ + 1;
-    long long int maxOverageI = (IDGG().aperture() == 7) ? edgeI + 1 : edgeI;
-    long long int maxOverageJ = (IDGG().aperture() == 7) ? edgeJ + 1 : edgeJ;
+    long long int maxOverageI = (IDGG().aperture() == 7 && IDGG().isClassI()) ? edgeI + 1 : edgeI;
+    long long int maxOverageJ = (IDGG().aperture() == 7 && IDGG().isClassI()) ? edgeJ + 1 : edgeJ;
 
    if (coord.i() > maxOverageI || coord.j() > maxOverageJ) { // maybe round-off error?
 
