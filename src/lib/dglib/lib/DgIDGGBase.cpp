@@ -59,18 +59,18 @@ DgGridMetric      DgIDGGBase::gridMetric (void) const { return dggs()->gridMetri
 ////////////////////////////////////////////////////////////////////////////////
 const DgQuadEdgeCells DgIDGGBase::edgeTable_[12] = {
 
-   DgQuadEdgeCells(0,  true,  0,  0, 0), // quad 0 should never occur
-   DgQuadEdgeCells(1,  true,  0,  2, 6),
-   DgQuadEdgeCells(2,  true,  0,  3, 7),
-   DgQuadEdgeCells(3,  true,  0,  4, 8),
-   DgQuadEdgeCells(4,  true,  0,  5, 9),
-   DgQuadEdgeCells(5,  true,  0,  1, 10),
-   DgQuadEdgeCells(6,  false, 11, 2, 7),
-   DgQuadEdgeCells(7,  false, 11, 3, 8),
-   DgQuadEdgeCells(8,  false, 11, 4, 9),
-   DgQuadEdgeCells(9,  false, 11, 5, 10),
-   DgQuadEdgeCells(10, false, 11, 1, 6),
-   DgQuadEdgeCells(11, false, 11, 0, 0)  // quad 11 should never occur
+   DgQuadEdgeCells(0,  true,  0,  0, 0, 0, 0), // quad 0 should never occur
+   DgQuadEdgeCells(1,  true,  0,  2, 10, 6, 5),
+   DgQuadEdgeCells(2,  true,  0,  3, 6, 7, 1),
+   DgQuadEdgeCells(3,  true,  0,  4, 7, 8, 2),
+   DgQuadEdgeCells(4,  true,  0,  5, 8, 9, 3),
+   DgQuadEdgeCells(5,  true,  0,  1, 9, 10, 4),
+   DgQuadEdgeCells(6,  false, 11, 2, 10, 7, 1),
+   DgQuadEdgeCells(7,  false, 11, 3, 6, 8, 2),
+   DgQuadEdgeCells(8,  false, 11, 4, 7, 9, 3),
+   DgQuadEdgeCells(9,  false, 11, 5, 8, 10, 4),
+   DgQuadEdgeCells(10, false, 11, 1, 9, 6, 5),
+   DgQuadEdgeCells(11, false, 11, 0, 0, 0, 0)  // quad 11 should never occur
 
 };
 

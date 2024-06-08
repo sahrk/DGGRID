@@ -328,9 +328,22 @@ dgcout << " ---> A. " << *loc << endl;
 
    int quadNum = addIn.quadNum();
 
+#if DGDEBUG
+dgcout << " ---> B. " << coord << endl;
+#endif
+
+    long long int maxI = IDGG().maxI();
+    long long int maxJ = IDGG().maxJ();
+    long long int topEdgeI = maxI + 1;
+    long long int topEdgeJ = maxJ + 1;
+    long long int maxTopOverageI = (IDGG().aperture() == 7 && IDGG().isClassI()) ? topEdgeI + 1 : topEdgeI;
+    long long int maxTopOverageJ = (IDGG().aperture() == 7 && IDGG().isClassI()) ? topEdgeJ + 1 : topEdgeJ;
+    long long int minI = (IDGG().aperture() == 7 && IDGG().isClassI()) ? -1 : 0;
+    long long int minJ = (IDGG().aperture() == 7 && IDGG().isClassI()) ? -1 : 0;
+
+   // if out of range check for possible round-off error
    const long double nudge = 0.0000001L;
-   if (coord.i() < 0 || coord.j() < 0) // maybe round-off error?
-   {
+   if (coord.i() < minI || coord.j() < minJ) {
       DgDVec2D tmp(addIn.coord());
 
       tmp.setX(tmp.x() + nudge);
@@ -342,18 +355,7 @@ dgcout << " ---> A. " << *loc << endl;
       delete loc;
    }
 
-#if DGDEBUG
-dgcout << " ---> B. " << coord << endl;
-#endif
-
-    long long int maxI = IDGG().maxI();
-    long long int maxJ = IDGG().maxJ();
-   long long int edgeI = maxI + 1;
-   long long int edgeJ = maxJ + 1;
-    long long int maxOverageI = (IDGG().aperture() == 7 && IDGG().isClassI()) ? edgeI + 1 : edgeI;
-    long long int maxOverageJ = (IDGG().aperture() == 7 && IDGG().isClassI()) ? edgeJ + 1 : edgeJ;
-
-   if (coord.i() > maxOverageI || coord.j() > maxOverageJ) { // maybe round-off error?
+   if (coord.i() > maxTopOverageI || coord.j() > maxTopOverageJ) {
 
       DgDVec2D tmp(addIn.coord());
 
@@ -366,12 +368,13 @@ dgcout << " ---> B. " << coord << endl;
       delete loc;
    }
 
+
 #if DGDEBUG
 dgcout << " ---> C. " << coord << endl;
 #endif
 
    if (coord.i() < 0 || coord.j() < 0 ||
-       coord.i() > maxOverageI || coord.j() > maxOverageJ) {
+       coord.i() > maxTopOverageI || coord.j() > maxTopOverageJ) {
       report("DgQ2DDtoIConverter::convertTypedAddress(): "
              " coordinate out of range: " + (string) coord, DgBase::Fatal);
    } else if (coord.i() > maxI || coord.j() > maxJ) {
@@ -384,9 +387,9 @@ dgcout << " ---> C. " << coord << endl;
                coord = DgIVec2D(0, 0);
             } else {
                quadNum = ec.upQuad();
-               coord = DgIVec2D((maxOverageI - edgeI), maxOverageI - coord.i());
+               coord = DgIVec2D((maxTopOverageI - topEdgeI), maxTopOverageI - coord.i());
             }
-         } else { // i == edgeI
+         } else { // i == topEdgeI
             quadNum = ec.rightQuad();
             coord.setI(0);
          }
@@ -397,7 +400,7 @@ dgcout << " ---> C. " << coord << endl;
                coord = DgIVec2D(0, 0);
             } else {
                quadNum = ec.rightQuad();
-               coord = DgIVec2D(maxOverageJ - coord.j(), (maxOverageJ - edgeJ));
+               coord = DgIVec2D(maxTopOverageJ - coord.j(), (maxTopOverageJ - topEdgeJ));
             }
          } else { // j > maxJ
             quadNum = ec.upQuad();
