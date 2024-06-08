@@ -338,76 +338,100 @@ dgcout << " ---> B. " << coord << endl;
     long long int topEdgeJ = maxJ + 1;
     long long int maxTopOverageI = (IDGG().aperture() == 7 && IDGG().isClassI()) ? topEdgeI + 1 : topEdgeI;
     long long int maxTopOverageJ = (IDGG().aperture() == 7 && IDGG().isClassI()) ? topEdgeJ + 1 : topEdgeJ;
-    long long int minI = (IDGG().aperture() == 7 && IDGG().isClassI()) ? -1 : 0;
-    long long int minJ = (IDGG().aperture() == 7 && IDGG().isClassI()) ? -1 : 0;
+    long long int minBottomI = (IDGG().aperture() == 7 && IDGG().isClassI()) ? -1 : 0;
+    long long int minBottomJ = (IDGG().aperture() == 7 && IDGG().isClassI()) ? -1 : 0;
 
    // if out of range check for possible round-off error
    const long double nudge = 0.0000001L;
-   if (coord.i() < minI || coord.j() < minJ) {
-      DgDVec2D tmp(addIn.coord());
+   bool underI, underJ, overI, overJ;
+   underI = coord.i() < minBottomI;
+   underJ = coord.j() < minBottomJ;
+   overI = coord.i() > maxTopOverageI;
+   overJ = coord.j() > maxTopOverageJ;
 
+   DgDVec2D tmp(addIn.coord());
+   bool overage = false;
+   if (underI || underJ) {
+      overage = true;
       tmp.setX(tmp.x() + nudge);
       tmp.setY(tmp.y() + nudge);
-
-      loc = IDGG().ccFrame().makeLocation(tmp);
-      IDGG().grid2D().convert(loc);
-      coord = *IDGG().grid2D().getAddress(*loc);
-      delete loc;
-   }
-
-   if (coord.i() > maxTopOverageI || coord.j() > maxTopOverageJ) {
-
-      DgDVec2D tmp(addIn.coord());
-
+   } else if (overI || overJ) {
+      overage = true;
       tmp.setX(tmp.x() - nudge);
       tmp.setY(tmp.y() - nudge);
+   }
 
+   if (overage) {
+      // nudge the incoming point and try again
       loc = IDGG().ccFrame().makeLocation(tmp);
       IDGG().grid2D().convert(loc);
       coord = *IDGG().grid2D().getAddress(*loc);
       delete loc;
-   }
 
+      // reset the overage conditions
+      underI = coord.i() < minBottomI;
+      underJ = coord.j() < minBottomJ;
+      overI = coord.i() > maxTopOverageI;
+      overJ = coord.j() > maxTopOverageJ;
+
+      // are we good?
+      if (underI || underJ || overI || overJ)
+         report("DgQ2DDtoIConverter::convertTypedAddress(): "
+             " coordinate out of range: " + (string) coord, DgBase::Fatal);
+   }
 
 #if DGDEBUG
 dgcout << " ---> C. " << coord << endl;
 #endif
-
-   if (coord.i() < 0 || coord.j() < 0 ||
-       coord.i() > maxTopOverageI || coord.j() > maxTopOverageJ) {
-      report("DgQ2DDtoIConverter::convertTypedAddress(): "
-             " coordinate out of range: " + (string) coord, DgBase::Fatal);
-   } else if (coord.i() > maxI || coord.j() > maxJ) {
-      const DgQuadEdgeCells& ec = IDGG().edgeTable(quadNum);
-
-      if (ec.isType0()) {
-         if (coord.j() > maxI) {
-            if (coord.i() == 0) {
-               quadNum = ec.loneVert();
-               coord = DgIVec2D(0, 0);
-            } else {
-               quadNum = ec.upQuad();
-               coord = DgIVec2D((maxTopOverageI - topEdgeI), maxTopOverageI - coord.i());
+   // we'll reuse the booleans above set to based on the actual quad i,j ranges
+   underI = coord.i() < 0;
+   underJ = coord.j() < 0;
+   overI = coord.i() > maxI;
+   overJ = coord.j() > maxJ;
+   int numOver = underI + underJ + overI + overJ; // works because bool is an int
+   if (numOver) {
+        if (numOver > 1) // this code only handles one overage direction
+            report("DgQ2DDtoIConverter::convertTypedAddress(): "
+                   " multiple overages.", DgBase::Fatal);
+        
+        const DgQuadEdgeCells& ec = IDGG().edgeTable(quadNum);
+        
+        if (underI) {
+            if (ec.isType0()) {
+            } else { // TypeI
             }
-         } else { // i == topEdgeI
-            quadNum = ec.rightQuad();
-            coord.setI(0);
-         }
-      } else { // type 1
-         if (coord.i() > maxI) {
-            if (coord.j() == 0) {
-               quadNum = ec.loneVert();
-               coord = DgIVec2D(0, 0);
-            } else {
-               quadNum = ec.rightQuad();
-               coord = DgIVec2D(maxTopOverageJ - coord.j(), (maxTopOverageJ - topEdgeJ));
+        } else if (underJ) {
+            if (ec.isType0()) {
+            } else { // TypeI
             }
-         } else { // j > maxJ
-            quadNum = ec.upQuad();
-            coord.setJ(0);
-         }
-      }
-   }
+        } else if (overI) {
+            if (ec.isType0()) {
+                quadNum = ec.rightQuad();
+                coord.setI(0);
+            } else { // TypeI
+                if (coord.j() == 0) {
+                    quadNum = ec.loneVert();
+                    coord = DgIVec2D(0, 0);
+                } else {
+                    quadNum = ec.rightQuad();
+                    coord = DgIVec2D(maxTopOverageJ - coord.j(), (maxTopOverageJ - topEdgeJ));
+                }
+            }
+        } else if (overJ) {
+            if (ec.isType0()) {
+                if (coord.i() == 0) {
+                    quadNum = ec.loneVert();
+                    coord = DgIVec2D(0, 0);
+                } else {
+                    quadNum = ec.upQuad();
+                    coord = DgIVec2D((maxTopOverageI - topEdgeI), maxTopOverageI - coord.i());
+                }
+            } else { // TypeI
+                quadNum = ec.upQuad();
+                coord.setJ(0);
+            }
+        }
+    }
 
 #if DGDEBUG
 dgcout << " ---> D. " << coord << endl;
