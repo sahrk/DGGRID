@@ -390,7 +390,7 @@ dgcout << " ---> C. " << coord << endl;
    overJ = coord.j() > maxJ;
    int numOver = underI + underJ + overI + overJ; // works because bool is an int
    if (numOver) {
-        if (numOver > 1) // this code only handles one overage direction
+        if (numOver > 1 && !(overI && overJ)) // this code only handles one overage direction
             report("DgQ2DDtoIConverter::convertTypedAddress(): "
                    " multiple overages.", DgBase::Fatal);
         
