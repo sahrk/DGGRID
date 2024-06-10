@@ -319,6 +319,8 @@ dgcout << "\nDgQ2DDtoIConverter::convertTypedAddress loc: " << *loc << endl;
 
     IDGG().grid2D().convert(loc);
 
+//dgcout << "XX " << addIn << " " << *loc << endl;
+
 #if DGDEBUG
 dgcout << " ---> A. " << *loc << endl;
 #endif
@@ -390,13 +392,24 @@ dgcout << " ---> C. " << coord << endl;
    overJ = coord.j() > maxJ;
    int numOver = underI + underJ + overI + overJ; // works because bool is an int
    if (numOver) {
-        if (numOver > 1 && !(overI && overJ)) // this code only handles one overage direction
+       bool upperRightCorner = overI && overJ;
+       if (numOver > 1 && !(numOver == 2 && upperRightCorner)) // this code only handles one overage direction
             report("DgQ2DDtoIConverter::convertTypedAddress(): "
                    " multiple overages.", DgBase::Fatal);
         
         const DgQuadEdgeCells& ec = IDGG().edgeTable(quadNum);
         
-        if (underI) {
+        // special case first
+       if (upperRightCorner) {
+           // must be upper right corner
+           if (ec.isType0()) {
+               quadNum = ec.upQuad();
+               coord = DgIVec2D(0, 0);
+           } else { // TypeI
+               quadNum = ec.rightQuad();
+               coord = DgIVec2D(0, 0);
+           }
+       } else if (underI) {
             if (ec.isType0()) {
             } else { // TypeI
             }
