@@ -319,7 +319,7 @@ dgcout << "\nDgQ2DDtoIConverter::convertTypedAddress loc: " << *loc << endl;
 
     IDGG().grid2D().convert(loc);
 
-dgcout << "XX " << addIn << " " << *loc << endl;
+//dgcout << "XX " << addIn << " " << *loc << endl;
 
 #if DGDEBUG
 dgcout << " ---> A. " << *loc << endl;
@@ -344,8 +344,8 @@ dgcout << " ---> B. " << coord << endl;
     long long int minBottomI = (IDGG().aperture() == 7 && IDGG().isClassI()) ? -1 : 0;
     long long int minBottomJ = (IDGG().aperture() == 7 && IDGG().isClassI()) ? -1 : 0;
      */
-    long long int maxTopOverageI = (IDGG().aperture() == 7) ? topEdgeI + 1 : topEdgeI;
-    long long int maxTopOverageJ = (IDGG().aperture() == 7) ? topEdgeJ + 1 : topEdgeJ;
+    long long int maxTopOverageI = (IDGG().aperture() == 7) ? topEdgeI + 2 : topEdgeI;
+    long long int maxTopOverageJ = (IDGG().aperture() == 7) ? topEdgeJ + 2 : topEdgeJ;
     long long int minBottomI = (IDGG().aperture() == 7) ? -2 : 0;
     long long int minBottomJ = (IDGG().aperture() == 7) ? -2 : 0;
 
