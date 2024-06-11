@@ -319,7 +319,7 @@ dgcout << "\nDgQ2DDtoIConverter::convertTypedAddress loc: " << *loc << endl;
 
     IDGG().grid2D().convert(loc);
 
-//dgcout << "XX " << addIn << " " << *loc << endl;
+dgcout << "XX " << addIn << " " << *loc << endl;
 
 #if DGDEBUG
 dgcout << " ---> A. " << *loc << endl;
@@ -338,10 +338,16 @@ dgcout << " ---> B. " << coord << endl;
     long long int maxJ = IDGG().maxJ();
     long long int topEdgeI = maxI + 1;
     long long int topEdgeJ = maxJ + 1;
+    /*
     long long int maxTopOverageI = (IDGG().aperture() == 7 && IDGG().isClassI()) ? topEdgeI + 1 : topEdgeI;
     long long int maxTopOverageJ = (IDGG().aperture() == 7 && IDGG().isClassI()) ? topEdgeJ + 1 : topEdgeJ;
     long long int minBottomI = (IDGG().aperture() == 7 && IDGG().isClassI()) ? -1 : 0;
     long long int minBottomJ = (IDGG().aperture() == 7 && IDGG().isClassI()) ? -1 : 0;
+     */
+    long long int maxTopOverageI = (IDGG().aperture() == 7) ? topEdgeI + 1 : topEdgeI;
+    long long int maxTopOverageJ = (IDGG().aperture() == 7) ? topEdgeJ + 1 : topEdgeJ;
+    long long int minBottomI = (IDGG().aperture() == 7) ? -2 : 0;
+    long long int minBottomJ = (IDGG().aperture() == 7) ? -2 : 0;
 
    // if out of range check for possible round-off error
    const long double nudge = 0.0000001L;
