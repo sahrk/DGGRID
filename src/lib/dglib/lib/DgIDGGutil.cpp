@@ -359,11 +359,14 @@ dgcout << " ---> B. " << coord << endl;
 
    DgDVec2D tmp(addIn.coord());
    bool overage = false;
+    /*
    if (underI || underJ) {
       overage = true;
       tmp.setX(tmp.x() + nudge);
       tmp.setY(tmp.y() + nudge);
-   } else if (overI || overJ) {
+   } else
+       */
+   if (overI || overJ) {
       overage = true;
       tmp.setX(tmp.x() - nudge);
       tmp.setY(tmp.y() - nudge);
@@ -377,13 +380,15 @@ dgcout << " ---> B. " << coord << endl;
       delete loc;
 
       // reset the overage conditions
-      underI = coord.i() < minBottomI;
-      underJ = coord.j() < minBottomJ;
+      //underI = coord.i() < minBottomI;
+      //underJ = coord.j() < minBottomJ;
       overI = coord.i() > maxTopOverageI;
       overJ = coord.j() > maxTopOverageJ;
 
       // are we good?
-      if (underI || underJ || overI || overJ)
+      //if (underI || underJ || overI || overJ)
+      if (overI || overJ)
+
          report("DgQ2DDtoIConverter::convertTypedAddress(): "
              " coordinate out of range: " + (string) coord, DgBase::Fatal);
    }
@@ -392,16 +397,19 @@ dgcout << " ---> B. " << coord << endl;
 dgcout << " ---> C. " << coord << endl;
 #endif
    // we'll reuse the booleans above set to based on the actual quad i,j ranges
-   underI = coord.i() < 0;
-   underJ = coord.j() < 0;
+   //underI = coord.i() < 0;
+   //underJ = coord.j() < 0;
    overI = coord.i() > maxI;
    overJ = coord.j() > maxJ;
-   int numOver = underI + underJ + overI + overJ; // works because bool is an int
-   if (numOver) {
+   //int numOver = underI + underJ + overI + overJ; // works because bool is an int
+   //if (numOver) {
+   if (overI || overJ) {
        bool upperRightCorner = overI && overJ;
+       /*
        if (numOver > 1 && !(numOver == 2 && upperRightCorner)) // this code only handles one overage direction
             report("DgQ2DDtoIConverter::convertTypedAddress(): "
                    " multiple overages.", DgBase::Fatal);
+        */
         
         const DgQuadEdgeCells& ec = IDGG().edgeTable(quadNum);
         
@@ -415,6 +423,7 @@ dgcout << " ---> C. " << coord << endl;
                quadNum = ec.rightQuad();
                coord = DgIVec2D(0, 0);
            }
+           /*
        } else if (underI) {
             if (ec.isType0()) {
             } else { // TypeI
@@ -423,6 +432,7 @@ dgcout << " ---> C. " << coord << endl;
             if (ec.isType0()) {
             } else { // TypeI
             }
+            */
         } else if (overI) {
             if (ec.isType0()) {
                 quadNum = ec.rightQuad();
