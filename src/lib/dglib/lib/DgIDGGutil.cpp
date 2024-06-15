@@ -344,8 +344,18 @@ dgcout << " ---> B. " << coord << endl;
     long long int minBottomI = (IDGG().aperture() == 7 && IDGG().isClassI()) ? -1 : 0;
     long long int minBottomJ = (IDGG().aperture() == 7 && IDGG().isClassI()) ? -1 : 0;
      */
+    /*
+     long long int maxTopOverageI = (IDGG().aperture() == 7 && ! ? topEdgeI + 2 : topEdgeI;
+    long long int maxTopOverageJ = (IDGG().aperture() == 7) ? topEdgeJ + 2 : topEdgeJ;
+     */
+    /*
+    long long int maxTopOverageI = (IDGG().aperture() == 7 && IDGG().isClassI()) ? topEdgeI + 2 : topEdgeI;
+    long long int maxTopOverageJ = (IDGG().aperture() == 7 && IDGG().isClassI()) ? topEdgeJ + 2 : topEdgeJ;
+     */
+     
     long long int maxTopOverageI = (IDGG().aperture() == 7) ? topEdgeI + 2 : topEdgeI;
     long long int maxTopOverageJ = (IDGG().aperture() == 7) ? topEdgeJ + 2 : topEdgeJ;
+
     long long int minBottomI = (IDGG().aperture() == 7) ? -2 : 0;
     long long int minBottomJ = (IDGG().aperture() == 7) ? -2 : 0;
 
@@ -359,14 +369,11 @@ dgcout << " ---> B. " << coord << endl;
 
    DgDVec2D tmp(addIn.coord());
    bool overage = false;
-    /*
    if (underI || underJ) {
       overage = true;
       tmp.setX(tmp.x() + nudge);
       tmp.setY(tmp.y() + nudge);
-   } else
-       */
-   if (overI || overJ) {
+   } else if (overI || overJ) {
       overage = true;
       tmp.setX(tmp.x() - nudge);
       tmp.setY(tmp.y() - nudge);
@@ -404,17 +411,10 @@ dgcout << " ---> C. " << coord << endl;
    //int numOver = underI + underJ + overI + overJ; // works because bool is an int
    //if (numOver) {
    if (overI || overJ) {
-       bool upperRightCorner = overI && overJ;
-       /*
-       if (numOver > 1 && !(numOver == 2 && upperRightCorner)) // this code only handles one overage direction
-            report("DgQ2DDtoIConverter::convertTypedAddress(): "
-                   " multiple overages.", DgBase::Fatal);
-        */
+       const DgQuadEdgeCells& ec = IDGG().edgeTable(quadNum);
         
-        const DgQuadEdgeCells& ec = IDGG().edgeTable(quadNum);
-        
-        // special case first
-       if (upperRightCorner) {
+       // special case first
+       if (overI && overJ) {
            // must be upper right corner
            if (ec.isType0()) {
                quadNum = ec.upQuad();
@@ -443,7 +443,11 @@ dgcout << " ---> C. " << coord << endl;
                     coord = DgIVec2D(0, 0);
                 } else {
                     quadNum = ec.rightQuad();
+                    // if we're here overI is true and overJ is false
+                    coord = DgIVec2D(topEdgeJ - coord.j(), coord.i() - topEdgeI);
+                    /*
                     coord = DgIVec2D(maxTopOverageJ - coord.j(), (maxTopOverageJ - topEdgeJ));
+                     */
                 }
             }
         } else if (overJ) {
@@ -453,7 +457,10 @@ dgcout << " ---> C. " << coord << endl;
                     coord = DgIVec2D(0, 0);
                 } else {
                     quadNum = ec.upQuad();
+                    coord = DgIVec2D(coord.j() - topEdgeJ, topEdgeI - coord.i());
+                    /*
                     coord = DgIVec2D((maxTopOverageI - topEdgeI), maxTopOverageI - coord.i());
+                     */
                 }
             } else { // TypeI
                 quadNum = ec.upQuad();
