@@ -7,6 +7,7 @@ All changes are by Kevin Sahr, unless otherwise noted.
 ### Fixed
 - bug binning some points that are very close to certain icosahedron edges into odd aperture 7 resolutions
 - failure when performing a TRANSFORM operation with input files other than lat/lon
+- fixed macro names in Z3RF
 
 ## [8.1b] - 2024-01-10
 ### Added
