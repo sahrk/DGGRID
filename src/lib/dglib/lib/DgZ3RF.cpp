@@ -33,51 +33,57 @@
 #include <dglib/DgIDGGBase.h>
 #include <dglib/DgRadixString.h>
 
-/** max ZORDER resolution */
-#define MAX_ZORDER_RES 30
+/** max Z3 resolution */
+#define MAX_Z3_RES 30
 
 /** The number of bits in a Z3 index. */
-#define ZORDER_NUM_BITS 64
+#define Z3_NUM_BITS 64
 
 /** The bit offset of the max resolution digit in a Z3 index. */
-#define ZORDER_MAX_OFFSET 63
+#define Z3_MAX_OFFSET 63
 
 /** The bit offset of the quad number in a Z3 index. */
-#define ZORDER_QUAD_OFFSET 60
+#define Z3_QUAD_OFFSET 60
 
 /** 1's in the 4 quad number bits, 0's everywhere else. */
-#define ZORDER_QUAD_MASK ((uint64_t)(15) << ZORDER_QUAD_OFFSET)
+#define Z3_QUAD_MASK ((uint64_t)(15) << Z3_QUAD_OFFSET)
 
 /** 0's in the 4 mode bits, 1's everywhere else. */
-#define ZORDER_QUAD_MASK_NEGATIVE (~ZORDER_QUAD_MASK)
+#define Z3_QUAD_MASK_NEGATIVE (~Z3_QUAD_MASK)
 
-/** The number of bits in a single ZORDER resolution digit. */
-#define ZORDER_PER_DIGIT_OFFSET 2
+/** The number of bits in a single Z3 resolution digit. */
+#define Z3_PER_DIGIT_OFFSET 2
 
 /** 1's in the 2 bits of highest res digit bits, 0's everywhere else. */
-#define ZORDER_DIGIT_MASK ((uint64_t)(3))
+#define Z3_DIGIT_MASK ((uint64_t)(3))
 
 /** Gets the integer quad number of a Z3 index. */
-#define ZORDER_GET_QUADNUM(z) ((int)((((z)&ZORDER_QUAD_MASK) >> ZORDER_QUAD_OFFSET)))
+#define Z3_GET_QUADNUM(z) ((int)((((z)&Z3_QUAD_MASK) >> Z3_QUAD_OFFSET)))
 
 /** Sets the integer mode of z to v. */
-#define ZORDER_SET_QUADNUM(z, v) \
-    (z) = (((z)&ZORDER_QUAD_MASK_NEGATIVE) | (((uint64_t)(v)) << ZORDER_QUAD_OFFSET))
+#define Z3_SET_QUADNUM(z, v) \
+    (z) = (((z)&Z3_QUAD_MASK_NEGATIVE) | (((uint64_t)(v)) << Z3_QUAD_OFFSET))
 
 /** Gets the resolution res integer digit of z. */
-#define ZORDER_GET_INDEX_DIGIT(z, res)                                        \
-    ((int)((((z) >> ((MAX_ZORDER_RES - (res)) * ZORDER_PER_DIGIT_OFFSET)) & \
-                  ZORDER_DIGIT_MASK)))
+#define Z3_GET_INDEX_DIGIT(z, res)                                        \
+    ((int)((((z) >> ((MAX_Z3_RES - (res)) * Z3_PER_DIGIT_OFFSET)) & \
+                  Z3_DIGIT_MASK)))
 
 /** Sets the resolution res digit of z to the integer digit */
-#define ZORDER_SET_INDEX_DIGIT(z, res, digit)                                  \
-    (z) = (((z) & ~((ZORDER_DIGIT_MASK                                        \
-                       << ((MAX_ZORDER_RES - (res)) * ZORDER_PER_DIGIT_OFFSET)))) | \
+#define Z3_SET_INDEX_DIGIT(z, res, digit)                                  \
+    (z) = (((z) & ~((Z3_DIGIT_MASK                                        \
+                       << ((MAX_Z3_RES - (res)) * Z3_PER_DIGIT_OFFSET)))) | \
             (((uint64_t)(digit))                                            \
-             << ((MAX_ZORDER_RES - (res)) * ZORDER_PER_DIGIT_OFFSET)))
+             << ((MAX_Z3_RES - (res)) * Z3_PER_DIGIT_OFFSET)))
 
 ////////////////////////////////////////////////////////////////////////////////
 const DgZ3Coord DgZ3Coord::undefDgZ3Coord(0xffffffffffffffff);
+
+////////////////////////////////////////////////////////////////////////////////
+DgZ3RF::DgZ3RF (DgRFNetwork& networkIn, const std::string& nameIn, int resIn)
+         : DgRF<DgZ3Coord, long long int>(networkIn, nameIn), res_ (resIn) 
+{
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 const char*
@@ -95,7 +101,7 @@ DgZ3RF::str2add (DgZ3Coord* add, const char* str,
    // convert to a unit64_t
    uint64_t val = 0;
    if (!sscanf(tok, "%" PRIx64, &val))
-      report("DgZ3RF::str2add(): invalid ZORDER index", DgBase::Fatal);
+      report("DgZ3RF::str2add(): invalid Z3 index", DgBase::Fatal);
 
    if (!add) add = new DgZ3Coord();
    add->setValue(val);
@@ -152,6 +158,11 @@ DgZ3StringtoZ3Converter::DgZ3StringtoZ3Converter
 DgZ3Coord
 DgZ3StringtoZ3Converter::convertTypedAddress (const DgZ3StringCoord& addIn) const
 {
+   if (res_ > MAX_Z3_RES) { 
+      report("DgZ3StringtoZ3Converter::DgZ3StringtoZ3Converter(): "
+         " input resolution exceeds max Z3 resolution of 30", DgBase::Fatal);
+   }
+
    string addstr = addIn.valString();
    uint64_t z = 0;
 
@@ -160,7 +171,7 @@ DgZ3StringtoZ3Converter::convertTypedAddress (const DgZ3StringCoord& addIn) cons
    if (qstr[0] == '0') // leading 0
       qstr = qstr.substr(1, 1);
    int quadNum = std::stoi(qstr);
-   ZORDER_SET_QUADNUM(z, quadNum);
+   Z3_SET_QUADNUM(z, quadNum);
 
    int index = 2; // skip the two quad digits
 
@@ -175,7 +186,7 @@ DgZ3StringtoZ3Converter::convertTypedAddress (const DgZ3StringCoord& addIn) cons
          " incoming index exceeds converter resolution", DgBase::Fatal);
 
       int d = digit - '0'; // convert to int
-      ZORDER_SET_INDEX_DIGIT(z, r, d);
+      Z3_SET_INDEX_DIGIT(z, r, d);
       r++;
    }
 
@@ -221,12 +232,12 @@ DgZ3ToZ3StringConverter::convertTypedAddress (const DgZ3Coord& addIn) const
 {
    uint64_t z = addIn.value();
 
-   int quadNum = ZORDER_GET_QUADNUM(z);
+   int quadNum = Z3_GET_QUADNUM(z);
    string s = dgg::util::to_string(quadNum, 2);
 
    for (int r = 1; r <= res_; r++) {
       // get the integer digit
-      char d = ZORDER_GET_INDEX_DIGIT(z, r);
+      char d = Z3_GET_INDEX_DIGIT(z, r);
       // convert to char
       d += '0';
       // append to index string

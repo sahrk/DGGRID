@@ -214,15 +214,18 @@ class DgQuadEdgeCells {
    public:
 
       DgQuadEdgeCells (int quadNumIn, bool isType0In, int loneVertIn,
-                      int upQuadIn, int rightQuadIn)
+                      int upQuadIn, int downQuadIn, int rightQuadIn, int leftQuadIn)
          : isType0_ (isType0In), quadNum_ (quadNumIn), loneVert_ (loneVertIn),
-           upQuad_ (upQuadIn), rightQuad_ (rightQuadIn) { }
+           upQuad_ (upQuadIn), downQuad_ (downQuadIn), rightQuad_ (rightQuadIn), 
+           leftQuad_ (leftQuadIn) { }
 
       bool isType0   (void) const { return isType0_; }
       int  quadNum   (void) const { return quadNum_; }
       int  loneVert  (void) const { return loneVert_; }
       int  upQuad    (void) const { return upQuad_; }
+      int  downQuad  (void) const { return downQuad_; }
       int  rightQuad (void) const { return rightQuad_; }
+      int  leftQuad  (void) const { return leftQuad_; }
 
    private:
 
@@ -231,8 +234,9 @@ class DgQuadEdgeCells {
       int quadNum_;
       int loneVert_;
       int upQuad_;
+      int downQuad_;
       int rightQuad_;
-
+      int leftQuad_;
 };
 
 ////////////////////////////////////////////////////////////////////////////////

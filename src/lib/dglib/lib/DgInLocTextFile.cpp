@@ -42,22 +42,8 @@ DgInLocTextFile::DgInLocTextFile (const DgRFBase& rfIn, const string* fileNameIn
     : DgInLocStreamFile (rfIn, fileNameIn, false, failLevel),
       forcePolyLine_ (false), forceCells_ (false)
 {
-   // the rf needs to be lat/lon
+   // create lat/lon rf (may be NULL)
    degRF_ = dynamic_cast<const DgGeoSphDegRF*>(&rfIn);
-   if (!degRF_) {
-      report("DgInLocTextFile::DgInLocTextFile(): RF " + rfIn.name() +
-             " is not longitude/latitude", DgBase::Fatal);
-   }
-
-/* not needed since must be lat/lon
-   // test for override of vecAddress
-   DgAddressBase* dummy = rfIn.vecAddress(DgDVec2D(M_ZERO, M_ZERO));
-   if (!dummy) {
-      report("DgInLocTextFile::DgInLocTextFile(): RF " + rfIn.name() +
-             " must override the vecAddress() method", DgBase::Fatal);
-   }
-   delete dummy;
-*/
 
 } // DgInLocTextFile::DgInLocTextFile
 

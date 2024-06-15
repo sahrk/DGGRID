@@ -3,9 +3,10 @@ All notable changes to this project will be documented in this file.
 
 All changes are by Kevin Sahr, unless otherwise noted.
 
-## [8.2] - 2024-06-05
+## [8.2] - 2024-06-15
 ### Fixed
 - bug binning some points that are very close to certain icosahedron edges into odd aperture 7 resolutions
+- failure when performing a TRANSFORM operation with input files other than lat/lon
 
 ## [8.1b] - 2024-01-10
 ### Added
