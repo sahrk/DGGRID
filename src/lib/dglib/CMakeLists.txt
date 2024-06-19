@@ -71,6 +71,8 @@ add_library(dglib
   lib/DgOutKMLfile.cpp
   lib/DgOutLocFile.cpp
   lib/DgOutLocTextFile.cpp
+  lib/DgOutNdxChildrenFile.cpp
+  lib/DgOutNdxParentFile.cpp
   lib/DgOutNeighborsFile.cpp
   lib/DgOutPRCellsFile.cpp
   lib/DgOutPRPtsFile.cpp

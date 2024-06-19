@@ -69,6 +69,7 @@ DgOutGdalFile::~DgOutGdalFile()
 void
 DgOutGdalFile::init (bool outputPoint, bool outputRegion,
                      bool outputNeighbors, bool outputChildren,
+                     bool outputNdxParent, bool outputNdxChildren,
                      const DgDataList* dataList)
 {
    fileNameOnly_ = DgOutLocFile::fileName();
@@ -152,6 +153,24 @@ DgOutGdalFile::init (bool outputPoint, bool outputRegion,
       delete fldDfn;
       fldDfn = NULL;
    }
+
+   if (outputNdxChildren) {
+      fldDfn = new OGRFieldDefn( "ndxChildren", OFTStringList );
+      fldDfn->SetWidth(32);
+      if (_oLayer->CreateField(fldDfn) != OGRERR_NONE)
+         ::report("Creating indexing children field failed.", DgBase::Fatal );
+      delete fldDfn;
+      fldDfn = NULL;
+   }
+
+   if (outputNdxParent) {
+      fldDfn = new OGRFieldDefn( "ndxParent", OFTString );
+      fldDfn->SetWidth(32);
+      if (_oLayer->CreateField(fldDfn) != OGRERR_NONE)
+         ::report("Creating indexing parent field failed.", DgBase::Fatal );
+      delete fldDfn;
+      fldDfn = NULL;
+   }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -171,6 +190,31 @@ DgOutGdalFile::insert(const DgDVec2D&)
 {
    //Probably isn't needed but keep in for safety
    return *this;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+void
+DgOutGdalFile::createAddressProperty (const DgIDGGBase& dgg, OGRFeature* feature,
+           const char* fieldName, const DgLocation& loc, const DgRFBase* outRF)
+{
+    DgLocation tmpLoc(loc);
+    dgg.convert(&tmpLoc);
+    std::string str;
+    if (!outRF) { // assumed seqnum
+        str = std::to_string(dgg.bndRF().seqNum(tmpLoc));
+    } else {
+        outRF->convert(&tmpLoc);
+        str = tmpLoc.asString(' ');
+    }
+
+    char* cstr = new char[str.length() + 1];
+    strcpy(cstr, str.c_str());
+
+   // add to the feature
+   feature->SetField(fieldName, cstr);
+
+   // cleanup
+   delete [] cstr;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -210,14 +254,16 @@ DgOutGdalFile::createAddressesProperty (const DgIDGGBase& dgg, OGRFeature* featu
 DgOutLocFile&
 DgOutGdalFile::insert (const DgIDGGBase& dgg, DgCell& cell,
            bool outputPoint, bool outputRegion, const DgIDGGBase& chdDgg,
-           const DgRFBase* outRF, const DgRFBase* chdOutRF,
-           const DgLocVector* neighbors, const DgLocVector* children)
+           const DgIDGGBase& ndxPrtDgg, const DgRFBase* outRF, const DgRFBase* chdOutRF,
+           const DgRFBase* ndxPrtOutRF, const DgRFBase* ndxChdOutRF,
+           const DgLocVector* neighbors, const DgLocVector* children,
+           const DgLocation* ndxParent, const DgLocVector* ndxChildren)
 {
    if (_mode != Collection)
       ::report("invalid GDAL output file mode encountered.", DgBase::Fatal);
 
    if (!_oLayer)
-      init(outputPoint, outputRegion, neighbors, children, cell.dataList());
+      init(outputPoint, outputRegion, neighbors, children, ndxParent, ndxChildren, cell.dataList());
 
    // first build the geometry
 
@@ -257,6 +303,14 @@ DgOutGdalFile::insert (const DgIDGGBase& dgg, DgCell& cell,
 
    if (neighbors)
       createAddressesProperty(dgg, feature, "neighbors", *neighbors, outRF);
+
+   if (ndxParent) {
+      createAddressProperty (ndxPrtDgg, feature, "ndxParent", *ndxParent, ndxPrtOutRF);
+   }
+
+   if (ndxChildren) {
+      createAddressesProperty (chdDgg, feature, "ndxChildren", *ndxChildren, ndxChdOutRF);
+   }
 
    addFeature(feature);
 
