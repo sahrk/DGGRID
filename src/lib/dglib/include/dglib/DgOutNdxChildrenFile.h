@@ -18,14 +18,12 @@
 *******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
-// DgOutChildrenFile.h: DgOutChildrenFile class definitions
-//
-// Version 7.0 - Kevin Sahr, 12/14/14
+// DgOutNdxChildrenFile.h: DgOutNdxChildrenFile class definitions
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef DGOUTCHILDREN_H
-#define DGOUTCHILDREN_H
+#ifndef DGOUTNDXCHILDREN_H
+#define DGOUTNDXCHILDREN_H
 
 #include <fstream>
 #include <string>
@@ -39,45 +37,46 @@ using namespace std;
 class DgIDGGBase;
 
 ////////////////////////////////////////////////////////////////////////////////
-class DgOutChildrenFile : public DgOutputStream {
+class DgOutNdxChildrenFile : public DgOutputStream {
 
    public:
 
-      DgOutChildrenFile (const string& fileName,
+      DgOutNdxChildrenFile (const string& fileName,
                         const DgIDGGBase& dgg,
                         const DgIDGGBase& chdDgg,
                         const DgRFBase* outRF = NULL,
-                        const DgRFBase* chdOutRF = NULL,
-                        const string& suffix = string("chd"),
+                        const DgRFBase* ndxChdOutRF = NULL,
+                        const string& suffix = string("ndxChd"),
                         DgReportLevel failLevel = DgBase::Fatal);
 
-      virtual DgOutChildrenFile& insert (const DgLocation& center, DgLocVector& vec);
+      virtual DgOutNdxChildrenFile& insert 
+                      (const DgLocation& center, DgLocVector& vec);
 
    private:
 
       const DgIDGGBase& dgg_;    // primary res dgg
-      const DgIDGGBase& chdDgg_; // child res dgg
+      const DgIDGGBase& chdDgg_; // indexing (and spatial) child res dgg
       const DgRFBase* outRF_;    // primary res output RF (NULL indicates seqNum)
-      const DgRFBase* chdOutRF_; // child res output RF
+      const DgRFBase* ndxChdOutRF_; // indexing child res output RF
 
 };
 
-inline DgOutChildrenFile& operator<< (DgOutChildrenFile& file, const char* str)
+inline DgOutNdxChildrenFile& operator<< (DgOutNdxChildrenFile& file, const char* str)
               { ostream& o = file; o << str; return file; }
 
-inline DgOutChildrenFile& operator<< (DgOutChildrenFile& file, const string& str)
+inline DgOutNdxChildrenFile& operator<< (DgOutNdxChildrenFile& file, const string& str)
               { ostream& o = file; o << str; return file; }
 
-inline DgOutChildrenFile& operator<< (DgOutChildrenFile& file, long double val)
+inline DgOutNdxChildrenFile& operator<< (DgOutNdxChildrenFile& file, long double val)
               { ostream& o = file; o << val; return file; }
 
-inline DgOutChildrenFile& operator<< (DgOutChildrenFile& file, float val)
+inline DgOutNdxChildrenFile& operator<< (DgOutNdxChildrenFile& file, float val)
               { ostream& o = file; o << val; return file; }
 
-inline DgOutChildrenFile& operator<< (DgOutChildrenFile& file, int val)
+inline DgOutNdxChildrenFile& operator<< (DgOutNdxChildrenFile& file, int val)
               { ostream& o = file; o << val; return file; }
 
-inline DgOutChildrenFile& operator<< (DgOutChildrenFile& file, unsigned long long val)
+inline DgOutNdxChildrenFile& operator<< (DgOutNdxChildrenFile& file, unsigned long long val)
               { ostream& o = file; o << val; return file; }
 
 #endif
