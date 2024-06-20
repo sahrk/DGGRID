@@ -370,10 +370,15 @@ SubOpOut::outputCellAdd2D (const DgLocation& add2D, const string* labelIn,
             (pointOutType == "GDAL_COLLECTION"),
             (cellOutType == "GDAL_COLLECTION"),
             op.dggOp.chdDgg(),
+            op.dggOp.ndxPrtDgg(),
             ((outSeqNum || useEnumLbl) ? NULL : pOutRF),
             ((outSeqNum || useEnumLbl) ? NULL : pChdOutRF),
+            ((outSeqNum || useEnumLbl) ? NULL : pNdxPrtOutRF),
+            ((outSeqNum || useEnumLbl) ? NULL : pNdxChdOutRF),
             ((neighborsOutType == "GDAL_COLLECTION") ? &neighbors : NULL),
-            ((childrenOutType == "GDAL_COLLECTION") ? &children : NULL));
+            ((childrenOutType == "GDAL_COLLECTION") ? &children : NULL),
+            ((ndxParentOutType == "GDAL_COLLECTION") ? &ndxParent : NULL),
+            ((ndxChildrenOutType == "GDAL_COLLECTION") ? &ndxChildren : NULL));
    }
 
 } // void SubOpOut::outputCell
@@ -382,7 +387,7 @@ SubOpOut::outputCellAdd2D (const DgLocation& add2D, const string* labelIn,
 ////////////////////////////////////////////////////////////////////////////////
 SubOpOut::SubOpOut (OpBasic& op, bool _activate)
    : SubOpBasic (op, _activate),
-     pOutRF (0), pChdOutRF (0),
+     pOutRF (0), pChdOutRF (0), pNdxPrtOutRF (0),
      outAddType (dgg::addtype::InvalidAddressType),
      outSeqNum (false), outputDelimiter (' '), nDensify (1),
      lonWrapMode (DgGeoSphRF::Wrap), unwrapPts (true),
@@ -390,6 +395,7 @@ SubOpOut::SubOpOut (OpBasic& op, bool _activate)
      nCellsTested(0), nCellsAccepted (0),
      dataOut (0), cellOut (0), ptOut (0), collectOut (0), randPtsOut (0),
      cellOutShp (0), ptOutShp (0), prCellOut (0), nbrOut (0), chdOut (0),
+     ndxPrtOut (0), ndxChdOut (0),
      concatPtOut (true), useEnumLbl (false),
      nOutputFile (0), nCellsOutputToFile (0)
 { }
