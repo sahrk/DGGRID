@@ -52,7 +52,7 @@ struct SubOpDGG : public SubOpBasic {
    const DgGeoSphDegRF& deg    (void) { return *_pDeg; }
    const DgIDGGBase&    chdDgg (void) { return *_pChdDgg; }
    const DgIDGGBase&    ndxPrtDgg (void) { return *_pNdxPrtDgg; }
-   const DgGeoSphDegRF& ndxPrtDeg (void) { return *_pPrtDeg; }
+   const DgGeoSphDegRF& ndxPrtDeg (void) { return *_pNdxPrtDeg; }
 
    // set rf and chdRF based on type
    // return if seq num

@@ -365,6 +365,26 @@ SubOpOut::outputCellAdd2D (const DgLocation& add2D, const string* labelIn,
          chdOut->insert(add2D, children);
    }
 
+   DgLocVector ndxChildren;
+   if (ndxChildrenOutType != "NONE") {
+
+// KEVIN XXX
+      op.dggOp.dggs().setAllChildren(q2diR, ndxChildren);
+
+      if (ndxChdOut)
+         ndxChdOut->insert(add2D, ndxChildren);
+   }
+
+   DgLocation ndxParent;
+   if (ndxParentOutType != "NONE") {
+
+// KEVIN XXX
+      //op.dggOp.dggs().setAllChildren(q2diR, ndxChildren);
+
+      if (ndxPrtOut)
+         ndxPrtOut->insert(add2D, ndxParent);
+   }
+
    if (collectOut) {
       collectOut->insert(dgg, cell,
             (pointOutType == "GDAL_COLLECTION"),
@@ -374,7 +394,7 @@ SubOpOut::outputCellAdd2D (const DgLocation& add2D, const string* labelIn,
             ((outSeqNum || useEnumLbl) ? NULL : pOutRF),
             ((outSeqNum || useEnumLbl) ? NULL : pChdOutRF),
             ((outSeqNum || useEnumLbl) ? NULL : pNdxPrtOutRF),
-            ((outSeqNum || useEnumLbl) ? NULL : pNdxChdOutRF),
+            ((outSeqNum || useEnumLbl) ? NULL : pChdOutRF),
             ((neighborsOutType == "GDAL_COLLECTION") ? &neighbors : NULL),
             ((childrenOutType == "GDAL_COLLECTION") ? &children : NULL),
             ((ndxParentOutType == "GDAL_COLLECTION") ? &ndxParent : NULL),
@@ -579,6 +599,30 @@ SubOpOut::initializeOp (void)
    // children_output_file_name <outputFileName>
    pList().insertParam(new DgStringParam("children_output_file_name", "chld"));
 
+   // indexing_children_output_type <NONE | TEXT | GDAL_COLLECTION>
+   choices.push_back(new string("NONE"));
+   choices.push_back(new string("TEXT"));
+   choices.push_back(new string("GDAL_COLLECTION"));
+   pList().insertParam(new DgStringChoiceParam("indexing_children_output_type", 
+                        "NONE", &choices));
+   dgg::util::release(choices);
+
+   // indexing_children_output_file_name <outputFileName>
+   pList().insertParam(new DgStringParam("indexing_children_output_file_name", 
+                       "ndxChld"));
+
+   // indexing_parent_output_type <NONE | TEXT | GDAL_COLLECTION>
+   choices.push_back(new string("NONE"));
+   choices.push_back(new string("TEXT"));
+   choices.push_back(new string("GDAL_COLLECTION"));
+   pList().insertParam(new DgStringChoiceParam("indexing_parent_output_type", 
+                        "NONE", &choices));
+   dgg::util::release(choices);
+
+   // indexing_parent_output_file_name <outputFileName>
+   pList().insertParam(new DgStringParam("indexing_parent_output_file_name", 
+                       "ndxPrt"));
+
    ///// additional random points parameters /////
 
    // randpts_concatenate_output <TRUE | FALSE>
@@ -655,11 +699,17 @@ SubOpOut::setupOp (void)
    getParamValue(pList(), "randpts_output_type", randPtsOutType, "NONE");
    getParamValue(pList(), "neighbor_output_type", neighborsOutType, "NONE");
    getParamValue(pList(), "children_output_type", childrenOutType, "NONE");
+   getParamValue(pList(), "indexing_children_output_type", ndxChildrenOutType, "NONE");
+   getParamValue(pList(), "indexing_parent_output_type", ndxParentOutType, "NONE");
 
    getParamValue(pList(), "neighbor_output_file_name", neighborsOutFileNameBase,
                    false);
    getParamValue(pList(), "children_output_file_name", childrenOutFileNameBase,
                    false);
+   getParamValue(pList(), "indexing_children_output_file_name", 
+                   ndxChildrenOutFileNameBase, false);
+   getParamValue(pList(), "indexing_parent_output_file_name", 
+                   ndxParentOutFileNameBase, false);
 
    getParamValue(pList(), "output_file_name", dataOutFileNameBase, false);
    getParamValue(pList(), "cell_output_file_name", cellOutFileNameBase,
@@ -792,6 +842,8 @@ SubOpOut::resetFiles (void) {
    metaOutFileName = metaOutFileNameBase;
    neighborsOutFileName = neighborsOutFileNameBase;
    childrenOutFileName = childrenOutFileNameBase;
+   ndxChildrenOutFileName = ndxChildrenOutFileNameBase;
+   ndxParentOutFileName = ndxParentOutFileNameBase;
 
    // Flush and close any input files we may have used:
    delete dataOut; dataOut = NULL;
@@ -864,6 +916,8 @@ SubOpOut::executeOp (void) {
       randPtsOutFileName += suffix;
       neighborsOutFileName += suffix;
       childrenOutFileName += suffix;
+      ndxChildrenOutFileName += suffix;
+      ndxParentOutFileName += suffix;
 
       if (!concatPtOut)
          randPtsOutFileName += suffix;
@@ -875,7 +929,9 @@ SubOpOut::executeOp (void) {
       makeCollectFile = true;
 
    if (!makeCollectFile && ((childrenOutType == "GDAL_COLLECTION") ||
-          (neighborsOutType == "GDAL_COLLECTION")))
+          (neighborsOutType == "GDAL_COLLECTION") ||
+          (ndxChildrenOutType == "GDAL_COLLECTION") ||
+          (ndxParentOutType == "GDAL_COLLECTION") ||))
       ::report("GDAL_COLLECTION must include cell and/or point data",
                 DgBase::Fatal);
 
@@ -952,6 +1008,18 @@ SubOpOut::executeOp (void) {
    if (childrenOutType == "TEXT") {
       chdOut = new DgOutChildrenFile(childrenOutFileName, dgg, op.dggOp.chdDgg(),
                ((outSeqNum || useEnumLbl) ? NULL : pOutRF), pChdOutRF, "chd");
+   }
+
+   if (ndxChildrenOutType == "TEXT") {
+      ndxChdOut = new DgOutNdxChildrenFile(ndxChildrenOutFileName, dgg, 
+          op.dggOp.chdDgg(), ((outSeqNum || useEnumLbl) ? NULL : pOutRF), 
+          pChdOutRF, "ndxChd");
+   }
+
+   if (ndxParentOutType == "TEXT") {
+      ndxPrtOut = new DgOutNdxParentFile(ndxParentOutFileName, dgg, 
+          op.dggOp.ndxPrtDgg(), ((outSeqNum || useEnumLbl) ? NULL : pOutRF), 
+          pPrtOutRF, "ndxPrt");
    }
 
    return 0;
