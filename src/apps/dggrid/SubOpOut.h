@@ -44,6 +44,8 @@ class DgOutPRCellsFile;
 class DgOutPRPtsFile;
 class DgOutNeighborsFile;
 class DgOutChildrenFile;
+class DgOutNdxChildrenFile;
+class DgOutNdxParentFile;
 class DgRandom;
 class DgDataList;
 
@@ -71,6 +73,7 @@ struct SubOpOut : public SubOpBasic {
    // the parameters
    const DgRFBase* pOutRF;     // RF for output addresses
    const DgRFBase* pChdOutRF;  // RF for output addresses at child resolution
+   const DgRFBase* pNdxPrtOutRF;  // RF for output addresses at parent resolution
    dgg::addtype::DgAddressType outAddType; // output address form
    bool outSeqNum;             // are the output addresses sequence numbers?
    char outputDelimiter;
@@ -103,10 +106,16 @@ struct SubOpOut : public SubOpBasic {
 
    string neighborsOutType;
    string childrenOutType;
+   string ndxChildrenOutType;
+   string ndxParentOutType;
    string neighborsOutFileNameBase;
    string neighborsOutFileName;
    string childrenOutFileNameBase;
    string childrenOutFileName;
+   string ndxChildrenOutFileNameBase;
+   string ndxChildrenOutFileName;
+   string ndxParentOutFileNameBase;
+   string ndxParentOutFileName;
 
    string cellOutFileNameBase;
    string cellOutFileName;
@@ -132,6 +141,8 @@ struct SubOpOut : public SubOpBasic {
    DgOutPRCellsFile *prCellOut;
    DgOutNeighborsFile *nbrOut;
    DgOutChildrenFile *chdOut;
+   DgOutNdxParentFile *ndxPrtOut;
+   DgOutNdxChildrenFile *ndxChdOut;
 
    bool concatPtOut;
    char formatStr[50];
