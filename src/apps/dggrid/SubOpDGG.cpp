@@ -63,47 +63,51 @@ SubOpDGG::SubOpDGG (OpBasic& op, bool _activate)
 // returns whether or not seq nums are used
 bool
 SubOpDGG::addressTypeToRF (DgAddressType type, const DgRFBase** rf,
-             const DgRFBase** chdRF, int forceRes)
+             const DgRFBase** chdRF, const DgRFBase** ndxPrtRF, int forceRes)
 {
    const DgIDGGBase* dgg = &this->dgg();
    const DgIDGGBase* chdDgg = &this->chdDgg();
+   const DgIDGGBase* ndxPrtDgg = &this->ndxPrtDgg();
    if (forceRes >= 0) {
       dgg = &dggs().idggBase(forceRes);
       chdDgg = &dggs().idggBase(forceRes + 1);
+      ndxPrtDgg = &dggs().idggBase(forceRes - 1);
    }
 
    bool seqNum = false;
    *rf = nullptr;
    if (chdRF) *chdRF = nullptr;
+   if (ndxPrtRF) *ndxPrtRF = nullptr;
 
    switch (type) {
       case Geo:
          *rf = &this->deg();
          if (chdRF) *chdRF = &this->chdDeg();
-/*
-         *rf = &dgg->geoRF();
-         if (chdRF) *chdRF = &chdDgg->geoRF();
-*/
+         if (ndxPrtRF) *ndxPrtRF = &this->ndxPrtDeg();
          break;
 
       case Plane:
          *rf = &dgg->planeRF();
          if (chdRF) *chdRF = &chdDgg->planeRF();
+         if (ndxPrtRF) *ndxPrtRF = &ndxPrtDgg->planeRF();
          break;
 
       case ProjTri:
          *rf = &dgg->projTriRF();
          if (chdRF) *chdRF = &chdDgg->projTriRF();
+         if (ndxPrtRF) *ndxPrtRF = &ndxPrtDgg->projTriRF();
          break;
 
       case Q2DD:
          *rf = &dgg->q2ddRF();
          if (chdRF) *chdRF = &chdDgg->q2ddRF();
+         if (ndxPrtRF) *ndxPrtRF = &ndxPrtDgg->q2ddRF();
          break;
 
       case Q2DI:
          *rf = dgg;
          if (chdRF) *chdRF = chdDgg;
+         if (ndxPrtRF) *ndxPrtRF = ndxPrtDgg;
          break;
 
       case SeqNum:
@@ -116,11 +120,13 @@ SubOpDGG::addressTypeToRF (DgAddressType type, const DgRFBase** rf,
          seqNum = true;
          *rf = dgg;
          if (chdRF) *chdRF = chdDgg;
+         if (ndxPrtRF) *ndxPrtRF = ndxPrtDgg;
          break;
 
       case Vertex2DD:
          *rf = &dgg->vertexRF();
          if (chdRF) *chdRF = &chdDgg->vertexRF();
+         if (ndxPrtRF) *ndxPrtRF = &ndxPrtDgg->vertexRF();
          break;
 
       case Z3:
@@ -131,6 +137,7 @@ SubOpDGG::addressTypeToRF (DgAddressType type, const DgRFBase** rf,
          if (dgg->z3RF()) {
             *rf = dgg->z3RF();
             if (chdRF) *chdRF = chdDgg->z3RF();
+            if (ndxPrtRF) *ndxPrtRF = ndxPrtDgg->z3RF();
          } else
             ::report("addressTypeToRF(): Z3 only supported for aperture 3 hexagon grids",
                      DgBase::Fatal);
@@ -145,6 +152,7 @@ SubOpDGG::addressTypeToRF (DgAddressType type, const DgRFBase** rf,
          if (dgg->z3StrRF()) {
             *rf = dgg->z3StrRF();
             if (chdRF) *chdRF = chdDgg->z3StrRF();
+            if (ndxPrtRF) *ndxPrtRF = ndxPrtDgg->z3StrRF();
          } else
             ::report("addressTypeToRF(): Z3_STRING only supported for aperture 3 hexagon grids",
                      DgBase::Fatal);
@@ -159,6 +167,7 @@ SubOpDGG::addressTypeToRF (DgAddressType type, const DgRFBase** rf,
          if (dgg->z7RF()) {
             *rf = dgg->z7RF();
             if (chdRF) *chdRF = chdDgg->z7RF();
+            if (ndxPrtRF) *ndxPrtRF = ndxPrtDgg->z7RF();
          } else
             ::report("addressTypeToRF(): Z7 only supported for aperture 7 hexagon grids",
                      DgBase::Fatal);
@@ -173,6 +182,7 @@ SubOpDGG::addressTypeToRF (DgAddressType type, const DgRFBase** rf,
          if (dgg->z7StrRF()) {
             *rf = dgg->z7StrRF();
             if (chdRF) *chdRF = chdDgg->z7StrRF();
+            if (ndxPrtRF) *ndxPrtRF = ndxPrtDgg->z7StrRF();
          } else
             ::report("addressTypeToRF(): Z7_STRING only supported for aperture 7 hexagon grids",
                      DgBase::Fatal);
@@ -187,6 +197,7 @@ SubOpDGG::addressTypeToRF (DgAddressType type, const DgRFBase** rf,
          if (dgg->zorderRF()) {
             *rf = dgg->zorderRF();
             if (chdRF) *chdRF = chdDgg->zorderRF();
+            if (ndxPrtRF) *ndxPrtRF = ndxPrtDgg->zorderRF();
          } else
             ::report("addressTypeToRF(): ZORDER only supported for aperture 3 or 4",
                      DgBase::Fatal);
@@ -201,6 +212,7 @@ SubOpDGG::addressTypeToRF (DgAddressType type, const DgRFBase** rf,
          if (dgg->zorderStrRF()) {
             *rf = dgg->zorderStrRF();
             if (chdRF) *chdRF = chdDgg->zorderStrRF();
+            if (ndxPrtRF) *ndxPrtRF = ndxPrtDgg->zorderStrRF();
          } else
             ::report("addressTypeToRF(): ZORDER_STRING only supported for aperture 3 or 4",
                      DgBase::Fatal);

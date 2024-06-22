@@ -329,10 +329,10 @@ SubOpGen::executeOp (void)
       if (clipCellRes < 0 || clipCellRes > op.dggOp.actualRes)
          ::report("genGrid(): invalid clipCellRes", DgBase::Fatal);
 
-      op.inOp.inSeqNum = op.dggOp.addressTypeToRF(op.inOp.inAddType, &op.inOp.pInRF, &chdRF, clipCellRes);
+      op.inOp.inSeqNum = op.dggOp.addressTypeToRF(op.inOp.inAddType, &op.inOp.pInRF, &chdRF, &ndxPrtRF, clipCellRes);
 
    } else {
-      op.inOp.inSeqNum = op.dggOp.addressTypeToRF(op.inOp.inAddType, &op.inOp.pInRF, &chdRF);
+      op.inOp.inSeqNum = op.dggOp.addressTypeToRF(op.inOp.inAddType, &op.inOp.pInRF, &chdRF, &ndxPrtRF);
    }
 
    if (!op.inOp.pInRF)
