@@ -387,52 +387,60 @@ dgcout << " ---> B. " << coord << endl;
       delete loc;
 
       // reset the overage conditions
-      //underI = coord.i() < minBottomI;
-      //underJ = coord.j() < minBottomJ;
+      underI = coord.i() < minBottomI;
+      underJ = coord.j() < minBottomJ;
       overI = coord.i() > maxTopOverageI;
       overJ = coord.j() > maxTopOverageJ;
 
       // are we good?
-      //if (underI || underJ || overI || overJ)
-      if (overI || overJ)
-
+      if (underI || underJ || overI || overJ)
          report("DgQ2DDtoIConverter::convertTypedAddress(): "
-             " coordinate out of range: " + (string) coord, DgBase::Fatal);
+                "coordinate out of range: " + to_string(quadNum) + " " + (string) coord, DgBase::Fatal);
    }
 
 #if DGDEBUG
 dgcout << " ---> C. " << coord << endl;
 #endif
    // we'll reuse the booleans above set to based on the actual quad i,j ranges
-   //underI = coord.i() < 0;
-   //underJ = coord.j() < 0;
+   underI = coord.i() < 0;
+   underJ = coord.j() < 0;
    overI = coord.i() > maxI;
    overJ = coord.j() > maxJ;
-   //int numOver = underI + underJ + overI + overJ; // works because bool is an int
-   //if (numOver) {
-   if (overI || overJ) {
-       const DgQuadEdgeCells& ec = IDGG().edgeTable(quadNum);
+   int numOver = underI + underJ + overI + overJ; // works because bool is an int
+
+    if (numOver) {
+        //if (overI || overJ) {
+        const DgQuadEdgeCells& ec = IDGG().edgeTable(quadNum);
         
-       // special case first
-       if (overI && overJ) {
-           // must be upper right corner
-           if (ec.isType0()) {
-               quadNum = ec.upQuad();
-               coord = DgIVec2D(0, 0);
-           } else { // TypeI
-               quadNum = ec.rightQuad();
-               coord = DgIVec2D(0, 0);
-           }
-           /*
-       } else if (underI) {
+        // special case first
+        if (overI && overJ) {
+            // must be upper right corner
             if (ec.isType0()) {
+                quadNum = ec.upQuad();
+                coord = DgIVec2D(0, 0);
             } else { // TypeI
+                quadNum = ec.rightQuad();
+                coord = DgIVec2D(0, 0);
+            }
+        } else if (numOver > 1) {
+            report("DgQ2DDtoIConverter::convertTypedAddress(): "
+                   "coordinate has multiple overages: " + to_string(quadNum) + " " + (string) coord, DgBase::Fatal);
+        } else if (underI) {
+            cout << "UNDER I" << endl;
+            quadNum = ec.leftQuad();
+            if (ec.isType0()) {
+                coord = DgIVec2D(topEdgeJ - coord.j(), topEdgeI + coord.i());
+            } else { // TypeI
+                coord = DgIVec2D(topEdgeI + coord.i(), coord.j());
             }
         } else if (underJ) {
+            cout << "UNDER J" << endl;
+            quadNum = ec.downQuad();
             if (ec.isType0()) {
+                coord = DgIVec2D(coord.i(), topEdgeJ + coord.j());
             } else { // TypeI
+                coord = DgIVec2D(topEdgeI - coord.i(), topEdgeJ + coord.j());
             }
-            */
         } else if (overI) {
             if (ec.isType0()) {
                 quadNum = ec.rightQuad();
@@ -472,6 +480,17 @@ dgcout << " ---> C. " << coord << endl;
 #if DGDEBUG
 dgcout << " ---> D. " << coord << endl;
 #endif
+
+    // reset the overage conditions
+    underI = coord.i() < 0;
+    underJ = coord.j() < 0;
+    overI = coord.i() > maxI;
+    overJ = coord.j() > maxJ;
+
+    // are we good?
+    if (underI || underJ || overI || overJ)
+       report("DgQ2DDtoIConverter::convertTypedAddress(): "
+           "final coordinate out of range: " + to_string(quadNum) + " " + (string) coord, DgBase::Fatal);
 
    DgQ2DICoord result(quadNum, coord);
 
