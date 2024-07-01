@@ -414,6 +414,8 @@ dgcout << " ---> C. " << coord << endl;
         
         // special case first
         if (overI && overJ) {
+ //           cout << "BOTH OVER: " << !ec.isType0() << " " << quadNum << " " << coord.i() //<< " " << coord.j();
+
             // must be upper right corner
             if (ec.isType0()) {
                 quadNum = ec.upQuad();
@@ -426,56 +428,60 @@ dgcout << " ---> C. " << coord << endl;
             report("DgQ2DDtoIConverter::convertTypedAddress(): "
                    "coordinate has multiple overages: " + to_string(quadNum) + " " + (string) coord, DgBase::Fatal);
         } else if (underI) {
-            cout << "UNDER I" << endl;
+ //           cout << "UNDER I: " << !ec.isType0() << " " << quadNum << " " << coord.i() << //" " << coord.j();
             quadNum = ec.leftQuad();
             if (ec.isType0()) {
-                coord = DgIVec2D(topEdgeJ - coord.j(), topEdgeI + coord.i());
+                coord = DgIVec2D(topEdgeJ - coord.j() + coord.i(), topEdgeJ + coord.i());
             } else { // TypeI
-                coord = DgIVec2D(topEdgeI + coord.i(), coord.j());
+                coord.setI(topEdgeI + coord.i());
             }
         } else if (underJ) {
-            cout << "UNDER J" << endl;
+ //           cout << "UNDER J: " << !ec.isType0() << " " << quadNum << " " << coord.i() << //" " << coord.j();
             quadNum = ec.downQuad();
             if (ec.isType0()) {
                 coord = DgIVec2D(coord.i(), topEdgeJ + coord.j());
             } else { // TypeI
-                coord = DgIVec2D(topEdgeI - coord.i(), topEdgeJ + coord.j());
+                coord = DgIVec2D(topEdgeJ + coord.j(), (topEdgeI - coord.i()) + coord.j());
             }
         } else if (overI) {
+ //           cout << "OVER I: " << !ec.isType0() << " " << quadNum << " " << coord.i() << " //" << coord.j();
             if (ec.isType0()) {
                 quadNum = ec.rightQuad();
-                coord.setI(0);
+                coord.setI(coord.i() - topEdgeI);
             } else { // TypeI
                 if (coord.j() == 0) {
                     quadNum = ec.loneVert();
                     coord = DgIVec2D(0, 0);
                 } else {
                     quadNum = ec.rightQuad();
-                    // if we're here overI is true and overJ is false
-                    coord = DgIVec2D(topEdgeJ - coord.j(), coord.i() - topEdgeI);
-                    /*
-                    coord = DgIVec2D(maxTopOverageJ - coord.j(), (maxTopOverageJ - topEdgeJ));
-                     */
+                    long long int iOverage = coord.i() - topEdgeI;
+                    coord = DgIVec2D((topEdgeJ - coord.j()) + iOverage, iOverage);
                 }
             }
         } else if (overJ) {
+  //          cout << "OVER J: " << !ec.isType0() << " " << quadNum << " " << coord.i() << " //" << coord.j();
             if (ec.isType0()) {
                 if (coord.i() == 0) {
                     quadNum = ec.loneVert();
                     coord = DgIVec2D(0, 0);
                 } else {
                     quadNum = ec.upQuad();
-                    coord = DgIVec2D(coord.j() - topEdgeJ, topEdgeI - coord.i());
+                    long long int jOverage = coord.j() - topEdgeJ;
+                    coord = DgIVec2D(jOverage, topEdgeI - coord.i() + jOverage);
                     /*
                     coord = DgIVec2D((maxTopOverageI - topEdgeI), maxTopOverageI - coord.i());
                      */
                 }
             } else { // TypeI
                 quadNum = ec.upQuad();
-                coord.setJ(0);
+                coord.setJ(coord.j() - topEdgeJ);
             }
         }
     }
+/*
+    if (underI || underJ || overI || overJ)
+        cout << " -> " << quadNum << " " << coord.i() << " " << coord.j() << endl;j
+ */
 
 #if DGDEBUG
 dgcout << " ---> D. " << coord << endl;
