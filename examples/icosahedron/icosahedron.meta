@@ -21,6 +21,8 @@ geodetic_densify 0.0
 # specify the output
 cell_output_type KML
 cell_output_file_name outputfiles/icosa
+point_output_type KML
+point_output_file_name outputfiles/icosaPts
 kml_default_color ffff0000
 kml_default_width 6
 kml_name ISEA Spherical Icosahedron

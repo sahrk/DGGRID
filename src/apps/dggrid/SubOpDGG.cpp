@@ -222,12 +222,13 @@ SubOpDGG::initializeOp (void)
 {
    vector<string*> choices;
 
-   // dggs_type <CUSTOM | SUPERFUND | PLANETRISK |
+   // dggs_type <CUSTOM | SUPERFUND | PLANETRISK | IGEO7 |
    //            ISEA3H | ISEA4H | ISEA7H | ISEA43H | ISEA4T | ISEA4D |
    //            FULLER3H | FULLER4H | FULLER7H | FULLER43H | FULLER4T | FULLER4D>
    choices.push_back(new string("CUSTOM"));
    choices.push_back(new string("SUPERFUND"));
    choices.push_back(new string("PLANETRISK"));
+   choices.push_back(new string("IGEO7"));
    choices.push_back(new string("ISEA3H"));
    choices.push_back(new string("ISEA4H"));
    choices.push_back(new string("ISEA7H"));
@@ -394,6 +395,14 @@ SubOpDGG::setupOp (void)
          pList().setPresetParam("dggs_aperture_type", "SEQUENCE");
          pList().setPresetParam("dggs_aperture_sequence", "43334777777777777777777");
          pList().setPresetParam("dggs_res_spec", "11");
+      } else if (tmplc == "igeo7") {
+         pList().setPresetParam("dggs_topology", "HEXAGON");
+         pList().setPresetParam("dggs_proj", "ISEA");
+         pList().setPresetParam("dggs_aperture_type", "PURE");
+         pList().setPresetParam("dggs_aperture", "7");
+         pList().setPresetParam("dggs_res_spec", "9");
+         pList().setPresetParam("input_address_type", "Z7");
+         pList().setPresetParam("output_address_type", "Z7");
       } else {
          // get the topology
          char topo = tmplc[tmplc.length() - 1];

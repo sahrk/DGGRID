@@ -8,6 +8,7 @@ gridgenMixedSHP
 gridgenPureKML
 hiRes
 icosahedron
+igeo7WholeEarth
 isea4d
 isea4t
 isea7hGen
@@ -25,7 +26,6 @@ z3WholeEarth
 z7CellClip
 z7Nums
 z7Transform
-z7WholeEarth
 zCellClip
 zNums
 zTransform

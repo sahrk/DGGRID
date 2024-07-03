@@ -15,6 +15,7 @@ gridgenPureKML
 hiRes
 holes
 icosahedron
+igeo7WholeEarth
 isea4d
 isea4t
 isea7hGen
@@ -40,7 +41,6 @@ z7CellClip
 z7Collection
 z7Nums
 z7Transform
-z7WholeEarth
 zCellClip
 zCollection
 zNums
