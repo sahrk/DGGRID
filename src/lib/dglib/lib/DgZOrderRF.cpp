@@ -152,6 +152,11 @@ DgZOrderStringtoZOrderConverter::DgZOrderStringtoZOrderConverter
 DgZOrderCoord
 DgZOrderStringtoZOrderConverter::convertTypedAddress (const DgZOrderStringCoord& addIn) const
 {
+   if (res_ > MAX_ZORDER_RES) {
+     report("DgZOrderStringtoZOrderConverter::DgZOrderStringtoZOrderConverter(): "
+        " input resolution exceeds max ZORDER resolution of 30", DgBase::Fatal);
+   }
+
    string addstr = addIn.valString();
    uint64_t z = 0;
 

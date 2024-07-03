@@ -1,0 +1,27 @@
+################################################################################
+# z7Nums.meta - example of a DGGRID metafile that generates kml cells for a 
+#     resolution 5 ISEA7H grid for Z7 indexes specified in text files.
+#
+################################################################################
+
+# specify the operation
+dggrid_operation GENERATE_GRID
+
+# specify a ISEA7H; override the default resolution
+dggs_type ISEA7H
+dggs_res_spec 5
+
+# control grid generation
+clip_subset_type INPUT_ADDRESS_TYPE
+input_address_type Z7
+clip_region_files inputfiles/z7a.txt inputfiles/z7b.txt
+
+# specify output address information
+output_cell_label_type OUTPUT_ADDRESS_TYPE
+output_address_type Z7_STRING
+
+# specify the output
+cell_output_type KML
+cell_output_file_name ./outputfiles/zcells
+point_output_type KML
+point_output_file_name ./outputfiles/zpoints

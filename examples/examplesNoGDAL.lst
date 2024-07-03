@@ -8,9 +8,11 @@ gridgenMixedSHP
 gridgenPureKML
 hiRes
 icosahedron
+igeo7WholeEarth
 isea4d
 isea4t
 isea7hGen
+quads
 mixedAperture
 planetRiskTable
 seqnums
@@ -21,6 +23,9 @@ z3CellClip
 z3Nums
 z3Transform
 z3WholeEarth
+z7CellClip
+z7Nums
+z7Transform
 zCellClip
 zNums
 zTransform

@@ -61,10 +61,14 @@
 #include <dglib/DgDmdD4Grid2D.h>
 #include <dglib/DgDmdD4Grid2DS.h>
 #include <dglib/DgTriGrid2D.h>
+/*
 #include <dglib/DgZOrderRF.h>
 #include <dglib/DgZOrderStringRF.h>
 #include <dglib/DgZ3RF.h>
 #include <dglib/DgZ3StringRF.h>
+#include <dglib/DgZ7RF.h>
+#include <dglib/DgZ7StringRF.h>
+*/
 #include "DgHexSF.h"
 
 //using namespace dgg::topo;
@@ -186,7 +190,7 @@ SubOpGen::evalCell (const DgIDGGBase& dgg, const DgContCartRF& cc1,
               accepted = true; // a hole may make this false
 #ifdef USE_GDAL
               if (useHoles) {
-                 const int numHoles = clipRegion.clpPolys()[i].holes.size();
+                 const int numHoles = (int) clipRegion.clpPolys()[i].holes.size();
                  if (numHoles > 0) {
 
                     // assume hole on the snyder quad are most likely
@@ -638,9 +642,13 @@ SubOpGen::executeOp (void)
                   dgcout << "# testing coord: " << coord << endl;
                   //dgcout << "DGG: " << dgg << endl;
                }
-
-               if (op.dggOp.gridTopo == Hexagon && !dgg.isClassI())
-	          if ((coord.j() + coord.i()) % 3) continue;
+/* this gets checked in evalCell
+                if (op.dggOp.gridTopo == Hexagon && !dgg.isClassI()) {
+                    printf("HERE\n");
+                    fflush(stdout);
+                    if ((coord.j() + coord.i()) % 3) continue;
+                }
+ */
 
                outputStatus();
 
@@ -656,7 +664,7 @@ SubOpGen::executeOp (void)
 
                DgLocation* addLoc = dgg.makeLocation(DgQ2DICoord(q, coord));
                op.outOp.outputCellAdd2D(*addLoc);
-	       delete addLoc;
+	           delete addLoc;
 
                // check for special cases
                if (q == 0 || q == 11) break; // only one cell
@@ -790,7 +798,7 @@ SubOpGen::processOneClipPoly (DgPolygon& polyIn, const DgIDGGBase& dgg,
    int** holeQuads = NULL;
    if (useHoles) {
       //// determine which holes have vertices on which quads
-      numHoles = polyIn.holes().size();
+      numHoles = (int) polyIn.holes().size();
       holeQuads = new int*[numHoles];
       for (int h = 0; h < numHoles; h++) {
 

@@ -103,6 +103,8 @@ add_library(dglib
   lib/DgUtil.cpp
   lib/DgZ3RF.cpp
   lib/DgZ3StringRF.cpp
+  lib/DgZ7RF.cpp
+  lib/DgZ7StringRF.cpp
   lib/DgZOrderRF.cpp
   lib/DgZOrderStringRF.cpp
 )

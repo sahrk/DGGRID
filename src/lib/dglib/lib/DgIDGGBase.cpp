@@ -45,6 +45,8 @@
 #include <dglib/DgZOrderStringRF.h>
 #include <dglib/DgZ3RF.h>
 #include <dglib/DgZ3StringRF.h>
+#include <dglib/DgZ7RF.h>
+#include <dglib/DgZ7StringRF.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 const DgGeoSphRF& DgIDGGBase::geoRF      (void) const { return dggs()->geoRF(); }
@@ -124,7 +126,7 @@ DgIDGGBase::DgIDGGBase (const DgIDGGSBase* dggs, const DgGeoSphRF& geoRF,
      dggs_ (dggs), sphIcosa_(0), aperture_(aperture), res_(res),
      precision_(precision), grid2D_(0), grid2DS_(0), ccFrame_(0),
      projTriRF_(0), vertexRF_(0), q2ddRF_(0), bndRF_(0), planeRF_(0),
-     zorderRF_ (0), zorderStrRF_ (0), z3RF_ (0), z3StrRF_ (0)
+     zorderRF_ (0), zorderStrRF_ (0), z3RF_ (0), z3StrRF_ (0), z7RF_ (0), z7StrRF_ (0)
 {
    //initialize();
 
@@ -138,7 +140,7 @@ DgIDGGBase::DgIDGGBase (const DgIDGGBase& rfIn)
         res_(rfIn.res()), precision_(rfIn.precision()),
         grid2D_(0), grid2DS_(0), ccFrame_(0), projTriRF_(0),
         vertexRF_(0), q2ddRF_(0), bndRF_(0), planeRF_(0),
-        zorderRF_ (0), zorderStrRF_ (0), z3RF_ (0), z3StrRF_ (0)
+        zorderRF_ (0), zorderStrRF_ (0), z3RF_ (0), z3StrRF_ (0), z7RF_ (0), z7StrRF_ (0)
 {
    //initialize();
 
@@ -170,15 +172,20 @@ DgIDGGBase::createConverters (void)
    q2ddRF_ = DgQ2DDRF::makeRF(network(), name() + string("q2dd"));
    planeRF_ = DgPlaneTriRF::makeRF(network(), name() + string("plane"));
 
-   if (gridTopo() == Hexagon && (aperture() == 4 || aperture() == 3)) {
-      zorderRF_ = DgZOrderRF::makeRF(network(), name() + string("zorder"),
-                        res(), aperture());
-      zorderStrRF_ = DgZOrderStringRF::makeRF(network(), name() + string("zorderStr"),
-                        res(), aperture());
-      if (dggs()->aperture() == 3) {
-         z3RF_ = DgZ3RF::makeRF(network(), name() + string("z3"), res());
-         z3StrRF_ = DgZ3StringRF::makeRF(network(), name() + string("z3Str"),
-                        res());
+   if (gridTopo() == Hexagon) {
+       if (dggs()->aperture() == 7) {
+           z7RF_ = DgZ7RF::makeRF(network(), name() + string("z7"), res());
+           z7StrRF_ = DgZ7StringRF::makeRF(network(), name() + string("z7Str"), res());
+       } else if (aperture() == 4 || aperture() == 3) {
+         zorderRF_ = DgZOrderRF::makeRF(network(), name() + string("zorder"),
+                            res(), aperture());
+         zorderStrRF_ = DgZOrderStringRF::makeRF(network(), name() + string("zorderStr"),
+                            res(), aperture());
+         if (dggs()->aperture() == 3) {
+            z3RF_ = DgZ3RF::makeRF(network(), name() + string("z3"), res());
+            z3StrRF_ = DgZ3StringRF::makeRF(network(), name() + string("z3Str"),
+                             res());
+         }
       }
    }
 
@@ -226,6 +233,15 @@ DgIDGGBase::createConverters (void)
       if (z3RF())
          toZ3 = new Dg2WayZ3ToStringConverter(*z3StrRF(), *z3RF());
    }
+
+    Dg2WayConverter* toZ7Str = NULL;
+    Dg2WayConverter* toZ7 = NULL;
+    if (z7StrRF()) {
+       toZ7Str = new Dg2WayZ7StringConverter(*this, *z7StrRF());
+
+       if (z7RF())
+          toZ7 = new Dg2WayZ7ToStringConverter(*z7StrRF(), *z7RF());
+    }
 
    // create the series converters that will replace the default DgDiscRF
    // converters

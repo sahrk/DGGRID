@@ -15,9 +15,11 @@ gridgenPureKML
 hiRes
 holes
 icosahedron
+igeo7WholeEarth
 isea4d
 isea4t
 isea7hGen
+quads
 mixedAperture
 multipleOrientations
 planetRiskClipHiRes
@@ -35,6 +37,10 @@ z3Collection
 z3Nums
 z3Transform
 z3WholeEarth
+z7CellClip
+z7Collection
+z7Nums
+z7Transform
 zCellClip
 zCollection
 zNums

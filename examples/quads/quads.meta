@@ -1,0 +1,30 @@
+################################################################################
+#
+# quads.meta - example of a DGGRID metafile that generates a res 0 
+#        quadrilateral DGGS in KML format. 
+#
+################################################################################
+
+# specify the operation
+dggrid_operation GENERATE_GRID
+
+# specify the DGG
+# res 0 FULLER and ISEA diamonds are the same
+dggs_type FULLER4D
+dggs_res_spec 0
+
+# control the generation
+clip_subset_type WHOLE_EARTH
+geodetic_densify 0.0
+
+# specify the output
+cell_output_type KML
+cell_output_file_name outputfiles/quads
+point_output_type KML
+point_output_file_name outputfiles/quadsP
+kml_default_color ffff0000
+kml_default_width 6
+kml_name Res 0 Quadrilaterals
+kml_description www.discreteglobalgrids.org
+kml_default_width 6
+densification 0

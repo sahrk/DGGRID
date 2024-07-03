@@ -61,7 +61,7 @@ int main (int argc, char* argv[])
    for (int i = 1; i < argc; i++) {
       // check if it's a flag
       if (*argv[i] == '-') {
-         int numFlags = strlen(argv[i]) - 1;
+         int numFlags = (int) strlen(argv[i]) - 1;
          if (numFlags == 0 || numFlags > 2) {
             flagErr = true;
          } else { // 1 or 2 flags
