@@ -1,4 +1,4 @@
-** executing DGGRID version 8.2 **
+** executing DGGRID version 8.3 **
 type sizes: big int: 64 bits / big double: 128 bits
 
 ** using meta file icosahedron.meta...
@@ -10,9 +10,9 @@ verbosity 0 (default)
 pause_on_startup false (default)
 pause_before_exit false (default)
 update_frequency 100000 (default)
-dggs_type FULLER4T (user set)
+dggs_type ISEA4T (user set)
 dggs_topology TRIANGLE (user set)
-dggs_proj FULLER (user set)
+dggs_proj ISEA (user set)
 dggs_aperture_type PURE (user set)
 dggs_aperture 4 (user set)
 proj_datum WGS84_AUTHALIC_SPHERE (default)
@@ -50,7 +50,7 @@ dggs_orient_output_file_name grid.meta (default)
 shapefile_id_field_length 11 (default)
 kml_default_width 6 (user set)
 kml_default_color ffff0000 (user set)
-kml_name Spherical Icosahedron (user set)
+kml_name ISEA Spherical Icosahedron (user set)
 kml_description www.discreteglobalgrids.org (user set)
 neighbor_output_type NONE (default)
 neighbor_output_file_name nbr (default)
