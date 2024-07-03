@@ -359,6 +359,11 @@ dgcout << " ---> B. " << coord << endl;
     long long int minBottomI = (IDGG().aperture() == 7) ? -2 : 0;
     long long int minBottomJ = (IDGG().aperture() == 7) ? -2 : 0;
 
+#if DGDEBUG
+    cout << maxI << " " << maxJ << " " << topEdgeI << " " << topEdgeJ << endl;
+    cout << minBottomI << " " << minBottomJ << " " << maxTopOverageI << " " << maxTopOverageJ << endl;
+#endif
+
    // if out of range check for possible round-off error
    const long double nudge = 0.0000001L;
    bool underI, underJ, overI, overJ;
@@ -414,7 +419,9 @@ dgcout << " ---> C. " << coord << endl;
         
         // special case first
         if (overI && overJ) {
- //           cout << "BOTH OVER: " << !ec.isType0() << " " << quadNum << " " << coord.i() //<< " " << coord.j();
+#if DGDEBUG
+            cout << "BOTH OVER: " << !ec.isType0() << " " << quadNum << " " << coord.i() << " " << coord.j();
+#endif
 
             // must be upper right corner
             if (ec.isType0()) {
@@ -428,7 +435,9 @@ dgcout << " ---> C. " << coord << endl;
             report("DgQ2DDtoIConverter::convertTypedAddress(): "
                    "coordinate has multiple overages: " + to_string(quadNum) + " " + (string) coord, DgBase::Fatal);
         } else if (underI) {
- //           cout << "UNDER I: " << !ec.isType0() << " " << quadNum << " " << coord.i() << //" " << coord.j();
+#if DGDEBUG
+            cout << "UNDER I: " << !ec.isType0() << " " << quadNum << " " << coord.i() << " " << coord.j();
+#endif
             quadNum = ec.leftQuad();
             if (ec.isType0()) {
                 coord = DgIVec2D(topEdgeJ - coord.j() + coord.i(), topEdgeJ + coord.i());
@@ -436,7 +445,9 @@ dgcout << " ---> C. " << coord << endl;
                 coord.setI(topEdgeI + coord.i());
             }
         } else if (underJ) {
- //           cout << "UNDER J: " << !ec.isType0() << " " << quadNum << " " << coord.i() << //" " << coord.j();
+#if DGDEBUG
+            cout << "UNDER J: " << !ec.isType0() << " " << quadNum << " " << coord.i() << " " << coord.j();
+#endif
             quadNum = ec.downQuad();
             if (ec.isType0()) {
                 coord = DgIVec2D(coord.i(), topEdgeJ + coord.j());
@@ -444,7 +455,9 @@ dgcout << " ---> C. " << coord << endl;
                 coord = DgIVec2D(topEdgeJ + coord.j(), (topEdgeI - coord.i()) + coord.j());
             }
         } else if (overI) {
- //           cout << "OVER I: " << !ec.isType0() << " " << quadNum << " " << coord.i() << " //" << coord.j();
+#if DGDEBUG
+            cout << "OVER I: " << !ec.isType0() << " " << quadNum << " " << coord.i() << " " << coord.j();
+#endif
             if (ec.isType0()) {
                 quadNum = ec.rightQuad();
                 coord.setI(coord.i() - topEdgeI);
@@ -459,7 +472,9 @@ dgcout << " ---> C. " << coord << endl;
                 }
             }
         } else if (overJ) {
-  //          cout << "OVER J: " << !ec.isType0() << " " << quadNum << " " << coord.i() << " //" << coord.j();
+#if DGDEBUG
+            cout << "OVER J: " << !ec.isType0() << " " << quadNum << " " << coord.i() << " " << coord.j();
+#endif
             if (ec.isType0()) {
                 if (coord.i() == 0) {
                     quadNum = ec.loneVert();
@@ -478,10 +493,11 @@ dgcout << " ---> C. " << coord << endl;
             }
         }
     }
-/*
+
+#if DGDEBUG
     if (underI || underJ || overI || overJ)
-        cout << " -> " << quadNum << " " << coord.i() << " " << coord.j() << endl;j
- */
+        cout << " -> " << quadNum << " " << coord.i() << " " << coord.j() << endl;
+#endif
 
 #if DGDEBUG
 dgcout << " ---> D. " << coord << endl;

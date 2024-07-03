@@ -1,4 +1,4 @@
-/*******************************************************************************
+/******************************************************************************
     Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
@@ -267,6 +267,9 @@ SubOpIn::getNextLoc (void) {
       }
    }
 
+#if DGDEBUG
+   if (loc) dgcout << "INPUT: " << *loc << endl;
+#endif
    return loc;
 
 } // DgLocationData* SubOpIn::getNextLoc
@@ -301,14 +304,17 @@ SubOpIn::executeOp (void) {
    const DgIDGGBase& dgg = op.dggOp.dgg();
 
    // set-up the input reference frame
-   if (inSeqNum)
-      pInRF = &dgg;
-   else if (!op.dggOp.isSuperfund) { // use input address type
+    if (inSeqNum) {
+        pInRF = &dgg;
+    } else if (!op.dggOp.isSuperfund) { // use input address type
 
       inSeqNum = op.dggOp.addressTypeToRF(inAddType, &pInRF);
       if (!pInRF)
          ::report("SubOpIn::executeOp(): invalid input RF", DgBase::Fatal);
    }
+    
+    if (op.dggOp.isApSeq && inSeqNum)
+        ::report("SubOpIn::executeOp(): sequence number input not supported for aperture sequence DGGS", DgBase::Fatal);
 
    // open first file
    resetInFile();
