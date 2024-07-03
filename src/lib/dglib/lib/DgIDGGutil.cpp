@@ -352,7 +352,7 @@ dgcout << " ---> B. " << coord << endl;
     long long int maxTopOverageI = (IDGG().aperture() == 7 && IDGG().isClassI()) ? topEdgeI + 2 : topEdgeI;
     long long int maxTopOverageJ = (IDGG().aperture() == 7 && IDGG().isClassI()) ? topEdgeJ + 2 : topEdgeJ;
      */
-     
+
     long long int maxTopOverageI = (IDGG().aperture() == 7) ? topEdgeI + 2 : topEdgeI;
     long long int maxTopOverageJ = (IDGG().aperture() == 7) ? topEdgeJ + 2 : topEdgeJ;
 
@@ -416,7 +416,7 @@ dgcout << " ---> C. " << coord << endl;
     if (numOver) {
         //if (overI || overJ) {
         const DgQuadEdgeCells& ec = IDGG().edgeTable(quadNum);
-        
+
         // special case first
         if (overI && overJ) {
 #if DGDEBUG

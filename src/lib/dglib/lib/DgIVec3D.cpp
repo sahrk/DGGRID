@@ -131,9 +131,9 @@ DgIVec3D::ijkPlusNormalize(void) {
  * @return The H3 digit (0-6) corresponding to the ijk unit vector, zero vector,
  * or INVALID_DIGIT (7) on failure.
  */
-DgIVec3D::Direction 
+DgIVec3D::Direction
 DgIVec3D::unitIjkPlusToDigit(void) const {
-    
+
     DgIVec3D c = *this;
     c.ijkPlusNormalize();
 
@@ -342,7 +342,7 @@ DgIVec3D::rotate60cw(DgIVec3D::Direction digit) {
 
 void
 DgIVec3D::rotateDigitVecCCW (DgIVec3D::Direction digits[], int maxRes, Direction skipDigit) {
-    
+
     // rotate in place; skips any leading skipDigit
 
     int foundFirstNonZeroDigit = 0;

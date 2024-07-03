@@ -312,7 +312,7 @@ SubOpIn::executeOp (void) {
       if (!pInRF)
          ::report("SubOpIn::executeOp(): invalid input RF", DgBase::Fatal);
    }
-    
+
     if (op.dggOp.isApSeq && inSeqNum)
         ::report("SubOpIn::executeOp(): sequence number input not supported for aperture sequence DGGS", DgBase::Fatal);
 

@@ -216,7 +216,7 @@ class DgQuadEdgeCells {
       DgQuadEdgeCells (int quadNumIn, bool isType0In, int loneVertIn,
                       int upQuadIn, int downQuadIn, int rightQuadIn, int leftQuadIn)
          : isType0_ (isType0In), quadNum_ (quadNumIn), loneVert_ (loneVertIn),
-           upQuad_ (upQuadIn), downQuad_ (downQuadIn), rightQuad_ (rightQuadIn), 
+           upQuad_ (upQuadIn), downQuad_ (downQuadIn), rightQuad_ (rightQuadIn),
            leftQuad_ (leftQuadIn) { }
 
       bool isType0   (void) const { return isType0_; }

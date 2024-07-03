@@ -63,7 +63,7 @@ typedef enum {
     /** Child digit which is skipped for pentagons */
     PENTAGON_SKIPPED_DIGIT_TYPE1 = J_AXES_DIGIT /* 2 */,
     PENTAGON_SKIPPED_DIGIT_TYPE2 = IK_AXES_DIGIT /* 5 */
-    
+
 } Direction;
 
       static const DgIVec3D& undefDgIVec3D;
