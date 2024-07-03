@@ -2,8 +2,10 @@
 *.d
 *.depends
 
-# Build directory
+# Build and working directories
 build/
+xcode/
+examples/WORKING
 
 # Compiled Object files
 *.slo

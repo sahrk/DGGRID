@@ -167,7 +167,7 @@ DgZ7StringtoZ7Converter::convertTypedAddress (const DgZ7StringCoord& addIn) cons
         " input resolution exceeds max Z7 resolution of 20", DgBase::Fatal);
    }
 
-   //printf("DgZ7StringtoZ7Converter::convertTypedAddress()\n"); 
+   //printf("DgZ7StringtoZ7Converter::convertTypedAddress()\n");
 
    string addstr = addIn.valString();
    uint64_t z = 0;
@@ -197,7 +197,7 @@ DgZ7StringtoZ7Converter::convertTypedAddress (const DgZ7StringCoord& addIn) cons
    }
 
    while (r <= MAX_Z7_RES) {
-       Z7_SET_INDEX_DIGIT(z, r, DgIVec3D::INVALID_DIGIT);  
+       Z7_SET_INDEX_DIGIT(z, r, DgIVec3D::INVALID_DIGIT);
        r++;
     }
 

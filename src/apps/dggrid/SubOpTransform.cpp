@@ -99,11 +99,18 @@ SubOpTransform::executeOp (void) {
 
       DgLocationData* loc = op.inOp.getNextLoc();
       if (!loc) break; // reached EOF on last input file
+#if DGDEBUG
+   dgcout << "TRANSFORM BEFORE: " << *loc << endl;
+#endif
 
       //op.outOp.pOutRF->convert(loc);
       dgg.convert(loc);
 
       op.outOp.outputCellAdd2D(*loc, nullptr, loc->dataList());
+
+#if DGDEBUG
+   dgcout << "TRANSFORM AFTER: " << *loc << endl;
+#endif
 
       delete loc;
    }

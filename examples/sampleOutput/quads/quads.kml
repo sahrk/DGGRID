@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://earth.google.com/kml/2.1">
+<Folder>
+   <name>Res 0 Quadrilaterals</name>
+   <description>www.discreteglobalgrids.org</description>
+   <Style id="lineStyle1">
+      <LineStyle id="lineStyle2">
+         <color>ffff0000</color>
+         <width>6</width>
+      </LineStyle>
+   </Style>
+<Placemark>
+<name>1</name>
+      <styleUrl>#lineStyle1</styleUrl>
+      <LineString>
+         <tessellate>1</tessellate>
+         <coordinates>
+            -168.7500000,58.2825256
+            -137.0325256,-0.0000000
+            -78.7500000,31.7174744
+            11.2500000,58.2825256
+            -168.7500000,58.2825256
+         </coordinates>
+      </LineString>
+</Placemark>
+<Placemark>
+<name>2</name>
+      <styleUrl>#lineStyle1</styleUrl>
+      <LineString>
+         <tessellate>1</tessellate>
+         <coordinates>
+            -78.7500000,31.7174744
+            -78.7500000,-31.7174744
+            -20.4674744,0.0000000
+            11.2500000,58.2825256
+            -78.7500000,31.7174744
+         </coordinates>
+      </LineString>
+</Placemark>
+<Placemark>
+<name>3</name>
+      <styleUrl>#lineStyle1</styleUrl>
+      <LineString>
+         <tessellate>1</tessellate>
+         <coordinates>
+            -20.4674744,0.0000000
+            11.2500000,-58.2825256
+            42.9674744,0.0000000
+            11.2500000,58.2825256
+            -20.4674744,0.0000000
+         </coordinates>
+      </LineString>
+</Placemark>
+<Placemark>
+<name>4</name>
+      <styleUrl>#lineStyle1</styleUrl>
+      <LineString>
+         <tessellate>1</tessellate>
+         <coordinates>
+            42.9674744,0.0000000
+            101.2500000,-31.7174744
+            101.2500000,31.7174744
+            11.2500000,58.2825256
+            42.9674744,0.0000000
+         </coordinates>
+      </LineString>
+</Placemark>
+<Placemark>
+<name>5</name>
+      <styleUrl>#lineStyle1</styleUrl>
+      <LineString>
+         <tessellate>1</tessellate>
+         <coordinates>
+            101.2500000,31.7174744
+            159.5325256,-0.0000000
+            -168.7500000,58.2825256
+            11.2500000,58.2825256
+            101.2500000,31.7174744
+         </coordinates>
+      </LineString>
+</Placemark>
+<Placemark>
+<name>6</name>
+      <styleUrl>#lineStyle1</styleUrl>
+      <LineString>
+         <tessellate>1</tessellate>
+         <coordinates>
+            -137.0325256,-0.0000000
+            -168.7500000,-58.2825256
+            -78.7500000,-31.7174744
+            -78.7500000,31.7174744
+            -137.0325256,-0.0000000
+         </coordinates>
+      </LineString>
+</Placemark>
+<Placemark>
+<name>7</name>
+      <styleUrl>#lineStyle1</styleUrl>
+      <LineString>
+         <tessellate>1</tessellate>
+         <coordinates>
+            -78.7500000,-31.7174744
+            -168.7500000,-58.2825256
+            11.2500000,-58.2825256
+            -20.4674744,0.0000000
+            -78.7500000,-31.7174744
+         </coordinates>
+      </LineString>
+</Placemark>
+<Placemark>
+<name>8</name>
+      <styleUrl>#lineStyle1</styleUrl>
+      <LineString>
+         <tessellate>1</tessellate>
+         <coordinates>
+            11.2500000,-58.2825256
+            -168.7500000,-58.2825256
+            101.2500000,-31.7174744
+            42.9674744,0.0000000
+            11.2500000,-58.2825256
+         </coordinates>
+      </LineString>
+</Placemark>
+<Placemark>
+<name>9</name>
+      <styleUrl>#lineStyle1</styleUrl>
+      <LineString>
+         <tessellate>1</tessellate>
+         <coordinates>
+            101.2500000,-31.7174744
+            -168.7500000,-58.2825256
+            159.5325256,-0.0000000
+            101.2500000,31.7174744
+            101.2500000,-31.7174744
+         </coordinates>
+      </LineString>
+</Placemark>
+<Placemark>
+<name>10</name>
+      <styleUrl>#lineStyle1</styleUrl>
+      <LineString>
+         <tessellate>1</tessellate>
+         <coordinates>
+            159.5325256,-0.0000000
+            -168.7500000,-58.2825256
+            -137.0325256,0.0000000
+            -168.7500000,58.2825256
+            159.5325256,-0.0000000
+         </coordinates>
+      </LineString>
+</Placemark>
+</Folder>
+</kml>

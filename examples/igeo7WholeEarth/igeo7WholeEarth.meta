@@ -1,6 +1,5 @@
 ################################################################################
-# z7WholeEarth.meta - example of generating a whole earth resolution 3 ISEA7H 
-#      grid with Z7 indexes.
+# igeo7WholeEarth.meta - example of generating a whole earth igeo7 DGG res 3.
 #
 ################################################################################
 
@@ -8,15 +7,19 @@
 dggrid_operation GENERATE_GRID
 
 # specify the DGG
-dggs_type ISEA7H
+dggs_type IGEO7
 dggs_res_spec 3
 
 # specify the output
 output_cell_label_type OUTPUT_ADDRESS_TYPE
-output_address_type Z7
 cell_output_type KML
-cell_output_file_name outputfiles/z7cells
+cell_output_file_name outputfiles/igeo7cells
 point_output_type KML
-point_output_file_name outputfiles/z7points
+point_output_file_name outputfiles/igeo7pts
 densification 0
 precision 6
+kml_default_color ffff0000
+kml_name igeo7 Res 3
+kml_description www.discreteglobalgrids.org
+kml_default_width 3
+

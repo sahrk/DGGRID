@@ -3,6 +3,22 @@ All notable changes to this project will be documented in this file.
 
 All changes are by Kevin Sahr, unless otherwise noted.
 
+## [8.3] - 2024-07-03
+### Added
+- new hierarchical index address types Z7 and Z7_STRING to parameters input_address_type and output_address_type
+- new DGGS preset IGEO7
+- added new examples quads, z7CellClip, z7Nums, z7WholeEarth, z7Collection and z7Transform
+### Changed
+- changed example z3Transform so that it takes non-GEO input
+### Fixed
+- yet more bugs binning some points that are very close to certain icosahedron edges into odd aperture 7 resolutions
+
+## [8.2] - 2024-06-15
+### Fixed
+- bug binning some points that are very close to certain icosahedron edges into odd aperture 7 resolutions
+- failure when performing a TRANSFORM operation with input files other than lat/lon
+- fixed macro names in Z3RF
+
 ## [8.1b] - 2024-01-10
 ### Added
 - pure aperture 7 hexagon grids (ISEA7H/FULLER7H) are now first class DGGS that support all operations (just like aperture 3 and 4 hexagon DGGS)

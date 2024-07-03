@@ -116,7 +116,7 @@ DgQ2DItoZ7StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
     DgIVec3D baseCellIjk = ijk;
     int res = IDGG().res();
     bool isClassIII = res % 2; // odd resolutions are Class III
-    // for Class III effective res of q2di is the Class I substrate 
+    // for Class III effective res of q2di is the Class I substrate
     int effectiveRes = (isClassIII) ? res + 1 : res;
 
     // build the Z7 index from finest res up
@@ -147,13 +147,13 @@ DgQ2DItoZ7StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
         // res 1 address is our lookup for adjacent base cells
         if (r == 1)
             baseCellIjk = ijk;
-        
+
         // no digit generated for Class I substrate
-        if (first && isClassIII) { 
+        if (first && isClassIII) {
            first = false;
            continue;
         }
-           
+
         DgIVec3D diff = lastIJK.diffVec(lastCenter);
         // don't need to normalize; done in unitIjkPlusToDigit
         //diff.ijkPlusNormalize();
@@ -178,7 +178,7 @@ DgQ2DItoZ7StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
         { 10, 11, 6, 1 },
         { 11, 11, 0, 0 }
     };
-    
+
     int quadOriginBaseCell = baseCell;
     if (baseCellIjk.i() == 1) {
         if (baseCellIjk.j() == 0) // { 1, 0 }
@@ -187,7 +187,7 @@ DgQ2DItoZ7StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
             baseCell = adjacentBaseCellTable[baseCell][2];
     } else if (baseCellIjk.j() == 1) // { 0, 1 }
         baseCell = adjacentBaseCellTable[baseCell][3];
-    
+
     // all base cells should be correct except for 0 and 11
     // Base Cell 0 maps to all 5’s, rotate into correct subdigit, skip 2
     // BC 1 - 5 skip subsequence 2
@@ -211,13 +211,13 @@ DgQ2DItoZ7StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
             }
         }
     }
-    
+
     string bcstr = dgg::util::to_string(baseCell, 2);
     string addstr = bcstr;
     for (int r = 1; r < res+1; r++) {
          addstr = addstr + to_string((int) digits[r]);
     }
-    
+
     free(digits);
     digits = NULL;
 
@@ -304,7 +304,7 @@ DgZ7StringToQ2DIConverter::convertTypedAddress (const DgZ7StringCoord& addIn) co
         res++;
     }
 
-   DgIVec3D ijk = { 0, 0, 0 }; 
+   DgIVec3D ijk = { 0, 0, 0 };
    for (int r = 0; r < res; r++) {
        if ((r + 1) % 2) { // first res is 1, not 0
            // Class III == rotate ccw
@@ -319,11 +319,11 @@ DgZ7StringToQ2DIConverter::convertTypedAddress (const DgZ7StringCoord& addIn) co
 
    DgIVec2D ij = DgIVec2D(ijk);
    int quadNum = bcNum;
-    
+
     if (ij.i() == 0 && ij.j() == 0) {
          return DgQ2DICoord(quadNum, DgIVec2D(0, 0));
     }
-        
+
     const int inverseAdjacentBaseCellTable[12][2] = {
         { 0,  0 }, // q0
         { 5, 10 }, // q1
@@ -338,9 +338,9 @@ DgZ7StringToQ2DIConverter::convertTypedAddress (const DgZ7StringCoord& addIn) co
         { 9,  5 }, // q10
         { 11, 11 } // q11
     };
-    
+
     //dgcout << addIn << " " << ij << " ";
-    
+
     bool negI = ij.i() < 0;
     bool negJ = ij.j() < 0;
     long int origI = ij.i();
