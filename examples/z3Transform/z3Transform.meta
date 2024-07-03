@@ -17,11 +17,11 @@ dggs_type ISEA3H
 dggs_res_spec 9
 
 # specify bin controls
-input_file_name inputfiles/geo.txt
-input_address_type GEO
+input_address_type Z3_STRING
+input_file_name inputfiles/z3str.txt
 input_delimiter " "
 
 # specify the output
-output_file_name outputfiles/z3str.txt
-output_address_type Z3_STRING
+output_address_type SEQNUM
+output_file_name outputfiles/seqNum.txt
 output_delimiter " "
