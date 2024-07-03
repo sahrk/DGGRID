@@ -11,7 +11,7 @@
 dggrid_operation GENERATE_GRID
 
 # specify the DGG
-dggs_type FULLER4T
+dggs_type ISEA4T
 dggs_res_spec 0
 
 # control the generation

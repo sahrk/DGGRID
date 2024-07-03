@@ -7,7 +7,7 @@ All changes are by Kevin Sahr, unless otherwise noted.
 ### Added
 - new hierarchical index address types Z7 and Z7_STRING to parameters input_address_type and output_address_type
 - new DGGS preset IGEO7
-- added new examples z7CellClip, z7Nums, z7WholeEarth, z7Collection and z7Transform
+- added new examples quads, z7CellClip, z7Nums, z7WholeEarth, z7Collection and z7Transform
 ### Changed
 - changed example z3Transform so that it takes non-GEO input
 ### Fixed
