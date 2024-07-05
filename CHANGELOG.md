@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file.
 
 All changes are by Kevin Sahr, unless otherwise noted.
 
+## [8.31] - 2024-07-05
+### Changed
+- igeo7 DGGS preset defaults output_cell_label_type to OUTPUT_ADDRESS_TYPE
+### Fixed
+- added #define to ensure PRIx64 gets defined
+
 ## [8.3] - 2024-07-03
 ### Added
 - new hierarchical index address types Z7 and Z7_STRING to parameters input_address_type and output_address_type
