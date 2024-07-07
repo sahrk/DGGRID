@@ -28,220 +28,48 @@
 #include <vector>
 
 ////////////////////////////////////////////////////////////////////////////////
-template<class A, class B, class DB> class DgNdxHierRFS
-                               : public DgDiscRF<DgResAdd<A>, B, DB> {
+template<class A> class DgNdxHierRFS {
 
    public:
 
       // indexing parent
       // only the DgLocation version performs checking on the input
 
-      virtual void setNdxParents (const DgLocation& loc, DgLocation& parent) const;
+      virtual void setNdxParent (const DgLocation& loc, DgLocation& parent) const;
 
-      virtual void setNdxParents (const DgResAdd<A>& add, const DgRFBase& rf,
-                               DgLocVector& vec) const
+      virtual void setNdxParent (const DgResAdd<A>& add, const DgRFBase& rf,
+                               DgLocation& parent) const
            {
-             setParents(add, vec);
-             rf.convert(vec);
+             setNdxParent(add, parent);
+             rf.convert(parent);
            }
 
-      virtual void setParents (const DgResAdd<A>& add, DgLocVector& vec) const
+      virtual void setNdxParent (const DgResAdd<A>& add, DgLocation& parent) const
            {
-             vec.clearAddress();
-             this->convert(vec);
+             add.clearAddress();
+             this->convert(parent);
              if (add.res() > 0 && add.res() < nRes())
-	      setAddParents(add, vec);
+	        setAddNdxParent(add, parent);
            }
 
-      virtual DgLocVector* makeParents (int res, const DgLocation& loc) const
+      virtual DgLocation* makeNdxParent (int res, const DgLocation& loc) const
            {
-             DgLocVector* vec = new DgLocVector(*this);
-             setParents(res, loc, *vec);
+             DgLocation* parent = new DgLocation(*this);
+             setNdxParent(res, loc, *parent);
 
-             return vec;
+             return parent;
            }
 
-      virtual DgLocVector* makeParents (const DgResAdd<A>& add) const
+      virtual DgLocation* makeNdxParent (const DgResAdd<A>& add) const
            {
-             DgLocVector* vec = new DgLocVector(*this);
-             setParents(add, *vec);
-             return vec;
-           }
-
-      // interior children
-
-      // only the DgLocation version performs checking on the input
-
-      virtual void setInteriorChildren (int res,
-                    const DgLocation& loc, DgLocVector& vec) const;
-
-      virtual void setInteriorChildren (const DgResAdd<A>& add,
-                                        const DgRFBase& rf,
-                                        DgLocVector& vec) const
-           {
-              setInteriorChildren(add, vec);
-              rf.convert(vec);
-           }
-
-      virtual void setInteriorChildren (const DgResAdd<A>& add,
-                                        DgLocVector& vec) const
-           {
-             vec.clearAddress();
-             this->convert(vec);
-             if (add.res() >= 0 && add.res() < (nRes() - 1))
-             {
-                setAddInteriorChildren(add, vec);
-             }
-           }
-
-      virtual DgLocVector* makeInteriorChildren (int res,
-                                                 const DgLocation& loc) const
-           {
-             DgLocVector* vec = new DgLocVector(*this);
-             setInteriorChildren(res, loc, *vec);
-
-             return vec;
-           }
-
-      virtual DgLocVector* makeInteriorChildren (const DgResAdd<A>& add) const
-           {
-             DgLocVector* vec = new DgLocVector(*this);
-             setInteriorChildren(add, *vec);
-
-             return vec;
-           }
-
-      // boundary children
-
-      // only the DgLocation version performs checking on the input
-
-      virtual void setBoundaryChildren (int res,
-                    const DgLocation& loc, DgLocVector& vec) const;
-
-      virtual void setBoundaryChildren (const DgResAdd<A>& add,
-                                        const DgRFBase& rf,
-                                        DgLocVector& vec) const
-           {
-              setBoundaryChildren(add, vec);
-              rf.convert(vec);
-           }
-
-      virtual void setBoundaryChildren (const DgResAdd<A>& add,
-                                        DgLocVector& vec) const
-           {
-             vec.clearAddress();
-             this->convert(vec);
-             if (add.res() >= 0 && add.res() < (nRes() - 1))
-             {
-                setAddBoundaryChildren(add, vec);
-             }
-           }
-
-      virtual DgLocVector* makeBoundaryChildren (int res,
-                                                 const DgLocation& loc) const
-           {
-             DgLocVector* vec = new DgLocVector(*this);
-             setBoundaryChildren(res, loc, *vec);
-
-             return vec;
-           }
-
-      virtual DgLocVector* makeBoundaryChildren (const DgResAdd<A>& add) const
-           {
-             DgLocVector* vec = new DgLocVector(*this);
-             setBoundaryChildren(add, *vec);
-
-             return vec;
-           }
-
-      // second order boundary children (aperture 7 only)
-
-      // only the DgLocation version performs checking on the input
-
-      virtual void setBoundary2Children (int res,
-                    const DgLocation& loc, DgLocVector& vec) const;
-
-      virtual void setBoundary2Children (const DgResAdd<A>& add,
-                                        const DgRFBase& rf,
-                                        DgLocVector& vec) const
-           {
-              setBoundary2Children(add, vec);
-              rf.convert(vec);
-           }
-
-      virtual void setBoundary2Children (const DgResAdd<A>& add,
-                                        DgLocVector& vec) const
-           {
-             vec.clearAddress();
-             this->convert(vec);
-             if (add.res() >= 0 && add.res() < (nRes() - 1))
-             {
-                setAddBoundary2Children(add, vec);
-             }
-           }
-
-      virtual DgLocVector* makeBoundary2Children (int res,
-                                                 const DgLocation& loc) const
-           {
-             DgLocVector* vec = new DgLocVector(*this);
-             setBoundary2Children(res, loc, *vec);
-
-             return vec;
-           }
-
-      virtual DgLocVector* makeBoundary2Children (const DgResAdd<A>& add) const
-           {
-             DgLocVector* vec = new DgLocVector(*this);
-             setBoundary2Children(add, *vec);
-
-             return vec;
-           }
-
-      // all children (interior and boundary)
-
-      // only the DgLocation version performs checking on the input
-
-      virtual void setAllChildren (int res,
-                    const DgLocation& loc, DgLocVector& vec) const;
-
-      virtual void setAllChildren (const DgResAdd<A>& add,
-                                        const DgRFBase& rf,
-                                        DgLocVector& vec) const
-           {
-              setAllChildren(add, vec);
-              rf.convert(vec);
-           }
-
-      virtual void setAllChildren (const DgResAdd<A>& add,
-                                        DgLocVector& vec) const
-           {
-             vec.clearAddress();
-             this->convert(vec);
-             if (add.res() >= 0 && add.res() < (nRes() - 1))
-             {
-                setAddAllChildren(add, vec);
-             }
-           }
-
-      virtual DgLocVector* makeAllChildren (int res,
-                                                 const DgLocation& loc) const
-           {
-             DgLocVector* vec = new DgLocVector(*this);
-             setAllChildren(res, loc, *vec);
-
-             return vec;
-           }
-
-      virtual DgLocVector* makeAllChildren (const DgResAdd<A>& add) const
-           {
-             DgLocVector* vec = new DgLocVector(*this);
-             setAllChildren(add, *vec);
-
-             return vec;
+             DgLocation* parent = new DgLocation(*this);
+             setNdxParent(add, *parent);
+             return parent;
            }
 
       virtual operator string (void) const
       {
+/*
          string s = "*** DgNdxHierRFS " + DgRFBase::name() +
                "\nap: " + dgg::util::to_string(aperture()) +
                "\nnRes: " + dgg::util::to_string(nRes()) +
@@ -251,6 +79,8 @@ template<class A, class B, class DB> class DgNdxHierRFS
             s += " >>> " + dgg::util::to_string(i) + ": " +
                    string(*(*grids_)[i]) + "\n";
 
+*/
+         string s = "*** DgNdxHierRFS";
          return s;
       }
 
@@ -262,15 +92,15 @@ template<class A, class B, class DB> class DgNdxHierRFS
                  dgg::topo::DgGridMetric gridMetric = dgg::topo::D6,
                  bool isCongruent = true, bool isAligned = false,
                  const string& name = "DiscS")
-        : DgDiscRF<DgResAdd<A>, B, DB>
+        : DgDiscRF<DgResAdd<A>>
                       (network, backFrame, name, gridTopo, gridMetric),
-          aperture_ (aperture), grids_ (new vector<const DgDiscRF<A, B, DB>*>()),
+          aperture_ (aperture), grids_ (new vector<const DgDiscRF<A>*>()),
           nRes_ (nResIn), isCongruent_ (isCongruent),
           isAligned_ (isAligned)
         {
           if (nRes() < 0)
           {
-             report("DgNdxHierRFS<A, B, DB>::DgDiscRF() nRes < 0",
+             report("DgNdxHierRFS<A>::DgDiscRF() nRes < 0",
                     DgBase::Fatal);
           }
 
@@ -283,61 +113,10 @@ template<class A, class B, class DB> class DgNdxHierRFS
           grids_->resize(nRes());
         }
 
-      DgNdxHierRFS (const DgNdxHierRFS<A, B, DB>& rf) // uses dubious operator=
-        : DgDiscRF<DgResAdd<A>, B, DB> (rf)
-        { *this = rf; }
-
-      virtual DgResAdd<A> quantify (const B& point) const
-            {
-               // quantify using max res grid
-
-               int maxRes = nRes() - 1;
-               DgLocation* loc = this->backFrame().makeLocation(point);
-               const DgDiscRF<A, B, DB>& grid = *grids()[maxRes];
-               grid.convert(loc);
-               DgResAdd<A> add(*grid.getAddress(*loc), maxRes);
-
-               delete loc;
-
-               return add;
-             }
-
-      virtual B invQuantify (const DgResAdd<A>& add) const
-             {
-               const DgDiscRF<A, B, DB>& grid = *grids()[add.res()];
-               DgLocation* loc = grid.makeLocation(add.address());
-               this->backFrame().convert(loc);
-               B newAdd(*(this->backFrame().getAddress(*loc)));
-               delete loc;
-               return newAdd;
-             }
-
-      virtual void setAddVertices (const DgResAdd<A>& add,
-                                   DgPolygon& vec) const
-                    { grids()[add.res()]->backFrame().convert(vec);
-                      grids()[add.res()]->setVertices(add.address(), vec);
-                      this->backFrame().convert(vec);
-		    }
-
-      virtual void setAddNeighbors (const DgResAdd<A>& add,
-                                    DgLocVector& vec) const;
-
-      // second order boundary children; aperture 7 hex only
-      virtual void setAddBoundary2Children (const DgResAdd<A>&, DgLocVector&) const { }
-
       // new pure virtual functions
 
-      virtual void setAddParents (const DgResAdd<A>& add,
-                                  DgLocVector& vec) const = 0;
-
-      virtual void setAddInteriorChildren (const DgResAdd<A>& add,
-                                           DgLocVector& vec) const = 0;
-
-      virtual void setAddBoundaryChildren (const DgResAdd<A>& add,
-                                           DgLocVector& vec) const = 0;
-
-      virtual void setAddAllChildren (const DgResAdd<A>& add,
-                                      DgLocVector& vec) const = 0;
+      virtual void setAddParent (const DgResAdd<A>& add,
+                                  DgLocation& parent) const = 0;
 
       // state data
 
@@ -345,7 +124,7 @@ template<class A, class B, class DB> class DgNdxHierRFS
 
       unsigned int aperture_;
 
-      vector<const DgDiscRF<A, B, DB>*>* grids_;
+      vector<const DgDiscRF<A>*>* grids_;
 
       int nRes_;
       bool isCongruent_;
@@ -354,134 +133,13 @@ template<class A, class B, class DB> class DgNdxHierRFS
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-template<class A, class B, class DB> ostream& operator<< (ostream& stream,
-          const DgNdxHierRFS<A, B, DB>& g)
+template<class A> ostream& operator<< (ostream& stream,
+          const DgNdxHierRFS<A>& g)
 {
    stream << string(g) << endl;
 
    return stream;
 }
-
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-template <class A, class B, class DB> class DgResAddConverter :
-    public DgConverter<DgResAdd<A>, long long int, A, long long int> {
-
-   public:
-
-      DgResAddConverter (const DgNdxHierRFS<A, B, DB>& fromFrame,
-                         const DgDiscRF<A, B, DB>& toFrame, int resIn)
-         : DgConverter<DgResAdd<A>, long long int, A,
-                 long long int> (fromFrame, toFrame),
-           res_ (resIn), discRFS_ (fromFrame), discRF_ (toFrame)
-           {
-	      // JFW: second clause will never be > (int vs long):
-              if (res() < 0 ||
-                  static_cast<unsigned long>(res()) >= discRFS().grids().size())
-              {
-                 report("DgResAddConverter<A, B, DB>::DgResAddConverter() "
-                        "invalid resolution", DgBase::Fatal);
-              }
-
-              if (*(discRFS().grids()[res()]) != discRF())
-              {
-                 report("DgDgResAddConverter<A, B, DB>::DgResAddConverter() "
-                        "grid mismatch", DgBase::Fatal);
-              }
-           }
-
-      DgResAddConverter (const DgResAddConverter& con)
-         : DgConverter<DgResAdd<A>, long long int, A, long long int> (con) { }
-
-      int res (void) const { return res_; }
-
-      const DgNdxHierRFS<A, B, DB>& discRFS (void) const { return discRFS_; }
-
-      const DgDiscRF<A, B, DB>& discRF (void) const { return discRF_; }
-
-      virtual A convertTypedAddress (const DgResAdd<A>& add) const
-        {
-           if (add.res() == res()) return add.address();
-
-           DgLocation* tmpLoc =
-             discRFS().grids()[add.res()]->makeLocation(add.address());
-           discRF().convert(tmpLoc);
-           A newAdd = *(discRF().getAddress(*tmpLoc));
-           delete tmpLoc;
-           return newAdd;
-        }
-
-   protected:
-
-      int res_;
-      const DgNdxHierRFS<A, B, DB>& discRFS_;
-      const DgDiscRF<A, B, DB>& discRF_;
-
-};
-
-////////////////////////////////////////////////////////////////////////////////
-template <class A, class B, class DB> class DgAddResConverter :
-    public DgConverter<A, long long int, DgResAdd<A>, long long int> {
-
-   public:
-
-      DgAddResConverter (const DgDiscRF<A, B, DB>& fromFrame,
-                         const DgNdxHierRFS<A, B, DB>& toFrame, int resIn)
-         : DgConverter<A, long long int, DgResAdd<A>,
-                       long long int> (fromFrame, toFrame),
-           res_ (resIn), discRFS_ (toFrame), discRF_ (fromFrame)
-           {
-              // JFW: Note that int res() > long size() can never occur:
-              if (res() < 0 ||
-                static_cast<unsigned long>(res()) >= discRFS().grids().size())
-              {
-                 report("DgDgAddResConverter<A, B, DB>::DgAddResConverter() "
-                        "invalid resolution", DgBase::Fatal);
-              }
-
-              if (*(discRFS().grids()[res()]) != discRF())
-              {
-                 report("DgAddResConverter<A, B, DB>::DgAddResConverter() "
-                        "grid mismatch", DgBase::Fatal);
-              }
-           }
-
-      DgAddResConverter (const DgAddResConverter& con)
-         : DgConverter<A, long long int, DgResAdd<A>, long long int> (con) { }
-
-      int res (void) const { return res_; }
-
-      const DgNdxHierRFS<A, B, DB>& discRFS (void) const { return discRFS_; }
-
-      const DgDiscRF<A, B, DB>& discRF (void) const { return discRF_; }
-
-      virtual DgResAdd<A> convertTypedAddress (const A& add) const
-        {
-           return DgResAdd<A>(add, res());
-        }
-
-   protected:
-
-      int res_;
-      const DgNdxHierRFS<A, B, DB>& discRFS_;
-      const DgDiscRF<A, B, DB>& discRF_;
-
-};
-
-////////////////////////////////////////////////////////////////////////////////
-template <class A, class B, class DB> class Dg2WayResAddConverter
-                                               : public Dg2WayConverter {
-
-   public:
-
-      Dg2WayResAddConverter (const DgNdxHierRFS<A, B, DB>& fromFrame,
-                             const DgDiscRF<A, B, DB>& toFrame, int res)
-         : Dg2WayConverter
-              (*(new DgResAddConverter<A, B, DB>(fromFrame, toFrame, res)),
-               *(new DgAddResConverter<A, B, DB>(toFrame, fromFrame, res)))
-           { }
-
-};
 
 // JFW: is this really what we mean?
 #include "../lib/DgNdxHierRFS.hpp"
