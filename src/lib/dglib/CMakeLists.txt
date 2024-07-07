@@ -64,6 +64,7 @@ add_library(dglib
   lib/DgLocBase.cpp
   lib/DgLocList.cpp
   lib/DgLocVector.cpp
+  lib/DgNdxHierRFS.hpp
   lib/DgOutAIGenFile.cpp
   lib/DgOutChildrenFile.cpp
   lib/DgOutGdalFile.cpp

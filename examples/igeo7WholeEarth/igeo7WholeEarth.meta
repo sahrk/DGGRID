@@ -17,6 +17,10 @@ cell_output_type KML
 cell_output_file_name outputfiles/igeo7cells
 point_output_type KML
 point_output_file_name outputfiles/igeo7pts
+indexing_children_output_type TEXT
+indexing_children_output_file_name ndxChld
+indexing_parent_output_type TEXT
+indexing_parent_output_file_name ndxPrt
 densification 0
 precision 6
 kml_default_color ffff0000
