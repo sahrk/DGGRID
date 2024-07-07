@@ -325,6 +325,7 @@ SubOpGen::executeOp (void)
    // set-up the input reference frame
    // this should be moved as much as possible to SubOpIn
    const DgRFBase* chdRF = nullptr;
+   const DgRFBase* ndxPrtRF = nullptr;
    if (cellClip && op.inOp.inAddType != dgg::addtype::SeqNum) {
       if (clipCellRes < 0 || clipCellRes > op.dggOp.actualRes)
          ::report("genGrid(): invalid clipCellRes", DgBase::Fatal);

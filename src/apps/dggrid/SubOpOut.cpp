@@ -45,6 +45,8 @@
 #include <dglib/DgOutPRCellsFile.h>
 #include <dglib/DgOutNeighborsFile.h>
 #include <dglib/DgOutChildrenFile.h>
+#include <dglib/DgOutNdxChildrenFile.h>
+#include <dglib/DgOutNdxParentFile.h>
 #include <dglib/DgHexIDGG.h>
 #include <dglib/DgHexIDGGS.h>
 #include <dglib/DgIDGGBase.h>
@@ -931,7 +933,7 @@ SubOpOut::executeOp (void) {
    if (!makeCollectFile && ((childrenOutType == "GDAL_COLLECTION") ||
           (neighborsOutType == "GDAL_COLLECTION") ||
           (ndxChildrenOutType == "GDAL_COLLECTION") ||
-          (ndxParentOutType == "GDAL_COLLECTION") ||))
+          (ndxParentOutType == "GDAL_COLLECTION")))
       ::report("GDAL_COLLECTION must include cell and/or point data",
                 DgBase::Fatal);
 
@@ -1017,9 +1019,9 @@ SubOpOut::executeOp (void) {
    }
 
    if (ndxParentOutType == "TEXT") {
-      ndxPrtOut = new DgOutNdxParentFile(ndxParentOutFileName, dgg, 
+       ndxPrtOut = new DgOutNdxParentFile(ndxParentOutFileName, dgg,
           op.dggOp.ndxPrtDgg(), ((outSeqNum || useEnumLbl) ? NULL : pOutRF), 
-          pPrtOutRF, "ndxPrt");
+          pNdxPrtOutRF, "ndxPrt");
    }
 
    return 0;

@@ -21,7 +21,7 @@ examples:
 
   doexamples.sh - executes all examples and performs a
     diff of the output files with output that has been
-    verified. Assumes that dggrid is in it's original
+    verified. Assumes that dggrid is in it's original cmake
     build location. Note that rounding errors may result 
     in small differences in the output generated, 
     depending on your system.
