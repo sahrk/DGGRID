@@ -67,6 +67,47 @@ template<class A> class DgNdxHierRFS {
              return parent;
            }
 
+      // indexing children
+      // only the DgLocation version performs checking on the input
+
+      virtual void setNdxChildren (int res,
+                    const DgLocation& loc, DgLocVector& chld) const;
+
+      virtual void setNdxChildren (const DgResAdd<A>& add,
+                                        const DgRFBase& rf,
+                                        DgLocVector& chld) const
+           {
+              setNdxChildren(add, chld);
+              rf.convert(chld);
+           }
+
+      virtual void setNdxChildren (const DgResAdd<A>& add,
+                                        DgLocVector& chld) const
+           {
+             chld.clearAddress();
+             this->convert(chld);
+             if (add.res() >= 0 && add.res() < (nRes() - 1)) {
+                setAddNdxChildren(add, chld);
+             }
+           }
+
+      virtual DgLocVector* makeNdxChildren (int res,
+                                                 const DgLocation& loc) const
+           {
+             DgLocVector* chld = new DgLocVector(*this);
+             setNdxChildren(res, loc, *chld);
+
+             return chld;
+           }
+
+      virtual DgLocVector* makeNdxChildren (const DgResAdd<A>& add) const
+           {
+             DgLocVector* chld = new DgLocVector(*this);
+             setNdxChildren(add, *chld);
+
+             return chld;
+           }
+
       virtual operator string (void) const
       {
 /*

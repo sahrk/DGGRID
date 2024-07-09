@@ -30,6 +30,7 @@
 
 #include <dglib/DgConverter.h>
 #include <dglib/Dg2WayConverter.h>
+#include <dglib/DgNdxHierRFS.h>
 
 class DgZ7Coord;
 class DgZ7StringRF;
@@ -136,13 +137,13 @@ operator<< (ostream& stream, const DgZ7Coord& coord)
 { return stream << std::string(coord); }
 
 ////////////////////////////////////////////////////////////////////////////////
-class DgZ7RF : public DgRF<DgZ7Coord, long long int> {
+class DgZ7RF : public DgRF<DgZ7Coord, long long int>, public DgNdxHierRFS {
 
    public:
 
-      static DgZ7RF* makeRF (DgRFNetwork& networkIn, const std::string& nameIn,
-                                  int resIn)
-         { return new DgZ7RF (networkIn, nameIn, resIn); }
+      static DgZ7RF* makeRF (DgRFNetwork& networkIn, const DgIDGGSBase& dggsIn,
+                      const std::string& nameIn, int resIn)
+         { return new DgZ7RF (networkIn, dggsIn, nameIn, resIn); }
 
       int res      (void) const { return res_; }
       int aperture (void) const { return 7; }
@@ -175,7 +176,8 @@ class DgZ7RF : public DgRF<DgZ7Coord, long long int> {
 
    protected:
 
-      DgZ7RF (DgRFNetwork& networkIn, const std::string& nameIn, int resIn);
+      DgZ7RF (DgRFNetwork& networkIn, const DgIDGGSBase& dggsIn, 
+                     const std::string& nameIn, int resIn);
 
       int res_;
       const DgZ7StringRF* z7strRF_;

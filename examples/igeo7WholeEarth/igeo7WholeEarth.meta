@@ -17,10 +17,16 @@ cell_output_type KML
 cell_output_file_name outputfiles/igeo7cells
 point_output_type KML
 point_output_file_name outputfiles/igeo7pts
-indexing_children_output_type TEXT
-indexing_children_output_file_name ndxChld
+# output neighbors and spatial children
+neighbor_output_type TEXT
+neighbor_output_file_name outputfiles/neighbors
+children_output_type TEXT
+children_output_file_name outputfiles/spatChld
+# output hierarchical indexing parent and children
 indexing_parent_output_type TEXT
 indexing_parent_output_file_name ndxPrt
+indexing_children_output_type TEXT
+indexing_children_output_file_name ndxChld
 densification 0
 precision 6
 kml_default_color ffff0000

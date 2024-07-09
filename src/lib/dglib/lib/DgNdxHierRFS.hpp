@@ -32,15 +32,14 @@ template<class A> void
 DgNdxHierRFS<A>::setNdxParent (int res, const DgLocation& loc,
                     DgLocation& parent) const
 {
-   vec.clearAddress();
-   this->convert(vec);
+   parent.clearAddress();
+   this->convert(parent);
 
-   if (res > 0 && res < nRes())
-   {
+   if (res > 0 && res < nRes()) {
       DgLocation tmpLoc(loc);
       grids()[res]->convert(&tmpLoc);
       this->convert(&tmpLoc);
-      setAddParent(*(this->getAddress(tmpLoc)), vec);
+      setAddParent(*(this->getAddress(tmpLoc)), parent);
    }
 
 } // void DgNdxHierRFS::setNdxParent
