@@ -26,11 +26,14 @@
 #define DGNDXHIERRFS_H
 
 #include <vector>
+#include <dglib/DgDiscRFS.h>
 
 ////////////////////////////////////////////////////////////////////////////////
-template<class A> class DgNdxHierRFS {
+template<class A, class B, class DB> class DgNdxHierRFS {
 
    public:
+    
+      const DgDiscRFS<A, B, DB>& rfs (void) { return rfs_; }
 
       // indexing parent
       // only the DgLocation version performs checking on the input
@@ -41,15 +44,15 @@ template<class A> class DgNdxHierRFS {
                                DgLocation& parent) const
            {
              setNdxParent(add, parent);
-             rf.convert(parent);
+             rf.convert(&parent);
            }
 
       virtual void setNdxParent (const DgResAdd<A>& add, DgLocation& parent) const
            {
              add.clearAddress();
              this->convert(parent);
-             if (add.res() > 0 && add.res() < nRes())
-	        setAddNdxParent(add, parent);
+             if (add.res() > 0 && add.res() < rfs().nRes())
+	         setAddNdxParent(add, parent);
            }
 
       virtual DgLocation* makeNdxParent (int res, const DgLocation& loc) const
@@ -86,7 +89,7 @@ template<class A> class DgNdxHierRFS {
            {
              chld.clearAddress();
              this->convert(chld);
-             if (add.res() >= 0 && add.res() < (nRes() - 1)) {
+             if (add.res() >= 0 && add.res() < (rfs().nRes() - 1)) {
                 setAddNdxChildren(add, chld);
              }
            }
@@ -127,55 +130,25 @@ template<class A> class DgNdxHierRFS {
 
    protected:
 
-      DgNdxHierRFS (DgRFNetwork& network, const DgRF<B, DB>& backFrame,
-                 int nResIn, unsigned int aperture,
-                 dgg::topo::DgGridTopology gridTopo = dgg::topo::Hexagon,
-                 dgg::topo::DgGridMetric gridMetric = dgg::topo::D6,
-                 bool isCongruent = true, bool isAligned = false,
-                 const string& name = "DiscS")
-        : DgDiscRF<DgResAdd<A>>
-                      (network, backFrame, name, gridTopo, gridMetric),
-          aperture_ (aperture), grids_ (new vector<const DgDiscRF<A>*>()),
-          nRes_ (nResIn), isCongruent_ (isCongruent),
-          isAligned_ (isAligned)
-        {
-          if (nRes() < 0)
-          {
-             report("DgNdxHierRFS<A>::DgDiscRF() nRes < 0",
-                    DgBase::Fatal);
-          }
+     DgNdxHierRFS (const DgDiscRFS<A, B, DB>& rfsIn)
+        : rfs_ (rfsIn)
+     { }
 
-          if (!this->isAligned() && !this->isCongruent())
-          {
-             report("DgNdxHierRFS::DgNdxHierRFS() grid system must be either "
-                    "congruent, aligned, or both", DgBase::Fatal);
-          }
+     // new pure virtual functions
+     virtual void setAddNdxParent (const DgResAdd<A>& add,
+                                   DgLocation& parent) const = 0;
+     virtual void setAddNdxChildren (const DgResAdd<A>& add,
+                                     DgLocVector& children) const = 0;
 
-          grids_->resize(nRes());
-        }
+   private:
 
-      // new pure virtual functions
-
-      virtual void setAddParent (const DgResAdd<A>& add,
-                                  DgLocation& parent) const = 0;
-
-      // state data
-
-      const DgRF<B, DB>* backFrame_;
-
-      unsigned int aperture_;
-
-      vector<const DgDiscRF<A>*>* grids_;
-
-      int nRes_;
-      bool isCongruent_;
-      bool isAligned_;
-
+     // state data
+     const DgDiscRFS<A, B, DB>& rfs_;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-template<class A> ostream& operator<< (ostream& stream,
-          const DgNdxHierRFS<A>& g)
+template<class A, class B, class DB> ostream& operator<< (ostream& stream,
+          const DgNdxHierRFS<A, B, DB>& g)
 {
    stream << string(g) << endl;
 

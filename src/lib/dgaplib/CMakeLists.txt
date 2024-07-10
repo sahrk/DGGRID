@@ -3,6 +3,11 @@ cmake_minimum_required (VERSION 3.9)
 add_library(dgaplib
   lib/DgApParamList.cpp
   lib/DgApSubOperation.cpp
+  include/dgaplib/DgApOperation.h
+  include/dgaplib/DgApOperationPList.h
+  include/dgaplib/DgApParamList.h
+  include/dgaplib/DgApSubOpPList.h
+  include/dgaplib/DgApSubOperation.h
 )
 
 if(GDAL_FOUND)

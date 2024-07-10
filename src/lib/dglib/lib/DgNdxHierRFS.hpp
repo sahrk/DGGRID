@@ -28,21 +28,40 @@
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-template<class A> void
-DgNdxHierRFS<A>::setNdxParent (int res, const DgLocation& loc,
+template<class A, class B, class DB> void
+DgNdxHierRFS<A, B, DB>::setNdxParent (int res, const DgLocation& loc,
                     DgLocation& parent) const
 {
    parent.clearAddress();
-   this->convert(parent);
+   rfs().convert(parent);
 
-   if (res > 0 && res < nRes()) {
+   if (res > 0 && res < rfs().nRes()) {
       DgLocation tmpLoc(loc);
-      grids()[res]->convert(&tmpLoc);
-      this->convert(&tmpLoc);
-      setAddParent(*(this->getAddress(tmpLoc)), parent);
+      rfs().grids()[res]->convert(&tmpLoc);
+      rfs().convert(&tmpLoc);
+      setAddParent(*(rfs().getAddress(tmpLoc)), parent);
    }
 
 } // void DgNdxHierRFS::setNdxParent
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+template<class A, class B, class DB> void
+DgNdxHierRFS<A, B, DB>::setNdxChildren (int res, const DgLocation& loc,
+                                   DgLocVector& children) const
+{
+   children.clearAddress();
+   rfs().convert(children);
+
+   if (res >= 0 && res < (rfs().nRes() - 1))
+   {
+      DgLocation tmpLoc(loc);
+      rfs().grids()[res]->convert(&tmpLoc);
+      rfs().convert(&tmpLoc);
+      setAddNdxChildren(*(rfs().getAddress(tmpLoc)), children);
+   }
+
+} // void DgNdxHierRFS::setNdxChildren
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

@@ -294,7 +294,7 @@ template<class A, class B, class DB> class DgDiscRFS
              return vec;
            }
 
-      // second order boundary children (aperture 7 only)
+      // second order boundary children (hex aperture 7 only)
 
       // only the DgLocation version performs checking on the input
 

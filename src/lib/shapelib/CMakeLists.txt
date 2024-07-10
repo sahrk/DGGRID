@@ -1,5 +1,7 @@
 cmake_minimum_required (VERSION 3.9)
 
+# left header file off the list to avoid potential
+# conflicts if using an external library
 add_library(shapelib
   lib/dbfopen.c
   lib/safileio.c
