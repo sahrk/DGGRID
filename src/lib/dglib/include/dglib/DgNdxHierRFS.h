@@ -49,7 +49,7 @@ template<class A, class B, class DB> class DgNdxHierRFS {
 
       virtual void setNdxParent (const DgResAdd<A>& add, DgLocation& parent) const
            {
-             add.clearAddress();
+             //add.clearAddress();
              this->convert(parent);
              if (add.res() > 0 && add.res() < rfs().nRes())
 	         setAddNdxParent(add, parent);

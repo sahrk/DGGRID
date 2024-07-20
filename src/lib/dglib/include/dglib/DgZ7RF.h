@@ -37,6 +37,7 @@ class DgZ7StringRF;
 class DgZ7StringCoord;
 class DgIDGGBase;
 class DgZ7Coord;
+class DgIDGGSBase;
 
 //using namespace std;
 

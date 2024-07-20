@@ -25,6 +25,10 @@
 #ifndef DGNDXHIERCPI_H
 #define DGNDXHIERCPI_H
 
+#include <dglib/DgNdxHierHexIDGGS.h>
+
+//class DgHexIDGGS;
+
 ////////////////////////////////////////////////////////////////////////////////
 class DgNdxHierCPI : public DgNdxHierHexIDGGS {
 
