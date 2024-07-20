@@ -34,7 +34,7 @@ class DgNdxHierHexIDGGS : public DgNdxHierIDGGS {
 
    public:
     
-      const DgHexIDGGS& hexDggs (void) { return hexDggs_; }
+      const DgHexIDGGS& hexDggs (void) const { return hexDggs_; }
 
       virtual operator string (void) const
       {

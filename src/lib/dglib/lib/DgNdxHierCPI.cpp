@@ -33,14 +33,14 @@ void
 DgNdxHierCPI::setAddNdxParent (const DgResAdd<DgQ2DICoord>& add,
                                    DgLocation& parent) const
 {
-   const DgHexIDGG& dgg = hexIdgg()(add.res());
-   const DgHexIDGG& dggp = hexIdgg()(add.res() - 1);
+   const DgHexIDGG& dgg = hexDggs().hexIdgg(add.res());
+   const DgHexIDGG& dggp = hexDggs().hexIdgg(add.res() - 1);
     
    DgLocation* centerLoc = dgg.makeLocation(add.address());
    parent = *centerLoc;
    delete centerLoc;
-   centerLoc = null_ptr;
-   dggp.convert(parent);
+   centerLoc = nullptr;
+   dggp.convert(&parent);
 }
     
 ////////////////////////////////////////////////////////////////////////////////
@@ -50,8 +50,8 @@ void
 DgNdxHierCPI::setAddNdxChildren (const DgResAdd<DgQ2DICoord>& add,
                                         DgLocVector& children) const
 {
-   const DgHexIDGG& dgg = hexIdgg()(add.res());
-   const DgHexIDGG& dggch = hexIdgg()(add.res() + 1);
+   const DgHexIDGG& dgg = hexDggs().hexIdgg(add.res());
+   const DgHexIDGG& dggch = hexDggs().hexIdgg(add.res() + 1);
     
    // the neighbors of the center hex at next res
    DgLocation* centerLoc = dgg.makeLocation(add.address());
@@ -60,7 +60,7 @@ DgNdxHierCPI::setAddNdxChildren (const DgResAdd<DgQ2DICoord>& add,
 
    const DgQ2DICoord& centerAdd = *dggch.getAddress(*centerLoc);
    delete centerLoc;
-   centerLoc = null_ptr;
+    centerLoc = nullptr;
 
    DgLocVector neighbors;
    dggch.setAddNeighbors(centerAdd, neighbors);

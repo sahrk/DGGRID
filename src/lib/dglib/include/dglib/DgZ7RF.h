@@ -142,9 +142,9 @@ class DgZ7RF : public DgRF<DgZ7Coord, long long int>, public DgNdxHierCPI {
 
    public:
 
-      static DgZ7RF* makeRF (DgRFNetwork& networkIn, const DgIDGGSBase& dggsIn,
+      static DgZ7RF* makeRF (DgRFNetwork& networkIn, const DgHexIDGGS& hexDggsIn,
                       const std::string& nameIn, int resIn)
-         { return new DgZ7RF (networkIn, dggsIn, nameIn, resIn); }
+         { return new DgZ7RF (networkIn, hexDggsIn, nameIn, resIn); }
 
       int res      (void) const { return res_; }
       int aperture (void) const { return 7; }
@@ -177,7 +177,7 @@ class DgZ7RF : public DgRF<DgZ7Coord, long long int>, public DgNdxHierCPI {
 
    protected:
 
-      DgZ7RF (DgRFNetwork& networkIn, const DgIDGGSBase& dggsIn, 
+      DgZ7RF (DgRFNetwork& networkIn, const DgHexIDGGS& hexDggsIn,
                      const std::string& nameIn, int resIn);
 
       int res_;

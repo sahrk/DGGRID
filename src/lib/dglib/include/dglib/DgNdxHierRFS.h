@@ -33,12 +33,12 @@ template<class A, class B, class DB> class DgNdxHierRFS {
 
    public:
     
-      const DgDiscRFS<A, B, DB>& rfs (void) { return rfs_; }
+      const DgDiscRFS<A, B, DB>& rfs (void) const { return rfs_; }
 
       // indexing parent
       // only the DgLocation version performs checking on the input
 
-      virtual void setNdxParent (const DgLocation& loc, DgLocation& parent) const;
+      virtual void setNdxParent (int res, const DgLocation& loc, DgLocation& parent) const;
 
       virtual void setNdxParent (const DgResAdd<A>& add, const DgRFBase& rf,
                                DgLocation& parent) const
@@ -50,14 +50,14 @@ template<class A, class B, class DB> class DgNdxHierRFS {
       virtual void setNdxParent (const DgResAdd<A>& add, DgLocation& parent) const
            {
              //add.clearAddress();
-             this->convert(parent);
+             rfs().convert(&parent);
              if (add.res() > 0 && add.res() < rfs().nRes())
 	         setAddNdxParent(add, parent);
            }
 
       virtual DgLocation* makeNdxParent (int res, const DgLocation& loc) const
            {
-             DgLocation* parent = new DgLocation(*this);
+             DgLocation* parent = new DgLocation(rfs());
              setNdxParent(res, loc, *parent);
 
              return parent;
@@ -65,7 +65,7 @@ template<class A, class B, class DB> class DgNdxHierRFS {
 
       virtual DgLocation* makeNdxParent (const DgResAdd<A>& add) const
            {
-             DgLocation* parent = new DgLocation(*this);
+             DgLocation* parent = new DgLocation(rfs());
              setNdxParent(add, *parent);
              return parent;
            }
@@ -88,7 +88,7 @@ template<class A, class B, class DB> class DgNdxHierRFS {
                                         DgLocVector& chld) const
            {
              chld.clearAddress();
-             this->convert(chld);
+             rfs().convert(chld);
              if (add.res() >= 0 && add.res() < (rfs().nRes() - 1)) {
                 setAddNdxChildren(add, chld);
              }
@@ -97,7 +97,7 @@ template<class A, class B, class DB> class DgNdxHierRFS {
       virtual DgLocVector* makeNdxChildren (int res,
                                                  const DgLocation& loc) const
            {
-             DgLocVector* chld = new DgLocVector(*this);
+             DgLocVector* chld = new DgLocVector(rfs());
              setNdxChildren(res, loc, *chld);
 
              return chld;
@@ -105,7 +105,7 @@ template<class A, class B, class DB> class DgNdxHierRFS {
 
       virtual DgLocVector* makeNdxChildren (const DgResAdd<A>& add) const
            {
-             DgLocVector* chld = new DgLocVector(*this);
+             DgLocVector* chld = new DgLocVector(rfs());
              setNdxChildren(add, *chld);
 
              return chld;

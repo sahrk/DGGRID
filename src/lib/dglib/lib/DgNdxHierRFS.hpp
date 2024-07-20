@@ -33,13 +33,13 @@ DgNdxHierRFS<A, B, DB>::setNdxParent (int res, const DgLocation& loc,
                     DgLocation& parent) const
 {
    parent.clearAddress();
-   rfs().convert(parent);
+   rfs().convert(&parent);
 
    if (res > 0 && res < rfs().nRes()) {
       DgLocation tmpLoc(loc);
       rfs().grids()[res]->convert(&tmpLoc);
       rfs().convert(&tmpLoc);
-      setAddParent(*(rfs().getAddress(tmpLoc)), parent);
+      setAddNdxParent(*(rfs().getAddress(tmpLoc)), parent);
    }
 
 } // void DgNdxHierRFS::setNdxParent
