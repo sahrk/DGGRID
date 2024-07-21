@@ -174,7 +174,11 @@ DgIDGGBase::createConverters (void)
 
    if (gridTopo() == Hexagon) {
        if (dggs()->aperture() == 7) {
-           z7RF_ = DgZ7RF::makeRF(network(), name() + string("z7"), res());
+           const DgHexIDGGS* hexDggs = dynamic_cast<const DgHexIDGGS*>(dggs());
+           if (!hexDggs) {
+              report("hexagon gridTopo does not match IDGGS", DgBase::Fatal);
+           }
+           z7RF_ = DgZ7RF::makeRF(network(), *hexDggs, name() + string("z7"), res());
            z7StrRF_ = DgZ7StringRF::makeRF(network(), name() + string("z7Str"), res());
        } else if (aperture() == 4 || aperture() == 3) {
          zorderRF_ = DgZOrderRF::makeRF(network(), name() + string("zorder"),
