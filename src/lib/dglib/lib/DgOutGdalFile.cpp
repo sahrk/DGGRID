@@ -180,6 +180,7 @@ DgOutGdalFile::createFeature (const string& label) const
    OGRFeature *feature = OGRFeature::CreateFeature(_oLayer->GetLayerDefn());
    if (!feature)
       ::report("GDAL feature creation failed.", DgBase::Fatal );
+   //feature->SetFID(0);
    feature->SetField("name", label.c_str());
    return feature;
 }
@@ -197,6 +198,7 @@ void
 DgOutGdalFile::createAddressProperty (const DgIDGGBase& dgg, OGRFeature* feature,
            const char* fieldName, const DgLocation& loc, const DgRFBase* outRF)
 {
+//    return;
     DgLocation tmpLoc(loc);
     dgg.convert(&tmpLoc);
     std::string str;
@@ -271,6 +273,7 @@ DgOutGdalFile::insert (const DgIDGGBase& dgg, DgCell& cell,
 
    // create the named feature
    OGRFeature *feature = createFeature(cell.label());
+   //feature->SetFID(0);
 
    // set the data fields
    if (cell.dataList()) {
