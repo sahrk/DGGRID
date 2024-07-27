@@ -413,7 +413,7 @@ DgOutGdalFile::insert (DgLocation& loc, const string* label,
       ::report( "invalid GDAL output file mode encountered.", DgBase::Fatal );
 
    if (!_oLayer)
-      init(true, false, false, false, dataList);
+      init(true, false, false, false, false, false, dataList);
 
    // create the feature
    OGRFeature *feature = createFeature(*label);
@@ -450,7 +450,7 @@ DgOutGdalFile::insert (DgPolygon& poly, const string* label,
       ::report( "invalid GDAL output file mode encountered.", DgBase::Fatal );
 
    if (!_oLayer)
-      init(false, true, false, false, dataList);
+      init(false, true, false, false, false, false, dataList);
 
    OGRPolygon* polygon = createPolygon(poly);
 
