@@ -64,6 +64,8 @@
 #include <dglib/DgDmdD4Grid2DS.h>
 #include <dglib/DgTriGrid2D.h>
 #include <dglib/DgOutRandPtsText.h>
+#include <dglib/DgZ7RF.h>
+
 #include "DgHexSF.h"
 
 #include "OpBasic.h"
@@ -381,7 +383,7 @@ SubOpOut::outputCellAdd2D (const DgLocation& add2D, const string* labelIn,
    if (ndxParentOutType != "NONE") {
 
 // KEVIN XXX
-      //op.dggOp.dggs().setAllChildren(q2diR, ndxChildren);
+      ndxHierIDGGS->setNdxParent(q2diR, ndxParent);
 
       if (ndxPrtOut)
          ndxPrtOut->insert(add2D, ndxParent);
@@ -411,6 +413,7 @@ SubOpOut::SubOpOut (OpBasic& op, bool _activate)
    : SubOpBasic (op, _activate),
      pOutRF (0), pChdOutRF (0), pNdxPrtOutRF (0),
      outAddType (dgg::addtype::InvalidAddressType),
+     hierNdxAddType (dgg::addtype::InvalidAddressType),
      outSeqNum (false), outputDelimiter (' '), nDensify (1),
      lonWrapMode (DgGeoSphRF::Wrap), unwrapPts (true),
      doRandPts (true), ptsRand (0), nRandPts (0),
@@ -661,6 +664,10 @@ SubOpOut::setupOp (void)
    getParamValue(pList(), "output_address_type", dummy, false);
    outAddType = dgg::addtype::stringToAddressType(dummy);
 
+   // hierarchical indexing type
+   getParamValue(pList(), "indexing_hier_address_type", dummy, false);
+   hierNdxAddType = dgg::addtype::stringToAddressType(dummy);
+
    // output delimiter
    getParamValue(pList(), "output_delimiter", dummy, false);
    if (dummy.length() != 3 || dummy.c_str()[0] != '"' ||
@@ -896,9 +903,18 @@ SubOpOut::executeOp (void) {
       pOutRF = &dgg;
    else if (!op.dggOp.isSuperfund) { // use input address type
 
-      outSeqNum = op.dggOp.addressTypeToRF(outAddType, &pOutRF, &pChdOutRF);
+      outSeqNum = op.dggOp.addressTypeToRF(outAddType, &pOutRF, &pChdOutRF, &pNdxPrtOutRF);
       if (!pOutRF)
          ::report("SubOpOut::executeOp(): invalid output RF", DgBase::Fatal);
+   }
+
+   if (ndxChildrenOutType != "NONE" || ndxParentOutType != "NONE") {
+      if (hierNdxAddType == Z7 && dgg.z7RF()) {
+          //ndxHierIDGGS = dynamic_cast<const DgNdxHierHexIDGGS*>(dgg.z7RF());
+          ndxHierIDGGS = dgg.z7RF();
+      } else {
+          ::report("SubOpOut::executeOp(): hierarchical indexing type", DgBase::Fatal);
+      }
    }
 
    string suffix = string("");
@@ -1012,17 +1028,20 @@ SubOpOut::executeOp (void) {
                ((outSeqNum || useEnumLbl) ? NULL : pOutRF), pChdOutRF, "chd");
    }
 
-   if (ndxChildrenOutType == "TEXT") {
-      ndxChdOut = new DgOutNdxChildrenFile(ndxChildrenOutFileName, dgg, 
-          op.dggOp.chdDgg(), ((outSeqNum || useEnumLbl) ? NULL : pOutRF), 
-          pChdOutRF, "ndxChd");
-   }
-
-   if (ndxParentOutType == "TEXT") {
-       ndxPrtOut = new DgOutNdxParentFile(ndxParentOutFileName, dgg,
-          op.dggOp.ndxPrtDgg(), ((outSeqNum || useEnumLbl) ? NULL : pOutRF), 
-          pNdxPrtOutRF, "ndxPrt");
-   }
+    if (ndxChildrenOutType == "TEXT" || ndxParentOutType == "TEXT") {
+        
+        if (ndxChildrenOutType == "TEXT") {
+            ndxChdOut = new DgOutNdxChildrenFile(ndxChildrenOutFileName, dgg,
+                                                 op.dggOp.chdDgg(), ((outSeqNum || useEnumLbl) ? NULL : pOutRF),
+                                                     pChdOutRF, "ndxChd");
+        }
+        
+        if (ndxParentOutType == "TEXT") {
+            ndxPrtOut = new DgOutNdxParentFile(ndxParentOutFileName, dgg,
+                                               op.dggOp.ndxPrtDgg(), ((outSeqNum || useEnumLbl) ? NULL : pOutRF),
+                                                   pNdxPrtOutRF, ndxHierIDGGS, "ndxPrt");
+        }
+    }
 
    return 0;
 

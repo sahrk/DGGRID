@@ -35,10 +35,11 @@ DgOutNdxParentFile::DgOutNdxParentFile (const string& fileName,
                         const DgIDGGBase& ndxPrtDgg,
                         const DgRFBase* outRF,
                         const DgRFBase* ndxPrtOutRF,
+                        const DgNdxHierIDGGS* ndxHierIDGGS,
                         const string& suffix,
                         DgReportLevel failLevel)
    : DgOutputStream (fileName, suffix, failLevel), dgg_ (dgg), ndxPrtDgg_ (ndxPrtDgg),
-                     outRF_ (outRF), ndxPrtOutRF_ (ndxPrtOutRF)
+                     outRF_ (outRF), ndxPrtOutRF_ (ndxPrtOutRF), ndxHierIDGGS_(ndxHierIDGGS)
 {
 
 } // DgOutNdxParentFile::DgOutNdxParentFile
@@ -51,7 +52,24 @@ DgOutNdxParentFile::insert (const DgLocation& center, DgLocation& parent)
 //cout << " dgg: " << dgg << endl;
 //cout << " center: " << center << endl;
 //cout << " parent: " << parent << endl;
-
+/*
+ if (!outRF_) { // indicates seqnum output
+    unsigned long long int sn = dgg_.bndRF().seqNum(center);
+    *this << sn;
+    for (int i = 0; i < vec.size(); i++) {
+       DgLocation tmpLoc(vec[i]);
+       chdDgg_.convert(&tmpLoc);
+       *this << " " << chdDgg_.bndRF().seqNum(tmpLoc);
+    }
+ } else {
+    DgLocation tmpLoc(center);
+    outRF_->convert(&tmpLoc);
+    *this << tmpLoc.asString(' ');
+    chdOutRF_->convert(&vec);
+    for (int i = 0; i < vec.size(); i++)
+       *this << " " << vec[i].asString(' ');
+ }
+ */
    if (!outRF_) { // indicates seqnum output
       unsigned long long int sn = dgg_.bndRF().seqNum(center);
       *this << sn;

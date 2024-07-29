@@ -52,6 +52,7 @@ struct SubOpDGG : public SubOpBasic {
    const DgGeoSphDegRF& deg    (void) { return *_pDeg; }
    const DgIDGGBase&    chdDgg (void) { return *_pChdDgg; }
    const DgGeoSphDegRF& chdDeg (void) { return *_pChdDeg; }
+   // note the indexing children use the same DGG as the spatial children
    const DgIDGGBase&    ndxPrtDgg (void) { return *_pNdxPrtDgg; }
    const DgGeoSphDegRF& ndxPrtDeg (void) { return *_pNdxPrtDeg; }
 
