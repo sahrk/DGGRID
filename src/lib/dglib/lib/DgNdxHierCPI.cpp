@@ -28,7 +28,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-// parent is always center cell at next coarser resolution
+// by default parent is center cell at next coarser resolution
 void
 DgNdxHierCPI::setAddNdxParent (const DgResAdd<DgQ2DICoord>& add,
                                    DgLocation& parent) const
@@ -60,7 +60,7 @@ DgNdxHierCPI::setAddNdxChildren (const DgResAdd<DgQ2DICoord>& add,
 
    const DgQ2DICoord& centerAdd = *dggch.getAddress(*centerLoc);
    delete centerLoc;
-    centerLoc = nullptr;
+   centerLoc = nullptr;
 
    DgLocVector neighbors;
    dggch.setAddNeighbors(centerAdd, neighbors);
