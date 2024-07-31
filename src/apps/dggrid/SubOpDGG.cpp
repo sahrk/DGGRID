@@ -71,7 +71,8 @@ SubOpDGG::addressTypeToRF (DgAddressType type, const DgRFBase** rf,
    if (forceRes >= 0) {
       dgg = &dggs().idggBase(forceRes);
       chdDgg = &dggs().idggBase(forceRes + 1);
-      ndxPrtDgg = &dggs().idggBase(forceRes - 1);
+      if (forceRes > 0)
+         ndxPrtDgg = &dggs().idggBase(forceRes - 1);
    }
 
    bool seqNum = false;
@@ -600,10 +601,15 @@ SubOpDGG::executeOp (void) {
 
    // child dgg
    _pChdDgg = &dggs().idggBase(actualRes + 1);
+    
+   // parent dgg (for hierarchical indexing)
+    _pNdxPrtDgg = ((actualRes > 0) ? &dggs().idggBase(actualRes - 1) : nullptr);
 
    // set-up to convert to degrees
    _pDeg = DgGeoSphDegRF::makeRF(geoRF(), _pGeoRF->name() + "Deg");
    _pChdDeg = DgGeoSphDegRF::makeRF(_pChdDgg->geoRF(), _pChdDgg->geoRF().name() + "Deg");
+   if (_pNdxPrtDgg)
+       _pNdxPrtDeg = DgGeoSphDegRF::makeRF(_pNdxPrtDgg->geoRF(), _pNdxPrtDgg->geoRF().name() + "Deg");
 
    return 0;
 
