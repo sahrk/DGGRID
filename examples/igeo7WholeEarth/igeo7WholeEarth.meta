@@ -13,6 +13,7 @@ dggs_res_spec 3
 # specify the output
 # igeo7 DGGS preset has Z7 for input and output
 # and sets output_cell_label_type to OUTPUT_ADDRESS_TYPE
+output_address_type Z7_STRING
 cell_output_type KML
 cell_output_file_name outputfiles/igeo7cells
 point_output_type KML
