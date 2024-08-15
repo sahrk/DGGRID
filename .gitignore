@@ -59,6 +59,7 @@ junk
 .*.swp
 .DS_Store
 .gdb_history
+docs
 
 .idea/
 cmake-build-debug/
