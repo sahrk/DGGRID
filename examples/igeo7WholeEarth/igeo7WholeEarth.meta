@@ -8,19 +8,21 @@ dggrid_operation GENERATE_GRID
 
 # specify the DGG
 dggs_type IGEO7
-dggs_res_spec 3
+dggs_res_spec 1
 
 # specify the output
 # igeo7 DGGS preset has Z7 for input and output
 # and sets output_cell_label_type to OUTPUT_ADDRESS_TYPE
+output_address_type Z7_STRING
 cell_output_type KML
-cell_output_file_name outputfiles/igeo7cells
+cell_output_file_name outputfiles/igeo7cells.1
 point_output_type KML
-point_output_file_name outputfiles/igeo7pts
+point_output_file_name outputfiles/igeo7pts.1
+
 densification 0
 precision 6
 kml_default_color ffff0000
-kml_name igeo7 Res 3
+kml_name igeo7 Res 1
 kml_description www.discreteglobalgrids.org
 kml_default_width 3
 
