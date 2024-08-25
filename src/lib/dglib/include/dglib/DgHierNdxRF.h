@@ -41,16 +41,17 @@ template <class T> class DgHierNdxCoord : public DgHierNdxCoordBase {
       // this should be initialized in the instantiated class
       static const DgHierNdxCoord<T> undefCoordTyped;
 
+/*
       DgHierNdxCoord<T> (void)
          { *this = undefCoordTyped; }
 
       DgHierNdxCoord<T> (const DgHierNdxCoord<T>& coord)
          { *this = coord; }
-
+*/
       DgHierNdxCoord (T valIn) : value_ (valIn) { }
 
       DgHierNdxCoord<T> (const DgHierNdxCoord<T>& coord = undefCoordTyped)
-         DgHierNdxCoordBase (coord) { }
+         { *this = coord; }
 
       void setValue (T value) { value_ = value; }
 
@@ -98,7 +99,7 @@ template <class T> class DgHierNdxRF : public DgHierNdxRFBase {
              if (!cTyped) {
                 *c = c->undefCoord();
                 return str;
-             else {
+             } else {
                 return str2addTyped(cTyped, str, delimiter); 
              }
          }
@@ -110,8 +111,9 @@ template <class T> class DgHierNdxRF : public DgHierNdxRFBase {
                             { return undefCoordTyped(); }
 
       // method to be defined by sub-classes
+      // given a dummy implementation here so the class isn't abstract
       virtual const char* str2addTyped (DgHierNdxCoord<T>* add, const char* str,
-                                   char delimiter) const = 0;
+                                   char delimiter) const { return str; }
 
    protected:
 
