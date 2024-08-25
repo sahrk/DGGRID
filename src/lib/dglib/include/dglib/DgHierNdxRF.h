@@ -34,7 +34,7 @@ using namespace std;
 
 ////////////////////////////////////////////////////////////////////////////////
 //
-template <class T> class DgHierNdxCoord<T> : public DgHierNdxCoordBase {
+template <class T> class DgHierNdxCoord : public DgHierNdxCoordBase {
 
    public:
 
@@ -74,8 +74,9 @@ template <class T> class DgHierNdxCoord<T> : public DgHierNdxCoordBase {
       virtual const DgHierNdxCoordBase& undefCoord (void) const
           { return undefCoordTyped; }
 
-      // method for sub-classes to define
-      virtual string valString (void) const = 0;
+      // sub-classes need to define this method
+      // it has a dummy definition from the Base class
+      //virtual string valString (void) const;
 
    private:
 
@@ -83,7 +84,7 @@ template <class T> class DgHierNdxCoord<T> : public DgHierNdxCoordBase {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-template <class T> class DgHierNdxRF<T> : public DgHierNdxRFBase {
+template <class T> class DgHierNdxRF : public DgHierNdxRFBase {
 
    public:
 

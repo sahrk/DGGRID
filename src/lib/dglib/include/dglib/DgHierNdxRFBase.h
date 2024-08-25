@@ -28,13 +28,14 @@
 #include <climits>
 #include <iostream>
 
+#include <dglib/DgDiscRF.h>
+#include <dglib/DgIDGGBase.h>
+
 #include <dglib/DgConverter.h>
 #include <dglib/Dg2WayConverter.h>
 
-class DgHierNdxCoordBase;
-class DgZOrderStringCoord;
-class DgIDGGBase;
-class DgHierNdxCoordBase;
+//class DgIDGGBase;
+class DgGeoCoord;
 
 using namespace std;
 
@@ -54,10 +55,11 @@ class DgHierNdxCoordBase  {
           { return !(*this == c); }
 
       // to be defined by sub-classes
-      virtual string valString (void) const = 0;
-      virtual bool operator== (const DgHierNdxCoordBase& c) const = 0;
-      virtual DgHierNdxCoordBase& operator= (const DgHierNdxCoordBase& add) = 0;
-      virtual const DgHierNdxCoordBase& undefCoord (void) const = 0;
+      // we give them dummy definitions here so the class isn't abstract
+      virtual string valString (void) const { return ""; }
+      virtual bool operator== (const DgHierNdxCoordBase& c) const { return false; }
+      virtual DgHierNdxCoordBase& operator= (const DgHierNdxCoordBase& add) { return *this; } 
+      virtual const DgHierNdxCoordBase& undefCoord (void) const { return *this; }
 
 };
 
@@ -67,15 +69,12 @@ operator<< (ostream& stream, const DgHierNdxCoordBase& coord)
 { return stream << string(coord); }
 
 ////////////////////////////////////////////////////////////////////////////////
-class DgHierNdxRFBase : public DgDiscRF<DgHierNdxCoordBase, long long int> {
+//class DgHierNdxRFBase : public DgDiscRF<DgHierNdxCoordBase, DgQ2DICoord, long long int> {
+class DgHierNdxRFBase : public DgDiscRF<DgHierNdxCoordBase, DgQ2DICoord, long long int> {
 
    //using DgDiscRF<DgQ2DICoord, DgGeoCoord, long double>::setVertices;
 
    public:
-
-      static DgHierNdxRFBase* makeRF (const DgIDGGBase& dggIn, const string& nameIn,
-                                      int resIn, int apertureIn)
-         { return new DgHierNdxRFBase (dggIn, nameIn, resIn, apertureIn); }
 
       virtual ~DgHierNdxRFBase (void);
 
@@ -112,9 +111,12 @@ class DgHierNdxRFBase : public DgDiscRF<DgHierNdxCoordBase, long long int> {
    protected:
 
       DgHierNdxRFBase (const DgIDGGBase& dggIn, const string& nameIn,
-                       int resIn, int apertureIn)
-         : DgDiscRF<DgHierNdxCoordBase, long long int>(dggIn.network(), nameIn),
+                       int resIn, int apertureIn);
+/*
+         : DgDiscRF<DgHierNdxCoordBase, DgQ2DICoord, long long int>(dggIn.network(), 
+                       dggIn, nameIn, dggIn.gridTopo(), dggIn.gridMetric()),
            dgg_ (dggIn), res_ (resIn), aperture_ (apertureIn) { }
+*/
 
       const DgIDGGBase& dgg_;
       int res_;
