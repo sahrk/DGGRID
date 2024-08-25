@@ -39,6 +39,8 @@ add_library(dglib
   lib/DgHexGrid2DS.cpp
   lib/DgHexIDGG.cpp
   lib/DgHexIDGGS.cpp
+  lib/DgHierNdxIntRF.cpp
+  lib/DgHierNdxRFBase.cpp
   lib/DgIcosaMap.cpp
   lib/DgIDGGBase.cpp
   lib/DgIDGG.cpp
@@ -111,6 +113,7 @@ add_library(dglib
   lib/DgZ7StringRF.cpp
   lib/DgZOrderRF.cpp
   lib/DgZOrderStringRF.cpp
+  lib/DgZXRF.cpp
   include/dglib/Dg2WayConverter.h
   include/dglib/DgAddress.h
   include/dglib/DgAddressBase.h
@@ -160,6 +163,9 @@ add_library(dglib
   include/dglib/DgHexGrid2DS.h
   include/dglib/DgHexIDGG.h
   include/dglib/DgHexIDGGS.h
+  include/dglib/DgHierNdxIntRF.h
+  include/dglib/DgHierNdxRF.h
+  include/dglib/DgHierNdxRFBase.h
   include/dglib/DgIDGG.h
   include/dglib/DgIDGGBase.h
   include/dglib/DgIDGGS.h
@@ -242,6 +248,7 @@ add_library(dglib
   include/dglib/DgZ7StringRF.h
   include/dglib/DgZOrderRF.h
   include/dglib/DgZOrderStringRF.h
+  include/dglib/DgZXRF.h
 )
 
 if(GDAL_FOUND)
