@@ -72,7 +72,8 @@ template <class T> class DgHierNdxCoord : public DgHierNdxCoordBase {
              return *this;
           }
 
-      virtual const DgHierNdxCoordBase& undefCoord (void) const
+      // from DgDiscRF
+      virtual const DgHierNdxCoordBase& undefAddress (void) const
           { return undefCoordTyped; }
 
       // sub-classes need to define this method
@@ -95,7 +96,7 @@ template <class T> class DgHierNdxRF : public DgHierNdxRFBase {
 
       virtual const char* str2add (DgHierNdxCoordBase* c, const char* str,
                                    char delimiter) const {
-             DgHierNdxCoord<T>* cTyped = dynamic_cast<DgHierNdxCoord<T>*>(&c);
+          DgHierNdxCoord<T>* cTyped = dynamic_cast<DgHierNdxCoord<T>*>(c);
              if (!cTyped) {
                 *c = c->undefCoord();
                 return str;

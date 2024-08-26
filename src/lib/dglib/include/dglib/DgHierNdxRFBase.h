@@ -58,9 +58,9 @@ class DgHierNdxCoordBase  {
       // we give them dummy definitions here so the class isn't abstract
       virtual string valString (void) const { return ""; }
       virtual bool operator== (const DgHierNdxCoordBase& c) const { return false; }
-      virtual DgHierNdxCoordBase& operator= (const DgHierNdxCoordBase& add) { return *this; } 
+      virtual DgHierNdxCoordBase& operator= (const DgHierNdxCoordBase& add)
+                { return *this; }
       virtual const DgHierNdxCoordBase& undefCoord (void) const { return *this; }
-
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -69,10 +69,7 @@ operator<< (ostream& stream, const DgHierNdxCoordBase& coord)
 { return stream << string(coord); }
 
 ////////////////////////////////////////////////////////////////////////////////
-//class DgHierNdxRFBase : public DgDiscRF<DgHierNdxCoordBase, DgQ2DICoord, long long int> {
 class DgHierNdxRFBase : public DgDiscRF<DgHierNdxCoordBase, DgQ2DICoord, long long int> {
-
-   //using DgDiscRF<DgQ2DICoord, DgGeoCoord, long double>::setVertices;
 
    public:
 
@@ -106,7 +103,19 @@ class DgHierNdxRFBase : public DgDiscRF<DgHierNdxCoordBase, DgQ2DICoord, long lo
       // methods for sub-classes to define
       virtual const char* str2add (DgHierNdxCoordBase* add, const char* str,
                                    char delimiter) const = 0;
-      virtual const DgHierNdxCoordBase& undefCoord (void) const = 0;
+
+      // from DgDiscRF
+      //virtual const DgHierNdxCoordBase& undefAddress (void) const = 0;
+
+      // these are given dummy definitions for now, but should be moved down
+      virtual DgHierNdxCoordBase quantify (const DgQ2DICoord& point) const
+                { return undefAdress(); }
+      virtual DgQ2DICoord invQuantify (const DgHierNdxCoordBase& add) const
+                { return DgQ2DICoord::undefDgQ2DICoord; }
+
+      // these should use the associated dgg
+      virtual void setAddNeighbors (const DgHierNdxCoordBase& add, DgLocVector& vec) const { }
+      virtual void setAddVertices  (const DgHierNdxCoordBase& add, DgPolygon& vec) const { }
 
    protected:
 

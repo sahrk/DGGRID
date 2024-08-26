@@ -51,7 +51,7 @@ class DgHierNdxIntRF : public DgHierNdxRF<HIERNDX_INT_TYPE> {
 
       static DgHierNdxIntRF* makeRF (const DgIDGGBase& dggIn, const string& nameIn,
                                   int resIn, int apertureIn)
-         { return new DgHierNdxRF<HIERNDX_INT_TYPE>(dggIn, nameIn, resIn, apertureIn); }
+         { return new DgHierNdxIntRF(dggIn, nameIn, resIn, apertureIn); }
 
       // method to be defined by sub-classes
       // virtual const char* str2addTyped (DgHierNdxCoord<HIERNDX_INT_TYPE>* add, const char* str,
