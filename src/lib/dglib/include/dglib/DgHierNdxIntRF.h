@@ -32,37 +32,36 @@
 
 using namespace std;
 
+#define HIERNDX_INT_TYPE uint64_t
+
 ////////////////////////////////////////////////////////////////////////////////
 //
-class DgHierNdxIntCoord : public DgHierNdxCoord<uint64_t> {
+class DgHierNdxIntCoord : public DgHierNdxCoord<HIERNDX_INT_TYPE> {
 
    public:
 
-      DgHierNdxIntCoord (void)
-         { *this = undefCoordTyped; }
-
       // method for sub-classes to define
-      virtual string valString (void) const = 0;
+      // virtual string valString (void) const;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-class DgHierNdxIntRF : public DgHierNdxRF<uint64_t> {
+class DgHierNdxIntRF : public DgHierNdxRF<HIERNDX_INT_TYPE> {
 
    public:
 
       static DgHierNdxIntRF* makeRF (const DgIDGGBase& dggIn, const string& nameIn,
                                   int resIn, int apertureIn)
-         { return new DgHierNdxRF<uint64_t>(dggIn, nameIn, resIn, apertureIn); }
+         { return new DgHierNdxRF<HIERNDX_INT_TYPE>(dggIn, nameIn, resIn, apertureIn); }
 
       // method to be defined by sub-classes
-      virtual const char* str2addTyped (DgHierNdxCoord<T>* add, const char* str,
-                                   char delimiter) const = 0;
+      // virtual const char* str2addTyped (DgHierNdxCoord<HIERNDX_INT_TYPE>* add, const char* str,
+      //                             char delimiter) const;
 
    protected:
 
       DgHierNdxIntRF (const DgIDGGBase& dggIn, const string& nameIn,
                     int resIn, int apertureIn)
-         : DgHierNdxRF<uint64_t>(dggIn, nameIn, resIn, apertureIn) { }
+         : DgHierNdxRF<HIERNDX_INT_TYPE>(dggIn, nameIn, resIn, apertureIn) { }
 
 };
 
