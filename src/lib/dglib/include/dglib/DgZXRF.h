@@ -46,18 +46,17 @@ class DgZXRF : public DgHierNdxIntRF {
 
    public:
 
-      static DgZXRF* makeRF (const DgIDGG& dggIn, const std::string& nameIn, 
-                             int resIn, int apertureIn)
-         { return new DgZXRF (dggIn, nameIn, resIn, apertureIn); }
+      static DgZXRF* makeRF (const DgIDGGS& dggsIn, int resIn, 
+                             const std::string& nameIn) 
+         { return new DgZXRF (dggsIn, resIn, nameIn); }
 
       virtual const char* str2addTyped (DgHierNdxCoord<uint64_t>* add, 
                                  const char* str, char delimiter) const;
 
    protected:
 
-      DgZXRF (const DgIDGG& dggIn, const std::string& nameIn, int resIn,
-              int apertureIn)
-         : DgHierNdxIntRF(dggIn, nameIn, resIn, apertureIn) { }
+      DgZXRF (const DgIDGGS& dggsIn, int resIn, const std::string& nameIn)
+         : DgHierNdxIntRF(dggsIn, resIn, nameIn) { }
 
 };
 

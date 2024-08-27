@@ -57,7 +57,7 @@ int main (int, char**)
    const DgIDGG& dgg = idggs.idgg(7);
    cout << dgg.gridStats() << endl;
 
-   DgZXRF* rfx = DgZXRF::makeRF (dgg, "ZX", 7, 7);
+   DgZXRF* rfx = DgZXRF::makeRF (idggs, 7, "ZX");
 
 /*
    //////// now use the DGG /////////

@@ -86,9 +86,9 @@ template <class T> class DgHierNdxRF : public DgHierNdxRFBase {
 
    public:
 
-      static DgHierNdxRF<T>* makeRF (const DgIDGG& dggIn, const string& nameIn,
-                                  int resIn, int apertureIn)
-         { return new DgHierNdxRF<T>(dggIn, nameIn, resIn, apertureIn); }
+      static DgHierNdxRF<T>* makeRF (const DgIDGGS& dggsIn, int resIn, 
+                                     const string& nameIn, int apertureIn)
+         { return new DgHierNdxRF<T>(dggsIn, resIn, nameIn); }
 
       virtual const char* str2add (DgHierNdxCoordBase* c, const char* str,
                                    char delimiter) const {
@@ -118,9 +118,8 @@ template <class T> class DgHierNdxRF : public DgHierNdxRFBase {
 
    protected:
 
-      DgHierNdxRF<T> (const DgIDGG& dggIn, const string& nameIn,
-                    int resIn, int apertureIn)
-         : DgHierNdxRFBase(dggIn, nameIn, resIn, apertureIn) { }
+      DgHierNdxRF<T> (const DgIDGGS& dggsIn, int resIn, const string& nameIn)
+         : DgHierNdxRFBase(dggsIn, resIn, nameIn) { }
 
 };
 

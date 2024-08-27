@@ -49,8 +49,9 @@ class DgHierNdxIntRF : public DgHierNdxRF<HIERNDX_INT_TYPE> {
 
    public:
 
-      static DgHierNdxIntRF* makeRF (const DgIDGG& dggIn, const string& nameIn, int resIn, int apertureIn)
-         { return new DgHierNdxIntRF(dggIn, nameIn, resIn, apertureIn); }
+      static DgHierNdxIntRF* makeRF (const DgIDGGS& dggsIn, int resIn, 
+                                     const string& nameIn)
+         { return new DgHierNdxIntRF(dggsIn, resIn, nameIn); }
 
       // method to be defined by sub-classes
       // virtual const char* str2addTyped (DgHierNdxCoord<HIERNDX_INT_TYPE>* add, const char* str,
@@ -58,9 +59,8 @@ class DgHierNdxIntRF : public DgHierNdxRF<HIERNDX_INT_TYPE> {
 
    protected:
 
-      DgHierNdxIntRF (const DgIDGG& dggIn, const string& nameIn,
-                    int resIn, int apertureIn)
-         : DgHierNdxRF<HIERNDX_INT_TYPE>(dggIn, nameIn, resIn, apertureIn) { }
+      DgHierNdxIntRF (const DgIDGGS& dggsIn, int resIn, const string& nameIn)
+         : DgHierNdxRF<HIERNDX_INT_TYPE>(dggsIn, resIn, nameIn) { }
 
 };
 
