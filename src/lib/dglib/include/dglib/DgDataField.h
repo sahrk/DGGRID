@@ -146,7 +146,7 @@ class DgDataFieldInt64 : public DgDataField<int64_t> {
 
    public:
 
-      DgDataFieldInt64 (string _name, int _value = 0.0)
+      DgDataFieldInt64 (string _name, int64_t _value = 0)
          : DgDataField<int64_t> (_name, FIELD_INT64, _value)
       { }
 

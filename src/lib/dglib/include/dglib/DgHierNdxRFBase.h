@@ -109,7 +109,7 @@ class DgHierNdxRFBase : public DgDiscRF<DgHierNdxCoordBase, DgQ2DICoord, long lo
 
       // these are given dummy definitions for now, but should be moved down
       virtual DgHierNdxCoordBase quantify (const DgQ2DICoord& point) const
-                { return undefAdress(); }
+                { return undefAddress(); }
       virtual DgQ2DICoord invQuantify (const DgHierNdxCoordBase& add) const
                 { return DgQ2DICoord::undefDgQ2DICoord; }
 
@@ -120,12 +120,10 @@ class DgHierNdxRFBase : public DgDiscRF<DgHierNdxCoordBase, DgQ2DICoord, long lo
    protected:
 
       DgHierNdxRFBase (const DgIDGGBase& dggIn, const string& nameIn,
-                       int resIn, int apertureIn);
-/*
+                       int resIn, int apertureIn)
          : DgDiscRF<DgHierNdxCoordBase, DgQ2DICoord, long long int>(dggIn.network(), 
                        dggIn, nameIn, dggIn.gridTopo(), dggIn.gridMetric()),
            dgg_ (dggIn), res_ (resIn), aperture_ (apertureIn) { }
-*/
 
       const DgIDGGBase& dgg_;
       int res_;

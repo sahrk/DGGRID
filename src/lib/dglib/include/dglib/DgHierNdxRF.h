@@ -72,10 +72,6 @@ template <class T> class DgHierNdxCoord : public DgHierNdxCoordBase {
              return *this;
           }
 
-      // from DgDiscRF
-      virtual const DgHierNdxCoordBase& undefAddress (void) const
-          { return undefCoordTyped; }
-
       // sub-classes need to define this method
       // it has a dummy definition from the Base class
       //virtual string valString (void) const;
@@ -116,6 +112,10 @@ template <class T> class DgHierNdxRF : public DgHierNdxRFBase {
       virtual const char* str2addTyped (DgHierNdxCoord<T>* add, const char* str,
                                    char delimiter) const { return str; }
 
+      // from DgDiscRF
+      virtual const DgHierNdxCoordBase& undefAddress (void) const
+          { return DgHierNdxCoord<T>::undefCoordTyped; }
+
    protected:
 
       DgHierNdxRF<T> (const DgIDGGBase& dggIn, const string& nameIn,
@@ -123,6 +123,9 @@ template <class T> class DgHierNdxRF : public DgHierNdxRFBase {
          : DgHierNdxRFBase(dggIn, nameIn, resIn, apertureIn) { }
 
 };
+
+// the actual value will be defined by the specializations
+template<typename T> const DgHierNdxCoord<T> DgHierNdxCoord<T>::undefCoordTyped;
 
 ////////////////////////////////////////////////////////////////////////////////
 #endif

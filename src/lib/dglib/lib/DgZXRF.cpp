@@ -48,7 +48,7 @@ DgZXCoord::valString (void) const
 {
    const int maxStrSize = 17; // max 16 digits plus 1 for the null terminator
    char str[maxStrSize];
-   snprintf(str, maxStrSize, "%016" PRIx64, value_);
+   snprintf(str, maxStrSize, "%016" PRIx64, value());
 
    return string(str);
 
