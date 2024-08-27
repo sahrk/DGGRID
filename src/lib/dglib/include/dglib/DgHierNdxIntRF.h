@@ -49,7 +49,7 @@ class DgHierNdxIntRF : public DgHierNdxRF<HIERNDX_INT_TYPE> {
 
    public:
 
-      static DgHierNdxIntRF* makeRF (const DgIDGGBase& dggIn, const string& nameIn, int resIn, int apertureIn)
+      static DgHierNdxIntRF* makeRF (const DgIDGG& dggIn, const string& nameIn, int resIn, int apertureIn)
          { return new DgHierNdxIntRF(dggIn, nameIn, resIn, apertureIn); }
 
       // method to be defined by sub-classes
@@ -58,7 +58,7 @@ class DgHierNdxIntRF : public DgHierNdxRF<HIERNDX_INT_TYPE> {
 
    protected:
 
-      DgHierNdxIntRF (const DgIDGGBase& dggIn, const string& nameIn,
+      DgHierNdxIntRF (const DgIDGG& dggIn, const string& nameIn,
                     int resIn, int apertureIn)
          : DgHierNdxRF<HIERNDX_INT_TYPE>(dggIn, nameIn, resIn, apertureIn) { }
 

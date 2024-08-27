@@ -46,7 +46,7 @@ class DgZXRF : public DgHierNdxIntRF {
 
    public:
 
-      static DgZXRF* makeRF (const DgIDGGBase& dggIn, const std::string& nameIn, 
+      static DgZXRF* makeRF (const DgIDGG& dggIn, const std::string& nameIn, 
                              int resIn, int apertureIn)
          { return new DgZXRF (dggIn, nameIn, resIn, apertureIn); }
 
@@ -55,7 +55,7 @@ class DgZXRF : public DgHierNdxIntRF {
 
    protected:
 
-      DgZXRF (const DgIDGGBase& dggIn, const std::string& nameIn, int resIn,
+      DgZXRF (const DgIDGG& dggIn, const std::string& nameIn, int resIn,
               int apertureIn)
          : DgHierNdxIntRF(dggIn, nameIn, resIn, apertureIn) { }
 

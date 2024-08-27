@@ -86,7 +86,7 @@ template <class T> class DgHierNdxRF : public DgHierNdxRFBase {
 
    public:
 
-      static DgHierNdxRF<T>* makeRF (const DgIDGGBase& dggIn, const string& nameIn,
+      static DgHierNdxRF<T>* makeRF (const DgIDGG& dggIn, const string& nameIn,
                                   int resIn, int apertureIn)
          { return new DgHierNdxRF<T>(dggIn, nameIn, resIn, apertureIn); }
 
@@ -118,7 +118,7 @@ template <class T> class DgHierNdxRF : public DgHierNdxRFBase {
 
    protected:
 
-      DgHierNdxRF<T> (const DgIDGGBase& dggIn, const string& nameIn,
+      DgHierNdxRF<T> (const DgIDGG& dggIn, const string& nameIn,
                     int resIn, int apertureIn)
          : DgHierNdxRFBase(dggIn, nameIn, resIn, apertureIn) { }
 

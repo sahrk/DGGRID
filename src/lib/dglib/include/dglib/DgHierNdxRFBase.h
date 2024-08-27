@@ -29,12 +29,11 @@
 #include <iostream>
 
 #include <dglib/DgDiscRF.h>
-#include <dglib/DgIDGGBase.h>
+#include <dglib/DgIDGG.h>
 
 #include <dglib/DgConverter.h>
 #include <dglib/Dg2WayConverter.h>
 
-//class DgIDGGBase;
 class DgGeoCoord;
 
 using namespace std;
@@ -75,7 +74,8 @@ class DgHierNdxRFBase : public DgDiscRF<DgHierNdxCoordBase, DgQ2DICoord, long lo
 
       virtual ~DgHierNdxRFBase (void);
 
-      const DgIDGGBase& dgg (void) { return dgg_; }
+      //const DgIDGGSBase& dggs (void) { return dggs_; }
+      const DgIDGG& dgg (void) { return dgg_; }
 
       int res      (void) const { return res_; }
       int aperture (void) const { return aperture_; }
@@ -119,13 +119,13 @@ class DgHierNdxRFBase : public DgDiscRF<DgHierNdxCoordBase, DgQ2DICoord, long lo
 
    protected:
 
-      DgHierNdxRFBase (const DgIDGGBase& dggIn, const string& nameIn,
+      DgHierNdxRFBase (const DgIDGG& dggIn, const string& nameIn,
                        int resIn, int apertureIn)
          : DgDiscRF<DgHierNdxCoordBase, DgQ2DICoord, long long int>(dggIn.network(), 
                        dggIn, nameIn, dggIn.gridTopo(), dggIn.gridMetric()),
            dgg_ (dggIn), res_ (resIn), aperture_ (apertureIn) { }
 
-      const DgIDGGBase& dgg_;
+      const DgIDGG& dgg_;
       int res_;
       int aperture_;
 
