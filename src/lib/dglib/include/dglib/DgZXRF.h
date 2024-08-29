@@ -33,25 +33,17 @@
 //using namespace std;
 
 ////////////////////////////////////////////////////////////////////////////////
-//
-class DgZXCoord : public DgHierNdxIntCoord {
-
-   public:
-
-      virtual string valString (void) const;
-};
-
-////////////////////////////////////////////////////////////////////////////////
 class DgZXRF : public DgHierNdxIntRF {
 
    public:
 
       static DgZXRF* makeRF (const DgIDGGS& dggsIn, int resIn, 
-                             const std::string& nameIn) 
+                             const std::string& nameIn = "ZXRF") 
          { return new DgZXRF (dggsIn, resIn, nameIn); }
 
-      virtual const char* str2addTyped (DgHierNdxCoord<uint64_t>* add, 
-                                 const char* str, char delimiter) const;
+      // methods from above
+      virtual INT_NDX_TYPE quantify (const DgQ2DICoord& point) const;
+      virtual DgQ2DICoord invQuantify (const INT_NDX_TYPE& add) const;
 
    protected:
 

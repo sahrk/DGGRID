@@ -32,27 +32,19 @@
 #include <dglib/DgZXRF.h>
 
 ////////////////////////////////////////////////////////////////////////////////
-//const DgZXCoord DgZXCoord::undefDgZXCoord(0xffffffffffffffff);
+INT_NDX_TYPE 
+DgZXRF::quantify (const DgQ2DICoord& point) const
+{
+   return undefAddress();
+}
 
 ////////////////////////////////////////////////////////////////////////////////
-const char*
-DgZXRF::str2addTyped (DgHierNdxCoord<uint64_t>* add, const char* str, char delimiter) const
+DgQ2DICoord 
+DgZXRF::invQuantify (const INT_NDX_TYPE& add) const
 {
-   return str;
-
-} // const char* DgZXRF::str2addTyped
-
-////////////////////////////////////////////////////////////////////////////////
-string
-DgZXCoord::valString (void) const
-{
-   const int maxStrSize = 17; // max 16 digits plus 1 for the null terminator
-   char str[maxStrSize];
-   snprintf(str, maxStrSize, "%016" PRIx64, value());
-
-   return string(str);
-
-} // const string& DgZXRF::valString
+   DgQ2DICoord c;
+   return c;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

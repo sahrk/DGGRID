@@ -22,12 +22,58 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#define __STDC_FORMAT_MACROS
+#include <inttypes.h>
+#include <climits>
 #include <cstdint>
 
 #include <dglib/DgHierNdxIntRF.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 
-template<> const DgHierNdxCoord<uint64_t> DgHierNdxCoord<uint64_t>::undefCoordTyped(UINT64_MAX);
+template<> const INT_NDX_TYPE DgHierNdxRF<INT_NDX_TYPE>::undefCoord = UINT64_MAX;
+
+////////////////////////////////////////////////////////////////////////////////
+string 
+DgHierNdxIntRF::add2str (const INT_NDX_TYPE& add) const
+// default is hexadecimal
+{
+   const int maxStrSize = 17; // max 16 digits plus 1 for the null terminator
+   char str[maxStrSize];
+   snprintf(str, maxStrSize, "%016" PRIx64, add);
+
+   return string(str);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+const char* 
+DgHierNdxIntRF::str2add (INT_NDX_TYPE* add, const char* str, 
+       char delimiter) const
+// default is hexadecimal
+{
+   char delimStr[2];
+   delimStr[0] = delimiter;
+   delimStr[1] = '\0';
+
+   char* tmpStr = new char[strlen(str) + 1];
+   strcpy(tmpStr, str);
+   char* tok = strtok(tmpStr, delimStr);
+
+   // convert to a unit64_t
+   uint64_t val = 0;
+   if (!sscanf(tok, "%" PRIx64, &val))
+      report("DgHierNdxRF<INT_NDX_TYPE>::str2add(): invalid Z7 index", DgBase::Fatal);
+
+   if (!add) add = new INT_NDX_TYPE;
+   *add = val;
+
+   unsigned long offset = strlen(tok) + 1;
+   delete[] tmpStr;
+   if (offset >= strlen(str)) return 0;
+   else return &str[offset];
+}
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////
