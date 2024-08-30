@@ -40,7 +40,7 @@ add_library(dglib
   lib/DgHexIDGG.cpp
   lib/DgHexIDGGS.cpp
   lib/DgHierNdxIntRF.cpp
-  lib/DgHierNdxRFBase.cpp
+  lib/DgHierNdxSystem.cpp
   lib/DgIcosaMap.cpp
   lib/DgIDGGBase.cpp
   lib/DgIDGG.cpp
@@ -165,7 +165,7 @@ add_library(dglib
   include/dglib/DgHexIDGGS.h
   include/dglib/DgHierNdxIntRF.h
   include/dglib/DgHierNdxRF.h
-  include/dglib/DgHierNdxRFBase.h
+  include/dglib/DgHierNdxSystem.h
   include/dglib/DgIDGG.h
   include/dglib/DgIDGGBase.h
   include/dglib/DgIDGGS.h

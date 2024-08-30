@@ -31,6 +31,7 @@
 #include <dglib/DgDiscRF.h>
 #include <dglib/DgIDGGS.h>
 #include <dglib/DgIDGG.h>
+#include <dglib/DgHierNdxSystem.h>
 
 using namespace std;
 
@@ -48,13 +49,13 @@ template <class T> class DgHierNdxRF :
                                      const string& nameIn)
          { return new DgHierNdxRF<T>(dggsIn, resIn, nameIn); }
 
-      //virtual ~DgHierNdxRF<T> (void);
+      const DgHierNdxSystem& system (void) { return sys_; }
 
-      const DgIDGGS& dggs (void) { return dggs_; }
-      const DgIDGG& dgg (void) { return dgg_; }
+      const DgIDGGS& dggs (void) { return sys.dggs(); }
+      const DgIDGG& dgg (void) { return sys.dgg(); }
 
-      int res      (void) const { return res_; }
-      int aperture (void) const { return aperture_; }
+      int res      (void) const { return sys.res(); }
+      int aperture (void) const { return sys.aperture(); }
 
       // indexes don't typically use delimiters
       virtual string add2str (const T& add, char delimiter) const
@@ -86,15 +87,13 @@ template <class T> class DgHierNdxRF :
 
    protected:
 
-      DgHierNdxRF<T> (const DgIDGGS& dggsIn, int resIn, const string& nameIn)
+      DgHierNdxRF<T> (const DgHierNdxSystem& sysIn, const DgIDGGS& dggsIn, int resIn, 
+                       const string& nameIn)
          : DgDiscRF<T, DgQ2DICoord, long long int>(dggsIn.network(), 
                        dggsIn.idgg(resIn), nameIn, dggsIn.gridTopo(), dggsIn.gridMetric()),
-           dggs_ (dggsIn), dgg_ (dggsIn.idgg(resIn)), res_ (resIn), aperture_ (dggsIn.aperture()) { }
+           sys_ (sysIn) { }
 
-      const DgIDGGS& dggs_;
-      const DgIDGG& dgg_;
-      int res_;
-      int aperture_;
+      const DgHierNdxSystem& sys_;
 };           
                 
 // the actual value should be defined by the specializations

@@ -47,4 +47,45 @@ DgZXRF::invQuantify (const INT_NDX_TYPE& add) const
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+void
+DgZXRF::setAddNdxParent (const DgResAdd<DgQ2DICoord>& add,
+                                   DgLocation& parent) const
+{
+   const DgHexIDGG& dgg = hexDggs().hexIdgg(add.res());
+   const DgHexIDGG& dggp = hexDggs().hexIdgg(add.res() - 1);
+    
+   DgLocation* centerLoc = dgg.makeLocation(add.address());
+   parent = *centerLoc;
+   delete centerLoc;
+   centerLoc = nullptr;
+   dggp.convert(&parent);
+}
+    
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+// default definition returns all 7 CPI children
+void
+DgZXRF::setAddNdxChildren (const DgResAdd<DgQ2DICoord>& add,
+                                        DgLocVector& children) const
+{
+   const DgHexIDGG& dgg = hexDggs().hexIdgg(add.res());
+   const DgHexIDGG& dggch = hexDggs().hexIdgg(add.res() + 1);
+    
+   // the neighbors of the center hex at next res
+   DgLocation* centerLoc = dgg.makeLocation(add.address());
+   dggch.convert(centerLoc);
+   children.push_back(*centerLoc);
+
+   const DgQ2DICoord& centerAdd = *dggch.getAddress(*centerLoc);
+   delete centerLoc;
+   centerLoc = nullptr;
+
+   DgLocVector neighbors;
+   dggch.setAddNeighbors(centerAdd, neighbors);
+   for (int i = 0; i < neighbors.size(); i++)
+      children.push_back(neighbors[i], true);
+
+} // void DgZXRF::setAddInteriorChildren
+
+////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
