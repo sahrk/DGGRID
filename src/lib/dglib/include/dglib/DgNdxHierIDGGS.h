@@ -27,22 +27,14 @@
 
 #include <vector>
 #include <dglib/DgIDGGSBase.h>
-#include <dglib/DgNdxHierRFS.h>
+#include <dglib/DgNdxHierIDGGSBase.h>
 
 ////////////////////////////////////////////////////////////////////////////////
-class DgNdxHierIDGGS : 
-         public DgNdxHierRFS<DgQ2DICoord, DgGeoCoord, long double> {
+template <class TINT, class TSTR> class DgNdxHierIDGGS : 
+                                     public DgNdxHierIDGGSBase {
 
    public:
     
-      const DgIDGGSBase& idggs (void) { return idggs_; }
-
-      virtual operator string (void) const
-      {
-         string s = "*** DgNdxHierIDGGS";
-         return s;
-      }
-
    protected:
 
      DgNdxHierIDGGS (const DgIDGGSBase& idggsIn)
@@ -58,6 +50,7 @@ class DgNdxHierIDGGS :
    private:
      // state data
      const DgIDGGSBase& idggs_;
+
 };
 
 #endif

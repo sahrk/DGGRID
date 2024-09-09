@@ -37,33 +37,33 @@ class DgHierNdxRFInt;
 using namespace std;
 
 ////////////////////////////////////////////////////////////////////////////////
-typedef struct {
-      const DgIDGG* dgg_;
-      const DgHierNdxRFInt* intRF_;
-} DgSystemSet;
-
 ////////////////////////////////////////////////////////////////////////////////
 class DgHierNdxSystem {
 
+   typedef struct {
+      const DgIDGG* dgg_;
+      const DgHierNdxRFInt* intRF_;
+   } DgSystemSet;
+
    public:
 
-      const DgHierNdxRFInt& intRF (void) { return *intRF; }
-
       const DgIDGGS& dggs (void) { return dggs_; }
-      const DgIDGG& dgg (void) { return dgg_; }
 
       int res      (void) const { return res_; }
       int aperture (void) const { return aperture_; }
 
+      const DgIDGG*         dgg   (void) { return curRes_.dgg_; }
+      const DgHierNdxRFInt* intRF (void) { return curRes_.intRF_; }
+
+      const DgIDGG*         pDgg   (void) { return pRes_.dgg_; }
+      const DgHierNdxRFInt* pIntRF (void) { return pRes_.intRF_; }
+
+      const DgIDGG*         chDgg   (void) { return chRes_.dgg_; }
+      const DgHierNdxRFInt* chIntRF (void) { return chRes_.intRF_; }
+
    protected:
 
-      DgHierNdxSystem (const DgIDGGS& dggsIn, int resIn, const string& nameIn)
-           dggs_ (dggsIn), res_ (resIn), aperture_ (dggsIn.aperture());
-           pRes_ {nullptr, nullptr, nullptr},
-           curRes_ {nullptr, nullptr, nullptr},
-           chRes_ {nullptr, nullptr, nullptr},
-
-//dgg_ (dggsIn.idgg(resIn)), 
+      DgHierNdxSystem (const DgIDGGS& dggsIn, int resIn, const string& nameIn);
 
       int setSystemSet (DgSystemSet& set, int res);
 

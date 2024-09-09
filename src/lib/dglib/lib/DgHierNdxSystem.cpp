@@ -27,11 +27,11 @@
 ////////////////////////////////////////////////////////////////////////////////
 DgHierNdxSystem::DgHierNdxSystem (const DgIDGGS& dggsIn, int resIn, 
                      const string& nameIn)
-   : dggs_ (dggsIn), res_ (resIn), aperture_ (dggsIn.aperture());
-     pRes_ {nullptr, nullptr, nullptr},
-     curRes_ {nullptr, nullptr, nullptr},
-     chRes_ {nullptr, nullptr, nullptr}
+   : dggs_ (dggsIn), res_ (resIn), aperture_ (dggsIn.aperture()),
+     pRes_ {nullptr, nullptr}, curRes_ {nullptr, nullptr}, 
+     chRes_ {nullptr, nullptr}
 {
+   // res is checked in setSystemSet
    setSystemSet(curRes_, res());
    setSystemSet(pRes_, res() - 1);
    setSystemSet(chRes_, res() + 1);
@@ -43,7 +43,10 @@ DgHierNdxSystem::setSystemSet (DgSystemSet& set, int resIn)
 {
    if (resIn >= 0 && resIn < dggs().nRes()) {
       set.dgg_ = dggsIn.idgg(resIn));
-      //set.intRF_ =
+      set.intRF_ = nullptr;
+   } else {
+      set.dgg_ = nullptr;
+      set.intRF_ = nullptr;
    }
 }
 

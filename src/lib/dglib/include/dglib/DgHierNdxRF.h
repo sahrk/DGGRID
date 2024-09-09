@@ -45,17 +45,26 @@ template <class T> class DgHierNdxRF :
       // this should be initialized in the instantiated class
       static const T undefCoord;
 
+      // sub-classes should create a factory method
+/*
       static DgHierNdxRF<T>* makeRF (const DgIDGGS& dggsIn, int resIn, 
                                      const string& nameIn)
-         { return new DgHierNdxRF<T>(dggsIn, resIn, nameIn); }
+         { 
+           sys_ = new DgHierNdxSystem(dggsIn, resIn, nameIn + "Sys");
+           return new DgHierNdxRF<T>(dggsIn, resIn, nameIn); 
+         }
 
-      const DgHierNdxSystem& system (void) { return sys_; }
+      static DgHierNdxRF<T>* makeRF (const DgHierNdxSystem& sysIn, const string& nameIn)
+         { return new DgHierNdxRF<T>(sysIn, nameIn); }
+*/
 
-      const DgIDGGS& dggs (void) { return sys.dggs(); }
-      const DgIDGG& dgg (void) { return sys.dgg(); }
+      const DgHierNdxSystem& system (void) { return *sys_; }
 
-      int res      (void) const { return sys.res(); }
-      int aperture (void) const { return sys.aperture(); }
+      const DgIDGGS& dggs (void) { return sys_->dggs(); }
+      const DgIDGG& dgg (void) { return sys_->dgg(); }
+
+      int res      (void) const { return sys_->res(); }
+      int aperture (void) const { return sys_->aperture(); }
 
       // indexes don't typically use delimiters
       virtual string add2str (const T& add, char delimiter) const
@@ -87,13 +96,19 @@ template <class T> class DgHierNdxRF :
 
    protected:
 
-      DgHierNdxRF<T> (const DgHierNdxSystem& sysIn, const DgIDGGS& dggsIn, int resIn, 
-                       const string& nameIn)
-         : DgDiscRF<T, DgQ2DICoord, long long int>(dggsIn.network(), 
-                       dggsIn.idgg(resIn), nameIn, dggsIn.gridTopo(), dggsIn.gridMetric()),
-           sys_ (sysIn) { }
+      DgHierNdxRF<T> (const DgHierNdxSystem& sysIn, const string& nameIn)
+         : DgDiscRF<T, DgQ2DICoord, long long int>(sysIn.dggs().network(), 
+                       sysIn.dggs().idgg(resIn), nameIn, sysIn.dggs().gridTopo(), 
+                       sysIn.dggs().gridMetric()),
+           sys_ (&sysIn) { }
 
-      const DgHierNdxSystem& sys_;
+      void initSystem (const DgIDGGS& dggsIn, int resIn, const string& nameIn)
+         { 
+           sys_ = new DgHierNdxSystem(dggsIn, resIn, nameIn + "Sys");
+         }
+
+      const DgHierNdxSystem* sys_;
+      bool ownSysMemory;
 };           
                 
 // the actual value should be defined by the specializations
