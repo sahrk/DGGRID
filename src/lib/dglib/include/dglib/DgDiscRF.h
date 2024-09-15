@@ -25,11 +25,7 @@
 #ifndef DGDISCRF_H
 #define DGDISCRF_H
 
-#include <dglib/DgGridTopo.h>
-#include <dglib/DgPolygon.h>
 #include <dglib/DgRF.h>
-
-using namespace dgg::topo;
 
 ////////////////////////////////////////////////////////////////////////////////
 template<class A, class B, class DB>
@@ -64,8 +60,7 @@ class DgDiscRF : public DgRF<A, long long int> {
                : DgConverter<A, long long int, B, DB> (fromFrame, toFrame) { }
 
             virtual B convertTypedAddress (const A& addIn) const
-             { return
-                  static_cast<const DgDiscRF<A, B, DB>&>(
+             { return static_cast<const DgDiscRF<A, B, DB>&>(
                                          this->fromFrame()).invQuantify(addIn);
 	     }
 
@@ -73,8 +68,7 @@ class DgDiscRF : public DgRF<A, long long int> {
 
       DgDiscRF& operator= (const DgDiscRF<A, B, DB>& rf)
           {
-             if (&rf != this)
-             {
+             if (&rf != this) {
                 DgRF<A, long long int>::operator=(rf);
                 backFrame_ = &rf.backFrame();
              }

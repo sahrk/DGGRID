@@ -18,7 +18,7 @@
 *******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
-// DgDiscTopoRF.h: DgDiscRF class definitions
+// DgDiscTopoRF.h: DgDiscTopoRF class definitions
 //
 // A discrete location system with a floating point backFrame, cell
 // geometry, and topology.
@@ -28,9 +28,9 @@
 #ifndef DGDISCTOPORF_H
 #define DGDISCTOPORF_H
 
+#include <dglib/DgDiscRF.h>
 #include <dglib/DgGridTopo.h>
 #include <dglib/DgPolygon.h>
-#include <dglib/DgDiscRF.h>
 
 using namespace dgg::topo;
 
@@ -190,15 +190,12 @@ class DgDiscTopoRF : public DgDiscRF<A, B, DB> {
           new DgInvQuantConverter(*this, backFrame()); }
 
       DgDiscTopoRF (const DgDiscTopoRF<A, B, DB>& rf) : DgRF<A, long long int> (rf),
-          backFrame_ (&rf.backFrame()), e_ (rf.e()), r_ (rf.r()),
-          c_ (rf.c()), area_ (rf.area()), gridTopo_ (rf.gridTopo()),
+          e_ (rf.e()), r_ (rf.r()), c_ (rf.c()), area_ (rf.area()), gridTopo_ (rf.gridTopo()),
           gridMetric_ (rf.gridMetric())
         { new DgQuantConverter(backFrame(), *this);
           new DgInvQuantConverter(*this, backFrame()); }
 
       virtual void setAddPoint (const A& add, DgLocation& pt) const;
-
- //     const DgRF<B, DB>* backFrame_;
 
       long double e_;   // edge length
       long double r_;   // radius (max center-to-vertex)
