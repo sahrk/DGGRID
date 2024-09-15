@@ -25,7 +25,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <dglib/DgDiscRF.h>
+#include <dglib/DgDiscTopoRF.h>
 #include <dglib/DgContCartRF.h>
 #include <dglib/DgDmdD4Grid2D.h>
 #include <dglib/DgDmdD4Grid2DS.h>

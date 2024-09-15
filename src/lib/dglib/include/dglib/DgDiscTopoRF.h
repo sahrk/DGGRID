@@ -18,15 +18,15 @@
 *******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
-// DgDiscRF.h: DgDiscRF class definitions
+// DgDiscTopoRF.h: DgDiscRF class definitions
 //
-// Version 7.0 - Kevin Sahr, 12/14/14
-// Version 6.1 - Kevin Sahr, 5/23/13
+// A discrete location system with a floating point backFrame, cell
+// geometry, and topology.
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef DGDISCRF_H
-#define DGDISCRF_H
+#ifndef DGDISCTOPORF_H
+#define DGDISCTOPORF_H
 
 #include <dglib/DgGridTopo.h>
 #include <dglib/DgPolygon.h>
@@ -36,7 +36,7 @@ using namespace dgg::topo;
 
 ////////////////////////////////////////////////////////////////////////////////
 template<class A, class B, class DB>
-class DgDiscRF : public DgRF<A, long long int> {
+class DgDiscTopoRF : public DgRF<A, long long int> {
 
    public:
 
@@ -45,14 +45,14 @@ class DgDiscRF : public DgRF<A, long long int> {
          public:
 
             DgQuantConverter (const DgRF<B, DB>& fromFrame,
-                              const DgDiscRF<A, B, DB>& toFrame)
+                              const DgDiscTopoRF<A, B, DB>& toFrame)
                : DgConverter<B, DB, A, long long int>
                        (static_cast< const DgRF<B, DB>& >(fromFrame),
                         static_cast< const DgRF<A, long long int>& >(toFrame)) { }
 
             virtual A convertTypedAddress (const B& addIn) const
               { return
-                   static_cast<const DgDiscRF<A, B, DB>&>(
+                   static_cast<const DgDiscTopoRF<A, B, DB>&>(
                                   this->toFrame()).quantify(addIn);
 	      }
 
@@ -62,19 +62,19 @@ class DgDiscRF : public DgRF<A, long long int> {
 
          public:
 
-            DgInvQuantConverter (const DgDiscRF<A, B, DB>& fromFrame,
+            DgInvQuantConverter (const DgDiscTopoRF<A, B, DB>& fromFrame,
                                  const DgRF<B, DB>& toFrame)
                : DgConverter<A, long long int, B, DB> (fromFrame, toFrame) { }
 
             virtual B convertTypedAddress (const A& addIn) const
              { return
-                  static_cast<const DgDiscRF<A, B, DB>&>(
+                  static_cast<const DgDiscTopoRF<A, B, DB>&>(
                                          this->fromFrame()).invQuantify(addIn);
 	     }
 
       };
 
-      DgDiscRF& operator= (const DgDiscRF<A, B, DB>& rf)
+      DgDiscTopoRF& operator= (const DgDiscTopoRF<A, B, DB>& rf)
           {
              if (&rf != this)
              {
@@ -220,7 +220,7 @@ class DgDiscRF : public DgRF<A, long long int> {
 
    protected:
 
-      DgDiscRF (DgRFNetwork& networkIn, const DgRF<B, DB>& backFrameIn,
+      DgDiscTopoRF (DgRFNetwork& networkIn, const DgRF<B, DB>& backFrameIn,
                 const string& nameIn = "Disc",
                 DgGridTopology gridTopoIn = Hexagon,
                 DgGridMetric gridMetricIn = D6,
@@ -232,7 +232,7 @@ class DgDiscRF : public DgRF<A, long long int> {
         { new DgQuantConverter(backFrame(), *this);
           new DgInvQuantConverter(*this, backFrame()); }
 
-      DgDiscRF (const DgDiscRF<A, B, DB>& rf) : DgRF<A, long long int> (rf),
+      DgDiscTopoRF (const DgDiscTopoRF<A, B, DB>& rf) : DgRF<A, long long int> (rf),
           backFrame_ (&rf.backFrame()), e_ (rf.e()), r_ (rf.r()),
           c_ (rf.c()), area_ (rf.area()), gridTopo_ (rf.gridTopo()),
           gridMetric_ (rf.gridMetric())
@@ -255,13 +255,13 @@ class DgDiscRF : public DgRF<A, long long int> {
 
 ////////////////////////////////////////////////////////////////////////////////
 template<class A, class B, class DB> ostream& operator<< (ostream& stream,
-          const DgDiscRF<A, B, DB>& g)
+          const DgDiscTopoRF<A, B, DB>& g)
 {
    stream << string(g) << endl;
 
    return stream;
 }
 
-#include "../lib/DgDiscRF.hpp"
+#include "../lib/DgDiscTopoRF.hpp"
 
 #endif

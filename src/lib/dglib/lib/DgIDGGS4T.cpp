@@ -28,7 +28,7 @@
 #include <cmath>
 
 #include <dglib/DgContCartRF.h>
-#include <dglib/DgDiscRF.h>
+#include <dglib/DgDiscTopoRF.h>
 #include <dglib/DgIDGGS4T.h>
 #include <dglib/DgTriGrid2D.h>
 #include <dglib/DgTriIDGG.h>

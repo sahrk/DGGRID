@@ -29,7 +29,7 @@
 #define DGBOUNDEDRFBASE_H
 
 #include <dglib/DgBoundedRFBase0.h>
-#include <dglib/DgDiscRF.h>
+#include <dglib/DgDiscTopoRF.h>
 
 class DgLocation;
 class DgPolygon;

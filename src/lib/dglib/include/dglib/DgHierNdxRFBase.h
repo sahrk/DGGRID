@@ -28,7 +28,7 @@
 #include <climits>
 #include <iostream>
 
-#include <dglib/DgDiscRF.h>
+#include <dglib/DgDiscTopoRF.h>
 #include <dglib/DgIDGGS.h>
 #include <dglib/DgIDGG.h>
 
@@ -64,7 +64,7 @@ operator<< (ostream& stream, const DgHierNdxCoordBase& coord)
 { return stream << string(coord); }
 
 ////////////////////////////////////////////////////////////////////////////////
-class DgHierNdxRFBase : public DgDiscRF<DgHierNdxCoordBase, DgQ2DICoord, long long int> {
+class DgHierNdxRFBase : public DgDiscTopoRF<DgHierNdxCoordBase, DgQ2DICoord, long long int> {
 
    public:
 
@@ -116,7 +116,7 @@ class DgHierNdxRFBase : public DgDiscRF<DgHierNdxCoordBase, DgQ2DICoord, long lo
    protected:
 
       DgHierNdxRFBase (const DgIDGGS& dggsIn, int resIn, const string& nameIn)
-         : DgDiscRF<DgHierNdxCoordBase, DgQ2DICoord, long long int>(dggsIn.network(), 
+         : DgDiscTopoRF<DgHierNdxCoordBase, DgQ2DICoord, long long int>(dggsIn.network(), 
                        dggsIn.idgg(resIn), nameIn, dggsIn.gridTopo(), dggsIn.gridMetric()),
            dggs_ (dggsIn), dgg_ (dggsIn.idgg(resIn)), res_ (resIn), aperture_ (dggsIn.aperture()) { }
 

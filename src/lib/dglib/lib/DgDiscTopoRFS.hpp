@@ -30,7 +30,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 template<class A, class B, class DB> void
-DgDiscRFS<A, B, DB>::setAddNeighbors (const DgResAdd<A>& add,
+DgDiscTopoRFS<A, B, DB>::setAddNeighbors (const DgResAdd<A>& add,
                                             DgLocVector& vec) const
 {
    grids()[add.res()]->convert(vec);
@@ -42,7 +42,7 @@ DgDiscRFS<A, B, DB>::setAddNeighbors (const DgResAdd<A>& add,
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 template<class A, class B, class DB> void
-DgDiscRFS<A, B, DB>::setParents (int res, const DgLocation& loc,
+DgDiscTopoRFS<A, B, DB>::setParents (int res, const DgLocation& loc,
                                                 DgLocVector& vec) const
 {
    vec.clearAddress();
@@ -61,7 +61,7 @@ DgDiscRFS<A, B, DB>::setParents (int res, const DgLocation& loc,
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 template<class A, class B, class DB> void
-DgDiscRFS<A, B, DB>::setInteriorChildren (int res, const DgLocation& loc,
+DgDiscTopoRFS<A, B, DB>::setInteriorChildren (int res, const DgLocation& loc,
                                    DgLocVector& vec) const
 {
    vec.clearAddress();
@@ -80,7 +80,7 @@ DgDiscRFS<A, B, DB>::setInteriorChildren (int res, const DgLocation& loc,
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 template<class A, class B, class DB> void
-DgDiscRFS<A, B, DB>::setBoundaryChildren (int res, const DgLocation& loc,
+DgDiscTopoRFS<A, B, DB>::setBoundaryChildren (int res, const DgLocation& loc,
                                    DgLocVector& vec) const
 {
    vec.clearAddress();
@@ -97,7 +97,7 @@ DgDiscRFS<A, B, DB>::setBoundaryChildren (int res, const DgLocation& loc,
 
 ////////////////////////////////////////////////////////////////////////////////
 template<class A, class B, class DB> void
-DgDiscRFS<A, B, DB>::setBoundary2Children (int res, const DgLocation& loc,
+DgDiscTopoRFS<A, B, DB>::setBoundary2Children (int res, const DgLocation& loc,
                                    DgLocVector& vec) const
 {
    vec.clearAddress();
@@ -115,7 +115,7 @@ DgDiscRFS<A, B, DB>::setBoundary2Children (int res, const DgLocation& loc,
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 template<class A, class B, class DB> void
-DgDiscRFS<A, B, DB>::setAllChildren (int res, const DgLocation& loc,
+DgDiscTopoRFS<A, B, DB>::setAllChildren (int res, const DgLocation& loc,
                               DgLocVector& vec) const
 {
    vec.clearAddress();
@@ -134,7 +134,7 @@ DgDiscRFS<A, B, DB>::setAllChildren (int res, const DgLocation& loc,
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 template<class A, class B, class DB> const char*
-DgDiscRFS<A, B, DB>::str2add (DgResAdd<A>* add, const char* str,
+DgDiscTopoRFS<A, B, DB>::str2add (DgResAdd<A>* add, const char* str,
                               char delimiter) const
 {
    if (!add) add = new DgResAdd<A>();

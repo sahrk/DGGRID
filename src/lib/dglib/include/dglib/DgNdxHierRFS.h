@@ -26,14 +26,14 @@
 #define DGNDXHIERRFS_H
 
 #include <vector>
-#include <dglib/DgDiscRFS.h>
+#include <dglib/DgDiscTopoRFS.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 template<class A, class B, class DB> class DgNdxHierRFS {
 
    public:
     
-      const DgDiscRFS<A, B, DB>& rfs (void) const { return rfs_; }
+      const DgDiscTopoRFS<A, B, DB>& rfs (void) const { return rfs_; }
 
       // indexing parent
       // only the DgLocation version performs checking on the input
@@ -130,7 +130,7 @@ template<class A, class B, class DB> class DgNdxHierRFS {
 
    protected:
 
-     DgNdxHierRFS (const DgDiscRFS<A, B, DB>& rfsIn)
+     DgNdxHierRFS (const DgDiscTopoRFS<A, B, DB>& rfsIn)
         : rfs_ (rfsIn)
      { }
 
@@ -143,7 +143,7 @@ template<class A, class B, class DB> class DgNdxHierRFS {
    private:
 
      // state data
-     const DgDiscRFS<A, B, DB>& rfs_;
+     const DgDiscTopoRFS<A, B, DB>& rfs_;
 };
 
 ////////////////////////////////////////////////////////////////////////////////

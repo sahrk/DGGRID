@@ -26,7 +26,7 @@
 
 #include <dglib/DgContCartRF.h>
 #include <dglib/DgIVec2D.h>
-#include <dglib/DgDiscRF.h>
+#include <dglib/DgDiscTopoRF.h>
 #include <dglib/DgTriGrid2D.h>
 #include <dglib/DgTriGrid2DS.h>
 

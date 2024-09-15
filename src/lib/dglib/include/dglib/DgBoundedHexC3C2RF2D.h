@@ -34,7 +34,7 @@ class DgBoundedHexC3C2RF2D : public DgBoundedHexC3RF2D {
 
    public:
 
-      DgBoundedHexC3C2RF2D (const DgDiscRF<DgIVec2D, DgDVec2D, long double>& rf,
+      DgBoundedHexC3C2RF2D (const DgDiscTopoRF<DgIVec2D, DgDVec2D, long double>& rf,
                 const DgIVec2D& lowerLeft, const DgIVec2D& upperRight,
                 unsigned long long int size = 0)
          : DgBoundedHexC3RF2D (rf, lowerLeft, upperRight, size) { }

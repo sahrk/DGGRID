@@ -58,7 +58,7 @@ class DgHexC2Grid2D : public DgDiscRF2D {
 
       virtual operator string (void) const
         {
-           string s = DgDiscRF::operator string() + ": DgHexC2Grid2D\n";
+           string s = DgDiscTopoRF::operator string() + ": DgHexC2Grid2D\n";
            s += "   -- surrogate: " + string(*surrogate_);
            s += "\n   -- substrate: " + string(*substrate_);
 

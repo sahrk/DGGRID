@@ -18,21 +18,18 @@
 *******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
-// DgDiscRFS.h: DgDiscRFS class definitions
-//
-// Version 7.0 - Kevin Sahr, 12/14/14
-// Version 6.1 - Kevin Sahr, 5/23/13
+// DgDiscTopoRFS.h: DgDiscRFS class definitions
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef DGDISCRFS_H
-#define DGDISCRFS_H
+#ifndef DGDISCTOPORFS_H
+#define DGDISCTOPORFS_H
 
 #include <vector>
 
 #include <dglib/Dg2WayConverter.h>
 #include <dglib/DgConverter.h>
-#include <dglib/DgDiscRF.h>
+#include <dglib/DgDiscTopoRF.h>
 #include <dglib/DgPolygon.h>
 #include <dglib/DgRF.h>
 
@@ -98,12 +95,12 @@ template<class A> ostream& operator<< (ostream& stream, const DgResAdd<A>& add)
 } // ostream& operator<<
 
 ////////////////////////////////////////////////////////////////////////////////
-template<class A, class B, class DB> class DgDiscRFS
-                               : public DgDiscRF<DgResAdd<A>, B, DB> {
+template<class A, class B, class DB> class DgDiscTopoRFS
+                               : public DgDiscTopoRF<DgResAdd<A>, B, DB> {
 
    public:
 
-     ~DgDiscRFS (void)
+     ~DgDiscTopoRFS (void)
         {
 /* the grids themselves are deleted by the DgRFNetwork
            for (unsigned int i = 0; i < grids().size(); i++)
@@ -124,12 +121,12 @@ template<class A, class B, class DB> class DgDiscRFS
       virtual const char* str2add (DgResAdd<A>* add, const char* str,
                                    char delimiter) const;
 
-      DgDiscRFS<A, B, DB>& operator= (const DgDiscRFS<A, B, DB>& rf)
+      DgDiscTopoRFS<A, B, DB>& operator= (const DgDiscTopoRFS<A, B, DB>& rf)
       // shallow copy with possible memory leak; don't use if avoidable
           {
              if (*this != rf)
              {
-                DgDiscRF<DgResAdd<A>, B, DB>::operator=(rf);
+                DgDiscTopoRF<DgResAdd<A>, B, DB>::operator=(rf);
 
                 aperture_ = rf.aperture();
                 nRes_ = rf.nRes();
@@ -138,7 +135,7 @@ template<class A, class B, class DB> class DgDiscRFS
 
                 delete grids_; // the DgRFNetwork deleteds the grids themselves
 
-                grids_ = new vector<const DgDiscRF<A, B, DB>*>(rf.nRes());
+                grids_ = new vector<const DgDiscTopoRF<A, B, DB>*>(rf.nRes());
                 for (int i = 0; i < nRes(); i++)
                 {
                    // KLUDGE: don't know real type of each grid so can't
@@ -151,7 +148,7 @@ template<class A, class B, class DB> class DgDiscRFS
             return *this;
          }
 
-      const vector<const DgDiscRF<A, B, DB>*>& grids (void) const { return *grids_; }
+      const vector<const DgDiscTopoRF<A, B, DB>*>& grids (void) const { return *grids_; }
 
       unsigned int aperture (void) const { return aperture_; }
 
@@ -162,7 +159,7 @@ template<class A, class B, class DB> class DgDiscRFS
 
       // no bounds checking
 
-      const DgDiscRF<A, B, DB>& operator[] (int res) const
+      const DgDiscTopoRF<A, B, DB>& operator[] (int res) const
                            { return *((*grids_)[res]); }
 
       // hokey temporary notion of distance
@@ -396,15 +393,15 @@ template<class A, class B, class DB> class DgDiscRFS
 
    protected:
 
-      DgDiscRFS (DgRFNetwork& network, const DgRF<B, DB>& backFrame,
+      DgDiscTopoRFS (DgRFNetwork& network, const DgRF<B, DB>& backFrame,
                  int nResIn, unsigned int aperture,
                  dgg::topo::DgGridTopology gridTopo = dgg::topo::Hexagon,
                  dgg::topo::DgGridMetric gridMetric = dgg::topo::D6,
                  bool isCongruent = true, bool isAligned = false,
                  const string& name = "DiscS")
-        : DgDiscRF<DgResAdd<A>, B, DB>
+        : DgDiscTopoRF<DgResAdd<A>, B, DB>
                       (network, backFrame, name, gridTopo, gridMetric),
-          aperture_ (aperture), grids_ (new vector<const DgDiscRF<A, B, DB>*>()),
+          aperture_ (aperture), grids_ (new vector<const DgDiscTopoRF<A, B, DB>*>()),
           nRes_ (nResIn), isCongruent_ (isCongruent),
           isAligned_ (isAligned)
         {
@@ -423,8 +420,8 @@ template<class A, class B, class DB> class DgDiscRFS
           grids_->resize(nRes());
         }
 
-      DgDiscRFS (const DgDiscRFS<A, B, DB>& rf) // uses dubious operator=
-        : DgDiscRF<DgResAdd<A>, B, DB> (rf)
+      DgDiscTopoRFS (const DgDiscTopoRFS<A, B, DB>& rf) // uses dubious operator=
+        : DgDiscTopoRF<DgResAdd<A>, B, DB> (rf)
         { *this = rf; }
 
       virtual DgResAdd<A> quantify (const B& point) const
@@ -433,7 +430,7 @@ template<class A, class B, class DB> class DgDiscRFS
 
                int maxRes = nRes() - 1;
                DgLocation* loc = this->backFrame().makeLocation(point);
-               const DgDiscRF<A, B, DB>& grid = *grids()[maxRes];
+               const DgDiscTopoRF<A, B, DB>& grid = *grids()[maxRes];
                grid.convert(loc);
                DgResAdd<A> add(*grid.getAddress(*loc), maxRes);
 
@@ -444,7 +441,7 @@ template<class A, class B, class DB> class DgDiscRFS
 
       virtual B invQuantify (const DgResAdd<A>& add) const
              {
-               const DgDiscRF<A, B, DB>& grid = *grids()[add.res()];
+               const DgDiscTopoRF<A, B, DB>& grid = *grids()[add.res()];
                DgLocation* loc = grid.makeLocation(add.address());
                this->backFrame().convert(loc);
                B newAdd(*(this->backFrame().getAddress(*loc)));
@@ -485,7 +482,7 @@ template<class A, class B, class DB> class DgDiscRFS
 
       unsigned int aperture_;
 
-      vector<const DgDiscRF<A, B, DB>*>* grids_;
+      vector<const DgDiscTopoRF<A, B, DB>*>* grids_;
 
       int nRes_;
       bool isCongruent_;
@@ -495,7 +492,7 @@ template<class A, class B, class DB> class DgDiscRFS
 
 ////////////////////////////////////////////////////////////////////////////////
 template<class A, class B, class DB> ostream& operator<< (ostream& stream,
-          const DgDiscRFS<A, B, DB>& g)
+          const DgDiscTopoRFS<A, B, DB>& g)
 {
    stream << string(g) << endl;
 
@@ -509,8 +506,8 @@ template <class A, class B, class DB> class DgResAddConverter :
 
    public:
 
-      DgResAddConverter (const DgDiscRFS<A, B, DB>& fromFrame,
-                         const DgDiscRF<A, B, DB>& toFrame, int resIn)
+      DgResAddConverter (const DgDiscTopoRFS<A, B, DB>& fromFrame,
+                         const DgDiscTopoRF<A, B, DB>& toFrame, int resIn)
          : DgConverter<DgResAdd<A>, long long int, A,
                  long long int> (fromFrame, toFrame),
            res_ (resIn), discRFS_ (fromFrame), discRF_ (toFrame)
@@ -535,9 +532,9 @@ template <class A, class B, class DB> class DgResAddConverter :
 
       int res (void) const { return res_; }
 
-      const DgDiscRFS<A, B, DB>& discRFS (void) const { return discRFS_; }
+      const DgDiscTopoRFS<A, B, DB>& discRFS (void) const { return discRFS_; }
 
-      const DgDiscRF<A, B, DB>& discRF (void) const { return discRF_; }
+      const DgDiscTopoRF<A, B, DB>& discRF (void) const { return discRF_; }
 
       virtual A convertTypedAddress (const DgResAdd<A>& add) const
         {
@@ -554,8 +551,8 @@ template <class A, class B, class DB> class DgResAddConverter :
    protected:
 
       int res_;
-      const DgDiscRFS<A, B, DB>& discRFS_;
-      const DgDiscRF<A, B, DB>& discRF_;
+      const DgDiscTopoRFS<A, B, DB>& discRFS_;
+      const DgDiscTopoRF<A, B, DB>& discRF_;
 
 };
 
@@ -565,8 +562,8 @@ template <class A, class B, class DB> class DgAddResConverter :
 
    public:
 
-      DgAddResConverter (const DgDiscRF<A, B, DB>& fromFrame,
-                         const DgDiscRFS<A, B, DB>& toFrame, int resIn)
+      DgAddResConverter (const DgDiscTopoRF<A, B, DB>& fromFrame,
+                         const DgDiscTopoRFS<A, B, DB>& toFrame, int resIn)
          : DgConverter<A, long long int, DgResAdd<A>,
                        long long int> (fromFrame, toFrame),
            res_ (resIn), discRFS_ (toFrame), discRF_ (fromFrame)
@@ -591,9 +588,9 @@ template <class A, class B, class DB> class DgAddResConverter :
 
       int res (void) const { return res_; }
 
-      const DgDiscRFS<A, B, DB>& discRFS (void) const { return discRFS_; }
+      const DgDiscTopoRFS<A, B, DB>& discRFS (void) const { return discRFS_; }
 
-      const DgDiscRF<A, B, DB>& discRF (void) const { return discRF_; }
+      const DgDiscTopoRF<A, B, DB>& discRF (void) const { return discRF_; }
 
       virtual DgResAdd<A> convertTypedAddress (const A& add) const
         {
@@ -603,8 +600,8 @@ template <class A, class B, class DB> class DgAddResConverter :
    protected:
 
       int res_;
-      const DgDiscRFS<A, B, DB>& discRFS_;
-      const DgDiscRF<A, B, DB>& discRF_;
+      const DgDiscTopoRFS<A, B, DB>& discRFS_;
+      const DgDiscTopoRF<A, B, DB>& discRF_;
 
 };
 
@@ -614,8 +611,8 @@ template <class A, class B, class DB> class Dg2WayResAddConverter
 
    public:
 
-      Dg2WayResAddConverter (const DgDiscRFS<A, B, DB>& fromFrame,
-                             const DgDiscRF<A, B, DB>& toFrame, int res)
+      Dg2WayResAddConverter (const DgDiscTopoRFS<A, B, DB>& fromFrame,
+                             const DgDiscTopoRF<A, B, DB>& toFrame, int res)
          : Dg2WayConverter
               (*(new DgResAddConverter<A, B, DB>(fromFrame, toFrame, res)),
                *(new DgAddResConverter<A, B, DB>(toFrame, fromFrame, res)))
@@ -624,6 +621,6 @@ template <class A, class B, class DB> class Dg2WayResAddConverter
 };
 
 // JFW: is this really what we mean?
-#include "../lib/DgDiscRFS.hpp"
+#include "../lib/DgDiscTopoRFS.hpp"
 
 #endif

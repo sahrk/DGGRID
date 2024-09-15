@@ -23,7 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 template<class A, class B, class DB>
-DgBoundedRF<A, B, DB>::DgBoundedRF (const DgDiscRF<A, B, DB>& rfIn,
+DgBoundedRF<A, B, DB>::DgBoundedRF (const DgDiscTopoRF<A, B, DB>& rfIn,
       const A& firstAddIn, const A& lastAddIn, const A& endAddIn, bool zBasedIn)
    : DgBoundedRFBase<B, DB> (rfIn, rfIn.makeLocation(firstAddIn),
      rfIn.makeLocation(lastAddIn), rfIn.makeLocation(endAddIn), zBasedIn),

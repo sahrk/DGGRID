@@ -27,7 +27,7 @@
 #ifndef DGBOUNDEDRFBASE0_H
 #define DGBOUNDEDRFBASE0_H
 
-#include "DgDiscRF.h"
+#include "DgDiscTopoRF.h"
 
 class DgLocation;
 class DgPolygon;

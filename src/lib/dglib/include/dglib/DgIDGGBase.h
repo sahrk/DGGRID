@@ -45,9 +45,9 @@ using namespace dgg::topo;
 //
 //  Icosahedral DGG class.
 //
-class DgIDGGBase : public DgDiscRF<DgQ2DICoord, DgGeoCoord, long double> {
+class DgIDGGBase : public DgDiscTopoRF<DgQ2DICoord, DgGeoCoord, long double> {
 
-   using DgDiscRF<DgQ2DICoord, DgGeoCoord, long double>::setVertices;
+   using DgDiscTopoRF<DgQ2DICoord, DgGeoCoord, long double>::setVertices;
 
    public:
 

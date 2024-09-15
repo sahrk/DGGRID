@@ -28,7 +28,7 @@
 #define DGIDGGSBASE_H
 
 #include <dglib/DgIDGGBase.h>
-#include <dglib/DgDiscRFS.h>
+#include <dglib/DgDiscTopoRFS.h>
 #include <dglib/DgEllipsoidRF.h>
 #include <dglib/DgEllipsoidRF.h>
 #include <dglib/DgApSeq.h>
@@ -39,7 +39,7 @@
 using namespace dgg::topo;
 
 ////////////////////////////////////////////////////////////////////////////////
-class DgIDGGSBase : public DgDiscRFS<DgQ2DICoord, DgGeoCoord, long double> {
+class DgIDGGSBase : public DgDiscTopoRFS<DgQ2DICoord, DgGeoCoord, long double> {
 
    public:
 
@@ -85,7 +85,7 @@ class DgIDGGSBase : public DgDiscRFS<DgQ2DICoord, DgGeoCoord, long double> {
                DgGridMetric gridMetric = D6,
                const string& projType = "ISEA",
                bool isPure = true)
-        : DgDiscRFS<DgQ2DICoord, DgGeoCoord, long double> (network, backFrame,
+        : DgDiscTopoRFS<DgQ2DICoord, DgGeoCoord, long double> (network, backFrame,
                   nRes, aperture, gridTopo, gridMetric, true, false, name),
           geoRF_ (backFrame), vert0_ (vert0), azDegs_ (azDegs),
           projType_ (projType), isPure_ (isPure) { }
@@ -123,7 +123,7 @@ class DgIDGGSBase : public DgDiscRFS<DgQ2DICoord, DgGeoCoord, long double> {
 inline ostream& operator<< (ostream& stream, const DgIDGGSBase& dggs)
 {
    stream << "** DgIDGGSBase: " <<
-         (const DgDiscRFS<DgQ2DICoord, DgGeoCoord, long double>&) dggs << endl;
+         (const DgDiscTopoRFS<DgQ2DICoord, DgGeoCoord, long double>&) dggs << endl;
    stream << "geoRF: " << dggs.geoRF();
    stream << "\nvert0: " << dggs.vert0();
    stream << "\nazDegs: " << dggs.azDegs();

@@ -38,7 +38,7 @@ class DgBoundedRF2D : public DgBoundedRF<DgIVec2D, DgDVec2D, long double> {
 
    public:
 
-      DgBoundedRF2D (const DgDiscRF<DgIVec2D, DgDVec2D, long double>& rf,
+      DgBoundedRF2D (const DgDiscTopoRF<DgIVec2D, DgDVec2D, long double>& rf,
                      const DgIVec2D& lowerLeft, const DgIVec2D& upperRight);
 
       virtual DgIVec2D& incrementAddress (DgIVec2D& add) const;
@@ -61,7 +61,7 @@ class DgBoundedRF2D : public DgBoundedRF<DgIVec2D, DgDVec2D, long double> {
       const DgIVec2D& invalidAdd (void) const
                          { return discRF().undefAddress(); }
 
-      const DgDiscRF<DgIVec2D, DgDVec2D, long double>& discRF (void) const
+      const DgDiscTopoRF<DgIVec2D, DgDVec2D, long double>& discRF (void) const
                { return discRF_; }
 
       virtual unsigned long long int seqNumAddress (const DgIVec2D& add) const;
@@ -84,7 +84,7 @@ class DgBoundedRF2D : public DgBoundedRF<DgIVec2D, DgDVec2D, long double> {
 
    private:
 
-      const DgDiscRF<DgIVec2D, DgDVec2D, long double>& discRF_;
+      const DgDiscTopoRF<DgIVec2D, DgDVec2D, long double>& discRF_;
 
       DgIVec2D lowerLeft_;
       DgIVec2D upperRight_;

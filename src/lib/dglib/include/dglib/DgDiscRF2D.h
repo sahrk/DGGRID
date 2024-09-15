@@ -30,14 +30,14 @@
 
 #include <cmath>
 
-#include <dglib/DgDiscRF.h>
+#include <dglib/DgDiscTopoRF.h>
 #include <dglib/DgDVec2D.h>
 #include <dglib/DgIVec2D.h>
 
 class DgPolygon;
 
 ////////////////////////////////////////////////////////////////////////////////
-class DgDiscRF2D : public DgDiscRF<DgIVec2D, DgDVec2D, long double> {
+class DgDiscRF2D : public DgDiscTopoRF<DgIVec2D, DgDVec2D, long double> {
 
    public:
 
@@ -93,13 +93,13 @@ class DgDiscRF2D : public DgDiscRF<DgIVec2D, DgDVec2D, long double> {
           dgg::topo::DgGridMetric gridMetricIn = dgg::topo::D6,
           long double eIn = 1.0L, long double rIn = 1.0L,
           long double cIn = 1.0L, long double areaIn = 1.0L)
-         : DgDiscRF<DgIVec2D, DgDVec2D, long double>
+         : DgDiscTopoRF<DgIVec2D, DgDVec2D, long double>
                (networkIn, ccFrameIn, nameIn, gridTopoIn, gridMetricIn,
                 eIn, rIn, cIn, areaIn)
            { setUndefLoc(makeLocation(undefAddress())); }
 
       DgDiscRF2D (const DgDiscRF2D& grd)
-           : DgDiscRF<DgIVec2D, DgDVec2D, long double> (grd)
+           : DgDiscTopoRF<DgIVec2D, DgDVec2D, long double> (grd)
            { setUndefLoc(makeLocation(undefAddress())); }
 
 };

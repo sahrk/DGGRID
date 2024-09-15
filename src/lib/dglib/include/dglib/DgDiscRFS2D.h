@@ -29,7 +29,7 @@
 #define DGDISCRFS2D_H
 
 #include <dglib/DgApSeq.h>
-#include <dglib/DgDiscRFS.h>
+#include <dglib/DgDiscTopoRFS.h>
 #include <dglib/DgDVec2D.h>
 #include <dglib/DgIVec2D.h>
 
@@ -38,7 +38,7 @@
 using namespace dgg::topo;
 
 ////////////////////////////////////////////////////////////////////////////////
-class DgDiscRFS2D : public DgDiscRFS<DgIVec2D, DgDVec2D, long double> {
+class DgDiscRFS2D : public DgDiscTopoRFS<DgIVec2D, DgDVec2D, long double> {
 
    public:
 
@@ -59,13 +59,13 @@ class DgDiscRFS2D : public DgDiscRFS<DgIVec2D, DgDVec2D, long double> {
                    DgGridMetric gridMetric = D6,
                    bool isCongruent = true, bool isAligned = false,
                    const string& name = "DiscRFS2D")
-        : DgDiscRFS<DgIVec2D, DgDVec2D, long double>
+        : DgDiscTopoRFS<DgIVec2D, DgDVec2D, long double>
               (network, backFrame, nRes, aperture, gridTopo, gridMetric,
                                isCongruent, isAligned, name)
            { setUndefLoc(makeLocation(undefAddress())); }
 
       DgDiscRFS2D (const DgDiscRFS2D& grd)
-        : DgDiscRFS<DgIVec2D, DgDVec2D, long double> (grd)
+        : DgDiscTopoRFS<DgIVec2D, DgDVec2D, long double> (grd)
            { setUndefLoc(makeLocation(undefAddress())); }
       virtual const DgResAdd<DgIVec2D>& undefAddress (void) const
            { static DgResAdd<DgIVec2D> undef(DgIVec2D::undefDgIVec2D, -1);

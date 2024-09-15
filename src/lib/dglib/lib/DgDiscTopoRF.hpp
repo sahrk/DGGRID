@@ -18,14 +18,12 @@
 *******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
-// DgDiscRF.hpp: DgDiscRF template class definition.
-//
-// Version 6.1 - Kevin Sahr, 5/23/13
+// DgDiscTopoRF.hpp: DgDiscTopoRF template class definition.
 //
 ////////////////////////////////////////////////////////////////////////////////
 
 template<class A, class B, class DB> void
-DgDiscRF<A, B, DB>::setVertices (const DgLocation& loc, DgPolygon& vec) const
+DgDiscTopoRF<A, B, DB>::setVertices (const DgLocation& loc, DgPolygon& vec) const
 {
    vec.clearAddress();
    backFrame().convert(vec);
@@ -45,7 +43,7 @@ DgDiscRF<A, B, DB>::setVertices (const DgLocation& loc, DgPolygon& vec) const
 
 ////////////////////////////////////////////////////////////////////////////////
 template<class A, class B, class DB> void
-DgDiscRF<A, B, DB>::setVertices (const DgLocation& loc, const DgRFBase& rf,
+DgDiscTopoRF<A, B, DB>::setVertices (const DgLocation& loc, const DgRFBase& rf,
                                                      DgPolygon& vec) const
 {
    setVertices(loc, vec);
@@ -55,7 +53,7 @@ DgDiscRF<A, B, DB>::setVertices (const DgLocation& loc, const DgRFBase& rf,
 
 ////////////////////////////////////////////////////////////////////////////////
 template<class A, class B, class DB> void
-DgDiscRF<A, B, DB>::setNeighbors (const DgLocation& loc, DgLocVector& vec) const
+DgDiscTopoRF<A, B, DB>::setNeighbors (const DgLocation& loc, DgLocVector& vec) const
 {
    vec.clearAddress();
    this->convert(vec);
@@ -75,7 +73,7 @@ DgDiscRF<A, B, DB>::setNeighbors (const DgLocation& loc, DgLocVector& vec) const
 
 ////////////////////////////////////////////////////////////////////////////////
 template<class A, class B, class DB> void
-DgDiscRF<A, B, DB>::setNeighborsBdry2 (const DgLocation& loc, DgLocVector& vec) const
+DgDiscTopoRF<A, B, DB>::setNeighborsBdry2 (const DgLocation& loc, DgLocVector& vec) const
 {
    vec.clearAddress();
    this->convert(vec);
@@ -95,7 +93,7 @@ DgDiscRF<A, B, DB>::setNeighborsBdry2 (const DgLocation& loc, DgLocVector& vec) 
 
 ////////////////////////////////////////////////////////////////////////////////
 template<class A, class B, class DB> void
-DgDiscRF<A, B, DB>::setPoint (const DgLocation& loc, DgLocation& point) const
+DgDiscTopoRF<A, B, DB>::setPoint (const DgLocation& loc, DgLocation& point) const
 {
    if (loc.rf() == *this)
    {
@@ -112,7 +110,7 @@ DgDiscRF<A, B, DB>::setPoint (const DgLocation& loc, DgLocation& point) const
 
 ////////////////////////////////////////////////////////////////////////////////
 template<class A, class B, class DB> void
-DgDiscRF<A, B, DB>::setPoint (const DgLocation& loc, const DgRFBase& rf,
+DgDiscTopoRF<A, B, DB>::setPoint (const DgLocation& loc, const DgRFBase& rf,
                                                      DgLocation& point) const
 {
    setPoint(loc, point);
@@ -122,7 +120,7 @@ DgDiscRF<A, B, DB>::setPoint (const DgLocation& loc, const DgRFBase& rf,
 
 ////////////////////////////////////////////////////////////////////////////////
 template<class A, class B, class DB> void
-DgDiscRF<A, B, DB>::setAddPoint (const A& add, DgLocation& pt) const
+DgDiscTopoRF<A, B, DB>::setAddPoint (const A& add, DgLocation& pt) const
 {
    DgLocation* tmpLoc = backFrame().makeLocation(invQuantify(add));
 

@@ -121,7 +121,7 @@ DgIDGGBase::DgIDGGBase (const DgIDGGSBase* dggs, const DgGeoSphRF& geoRF,
              unsigned int aperture, int res, const string& name,
              DgGridTopology gridTopo, DgGridMetric gridMetric,
              unsigned int precision)
-   : DgDiscRF<DgQ2DICoord, DgGeoCoord, long double>
+   : DgDiscTopoRF<DgQ2DICoord, DgGeoCoord, long double>
           (geoRF.network(), geoRF, name, gridTopo, gridMetric),
      dggs_ (dggs), sphIcosa_(0), aperture_(aperture), res_(res),
      precision_(precision), grid2D_(0), grid2DS_(0), ccFrame_(0),
