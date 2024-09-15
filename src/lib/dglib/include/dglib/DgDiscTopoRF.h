@@ -30,60 +30,25 @@
 
 #include <dglib/DgGridTopo.h>
 #include <dglib/DgPolygon.h>
-#include <dglib/DgRF.h>
+#include <dglib/DgDiscRF.h>
 
 using namespace dgg::topo;
 
 ////////////////////////////////////////////////////////////////////////////////
 template<class A, class B, class DB>
-class DgDiscTopoRF : public DgRF<A, long long int> {
+class DgDiscTopoRF : public DgDiscRF<A, B, DB> {
 
    public:
-
-      class DgQuantConverter : public DgConverter<B, DB, A, long long int> {
-
-         public:
-
-            DgQuantConverter (const DgRF<B, DB>& fromFrame,
-                              const DgDiscTopoRF<A, B, DB>& toFrame)
-               : DgConverter<B, DB, A, long long int>
-                       (static_cast< const DgRF<B, DB>& >(fromFrame),
-                        static_cast< const DgRF<A, long long int>& >(toFrame)) { }
-
-            virtual A convertTypedAddress (const B& addIn) const
-              { return
-                   static_cast<const DgDiscTopoRF<A, B, DB>&>(
-                                  this->toFrame()).quantify(addIn);
-	      }
-
-      };
-
-      class DgInvQuantConverter : public DgConverter<A, long long int, B, DB> {
-
-         public:
-
-            DgInvQuantConverter (const DgDiscTopoRF<A, B, DB>& fromFrame,
-                                 const DgRF<B, DB>& toFrame)
-               : DgConverter<A, long long int, B, DB> (fromFrame, toFrame) { }
-
-            virtual B convertTypedAddress (const A& addIn) const
-             { return
-                  static_cast<const DgDiscTopoRF<A, B, DB>&>(
-                                         this->fromFrame()).invQuantify(addIn);
-	     }
-
-      };
 
       DgDiscTopoRF& operator= (const DgDiscTopoRF<A, B, DB>& rf)
           {
              if (&rf != this)
              {
-                DgRF<A, long long int>::operator=(rf);
+                DgDiscRF<A, B, DB>::operator=(rf);
                 e_ = rf.e();
                 r_ = rf.r();
                 c_ = rf.c();
                 area_ = rf.area();
-                backFrame_ = &rf.backFrame();
                 gridTopo_ = rf.gridTopo();
                 gridMetric_ = rf.gridMetric();
              }
@@ -91,8 +56,6 @@ class DgDiscTopoRF : public DgRF<A, long long int> {
           }
 
       // get methods
-
-      const DgRF<B, DB>& backFrame (void) const { return *backFrame_; }
 
       long double e    (void) const { return e_; }
       long double r    (void) const { return r_; }
@@ -113,12 +76,6 @@ class DgDiscTopoRF : public DgRF<A, long long int> {
       void setGridMetric   (DgGridMetric m)   { gridMetric_ = m; }
 
       // misc methods
-
-      virtual string dist2str (const long long int& dist) const { return to_string(dist); }
-      virtual long double dist2dbl (const long long int& dist) const { return (long double) dist; }
-      virtual unsigned long long int dist2int (const long long int& dist) const
-                         { return static_cast<unsigned long long int>(dist); }
-
       virtual void setPoint (const DgLocation& loc, DgLocation& point) const;
 
       virtual void setPoint (const DgLocation& loc, const DgRFBase& rf,
@@ -241,7 +198,7 @@ class DgDiscTopoRF : public DgRF<A, long long int> {
 
       virtual void setAddPoint (const A& add, DgLocation& pt) const;
 
-      const DgRF<B, DB>* backFrame_;
+ //     const DgRF<B, DB>* backFrame_;
 
       long double e_;   // edge length
       long double r_;   // radius (max center-to-vertex)

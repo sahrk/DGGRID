@@ -146,6 +146,7 @@ add_library(dglib
   include/dglib/DgDiscRF.h
   include/dglib/DgDiscTopoRF.h
   include/dglib/DgDiscRF2D.h
+  include/dglib/DgDiscRFS.h
   include/dglib/DgDiscTopoRFS.h
   include/dglib/DgDiscRFS2D.h
   include/dglib/DgDistance.h
