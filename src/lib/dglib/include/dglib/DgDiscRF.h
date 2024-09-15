@@ -121,6 +121,7 @@ class DgDiscRF : public DgRF<A, long long int> {
         { new DgQuantConverter(backFrame(), *this);
           new DgInvQuantConverter(*this, backFrame()); }
 
+      int abc;
       const DgRF<B, DB>* backFrame_;
 };
 

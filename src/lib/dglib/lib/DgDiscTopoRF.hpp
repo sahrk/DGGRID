@@ -26,7 +26,7 @@ template<class A, class B, class DB> void
 DgDiscTopoRF<A, B, DB>::setVertices (const DgLocation& loc, DgPolygon& vec) const
 {
    vec.clearAddress();
-   backFrame().convert(vec);
+   this->backFrame().convert(vec);
 
    if (loc.rf() == *this)
    {
@@ -47,7 +47,7 @@ DgDiscTopoRF<A, B, DB>::setVertices (const DgLocation& loc, const DgRFBase& rf,
                                                      DgPolygon& vec) const
 {
    setVertices(loc, vec);
-   if (rf != backFrame()) backFrame().convert(vec);
+   if (rf != this->backFrame()) this->backFrame().convert(vec);
 
 } // const DgLocVector& DgDiscRF::setVertices
 
@@ -114,7 +114,7 @@ DgDiscTopoRF<A, B, DB>::setPoint (const DgLocation& loc, const DgRFBase& rf,
                                                      DgLocation& point) const
 {
    setPoint(loc, point);
-   if (rf != backFrame()) backFrame().convert(&point);
+   if (rf != this->backFrame()) this->backFrame().convert(&point);
 
 } // void DgDiscRF::setPoint
 
@@ -122,7 +122,7 @@ DgDiscTopoRF<A, B, DB>::setPoint (const DgLocation& loc, const DgRFBase& rf,
 template<class A, class B, class DB> void
 DgDiscTopoRF<A, B, DB>::setAddPoint (const A& add, DgLocation& pt) const
 {
-   DgLocation* tmpLoc = backFrame().makeLocation(invQuantify(add));
+   DgLocation* tmpLoc = this->backFrame().makeLocation(invQuantify(add));
 
    pt = *tmpLoc;
 

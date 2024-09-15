@@ -85,7 +85,7 @@ class DgDiscTopoRF : public DgDiscRF<A, B, DB> {
                { setAddPoint(add, point); rf.convert(&point); }
 
       virtual void setPoint (const A& add, DgLocation& pt) const
-                    { pt.clearAddress(); backFrame().convert(&pt);
+                    { pt.clearAddress(); this->backFrame().convert(&pt);
                       setAddPoint(add, pt); }
 
       virtual void setVertices (const DgLocation& loc, DgPolygon& vec) const;
@@ -98,7 +98,7 @@ class DgDiscTopoRF : public DgDiscRF<A, B, DB> {
                { setAddVertices(add, vec); rf.convert(vec); }
 
       virtual void setVertices  (const A& add, DgPolygon& vec) const
-               { vec.clearAddress(); backFrame().convert(vec);
+               { vec.clearAddress(); this->backFrame().convert(vec);
                  setAddVertices(add, vec); }
 
       virtual void setNeighbors (const DgLocation& loc, DgLocVector& vec) const;
@@ -115,11 +115,11 @@ class DgDiscTopoRF : public DgDiscRF<A, B, DB> {
                  setNeighbors(loc, *vec);  return vec; }
 
       virtual DgPolygon* makeVertices (const DgLocation& loc) const
-               { DgPolygon* vec = new DgPolygon(backFrame());
+               { DgPolygon* vec = new DgPolygon(this->backFrame());
                  setVertices(loc, *vec);  return vec; }
 
       virtual DgLocation* makePoint (const DgLocation& loc) const
-               { DgLocation* pt = new DgLocation(backFrame());
+               { DgLocation* pt = new DgLocation(this->backFrame());
                  setPoint(loc, *pt);  return pt; }
 
       virtual DgLocVector* makeNeighbors (const A& add) const
@@ -127,11 +127,11 @@ class DgDiscTopoRF : public DgDiscRF<A, B, DB> {
                  setNeighbors(add, *vec);  return vec; }
 
       virtual DgPolygon* makeVertices (const A& add) const
-               { DgPolygon* vec = new DgPolygon(backFrame());
+               { DgPolygon* vec = new DgPolygon(this->backFrame());
                  setVertices(add, *vec);  return vec; }
 
       virtual DgLocation* makePoint (const A& add) const
-               { DgLocation* pt = new DgLocation(backFrame());
+               { DgLocation* pt = new DgLocation(this->backFrame());
                  setPoint(add, *pt);  return pt; }
 
       // second order boundary neighbors (for aperture 7 hex grids only)
@@ -183,17 +183,15 @@ class DgDiscTopoRF : public DgDiscRF<A, B, DB> {
                 DgGridMetric gridMetricIn = D6,
                 long double eIn = 1.0L,
                 long double rIn = 1.0L, long double cIn = 1.0L, long double areaIn = 1.0L)
-        : DgRF<A, long long int> (networkIn, nameIn), backFrame_ (&backFrameIn),
+        : DgRF<A, long long int> (networkIn, nameIn), 
           e_ (eIn), r_ (rIn), c_ (cIn), area_ (areaIn), gridTopo_ (gridTopoIn),
           gridMetric_ (gridMetricIn)
-        { new DgQuantConverter(backFrame(), *this);
-          new DgInvQuantConverter(*this, backFrame()); }
+        { }
 
       DgDiscTopoRF (const DgDiscTopoRF<A, B, DB>& rf) : DgRF<A, long long int> (rf),
           e_ (rf.e()), r_ (rf.r()), c_ (rf.c()), area_ (rf.area()), gridTopo_ (rf.gridTopo()),
           gridMetric_ (rf.gridMetric())
-        { new DgQuantConverter(backFrame(), *this);
-          new DgInvQuantConverter(*this, backFrame()); }
+        { }
 
       virtual void setAddPoint (const A& add, DgLocation& pt) const;
 
