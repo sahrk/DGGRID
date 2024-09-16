@@ -178,17 +178,17 @@ class DgDiscTopoRF : public DgDiscRF<A, B, DB> {
    protected:
 
       DgDiscTopoRF (DgRFNetwork& networkIn, const DgRF<B, DB>& backFrameIn,
-                const string& nameIn = "Disc",
+                const string& nameIn = "DiscTopo",
                 DgGridTopology gridTopoIn = Hexagon,
                 DgGridMetric gridMetricIn = D6,
                 long double eIn = 1.0L,
                 long double rIn = 1.0L, long double cIn = 1.0L, long double areaIn = 1.0L)
-        : DgRF<A, long long int> (networkIn, nameIn), 
+        : DgDiscRF<A, B, DB> (networkIn, backFrameIn, nameIn), 
           e_ (eIn), r_ (rIn), c_ (cIn), area_ (areaIn), gridTopo_ (gridTopoIn),
           gridMetric_ (gridMetricIn)
         { }
 
-      DgDiscTopoRF (const DgDiscTopoRF<A, B, DB>& rf) : DgRF<A, long long int> (rf),
+      DgDiscTopoRF (const DgDiscTopoRF<A, B, DB>& rf) : DgDiscRF<A, B, DB> (rf),
           e_ (rf.e()), r_ (rf.r()), c_ (rf.c()), area_ (rf.area()), gridTopo_ (rf.gridTopo()),
           gridMetric_ (rf.gridMetric())
         { }
