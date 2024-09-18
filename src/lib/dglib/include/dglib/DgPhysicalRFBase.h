@@ -39,7 +39,7 @@ template<class C> class DgPhysicalRFBase {
       DgPhysicalRFBase<C> (const DgBoundedRFBase& rfIn)
           : boundedRFBase_ (rfIn) { }
 
-      virtual ~DgPhysicalRFBase (void);
+      virtual ~DgPhysicalRFBase<C> (void);
 
       const DgBoundedRFBase& boundedRFBase (void) const
                                  { return boundedRFBase_; }
