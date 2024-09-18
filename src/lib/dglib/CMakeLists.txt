@@ -179,7 +179,6 @@ add_library(dglib
    include/dglib/DgInShapefile.h
    include/dglib/DgInShapefileAtt.h
    include/dglib/DgInputStream.h
-   include/dglib/DgLabelLoc.h
    include/dglib/DgLocBase.h
    include/dglib/DgLocList.h
    include/dglib/DgLocVector.h

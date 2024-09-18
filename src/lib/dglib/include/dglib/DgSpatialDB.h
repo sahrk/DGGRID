@@ -89,7 +89,7 @@ template<class C> class DgSpatialDB {
 
       const DgPhysicalRFBase<C>& physRF (void) const { return physicalRF_; }
 
-      const DgBoundedRFBase& boundedRF (void) const
+      const DgBoundedRFBase0& boundedRF (void) const
                      { return physicalRF_.boundedRFBase(); }
 
       const DgRFBase& rf (void) const { return boundedRF().rf(); }
