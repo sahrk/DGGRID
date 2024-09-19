@@ -27,7 +27,7 @@
 
 #include <dglib/DgBoundedRF.h>
 #include <dglib/DgPhysicalRFBase.h>
-#include <dglib/dgRF.h>
+#include <dglib/DgRF.h>
 
 class DgLocation;
 
