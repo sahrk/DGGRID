@@ -27,7 +27,6 @@
 
 #include <dglib/DgBoundedRF2D.h>
 #include <dglib/DgDiscRFS2D.h>
-//#include <dglib/DgRF2D.h>
 #include <dglib/DgIVec2D.h>
 #include <dglib/DgPhysicalRF.h>
 
