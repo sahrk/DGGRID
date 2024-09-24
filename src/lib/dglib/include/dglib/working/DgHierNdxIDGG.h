@@ -18,83 +18,64 @@
 *******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
-// DgHierNdxSystemRF.h: DgHierNdxSystemRF header file
+// DgHierNdxIDGG.h: DgHierNdxIDGG header file
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef DGHIERNDXSYSTEMRF_H
-#define DGHIERNDXSYSTEMRF_H
+#ifndef DGHIERNDXIDGG_H
+#define DGHIERNDXIDGG_H
 
 #include <climits>
 #include <iostream>
 
 #include <dglib/DgDiscRF.h>
+#include <dglib/DgIDGGS.h>
+#include <dglib/DgIDGG.h>
 
 class DgHierNdxRFInt;
-class DgHierNdxRFS;
+class DgNdxHierIDGGSBase;
 
 using namespace std;
 
-// need to put in appropriate include
-#ifndef HIERNDX_INT_TYPE
-#define HIERNDX_INT_TYPE uint64_t
-#endif
-
 ////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-class DgHierNdx {
-// should these be ZXCoord/ZXStringCoord?
-   HIERNDX_INT_TYPE intNdx_;
-   string strNdx_;
-};
-
-// use Int as a standin until class is complete
-typedef DgHierNdxRFStr DgHierNdxRFInt;
-
-////////////////////////////////////////////////////////////////////////////////
-class DgHierNdxSystemRF<B, DB> : DgDiscRF<DgHierNdx, B, DB> {
-
-   struct DgSystemSet {
-      const DgHierNdxRFInt* intRF_;
-      const DgHierNdxRFStr* strRF_;
-   };
+class DgHierNdxIDGG : public DgHierNdxSystemRF<B, DB> {
 
    public:
 
-      const DgNdxHierRFS<B, DB>& ndxHierRFS (void) { return ndxHierRFS_; }
-
-      const bool outModeInt (void) { return outModeInt_; }
-
-      void setOutModeInt (bool outModeIntIn = true) { outModeInt_ = outModeIntIn; }
+      const DgNdxHierIDGGSBase& ndxHierDggs (void) { return ndxHierDggs_; }
+      const DgIDGGS&            dggs        (void) { return dggs_; }
 
       int res      (void) const { return res_; }
-      int aperture (void) const { return aperture_; }
+
+      const DgIDGG* dgg   (void) { return curResDgg_; }
+      const DgIDGG* pDgg  (void) { return pResDgg_; }
+      const DgIDGG* chDgg (void) { return chResDgg_; }
+
 
       const DgHierNdxRFInt* intRF (void) { return curRes_.intRF_; }
       const DgHierNdxRFStr* strRF (void) { return curRes_.strRF_; }
 
       const DgHierNdxRFInt* pIntRF (void) { return pRes_.intRF_; }
       const DgHierNdxRFStr* pStrRF (void) { return pRes_.strRF_; }
-      
+
       const DgHierNdxRFInt* chIntRF (void) { return chRes_.intRF_; }
       const DgHierNdxRFStr* chStrRF (void) { return chRes_.strRF_; }
 
    protected:
 
-      DgHierNdxSystemRF (const DgNdxHierRFS& ndxHierRFSIn, int resIn, 
-               bool outModeIntIn = true, const string& nameIn = "HierNdxSysRF");
+      DgHierNdxIDGG (const DgNdxHierIDGGSBase& ndxHierDggsIn, int resIn, 
+               bool outModeIntIn = true, const string& nameIn = "HierNdxIDGG");
+
+      int setDgg (int res);
 
       int setSystemSet (DgSystemSet& set, int res);
 
-      const DgNdxHierRFS<B, DB>& ndxHierRFS_;
-      int res_;
+      const DgNdxHierIDGGSBase& ndxHierDggs_;
+      const DgIDGGS& dggs_;
+      const DgIDGG* dgg_;
 
-      DgSystemSet pRes_;
-      DgSystemSet curRes_;
-      DgSystemSet chRes_;
-
-      // use int form (vs str) for output?
-      bool outModeInt_;
+      int aperture_;
+      
 };
 
 ////////////////////////////////////////////////////////////////////////////////
