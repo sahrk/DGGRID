@@ -30,7 +30,6 @@
 #include <dglib/DgIDGGBase.h>
 #include <dglib/DgDiscTopoRFS.h>
 #include <dglib/DgEllipsoidRF.h>
-#include <dglib/DgEllipsoidRF.h>
 #include <dglib/DgApSeq.h>
 #include <dglib/DgGridTopo.h>
 

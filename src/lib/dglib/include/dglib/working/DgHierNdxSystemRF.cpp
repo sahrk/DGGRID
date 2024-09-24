@@ -18,50 +18,40 @@
 *******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
-// DgDiscRFS.hpp: DgDiscRFS template class definition.
+// DgHierNdxSystemRF.cpp: DgHierNdxSystemRF class implementation
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <dglib/DgRF.h>
+#include <dglib/DgHierNdxSystemRF.h>
+#include <dglib/DgNdxHierIDGGSBase.h>
 
 ////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-template<class A, class B, class DB> const char*
-DgDiscRFS<A, B, DB>::str2add (DgResAdd<A>* add, const char* str,
-                              char delimiter) const
+DgHierNdxSystemRF::DgHierNdxSystemRF (const DgNdxHierIDGGSBase& ndxHierDggsIn, int resIn,
+               bool outModeIntIn, const string& nameIn)
+   : ndxHierDggs_ (ndxHierDggsIn), dggs_ (ndxHierDggsIn.dggs()), res_ (resIn), 
+     aperture_ (ndxHierDggsIn.dggs().aperture()), pRes_ {nullptr, nullptr}, 
+     curRes_ {nullptr, nullptr}, chRes_ {nullptr, nullptr}, outModeIntIn_ (outModeIntIn)
 {
-   if (!add) add = new DgResAdd<A>();
+   setSystemSet(pRes_, res_ - 1);
+   setSystemSet(curRes_, res_);
+   setSystemSet(chRes_, res_ + 1);
+}
 
-   char delimStr[2];
-   delimStr[0] = delimiter;
-   delimStr[1] = '\0';
+////////////////////////////////////////////////////////////////////////////////
+int 
+DgHierNdxSystemRF::setSystemSet (DgSystemSet& set, int res)
+{
+   set.dgg_ = nullptr;
+   set.intRF_ = nullptr;
+   set.strRF_ = nullptr;
+   if (res < 0 || res >= rfs().nRes())
+      return 1;
 
-   char* tmpStr = new char[strlen(str) + 1];
-   strcpy(tmpStr, str);
-
-   char* tok;
-
-   // get the resolution
-
-   tok = strtok(tmpStr, delimStr);
-   int res;
-   if (sscanf(tok, "%d", &res) != 1)
-   {
-      ::report("DgDiscRFS<A, B, DB>::str2add() invalid res string " +
-               string(tok), DgBase::Fatal);
-   }
-
-   // now get the address
-
-   const char* tmp = &(str[strlen(tok) + 1]);
-   DgLocation tloc(*grids()[res]);
-   tmp = tloc.fromString(tmp, delimiter);
-   const A& subAdd = *grids()[res]->getAddress(tloc);
-   *add = DgResAdd<A>(subAdd, res);
-
-   return tmp;
-
-} // const char* DgDiscRFS::str2add
+   // res must be valid
+   set.dgg_ = dggs_[res];
+   set.intRF_ = ndxHierDggs_[i].intRF();
+   set.strRF_ = ndxHierDggs_[i].strRF();
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

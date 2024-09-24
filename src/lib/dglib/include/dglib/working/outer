@@ -1,0 +1,293 @@
+35c35
+< #define INT_NDX_TYPE uint64_t
+---
+> #define HIERNDX_INT_TYPE uint64_t
+38c38,39
+< class DgHierNdxIntRF : public DgHierNdxRF<INT_NDX_TYPE> {
+---
+> //
+> class DgHierNdxIntCoord : public DgHierNdxCoord<HIERNDX_INT_TYPE> {
+42,44c43,45
+<       static DgHierNdxIntRF* makeRF (const DgIDGGS& dggsIn, int resIn,
+<                                      const string& nameIn = "IntNdx")
+<          { return new DgHierNdxIntRF(dggsIn, resIn, nameIn); }
+---
+>       // method for sub-classes to define
+>       // virtual string valString (void) const;
+> };
+46,48c47,48
+<       // these assume input/output strings are in hexadecimal
+<       virtual string add2str (const INT_NDX_TYPE& add) const;
+<       virtual const char* str2add (INT_NDX_TYPE* c, const char* str, char delimiter) const;
+---
+> ////////////////////////////////////////////////////////////////////////////////
+> class DgHierNdxIntRF : public DgHierNdxRF<HIERNDX_INT_TYPE> {
+50,53c50
+<       // these need to be defined by specializations
+<       // they have dummy definitions from the superclass
+<       //virtual INT_NDX_TYPE quantify (const DgQ2DICoord& point) const
+<       //virtual DgQ2DICoord invQuantify (const INT_NDX_TYPE& add) const
+---
+>    public:
+54a52,59
+>       static DgHierNdxIntRF* makeRF (const DgIDGGS& dggsIn, int resIn, 
+>                                      const string& nameIn)
+>          { return new DgHierNdxIntRF(dggsIn, resIn, nameIn); }
+> 
+>       // method to be defined by sub-classes
+>       // virtual const char* str2addTyped (DgHierNdxCoord<HIERNDX_INT_TYPE>* add, const char* str,
+>       //                             char delimiter) const;
+> 
+58c63
+<          : DgHierNdxRF<INT_NDX_TYPE>(dggsIn, resIn, nameIn) { }
+---
+>          : DgHierNdxRF<HIERNDX_INT_TYPE>(dggsIn, resIn, nameIn) { }
+31,34c31
+< #include <dglib/DgDiscRF.h>
+< #include <dglib/DgIDGGS.h>
+< #include <dglib/DgIDGG.h>
+< #include <dglib/DgHierNdxSystemRF.h>
+---
+> #include <dglib/DgHierNdxRFBase.h>
+39,41c36,38
+< template <class T> class DgHierNdxRF :
+<                        public DgDiscRF<T, DgQ2DICoord, long long int>
+< {
+---
+> //
+> template <class T> class DgHierNdxCoord : public DgHierNdxCoordBase {
+> 
+45c42
+<       static const T undefCoord;
+---
+>       static const DgHierNdxCoord<T> undefCoordTyped;
+47d43
+<       // sub-classes should create a factory method
+49,54c45,46
+<       static DgHierNdxRF<T>* makeRF (const DgIDGGS& dggsIn, int resIn,
+<                                      const string& nameIn)
+<          {
+<            sys_ = new DgHierNdxSystemRF(dggsIn, resIn, nameIn + "Sys");
+<            return new DgHierNdxRF<T>(dggsIn, resIn, nameIn);
+<          }
+---
+>       DgHierNdxCoord<T> (void)
+>          { *this = undefCoordTyped; }
+56,57c48,49
+<       static DgHierNdxRF<T>* makeRF (const DgHierNdxSystemRF& sysIn, const string& nameIn)
+<          { return new DgHierNdxRF<T>(sysIn, nameIn); }
+---
+>       DgHierNdxCoord<T> (const DgHierNdxCoord<T>& coord)
+>          { *this = coord; }
+58a51
+>       DgHierNdxCoord (T valIn) : value_ (valIn) { }
+60c53,54
+<       const DgHierNdxSystemRF& system (void) { return *sys_; }
+---
+>       DgHierNdxCoord<T> (const DgHierNdxCoord<T>& coord = undefCoordTyped)
+>          { *this = coord; }
+62,63c56
+<       const DgIDGGS& dggs (void) { return sys_->dggs(); }
+<       const DgIDGG& dgg (void) { return sys_->dgg(); }
+---
+>       void setValue (T value) { value_ = value; }
+65,66c58
+<       int res      (void) const { return sys_->res(); }
+<       int aperture (void) const { return sys_->aperture(); }
+---
+>       T value (void) const { return value_; }
+68,70c60,65
+<       // indexes don't typically use delimiters
+<       virtual string add2str (const T& add, char delimiter) const
+<                        { return add2str(add); }
+---
+>       virtual bool operator== (const DgHierNdxCoordBase& c) const
+>           { 
+>              const DgHierNdxCoord<T>* cTyped = dynamic_cast<const DgHierNdxCoord<T>*>(&c);
+>              // false if cTyped == NULL
+>              return cTyped && value() == cTyped->value(); 
+>           }
+72c67,70
+<       virtual const T& undefAddress (void) const { return undefCoord; }
+---
+>       virtual DgHierNdxCoordBase& operator= (const DgHierNdxCoordBase& c)
+>           {
+>              const DgHierNdxCoord<T>* cTyped = dynamic_cast<const DgHierNdxCoord<T>*>(&c);
+>              if (cTyped && *cTyped != *this) setValue(cTyped->value());
+74,82c72,73
+<       // these need to be defined by specializations
+<       // given dummy definitions for now so the class isn't abstract
+<       virtual T quantify (const DgQ2DICoord& point) const
+<                 { return undefAddress(); }
+<       virtual DgQ2DICoord invQuantify (const T& add) const
+<                 { return DgQ2DICoord::undefDgQ2DICoord; }
+<       virtual string add2str (const T& add) const { return dgg::util::to_string(add); }
+<       virtual const char* str2add (T* c, const char* str, char delimiter) const
+<                       { return str; }
+---
+>              return *this;
+>           }
+84,94c75,77
+<       // these should use the associated dgg
+<       virtual long long int dist (const T& add1, const T& add2) const
+<                        { return 0; }
+<       virtual string dist2str (const long long int& dist) const
+<                        { return dgg::util::to_string(dist); }
+<       virtual long double dist2dbl (const long long int& dist) const
+<                        { return dist; }
+<       virtual unsigned long long int dist2int (const long long int& dist) const
+<                        { return dist; }
+<       virtual void setAddNeighbors (const T& add, DgLocVector& vec) const { }
+<       virtual void setAddVertices  (const T& add, DgPolygon& vec) const { }
+---
+>       // sub-classes need to define this method
+>       // it has a dummy definition from the Base class
+>       //virtual string valString (void) const;
+96c79
+<    protected:
+---
+>    private:
+98,102c81,82
+<       DgHierNdxRF<T> (const DgHierNdxSystemRF& sysIn, const string& nameIn)
+<          : DgDiscRF<T, DgQ2DICoord, long long int>(sysIn.dggs().network(),
+<                        sysIn.dggs().idgg(resIn), nameIn, sysIn.dggs().gridTopo(),
+<                        sysIn.dggs().gridMetric()),
+<            sys_ (&sysIn) { }
+---
+>       T value_;
+> };
+104,106c84,101
+<       void initSystem (const DgIDGGS& dggsIn, int resIn, const string& nameIn)
+<          {
+<            sys_ = new DgHierNdxSystemRF(dggsIn, resIn, nameIn + "Sys");
+---
+> ////////////////////////////////////////////////////////////////////////////////
+> template <class T> class DgHierNdxRF : public DgHierNdxRFBase {
+> 
+>    public:
+> 
+>       static DgHierNdxRF<T>* makeRF (const DgIDGGS& dggsIn, int resIn, 
+>                                      const string& nameIn, int apertureIn)
+>          { return new DgHierNdxRF<T>(dggsIn, resIn, nameIn); }
+> 
+>       virtual const char* str2add (DgHierNdxCoordBase* c, const char* str,
+>                                    char delimiter) const {
+>           DgHierNdxCoord<T>* cTyped = dynamic_cast<DgHierNdxCoord<T>*>(c);
+>              if (!cTyped) {
+>                 *c = c->undefCoord();
+>                 return str;
+>              } else {
+>                 return str2addTyped(cTyped, str, delimiter); 
+>              }
+109,110c104,123
+<       const DgHierNdxSystemRF* sys_;
+<       bool ownSysMemory;
+---
+>       const DgHierNdxCoord<T>& undefCoordTyped (void) const
+>                             { return DgHierNdxCoord<T>::undefCoordTyped; }
+> 
+>       virtual const DgHierNdxCoordBase& undefCoord (void) const
+>                             { return undefCoordTyped(); }
+> 
+>       // method to be defined by sub-classes
+>       // given a dummy implementation here so the class isn't abstract
+>       virtual const char* str2addTyped (DgHierNdxCoord<T>* add, const char* str,
+>                                    char delimiter) const { return str; }
+> 
+>       // from DgDiscRF
+>       virtual const DgHierNdxCoordBase& undefAddress (void) const
+>           { return DgHierNdxCoord<T>::undefCoordTyped; }
+> 
+>    protected:
+> 
+>       DgHierNdxRF<T> (const DgIDGGS& dggsIn, int resIn, const string& nameIn)
+>          : DgHierNdxRFBase(dggsIn, resIn, nameIn) { }
+> 
+113,114c126,127
+< // the actual value should be defined by the specializations
+< //template<typename T> const T DgHierNdxRF<T>::undefCoord;
+---
+> // the actual value will be defined by the specializations
+> template<typename T> const DgHierNdxCoord<T> DgHierNdxCoord<T>::undefCoordTyped;
+36c36
+< 
+---
+>     
+50c50
+< 
+---
+>      
+30c30
+< #include <dglib/DgNdxHierIDGGSBase.h>
+---
+> #include <dglib/DgNdxHierRFS.h>
+33,34c33,34
+< template <class TINT, class TSTR> class DgNdxHierIDGGS :
+<                                      public DgNdxHierIDGGSBase {
+---
+> class DgNdxHierIDGGS : 
+>          public DgNdxHierRFS<DgQ2DICoord, DgGeoCoord, long double> {
+36a37,38
+>     
+>       const DgIDGGSBase& idggs (void) { return idggs_; }
+37a40,45
+>       virtual operator string (void) const
+>       {
+>          string s = "*** DgNdxHierIDGGS";
+>          return s;
+>       }
+> 
+38,40d37
+<       const DgIDGGBase& idggBase (int res) const
+<              { return static_cast<const DgIDGGBase&>(operator[](res)); }
+< 
+52a50
+>      { }
+54d51
+< 
+64d60
+< 
+29c29
+< #include <dglib/DgDiscRFS.h>
+---
+> #include <dglib/DgDiscTopoRFS.h>
+34a35,36
+>     
+>       const DgDiscTopoRFS<A, B, DB>& rfs (void) const { return rfs_; }
+36,55d37
+<      ~DgNdxHierRFS<A, B, DB>(void)
+<         {
+<            // the RF's within the systems are deleted by the DgRFNetwork
+<            //for (unsigned int i = 0; i < grids().size(); i++)
+<            //   delete grids_[i];
+< 
+<            delete[] grids_;
+<         }
+< 
+<       const DgDiscRFS<A, B, DB>& rfs (void) const { return rfs_; }
+< 
+<       const DgHierNdxSystemRF::DgSystemSet* grids (void) const
+<                { return grids_; }
+< 
+<       int nRes (void) const { return rfs.nRes(); }
+< 
+<       // no bounds checking
+<       const DgHierNdxSystemRF::DgSystemSet& operator[] (int res) const
+<                            { return grids_[res]; }
+< 
+151,153c133,135
+<      DgNdxHierRFS (const DgDiscRFS<A, B, DB>& rfsIn)
+<         : rfs_ (rfsIn), grids_ (nullptr)
+<      { grids_ = new DgHierNdxSystemRF::DgSystemSet[nRes()]; }
+---
+>      DgNdxHierRFS (const DgDiscTopoRFS<A, B, DB>& rfsIn)
+>         : rfs_ (rfsIn)
+>      { }
+164,168c146
+<      const DgDiscRFS<A, B, DB>& rfs_;
+< 
+<      // array of systems by res
+<      DgHierNdxSystemRF::DgSystemSet* grids_;
+< 
+---
+>      const DgDiscTopoRFS<A, B, DB>& rfs_;

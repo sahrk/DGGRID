@@ -18,10 +18,7 @@
 *******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
-// DgDiscRFS.hpp: DgDiscRFS template class definition.
-//
-// Version 7.0 - Kevin Sahr, 12/14/14
-// Version 6.1 - Kevin Sahr, 5/23/13
+// DgDiscTopoRFS.hpp: DgDiscTopoRFS template class definition.
 //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -34,10 +31,10 @@ DgDiscTopoRFS<A, B, DB>::setAddNeighbors (const DgResAdd<A>& add,
                                             DgLocVector& vec) const
 {
    grids()[add.res()]->convert(vec);
-   grids()[add.res()]->setAddNeighbors(add.address(), vec);
+   topoRF(add.res())->setAddNeighbors(add.address(), vec);
    this->convert(vec);
 
-} // void DgDiscRFS<A, B, DB>::setAddNeighbors
+} // void DgDiscTopoRFS<A, B, DB>::setAddNeighbors
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -56,7 +53,7 @@ DgDiscTopoRFS<A, B, DB>::setParents (int res, const DgLocation& loc,
       setAddParents(*(this->getAddress(tmpLoc)), vec);
    }
 
-} // void DgDiscRFS::setParents
+} // void DgDiscTopoRFS::setParents
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -75,7 +72,7 @@ DgDiscTopoRFS<A, B, DB>::setInteriorChildren (int res, const DgLocation& loc,
       setAddInteriorChildren(*(this->getAddress(tmpLoc)), vec);
    }
 
-} // void DgDiscRFS::setInteriorChildren
+} // void DgDiscTopoRFS::setInteriorChildren
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -93,7 +90,7 @@ DgDiscTopoRFS<A, B, DB>::setBoundaryChildren (int res, const DgLocation& loc,
       setAddBoundaryChildren(*(this->getAddress(tmpLoc)), vec);
    }
 
-} // void DgDiscRFS::setBoundaryChildren
+} // void DgDiscTopoRFS::setBoundaryChildren
 
 ////////////////////////////////////////////////////////////////////////////////
 template<class A, class B, class DB> void
@@ -110,7 +107,7 @@ DgDiscTopoRFS<A, B, DB>::setBoundary2Children (int res, const DgLocation& loc,
       setAddBoundary2Children(*(this->getAddress(tmpLoc)), vec);
    }
 
-} // void DgDiscRFS::setBoundaryChildren
+} // void DgDiscTopoRFS::setBoundaryChildren
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -129,46 +126,7 @@ DgDiscTopoRFS<A, B, DB>::setAllChildren (int res, const DgLocation& loc,
       setAddAllChildren(*(this->getAddress(tmpLoc)), vec);
    }
 
-} // void DgDiscRFS::setAllChildren
-
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-template<class A, class B, class DB> const char*
-DgDiscTopoRFS<A, B, DB>::str2add (DgResAdd<A>* add, const char* str,
-                              char delimiter) const
-{
-   if (!add) add = new DgResAdd<A>();
-
-   char delimStr[2];
-   delimStr[0] = delimiter;
-   delimStr[1] = '\0';
-
-   char* tmpStr = new char[strlen(str) + 1];
-   strcpy(tmpStr, str);
-
-   char* tok;
-
-   // get the resolution
-
-   tok = strtok(tmpStr, delimStr);
-   int res;
-   if (sscanf(tok, "%d", &res) != 1)
-   {
-      ::report("DgDiscRFS<A, B, DB>::str2add() invalid res string " +
-               string(tok), DgBase::Fatal);
-   }
-
-   // now get the address
-
-   const char* tmp = &(str[strlen(tok) + 1]);
-   DgLocation tloc(*grids()[res]);
-   tmp = tloc.fromString(tmp, delimiter);
-   const A& subAdd = *grids()[res]->getAddress(tloc);
-   *add = DgResAdd<A>(subAdd, res);
-
-   return tmp;
-
-} // const char* DgDiscRFS::str2add
+} // void DgDiscTopoRFS::setAllChildren
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
