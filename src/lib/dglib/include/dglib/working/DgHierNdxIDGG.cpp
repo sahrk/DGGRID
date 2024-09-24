@@ -18,39 +18,36 @@
 *******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
-// DgHierNdxSystemRF.cpp: DgHierNdxSystemRF class implementation
+// DgHierNdxIDGG.cpp: DgHierNdxIDGG class implementation
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <dglib/DgHierNdxSystemRF.h>
+#include <dglib/DgHierNdxIDGG.h>
 #include <dglib/DgNdxHierIDGGSBase.h>
 
 ////////////////////////////////////////////////////////////////////////////////
-DgHierNdxSystemRF::DgHierNdxSystemRF (const DgNdxHierIDGGSBase& ndxHierDggsIn, int resIn,
+DgHierNdxIDGG::DgHierNdxIDGG (const DgNdxHierIDGGSBase& ndxHierDggsIn, int resIn,
                bool outModeIntIn, const string& nameIn)
-   : ndxHierDggs_ (ndxHierDggsIn), dggs_ (ndxHierDggsIn.dggs()), res_ (resIn), 
-     aperture_ (ndxHierDggsIn.dggs().aperture()), pRes_ {nullptr, nullptr}, 
-     curRes_ {nullptr, nullptr}, chRes_ {nullptr, nullptr}, outModeIntIn_ (outModeIntIn)
+   : DgHierNdxSystemRF (ndxHierDggsIn, resIn, outModeIntIn, nameIn),
+     ndxHierDggs_ (ndxHierDggsIn), dggs_ (ndxHierDggsIn.dggs()), 
+     aperture_ (ndxHierDggsIn.dggs().aperture()), curResDgg_ (nullptr),
+     pResDgg_ (nullptr), chResDgg_ (nullptr)
 {
-   setSystemSet(pRes_, res_ - 1);
-   setSystemSet(curRes_, res_);
-   setSystemSet(chRes_, res_ + 1);
+   setDgg(&pResDgg_, res() - 1);
+   setDgg(&curResDgg_, res());
+   setDgg(&chResDgg_, res() + 1);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 int 
-DgHierNdxSystemRF::setSystemSet (DgSystemSet& set, int res)
+DgHierNdxIDGG::setDgg (const DgIDGG** dgg, int res)
 {
-   set.dgg_ = nullptr;
-   set.intRF_ = nullptr;
-   set.strRF_ = nullptr;
+   *dgg = nullptr;
    if (res < 0 || res >= rfs().nRes())
       return 1;
 
-   // res must be valid
-   set.dgg_ = dggs_[res];
-   set.intRF_ = ndxHierDggs_[i].intRF();
-   set.strRF_ = ndxHierDggs_[i].strRF();
+   // if we're here res is valid
+   *dgg = dggs()[res];
 }
 
 ////////////////////////////////////////////////////////////////////////////////

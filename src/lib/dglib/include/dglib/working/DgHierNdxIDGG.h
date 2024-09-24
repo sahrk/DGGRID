@@ -38,7 +38,7 @@ class DgNdxHierIDGGSBase;
 using namespace std;
 
 ////////////////////////////////////////////////////////////////////////////////
-class DgHierNdxIDGG : public DgHierNdxSystemRF<B, DB> {
+class DgHierNdxIDGG : public DgHierNdxSystemRF<DgQ2DICoord, long long int> {
 
    public:
 
@@ -47,35 +47,26 @@ class DgHierNdxIDGG : public DgHierNdxSystemRF<B, DB> {
 
       int res      (void) const { return res_; }
 
+      // get current, parent, and child dgg's
       const DgIDGG* dgg   (void) { return curResDgg_; }
       const DgIDGG* pDgg  (void) { return pResDgg_; }
       const DgIDGG* chDgg (void) { return chResDgg_; }
-
-
-      const DgHierNdxRFInt* intRF (void) { return curRes_.intRF_; }
-      const DgHierNdxRFStr* strRF (void) { return curRes_.strRF_; }
-
-      const DgHierNdxRFInt* pIntRF (void) { return pRes_.intRF_; }
-      const DgHierNdxRFStr* pStrRF (void) { return pRes_.strRF_; }
-
-      const DgHierNdxRFInt* chIntRF (void) { return chRes_.intRF_; }
-      const DgHierNdxRFStr* chStrRF (void) { return chRes_.strRF_; }
 
    protected:
 
       DgHierNdxIDGG (const DgNdxHierIDGGSBase& ndxHierDggsIn, int resIn, 
                bool outModeIntIn = true, const string& nameIn = "HierNdxIDGG");
 
-      int setDgg (int res);
-
-      int setSystemSet (DgSystemSet& set, int res);
+      int setDgg (const DgIDGG** dgg, int res);
 
       const DgNdxHierIDGGSBase& ndxHierDggs_;
       const DgIDGGS& dggs_;
-      const DgIDGG* dgg_;
-
       int aperture_;
-      
+
+      const DgIDGG* curResDgg_;
+      const DgIDGG* pResDgg_;
+      const DgIDGG* chResDgg_;
+
 };
 
 ////////////////////////////////////////////////////////////////////////////////

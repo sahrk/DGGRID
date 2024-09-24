@@ -41,16 +41,14 @@ DgHierNdxSystemRF::DgHierNdxSystemRF (const DgNdxHierIDGGSBase& ndxHierDggsIn, i
 int 
 DgHierNdxSystemRF::setSystemSet (DgSystemSet& set, int res)
 {
-   set.dgg_ = nullptr;
    set.intRF_ = nullptr;
    set.strRF_ = nullptr;
    if (res < 0 || res >= rfs().nRes())
       return 1;
 
-   // res must be valid
-   set.dgg_ = dggs_[res];
-   set.intRF_ = ndxHierDggs_[i].intRF();
-   set.strRF_ = ndxHierDggs_[i].strRF();
+   // if we're here res is valid
+   set.intRF_ = ndxHierDggs_[res].intRF();
+   set.strRF_ = ndxHierDggs_[res].strRF();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
