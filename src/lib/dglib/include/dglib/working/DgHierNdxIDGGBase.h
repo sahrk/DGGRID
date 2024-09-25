@@ -18,12 +18,12 @@
 *******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
-// DgHierNdxIDGG.h: DgHierNdxIDGG header file
+// DgHierNdxIDGGBase.h: DgHierNdxIDGGBase header file
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef DGHIERNDXIDGG_H
-#define DGHIERNDXIDGG_H
+#ifndef DGHIERNDXIDGGBASE_H
+#define DGHIERNDXIDGGBASE_H
 
 #include <climits>
 #include <iostream>
@@ -38,18 +38,39 @@ class DgNdxHierIDGGSBase;
 using namespace std;
 
 ////////////////////////////////////////////////////////////////////////////////
-template <class TINT, class TSTR> class DgHierNdxIDGG : 
-                   public DgHierNdxIDGGBase {
+class DgHierNdxIDGGBase : 
+                 public DgHierNdxSystemRF<DgQ2DICoord, long long int> {
+
+   public:
+
+      const DgNdxHierIDGGSBase& ndxHierDggs (void) { return ndxHierDggs_; }
+      const DgIDGGS&            dggs        (void) { return dggs_; }
+
+      int res      (void) const { return res_; }
+
+      // get current, parent, and child dgg's
+      const DgIDGG* dgg   (void) { return curResDgg_; }
+      const DgIDGG* pDgg  (void) { return pResDgg_; }
+      const DgIDGG* chDgg (void) { return chResDgg_; }
 
    protected:
 
-      DgHierNdxIDGG<TINT, TSTR> (const DgNdxHierIDGGSBase& ndxHierDggsIn, int resIn, 
+      DgHierNdxIDGGBase (const DgNdxHierIDGGSBase& ndxHierDggsIn, int resIn, 
                const string& nameIn = "HierNdxIDGG");
 
-};
+      int setDgg (const DgIDGG** dgg, int res);
 
-////////////////////////////////////////////////////////////////////////////////
-#include "../lib/DgNdxHierRFS.hpp"
+      virtual void initialize (void);
+
+      const DgNdxHierIDGGSBase& ndxHierDggs_;
+      const DgIDGGS& dggs_;
+      int aperture_;
+
+      const DgIDGG* curResDgg_;
+      const DgIDGG* pResDgg_;
+      const DgIDGG* chResDgg_;
+
+};
 
 ////////////////////////////////////////////////////////////////////////////////
 #endif

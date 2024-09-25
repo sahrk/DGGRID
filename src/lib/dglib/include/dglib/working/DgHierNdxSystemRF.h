@@ -61,11 +61,10 @@ class DgHierNdxSystemRF<B, DB> : DgDiscRF<DgHierNdx, B, DB> {
 
    public:
 
-      const DgNdxHierRFS<B, DB>& ndxHierRFS (void) { return ndxHierRFS_; }
+      const DgNdxHierRFS<B, DB>& ndxHierRFS (void) 
+                { return ndxHierRFS_; }
 
-      const bool outModeInt (void) { return outModeInt_; }
-
-      void setOutModeInt (bool outModeIntIn = true) { outModeInt_ = outModeIntIn; }
+      bool outModeInt (void) { return ndxHierRFS().outModeInt(); }
 
       int res      (void) const { return res_; }
       int aperture (void) const { return aperture_; }
@@ -81,10 +80,12 @@ class DgHierNdxSystemRF<B, DB> : DgDiscRF<DgHierNdx, B, DB> {
 
    protected:
 
-      DgHierNdxSystemRF (const DgNdxHierRFS& ndxHierRFSIn, int resIn, 
-               bool outModeIntIn = true, const string& nameIn = "HierNdxSysRF");
+      DgHierNdxSystemRF<B, DB> (
+            const DgNdxHierRFS<B, DB>& ndxHierRFSIn, int resIn, 
+            const string& nameIn = "HierNdxSysRF");
 
       int setSystemSet (DgSystemSet& set, int res);
+      virtual void initialize (void);
 
       const DgNdxHierRFS<B, DB>& ndxHierRFS_;
       int res_;
@@ -93,8 +94,6 @@ class DgHierNdxSystemRF<B, DB> : DgDiscRF<DgHierNdx, B, DB> {
       DgSystemSet curRes_;
       DgSystemSet chRes_;
 
-      // use int form (vs str) for output?
-      bool outModeInt_;
 };
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -36,6 +36,10 @@ template<class B, class DB> class DgNdxHierRFS :
 
    public:
 
+      // externally an Int or Str form?
+      bool outModeInt (void) { return outModeInt_; }
+      void setOutModeInt (bool outModeIntIn = true) { outModeInt_ = outModeIntIn; }
+
       // indexing parent
       // only the DgLocation version performs checking on the input
 
@@ -114,8 +118,11 @@ template<class B, class DB> class DgNdxHierRFS :
 
    protected:
 
-     DgNdxHierRFS <B, DB>(void)
-        : grids_ (new vector<const DgHierNdxSystemRF<B, DB>*>(nRes_, nullptr))
+     DgNdxHierRFS <B, DB>(DgRFNetwork& networkIn, const DgRF<B, DB>& backFrameIn,
+           int nResIn, bool outModeIntIn = true, const string& nameIn = "NdxHierRFS")
+        : DiscRFS<DgHierNdx, B, DB> (networkIn, backFrameIn, nResIn, nameIn),
+          grids_ (new vector<const DgHierNdxSystemRF<B, DB>*>(nRes_, nullptr)),
+          outModeInt_ (outModeIntIn)
      { }
 
      // new pure virtual functions
@@ -123,6 +130,8 @@ template<class B, class DB> class DgNdxHierRFS :
                                    DgLocation& parent) const = 0;
      virtual void setAddNdxChildren (const DgResAdd<DgHierNdx>& add,
                                      DgLocVector& children) const = 0;
+
+     bool outModeInt_;
 
 };
 

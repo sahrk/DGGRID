@@ -48,8 +48,11 @@ class DgNdxHierIDGGSBase
 
    protected:
 
-     DgNdxHierIDGGSBase (const DgIDGGSBase& dggsIn)
-        : DgNdxHierRFS(), dggs_ (dggsIn)
+     DgNdxHierIDGGSBase (const DgIDGGSBase& dggsIn, bool outModeIntIn = true, 
+            const string& nameIn = "NdxHierIDGGSBase")
+        : DgNdxHierRFS(dggsIn.network(), dggsIn, dggsIn.nRes(), outModeIntIn, nameIn), 
+          dggs_ (dggsIn)
+     { }
 
      // pure virtual functions passed down from above
      virtual void setAddNdxParent (const DgResAdd<DgHierNdx>& add,

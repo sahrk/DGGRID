@@ -18,21 +18,29 @@
 *******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
-// DgHierNdxIDGG.cpp: DgHierNdxIDGG class implementation
+// DgHierNdxIDGGBase.cpp: DgHierNdxIDGGBase class implementation
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <dglib/DgHierNdxIDGG.h>
+#include <dglib/DgHierNdxIDGGBase.h>
 #include <dglib/DgNdxHierIDGGSBase.h>
 
 ////////////////////////////////////////////////////////////////////////////////
-DgHierNdxIDGG::DgHierNdxIDGG (const DgNdxHierIDGGSBase& ndxHierDggsIn, int resIn,
-               bool outModeIntIn, const string& nameIn)
-   : DgHierNdxSystemRF (ndxHierDggsIn, resIn, outModeIntIn, nameIn),
+DgHierNdxIDGGBase::DgHierNdxIDGGBase (const DgNdxHierIDGGSBase& ndxHierDggsIn, int resIn,
+               const string& nameIn)
+   : DgHierNdxSystemRF (ndxHierDggsIn, resIn, nameIn),
      ndxHierDggs_ (ndxHierDggsIn), dggs_ (ndxHierDggsIn.dggs()), 
      aperture_ (ndxHierDggsIn.dggs().aperture()), curResDgg_ (nullptr),
      pResDgg_ (nullptr), chResDgg_ (nullptr)
 {
+   // RFS has to call initialize to set up the systems
+}
+
+////////////////////////////////////////////////////////////////////////////////
+void
+DgHierNdxIDGGBase::initialize (void)
+{
+   DgHierNdxSystemRF::initialize();
    setDgg(&pResDgg_, res() - 1);
    setDgg(&curResDgg_, res());
    setDgg(&chResDgg_, res() + 1);
@@ -40,7 +48,7 @@ DgHierNdxIDGG::DgHierNdxIDGG (const DgNdxHierIDGGSBase& ndxHierDggsIn, int resIn
 
 ////////////////////////////////////////////////////////////////////////////////
 int 
-DgHierNdxIDGG::setDgg (const DgIDGG** dgg, int res)
+DgHierNdxIDGGBase::setDgg (const DgIDGG** dgg, int res)
 {
    *dgg = nullptr;
    if (res < 0 || res >= rfs().nRes())

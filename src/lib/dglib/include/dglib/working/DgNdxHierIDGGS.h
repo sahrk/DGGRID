@@ -37,9 +37,18 @@ template <class TINT, class TSTR> class DgNdxHierIDGGS :
 
    protected:
 
-     DgNdxHierIDGGS (const DgIDGGSBase& dggsIn)
-        : DgNdxHierIDGGSBase(dggsIn)
+     DgNdxHierIDGGS (const DgIDGGSBase& dggsIn, bool outModeIntIn = true, 
+            const string& nameIn = "NdxHierIDGGS")
+        : DgNdxHierIDGGSBase(dggsIn, outModeIntIn, nameIn)
      { 
+        for (int r = 0; r < res(); r++) {
+           grids_[r] = new DgHierNdxIDGG(*this, r, );
+
+      DgHierNdxIDGG (const DgNdxHierIDGGSBase& ndxHierDggsIn, int resIn,
+               bool outModeIntIn = true, const string& nameIn = "HierNdxIDGG");
+
+
+        }
      }
 
      // pure virtual functions passed down from above

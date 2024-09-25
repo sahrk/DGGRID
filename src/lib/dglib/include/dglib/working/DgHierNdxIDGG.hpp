@@ -18,45 +18,25 @@
 *******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
-// DgHierNdxSystemRF.cpp: DgHierNdxSystemRF class implementation
+// DgHierNdxIDGG.hpp: DgHierNdxIDGG template method definitions
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <dglib/DgHierNdxSystemRF.h>
-#include <dglib/DgNdxHierIDGGSBase.h>
+//#include <dglib/DgHierNdxIDGG.h>
+//#include <dglib/DgNdxHierIDGGSBase.h>
 
 ////////////////////////////////////////////////////////////////////////////////
-DgHierNdxSystemRF<B, DB>::DgHierNdxSystemRF (
-      const DgNdxHierIDGGSBase& ndxHierDggsIn, int resIn, const string& nameIn)
-   : DgDiscRF<DgHierNdx, B, DB>(ndxHierDggsIn.dggs().network, 
-              ndxHierDggsIn.dggs()[resIn], nameIn), 
-     ndxHierDggs_ (ndxHierDggsIn), dggs_ (ndxHierDggsIn.dggs()), res_ (resIn), 
-     aperture_ (ndxHierDggsIn.dggs().aperture()), pRes_ {nullptr, nullptr}, 
-     curRes_ {nullptr, nullptr}, chRes_ {nullptr, nullptr}
-{ 
-   // RFS has to call initialize to set up the parent and child systems 
-}
-
-////////////////////////////////////////////////////////////////////////////////
-void
-DgHierNdxSystemRF<B, DB>::initialize (void)
+DgHierNdxIDGG::DgHierNdxIDGG (const DgNdxHierIDGGSBase& ndxHierDggsIn, int resIn,
+               const string& nameIn)
+   : DgHierNdxSystemRF (ndxHierDggsIn, resIn, nameIn),
+     ndxHierDggs_ (ndxHierDggsIn), dggs_ (ndxHierDggsIn.dggs()), 
+     aperture_ (ndxHierDggsIn.dggs().aperture()), curResDgg_ (nullptr),
+     pResDgg_ (nullptr), chResDgg_ (nullptr)
 {
-   setSystemSet(pRes_, res_ - 1);
-   setSystemSet(chRes_, res_ + 1);
-}
+  curRes_.intRF_ = ndxHierDggs_[res_].intRF();
+  curRes_.strRF_ = ndxHierDggs_[res_].strRF();
 
-////////////////////////////////////////////////////////////////////////////////
-int 
-DgHierNdxSystemRF<B, DB>::setSystemSet (DgSystemSet& set, int res)
-{
-   set.intRF_ = nullptr;
-   set.strRF_ = nullptr;
-   if (res < 0 || res >= rfs().nRes())
-      return 1;
-
-   // if we're here res is valid
-   set.intRF_ = ndxHierDggs_[res].intRF();
-   set.strRF_ = ndxHierDggs_[res].strRF();
+   // RFS has to call initialize to set up the systems
 }
 
 ////////////////////////////////////////////////////////////////////////////////
