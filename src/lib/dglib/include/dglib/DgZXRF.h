@@ -50,8 +50,13 @@ class DgZXRF : public DgHierNdxIntRF {
                              const std::string& nameIn) 
          { return new DgZXRF (dggsIn, resIn, nameIn); }
 
-      virtual const char* str2addTyped (DgHierNdxCoord<uint64_t>* add, 
+      virtual const char* str2addTyped (DgHierNdxIntCoord* add, 
                                  const char* str, char delimiter) const;
+
+      // these need to be defined by specializations
+      // they have dummy definitions from the superclass
+      virtual HIERNDX_INT_TYPE quantify (const DgQ2DICoord& point) const
+      virtual DgQ2DICoord invQuantify (const HIERNDX_INT_TYPE& add) const
 
    protected:
 
