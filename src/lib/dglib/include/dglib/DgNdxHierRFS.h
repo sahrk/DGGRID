@@ -26,46 +26,51 @@
 #define DGNDXHIERRFS_H
 
 #include <vector>
-#include <dglib/DgDiscTopoRFS.h>
+#include <dglib/DgDiscRFS.h>
+
+class DgHierNdx;
 
 ////////////////////////////////////////////////////////////////////////////////
-template<class A, class B, class DB> class DgNdxHierRFS {
+template<class B, class DB> class DgNdxHierRFS : 
+                                          public DgDiscRFS<DgHierNdx, B, DB> {
 
    public:
-    
-      const DgDiscTopoRFS<A, B, DB>& rfs (void) const { return rfs_; }
+
+      // externally an Int or Str form?
+      bool outModeInt (void) { return outModeInt_; }
+      void setOutModeInt (bool outModeIntIn = true) { outModeInt_ = outModeIntIn; }
 
       // indexing parent
       // only the DgLocation version performs checking on the input
 
       virtual void setNdxParent (int res, const DgLocation& loc, DgLocation& parent) const;
 
-      virtual void setNdxParent (const DgResAdd<A>& add, const DgRFBase& rf,
+      virtual void setNdxParent (const DgResAdd<DgHierNdx>& add, const DgRFBase& rf,
                                DgLocation& parent) const
            {
              setNdxParent(add, parent);
              rf.convert(&parent);
            }
 
-      virtual void setNdxParent (const DgResAdd<A>& add, DgLocation& parent) const
+      virtual void setNdxParent (const DgResAdd<DgHierNdx>& add, DgLocation& parent) const
            {
              //add.clearAddress();
-             rfs().convert(&parent);
-             if (add.res() > 0 && add.res() < rfs().nRes())
+             convert(&parent);
+             if (add.res() > 0 && add.res() < nRes())
 	         setAddNdxParent(add, parent);
            }
 
       virtual DgLocation* makeNdxParent (int res, const DgLocation& loc) const
            {
-             DgLocation* parent = new DgLocation(rfs());
+             DgLocation* parent = new DgLocation(*this);
              setNdxParent(res, loc, *parent);
 
              return parent;
            }
 
-      virtual DgLocation* makeNdxParent (const DgResAdd<A>& add) const
+      virtual DgLocation* makeNdxParent (const DgResAdd<DgHierNdx>& add) const
            {
-             DgLocation* parent = new DgLocation(rfs());
+             DgLocation* parent = new DgLocation(*this);
              setNdxParent(add, *parent);
              return parent;
            }
@@ -76,7 +81,7 @@ template<class A, class B, class DB> class DgNdxHierRFS {
       virtual void setNdxChildren (int res,
                     const DgLocation& loc, DgLocVector& chld) const;
 
-      virtual void setNdxChildren (const DgResAdd<A>& add,
+      virtual void setNdxChildren (const DgResAdd<DgHierNdx>& add,
                                         const DgRFBase& rf,
                                         DgLocVector& chld) const
            {
@@ -84,12 +89,12 @@ template<class A, class B, class DB> class DgNdxHierRFS {
               rf.convert(chld);
            }
 
-      virtual void setNdxChildren (const DgResAdd<A>& add,
+      virtual void setNdxChildren (const DgResAdd<DgHierNdx>& add,
                                         DgLocVector& chld) const
            {
              chld.clearAddress();
-             rfs().convert(chld);
-             if (add.res() >= 0 && add.res() < (rfs().nRes() - 1)) {
+             convert(chld);
+             if (add.res() >= 0 && add.res() < (nRes() - 1)) {
                 setAddNdxChildren(add, chld);
              }
            }
@@ -97,63 +102,40 @@ template<class A, class B, class DB> class DgNdxHierRFS {
       virtual DgLocVector* makeNdxChildren (int res,
                                                  const DgLocation& loc) const
            {
-             DgLocVector* chld = new DgLocVector(rfs());
+             DgLocVector* chld = new DgLocVector(*this);
              setNdxChildren(res, loc, *chld);
 
              return chld;
            }
 
-      virtual DgLocVector* makeNdxChildren (const DgResAdd<A>& add) const
+      virtual DgLocVector* makeNdxChildren (const DgResAdd<DgHierNdx>& add) const
            {
-             DgLocVector* chld = new DgLocVector(rfs());
+             DgLocVector* chld = new DgLocVector(*this);
              setNdxChildren(add, *chld);
 
              return chld;
            }
 
-      virtual operator string (void) const
-      {
-/*
-         string s = "*** DgNdxHierRFS " + DgRFBase::name() +
-               "\nap: " + dgg::util::to_string(aperture()) +
-               "\nnRes: " + dgg::util::to_string(nRes()) +
-               "\nisCongruent: " + dgg::util::to_string(isCongruent()) +
-               "\nisAligned: " + dgg::util::to_string(isAligned()) + "\n";
-         for (int i = 0; i < nRes(); i++)
-            s += " >>> " + dgg::util::to_string(i) + ": " +
-                   string(*(*grids_)[i]) + "\n";
-
-*/
-         string s = "*** DgNdxHierRFS";
-         return s;
-      }
-
    protected:
 
-     DgNdxHierRFS (const DgDiscTopoRFS<A, B, DB>& rfsIn)
-        : rfs_ (rfsIn)
+     DgNdxHierRFS <B, DB>(DgRFNetwork& networkIn, const DgRF<B, DB>& backFrameIn,
+           int nResIn, bool outModeIntIn = true, const string& nameIn = "NdxHierRFS")
+        : DiscRFS<DgHierNdx, B, DB> (networkIn, backFrameIn, nResIn, nameIn),
+          grids_ (new vector<const DgHierNdxSystemRF<B, DB>*>(nRes_, nullptr)),
+          outModeInt_ (outModeIntIn)
      { }
 
      // new pure virtual functions
-     virtual void setAddNdxParent (const DgResAdd<A>& add,
+     virtual void setAddNdxParent (const DgResAdd<DgHierNdx>& add,
                                    DgLocation& parent) const = 0;
-     virtual void setAddNdxChildren (const DgResAdd<A>& add,
+     virtual void setAddNdxChildren (const DgResAdd<DgHierNdx>& add,
                                      DgLocVector& children) const = 0;
 
-   private:
+     bool outModeInt_;
 
-     // state data
-     const DgDiscTopoRFS<A, B, DB>& rfs_;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-template<class A, class B, class DB> ostream& operator<< (ostream& stream,
-          const DgNdxHierRFS<A, B, DB>& g)
-{
-   stream << string(g) << endl;
-
-   return stream;
-}
 
 // JFW: is this really what we mean?
 #include "../lib/DgNdxHierRFS.hpp"

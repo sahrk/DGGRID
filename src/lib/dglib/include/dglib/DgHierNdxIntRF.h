@@ -35,27 +35,22 @@ using namespace std;
 #define HIERNDX_INT_TYPE uint64_t
 
 ////////////////////////////////////////////////////////////////////////////////
-//
-class DgHierNdxIntCoord : public DgHierNdxCoord<HIERNDX_INT_TYPE> {
-
-   public:
-
-      // method for sub-classes to define
-      // virtual string valString (void) const;
-};
-
-////////////////////////////////////////////////////////////////////////////////
 class DgHierNdxIntRF : public DgHierNdxRF<HIERNDX_INT_TYPE> {
 
    public:
 
-      static DgHierNdxIntRF* makeRF (const DgIDGGS& dggsIn, int resIn, 
-                                     const string& nameIn)
+      static DgHierNdxIntRF* makeRF (const DgIDGGS& dggsIn, int resIn,
+                                     const string& nameIn = "IntNdx")
          { return new DgHierNdxIntRF(dggsIn, resIn, nameIn); }
 
-      // method to be defined by sub-classes
-      // virtual const char* str2addTyped (DgHierNdxCoord<HIERNDX_INT_TYPE>* add, const char* str,
-      //                             char delimiter) const;
+      // these assume input/output strings are in hexadecimal
+      virtual string add2str (const HIERNDX_INT_TYPE& add) const;
+      virtual const char* str2add (HIERNDX_INT_TYPE* c, const char* str, char delimiter) const;
+
+      // these need to be defined by specializations
+      // they have dummy definitions from the superclass
+      //virtual HIERNDX_INT_TYPE quantify (const DgQ2DICoord& point) const
+      //virtual DgQ2DICoord invQuantify (const HIERNDX_INT_TYPE& add) const
 
    protected:
 

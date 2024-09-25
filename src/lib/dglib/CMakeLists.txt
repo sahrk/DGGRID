@@ -41,8 +41,11 @@ add_library(dglib
   lib/DgHexGrid2DS.cpp
   lib/DgHexIDGG.cpp
   lib/DgHexIDGGS.cpp
+  lib/DgHierNdxIDGGBase.cpp
   lib/DgHierNdxIntRF.cpp
-  lib/DgHierNdxRFBase.cpp
+  lib/DgHierNdxSystemRF.cpp
+  lib/DgHierNdxIDGG.hpp
+  lib/DgNdxHierRFS.hpp
   lib/DgIcosaMap.cpp
   lib/DgIDGGBase.cpp
   lib/DgIDGG.cpp
@@ -68,8 +71,6 @@ add_library(dglib
   lib/DgLocBase.cpp
   lib/DgLocList.cpp
   lib/DgLocVector.cpp
-  lib/DgNdxHierRFS.hpp
-  lib/DgNdxHierCPI.cpp
   lib/DgOutAIGenFile.cpp
   lib/DgOutChildrenFile.cpp
   lib/DgOutGdalFile.cpp
@@ -167,9 +168,14 @@ add_library(dglib
   include/dglib/DgHexGrid2DS.h
   include/dglib/DgHexIDGG.h
   include/dglib/DgHexIDGGS.h
+  include/dglib/DgHierNdxIDGG.h
+  include/dglib/DgHierNdxIDGGBase.h
   include/dglib/DgHierNdxIntRF.h
   include/dglib/DgHierNdxRF.h
-  include/dglib/DgHierNdxRFBase.h
+  include/dglib/DgHierNdxSystemRF.h
+  include/dglib/DgNdxHierIDGGS.h
+  include/dglib/DgNdxHierIDGGSBase.h
+  include/dglib/DgNdxHierRFS.h
   include/dglib/DgIDGG.h
   include/dglib/DgIDGGBase.h
   include/dglib/DgIDGGS.h
@@ -198,11 +204,6 @@ add_library(dglib
   include/dglib/DgLocList.h
   include/dglib/DgLocVector.h
   include/dglib/DgLocation.h
-  include/dglib/DgNdxHierCPI.h
-  include/dglib/DgNdxHierHexIDGGS.h
-  include/dglib/DgNdxHierIDGGS.h
-  include/dglib/DgNdxHierRFS.h
-  include/dglib/DgNdxHierRFS.h
   include/dglib/DgOutAIGenFile.h
   include/dglib/DgOutChildrenFile.h
   include/dglib/DgOutGdalFile.h

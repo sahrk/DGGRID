@@ -27,37 +27,35 @@
 
 #include <vector>
 #include <dglib/DgIDGGSBase.h>
-#include <dglib/DgNdxHierRFS.h>
+#include <dglib/DgNdxHierIDGGSBase.h>
 
 ////////////////////////////////////////////////////////////////////////////////
-class DgNdxHierIDGGS : 
-         public DgNdxHierRFS<DgQ2DICoord, DgGeoCoord, long double> {
+template <class TINT, class TSTR> class DgNdxHierIDGGS :
+                                     public DgNdxHierIDGGSBase {
 
    public:
-    
-      const DgIDGGSBase& idggs (void) { return idggs_; }
-
-      virtual operator string (void) const
-      {
-         string s = "*** DgNdxHierIDGGS";
-         return s;
-      }
 
    protected:
 
-     DgNdxHierIDGGS (const DgIDGGSBase& idggsIn)
-        : DgNdxHierRFS(idggsIn), idggs_ (idggsIn)
-     { }
+     DgNdxHierIDGGS (const DgIDGGSBase& dggsIn, bool outModeIntIn = true, 
+            const string& nameIn = "NdxHierIDGGS")
+        : DgNdxHierIDGGSBase(dggsIn, outModeIntIn, nameIn)
+     { 
+        for (int r = 0; r < res(); r++) {
+           grids_[r] = new DgHierNdxIDGG(*this, r, );
+
+      DgHierNdxIDGG (const DgNdxHierIDGGSBase& ndxHierDggsIn, int resIn,
+               bool outModeIntIn = true, const string& nameIn = "HierNdxIDGG");
+
+
+        }
+     }
 
      // pure virtual functions passed down from above
      virtual void setAddNdxParent (const DgResAdd<DgQ2DICoord>& add,
                                    DgLocation& parent) const = 0;
      virtual void setAddNdxChildren (const DgResAdd<DgQ2DICoord>& add,
                                      DgLocVector& children) const = 0;
-
-   private:
-     // state data
-     const DgIDGGSBase& idggs_;
 };
 
 #endif
