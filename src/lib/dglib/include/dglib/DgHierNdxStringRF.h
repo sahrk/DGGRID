@@ -18,54 +18,53 @@
 *******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
-// DgHierNdxIntRF.h: DgHierNdxIntRF header file
+// DgHierNdxStringRF.h: DgHierNdxStringRF header file
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef DGHIERNDXINTRF_H
-#define DGHIERNDXINTRF_H
+#ifndef DGHIERNDXSTRINGRF_H
+#define DGHIERNDXSTRINGRF_H
 
-//#include <climits>
+#include <climits>
 #include <iostream>
 
 #include <dglib/DgHierNdxRF.h>
 
-using namespace std;
-
-#define HIERNDX_INT_TYPE uint64_t
+//using namespace std;
 
 ////////////////////////////////////////////////////////////////////////////////
-class DgHierNdxIntCoord : public DgHierNdxCoord<HIERNDX_INT_TYPE> {
-
-   public: 
-
-      // define abstract method from above
-      // output as hexadecimal string
-      virtual std::string valString (void) const;
-}
-
-////////////////////////////////////////////////////////////////////////////////
-class DgHierNdxIntRF : public DgHierNdxRF<DgHierNdxIntCoord> {
+class DgHierNdxStringCoord : public DgHierNdxCoord<std::string> {
 
    public:
 
-      static DgHierNdxIntRF* makeRF (const DgIDGGS& dggsIn, int resIn,
-                                     const string& nameIn = "IntNdx")
-         { return new DgHierNdxIntRF(dggsIn, resIn, nameIn); }
+      // abstract method from above
+      virtual std::string valString (void) const {
+         return value();
+      }
+}
 
-      // these assume input/output strings are in hexadecimal
-      virtual string add2str (const DgHierNdxIntCoord& add) const { return add.valString(); }
-      virtual const char* str2add (DgHierNdxIntCoord* c, const char* str, char delimiter) const;
+////////////////////////////////////////////////////////////////////////////////
+class DgHierNdxStringRF : public DgHierNdxRF<DgHierNdxStringCoord> {
+
+   public:
+
+      static DgHierNdxStringRF* makeRF (const DgIDGGS& dggsIn, int resIn,
+                                     const string& nameIn = "IntNdx")
+         { return new DgHierNdxStringRF(dggsIn, resIn, nameIn); }
+
+      virtual string add2str (const DgHierNdxStringCoord& add) const
+                        { return add.value(); }
 
       // these need to be defined by specializations
+      //virtual const char* str2add (DgHierNdxStringCoord* c, const char* str, char delimiter) const
       // they have dummy definitions from the superclass
-      //virtual DgHierNdxIntCoord quantify (const DgQ2DICoord& point) const
-      //virtual DgQ2DICoord invQuantify (const DgHierNdxIntCoord& add) const
+      //virtual DgHierNdxStringCoord quantify (const DgQ2DICoord& point) const
+      //virtual DgQ2DICoord invQuantify (const DgHierNdxStringCoord& add) const
 
    protected:
 
-      DgHierNdxIntRF (const DgIDGGS& dggsIn, int resIn, const string& nameIn)
-         : DgHierNdxRF<DgHierNdxIntCoord>(dggsIn, resIn, nameIn) { }
+      DgHierNdxStringRF (const DgIDGGS& dggsIn, int resIn, const string& nameIn)
+         : DgHierNdxRF<DgHierNdxStringCoord>(dggsIn, resIn, nameIn) { }
 
 };
 

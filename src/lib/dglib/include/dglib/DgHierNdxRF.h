@@ -36,6 +36,52 @@
 using namespace std;
 
 ////////////////////////////////////////////////////////////////////////////////
+class DgHierNdxCoord<T>  {
+
+   public:
+
+      //static const DgHierNdxCoord<T> undefDgHierNdxCoord<T>;
+
+      DgHierNdxCoord<T> (void) : value_ (0) { }
+
+      DgHierNdxCoord<T> (T valIn) : value_ (valIn) { }
+
+      DgHierNdxCoord<T> (const DgHierNdxCoord<T>& coord)
+              { value_ = coord.value(); }
+
+      void setValue (T value) { value_ = value; }
+
+      T value (void) const { return value_; }
+
+      operator std::string (void) const { return valString(); }
+
+      bool operator== (const DgHierNdxCoord<T>& c) const
+          { return value() == c.value(); }
+
+      bool operator!= (const DgHierNdxCoord<T>& c) const
+          { return !(*this == c); }
+
+      DgHierNdxCoord<T>& operator= (const DgHierNdxCoord<T>& add)
+          {
+             if (add != *this) setValue(add.value());
+
+             return *this;
+          }
+
+      // sub-classes must define
+      virtual std::string valString (void) const = 0;
+
+   private:
+
+      T value_;
+};
+
+////////////////////////////////////////////////////////////////////////////////
+inline ostream&
+operator<< (ostream& stream, const DgHierNdxCoord<T>& coord)
+{ return stream << std::string(coord); }
+
+////////////////////////////////////////////////////////////////////////////////
 template <class T> class DgHierNdxRF :
                        public DgDiscRF<T, DgQ2DICoord, long long int>
 {

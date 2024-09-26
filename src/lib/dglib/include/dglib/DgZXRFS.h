@@ -18,40 +18,39 @@
 *******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
-// DgZXRF.h: DgZXRF header file
+// DgZXRFS.h: DgZXRFS class definitions
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef DGZXRF_H
-#define DGZXRF_H
+#ifndef DGZXRFS_H
+#define DGZXRFS_H
 
-//#include <climits>
-//#include <iostream>
+#include <dglib/DgNdxHierIDGGS.h>
 
-#include <dglib/DgHierNdxIntRF.h>
-
-//using namespace std;
+class DgZXRF;
+class DgZXStringRF;
 
 ////////////////////////////////////////////////////////////////////////////////
-class DgZXRF : public DgHierNdxIntRF {
+class DgZXRFS : public DgNdxHierIDGGS<DgZXRF, DgZXStringRF> {
 
    public:
 
-      static DgZXRF* makeRF (const DgIDGGS& dggsIn, int resIn, 
-                             const std::string& nameIn) 
-         { return new DgZXRF (dggsIn, resIn, nameIn); }
-
-      // these need to be defined by specializations
-      // they have dummy definitions from the superclass
-      virtual DgHierNdxIntCoord quantify (const DgQ2DICoord& point) const;
-      virtual DgQ2DICoord invQuantify (const DgHierNdxIntCoord& add) const;
-
    protected:
 
-      DgZXRF (const DgIDGGS& dggsIn, int resIn, const std::string& nameIn)
-         : DgHierNdxIntRF(dggsIn, resIn, nameIn) { }
+     DgZXRFS (const DgIDGGSBase& dggsIn, bool outModeIntIn = true, 
+            const string& nameIn = "ZXRFS")
+        : DgNdxHierIDGGS(dggsIn, outModeIntIn, nameIn)
+     { 
+     }
 
+     // override virtual functions with dummy definitions from above
+     // quant/invQuant?
+
+     // pure virtual functions passed down from above
+     virtual void setAddNdxParent (const DgResAdd<DgQ2DICoord>& add,
+                                   DgLocation& parent) const = 0;
+     virtual void setAddNdxChildren (const DgResAdd<DgQ2DICoord>& add,
+                                     DgLocVector& children) const = 0;
 };
 
-////////////////////////////////////////////////////////////////////////////////
 #endif

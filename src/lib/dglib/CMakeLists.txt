@@ -43,6 +43,7 @@ add_library(dglib
   lib/DgHexIDGGS.cpp
   lib/DgHierNdxIDGGBase.cpp
   lib/DgHierNdxIntRF.cpp
+  lib/DgHierNdxStringRF.cpp
   lib/DgHierNdxSystemRF.cpp
   lib/DgHierNdxIDGG.hpp
   lib/DgNdxHierRFS.hpp
@@ -114,6 +115,7 @@ add_library(dglib
   lib/DgZ3StringRF.cpp
   lib/DgZ7RF.cpp
   lib/DgZ7StringRF.cpp
+  lib/DgZXStringRF.cpp
   lib/DgZOrderRF.cpp
   lib/DgZOrderStringRF.cpp
   lib/DgZXRF.cpp
@@ -172,6 +174,7 @@ add_library(dglib
   include/dglib/DgHierNdxIDGGBase.h
   include/dglib/DgHierNdxIntRF.h
   include/dglib/DgHierNdxRF.h
+  include/dglib/DgHierNdxStringRF.h
   include/dglib/DgHierNdxSystemRF.h
   include/dglib/DgNdxHierIDGGS.h
   include/dglib/DgNdxHierIDGGSBase.h
@@ -254,6 +257,8 @@ add_library(dglib
   include/dglib/DgZOrderRF.h
   include/dglib/DgZOrderStringRF.h
   include/dglib/DgZXRF.h
+  include/dglib/DgZXRFS.h
+  include/dglib/DgZXStringRF.h
 )
 
 if(GDAL_FOUND)

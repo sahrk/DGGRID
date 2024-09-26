@@ -18,60 +18,40 @@
 *******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
-// DgHierNdxIntRF.cpp: DgHierNdxIntRF class implementation
+// DgZXStringRF.cpp: DgZXStringRF class implementation
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#define __STDC_FORMAT_MACROS
-#include <inttypes.h>
-#include <cmath>
-#include <climits>
-#include <cstdint>
-#include <cfloat>
 #include <string.h>
 
-#include <dglib/DgHierNdxIntRF.h>
+#include <dglib/DgZXStringRF.h>
 
 ////////////////////////////////////////////////////////////////////////////////
-template<> const DgHierNdxCoord<uint64_t> DgHierNdxCoord<uint64_t>::undefCoordTyped(UINT64_MAX);
+//const DgZXStringCoord DgZXStringCoord::undefDgZXStringCoord(0xffffffffffffffff);
 
 ////////////////////////////////////////////////////////////////////////////////
-std::string
-DgHierNdxIntCoord::valString (void) const {
-   const int maxStrSize = 17; // max 16 digits plus 1 for the null terminator
-   char str[maxStrSize];
-   snprintf(str, maxStrSize, "%016" PRIx64, value());
+const char*
+DgZXStringRF::str2add (DgHierNdxStringCoord* add, const char* str,
+                                   char delimiter) const
+{
+   return str;
 
-   return string(str);
+} // const char* DgZXStringRF::str2add
+
+////////////////////////////////////////////////////////////////////////////////
+DgHierNdxStringCoord 
+DgZXStringRF::quantify (const DgQ2DICoord& point) const
+{
+   DgHierNdxStringCoord c;
+   return c;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-// assumes hexadecimal
-const char* 
-DgHierNdxIntRF::str2add (DgHierNdxIntCoord* c, const char* str, 
-                    char delimiter) const;
+DgQ2DICoord 
+DgZXStringRF::invQuantify (const DgHierNdxStringCoord& add) const
 {
-   char delimStr[2];
-   delimStr[0] = delimiter;
-   delimStr[1] = '\0';
-
-   char* tmpStr = new char[strlen(str) + 1];
-   strcpy(tmpStr, str);
-   char* tok = strtok(tmpStr, delimStr);
-
-   // convert to a unit64_t
-   uint64_t val = 0;
-   if (!sscanf(tok, "%" PRIx64, &val))
-      report("DgHierNdxIntRF::str2add(): invalid index", DgBase::Fatal);
-
-   if (!add) add = new DgHierNdxIntCoord();
-   add->setValue(val);
-
-   unsigned long offset = strlen(tok) + 1;
-   delete[] tmpStr;
-   if (offset >= strlen(str)) return 0;
-   else return &str[offset];
-
-} // const char* DgHierNdxIntRF::str2add
+   DgQ2DICoord c;
+   return c;
+}
 
 ////////////////////////////////////////////////////////////////////////////////

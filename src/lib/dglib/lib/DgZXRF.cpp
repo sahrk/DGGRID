@@ -22,12 +22,12 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#define __STDC_FORMAT_MACROS
-#include <inttypes.h>
-#include <cmath>
-#include <climits>
-#include <cfloat>
-#include <string.h>
+//#define __STDC_FORMAT_MACROS
+//#include <inttypes.h>
+//#include <cmath>
+//#include <climits>
+//#include <cfloat>
+//#include <string.h>
 
 #include <dglib/DgZXRF.h>
 
@@ -35,24 +35,19 @@
 //const DgZXCoord DgZXCoord::undefDgZXCoord(0xffffffffffffffff);
 
 ////////////////////////////////////////////////////////////////////////////////
-const char*
-DgZXRF::str2addTyped (DgHierNdxCoord<uint64_t>* add, const char* str, char delimiter) const
+DgHierNdxIntCoord 
+DgZXRF::quantify (const DgQ2DICoord& point) const 
 {
-   return str;
-
-} // const char* DgZXRF::str2addTyped
+   DgHierNdxIntCoord c;
+   return c;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
-string
-DgZXCoord::valString (void) const
+DgQ2DICoord 
+DgZXRF::invQuantify (const DgHierNdxIntCoord& add) const
 {
-   const int maxStrSize = 17; // max 16 digits plus 1 for the null terminator
-   char str[maxStrSize];
-   snprintf(str, maxStrSize, "%016" PRIx64, value());
+   DgQ2DICoord c;
+   return c;
+}
 
-   return string(str);
-
-} // const string& DgZXRF::valString
-
-////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

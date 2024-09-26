@@ -18,40 +18,16 @@
 *******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
-// DgZXRF.h: DgZXRF header file
+// DgHierNdxStringRF.cpp: DgHierNdxStringRF class implementation
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef DGZXRF_H
-#define DGZXRF_H
-
-//#include <climits>
-//#include <iostream>
-
-#include <dglib/DgHierNdxIntRF.h>
-
-//using namespace std;
+#include <dglib/DgHierNdxStringRF.h>
 
 ////////////////////////////////////////////////////////////////////////////////
-class DgZXRF : public DgHierNdxIntRF {
 
-   public:
-
-      static DgZXRF* makeRF (const DgIDGGS& dggsIn, int resIn, 
-                             const std::string& nameIn) 
-         { return new DgZXRF (dggsIn, resIn, nameIn); }
-
-      // these need to be defined by specializations
-      // they have dummy definitions from the superclass
-      virtual DgHierNdxIntCoord quantify (const DgQ2DICoord& point) const;
-      virtual DgQ2DICoord invQuantify (const DgHierNdxIntCoord& add) const;
-
-   protected:
-
-      DgZXRF (const DgIDGGS& dggsIn, int resIn, const std::string& nameIn)
-         : DgHierNdxIntRF(dggsIn, resIn, nameIn) { }
-
-};
+template<> const DgHierNdxCoord<string> DgHierNdxCoord<string>::undefCoordTyped("INVALID");
 
 ////////////////////////////////////////////////////////////////////////////////
-#endif
+////////////////////////////////////////////////////////////////////////////////
+

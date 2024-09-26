@@ -18,38 +18,38 @@
 *******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
-// DgZXRF.h: DgZXRF header file
+// DgZXStringRF.h: DgZXStringRF header file
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef DGZXRF_H
-#define DGZXRF_H
+#ifndef DGZXSTRINGRF_H
+#define DGZXSTRINGRF_H
 
-//#include <climits>
-//#include <iostream>
+#include <climits>
+#include <iostream>
 
-#include <dglib/DgHierNdxIntRF.h>
-
-//using namespace std;
+#include <dglib/DgHierNdxStringRF.h>
 
 ////////////////////////////////////////////////////////////////////////////////
-class DgZXRF : public DgHierNdxIntRF {
+class DgZXStringRF : public DgHierNdxStringRF {
 
    public:
 
-      static DgZXRF* makeRF (const DgIDGGS& dggsIn, int resIn, 
+      static DgZXStringRF* makeRF (const DgIDGGS& dggsIn, int resIn, 
                              const std::string& nameIn) 
-         { return new DgZXRF (dggsIn, resIn, nameIn); }
+         { return new DgZXStringRF (dggsIn, resIn, nameIn); }
 
       // these need to be defined by specializations
-      // they have dummy definitions from the superclass
-      virtual DgHierNdxIntCoord quantify (const DgQ2DICoord& point) const;
-      virtual DgQ2DICoord invQuantify (const DgHierNdxIntCoord& add) const;
+      virtual const char* str2add (DgHierNdxStringCoord* add, const char* str,
+                                   char delimiter) const;
+      // these have dummy definitions from the superclass
+      virtual DgHierNdxStringCoord quantify (const DgQ2DICoord& point) const;
+      virtual DgQ2DICoord invQuantify (const DgHierNdxStringCoord& add) const;
 
    protected:
 
-      DgZXRF (const DgIDGGS& dggsIn, int resIn, const std::string& nameIn)
-         : DgHierNdxIntRF(dggsIn, resIn, nameIn) { }
+      DgZXStringRF (const DgIDGGS& dggsIn, int resIn, const std::string& nameIn)
+         : DgHierNdxStringRF(dggsIn, resIn, nameIn) { }
 
 };
 
