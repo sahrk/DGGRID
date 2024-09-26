@@ -33,7 +33,7 @@
 #include <dglib/DgIDGG.h>
 
 class DgHierNdxRFInt;
-class DgNdxHierIDGGSBase;
+class DgHierNdxIDGGSBase;
 
 using namespace std;
 
@@ -43,7 +43,7 @@ class DgHierNdxIDGGBase :
 
    public:
 
-      const DgNdxHierIDGGSBase& ndxHierDggs (void) { return ndxHierDggs_; }
+      const DgHierNdxIDGGSBase& ndxHierDggs (void) { return ndxHierDggs_; }
       const DgIDGGS&            dggs        (void) { return dggs_; }
 
       int res      (void) const { return res_; }
@@ -55,14 +55,14 @@ class DgHierNdxIDGGBase :
 
    protected:
 
-      DgHierNdxIDGGBase (const DgNdxHierIDGGSBase& ndxHierDggsIn, int resIn, 
+      DgHierNdxIDGGBase (const DgHierNdxIDGGSBase& ndxHierDggsIn, int resIn, 
                const string& nameIn = "HierNdxIDGG");
 
       int setDgg (const DgIDGG** dgg, int res);
 
       virtual void initialize (void);
 
-      const DgNdxHierIDGGSBase& ndxHierDggs_;
+      const DgHierNdxIDGGSBase& ndxHierDggs_;
       const DgIDGGS& dggs_;
       int aperture_;
 

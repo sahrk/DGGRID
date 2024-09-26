@@ -23,11 +23,11 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <dglib/DgHierNdxSystemRF.h>
-#include <dglib/DgNdxHierIDGGSBase.h>
+#include <dglib/DgHierNdxIDGGSBase.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 DgHierNdxSystemRF<B, DB>::DgHierNdxSystemRF (
-      const DgNdxHierIDGGSBase& ndxHierDggsIn, int resIn, const string& nameIn)
+      const DgHierNdxIDGGSBase& ndxHierDggsIn, int resIn, const string& nameIn)
    : DgDiscRF<DgHierNdx, B, DB>(ndxHierDggsIn.dggs().network, 
               ndxHierDggsIn.dggs()[resIn], nameIn), 
      ndxHierDggs_ (ndxHierDggsIn), dggs_ (ndxHierDggsIn.dggs()), res_ (resIn), 

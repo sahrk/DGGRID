@@ -18,12 +18,12 @@
 *******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
-// DgNdxHierRFS.h: DgNdxHierRFS class definitions
+// DgHierNdxRFS.h: DgHierNdxRFS class definitions
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef DGNDXHIERRFS_H
-#define DGNDXHIERRFS_H
+#ifndef DGHIERNDXRFS_H
+#define DGHIERNDXRFS_H
 
 #include <vector>
 #include <dglib/DgDiscRFS.h>
@@ -31,7 +31,7 @@
 class DgHierNdx;
 
 ////////////////////////////////////////////////////////////////////////////////
-template<class B, class DB> class DgNdxHierRFS : 
+template<class B, class DB> class DgHierNdxRFS : 
                                           public DgDiscRFS<DgHierNdx, B, DB> {
 
    public:
@@ -118,8 +118,8 @@ template<class B, class DB> class DgNdxHierRFS :
 
    protected:
 
-     DgNdxHierRFS <B, DB>(DgRFNetwork& networkIn, const DgRF<B, DB>& backFrameIn,
-           int nResIn, bool outModeIntIn = true, const string& nameIn = "NdxHierRFS")
+     DgHierNdxRFS <B, DB>(DgRFNetwork& networkIn, const DgRF<B, DB>& backFrameIn,
+           int nResIn, bool outModeIntIn = true, const string& nameIn = "HierNdxRFS")
         : DiscRFS<DgHierNdx, B, DB> (networkIn, backFrameIn, nResIn, nameIn),
           grids_ (new vector<const DgHierNdxSystemRF<B, DB>*>(nRes_, nullptr)),
           outModeInt_ (outModeIntIn)
@@ -138,6 +138,6 @@ template<class B, class DB> class DgNdxHierRFS :
 ////////////////////////////////////////////////////////////////////////////////
 
 // JFW: is this really what we mean?
-#include "../lib/DgNdxHierRFS.hpp"
+#include "../lib/DgHierNdxRFS.hpp"
 
 #endif

@@ -46,7 +46,7 @@ add_library(dglib
   lib/DgHierNdxStringRF.cpp
   lib/DgHierNdxSystemRF.cpp
   lib/DgHierNdxIDGG.hpp
-  lib/DgNdxHierRFS.hpp
+  lib/DgHierNdxRFS.hpp
   lib/DgIcosaMap.cpp
   lib/DgIDGGBase.cpp
   lib/DgIDGG.cpp
@@ -176,9 +176,9 @@ add_library(dglib
   include/dglib/DgHierNdxRF.h
   include/dglib/DgHierNdxStringRF.h
   include/dglib/DgHierNdxSystemRF.h
-  include/dglib/DgNdxHierIDGGS.h
-  include/dglib/DgNdxHierIDGGSBase.h
-  include/dglib/DgNdxHierRFS.h
+  include/dglib/DgHierNdxIDGGS.h
+  include/dglib/DgHierNdxIDGGSBase.h
+  include/dglib/DgHierNdxRFS.h
   include/dglib/DgIDGG.h
   include/dglib/DgIDGGBase.h
   include/dglib/DgIDGGS.h
@@ -257,8 +257,8 @@ add_library(dglib
   include/dglib/DgZOrderRF.h
   include/dglib/DgZOrderStringRF.h
   include/dglib/DgZXRF.h
-  include/dglib/DgZXRFS.h
   include/dglib/DgZXStringRF.h
+  include/dglib/DgZXSystem.h
 )
 
 if(GDAL_FOUND)

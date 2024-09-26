@@ -18,33 +18,38 @@
 *******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
-// DgZXRFS.h: DgZXRFS class definitions
+// DgHierNdxIDGGS.h: DgHierNdxIDGGS class definitions
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef DGZXRFS_H
-#define DGZXRFS_H
+#ifndef DGHIERNDXIDGGS_H
+#define DGHIERNDXIDGGS_H
 
-#include <dglib/DgNdxHierIDGGS.h>
-
-class DgZXRF;
-class DgZXStringRF;
+#include <vector>
+#include <dglib/DgIDGGSBase.h>
+#include <dglib/DgHierNdxIDGGSBase.h>
 
 ////////////////////////////////////////////////////////////////////////////////
-class DgZXRFS : public DgNdxHierIDGGS<DgZXRF, DgZXStringRF> {
+template <class TINT, class TSTR> class DgHierNdxIDGGS :
+                                     public DgHierNdxIDGGSBase {
 
    public:
 
    protected:
 
-     DgZXRFS (const DgIDGGSBase& dggsIn, bool outModeIntIn = true, 
-            const string& nameIn = "ZXRFS")
-        : DgNdxHierIDGGS(dggsIn, outModeIntIn, nameIn)
+     DgHierNdxIDGGS (const DgIDGGSBase& dggsIn, bool outModeIntIn = true, 
+            const string& nameIn = "HierNdxIDGGS")
+        : DgHierNdxIDGGSBase(dggsIn, outModeIntIn, nameIn)
      { 
-     }
+        for (int r = 0; r < res(); r++) {
+           grids_[r] = new DgHierNdxIDGG(*this, r, );
 
-     // override virtual functions with dummy definitions from above
-     // quant/invQuant?
+      DgHierNdxIDGG (const DgHierNdxIDGGSBase& ndxHierDggsIn, int resIn,
+               bool outModeIntIn = true, const string& nameIn = "HierNdxIDGG");
+
+
+        }
+     }
 
      // pure virtual functions passed down from above
      virtual void setAddNdxParent (const DgResAdd<DgQ2DICoord>& add,

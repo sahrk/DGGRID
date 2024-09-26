@@ -18,44 +18,53 @@
 *******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
-// DgNdxHierIDGGS.h: DgNdxHierIDGGS class definitions
+// DgHierNdxIDGGSBase.h: DgHierNdxIDGGSBase class definitions
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef DGNDXHIERIDGGS_H
-#define DGNDXHIERIDGGS_H
+#ifndef DGHIERNDXIDGGSBASE_H
+#define DGHIERNDXIDGGSBASE_H
 
 #include <vector>
 #include <dglib/DgIDGGSBase.h>
-#include <dglib/DgNdxHierIDGGSBase.h>
+#include <dglib/DgHierNdxRFS.h>
 
 ////////////////////////////////////////////////////////////////////////////////
-template <class TINT, class TSTR> class DgNdxHierIDGGS :
-                                     public DgNdxHierIDGGSBase {
+class DgHierNdxIDGGSBase 
+             : public DgHierNdxRFS<ResAdd<DgQ2DICoord>, long long int> {
 
    public:
 
+      const DgIDGGBase& dggBase (int res) const
+             { return static_cast<const DgIDGGBase&>(operator[](res)); }
+
+      const DgIDGGSBase& dggs (void) { return dggs_; }
+
+      virtual operator string (void) const
+      {
+         string s = "*** DgHierNdxIDGGSBase";
+         return s;
+      }
+
    protected:
 
-     DgNdxHierIDGGS (const DgIDGGSBase& dggsIn, bool outModeIntIn = true, 
-            const string& nameIn = "NdxHierIDGGS")
-        : DgNdxHierIDGGSBase(dggsIn, outModeIntIn, nameIn)
-     { 
-        for (int r = 0; r < res(); r++) {
-           grids_[r] = new DgHierNdxIDGG(*this, r, );
-
-      DgHierNdxIDGG (const DgNdxHierIDGGSBase& ndxHierDggsIn, int resIn,
-               bool outModeIntIn = true, const string& nameIn = "HierNdxIDGG");
-
-
-        }
-     }
+     DgHierNdxIDGGSBase (const DgIDGGSBase& dggsIn, bool outModeIntIn = true, 
+            const string& nameIn = "HierNdxIDGGSBase")
+        : DgHierNdxRFS(dggsIn.network(), dggsIn, dggsIn.nRes(), outModeIntIn, nameIn), 
+          dggs_ (dggsIn)
+     { }
 
      // pure virtual functions passed down from above
-     virtual void setAddNdxParent (const DgResAdd<DgQ2DICoord>& add,
+     virtual void setAddNdxParent (const DgResAdd<DgHierNdx>& add,
                                    DgLocation& parent) const = 0;
-     virtual void setAddNdxChildren (const DgResAdd<DgQ2DICoord>& add,
+     virtual void setAddNdxChildren (const DgResAdd<DgHierNdx>& add,
                                      DgLocVector& children) const = 0;
+
+   private:
+
+     // state data
+     const DgIDGGSBase& dggs_;
+
 };
 
 #endif

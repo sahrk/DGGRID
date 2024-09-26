@@ -23,10 +23,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 //#include <dglib/DgHierNdxIDGG.h>
-//#include <dglib/DgNdxHierIDGGSBase.h>
+//#include <dglib/DgHierNdxIDGGSBase.h>
 
 ////////////////////////////////////////////////////////////////////////////////
-DgHierNdxIDGG::DgHierNdxIDGG (const DgNdxHierIDGGSBase& ndxHierDggsIn, int resIn,
+DgHierNdxIDGG::DgHierNdxIDGG (const DgHierNdxIDGGSBase& ndxHierDggsIn, int resIn,
                const string& nameIn)
    : DgHierNdxSystemRF (ndxHierDggsIn, resIn, nameIn),
      ndxHierDggs_ (ndxHierDggsIn), dggs_ (ndxHierDggsIn.dggs()), 

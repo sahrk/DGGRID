@@ -33,7 +33,7 @@
 #include <dglib/DgIDGG.h>
 
 class DgHierNdxRFInt;
-class DgNdxHierIDGGSBase;
+class DgHierNdxIDGGSBase;
 
 using namespace std;
 
@@ -43,13 +43,13 @@ template <class TINT, class TSTR> class DgHierNdxIDGG :
 
    protected:
 
-      DgHierNdxIDGG<TINT, TSTR> (const DgNdxHierIDGGSBase& ndxHierDggsIn, int resIn, 
+      DgHierNdxIDGG<TINT, TSTR> (const DgHierNdxIDGGSBase& ndxHierDggsIn, int resIn, 
                const string& nameIn = "HierNdxIDGG");
 
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-#include "../lib/DgNdxHierRFS.hpp"
+#include "../lib/DgHierNdxRFS.hpp"
 
 ////////////////////////////////////////////////////////////////////////////////
 #endif

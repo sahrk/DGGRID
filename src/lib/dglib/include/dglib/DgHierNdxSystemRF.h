@@ -61,7 +61,7 @@ class DgHierNdxSystemRF<B, DB> : DgDiscRF<DgHierNdx, B, DB> {
 
    public:
 
-      const DgNdxHierRFS<B, DB>& ndxHierRFS (void) 
+      const DgHierNdxRFS<B, DB>& ndxHierRFS (void) 
                 { return ndxHierRFS_; }
 
       bool outModeInt (void) { return ndxHierRFS().outModeInt(); }
@@ -81,13 +81,13 @@ class DgHierNdxSystemRF<B, DB> : DgDiscRF<DgHierNdx, B, DB> {
    protected:
 
       DgHierNdxSystemRF<B, DB> (
-            const DgNdxHierRFS<B, DB>& ndxHierRFSIn, int resIn, 
+            const DgHierNdxRFS<B, DB>& ndxHierRFSIn, int resIn, 
             const string& nameIn = "HierNdxSysRF");
 
       int setSystemSet (DgSystemSet& set, int res);
       virtual void initialize (void);
 
-      const DgNdxHierRFS<B, DB>& ndxHierRFS_;
+      const DgHierNdxRFS<B, DB>& ndxHierRFS_;
       int res_;
 
       DgSystemSet pRes_;
