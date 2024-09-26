@@ -28,7 +28,7 @@
 using namespace std;
 
 #include <dglib/DgIDGGS7H.h>
-#include <dglib/DgZXRF.h>
+#include <dglib/DgZXSystem.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 int main (int, char**)
@@ -57,7 +57,7 @@ int main (int, char**)
    const DgIDGG& dgg = idggs.idgg(7);
    cout << dgg.gridStats() << endl;
 
-   DgZXRF* rfx = DgZXRF::makeRF (idggs, 7, "ZX");
+   DgZXSystem* rfx = new DgZXSystem(idggs, 7, "ZX");
 
 /*
    //////// now use the DGG /////////
