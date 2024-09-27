@@ -27,11 +27,11 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 DgHierNdxSystemRF<B, DB>::DgHierNdxSystemRF (
-      const DgHierNdxIDGGSBase& ndxHierDggsIn, int resIn, const string& nameIn)
-   : DgDiscRF<DgHierNdx, B, DB>(ndxHierDggsIn.dggs().network, 
-              ndxHierDggsIn.dggs()[resIn], nameIn), 
-     ndxHierDggs_ (ndxHierDggsIn), dggs_ (ndxHierDggsIn.dggs()), res_ (resIn), 
-     aperture_ (ndxHierDggsIn.dggs().aperture()), pRes_ {nullptr, nullptr}, 
+      const DgHierNdxIDGGSBase& hierNdxDggsIn, int resIn, const string& nameIn)
+   : DgDiscRF<DgHierNdx, B, DB>(hierNdxDggsIn.dggs().network,
+              hierNdxDggsIn.dggs()[resIn], nameIn),
+     hierNdxDggs_ (hierNdxDggsIn), dggs_ (hierNdxDggsIn.dggs()), res_ (resIn),
+     aperture_ (hierNdxDggsIn.dggs().aperture()), pRes_ {nullptr, nullptr},
      curRes_ {nullptr, nullptr}, chRes_ {nullptr, nullptr}
 { 
    // RFS has to call initialize to set up the parent and child systems 
@@ -55,8 +55,8 @@ DgHierNdxSystemRF<B, DB>::setSystemSet (DgSystemSet& set, int res)
       return 1;
 
    // if we're here res is valid
-   set.intRF_ = ndxHierDggs_[res].intRF();
-   set.strRF_ = ndxHierDggs_[res].strRF();
+   set.intRF_ = hierNdxDggs_[res].intRF();
+   set.strRF_ = hierNdxDggs_[res].strRF();
 }
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -82,27 +82,16 @@ operator<< (ostream& stream, const DgHierNdxCoord<T>& coord)
 { return stream << std::string(coord); }
 
 ////////////////////////////////////////////////////////////////////////////////
-template <class T> class DgHierNdxRF :
-                       public DgDiscRF<T, DgQ2DICoord, long long int>
+// class C is a DgHierNdxCoord<X> for some X
+template <class C> class DgHierNdxRF :
+                       public DgDiscRF<C, DgQ2DICoord, long long int>
 {
    public:
 
       // this should be initialized in the instantiated class
-      static const T undefCoord;
+      static const C undefCoord;
 
       // sub-classes should create a factory method
-/*
-      static DgHierNdxRF<T>* makeRF (const DgIDGGS& dggsIn, int resIn,
-                                     const string& nameIn)
-         {
-           sys_ = new DgHierNdxSystemRF(dggsIn, resIn, nameIn + "Sys");
-           return new DgHierNdxRF<T>(dggsIn, resIn, nameIn);
-         }
-
-      static DgHierNdxRF<T>* makeRF (const DgHierNdxSystemRF& sysIn, const string& nameIn)
-         { return new DgHierNdxRF<T>(sysIn, nameIn); }
-*/
-
       const DgHierNdxSystemRF& system (void) { return *sys_; }
 
       const DgIDGGS& dggs (void) { return sys_->dggs(); }
@@ -112,23 +101,23 @@ template <class T> class DgHierNdxRF :
       int aperture (void) const { return sys_->aperture(); }
 
       // indexes don't typically use delimiters
-      virtual string add2str (const T& add, char delimiter) const
+      virtual string add2str (const C& add, char delimiter) const
                        { return add2str(add); }
 
-      virtual const T& undefAddress (void) const { return undefCoord; }
+      virtual const C& undefAddress (void) const { return undefCoord; }
 
       // these need to be defined by specializations
       // given dummy definitions for now so the class isn't abstract
-      virtual T quantify (const DgQ2DICoord& point) const
+      virtual C quantify (const DgQ2DICoord& point) const
                 { return undefAddress(); }
-      virtual DgQ2DICoord invQuantify (const T& add) const
+      virtual DgQ2DICoord invQuantify (const C& add) const
                 { return DgQ2DICoord::undefDgQ2DICoord; }
-      virtual string add2str (const T& add) const { return dgg::util::to_string(add); }
-      virtual const char* str2add (T* c, const char* str, char delimiter) const
+      virtual string add2str (const C& add) const { return dgg::util::to_string(add); }
+      virtual const char* str2add (C* c, const char* str, char delimiter) const
                       { return str; }
 
       // these should use the associated dgg
-      virtual long long int dist (const T& add1, const T& add2) const
+      virtual long long int dist (const C& add1, const C& add2) const
                        { return 0; }
       virtual string dist2str (const long long int& dist) const
                        { return dgg::util::to_string(dist); }
@@ -136,13 +125,13 @@ template <class T> class DgHierNdxRF :
                        { return dist; }
       virtual unsigned long long int dist2int (const long long int& dist) const
                        { return dist; }
-      virtual void setAddNeighbors (const T& add, DgLocVector& vec) const { }
-      virtual void setAddVertices  (const T& add, DgPolygon& vec) const { }
+      virtual void setAddNeighbors (const C& add, DgLocVector& vec) const { }
+      virtual void setAddVertices  (const C& add, DgPolygon& vec) const { }
 
    protected:
 
-      DgHierNdxRF<T> (const DgHierNdxSystemRF& sysIn, const string& nameIn)
-         : DgDiscRF<T, DgQ2DICoord, long long int>(sysIn.dggs().network(),
+      DgHierNdxRF<C> (const DgHierNdxSystemRF& sysIn, const string& nameIn)
+         : DgDiscRF<C, DgQ2DICoord, long long int>(sysIn.dggs().network(),
                        sysIn.dggs().idgg(resIn), nameIn, sysIn.dggs().gridTopo(),
                        sysIn.dggs().gridMetric()),
            sys_ (&sysIn) { }
@@ -157,7 +146,7 @@ template <class T> class DgHierNdxRF :
 };
 
 // the actual value should be defined by the specializations
-//template<typename T> const T DgHierNdxRF<T>::undefCoord;
+//template<typename C> const C DgHierNdxRF<C>::undefCoord;
 
 ////////////////////////////////////////////////////////////////////////////////
 #endif

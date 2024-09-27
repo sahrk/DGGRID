@@ -383,7 +383,7 @@ SubOpOut::outputCellAdd2D (const DgLocation& add2D, const string* labelIn,
    if (ndxParentOutType != "NONE") {
 
 // KEVIN XXX
-      ndxHierIDGGS->setNdxParent(q2diR, ndxParent);
+       hierNdxIDGGS->setNdxParent(q2diR, ndxParent);
 
       if (ndxPrtOut)
          ndxPrtOut->insert(add2D, ndxParent);
@@ -910,8 +910,8 @@ SubOpOut::executeOp (void) {
 
    if (ndxChildrenOutType != "NONE" || ndxParentOutType != "NONE") {
       if (hierNdxAddType == Z7 && dgg.z7RF()) {
-          //ndxHierIDGGS = dynamic_cast<const DgNdxHierHexIDGGS*>(dgg.z7RF());
-          ndxHierIDGGS = dgg.z7RF();
+          //hierNdxIDGGS = dynamic_cast<const DgHierNdxHexIDGGS*>(dgg.z7RF());
+          hierNdxIDGGS = dgg.z7RF();
       } else {
           ::report("SubOpOut::executeOp(): hierarchical indexing type", DgBase::Fatal);
       }
@@ -1039,7 +1039,7 @@ SubOpOut::executeOp (void) {
         if (ndxParentOutType == "TEXT") {
             ndxPrtOut = new DgOutNdxParentFile(ndxParentOutFileName, dgg,
                                                op.dggOp.ndxPrtDgg(), ((outSeqNum || useEnumLbl) ? NULL : pOutRF),
-                                                   pNdxPrtOutRF, ndxHierIDGGS, "ndxPrt");
+                                                   pNdxPrtOutRF, hierNdxIDGGS, "ndxPrt");
         }
     }
 

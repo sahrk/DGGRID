@@ -30,7 +30,7 @@
 
 #include <dglib/DgConverter.h>
 #include <dglib/Dg2WayConverter.h>
-#include <dglib/DgNdxHierCPI.h>
+#include <dglib/DgHierNdxCPI.h>
 
 class DgZ7Coord;
 class DgZ7StringRF;
@@ -138,7 +138,7 @@ operator<< (ostream& stream, const DgZ7Coord& coord)
 { return stream << std::string(coord); }
 
 ////////////////////////////////////////////////////////////////////////////////
-class DgZ7RF : public DgRF<DgZ7Coord, long long int>, public DgNdxHierCPI {
+class DgZ7RF : public DgRF<DgZ7Coord, long long int>, public DgHierNdxCPI {
 
    public:
 

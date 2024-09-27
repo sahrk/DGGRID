@@ -84,7 +84,7 @@ const DgZ7Coord DgZ7Coord::undefDgZ7Coord(0xffffffffffffffff);
 DgZ7RF::DgZ7RF (DgRFNetwork& networkIn, const DgHexIDGGS& hexDggsIn,
                              const std::string& nameIn, int resIn)
     : DgRF<DgZ7Coord, long long int>(networkIn, nameIn),
-      DgNdxHierCPI (hexDggsIn),
+      //DgNdxHierCPI (hexDggsIn),
       res_ (resIn), z7strRF_ (NULL), z7strToZ7_ (NULL), z7toZ7str_ (NULL)
 {
     z7strRF_ = DgZ7StringRF::makeRF(networkIn, nameIn + "str", resIn);

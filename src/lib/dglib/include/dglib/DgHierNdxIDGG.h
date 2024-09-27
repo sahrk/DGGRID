@@ -43,7 +43,7 @@ template <class TINT, class TSTR> class DgHierNdxIDGG :
 
    protected:
 
-      DgHierNdxIDGG<TINT, TSTR> (const DgHierNdxIDGGSBase& ndxHierDggsIn, int resIn, 
+      DgHierNdxIDGG<TINT, TSTR> (const DgHierNdxIDGGSBase& hierNdxDggsIn, int resIn,
                const string& nameIn = "HierNdxIDGG");
 
 };

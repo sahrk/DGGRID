@@ -26,15 +26,15 @@
 //#include <dglib/DgHierNdxIDGGSBase.h>
 
 ////////////////////////////////////////////////////////////////////////////////
-DgHierNdxIDGG::DgHierNdxIDGG (const DgHierNdxIDGGSBase& ndxHierDggsIn, int resIn,
+DgHierNdxIDGG::DgHierNdxIDGG (const DgHierNdxIDGGSBase& hierNdxDggsIn, int resIn,
                const string& nameIn)
-   : DgHierNdxSystemRF (ndxHierDggsIn, resIn, nameIn),
-     ndxHierDggs_ (ndxHierDggsIn), dggs_ (ndxHierDggsIn.dggs()), 
-     aperture_ (ndxHierDggsIn.dggs().aperture()), curResDgg_ (nullptr),
+   : DgHierNdxSystemRF (hierNdxDggsIn, resIn, nameIn),
+     hierNdxDggs_ (hierNdxDggsIn), dggs_ (hierNdxDggsIn.dggs()),
+     aperture_ (hierNdxDggsIn.dggs().aperture()), curResDgg_ (nullptr),
      pResDgg_ (nullptr), chResDgg_ (nullptr)
 {
-  curRes_.intRF_ = ndxHierDggs_[res_].intRF();
-  curRes_.strRF_ = ndxHierDggs_[res_].strRF();
+  curRes_.intRF_ = hierNdxDggs_[res_].intRF();
+  curRes_.strRF_ = hierNdxDggs_[res_].strRF();
 
    // RFS has to call initialize to set up the systems
 }

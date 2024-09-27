@@ -36,11 +36,11 @@ DgOutNdxParentFile::DgOutNdxParentFile (const string& fileName,
                         const DgIDGGBase& ndxPrtDgg,
                         const DgRFBase* outRF,
                         const DgRFBase* ndxPrtOutRF,
-                        const DgNdxHierIDGGS* ndxHierIDGGS,
+                        const DgHierNdxIDGGS* hierNdxIDGGS,
                         const string& suffix,
                         DgReportLevel failLevel)
    : DgOutputStream (fileName, suffix, failLevel), dgg_ (dgg), ndxPrtDgg_ (ndxPrtDgg),
-                     outRF_ (outRF), ndxPrtOutRF_ (ndxPrtOutRF), ndxHierIDGGS_(ndxHierIDGGS)
+                     outRF_ (outRF), ndxPrtOutRF_ (ndxPrtOutRF), hierNdxIDGGS_(hierNdxIDGGS)
 {
 
 } // DgOutNdxParentFile::DgOutNdxParentFile

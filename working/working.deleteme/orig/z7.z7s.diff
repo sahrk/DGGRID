@@ -1,0 +1,190 @@
+25,26c25,26
+< #ifndef DGZ7RF_H
+< #define DGZ7RF_H
+---
+> #ifndef DGZ7STRINGRF_H
+> #define DGZ7STRINGRF_H
+33d32
+< #include <dglib/DgNdxHierCPI.h>
+35,37c34
+< class DgZ7StringCoord;
+< class DgZ7StringStringRF;
+< class DgZ7StringStringCoord;
+---
+> class DgQ2DICoord;
+38a36
+> class DgZ7Coord;
+40d37
+< class DgIDGGSBase;
+42c39
+< //using namespace std;
+---
+> using namespace std;
+45,46c42,43
+< class DgZ7StringStringtoZ7Converter :
+<         public DgConverter<DgZ7StringStringCoord, long long int, DgZ7StringCoord, long long int>
+---
+> class DgQ2DItoZ7StringConverter :
+>         public DgConverter<DgQ2DICoord, long long int, DgZ7StringCoord, long long int>
+50c47
+<       DgZ7StringStringtoZ7Converter (const DgRF<DgZ7StringStringCoord, long long int>& from,
+---
+>       DgQ2DItoZ7StringConverter (const DgRF<DgQ2DICoord, long long int>& from,
+52a50,51
+>       const DgIDGGBase& IDGG (void) const { return *pIDGG_; }
+> 
+54c53
+<                                 (const DgZ7StringStringCoord& addIn) const;
+---
+>                                 (const DgQ2DICoord& addIn) const;
+56c55
+<    private:
+---
+>    protected:
+58c57,60
+<       int res_;
+---
+>       const DgIDGGBase* pIDGG_;
+>       int effRes_;
+>       int effRadix_;
+> 
+62,63c64,65
+< class DgZ7StringToZ7StringConverter :
+<         public DgConverter<DgZ7StringCoord, long long int, DgZ7StringStringCoord, long long int>
+---
+> class DgZ7StringToQ2DIConverter :
+>         public DgConverter<DgZ7StringCoord, long long int, DgQ2DICoord, long long int>
+67,68c69,70
+<       DgZ7StringToZ7StringConverter (const DgRF<DgZ7StringCoord, long long int>& from,
+<                                    const DgRF<DgZ7StringStringCoord, long long int>& to);
+---
+>       DgZ7StringToQ2DIConverter (const DgRF<DgZ7StringCoord, long long int>& from,
+>                                    const DgRF<DgQ2DICoord, long long int>& to);
+70c72,74
+<       virtual DgZ7StringStringCoord convertTypedAddress
+---
+>       const DgIDGGBase& IDGG (void) const { return *pIDGG_; }
+> 
+>       virtual DgQ2DICoord convertTypedAddress
+73c77
+<    private:
+---
+>    protected:
+74a79
+>       const DgIDGGBase* pIDGG_;
+75a81,82
+>       int numClassI_;
+>       unsigned long long int unitScaleClassIres_;
+79c86
+< class Dg2WayZ7ToStringConverter : public Dg2WayConverter {
+---
+> class Dg2WayZ7StringConverter : public Dg2WayConverter {
+83,88c90,93
+<       Dg2WayZ7ToStringConverter (
+<                const DgRF<DgZ7StringStringCoord, long long int>& fromFrame,
+<                const DgRF<DgZ7StringCoord, long long int>& toFrame)
+<          : Dg2WayConverter (*(new DgZ7StringStringtoZ7Converter(fromFrame, toFrame)),
+<                             *(new DgZ7StringToZ7StringConverter(toFrame, fromFrame)))
+<                                              {}
+---
+>       Dg2WayZ7StringConverter (const DgRF<DgQ2DICoord, long long int>& fromFrame,
+>               const DgRF<DgZ7StringCoord, long long int>& toFrame)
+>          : Dg2WayConverter (*(new DgQ2DItoZ7StringConverter(fromFrame, toFrame)),
+>               *(new DgZ7StringToQ2DIConverter(toFrame, fromFrame))) {}
+93c98
+< //   Coordinate consisting of a string containing quad number, (aperture 7 hex
+---
+> //   Coordinate consisting of a string containing quad number, (aperture 3 hex
+102c107
+<       DgZ7StringCoord (void) : value_ (0) { }
+---
+>       DgZ7StringCoord (void) { }
+104c109,110
+<       DgZ7StringCoord (uint64_t valIn) : value_ (valIn) { }
+---
+>       DgZ7StringCoord (const string& valStrIn)
+>          : valString_ (valStrIn) { }
+107c113
+<               { value_ = coord.value(); }
+---
+>               { valString_ = coord.valString(); }
+109c115
+<       void setValue (uint64_t value) { value_ = value; }
+---
+>       void setValString (const string strIn) { valString_ = strIn; }
+111c117
+<       uint64_t value (void) const { return value_; }
+---
+>       const string& valString (void) const { return valString_; }
+113c119
+<       operator std::string (void) const { return valString(); }
+---
+>       operator string (void) const { return valString(); }
+115,116d120
+<       std::string valString (void) const;
+< 
+118c122
+<           { return value() == c.value(); }
+---
+>           { return valString() == c.valString(); }
+125c129
+<              if (add != *this) setValue(add.value());
+---
+>              if (add != *this) setValString(add.valString());
+132c136,137
+<       uint64_t value_;
+---
+>       string valString_;
+> 
+138c143
+< { return stream << std::string(coord); }
+---
+> { return stream << string(coord); }
+141c146
+< class DgZ7StringRF : public DgRF<DgZ7StringCoord, long long int>, public DgNdxHierCPI {
+---
+> class DgZ7StringRF : public DgRF<DgZ7StringCoord, long long int> {
+145,147c150,152
+<       static DgZ7StringRF* makeRF (DgRFNetwork& networkIn, const DgHexIDGGS& hexDggsIn,
+<                       const std::string& nameIn, int resIn)
+<          { return new DgZ7StringRF (networkIn, hexDggsIn, nameIn, resIn); }
+---
+>       static DgZ7StringRF* makeRF (DgRFNetwork& networkIn,
+>                const string& nameIn, int resIn)
+>          { return new DgZ7StringRF (networkIn, nameIn, resIn); }
+156,157c161,162
+<       virtual std::string add2str (const DgZ7StringCoord& add) const
+<                        { return std::string(add); }
+---
+>       virtual string add2str (const DgZ7StringCoord& add) const
+>                        { return string(add); }
+159c164
+<       virtual std::string add2str (const DgZ7StringCoord& add, char delimiter)
+---
+>       virtual string add2str (const DgZ7StringCoord& add, char delimiter)
+161c166
+<                        { return std::string(add); }
+---
+>                        { return string(add); }
+166c171
+<       virtual std::string dist2str (const long long int& dist) const
+---
+>       virtual string dist2str (const long long int& dist) const
+176c181
+<                             { return DgZ7StringCoord::undefDgZ7StringCoord; }
+---
+>                        { return DgZ7StringCoord::undefDgZ7StringCoord; }
+180,181c185,188
+<       DgZ7StringRF (DgRFNetwork& networkIn, const DgHexIDGGS& hexDggsIn,
+<                      const std::string& nameIn, int resIn);
+---
+>       DgZ7StringRF (DgRFNetwork& networkIn, const string& nameIn,
+>                          int resIn)
+>          : DgRF<DgZ7StringCoord, long long int>(networkIn, nameIn),
+>            res_ (resIn) { }
+184,186d190
+<       const DgZ7StringStringRF* z7strRF_;
+<       const DgZ7StringStringtoZ7Converter* z7strToZ7_;
+<       const DgZ7StringToZ7StringConverter* z7toZ7str_;
+188d191
+<    friend class DgZ7StringStringtoZ7Converter;

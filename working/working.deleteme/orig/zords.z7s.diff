@@ -1,0 +1,34 @@
+25,26c25,26
+< #ifndef DGZORDERSTRINGRF_H
+< #define DGZORDERSTRINGRF_H
+---
+> #ifndef DGZ7STRINGRF_H
+> #define DGZ7STRINGRF_H
+80,82c80,82
+<       int effRes_;
+<       int effRadix_;
+< 
+---
+>       int res_;
+>       int numClassI_;
+>       unsigned long long int unitScaleClassIres_;
+151,152c151,152
+<                const string& nameIn, int resIn, int apertureIn)
+<          { return new DgZ7StringRF (networkIn, nameIn, resIn, apertureIn); }
+---
+>                const string& nameIn, int resIn)
+>          { return new DgZ7StringRF (networkIn, nameIn, resIn); }
+155c155
+<       int aperture (void) const { return aperture_; }
+---
+>       int aperture (void) const { return 7; }
+186c186
+<                          int resIn, int apertureIn)
+---
+>                          int resIn)
+188c188
+<            res_ (resIn), aperture_ (apertureIn) { }
+---
+>            res_ (resIn) { }
+191d190
+<       int aperture_;

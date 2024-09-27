@@ -44,7 +44,7 @@ template <class TINT, class TSTR> class DgHierNdxIDGGS :
         for (int r = 0; r < res(); r++) {
            grids_[r] = new DgHierNdxIDGG(*this, r, );
 
-      DgHierNdxIDGG (const DgHierNdxIDGGSBase& ndxHierDggsIn, int resIn,
+      DgHierNdxIDGG (const DgHierNdxIDGGSBase& hierNdxDggsIn, int resIn,
                bool outModeIntIn = true, const string& nameIn = "HierNdxIDGG");
 
 

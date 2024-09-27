@@ -43,7 +43,7 @@ class DgHierNdxIDGGBase :
 
    public:
 
-      const DgHierNdxIDGGSBase& ndxHierDggs (void) { return ndxHierDggs_; }
+      const DgHierNdxIDGGSBase& hierNdxDggs (void) { return hierNdxDggs_; }
       const DgIDGGS&            dggs        (void) { return dggs_; }
 
       int res      (void) const { return res_; }
@@ -55,14 +55,14 @@ class DgHierNdxIDGGBase :
 
    protected:
 
-      DgHierNdxIDGGBase (const DgHierNdxIDGGSBase& ndxHierDggsIn, int resIn, 
+      DgHierNdxIDGGBase (const DgHierNdxIDGGSBase& hierNdxDggsIn, int resIn, 
                const string& nameIn = "HierNdxIDGG");
 
       int setDgg (const DgIDGG** dgg, int res);
 
       virtual void initialize (void);
 
-      const DgHierNdxIDGGSBase& ndxHierDggs_;
+      const DgHierNdxIDGGSBase& hierNdxDggs_;
       const DgIDGGS& dggs_;
       int aperture_;
 

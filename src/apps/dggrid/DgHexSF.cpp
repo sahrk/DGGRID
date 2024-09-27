@@ -248,7 +248,7 @@ cout << "depthFirstTrav res: " << res_
          center = downAp3r();
       }
       else
-         ::report("ERROR: HexHeir.createSets().", DgBase::Fatal);
+         ::report("ERROR: HexHier.createSets().", DgBase::Fatal);
 
       center.classI_ = childClassI;
       center.type_ = cs[0];
@@ -387,7 +387,7 @@ DgHexSF::dirFromCenter (int digit)
          break;
       default:
          ::report(string("ERROR: invalid digit ") + dgg::util::to_string(digit)
-            + string(" in HexHeir.dirFromCenter()."), DgBase::Fatal);
+            + string(" in HexHier.dirFromCenter()."), DgBase::Fatal);
    }
 
    return DgHexSF(genOp_, i, j, k, res_);
