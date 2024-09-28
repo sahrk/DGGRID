@@ -18,18 +18,15 @@
 *******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
-// DgHierNdxRFS.hpp: DgHierNdxRFS template class definition.
+// DgHierNdxSystemRFS.cpp: DgHierNdxSystemRFS class definition.
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <dglib/DgRF.h>
+#include <dglib/DgHierNdxSystemRFS.h>
 
 ////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-template<class A, class B, class DB> void
-DgHierNdxRFS<A, B, DB>::setNdxParent (int res, const DgLocation& loc,
+void
+DgHierNdxSystemRFS::setNdxParent (int res, const DgLocation& loc,
                     DgLocation& parent) const
 {
    parent.clearAddress();
@@ -42,12 +39,12 @@ DgHierNdxRFS<A, B, DB>::setNdxParent (int res, const DgLocation& loc,
       setAddNdxParent(*(rfs().getAddress(tmpLoc)), parent);
    }
 
-} // void DgHierNdxRFS::setNdxParent
+} // void DgHierNdxSystemRFS::setNdxParent
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-template<class A, class B, class DB> void
-DgHierNdxRFS<A, B, DB>::setNdxChildren (int res, const DgLocation& loc,
+void
+DgHierNdxSystemRFS::setNdxChildren (int res, const DgLocation& loc,
                                    DgLocVector& children) const
 {
    children.clearAddress();
@@ -61,7 +58,7 @@ DgHierNdxRFS<A, B, DB>::setNdxChildren (int res, const DgLocation& loc,
       setAddNdxChildren(*(rfs().getAddress(tmpLoc)), children);
    }
 
-} // void DgHierNdxRFS::setNdxChildren
+} // void DgHierNdxSystemRFS::setNdxChildren
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

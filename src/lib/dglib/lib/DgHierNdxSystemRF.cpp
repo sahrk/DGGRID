@@ -27,7 +27,8 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 DgHierNdxSystemRF<B, DB>::DgHierNdxSystemRF (
-      const DgHierNdxIDGGSBase& hierNdxDggsIn, int resIn, const string& nameIn)
+         const DgHierNdxRFS<B, DB>& hierNdxRFSIn, int resIn,
+         const string& nameIn = "HierNdxSysRF")
    : DgDiscRF<DgHierNdx, B, DB>(hierNdxDggsIn.dggs().network,
               hierNdxDggsIn.dggs()[resIn], nameIn),
      hierNdxDggs_ (hierNdxDggsIn), dggs_ (hierNdxDggsIn.dggs()), res_ (resIn),
