@@ -18,12 +18,12 @@
 *******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
-// DgHierNdxSystemRFSBase.h: DgHierNdxSystemRFSBase class definitions
+// DgHierNdxRFS.h: DgHierNdxRFS class definitions
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef DGHIERNDXRFSBASE_H
-#define DGHIERNDXRFSBASE_H
+#ifndef DGHIERNDXRFS_H
+#define DGHIERNDXRFS_H
 
 #include <vector>
 #include <dglib/DgDiscRFS.h>
@@ -31,21 +31,10 @@
 class DgHierNdx;
 
 ////////////////////////////////////////////////////////////////////////////////
-class DgHierNdxSystemRFSBase : 
-              public DgDiscRFS<DgHierNdx, ResAdd<DgQ2DICoord>, long long int> {
+template<class B, class DB> class DgHierNdxRFS : 
+                                          public DgDiscRFS<DgHierNdx, B, DB> {
 
    public:
-
-      const DgIDGGBase& dggBase (int res) const
-             { return static_cast<const DgIDGGBase&>(operator[](res)); }
-
-      const DgIDGGSBase& dggs (void) { return dggs_; }
-
-      virtual operator string (void) const
-      {
-         string s = "*** DgHierNdxSystemRFSBase";
-         return s;
-      }
 
       // externally an Int or Str form?
       bool outModeInt (void) { return outModeInt_; }
@@ -129,27 +118,26 @@ class DgHierNdxSystemRFSBase :
 
    protected:
 
-     DgHierNdxSystemRFSBase (const DgIDGGSBase& dggsIn, bool outModeIntIn = true,
-            const string& nameIn = "HierNdxSystemRFS")
-        : DiscRFS<DgHierNdx, ResAdd<DgQ2DICoord>, long long int> 
-                    (dggsIn.network(), dggsIn, dggsIn.nRes(), nameIn),
-          dggs_ (dggsIn), outModeInt_ (outModeIntIn)
-     { 
-        grids_ = new vector<const DgHierNdxSystemRFBase*>(nRes_, nullptr);
-     }
+     DgHierNdxRFS <B, DB>(DgRFNetwork& networkIn, const DgRF<B, DB>& backFrameIn,
+           int nResIn, bool outModeIntIn = true, const string& nameIn = "HierNdxRFS")
+        : DiscRFS<DgHierNdx, B, DB> (networkIn, backFrameIn, nResIn, nameIn),
+          grids_ (new vector<const DgHierNdxSystemRF*>(nRes_, nullptr)),
+          outModeInt_ (outModeIntIn)
+     { }
 
-     // pure virtual functions passed down from above
+     // new pure virtual functions
      virtual void setAddNdxParent (const DgResAdd<DgHierNdx>& add,
                                    DgLocation& parent) const = 0;
      virtual void setAddNdxChildren (const DgResAdd<DgHierNdx>& add,
                                      DgLocVector& children) const = 0;
 
-     // state data
-     const DgIDGGSBase& dggs_;
      bool outModeInt_;
 
 };
 
 ////////////////////////////////////////////////////////////////////////////////
+
+// JFW: is this really what we mean?
+#include "../lib/DgHierNdxRFS.hpp"
 
 #endif

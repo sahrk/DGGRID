@@ -18,26 +18,38 @@
 *******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
-// DgHierNdxIDGG.hpp: DgHierNdxIDGG template method definitions
+// DgHierNdxSystemRF.h: DgHierNdxSystemRF header file
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-//#include <dglib/DgHierNdxIDGG.h>
-//#include <dglib/DgHierNdxIDGGSBase.h>
+#ifndef DGHIERNDXSYSTEMRF_H
+#define DGHIERNDXSYSTEMRF_H
+
+#include <climits>
+#include <iostream>
+
+#include <dglib/DgDiscRF.h>
+#include <dglib/DgIDGGS.h>
+#include <dglib/DgIDGG.h>
+
+class DgHierNdxRFInt;
+class DgHierNdxSystemRFSBase;
+
+using namespace std;
 
 ////////////////////////////////////////////////////////////////////////////////
-DgHierNdxIDGG::DgHierNdxIDGG (const DgHierNdxIDGGSBase& hierNdxDggsIn, int resIn,
-               const string& nameIn)
-   : DgHierNdxSystemRF (hierNdxDggsIn, resIn, nameIn),
-     hierNdxDggs_ (hierNdxDggsIn), dggs_ (hierNdxDggsIn.dggs()),
-     aperture_ (hierNdxDggsIn.dggs().aperture()), curResDgg_ (nullptr),
-     pResDgg_ (nullptr), chResDgg_ (nullptr)
-{
-  curRes_.intRF_ = hierNdxDggs_[res_].intRF();
-  curRes_.strRF_ = hierNdxDggs_[res_].strRF();
+template <class TINT, class TSTR> class DgHierNdxSystemRF : 
+                   public DgHierNdxSystemRFBase {
 
-   // RFS has to call initialize to set up the systems
-}
+   protected:
+
+      DgHierNdxSystemRF<TINT, TSTR> (const DgHierNdxSystemRFSBase& hierNdxDggsIn, 
+            int resIn, const string& nameIn = "HierNdxIDGG");
+
+};
 
 ////////////////////////////////////////////////////////////////////////////////
+//#include "../lib/DgHierNdxRF.hpp"
+
 ////////////////////////////////////////////////////////////////////////////////
+#endif

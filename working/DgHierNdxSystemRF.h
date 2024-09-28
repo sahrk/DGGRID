@@ -18,24 +18,19 @@
 *******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
-// DgHierNdxSystemRFBase.h: DgHierNdxSystemRFBase header file
+// DgHierNdxSystemRF.h: DgHierNdxSystemRF header file
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef DGHIERNDXSYSTEMRFBASE_H
-#define DGHIERNDXSYSTEMRFBASE_H
+#ifndef DGHIERNDXSYSTEMRF_H
+#define DGHIERNDXSYSTEMRF_H
 
 #include <climits>
 #include <iostream>
 
 #include <dglib/DgDiscRF.h>
-#include <dglib/DgIDGGS.h>
-#include <dglib/DgIDGG.h>
 
 class DgHierNdxRFInt;
-class DgHierNdxSystemRFSBasee;
-class DgHierNdxRFInt;
-class DgHierNdxRFString;
 class DgHierNdxRFS;
 
 using namespace std;
@@ -53,50 +48,47 @@ class DgHierNdx {
    string strNdx_;
 };
 
+// use Int as a standin until class is complete
+typedef DgHierNdxRFStr DgHierNdxRFInt;
+
 ////////////////////////////////////////////////////////////////////////////////
-class DgHierNdxSystemRFBase : DgDiscRF<DgHierNdx, DgQ2DICoord, long long int> {
+class DgHierNdxSystemRF<B, DB> : DgDiscRF<DgHierNdx, B, DB> {
 
    struct DgSystemSet {
-      const DgIDGG*         dgg_;
       const DgHierNdxRFInt* intRF_;
       const DgHierNdxRFStr* strRF_;
    };
 
    public:
 
-      const DgHierNdxSystemRFSBase& hierNdxRFS (void) { return hierNdxRFS_; }
-
-      const DgIDGGS& dggs (void) { return dggs_; }
+      const DgHierNdxRFS<B, DB>& hierNdxRFS (void)
+                { return hierNdxRFS_; }
 
       bool outModeInt (void) { return hierNdxRFS().outModeInt(); }
 
       int res      (void) const { return res_; }
       int aperture (void) const { return aperture_; }
 
-      const DgIDGG*         dgg   (void) { return curResDgg_; }
       const DgHierNdxRFInt* intRF (void) { return curRes_.intRF_; }
       const DgHierNdxRFStr* strRF (void) { return curRes_.strRF_; }
 
-      const DgIDGG*         pDgg   (void) { return pResDgg_; }
       const DgHierNdxRFInt* pIntRF (void) { return pRes_.intRF_; }
       const DgHierNdxRFStr* pStrRF (void) { return pRes_.strRF_; }
       
-      const DgIDGG*         chDgg   (void) { return chResDgg_; }
       const DgHierNdxRFInt* chIntRF (void) { return chRes_.intRF_; }
       const DgHierNdxRFStr* chStrRF (void) { return chRes_.strRF_; }
 
    protected:
 
-      DgHierNdxSystemRFBase (const DgHierNdxSystemRFSBasee& hierNdxRFSIn, int resIn,
-            const string& nameIn = "HierNdxSysRFBase");
+      DgHierNdxSystemRF<B, DB> (
+            const DgHierNdxRFS<B, DB>& hierNdxRFSIn, int resIn,
+            const string& nameIn = "HierNdxSysRF");
 
       int setSystemSet (DgSystemSet& set, int res);
       virtual void initialize (void);
 
-      const DgHierNdxSystemRFSBasee& hierNdxRFS_;
-      const DgIDGGS& dggs_;
+      const DgHierNdxRFS<B, DB>& hierNdxRFS_;
       int res_;
-      int aperture_;
 
       DgSystemSet pRes_;
       DgSystemSet curRes_;

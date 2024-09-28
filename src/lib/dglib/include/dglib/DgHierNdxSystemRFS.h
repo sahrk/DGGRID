@@ -18,33 +18,33 @@
 *******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
-// DgHierNdxIDGGS.h: DgHierNdxIDGGS class definitions
+// DgHierNdxSystemRFS.h: DgHierNdxSystemRFS class definitions
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef DGHIERNDXIDGGS_H
-#define DGHIERNDXIDGGS_H
+#ifndef DGHIERNDXSYSTEMRFS_H
+#define DGHIERNDXSYSTEMRFS_H
 
 #include <vector>
 #include <dglib/DgIDGGSBase.h>
-#include <dglib/DgHierNdxIDGGSBase.h>
+#include <dglib/DgHierNdxSystemRFSBase.h>
 
 ////////////////////////////////////////////////////////////////////////////////
-template <class TINT, class TSTR> class DgHierNdxIDGGS :
-                                     public DgHierNdxIDGGSBase {
+template <class TINT, class TSTR> class DgHierNdxSystemRFS :
+                                     public DgHierNdxSystemRFSBase {
 
    public:
 
    protected:
 
-     DgHierNdxIDGGS (const DgIDGGSBase& dggsIn, bool outModeIntIn = true, 
+     DgHierNdxSystemRFS (const DgIDGGSBase& dggsIn, bool outModeIntIn = true, 
             const string& nameIn = "HierNdxIDGGS")
-        : DgHierNdxIDGGSBase(dggsIn, outModeIntIn, nameIn)
+        : DgHierNdxSystemRFSBase(dggsIn, outModeIntIn, nameIn)
      { 
         for (int r = 0; r < res(); r++) {
            grids_[r] = new DgHierNdxIDGG(*this, r, );
 
-      DgHierNdxIDGG (const DgHierNdxIDGGSBase& hierNdxDggsIn, int resIn,
+      DgHierNdxIDGG (const DgHierNdxSystemRFSBase& hierNdxDggsIn, int resIn,
                bool outModeIntIn = true, const string& nameIn = "HierNdxIDGG");
 
 
