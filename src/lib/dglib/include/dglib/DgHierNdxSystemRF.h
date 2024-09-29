@@ -41,11 +41,26 @@ using namespace std;
 template <class TINT, class TSTR> class DgHierNdxSystemRF : 
                    public DgHierNdxSystemRFBase {
 
+   public:
+
+      const const TINT* typedIntRF (void) { return curRes_.intRF_; }
+      const const TSTR* typedStrRF (void) { return curRes_.strRF_; }
+
+      // abstract methods from above
+      //virtual DgHierNdxIntCoord toIntCoord (const DgHierNdxStringCoord& c) = 0;
+      //virtual DgHierNdxStringCoord toStringCoord (const DgHierNdxIntCoord& c) = 0;
+
    protected:
 
-      DgHierNdxSystemRF<TINT, TSTR> (const DgHierNdxSystemRFSBase& hierNdxDggsIn, 
-            int resIn, const string& nameIn = "HierNdxIDGG");
-
+      DgHierNdxSystemRF<TINT, TSTR> (
+            const DgHierNdxSystemRFS<TINT, TSTR>& hierNdxRFSIn, 
+            int resIn = 0, const string& nameIn = "DgHierNdxSystemRF")
+         : DgHierNdxSystemRFBase(hierNdxRFSIn, resIn, nameIn)
+      {
+         curRes_.dgg_ = dggs()[resIn];
+         curRes_.intRF_ = new TINT(dggs(), resIn); // use default name
+         curRes_.strRF_ = new TSTR(dggs(), resIn); // use default name
+      }
 };
 
 ////////////////////////////////////////////////////////////////////////////////

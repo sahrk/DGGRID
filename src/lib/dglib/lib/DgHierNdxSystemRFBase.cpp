@@ -25,32 +25,26 @@
 #include <dglib/DgHierNdxSystemRFSBase.h>
 
 ////////////////////////////////////////////////////////////////////////////////
-DgHierNdxIDGGBase::DgHierNdxIDGGBase (const DgHierNdxIDGGSBase& hierNdxDggsIn, int resIn,
-               const string& nameIn)
-   : DgHierNdxSystemRF (hierNdxDggsIn, resIn, nameIn),
-     hierNdxDggs_ (hierNdxDggsIn), dggs_ (hierNdxDggsIn.dggs()),
-     aperture_ (hierNdxDggsIn.dggs().aperture()), curResDgg_ (nullptr),
-     pResDgg_ (nullptr), chResDgg_ (nullptr)
-{
-   // RFS has to call initialize to set up the systems
-}
-
 DgHierNdxSystemRFBase::DgHierNdxSystemRFBase (
          const DgHierNdxSystemRFSBase& hierNdxRFSIn, int resIn,
          const string& nameIn = "HierNdxSysRF")
-   : DgDiscRF<DgHierNdx, B, DB>(hierNdxDggsIn.dggs().network,
-              hierNdxDggsIn.dggs()[resIn], nameIn),
-     hierNdxDggs_ (hierNdxDggsIn), dggs_ (hierNdxDggsIn.dggs()), res_ (resIn),
-     aperture_ (hierNdxDggsIn.dggs().aperture()), pRes_ {nullptr, nullptr},
-     curRes_ {nullptr, nullptr}, chRes_ {nullptr, nullptr}
+   : DgDiscRF<DgHierNdx, DgQ2DICoord, long long int>(hierNdxRFSIn.dggs().network,
+              hierNdxRFSIn.dggs()[resIn], nameIn),
+     hierNdxRFS_ (hierNdxRFSIn), dggs_ (hierNdxRFSIn.dggs()), res_ (resIn),
+     aperture_ (hierNdxRFSIn.dggs().aperture()), pRes_ {nullptr, nullptr, nullptr},
+     curRes_ {nullptr, nullptr, nullptr}, chRes_ {nullptr, nullptr, nullptr}
 { 
    // RFS has to call initialize to set up the parent and child systems 
+   // after the grids_ are all initialized
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 void
 DgHierNdxSystemRFBase::initialize (void)
 {
+   // current res set in the constructor
+   //setSystemSet(curRes_, res_);
+
    setSystemSet(pRes_, res_ - 1);
    setSystemSet(chRes_, res_ + 1);
 }
@@ -59,36 +53,16 @@ DgHierNdxSystemRFBase::initialize (void)
 int 
 DgHierNdxSystemRFBase::setSystemSet (DgSystemSet& set, int res)
 {
+   set.dgg_ = nullptr;
    set.intRF_ = nullptr;
    set.strRF_ = nullptr;
    if (res < 0 || res >= rfs().nRes())
       return 1;
 
    // if we're here res is valid
-   set.intRF_ = hierNdxDggs_[res].intRF();
-   set.strRF_ = hierNdxDggs_[res].strRF();
-}
-
-////////////////////////////////////////////////////////////////////////////////
-void
-DgHierNdxIDGGBase::initialize (void)
-{
-   DgHierNdxSystemRF::initialize();
-   setDgg(&pResDgg_, res() - 1);
-   setDgg(&curResDgg_, res());
-   setDgg(&chResDgg_, res() + 1);
-}
-
-////////////////////////////////////////////////////////////////////////////////
-int 
-DgHierNdxIDGGBase::setDgg (const DgIDGG** dgg, int res)
-{
-   *dgg = nullptr;
-   if (res < 0 || res >= rfs().nRes())
-      return 1;
-
-   // if we're here res is valid
-   *dgg = dggs()[res];
+   set.dgg_ = hierNdxRFS_[res].dgg();
+   set.intRF_ = hierNdxRFS_[res].intRF();
+   set.strRF_ = hierNdxRFS_[res].strRF();
 }
 
 ////////////////////////////////////////////////////////////////////////////////

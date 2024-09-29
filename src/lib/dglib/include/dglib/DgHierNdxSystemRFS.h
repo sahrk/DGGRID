@@ -41,13 +41,13 @@ template <class TINT, class TSTR> class DgHierNdxSystemRFS :
             const string& nameIn = "HierNdxIDGGS")
         : DgHierNdxSystemRFSBase(dggsIn, outModeIntIn, nameIn)
      { 
-        for (int r = 0; r < res(); r++) {
-           grids_[r] = new DgHierNdxIDGG(*this, r, );
+        // create the systems
+        for (int r = 0; r < res(); r++)
+           grids_[r] = new DgHierNdxSystemRF<TINT, TSTR>(*this, r, nameIn + string("r") + string(r);
 
-      DgHierNdxIDGG (const DgHierNdxSystemRFSBase& hierNdxDggsIn, int resIn,
-               bool outModeIntIn = true, const string& nameIn = "HierNdxIDGG");
-
-
+        // initialize the systems
+        for (int r = 0; r < res(); r++)
+           grids_[r]->initialize();
         }
      }
 

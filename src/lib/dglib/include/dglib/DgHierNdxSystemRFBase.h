@@ -31,12 +31,11 @@
 #include <dglib/DgDiscRF.h>
 #include <dglib/DgIDGGS.h>
 #include <dglib/DgIDGG.h>
+#include <dglib/DgHierNdxIntRF.h>
+#include <dglib/DgHierNdxStringRF.h>
 
-class DgHierNdxRFInt;
-class DgHierNdxSystemRFSBasee;
-class DgHierNdxRFInt;
-class DgHierNdxRFString;
-class DgHierNdxRFS;
+//class DgHierNdxSystemRFSBase;
+//class DgHierNdxRFS;
 
 using namespace std;
 
@@ -57,7 +56,7 @@ class DgHierNdxSystemRFBase : DgDiscRF<DgHierNdx, DgQ2DICoord, long long int> {
 
    struct DgSystemSet {
       const DgIDGG*         dgg_;
-      const DgHierNdxRFInt* intRF_;
+      const DgHierNdxIntRF* intRF_;
       const DgHierNdxRFStr* strRF_;
    };
 
@@ -71,28 +70,32 @@ class DgHierNdxSystemRFBase : DgDiscRF<DgHierNdx, DgQ2DICoord, long long int> {
 
       int res      (void) const { return res_; }
       int aperture (void) const { return aperture_; }
-
-      const DgIDGG*         dgg   (void) { return curResDgg_; }
-      const DgHierNdxRFInt* intRF (void) { return curRes_.intRF_; }
+      
+      const DgIDGG*         dgg   (void) { return curRes_.dgg_; }
+      const DgHierNdxIntRF* intRF (void) { return curRes_.intRF_; }
       const DgHierNdxRFStr* strRF (void) { return curRes_.strRF_; }
 
-      const DgIDGG*         pDgg   (void) { return pResDgg_; }
-      const DgHierNdxRFInt* pIntRF (void) { return pRes_.intRF_; }
+      const DgIDGG*         pDgg   (void) { return pRes_.dgg_; }
+      const DgHierNdxIntRF* pIntRF (void) { return pRes_.intRF_; }
       const DgHierNdxRFStr* pStrRF (void) { return pRes_.strRF_; }
       
-      const DgIDGG*         chDgg   (void) { return chResDgg_; }
-      const DgHierNdxRFInt* chIntRF (void) { return chRes_.intRF_; }
+      const DgIDGG*         chDgg   (void) { return chRes_.dgg_; }
+      const DgHierNdxIntRF* chIntRF (void) { return chRes_.intRF_; }
       const DgHierNdxRFStr* chStrRF (void) { return chRes_.strRF_; }
+
+      // abstract methods for sub-classes
+      virtual DgHierNdxIntCoord toIntCoord (const DgHierNdxStringCoord& c) = 0;
+      virtual DgHierNdxStringCoord toStringCoord (const DgHierNdxIntCoord& c) = 0;
 
    protected:
 
-      DgHierNdxSystemRFBase (const DgHierNdxSystemRFSBasee& hierNdxRFSIn, int resIn,
+      DgHierNdxSystemRFBase (const DgHierNdxSystemRFSBase& hierNdxRFSIn, int resIn,
             const string& nameIn = "HierNdxSysRFBase");
 
       int setSystemSet (DgSystemSet& set, int res);
       virtual void initialize (void);
 
-      const DgHierNdxSystemRFSBasee& hierNdxRFS_;
+      const DgHierNdxSystemRFSBase& hierNdxRFS_;
       const DgIDGGS& dggs_;
       int res_;
       int aperture_;
