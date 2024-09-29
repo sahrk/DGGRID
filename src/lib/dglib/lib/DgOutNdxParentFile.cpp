@@ -36,7 +36,7 @@ DgOutNdxParentFile::DgOutNdxParentFile (const string& fileName,
                         const DgIDGGBase& ndxPrtDgg,
                         const DgRFBase* outRF,
                         const DgRFBase* ndxPrtOutRF,
-                        const DgHierNdxIDGGS* hierNdxIDGGS,
+                        const DgHierNdxSystemRFSBase* hierNdxRFS,
                         const string& suffix,
                         DgReportLevel failLevel)
    : DgOutputStream (fileName, suffix, failLevel), dgg_ (dgg), ndxPrtDgg_ (ndxPrtDgg),

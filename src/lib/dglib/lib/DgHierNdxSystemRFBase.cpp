@@ -22,7 +22,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <dglib/DgHierNdxSystemRFBase.h>
-#include <dglib/DgHierNdxIDGGSBase.h>
+#include <dglib/DgHierNdxSystemRFSBase.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 DgHierNdxIDGGBase::DgHierNdxIDGGBase (const DgHierNdxIDGGSBase& hierNdxDggsIn, int resIn,

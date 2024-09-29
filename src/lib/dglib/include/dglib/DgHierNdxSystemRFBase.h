@@ -41,16 +41,15 @@ class DgHierNdxRFS;
 using namespace std;
 
 // need to put in appropriate include
-#ifndef HIERNDX_INT_TYPE
-#define HIERNDX_INT_TYPE uint64_t
-#endif
+//#ifndef HIERNDX_INT_TYPE
+//#define HIERNDX_INT_TYPE uint64_t
+//#endif
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 class DgHierNdx {
-// should these be ZXCoord/ZXStringCoord?
-   HIERNDX_INT_TYPE intNdx_;
-   string strNdx_;
+   DgHierNdxIntCoord intNdx_;
+   DgHierNdxStringCoord strNdx_;
 };
 
 ////////////////////////////////////////////////////////////////////////////////

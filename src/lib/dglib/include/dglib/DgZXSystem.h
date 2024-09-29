@@ -25,13 +25,13 @@
 #ifndef DGZXSYSTEM_H
 #define DGZXSYSTEM_H
 
-#include <dglib/DgHierNdxIDGGS.h>
+#include <dglib/DgHierNdxSystemRFS.h>
 
 class DgZXRF;
 class DgZXStringRF;
 
 ////////////////////////////////////////////////////////////////////////////////
-class DgZXSystem : public DgHierNdxIDGGS<DgZXRF, DgZXStringRF> {
+class DgZXSystem : public DgHierNdxSystemRFS<DgZXRF, DgZXStringRF> {
 
    public:
 
@@ -39,7 +39,7 @@ class DgZXSystem : public DgHierNdxIDGGS<DgZXRF, DgZXStringRF> {
 
      DgZXSystem (const DgIDGGSBase& dggsIn, bool outModeIntIn = true, 
             const string& nameIn = "ZXSystem")
-        : DgHierNdxIDGGS(dggsIn, outModeIntIn, nameIn)
+        : DgHierNdxSystemRFS(dggsIn, outModeIntIn, nameIn)
      { 
      }
 

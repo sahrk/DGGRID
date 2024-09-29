@@ -41,12 +41,10 @@ add_library(dglib
   lib/DgHexGrid2DS.cpp
   lib/DgHexIDGG.cpp
   lib/DgHexIDGGS.cpp
-  lib/DgHierNdxIDGGBase.cpp
   lib/DgHierNdxIntRF.cpp
   lib/DgHierNdxStringRF.cpp
-  lib/DgHierNdxSystemRF.cpp
-  lib/DgHierNdxIDGG.hpp
-  lib/DgHierNdxRFS.hpp
+  lib/DgHierNdxSystemRFBase.cpp
+  lib/DgHierNdxSystemRFSBase.cpp
   lib/DgIcosaMap.cpp
   lib/DgIDGGBase.cpp
   lib/DgIDGG.cpp
@@ -170,15 +168,13 @@ add_library(dglib
   include/dglib/DgHexGrid2DS.h
   include/dglib/DgHexIDGG.h
   include/dglib/DgHexIDGGS.h
-  include/dglib/DgHierNdxIDGG.h
-  include/dglib/DgHierNdxIDGGBase.h
   include/dglib/DgHierNdxIntRF.h
   include/dglib/DgHierNdxRF.h
   include/dglib/DgHierNdxStringRF.h
   include/dglib/DgHierNdxSystemRF.h
-  include/dglib/DgHierNdxIDGGS.h
-  include/dglib/DgHierNdxIDGGSBase.h
-  include/dglib/DgHierNdxRFS.h
+  include/dglib/DgHierNdxSystemRFBase.h
+  include/dglib/DgHierNdxSystemRFS.h
+  include/dglib/DgHierNdxSystemRFSBase.h
   include/dglib/DgIDGG.h
   include/dglib/DgIDGGBase.h
   include/dglib/DgIDGGS.h
