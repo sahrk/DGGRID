@@ -47,8 +47,6 @@ template <class TINT, class TSTR> class DgHierNdxSystemRF :
       const const TSTR* typedStrRF (void) { return curRes_.strRF_; }
 
       // abstract methods from above
-      //virtual DgHierNdxIntCoord toIntCoord (const DgHierNdxStringCoord& c) = 0;
-      //virtual DgHierNdxStringCoord toStringCoord (const DgHierNdxIntCoord& c) = 0;
 
    protected:
 
@@ -57,9 +55,13 @@ template <class TINT, class TSTR> class DgHierNdxSystemRF :
             int resIn = 0, const string& nameIn = "DgHierNdxSystemRF")
          : DgHierNdxSystemRFBase(hierNdxRFSIn, resIn, nameIn)
       {
+         if (resIn < 0 || resIn >= hierNdxRFS_.nRes()) return;
+
          curRes_.dgg_ = dggs()[resIn];
          curRes_.intRF_ = new TINT(dggs(), resIn); // use default name
          curRes_.strRF_ = new TSTR(dggs(), resIn); // use default name
+         DgHierNdx2WayIntToStringConverter* c2way = 
+                               new DgHierNdx2WayIntToStringConverter(*this);
       }
 };
 

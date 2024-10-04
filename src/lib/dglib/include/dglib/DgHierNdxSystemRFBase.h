@@ -28,6 +28,8 @@
 #include <climits>
 #include <iostream>
 
+#include <dglib/DgConverter.h>
+#include <dglib/Dg2WayConverter.h>
 #include <dglib/DgDiscRF.h>
 #include <dglib/DgIDGGS.h>
 #include <dglib/DgIDGG.h>
@@ -45,6 +47,60 @@ using namespace std;
 //#endif
 
 ////////////////////////////////////////////////////////////////////////////////
+class DgHierNdxStringToIntConverter :
+        public DgConverter<DgHierNdxStringCoord, long long int, DgHierNdxIntCoord, 
+                            long long int>
+{
+   public:
+
+      virtual DgHierNdxIntCoord convertTypedAddress
+                                (const DgHierNdxStringCoord& addIn) const;
+
+   private:
+
+      DgHierNdxStringToIntConverter (const DgHierNdxStringRF& from, 
+                                     const DgHierNdxIntRF& to);
+
+      const DgHierNdxSystemRF& sys;
+
+   friend class Dg2WayIntToStringConverter;
+};
+
+////////////////////////////////////////////////////////////////////////////////
+class DgHierNdxIntToStringConverter :
+        public DgConverter<DgHierNdxIntCoord, long long int, DgHierNdxStringCoord, 
+                            long long int>
+{
+   public:
+
+      virtual DgHierNdxStringCoord convertTypedAddress
+                                (const DgHierNdxIntCoord& addIn) const;
+
+   private:
+
+      DgHierNdxIntToStringConverter (const DgHierNdxIntRF& from, 
+            const DgHierNdxStringRF& to);
+
+      const DgHierNdxSystemRF& sys;
+
+   friend class Dg2WayIntToStringConverter;
+};
+
+////////////////////////////////////////////////////////////////////////////////
+class DgHierNdx2WayIntToStringConverter : public Dg2WayConverter {
+
+   public:
+
+      DgHierNdx2WayIntToStringConverter (const DgHierNdxSystemRF& sys)
+         : Dg2WayConverter (*(new DgHierNdxStringToIntConverter(
+                                      *sys.strRF(), *sys.intRF())),
+                            *(new DgHierNdxIntToStringConverter(
+                                      *sys.intRF(), *sys.strRF())))
+      {}
+};
+
+
+////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 class DgHierNdx {
    DgHierNdxIntCoord intNdx_;
@@ -57,7 +113,7 @@ class DgHierNdxSystemRFBase : DgDiscRF<DgHierNdx, DgQ2DICoord, long long int> {
    struct DgSystemSet {
       const DgIDGG*         dgg_;
       const DgHierNdxIntRF* intRF_;
-      const DgHierNdxRFStr* strRF_;
+      const DgHierNdxStringRF* strRF_;
    };
 
    public:

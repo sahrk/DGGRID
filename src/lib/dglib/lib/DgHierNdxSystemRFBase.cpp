@@ -25,6 +25,44 @@
 #include <dglib/DgHierNdxSystemRFSBase.h>
 
 ////////////////////////////////////////////////////////////////////////////////
+#include <dglib/DgConverter.h>
+#include <dglib/Dg2WayConverter.h>
+
+////////////////////////////////////////////////////////////////////////////////
+DgHierNdxStringToIntConverter::DgHierNdxStringToIntConverter (
+                  const DgHierNdxStringRF& from, const DgHierNdxIntRF& to)
+         : DgConverter<DgHierNdxStringCoord, long long int, 
+                    DgHierNdxIntCoord, long long int> (from, to),
+           sys(from.system())
+      { }
+
+////////////////////////////////////////////////////////////////////////////////
+DgHierNdxIntCoord 
+DgHierNdxStringToIntConverter::convertTypedAddress
+                                (const DgHierNdxStringCoord& addIn) const
+{ 
+   return sys.toIntCoord(addIn); 
+}
+
+////////////////////////////////////////////////////////////////////////////////
+DgHierNdxIntToStringConverter:: 
+      DgHierNdxIntToStringConverter (const DgHierNdxIntRF& from, 
+            const DgHierNdxStringRF& to)
+         : DgConverter<DgHierNdxIntCoord, long long int, 
+                    DgHierNdxStringCoord, long long int> (from, to),
+           sys(from.system())
+      { }
+
+////////////////////////////////////////////////////////////////////////////////
+DgHierNdxStringCoord 
+DgHierNdxIntToStringConverter::convertTypedAddress
+                                (const DgHierNdxIntCoord& addIn) const
+{ 
+   return sys.toStringCoord(addIn); 
+}
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 DgHierNdxSystemRFBase::DgHierNdxSystemRFBase (
          const DgHierNdxSystemRFSBase& hierNdxRFSIn, int resIn,
          const string& nameIn = "HierNdxSysRF")
@@ -42,7 +80,7 @@ DgHierNdxSystemRFBase::DgHierNdxSystemRFBase (
 void
 DgHierNdxSystemRFBase::initialize (void)
 {
-   // current res set in the constructor
+   // current res set in the sub-class constructor
    //setSystemSet(curRes_, res_);
 
    setSystemSet(pRes_, res_ - 1);
@@ -56,7 +94,7 @@ DgHierNdxSystemRFBase::setSystemSet (DgSystemSet& set, int res)
    set.dgg_ = nullptr;
    set.intRF_ = nullptr;
    set.strRF_ = nullptr;
-   if (res < 0 || res >= rfs().nRes())
+   if (res < 0 || res >= hierNdxRFS_.nRes())
       return 1;
 
    // if we're here res is valid
