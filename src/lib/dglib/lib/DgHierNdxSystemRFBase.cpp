@@ -21,12 +21,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <dglib/DgHierNdxSystemRFBase.h>
-#include <dglib/DgHierNdxSystemRFSBase.h>
-
-////////////////////////////////////////////////////////////////////////////////
 #include <dglib/DgConverter.h>
 #include <dglib/Dg2WayConverter.h>
+
+#include <dglib/DgHierNdxSystemRFBase.h>
+//#include <dglib/DgHierNdxSystemRFSBase.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 DgHierNdxStringToIntConverter::DgHierNdxStringToIntConverter (
@@ -71,7 +70,8 @@ DgHierNdxSystemRFBase::DgHierNdxSystemRFBase (
      hierNdxRFS_ (hierNdxRFSIn), dggs_ (hierNdxRFSIn.dggs()), res_ (resIn),
      aperture_ (hierNdxRFSIn.dggs().aperture()), pRes_ {nullptr, nullptr, nullptr},
      curRes_ {nullptr, nullptr, nullptr}, chRes_ {nullptr, nullptr, nullptr}
-{ 
+{
+   // sub-classes need to assign appropriate RF's to curRes_
    // RFS has to call initialize to set up the parent and child systems 
    // after the grids_ are all initialized
 }
@@ -101,6 +101,24 @@ DgHierNdxSystemRFBase::setSystemSet (DgSystemSet& set, int res)
    set.dgg_ = hierNdxRFS_[res].dgg();
    set.intRF_ = hierNdxRFS_[res].intRF();
    set.strRF_ = hierNdxRFS_[res].strRF();
+}
+
+////////////////////////////////////////////////////////////////////////////////
+DgHierNdx
+DgHierNdxSystemRFBase::quantify (const DgQ2DICoord& point) const
+{
+   DgHierNdx add;
+   add.strNdx_ = strRF()->quantify(point);
+   setIntFromStringCoord(add);
+   return add;
+}
+   
+////////////////////////////////////////////////////////////////////////////////
+DgQ2DICoord
+DgHierNdxSystemRFBase::invQuantify (const DgHierNdx& add) const
+{
+   DgQ2DICoord point = strRF()->invQuantify(add.strNdx_);
+   return point;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

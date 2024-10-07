@@ -137,6 +137,11 @@ class DgHierNdxSystemRFSBase :
      { 
         grids_ = new vector<const DgHierNdxSystemRFBase*>(nRes_, nullptr);
      }
+                  
+     // override the default definitions from DgDiscRFS (which quantify at
+     // the highest resolution)
+     virtual DgResAdd<DgHierNdx> quantify (const ResAdd<DgQ2DICoord>& point) const;
+     virtual ResAdd<DgQ2DICoord> invQuantify (const DgResAdd<DgHierNdx>& add) const;
 
      // pure virtual functions passed down from above
      virtual void setAddNdxParent (const DgResAdd<DgHierNdx>& add,

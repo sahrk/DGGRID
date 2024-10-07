@@ -41,11 +41,6 @@
 
 using namespace std;
 
-// need to put in appropriate include
-//#ifndef HIERNDX_INT_TYPE
-//#define HIERNDX_INT_TYPE uint64_t
-//#endif
-
 ////////////////////////////////////////////////////////////////////////////////
 class DgHierNdxStringToIntConverter :
         public DgConverter<DgHierNdxStringCoord, long long int, DgHierNdxIntCoord, 
@@ -138,6 +133,16 @@ class DgHierNdxSystemRFBase : DgDiscRF<DgHierNdx, DgQ2DICoord, long long int> {
       const DgIDGG*         chDgg   (void) { return chRes_.dgg_; }
       const DgHierNdxIntRF* chIntRF (void) { return chRes_.intRF_; }
       const DgHierNdxRFStr* chStrRF (void) { return chRes_.strRF_; }
+
+      void setIntFromStringCoord (DgHierNdx& hn) const
+               { hn.intNdx_ = toIntCoord(hn.strNdx_); }
+
+      void setStringFromIntCoord (DgHierNdx& hn) const
+               { hn.strNdx_ = toStringCoord(hn.intNdx_); }
+
+      // provide default methods that quantify via the string representation
+      virtual DgHierNdx quantify (const DgQ2DICoord& point) const;
+      virtual DgQ2DICoord invQuantify (const DgHierNdx& add) const;
 
       // abstract methods for sub-classes
       virtual DgHierNdxIntCoord toIntCoord (const DgHierNdxStringCoord& c) = 0;

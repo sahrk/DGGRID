@@ -18,15 +18,15 @@
 *******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
-// DgHierNdxSystemRFS.cpp: DgHierNdxSystemRFS class definition.
+// DgHierNdxSystemRFSBase.cpp: DgHierNdxSystemRFSBase class definition.
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <dglib/DgHierNdxSystemRFS.h>
+#include <dglib/DgHierNdxSystemRFSBase.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 void
-DgHierNdxSystemRFS::setNdxParent (int res, const DgLocation& loc,
+DgHierNdxSystemRFSBase::setNdxParent (int res, const DgLocation& loc,
                     DgLocation& parent) const
 {
    parent.clearAddress();
@@ -39,12 +39,12 @@ DgHierNdxSystemRFS::setNdxParent (int res, const DgLocation& loc,
       setAddNdxParent(*(rfs().getAddress(tmpLoc)), parent);
    }
 
-} // void DgHierNdxSystemRFS::setNdxParent
+} // void DgHierNdxSystemRFSBase::setNdxParent
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 void
-DgHierNdxSystemRFS::setNdxChildren (int res, const DgLocation& loc,
+DgHierNdxSystemRFSBase::setNdxChildren (int res, const DgLocation& loc,
                                    DgLocVector& children) const
 {
    children.clearAddress();
@@ -58,7 +58,27 @@ DgHierNdxSystemRFS::setNdxChildren (int res, const DgLocation& loc,
       setAddNdxChildren(*(rfs().getAddress(tmpLoc)), children);
    }
 
-} // void DgHierNdxSystemRFS::setNdxChildren
+} // void DgHierNdxSystemRFSBase::setNdxChildren
+
+////////////////////////////////////////////////////////////////////////////////
+DgResAdd<DgHierNdx> 
+DgHierNdxSystemRFSBase::quantify (const DgResAdd<DgQ2DICoord>& point) const
+{
+   const DgHierNdxSystemRFBase& grid = *grids()[point.res()];   
+   DgHierNdx hierNdx = grid.quantify(point.address());
+   DgResAdd<DgHierNdx> add(hierNdx, point.res());
+   return add;
+}
+                  
+////////////////////////////////////////////////////////////////////////////////
+DgResAdd<DgQ2DICoord> 
+DgHierNdxSystemRFSBase::invQuantify (const DgResAdd<DgHierNdx>& add) const
+{
+   const DgHierNdxSystemRFBase& grid = *grids()[add.res()];   
+   DgQ2DICoord q2di = grid.invQuantify(add.address());
+   DgResAdd<DgQ2DICoord> newPoint(q2di, add.res());
+   return newPoint;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
