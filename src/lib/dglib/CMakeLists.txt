@@ -113,10 +113,11 @@ add_library(dglib
   lib/DgZ3StringRF.cpp
   lib/DgZ7RF.cpp
   lib/DgZ7StringRF.cpp
+  lib/DgZXRF.cpp
   lib/DgZXStringRF.cpp
+  lib/DgZXSystem.cpp
   lib/DgZOrderRF.cpp
   lib/DgZOrderStringRF.cpp
-  lib/DgZXRF.cpp
   include/dglib/Dg2WayConverter.h
   include/dglib/DgAddress.h
   include/dglib/DgAddressBase.h

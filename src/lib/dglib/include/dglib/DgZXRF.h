@@ -42,7 +42,10 @@ class DgZXRF : public DgHierNdxIntRF {
          { return new DgZXRF (dggsIn, resIn, nameIn); }
 
       // these need to be defined by specializations
-      // they have dummy definitions from the superclass
+      virtual const char* str2add (DgHierNdxIntCoord* c, const char* str, 
+                   char delimiter) const;
+
+      // these have dummy definitions from the superclass
       virtual DgHierNdxIntCoord quantify (const DgQ2DICoord& point) const;
       virtual DgQ2DICoord invQuantify (const DgHierNdxIntCoord& add) const;
 

@@ -30,7 +30,7 @@
 #include <dglib/DgHierNdxSystemRFSBase.h>
 
 ////////////////////////////////////////////////////////////////////////////////
-template <class TINT, class TSTR> class DgHierNdxSystemRFS :
+template <class TSYS, class TINT, class TSTR> class DgHierNdxSystemRFS :
                                      public DgHierNdxSystemRFSBase {
 
    public:
@@ -43,13 +43,16 @@ template <class TINT, class TSTR> class DgHierNdxSystemRFS :
      { 
         // create the systems
         for (int r = 0; r < res(); r++)
-           grids_[r] = new DgHierNdxSystemRF<TINT, TSTR>(*this, r, nameIn + string("r") + string(r);
+           grids_[r] = new DgHierNdxSystemRF<TINT, TSTR>(*this, r, 
+                                            nameIn + string("r") + string(r);
 
         // initialize the systems
         for (int r = 0; r < res(); r++)
            grids_[r]->initialize();
         }
      }
+
+     // pure virtual functions passed down from above
 
      // pure virtual functions passed down from above
      virtual void setAddNdxParent (const DgResAdd<DgQ2DICoord>& add,

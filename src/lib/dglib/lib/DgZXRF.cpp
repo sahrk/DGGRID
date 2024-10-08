@@ -32,7 +32,12 @@
 #include <dglib/DgZXRF.h>
 
 ////////////////////////////////////////////////////////////////////////////////
-//const DgZXCoord DgZXCoord::undefDgZXCoord(0xffffffffffffffff);
+const char*
+DgZXRF::str2add (DgHierNdxIntCoord* add, const char* str, char delimiter) const
+{
+   return str;
+
+} // const char* DgZXRF::str2add
 
 ////////////////////////////////////////////////////////////////////////////////
 DgHierNdxIntCoord 

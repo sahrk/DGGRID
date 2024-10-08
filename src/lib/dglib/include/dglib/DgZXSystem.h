@@ -35,22 +35,30 @@ class DgZXSystem : public DgHierNdxSystemRFS<DgZXRF, DgZXStringRF> {
 
    public:
 
+      static DgZXSystem* makeSystem (const DgIDGGS& dggsIn, bool outModeIntIn = true,
+                             const std::string& nameIn)
+         { return new DgZXSystem (dggsIn, outModeIntIn, nameIn); }
+
    protected:
 
      DgZXSystem (const DgIDGGSBase& dggsIn, bool outModeIntIn = true, 
             const string& nameIn = "ZXSystem")
-        : DgHierNdxSystemRFS(dggsIn, outModeIntIn, nameIn)
+        : DgHierNdxSystemRFS<DgZXRF, DgZXStringRF>(dggsIn, outModeIntIn, nameIn)
      { 
      }
 
-     // override virtual functions with dummy definitions from above
-     // quant/invQuant?
+     // default methods quantize via string representation; redefine to
+     // get different behavior
+     //virtual DgHierNdx quantify (const DgQ2DICoord& point) const;
+     //virtual DgQ2DICoord invQuantify (const DgHierNdx& add) const;
 
-     // pure virtual functions passed down from above
+     // abstract methods from above
+     virtual DgHierNdxIntCoord toIntCoord (const DgHierNdxStringCoord& c);
+     virtual DgHierNdxStringCoord toStringCoord (const DgHierNdxIntCoord& c);
      virtual void setAddNdxParent (const DgResAdd<DgQ2DICoord>& add,
-                                   DgLocation& parent) const = 0;
+                                   DgLocation& parent) const;
      virtual void setAddNdxChildren (const DgResAdd<DgQ2DICoord>& add,
-                                     DgLocVector& children) const = 0;
+                                     DgLocVector& children) const;
 };
 
 #endif

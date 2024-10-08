@@ -42,6 +42,7 @@ class DgZXStringRF : public DgHierNdxStringRF {
       // these need to be defined by specializations
       virtual const char* str2add (DgHierNdxStringCoord* add, const char* str,
                                    char delimiter) const;
+
       // these have dummy definitions from the superclass
       virtual DgHierNdxStringCoord quantify (const DgQ2DICoord& point) const;
       virtual DgQ2DICoord invQuantify (const DgHierNdxStringCoord& add) const;
