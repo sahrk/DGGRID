@@ -27,7 +27,6 @@
 
 #include <vector>
 #include <dglib/DgDiscRFS.h>
-//#include <dglib/DgHierNdxSystemRFBase.h>
 
 class DgHierNdxSystemRFBase;
 class DgHierNdx;
@@ -57,93 +56,30 @@ class DgHierNdxSystemRFSBase :
       // only the DgLocation version performs checking on the input
 
       virtual void setNdxParent (int res, const DgLocation& loc, DgLocation& parent) const;
-
       virtual void setNdxParent (const DgResAdd<DgHierNdx>& add, const DgRFBase& rf,
-                               DgLocation& parent) const
-           {
-             setNdxParent(add, parent);
-             rf.convert(&parent);
-           }
-
-      virtual void setNdxParent (const DgResAdd<DgHierNdx>& add, DgLocation& parent) const
-           {
-             //add.clearAddress();
-             convert(&parent);
-             if (add.res() > 0 && add.res() < nRes())
-	         setAddNdxParent(add, parent);
-           }
-
-      virtual DgLocation* makeNdxParent (int res, const DgLocation& loc) const
-           {
-             DgLocation* parent = new DgLocation(*this);
-             setNdxParent(res, loc, *parent);
-
-             return parent;
-           }
-
-      virtual DgLocation* makeNdxParent (const DgResAdd<DgHierNdx>& add) const
-           {
-             DgLocation* parent = new DgLocation(*this);
-             setNdxParent(add, *parent);
-             return parent;
-           }
+                               DgLocation& parent) const;
+      virtual void setNdxParent (const DgResAdd<DgHierNdx>& add, DgLocation& parent) const;
+      virtual DgLocation* makeNdxParent (int res, const DgLocation& loc) const;
+      virtual DgLocation* makeNdxParent (const DgResAdd<DgHierNdx>& add) const;
 
       // indexing children
       // only the DgLocation version performs checking on the input
-
-      virtual void setNdxChildren (int res,
-                    const DgLocation& loc, DgLocVector& chld) const;
-
-      virtual void setNdxChildren (const DgResAdd<DgHierNdx>& add,
-                                        const DgRFBase& rf,
-                                        DgLocVector& chld) const
-           {
-              setNdxChildren(add, chld);
-              rf.convert(chld);
-           }
-
-      virtual void setNdxChildren (const DgResAdd<DgHierNdx>& add,
-                                        DgLocVector& chld) const
-           {
-             chld.clearAddress();
-             convert(chld);
-             if (add.res() >= 0 && add.res() < (nRes() - 1)) {
-                setAddNdxChildren(add, chld);
-             }
-           }
-
-      virtual DgLocVector* makeNdxChildren (int res,
-                                                 const DgLocation& loc) const
-           {
-             DgLocVector* chld = new DgLocVector(*this);
-             setNdxChildren(res, loc, *chld);
-
-             return chld;
-           }
-
-      virtual DgLocVector* makeNdxChildren (const DgResAdd<DgHierNdx>& add) const
-           {
-             DgLocVector* chld = new DgLocVector(*this);
-             setNdxChildren(add, *chld);
-
-             return chld;
-           }
+      virtual void setNdxChildren (int res, const DgLocation& loc, DgLocVector& chld) const;
+      virtual void setNdxChildren (const DgResAdd<DgHierNdx>& add, const DgRFBase& rf,
+                                        DgLocVector& chld) const;
+      virtual void setNdxChildren (const DgResAdd<DgHierNdx>& add, DgLocVector& chld) const;
+      virtual DgLocVector* makeNdxChildren (int res, const DgLocation& loc) const;
+      virtual DgLocVector* makeNdxChildren (const DgResAdd<DgHierNdx>& add) const;
 
    protected:
 
      DgHierNdxSystemRFSBase (const DgIDGGSBase& dggsIn, bool outModeIntIn = true,
-            const string& nameIn = "HierNdxSystemRFS")
-        : DiscRFS<DgHierNdx, ResAdd<DgQ2DICoord>, long long int> 
-                    (dggsIn.network(), dggsIn, dggsIn.nRes(), nameIn),
-          dggs_ (dggsIn), outModeInt_ (outModeIntIn)
-     { 
-        grids_ = new vector<const DgHierNdxSystemRFBase*>(nRes_, nullptr);
-     }
+            const string& nameIn = "HierNdxSystemRFS");
                   
      // override the default definitions from DgDiscRFS (which quantify at
      // the highest resolution)
-     virtual DgResAdd<DgHierNdx> quantify (const ResAdd<DgQ2DICoord>& point) const;
-     virtual ResAdd<DgQ2DICoord> invQuantify (const DgResAdd<DgHierNdx>& add) const;
+     virtual DgResAdd<DgHierNdx> quantify (const DgResAdd<DgQ2DICoord>& point) const;
+     virtual DgResAdd<DgQ2DICoord> invQuantify (const DgResAdd<DgHierNdx>& add) const;
 
      // pure virtual functions passed down from above
      virtual void setAddNdxParent (const DgResAdd<DgHierNdx>& add,

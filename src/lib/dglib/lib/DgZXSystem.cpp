@@ -29,6 +29,7 @@
 //#include <cfloat>
 //#include <string.h>
 
+#include <dglib/DgHierNdxRF.h>
 #include <dglib/DgZXSystem.h>
 
 ////////////////////////////////////////////////////////////////////////////////

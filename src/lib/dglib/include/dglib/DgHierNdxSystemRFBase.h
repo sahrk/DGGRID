@@ -33,17 +33,21 @@
 #include <dglib/DgDiscRF.h>
 #include <dglib/DgIDGGS.h>
 #include <dglib/DgIDGG.h>
-#include <dglib/DgHierNdxIntRF.h>
-#include <dglib/DgHierNdxStringRF.h>
+//#include <dglib/DgHierNdxIntRF.h>
+//#include <dglib/DgHierNdxStringRF.h>
 
 //class DgHierNdxSystemRFSBase;
 //class DgHierNdxRFS;
+class DgHierNdxStringCoord;
+class DgHierNdxIntCoord;
+class DgHierNdxStringRF;
+class DgHierNdxSystemRF;
 
 using namespace std;
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgHierNdxStringToIntConverter :
-        public DgConverter<DgHierNdxStringCoord, long long int, DgHierNdxIntCoord, 
+        public DgConverter<DgHierNdxStringCoord, long long int, DgHierNdxIntCoord,
                             long long int>
 {
    public:
