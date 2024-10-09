@@ -28,6 +28,7 @@
 #include <vector>
 #include <dglib/DgIDGGSBase.h>
 #include <dglib/DgHierNdxSystemRFSBase.h>
+#include <dglib/DgHierNdxSystemRF.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 template <class TINT, class TSTR> class DgHierNdxSystemRFS :
@@ -42,12 +43,12 @@ template <class TINT, class TSTR> class DgHierNdxSystemRFS :
         : DgHierNdxSystemRFSBase(dggsIn, outModeIntIn, nameIn)
      { 
         // create the systems
-        for (int r = 0; r < res(); r++)
-           grids_[r] = new DgHierNdxSystemRF<TINT, TSTR>(*this, r, 
+        for (int r = 0; r < nRes(); r++)
+           grids_[r] = new DgHierNdxSystemRF<TINT, TSTR>(*this, r,
                                             nameIn + string("r") + string(r);
 
         // initialize the systems
-        for (int r = 0; r < res(); r++)
+        for (int r = 0; r < nRes(); r++)
            grids_[r]->initialize();
         }
      }

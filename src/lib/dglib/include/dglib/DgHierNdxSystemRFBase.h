@@ -38,6 +38,7 @@
 
 //class DgHierNdxSystemRFSBase;
 //class DgHierNdxRFS;
+class DgHierNdxIntRF;
 class DgHierNdxStringCoord;
 class DgHierNdxIntCoord;
 class DgHierNdxStringRF;
