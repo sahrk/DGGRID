@@ -169,6 +169,7 @@ add_library(dglib
   include/dglib/DgHexGrid2DS.h
   include/dglib/DgHexIDGG.h
   include/dglib/DgHexIDGGS.h
+  include/dglib/DgHierNdx.h
   include/dglib/DgHierNdxIntRF.h
   include/dglib/DgHierNdxRF.h
   include/dglib/DgHierNdxStringRF.h

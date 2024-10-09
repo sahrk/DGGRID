@@ -38,11 +38,13 @@
 
 //class DgHierNdxSystemRFSBase;
 //class DgHierNdxRFS;
+class DgHierNdx;
 class DgHierNdxIntRF;
 class DgHierNdxStringCoord;
 class DgHierNdxIntCoord;
 class DgHierNdxStringRF;
 class DgHierNdxSystemRF;
+class DgHierNdxSystemRFSBase;
 
 using namespace std;
 
@@ -91,21 +93,19 @@ class DgHierNdx2WayIntToStringConverter : public Dg2WayConverter {
 
    public:
 
-      DgHierNdx2WayIntToStringConverter (const DgHierNdxSystemRF& sys)
-         : Dg2WayConverter (*(new DgHierNdxStringToIntConverter(
-                                      *sys.strRF(), *sys.intRF())),
-                            *(new DgHierNdxIntToStringConverter(
-                                      *sys.intRF(), *sys.strRF())))
-      {}
+     DgHierNdx2WayIntToStringConverter (const DgHierNdxSystemRF& sys);
+
 };
 
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
+/*
 class DgHierNdx {
    DgHierNdxIntCoord intNdx_;
    DgHierNdxStringCoord strNdx_;
 };
+*/
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgHierNdxSystemRFBase : DgDiscRF<DgHierNdx, DgQ2DICoord, long long int> {
@@ -122,22 +122,22 @@ class DgHierNdxSystemRFBase : DgDiscRF<DgHierNdx, DgQ2DICoord, long long int> {
 
       const DgIDGGS& dggs (void) { return dggs_; }
 
-      bool outModeInt (void) { return hierNdxRFS().outModeInt(); }
+      bool outModeInt (void);
 
       int res      (void) const { return res_; }
       int aperture (void) const { return aperture_; }
       
-      const DgIDGG*         dgg   (void) { return curRes_.dgg_; }
-      const DgHierNdxIntRF* intRF (void) { return curRes_.intRF_; }
-      const DgHierNdxRFStr* strRF (void) { return curRes_.strRF_; }
+      const DgIDGG*            dgg   (void) { return curRes_.dgg_; }
+      const DgHierNdxIntRF*    intRF (void) { return curRes_.intRF_; }
+      const DgHierNdxStringRF* strRF (void) { return curRes_.strRF_; }
 
-      const DgIDGG*         pDgg   (void) { return pRes_.dgg_; }
-      const DgHierNdxIntRF* pIntRF (void) { return pRes_.intRF_; }
-      const DgHierNdxRFStr* pStrRF (void) { return pRes_.strRF_; }
+      const DgIDGG*            pDgg   (void) { return pRes_.dgg_; }
+      const DgHierNdxIntRF*    pIntRF (void) { return pRes_.intRF_; }
+      const DgHierNdxStringRF* pStrRF (void) { return pRes_.strRF_; }
       
-      const DgIDGG*         chDgg   (void) { return chRes_.dgg_; }
-      const DgHierNdxIntRF* chIntRF (void) { return chRes_.intRF_; }
-      const DgHierNdxRFStr* chStrRF (void) { return chRes_.strRF_; }
+      const DgIDGG*            chDgg   (void) { return chRes_.dgg_; }
+      const DgHierNdxIntRF*    chIntRF (void) { return chRes_.intRF_; }
+      const DgHierNdxStringRF* chStrRF (void) { return chRes_.strRF_; }
 
       void setIntFromStringCoord (DgHierNdx& hn) const
                { hn.intNdx_ = toIntCoord(hn.strNdx_); }

@@ -30,7 +30,7 @@ template<class A, class B, class DB> void
 DgDiscTopoRFS<A, B, DB>::setAddNeighbors (const DgResAdd<A>& add,
                                             DgLocVector& vec) const
 {
-   grids()[add.res()]->convert(vec);
+   this->grids()[add.res()]->convert(vec);
    topoRF(add.res())->setAddNeighbors(add.address(), vec);
    this->convert(vec);
 
@@ -45,10 +45,10 @@ DgDiscTopoRFS<A, B, DB>::setParents (int res, const DgLocation& loc,
    vec.clearAddress();
    this->convert(vec);
 
-   if (res > 0 && res < nRes())
+   if (res > 0 && res < this->nRes())
    {
       DgLocation tmpLoc(loc);
-      grids()[res]->convert(&tmpLoc);
+      this->grids()[res]->convert(&tmpLoc);
       this->convert(&tmpLoc);
       setAddParents(*(this->getAddress(tmpLoc)), vec);
    }
@@ -64,10 +64,10 @@ DgDiscTopoRFS<A, B, DB>::setInteriorChildren (int res, const DgLocation& loc,
    vec.clearAddress();
    this->convert(vec);
 
-   if (res >= 0 && res < (nRes() - 1))
+   if (res >= 0 && res < (this->nRes() - 1))
    {
       DgLocation tmpLoc(loc);
-      grids()[res]->convert(&tmpLoc);
+      this->grids()[res]->convert(&tmpLoc);
       this->convert(&tmpLoc);
       setAddInteriorChildren(*(this->getAddress(tmpLoc)), vec);
    }
@@ -82,10 +82,10 @@ DgDiscTopoRFS<A, B, DB>::setBoundaryChildren (int res, const DgLocation& loc,
 {
    vec.clearAddress();
    this->convert(vec);
-   if (res >= 0 && res < (nRes() - 1))
+   if (res >= 0 && res < (this->nRes() - 1))
    {
       DgLocation tmpLoc(loc);
-      grids()[res]->convert(&tmpLoc);
+      this->grids()[res]->convert(&tmpLoc);
       this->convert(&tmpLoc);
       setAddBoundaryChildren(*(this->getAddress(tmpLoc)), vec);
    }
@@ -99,10 +99,10 @@ DgDiscTopoRFS<A, B, DB>::setBoundary2Children (int res, const DgLocation& loc,
 {
    vec.clearAddress();
    this->convert(vec);
-   if (res >= 0 && res < (nRes() - 1))
+   if (res >= 0 && res < (this->nRes() - 1))
    {
       DgLocation tmpLoc(loc);
-      grids()[res]->convert(&tmpLoc);
+      this->grids()[res]->convert(&tmpLoc);
       this->convert(&tmpLoc);
       setAddBoundary2Children(*(this->getAddress(tmpLoc)), vec);
    }
@@ -118,10 +118,10 @@ DgDiscTopoRFS<A, B, DB>::setAllChildren (int res, const DgLocation& loc,
    vec.clearAddress();
    this->convert(vec);
 
-   if (res >= 0 && res < (nRes() - 1))
+   if (res >= 0 && res < (this->nRes() - 1))
    {
       DgLocation tmpLoc(loc);
-      grids()[res]->convert(&tmpLoc);
+      this->grids()[res]->convert(&tmpLoc);
       this->convert(&tmpLoc);
       setAddAllChildren(*(this->getAddress(tmpLoc)), vec);
    }

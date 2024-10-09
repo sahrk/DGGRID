@@ -25,7 +25,9 @@
 #include <dglib/Dg2WayConverter.h>
 
 #include <dglib/DgHierNdxSystemRFBase.h>
-//#include <dglib/DgHierNdxSystemRFSBase.h>
+#include <dglib/DgHierNdx.h>
+#include <dglib/DgHierNdxIntRF.h>
+#include <dglib/DgHierNdxStringRF.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 DgHierNdxStringToIntConverter::DgHierNdxStringToIntConverter (
@@ -61,6 +63,15 @@ DgHierNdxIntToStringConverter::convertTypedAddress
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+DgHierNdx2WayIntToStringConverter (const DgHierNdxSystemRF& sys)
+   : Dg2WayConverter (*(new DgHierNdxStringToIntConverter(
+                               *sys.strRF(), *sys.intRF())),
+                      *(new DgHierNdxIntToStringConverter(
+                               *sys.intRF(), *sys.strRF())))
+{
+}
+
+////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgHierNdxSystemRFBase::DgHierNdxSystemRFBase (
          const DgHierNdxSystemRFSBase& hierNdxRFSIn, int resIn,
@@ -74,6 +85,13 @@ DgHierNdxSystemRFBase::DgHierNdxSystemRFBase (
    // sub-classes need to assign appropriate RF's to curRes_
    // RFS has to call initialize to set up the parent and child systems 
    // after the grids_ are all initialized
+}
+
+////////////////////////////////////////////////////////////////////////////////
+bool 
+DgHierNdxSystemRFBase::outModeInt (void) 
+{ 
+   return hierNdxRFS().outModeInt(); 
 }
 
 ////////////////////////////////////////////////////////////////////////////////
