@@ -128,11 +128,7 @@ template<class A, class B, class DB> class DgDiscRFS
              {
                 DgDiscRF<DgResAdd<A>, B, DB>::operator=(rf);
 
-                aperture_ = rf.aperture();
                 nRes_ = rf.nRes();
-                isCongruent_ = rf.isCongruent();
-                isAligned_ = rf.isAligned();
-
                 delete grids_; // the DgRFNetwork deleteds the grids themselves
 
                 grids_ = new vector<const DgDiscRF<A, B, DB>*>(rf.nRes());

@@ -31,6 +31,7 @@
 #include <dglib/DgDiscRF.h>
 #include <dglib/DgIDGGS.h>
 #include <dglib/DgIDGG.h>
+#include <dglib/DgHierNdxSystemRFBase.h>
 
 class DgHierNdxRFInt;
 class DgHierNdxSystemRFSBase;

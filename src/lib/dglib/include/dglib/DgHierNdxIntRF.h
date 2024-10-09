@@ -42,7 +42,7 @@ class DgHierNdxIntCoord : public DgHierNdxCoord<HIERNDX_INT_TYPE> {
       // define abstract method from above
       // output as hexadecimal string
       virtual std::string valString (void) const;
-}
+};
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgHierNdxIntRF : public DgHierNdxRF<DgHierNdxIntCoord> {

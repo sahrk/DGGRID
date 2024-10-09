@@ -30,7 +30,7 @@
 
 #include <dglib/DgConverter.h>
 #include <dglib/Dg2WayConverter.h>
-#include <dglib/DgHierNdxCPI.h>
+//#include <dglib/DgHierNdxCPI.h>
 
 class DgZ7Coord;
 class DgZ7StringRF;

@@ -30,7 +30,7 @@
 #include <dglib/DgHierNdxSystemRFSBase.h>
 
 ////////////////////////////////////////////////////////////////////////////////
-template <class TSYS, class TINT, class TSTR> class DgHierNdxSystemRFS :
+template <class TINT, class TSTR> class DgHierNdxSystemRFS :
                                      public DgHierNdxSystemRFSBase {
 
    public:

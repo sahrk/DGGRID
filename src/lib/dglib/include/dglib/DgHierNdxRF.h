@@ -36,7 +36,7 @@
 using namespace std;
 
 ////////////////////////////////////////////////////////////////////////////////
-class DgHierNdxCoord<T>  {
+template <class T> class DgHierNdxCoord  {
 
    public:
 
@@ -82,7 +82,7 @@ operator<< (ostream& stream, const DgHierNdxCoord<T>& coord)
 { return stream << std::string(coord); }
 
 ////////////////////////////////////////////////////////////////////////////////
-// class C is a DgHierNdxCoord<X> for some X
+// class C is a DgHierNdxCoord<T> for some T
 template <class C> class DgHierNdxRF :
                        public DgDiscRF<C, DgQ2DICoord, long long int>
 {

@@ -22,17 +22,19 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef DGHIERNDXRFSBASE_H
-#define DGHIERNDXRFSBASE_H
+#ifndef DGHIERNDXSYSTEMRFSBASE_H
+#define DGHIERNDXSYSTEMRFSBASE_H
 
 #include <vector>
 #include <dglib/DgDiscRFS.h>
+//#include <dglib/DgHierNdxSystemRFBase.h>
 
+class DgHierNdxSystemRFBase;
 class DgHierNdx;
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgHierNdxSystemRFSBase : 
-              public DgDiscRFS<DgHierNdx, ResAdd<DgQ2DICoord>, long long int> {
+              public DgDiscRFS<DgHierNdx, DgResAdd<DgQ2DICoord>, long long int> {
 
    public:
 

@@ -43,12 +43,23 @@ template<class A, class B, class DB> class DgDiscTopoRFS
       DgDiscTopoRFS<A, B, DB>& operator= (const DgDiscTopoRFS<A, B, DB>& rf)
       // shallow copy with possible memory leak; don't use if avoidable
           {
-             if (*this != rf) {
+             if (*this != rf)
+             {
                 DgDiscRFS<A, B, DB>::operator=(rf);
                 aperture_ = rf.aperture();
                 isCongruent_ = rf.isCongruent();
                 isAligned_ = rf.isAligned();
-          }
+
+                this->grids_ = new vector<const DgDiscTopoRF<A, B, DB>*>(rf.nRes(), nullptr);
+                for (int i = 0; i < rf.nRes(); i++)
+                {
+                   // KLUDGE: don't know real type of each grid so can't
+                   // easily create them here; opt for shallow copy
+                   (*(this->grids_))[i] = rf.grids()[i];
+                }
+            }
+
+            return *this;
          }
 
       unsigned int aperture (void) const { return aperture_; }
@@ -58,7 +69,7 @@ template<class A, class B, class DB> class DgDiscTopoRFS
 
       // no bounds checking
       const DgDiscTopoRF<A, B, DB>& topoRF (int res) const
-                { return *(static_cast<const DgDiscTopoRF<A, B, DB>*>(*grids_[res])); }
+        { return *(static_cast<const DgDiscTopoRF<A, B, DB>*>(this->grids()[res])); }
 
       // parents
 
@@ -78,8 +89,8 @@ template<class A, class B, class DB> class DgDiscTopoRFS
            {
              vec.clearAddress();
              this->convert(vec);
-             if (add.res() > 0 && add.res() < nRes())
-	      setAddParents(add, vec);
+             if (add.res() > 0 && add.res() < this->nRes())
+	            setAddParents(add, vec);
            }
 
       virtual DgLocVector* makeParents (int res, const DgLocation& loc) const
@@ -117,7 +128,7 @@ template<class A, class B, class DB> class DgDiscTopoRFS
            {
              vec.clearAddress();
              this->convert(vec);
-             if (add.res() >= 0 && add.res() < (nRes() - 1))
+             if (add.res() >= 0 && add.res() < (this->nRes() - 1))
              {
                 setAddInteriorChildren(add, vec);
              }
@@ -160,7 +171,7 @@ template<class A, class B, class DB> class DgDiscTopoRFS
            {
              vec.clearAddress();
              this->convert(vec);
-             if (add.res() >= 0 && add.res() < (nRes() - 1))
+             if (add.res() >= 0 && add.res() < (this->nRes() - 1))
              {
                 setAddBoundaryChildren(add, vec);
              }
@@ -203,7 +214,7 @@ template<class A, class B, class DB> class DgDiscTopoRFS
            {
              vec.clearAddress();
              this->convert(vec);
-             if (add.res() >= 0 && add.res() < (nRes() - 1)) {
+             if (add.res() >= 0 && add.res() < (this->nRes() - 1)) {
                 setAddBoundary2Children(add, vec);
              }
            }
@@ -245,7 +256,7 @@ template<class A, class B, class DB> class DgDiscTopoRFS
            {
              vec.clearAddress();
              this->convert(vec);
-             if (add.res() >= 0 && add.res() < (nRes() - 1)) {
+             if (add.res() >= 0 && add.res() < (this->nRes() - 1)) {
                 setAddAllChildren(add, vec);
              }
            }
@@ -270,17 +281,16 @@ template<class A, class B, class DB> class DgDiscTopoRFS
    protected:
 
       DgDiscTopoRFS (DgRFNetwork& network, const DgRF<B, DB>& backFrame,
-                 int nResIn, unsigned int aperture,
+                 int nRes, unsigned int aperture,
                  dgg::topo::DgGridTopology gridTopo = dgg::topo::Hexagon,
                  dgg::topo::DgGridMetric gridMetric = dgg::topo::D6,
                  bool isCongruent = true, bool isAligned = false,
                  const string& name = "DiscS")
-        : DgDiscRFS<A, B, DB> (network, backFrame, name),
-          aperture_ (aperture), grids_ (new vector<const DgDiscTopoRF<A, B, DB>*>(nRes_, nullptr)),
-          isCongruent_ (isCongruent), isAligned_ (isAligned)
+        : DgDiscRFS<A, B, DB> (network, backFrame, nRes, name),
+          aperture_ (aperture), isCongruent_ (isCongruent), isAligned_ (isAligned)
         {
-          if (!this->isAligned() && !this->isCongruent())
-          {
+          this->grids_ = new vector<const DgDiscTopoRF<A, B, DB>*>(nRes, nullptr);
+          if (!this->isAligned() && !this->isCongruent()) {
              report("DgDiscRFS::DgDiscRFS() grid system must be either "
                     "congruent, aligned, or both", DgBase::Fatal);
           }
@@ -290,9 +300,10 @@ template<class A, class B, class DB> class DgDiscTopoRFS
         : DgDiscRFS<A, B, DB> (rf)
         { *this = rf; }
 
+
       virtual void setAddVertices (const DgResAdd<A>& add,
                                    DgPolygon& vec) const
-                    { grids()[add.res()]->backFrame().convert(vec);
+                    { this->grids()[add.res()]->backFrame().convert(vec);
                       topoRF(add.res())->setVertices(add.address(), vec);
                       this->backFrame().convert(vec);
 		    }
@@ -318,6 +329,7 @@ template<class A, class B, class DB> class DgDiscTopoRFS
                                       DgLocVector& vec) const = 0;
 
       // state data
+      int aperture_;
       bool isCongruent_;
       bool isAligned_;
 
