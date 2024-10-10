@@ -47,9 +47,9 @@ template <class TINT, class TSTR> class DgHierNdxSystemRF :
       const TINT* typedIntRF (void) { return curRes_.intRF_; }
       const TSTR* typedStrRF (void) { return curRes_.strRF_; }
 
-      // abstract methods from above
-      //virtual DgHierNdxIntCoord toIntCoord (const DgHierNdxStringCoord& c) = 0;
-      //virtual DgHierNdxStringCoord toStringCoord (const DgHierNdxIntCoord& c) = 0;
+      // abstract methods from above with default dummy definitions
+      //virtual DgHierNdxIntCoord toIntCoord (const DgHierNdxStringCoord& c);
+      //virtual DgHierNdxStringCoord toStringCoord (const DgHierNdxIntCoord& c);
 
    protected:
 

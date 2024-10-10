@@ -44,7 +44,17 @@ class DgZXSystem : public DgHierNdxSystemRFS<DgZXRF, DgZXStringRF> {
      DgZXSystem (const DgIDGGSBase& dggsIn, bool outModeIntIn = true, 
             const string& nameIn = "ZXSystem")
         : DgHierNdxSystemRFS<DgZXRF, DgZXStringRF>(dggsIn, outModeIntIn, nameIn)
-     { 
+     {
+         /*
+         for (int r = 0; r < nRes(); r++)
+            grids_[r] = new DgHierNdxSystemRF<TINT, TSTR>(*this, r,
+                                             nameIn + to_string(r));
+
+         // initialize the systems
+         for (int r = 0; r < nRes(); r++)
+            grids_[r]->initialize();
+         }
+          */
      }
 
      // default methods quantize via string representation; redefine to

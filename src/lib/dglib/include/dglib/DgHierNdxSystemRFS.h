@@ -51,7 +51,8 @@ template <class TINT, class TSTR> class DgHierNdxSystemRFS :
         for (int r = 0; r < nRes(); r++)
            grids_[r]->initialize();
         }
-     }
+
+     };
 
      // pure virtual functions passed down from above
 
