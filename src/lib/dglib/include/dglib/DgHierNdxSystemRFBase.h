@@ -43,7 +43,7 @@ class DgHierNdxIntRF;
 class DgHierNdxStringCoord;
 class DgHierNdxIntCoord;
 class DgHierNdxStringRF;
-class DgHierNdxSystemRF;
+class DgHierNdxSystemRFBase;
 class DgHierNdxSystemRFSBase;
 
 using namespace std;
@@ -63,7 +63,7 @@ class DgHierNdxStringToIntConverter :
       DgHierNdxStringToIntConverter (const DgHierNdxStringRF& from, 
                                      const DgHierNdxIntRF& to);
 
-      const DgHierNdxSystemRF& sys;
+      const DgHierNdxSystemRFBase& sys;
 
    friend class Dg2WayIntToStringConverter;
 };
@@ -83,7 +83,7 @@ class DgHierNdxIntToStringConverter :
       DgHierNdxIntToStringConverter (const DgHierNdxIntRF& from, 
             const DgHierNdxStringRF& to);
 
-      const DgHierNdxSystemRF& sys;
+      const DgHierNdxSystemRFBase& sys;
 
    friend class Dg2WayIntToStringConverter;
 };
@@ -93,7 +93,7 @@ class DgHierNdx2WayIntToStringConverter : public Dg2WayConverter {
 
    public:
 
-     DgHierNdx2WayIntToStringConverter (const DgHierNdxSystemRF& sys);
+     DgHierNdx2WayIntToStringConverter (const DgHierNdxSystemRFBase& sys);
 
 };
 
@@ -118,32 +118,29 @@ class DgHierNdxSystemRFBase : DgDiscRF<DgHierNdx, DgQ2DICoord, long long int> {
 
    public:
 
-      const DgHierNdxSystemRFSBase& hierNdxRFS (void) { return hierNdxRFS_; }
+      const DgHierNdxSystemRFSBase& hierNdxRFS (void) const { return hierNdxRFS_; }
 
-      const DgIDGGS& dggs (void) { return dggs_; }
+      const DgIDGGS& dggs (void) const { return dggs_; }
 
       bool outModeInt (void);
 
       int res      (void) const { return res_; }
       int aperture (void) const { return aperture_; }
       
-      const DgIDGG*            dgg   (void) { return curRes_.dgg_; }
-      const DgHierNdxIntRF*    intRF (void) { return curRes_.intRF_; }
-      const DgHierNdxStringRF* strRF (void) { return curRes_.strRF_; }
+      const DgIDGG*            dgg   (void) const { return curRes_.dgg_; }
+      const DgHierNdxIntRF*    intRF (void) const { return curRes_.intRF_; }
+      const DgHierNdxStringRF* strRF (void) const { return curRes_.strRF_; }
 
-      const DgIDGG*            pDgg   (void) { return pRes_.dgg_; }
-      const DgHierNdxIntRF*    pIntRF (void) { return pRes_.intRF_; }
-      const DgHierNdxStringRF* pStrRF (void) { return pRes_.strRF_; }
+      const DgIDGG*            pDgg   (void) const { return pRes_.dgg_; }
+      const DgHierNdxIntRF*    pIntRF (void) const { return pRes_.intRF_; }
+      const DgHierNdxStringRF* pStrRF (void) const { return pRes_.strRF_; }
       
-      const DgIDGG*            chDgg   (void) { return chRes_.dgg_; }
-      const DgHierNdxIntRF*    chIntRF (void) { return chRes_.intRF_; }
-      const DgHierNdxStringRF* chStrRF (void) { return chRes_.strRF_; }
+      const DgIDGG*            chDgg   (void) const { return chRes_.dgg_; }
+      const DgHierNdxIntRF*    chIntRF (void) const { return chRes_.intRF_; }
+      const DgHierNdxStringRF* chStrRF (void) const { return chRes_.strRF_; }
 
-      void setIntFromStringCoord (DgHierNdx& hn) const
-               { hn.intNdx_ = toIntCoord(hn.strNdx_); }
-
-      void setStringFromIntCoord (DgHierNdx& hn) const
-               { hn.strNdx_ = toStringCoord(hn.intNdx_); }
+      void setIntFromStringCoord (DgHierNdx& hn) const;
+      void setStringFromIntCoord (DgHierNdx& hn) const;
 
       // provide default methods that quantify via the string representation
       virtual DgHierNdx quantify (const DgQ2DICoord& point) const;

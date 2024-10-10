@@ -50,7 +50,7 @@ template<class A, class B, class DB> class DgDiscTopoRFS
                 isCongruent_ = rf.isCongruent();
                 isAligned_ = rf.isAligned();
 
-                this->grids_ = new vector<const DgDiscTopoRF<A, B, DB>*>(rf.nRes(), nullptr);
+                this->grids_ = new vector<const DgDiscRF<A, B, DB>*>(rf.nRes(), nullptr);
                 for (int i = 0; i < rf.nRes(); i++)
                 {
                    // KLUDGE: don't know real type of each grid so can't
@@ -289,7 +289,7 @@ template<class A, class B, class DB> class DgDiscTopoRFS
         : DgDiscRFS<A, B, DB> (network, backFrame, nRes, name),
           aperture_ (aperture), isCongruent_ (isCongruent), isAligned_ (isAligned)
         {
-          this->grids_ = new vector<const DgDiscTopoRF<A, B, DB>*>(nRes, nullptr);
+          this->grids_ = new vector<const DgDiscRF<A, B, DB>*>(nRes, nullptr);
           if (!this->isAligned() && !this->isCongruent()) {
              report("DgDiscRFS::DgDiscRFS() grid system must be either "
                     "congruent, aligned, or both", DgBase::Fatal);

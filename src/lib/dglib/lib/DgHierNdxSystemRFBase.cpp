@@ -95,6 +95,20 @@ DgHierNdxSystemRFBase::outModeInt (void)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+void 
+DgHierNdxSystemRFBase::setIntFromStringCoord (DgHierNdx& hn) const
+{ 
+   hn.intNdx_ = this->toIntCoord(hn.strNdx_); 
+}
+
+////////////////////////////////////////////////////////////////////////////////
+void 
+DgHierNdxSystemRFBase::setStringFromIntCoord (DgHierNdx& hn) const
+{ 
+   hn.strNdx_ = this->toStringCoord(hn.intNdx_); 
+}
+
+////////////////////////////////////////////////////////////////////////////////
 void
 DgHierNdxSystemRFBase::initialize (void)
 {

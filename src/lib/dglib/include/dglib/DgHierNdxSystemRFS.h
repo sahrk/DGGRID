@@ -45,7 +45,7 @@ template <class TINT, class TSTR> class DgHierNdxSystemRFS :
         // create the systems
         for (int r = 0; r < nRes(); r++)
            grids_[r] = new DgHierNdxSystemRF<TINT, TSTR>(*this, r,
-                                            nameIn + string("r") + string(r);
+                                            nameIn + to_string(r));
 
         // initialize the systems
         for (int r = 0; r < nRes(); r++)

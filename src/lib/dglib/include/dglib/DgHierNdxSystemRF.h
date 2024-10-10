@@ -44,8 +44,8 @@ template <class TINT, class TSTR> class DgHierNdxSystemRF :
 
    public:
 
-      const const TINT* typedIntRF (void) { return curRes_.intRF_; }
-      const const TSTR* typedStrRF (void) { return curRes_.strRF_; }
+      const TINT* typedIntRF (void) { return curRes_.intRF_; }
+      const TSTR* typedStrRF (void) { return curRes_.strRF_; }
 
       // abstract methods from above
       //virtual DgHierNdxIntCoord toIntCoord (const DgHierNdxStringCoord& c) = 0;
