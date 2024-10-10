@@ -32,9 +32,11 @@
 #include <dglib/DgIDGGS.h>
 #include <dglib/DgIDGG.h>
 #include <dglib/DgHierNdxSystemRFBase.h>
+//#include <dglib/DgHierNdxSystemRFS.h>
 
 class DgHierNdxRFInt;
 class DgHierNdxSystemRFSBase;
+template <class TINT, class TSTR> DgHierNdxSystemRFS;
 
 using namespace std;
 
