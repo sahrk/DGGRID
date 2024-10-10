@@ -36,6 +36,13 @@ DgHierNdxSystemRFSBase::DgHierNdxSystemRFSBase (const DgIDGGSBase& dggsIn,
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+const
+DgHierNdxSystemRFSBase::DgIDGGBase& dggBase (int res) const
+{
+    return dggs()[res];
+}
+
+////////////////////////////////////////////////////////////////////////////////
 void
 DgHierNdxSystemRFSBase::setNdxParent (int res, const DgLocation& loc,
                     DgLocation& parent) const

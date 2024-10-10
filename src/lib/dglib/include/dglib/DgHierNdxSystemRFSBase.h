@@ -37,10 +37,9 @@ class DgHierNdxSystemRFSBase :
 
    public:
 
-      const DgIDGGBase& dggBase (int res) const
-             { return static_cast<const DgIDGGBase&>(operator[](res)); }
-
-      const DgIDGGSBase& dggs (void) { return dggs_; }
+      const DgIDGGBase& dggBase (int res) const;
+ 
+      const DgIDGGSBase& dggs (void) const { return dggs_; }
 
       virtual operator string (void) const
       {

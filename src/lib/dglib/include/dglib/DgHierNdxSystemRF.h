@@ -36,7 +36,7 @@
 
 class DgHierNdxRFInt;
 class DgHierNdxSystemRFSBase;
-template <class TINT, class TSTR> DgHierNdxSystemRFS;
+template <typename TINT, typename TSTR> class DgHierNdxSystemRFS;
 
 using namespace std;
 

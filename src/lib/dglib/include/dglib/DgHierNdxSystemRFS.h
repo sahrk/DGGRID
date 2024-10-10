@@ -41,7 +41,7 @@ template <class TINT, class TSTR> class DgHierNdxSystemRFS :
      DgHierNdxSystemRFS (const DgIDGGSBase& dggsIn, bool outModeIntIn = true, 
             const string& nameIn = "HierNdxIDGGS")
         : DgHierNdxSystemRFSBase(dggsIn, outModeIntIn, nameIn)
-     { 
+     { /*
         // create the systems
         for (int r = 0; r < nRes(); r++)
            grids_[r] = new DgHierNdxSystemRF<TINT, TSTR>(*this, r,
@@ -51,7 +51,7 @@ template <class TINT, class TSTR> class DgHierNdxSystemRFS :
         for (int r = 0; r < nRes(); r++)
            grids_[r]->initialize();
         }
-
+*/
      };
 
      // pure virtual functions passed down from above

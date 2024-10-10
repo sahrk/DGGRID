@@ -126,8 +126,8 @@ inline ostream& operator<< (ostream& stream, const DgIDGGSBase& dggs)
    stream << "geoRF: " << dggs.geoRF();
    stream << "\nvert0: " << dggs.vert0();
    stream << "\nazDegs: " << dggs.azDegs();
-   stream << "\ngridTopo: " << dggs.gridTopo();
-   stream << "\ngridMetric: " << dggs.gridMetric();
+   //stream << "\ngridTopo: " << dggs.gridTopo();
+   //stream << "\ngridMetric: " << dggs.gridMetric();
    stream << "\nprojType: " << dggs.projType();
 
    return stream;

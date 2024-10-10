@@ -29,8 +29,24 @@
 //#include <cfloat>
 //#include <string.h>
 
-#include <dglib/DgHierNdxRF.h>
 #include <dglib/DgZXSystem.h>
+#include <dglib/DgHierNdxRF.h>
+
+////////////////////////////////////////////////////////////////////////////////
+DgZXSystem (const DgIDGGSBase& dggsIn, bool outModeIntIn, const string& nameIn)
+   : DgHierNdxSystemRFS<DgZXRF, DgZXStringRF>(dggsIn, outModeIntIn, nameIn)
+{
+    
+    for (int r = 0; r < nRes(); r++)
+       grids_[r] = new DgHierNdxSystemRF<DgZXRF, DgZXStringRF>(*this, r,
+                                        nameIn + to_string(r));
+
+    // initialize the systems
+    for (int r = 0; r < nRes(); r++)
+       grids_[r]->initialize();
+    }
+     
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 DgHierNdxIntCoord 
@@ -38,6 +54,7 @@ DgZXSystem::toIntCoord (const DgHierNdxStringCoord& c)
 {
 
 }
+
 ////////////////////////////////////////////////////////////////////////////////
 DgHierNdxStringCoord 
 DgZXSystem::toStringCoord (const DgHierNdxIntCoord& c)
