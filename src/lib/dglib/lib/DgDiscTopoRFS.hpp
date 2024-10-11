@@ -31,7 +31,7 @@ DgDiscTopoRFS<A, B, DB>::setAddNeighbors (const DgResAdd<A>& add,
                                             DgLocVector& vec) const
 {
    this->grids()[add.res()]->convert(vec);
-   topoRF(add.res())->setAddNeighbors(add.address(), vec);
+   topoRF(add.res()).setAddNeighbors(add.address(), vec);
    this->convert(vec);
 
 } // void DgDiscTopoRFS<A, B, DB>::setAddNeighbors

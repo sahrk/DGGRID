@@ -304,7 +304,7 @@ template<class A, class B, class DB> class DgDiscTopoRFS
       virtual void setAddVertices (const DgResAdd<A>& add,
                                    DgPolygon& vec) const
                     { this->grids()[add.res()]->backFrame().convert(vec);
-                      topoRF(add.res())->setVertices(add.address(), vec);
+                        topoRF(add.res()).setVertices(add.address(), vec);
                       this->backFrame().convert(vec);
 		    }
 

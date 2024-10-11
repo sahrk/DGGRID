@@ -48,10 +48,11 @@ class DgHierNdxIntCoord : public DgHierNdxCoord<HIERNDX_INT_TYPE> {
 class DgHierNdxIntRF : public DgHierNdxRF<DgHierNdxIntCoord> {
 
    public:
-
-      static DgHierNdxIntRF* makeRF (const DgIDGGS& dggsIn, int resIn,
+/*
+      static DgHierNdxIntRF* makeRF (const DgHierNdxSystemRFBase& dggsIn, int resIn,
                                      const string& nameIn = "IntNdx")
          { return new DgHierNdxIntRF(dggsIn, resIn, nameIn); }
+ */
 
       // these assume input/output strings are in hexadecimal
       virtual string add2str (const DgHierNdxIntCoord& add) const { return add.valString(); }
@@ -64,8 +65,8 @@ class DgHierNdxIntRF : public DgHierNdxRF<DgHierNdxIntCoord> {
 
    protected:
 
-      DgHierNdxIntRF (const DgIDGGS& dggsIn, int resIn, const string& nameIn)
-         : DgHierNdxRF<DgHierNdxIntCoord>(dggsIn, resIn, nameIn) { }
+      DgHierNdxIntRF (const DgHierNdxSystemRFBase& sysIn, int resIn, const string& nameIn)
+         : DgHierNdxRF<DgHierNdxIntCoord>(dggsIn, sysIn, nameIn) { }
 
 };
 

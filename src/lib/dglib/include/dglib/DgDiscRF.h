@@ -97,6 +97,7 @@ class DgDiscRF : public DgRF<A, long long int> {
       // remind users of the pure virtual functions remaining from above
 
       virtual string add2str (const A& add) const = 0;
+      virtual string add2str (const A& add, char delimiter) const = 0;
 
       virtual const char* str2add (A* add, const char* str, char delimiter)
                                                                       const = 0;

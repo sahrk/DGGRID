@@ -41,16 +41,17 @@ class DgHierNdxStringCoord : public DgHierNdxCoord<std::string> {
       virtual std::string valString (void) const {
          return value();
       }
-}
+};
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgHierNdxStringRF : public DgHierNdxRF<DgHierNdxStringCoord> {
 
    public:
-
+/*
       static DgHierNdxStringRF* makeRF (const DgIDGGS& dggsIn, int resIn,
                                      const string& nameIn = "IntNdx")
          { return new DgHierNdxStringRF(dggsIn, resIn, nameIn); }
+ */
 
       virtual string add2str (const DgHierNdxStringCoord& add) const
                         { return add.value(); }
@@ -63,8 +64,8 @@ class DgHierNdxStringRF : public DgHierNdxRF<DgHierNdxStringCoord> {
 
    protected:
 
-      DgHierNdxStringRF (const DgIDGGS& dggsIn, int resIn, const string& nameIn)
-         : DgHierNdxRF<DgHierNdxStringCoord>(dggsIn, resIn, nameIn) { }
+      DgHierNdxStringRF (const DgHierNdxSystemRFBase& sysIn, int resIn, const string& nameIn)
+         : DgHierNdxRF<DgHierNdxStringCoord>(sysIn, resIn, nameIn) { }
 
 };
 
