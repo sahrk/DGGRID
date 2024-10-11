@@ -36,8 +36,15 @@ DgHierNdxSystemRFSBase::DgHierNdxSystemRFSBase (const DgIDGGSBase& dggsIn,
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-const
-DgHierNdxSystemRFSBase::DgIDGGBase& dggBase (int res) const
+const DgHierNdxSystemRFBase&
+DgHierNdxSystemRFSBase::sysRF (int res) const
+{
+    return *(static_cast<const DgHierNdxSystemRFBase*>(grids()[res]));
+}
+
+////////////////////////////////////////////////////////////////////////////////
+const DgIDGGBase&
+DgHierNdxSystemRFSBase::dggBase (int res) const
 {
     return dggs()[res];
 }

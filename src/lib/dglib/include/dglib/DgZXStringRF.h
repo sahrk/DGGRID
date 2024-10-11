@@ -51,7 +51,7 @@ class DgZXStringRF : public DgHierNdxStringRF {
 
    protected:
 
-      DgZXStringRF (const DgZXSystem& sysIn, int resIn, const std::string& nameIn)
+    DgZXStringRF (const DgHierNdxSystemRFBase& sysIn, int resIn, const std::string& nameIn)
          : DgHierNdxStringRF(sysIn, resIn, nameIn),
            zxSys_ (sysIn)
       { }

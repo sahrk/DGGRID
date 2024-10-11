@@ -63,14 +63,14 @@ DgZXSystem::toStringCoord (const DgHierNdxIntCoord& c)
 
 ////////////////////////////////////////////////////////////////////////////////
 void 
-DgZXSystem::setAddNdxParent (const DgResAdd<DgQ2DICoord>& add,
+DgZXSystem::setAddNdxParent (const DgResAdd<DgHierNdx>& add,
                                    DgLocation& parent) const
 {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 void 
-DgZXSystem::setAddNdxChildren (const DgResAdd<DgQ2DICoord>& add,
+DgZXSystem::setAddNdxChildren (const DgResAdd<DgHierNdx>& add,
                                      DgLocVector& children) const
 {
 }

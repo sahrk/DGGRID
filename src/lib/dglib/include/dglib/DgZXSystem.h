@@ -36,9 +36,11 @@ class DgZXSystem : public DgHierNdxSystemRFS<DgZXRF, DgZXStringRF> {
    public:
 
       static DgZXSystem* makeSystem (const DgIDGGS& dggsIn, bool outModeIntIn = true,
-                             const std::string& nameIn)
-         { return new DgZXSystem (dggsIn, outModeIntIn, nameIn); }
-
+                             const std::string& nameIn = "ZXSystem")
+      {
+          return new DgZXSystem (dggsIn, outModeIntIn, nameIn);
+      }
+ 
    protected:
 
      DgZXSystem (const DgIDGGSBase& dggsIn, bool outModeIntIn = true, 
@@ -50,11 +52,13 @@ class DgZXSystem : public DgHierNdxSystemRFS<DgZXRF, DgZXStringRF> {
      //virtual DgQ2DICoord invQuantify (const DgHierNdx& add) const;
 
      // abstract methods from above
+
+     virtual const DgResAdd<DgHierNdx>& undefAddress (void) const
      virtual DgHierNdxIntCoord toIntCoord (const DgHierNdxStringCoord& c);
      virtual DgHierNdxStringCoord toStringCoord (const DgHierNdxIntCoord& c);
-     virtual void setAddNdxParent (const DgResAdd<DgQ2DICoord>& add,
+     virtual void setAddNdxParent (const DgResAdd<DgHierNdx>& add,
                                    DgLocation& parent) const;
-     virtual void setAddNdxChildren (const DgResAdd<DgQ2DICoord>& add,
+     virtual void setAddNdxChildren (const DgResAdd<DgHierNdx>& add,
                                      DgLocVector& children) const;
 };
 

@@ -66,7 +66,7 @@ class DgHierNdxIntRF : public DgHierNdxRF<DgHierNdxIntCoord> {
    protected:
 
       DgHierNdxIntRF (const DgHierNdxSystemRFBase& sysIn, int resIn, const string& nameIn)
-         : DgHierNdxRF<DgHierNdxIntCoord>(dggsIn, sysIn, nameIn) { }
+         : DgHierNdxRF<DgHierNdxIntCoord>(sysIn, resIn, nameIn) { }
 
 };
 

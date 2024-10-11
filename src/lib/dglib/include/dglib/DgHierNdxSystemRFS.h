@@ -57,9 +57,9 @@ template <class TINT, class TSTR> class DgHierNdxSystemRFS :
      // pure virtual functions passed down from above
 
      // pure virtual functions passed down from above
-     virtual void setAddNdxParent (const DgResAdd<DgQ2DICoord>& add,
+     virtual void setAddNdxParent (const DgResAdd<DgHierNdx>& add,
                                    DgLocation& parent) const = 0;
-     virtual void setAddNdxChildren (const DgResAdd<DgQ2DICoord>& add,
+     virtual void setAddNdxChildren (const DgResAdd<DgHierNdx>& add,
                                      DgLocVector& children) const = 0;
 };
 
