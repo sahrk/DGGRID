@@ -36,6 +36,14 @@ DgHierNdxSystemRFSBase::DgHierNdxSystemRFSBase (const DgIDGGSBase& dggsIn,
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+const
+DgHierNdxSystemRFSBase::DgResAdd<DgHierNdx>& undefAddress (void) const
+{
+    static DgResAdd<DgHierNdx> undef(DgIVec2D::undefDgIVec2D, -1);
+    return undef;
+}
+
+////////////////////////////////////////////////////////////////////////////////
 const DgHierNdxSystemRFBase&
 DgHierNdxSystemRFSBase::sysRF (int res) const
 {

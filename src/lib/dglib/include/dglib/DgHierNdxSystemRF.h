@@ -50,8 +50,8 @@ template <class TINT, class TSTR> class DgHierNdxSystemRF :
       const TSTR* typedStrRF (void) { return curRes_.strRF_; }
 
       // abstract methods from above with default dummy definitions
-      //virtual DgHierNdxIntCoord toIntCoord (const DgHierNdxStringCoord& c);
-      //virtual DgHierNdxStringCoord toStringCoord (const DgHierNdxIntCoord& c);
+      //virtual DgHierNdxIntCoord toIntCoord (const DgHierNdxStringCoord& c) const;
+      //virtual DgHierNdxStringCoord toStringCoord (const DgHierNdxIntCoord& c) const;
 
    protected:
 

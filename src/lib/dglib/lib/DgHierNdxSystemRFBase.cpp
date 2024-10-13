@@ -155,7 +155,7 @@ DgHierNdxSystemRFBase::invQuantify (const DgHierNdx& add) const
 
 ////////////////////////////////////////////////////////////////////////////////
 DgHierNdxIntCoord 
-DgHierNdxSystemRFBase::toIntCoord (const DgHierNdxStringCoord& c)
+DgHierNdxSystemRFBase::toIntCoord (const DgHierNdxStringCoord& c) const
 {
     DgHierNdxIntCoord add;
     return add;
@@ -163,7 +163,7 @@ DgHierNdxSystemRFBase::toIntCoord (const DgHierNdxStringCoord& c)
 
 ////////////////////////////////////////////////////////////////////////////////
 DgHierNdxStringCoord 
-DgHierNdxSystemRFBase::toStringCoord (const DgHierNdxIntCoord& c)
+DgHierNdxSystemRFBase::toStringCoord (const DgHierNdxIntCoord& c) const
 {
     DgHierNdxStringCoord add;
     return add;

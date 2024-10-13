@@ -32,8 +32,10 @@
 #include <dglib/DgZXSystem.h>
 #include <dglib/DgHierNdxRF.h>
 
+class DgIDGGSBase;
+
 ////////////////////////////////////////////////////////////////////////////////
-DgZXSystem (const DgIDGGSBase& dggsIn, bool outModeIntIn, const string& nameIn)
+DgZXSystem::DgZXSystem (const DgIDGGSBase& dggsIn, bool outModeIntIn, const string& nameIn)
    : DgHierNdxSystemRFS<DgZXRF, DgZXStringRF>(dggsIn, outModeIntIn, nameIn)
 {
     
@@ -42,23 +44,26 @@ DgZXSystem (const DgIDGGSBase& dggsIn, bool outModeIntIn, const string& nameIn)
                                         nameIn + to_string(r));
 
     // initialize the systems
-    for (int r = 0; r < nRes(); r++)
+    for (int r = 0; r < nRes(); r++) {
        grids_[r]->initialize();
     }
      
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-DgHierNdxIntCoord 
-DgZXSystem::toIntCoord (const DgHierNdxStringCoord& c)
+DgHierNdxIntCoord
+DgZXSystem::toIntCoord (const DgHierNdxStringCoord& c) const
 {
-
+    DgHierNdxIntCoord add;
+    return add;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 DgHierNdxStringCoord 
-DgZXSystem::toStringCoord (const DgHierNdxIntCoord& c)
+DgZXSystem::toStringCoord (const DgHierNdxIntCoord& c) const
 {
+    DgHierNdxStringCoord add;
+    return add;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

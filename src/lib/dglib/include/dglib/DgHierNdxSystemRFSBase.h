@@ -78,9 +78,7 @@ class DgHierNdxSystemRFSBase :
             const string& nameIn = "HierNdxSystemRFS");
                   
      // from above
-     virtual const DgResAdd<DgHierNdx>& undefAddress (void) const
-     { static DgResAdd<DgHierNdx> undef(DgIVec2D::undefDgIVec2D, -1);
-       return undef; }  
+     virtual const DgResAdd<DgHierNdx>& undefAddress (void) const;
 
      // override the default definitions from DgDiscRFS (which quantify at
      // the highest resolution)

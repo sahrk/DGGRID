@@ -53,9 +53,8 @@ class DgZXSystem : public DgHierNdxSystemRFS<DgZXRF, DgZXStringRF> {
 
      // abstract methods from above
 
-     virtual const DgResAdd<DgHierNdx>& undefAddress (void) const
-     virtual DgHierNdxIntCoord toIntCoord (const DgHierNdxStringCoord& c);
-     virtual DgHierNdxStringCoord toStringCoord (const DgHierNdxIntCoord& c);
+     virtual DgHierNdxIntCoord toIntCoord (const DgHierNdxStringCoord& c) const;
+     virtual DgHierNdxStringCoord toStringCoord (const DgHierNdxIntCoord& c) const;
      virtual void setAddNdxParent (const DgResAdd<DgHierNdx>& add,
                                    DgLocation& parent) const;
      virtual void setAddNdxChildren (const DgResAdd<DgHierNdx>& add,

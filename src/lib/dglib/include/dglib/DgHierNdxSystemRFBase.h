@@ -147,8 +147,8 @@ class DgHierNdxSystemRFBase : DgDiscRF<DgHierNdx, DgQ2DICoord, long long int> {
       virtual DgQ2DICoord invQuantify (const DgHierNdx& add) const;
 
       // abstract methods for sub-classes; given dummy definitions here
-      virtual DgHierNdxIntCoord toIntCoord (const DgHierNdxStringCoord& c);
-      virtual DgHierNdxStringCoord toStringCoord (const DgHierNdxIntCoord& c);
+      virtual DgHierNdxIntCoord toIntCoord (const DgHierNdxStringCoord& c) const;
+      virtual DgHierNdxStringCoord toStringCoord (const DgHierNdxIntCoord& c) const;
 
    protected:
 
