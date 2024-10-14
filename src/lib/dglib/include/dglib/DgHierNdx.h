@@ -35,7 +35,11 @@ class DgHierNdx {
          : intNdx_ (intNdxIn), strNdx_(strNdxIn), outModeInt_ (outModeIntIn)
          { }
     
-      DgHierNdx (void);
+      DgHierNdx (const DgHierNdx& ndxIn)
+       : intNdx_ (ndxIn.intNdx()), strNdx_(ndxIn.strNdx()), outModeInt_ (ndxIn.outModeInt)
+       { }
+
+      DgHierNdx (bool outModeIntIn = true);
     
       bool outModeInt (void) const { return outModeInt_; }
     
@@ -47,7 +51,28 @@ class DgHierNdx {
     
       void setOutModeInt (bool outModeIntIn) { outModeInt_ = outModeIntIn; }
 
-      operator string (void) const;
+      operator std::string (void) const;
+    
+      bool operator== (const DgHierNdx& ndx) const
+        {
+            return intNdx() == ndx.intNdx() &&
+                 strNdx() == ndx.strNdx() &&
+                 outModeInt() == ndx.outModeInt();
+        }
+
+      bool operator!= (const DgHierNdx& ndx) const
+        { return !(*this == ndx); }
+
+      DgHierNdx& operator= (const DgHierNdx& ndx)
+        {
+           if (ndx != *this) {
+              setIntNdx(ndx->intNdx());
+              setStrNdx(ndx->strNdx());
+              setOutModeInt(ndx->outModeInt());
+           }
+           
+           return *this;
+        }
 
    private:
 

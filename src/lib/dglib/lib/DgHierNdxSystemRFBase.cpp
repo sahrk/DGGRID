@@ -30,7 +30,7 @@
 #include <dglib/DgHierNdxStringRF.h>
 
 ////////////////////////////////////////////////////////////////////////////////
-DgHierNdx::DgHierNdx (void)
+DgHierNdx::DgHierNdx (bool outModeIntIn)
    : intNdx_ (intNdxIn), strNdx_(strNdxIn), outModeInt_ (outModeIntIn)
 {
 }
@@ -182,7 +182,7 @@ DgHierNdxSystemRFBase::setSystemSet (DgSystemSet& set, int res)
 DgHierNdx
 DgHierNdxSystemRFBase::quantify (const DgQ2DICoord& point) const
 {
-   DgHierNdx add;
+   DgHierNdx add(outModeInt());
    add.strNdx_ = strRF()->quantify(point);
    setIntFromStringCoord(add);
    return add;
