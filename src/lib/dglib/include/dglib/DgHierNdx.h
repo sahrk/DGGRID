@@ -29,8 +29,31 @@
 ////////////////////////////////////////////////////////////////////////////////
 class DgHierNdx {
    public:
+      
+      DgHierNdx (const DgHierNdxIntCoord& intNdxIn, const DgHierNdxStringCoord& strNdxIn,
+                 bool outModeIntIn = true)
+         : intNdx_ (intNdxIn), strNdx_(strNdxIn), outModeInt_ (outModeIntIn)
+         { }
+    
+      DgHierNdx (void);
+    
+      bool outModeInt (void) const { return outModeInt_; }
+    
+      const DgHierNdxIntCoord&    intNdx (void) const { return intNdx_; }
+      const DgHierNdxStringCoord& strNdx (void) const { return strNdx_; }
+      
+      void setIntNdx (const DgHierNdxIntCoord& intNdxIn) { intNdx_ = intNdxIn; }
+      void setStrNdx (const DgHierNdxStrCoord& strNdxIn) { strNdx_ = strNdxIn; }
+    
+      void setOutModeInt (bool outModeIntIn) { outModeInt_ = outModeIntIn; }
+
+      operator string (void) const;
+
+   private:
+
       DgHierNdxIntCoord intNdx_;
       DgHierNdxStringCoord strNdx_;
+      bool outModeInt_;
 };
 
 ////////////////////////////////////////////////////////////////////////////////

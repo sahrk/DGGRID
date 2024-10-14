@@ -30,6 +30,22 @@
 #include <dglib/DgHierNdxStringRF.h>
 
 ////////////////////////////////////////////////////////////////////////////////
+DgHierNdx::DgHierNdx (void)
+   : intNdx_ (intNdxIn), strNdx_(strNdxIn), outModeInt_ (outModeIntIn)
+{
+}
+
+////////////////////////////////////////////////////////////////////////////////
+operator 
+DgHierNdx::string (void) const 
+{ 
+  if (outModeInt()) 
+     return intRF()->valString();
+  else
+     return strRF()->valString();
+}
+
+////////////////////////////////////////////////////////////////////////////////
 DgHierNdxStringToIntConverter::DgHierNdxStringToIntConverter (
                   const DgHierNdxStringRF& from, const DgHierNdxIntRF& to)
          : DgConverter<DgHierNdxStringCoord, long long int, 
@@ -85,6 +101,33 @@ DgHierNdxSystemRFBase::DgHierNdxSystemRFBase (
    // sub-classes need to assign appropriate RF's to curRes_
    // RFS has to call initialize to set up the parent and child systems 
    // after the grids_ are all initialized
+}
+
+////////////////////////////////////////////////////////////////////////////////
+const char* 
+DgHierNdxSystemRFBase::str2add (DgHierNdx* add, const char* str, char delimiter) const
+{
+  const char* newS = str;
+  if (outModeInt()) {
+     DgHierNdxIntCoord intNdx;     
+     newS = intRF()->str2add(intNdx, str, delimiter);
+     add->setIntNdx(intNdx);
+     setStringFromIntCoord(*add);
+  } else {
+     DgHierNdxStringCoord strNdx;     
+     newS = strRF()->str2add(strNdx, str, delimiter);
+     add->setStrNdx(strNdx);
+     setIntFromStrCoord(*add);
+  }
+
+  return newS;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+const DgHierNdx& 
+DgHierNdxSystemRFBase::undefAddress (void) const
+{
+   static DgHierNdx undefCoord();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
