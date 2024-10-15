@@ -53,7 +53,7 @@ template <class TINT, class TSTR> class DgHierNdxSystemRF :
       //virtual DgHierNdxIntCoord toIntCoord (const DgHierNdxStringCoord& c) const;
       //virtual DgHierNdxStringCoord toStringCoord (const DgHierNdxIntCoord& c) const;
 
-   protected:
+   //protected:
 
       DgHierNdxSystemRF<TINT, TSTR> (
             const DgHierNdxSystemRFS<TINT, TSTR>& hierNdxRFSIn, 

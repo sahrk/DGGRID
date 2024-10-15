@@ -48,11 +48,6 @@ class DgHierNdxIntCoord : public DgHierNdxCoord<HIERNDX_INT_TYPE> {
 class DgHierNdxIntRF : public DgHierNdxRF<DgHierNdxIntCoord> {
 
    public:
-/*
-      static DgHierNdxIntRF* makeRF (const DgHierNdxSystemRFBase& dggsIn, int resIn,
-                                     const string& nameIn = "IntNdx")
-         { return new DgHierNdxIntRF(dggsIn, resIn, nameIn); }
- */
 
       // these assume input/output strings are in hexadecimal
       virtual string add2str (const DgHierNdxIntCoord& add) const { return add.valString(); }

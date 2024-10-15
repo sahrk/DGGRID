@@ -147,12 +147,10 @@ class DgHierNdxSystemRFBase : DgDiscRF<DgHierNdx, DgQ2DICoord, long long int> {
       virtual DgQ2DICoord invQuantify (const DgHierNdx& add) const;
     
       // abstract methods
-      virtual string add2str (const DgHierNdx& add) const
-                                      { return std::string(add); }
-    
-      virtual string add2str (const DgHierNdx& add, char delimiter) const
-                                      { return std::string(add); }
-
+      virtual string add2str (const DgHierNdx& add) const;
+       
+      virtual string add2str (const DgHierNdx& add, char delimiter) const;
+                          
       virtual const DgHierNdx& undefAddress (void) const;
 
       virtual const char* str2add (DgHierNdx* add, const char* str, char delimiter) const;

@@ -41,6 +41,7 @@ add_library(dglib
   lib/DgHexGrid2DS.cpp
   lib/DgHexIDGG.cpp
   lib/DgHexIDGGS.cpp
+  lib/DgHierNdx.cpp
   lib/DgHierNdxIntRF.cpp
   lib/DgHierNdxStringRF.cpp
   lib/DgHierNdxSystemRFBase.cpp

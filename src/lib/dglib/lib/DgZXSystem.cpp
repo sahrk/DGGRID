@@ -31,6 +31,7 @@
 
 #include <dglib/DgZXSystem.h>
 #include <dglib/DgHierNdxRF.h>
+#include <dglib/DgHierNdx.h>
 
 class DgIDGGSBase;
 

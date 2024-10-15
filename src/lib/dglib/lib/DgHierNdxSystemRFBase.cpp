@@ -30,22 +30,6 @@
 #include <dglib/DgHierNdxStringRF.h>
 
 ////////////////////////////////////////////////////////////////////////////////
-DgHierNdx::DgHierNdx (bool outModeIntIn)
-   : intNdx_ (intNdxIn), strNdx_(strNdxIn), outModeInt_ (outModeIntIn)
-{
-}
-
-////////////////////////////////////////////////////////////////////////////////
-operator 
-DgHierNdx::string (void) const 
-{ 
-  if (outModeInt()) 
-     return intRF()->valString();
-  else
-     return strRF()->valString();
-}
-
-////////////////////////////////////////////////////////////////////////////////
 DgHierNdxStringToIntConverter::DgHierNdxStringToIntConverter (
                   const DgHierNdxStringRF& from, const DgHierNdxIntRF& to)
          : DgConverter<DgHierNdxStringCoord, long long int, 
@@ -104,6 +88,20 @@ DgHierNdxSystemRFBase::DgHierNdxSystemRFBase (
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+string
+DgHierNdxSystemRFBase::add2str (const DgHierNdx& add) const
+{
+    return std::string(add);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+string
+DgHierNdxSystemRFBase::add2str (const DgHierNdx& add, char delimiter) const
+{
+    return std::string(add);
+}
+
+////////////////////////////////////////////////////////////////////////////////
 const char* 
 DgHierNdxSystemRFBase::str2add (DgHierNdx* add, const char* str, char delimiter) const
 {
@@ -127,7 +125,7 @@ DgHierNdxSystemRFBase::str2add (DgHierNdx* add, const char* str, char delimiter)
 const DgHierNdx& 
 DgHierNdxSystemRFBase::undefAddress (void) const
 {
-   static DgHierNdx undefCoord();
+   return DgHierNdx::undefAddress();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
