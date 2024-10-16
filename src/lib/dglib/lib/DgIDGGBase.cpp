@@ -243,6 +243,10 @@ DgIDGGBase::createConverters (void)
           toZ7 = new Dg2WayZ7ToStringConverter(*z7StrRF(), *z7RF());
     }
 
+    // suppress unused variable error
+    (void)toZ7Str;
+    (void)toZ7;
+
    // create the series converters that will replace the default DgDiscRF
    // converters
 

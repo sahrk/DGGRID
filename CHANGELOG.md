@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file.
 
 All changes are by Kevin Sahr, unless otherwise noted.
 
+## [8.33] - 2024-10-16
+### Added
+- output whether or not built with GDAL
+### Fixed
+- suppressed remaining compiler warnings
+
 ## [8.32] - 2024-09-18
 ### Fixed
 - template definition errors in DgPhysicalRF

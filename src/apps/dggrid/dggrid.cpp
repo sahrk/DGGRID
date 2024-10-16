@@ -99,14 +99,19 @@ int main (int argc, char* argv[])
 
    if (hFlag || (hFlag && vFlag)) { // output is currently redundant
       dgcout << "DGGRID version " << DGGRID_VERSION << " released " << DGGRID_RELEASE_DATE << endl;
-      dgcout << "How to use:" << endl;
+#ifdef USE_GDAL
+      dgcout << "built with GDAL version " << string(GDALVersionInfo("VERSION_NUM")) << endl;
+#else
+      dgcout << "built without GDAL" << endl;;
+#endif
+      dgcout << "\nTo use:" << endl;
       dgcout << endl;
       dgcout << "dggrid metafileName" << endl;
       dgcout << endl;
       dgcout << "dggrid -v" << endl;
       dgcout << "dggrid -h" << endl;
       dgcout << endl;
-      dgcout << "Credits:" << endl;
+      dgcout << "From:" << endl;
       dgcout << "Southern Terra Cognita Laboratory" << endl;
       dgcout << "website: http://www.discreteglobalgrids.org/" << endl;
       dgcout << "Kevin Sahr, Director" << endl;
@@ -118,6 +123,11 @@ int main (int argc, char* argv[])
       dgcout << "https://github.com/sahrk/DGGRID" << endl;
    } else if (vFlag) {
       dgcout << "DGGRID version " << DGGRID_VERSION << " released " << DGGRID_RELEASE_DATE << endl;
+#ifdef USE_GDAL
+      dgcout << "built with GDAL version " << string(GDALVersionInfo("VERSION_NUM")) << endl;
+#else
+      dgcout << "built without GDAL" << endl;;
+#endif
    }
 
    if (!hasMetaFile)
@@ -125,7 +135,13 @@ int main (int argc, char* argv[])
 
    //// build and load the parameter list ////
 
-   dgcout << "** executing DGGRID version " << DGGRID_VERSION << " **\n";
+   dgcout << "** executing DGGRID version " << DGGRID_VERSION;
+#ifdef USE_GDAL
+   dgcout << " with GDAL version " << string(GDALVersionInfo("VERSION_NUM"));
+#else
+   dgcout << " without GDAL";
+#endif
+   dgcout << " **\n";
    dgcout << "type sizes: big int: " << sizeof(long long int) * 8 << " bits / ";
    dgcout << "big double: " << sizeof(long double) * 8 << " bits\n";
    dgcout << "\n** using meta file " << metaFileName << "..." << endl;

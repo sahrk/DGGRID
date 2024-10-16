@@ -820,7 +820,7 @@ SubOpGen::processOneClipPoly (DgPolygon& polyIn, const DgIDGGBase& dgg,
 #endif
 
    // now perform the intersection for each quad intersected
-   int nQuadsInt = 0;
+   //int nQuadsInt = 0;
    for (int q = 1; q < 11; q++) {
 
       if (op.mainOp.megaVerbose) dgcout << "intersecting with quads..." << endl;
@@ -845,7 +845,7 @@ SubOpGen::processOneClipPoly (DgPolygon& polyIn, const DgIDGGBase& dgg,
       if (op.mainOp.megaVerbose)
          dgcout << solution->size() << " intersections FOUND in quad " << q << endl;
 
-      nQuadsInt++;
+      //nQuadsInt++;
       clipRegions[q].setIsQuadUsed(true);
 
       ////// now convert back to Snyder and add to the clipRegions
