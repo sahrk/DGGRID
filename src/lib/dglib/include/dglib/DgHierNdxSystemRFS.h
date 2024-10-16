@@ -54,7 +54,8 @@ template <class TINT, class TSTR> class DgHierNdxSystemRFS :
          
          // move into our grids_
          for (int r = 0; r < nRes(); r++)
-             gridsMutable()[r] = rfGrids[r];
+             (*grids_)[r] =
+                  static_cast<const DgDiscRF<DgHierNdx, DgQ2DICoord, long long>*>(rfGrids[r]);
      };
 
      // pure virtual functions passed down from above
