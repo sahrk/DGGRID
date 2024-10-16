@@ -25,23 +25,14 @@
 #ifndef DGZXRF_H
 #define DGZXRF_H
 
-//#include <climits>
-//#include <iostream>
-
 #include <dglib/DgHierNdxIntRF.h>
-#include <dglib/DgZXSystem.h>
 
-//using namespace std;
+class DgZXSystem;
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgZXRF : public DgHierNdxIntRF {
 
    public:
-/*
-      static DgZXRF* makeRF (const DgIDGGS& dggsIn, int resIn,
-                             const std::string& nameIn) 
-         { return new DgZXRF (dggsIn, resIn, nameIn); }
- */
 
       // these need to be defined by specializations
       virtual const char* str2add (DgHierNdxIntCoord* c, const char* str, 
@@ -53,10 +44,10 @@ class DgZXRF : public DgHierNdxIntRF {
 
    protected:
 
-    DgZXRF (const DgHierNdxSystemRFBase& sysIn, int resIn, const std::string& nameIn)
-    : DgHierNdxIntRF(sysIn, resIn, nameIn) { }
+    DgZXRF (const DgHierNdxSystemRFBase& sysIn, int resIn, const std::string& nameIn);
 
     friend DgZXSystem;
+    template<class TINT, class TSTR> friend class DgHierNdxSystemRF;
 };
 
 ////////////////////////////////////////////////////////////////////////////////

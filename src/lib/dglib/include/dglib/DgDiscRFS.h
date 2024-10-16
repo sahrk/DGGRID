@@ -186,6 +186,8 @@ template<class A, class B, class DB> class DgDiscRFS
         : DgDiscRF<DgResAdd<A>, B, DB> (rf)
         { *this = rf; }
 
+      vector<const DgDiscRF<A, B, DB>*>& gridsMutable (void) const { return *grids_; }
+
       virtual DgResAdd<A> quantify (const B& point) const
             {
                // quantify using max res grid

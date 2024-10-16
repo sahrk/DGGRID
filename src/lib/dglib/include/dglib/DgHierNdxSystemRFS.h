@@ -41,17 +41,20 @@ template <class TINT, class TSTR> class DgHierNdxSystemRFS :
      DgHierNdxSystemRFS (const DgIDGGSBase& dggsIn, bool outModeIntIn = true, 
             const string& nameIn = "HierNdxIDGGS")
         : DgHierNdxSystemRFSBase(dggsIn, outModeIntIn, nameIn)
-     { /*
-        // create the systems
-        for (int r = 0; r < nRes(); r++)
-           grids_[r] = new DgHierNdxSystemRF<TINT, TSTR>(*this, r,
+     {
+         // all the grids need to be created before we can set the parent/child grids
+         // RFs are deallocated by the RFNetwork
+         vector<DgHierNdxSystemRFBase*> rfGrids(nRes(), nullptr);
+         for (int r = 0; r < nRes(); r++)
+             rfGrids[r] = new DgHierNdxSystemRF<TINT, TSTR>(*this, r,
                                             nameIn + to_string(r));
-
-        // initialize the systems
-        for (int r = 0; r < nRes(); r++)
-           grids_[r]->initialize();
-        }
-*/
+         
+         for (int r = 0; r < nRes(); r++)
+             rfGrids[r]->initialize();
+         
+         // move into our grids_
+         for (int r = 0; r < nRes(); r++)
+             gridsMutable()[r] = rfGrids[r];
      };
 
      // pure virtual functions passed down from above

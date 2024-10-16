@@ -45,8 +45,7 @@ class DgHierNdxIntCoord;
 class DgHierNdxStringRF;
 class DgHierNdxSystemRFBase;
 class DgHierNdxSystemRFSBase;
-
-using namespace std;
+template<class TINT, class TSTR> class DgHierNdxSystemRFS;
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgHierNdxStringToIntConverter :
@@ -108,7 +107,8 @@ class DgHierNdx {
 */
 
 ////////////////////////////////////////////////////////////////////////////////
-class DgHierNdxSystemRFBase : DgDiscRF<DgHierNdx, DgQ2DICoord, long long int> {
+class DgHierNdxSystemRFBase
+        : public DgDiscRF<DgHierNdx, DgQ2DICoord, long long int> {
 
    struct DgSystemSet {
       const DgIDGG*         dgg_;
@@ -118,7 +118,8 @@ class DgHierNdxSystemRFBase : DgDiscRF<DgHierNdx, DgQ2DICoord, long long int> {
 
    public:
 
-      const DgHierNdxSystemRFSBase& hierNdxRFS (void) const { return hierNdxRFS_; }
+      const DgHierNdxSystemRFSBase& hierNdxRFS (void) const
+            { return hierNdxRFS_; }
 
       const DgIDGGS& dggs (void) const { return dggs_; }
 
@@ -176,6 +177,7 @@ class DgHierNdxSystemRFBase : DgDiscRF<DgHierNdx, DgQ2DICoord, long long int> {
       DgSystemSet curRes_;
       DgSystemSet chRes_;
 
+      template<class TINT, class TSTR> friend class DgHierNdxSystemRFS;
 };
 
 ////////////////////////////////////////////////////////////////////////////////

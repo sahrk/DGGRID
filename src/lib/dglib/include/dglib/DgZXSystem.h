@@ -26,9 +26,8 @@
 #define DGZXSYSTEM_H
 
 #include <dglib/DgHierNdxSystemRFS.h>
-
-class DgZXRF;
-class DgZXStringRF;
+#include <dglib/DgZXRF.h>
+#include <dglib/DgZXStringRF.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgZXSystem : public DgHierNdxSystemRFS<DgZXRF, DgZXStringRF> {

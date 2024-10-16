@@ -29,17 +29,13 @@
 #include <iostream>
 
 #include <dglib/DgHierNdxStringRF.h>
-#include <dglib/DgZXSystem.h>
+
+class DgZXSystem;
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgZXStringRF : public DgHierNdxStringRF {
 
    public:
-/*
-      static DgZXStringRF* makeRF (const DgIDGGS& dggsIn, int resIn,
-                             const std::string& nameIn) 
-         { return new DgZXStringRF (dggsIn, resIn, nameIn); }
- */
 
       // these need to be defined by specializations
       virtual const char* str2add (DgHierNdxStringCoord* add, const char* str,
@@ -51,11 +47,10 @@ class DgZXStringRF : public DgHierNdxStringRF {
 
    protected:
 
-    DgZXStringRF (const DgHierNdxSystemRFBase& sysIn, int resIn, const std::string& nameIn)
-         : DgHierNdxStringRF(sysIn, resIn, nameIn)
-      { }
+    DgZXStringRF (const DgHierNdxSystemRFBase& sysIn, int resIn, const std::string& nameIn);
 
     friend DgZXSystem;
+    template<class TINT, class TSTR> friend class DgHierNdxSystemRF;
 
 };
 

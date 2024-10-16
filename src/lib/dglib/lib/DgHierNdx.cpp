@@ -1,6 +1,5 @@
 /*******************************************************************************
     Copyright (C) 2023 Kevin Sahr
-
     This file is part of DGGRID.
 
     DGGRID is free software: you can redistribute it and/or modify
@@ -18,47 +17,34 @@
 *******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
-// DgZXStringRF.cpp: DgZXStringRF class implementation
+// DgHierNdx.cpp: DgHierNdx class implementation
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <string.h>
-
-#include <dglib/DgZXStringRF.h>
-
-////////////////////////////////////////////////////////////////////////////////
-//const DgZXStringCoord DgZXStringCoord::undefDgZXStringCoord(0xffffffffffffffff);
+#include <dglib/DgHierNdx.h>
+#include <dglib/DgHierNdxIntRF.h>
+#include <dglib/DgHierNdxStringRF.h>
 
 ////////////////////////////////////////////////////////////////////////////////
-DgZXStringRF::DgZXStringRF (const DgHierNdxSystemRFBase& sysIn, int resIn, 
-              const std::string& nameIn)
-   : DgHierNdxStringRF(sysIn, resIn, nameIn)
+const DgHierNdx DgHierNdx::undefCoord(
+                   intRF()->undefAddress(), strRF->undefAddress(), true);
+
+////////////////////////////////////////////////////////////////////////////////
+DgHierNdx::DgHierNdx (bool outModeIntIn)
+   : intNdx_ (undefCoord.intNdx()), strNdx_(undefCoord.strNdx()), 
+                   outModeInt_ (outModeIntIn)
+{
+}
+
+////////////////////////////////////////////////////////////////////////////////
+std::string
+DgHierNdx::valString (void) const 
 { 
+  if (outModeInt()) 
+     return intRF()->valString();
+  else
+     return strRF()->valString();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-const char*
-DgZXStringRF::str2add (DgHierNdxStringCoord* add, const char* str,
-                                   char delimiter) const
-{
-   return str;
-
-} // const char* DgZXStringRF::str2add
-
-////////////////////////////////////////////////////////////////////////////////
-DgHierNdxStringCoord 
-DgZXStringRF::quantify (const DgQ2DICoord& point) const
-{
-   DgHierNdxStringCoord c;
-   return c;
-}
-
-////////////////////////////////////////////////////////////////////////////////
-DgQ2DICoord 
-DgZXStringRF::invQuantify (const DgHierNdxStringCoord& add) const
-{
-   DgQ2DICoord c;
-   return c;
-}
-
 ////////////////////////////////////////////////////////////////////////////////

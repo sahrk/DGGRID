@@ -30,6 +30,13 @@
 //#include <string.h>
 
 #include <dglib/DgZXRF.h>
+//#include <dglib/DgZXSystem.h>
+
+////////////////////////////////////////////////////////////////////////////////
+DgZXRF::DgZXRF (const DgHierNdxSystemRFBase& sysIn, int resIn, const std::string& nameIn)
+    : DgHierNdxIntRF(sysIn, resIn, nameIn) 
+{ 
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 const char*

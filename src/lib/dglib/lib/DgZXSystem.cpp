@@ -29,9 +29,10 @@
 //#include <cfloat>
 //#include <string.h>
 
+#include <dglib/DgHierNdx.h>
 #include <dglib/DgZXSystem.h>
 #include <dglib/DgHierNdxRF.h>
-#include <dglib/DgHierNdx.h>
+#include <dglib/DgHierNdxSystemRF.h>
 
 class DgIDGGSBase;
 
@@ -39,15 +40,21 @@ class DgIDGGSBase;
 DgZXSystem::DgZXSystem (const DgIDGGSBase& dggsIn, bool outModeIntIn, const string& nameIn)
    : DgHierNdxSystemRFS<DgZXRF, DgZXStringRF>(dggsIn, outModeIntIn, nameIn)
 {
+    /*
+    // all the grids need to be created before we can set the parent/child grids
+    // RFs are deallocated by the RFNetwork
+    vector<const DgHierNdxSystemRFBase*> rfGrids(nRes(), nullptr);
+    for (int r = 0; r < nRes(); r++)
+        rfGrids[r] = new DgHierNdxSystemRF<DgZXRF, DgZXStringRF>(*this, r,
+                                                                 nameIn + to_string(r));
     
     for (int r = 0; r < nRes(); r++)
-       grids_[r] = new DgHierNdxSystemRF<DgZXRF, DgZXStringRF>(*this, r,
-                                        nameIn + to_string(r));
-
-    // initialize the systems
-    for (int r = 0; r < nRes(); r++) {
-       grids_[r]->initialize();
-    }
+        rfGrids[r]->initialize();
+    
+    // move into our grids_
+    for (int r = 0; r < nRes(); r++)
+        gridsMutable()[r] = rfGrids[r];
+     */
      
 }
 

@@ -25,6 +25,9 @@
 #ifndef DGHIERNDX_H
 #define DGHIERNDX_H
 
+#include <dglib/DgHierNdxIntRF.h>
+#include <dglib/DgHierNdxStringRF.h>
+
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 class DgHierNdx {
@@ -32,7 +35,7 @@ class DgHierNdx {
    public:
 
       static const DgHierNdx undefCoord;
-      static const DgHierNdx& undefAddress (void) const { return undefCoord; }
+      static const DgHierNdx& undefAddress (void) { return undefCoord; }
       
       DgHierNdx (const DgHierNdxIntCoord& intNdxIn, const DgHierNdxStringCoord& strNdxIn,
                  bool outModeIntIn = true)
@@ -40,7 +43,7 @@ class DgHierNdx {
          { }
     
       DgHierNdx (const DgHierNdx& ndxIn)
-       : intNdx_ (ndxIn.intNdx()), strNdx_(ndxIn.strNdx()), outModeInt_ (ndxIn.outModeInt)
+       : intNdx_ (ndxIn.intNdx()), strNdx_(ndxIn.strNdx()), outModeInt_ (ndxIn.outModeInt())
        { }
 
       DgHierNdx (bool outModeIntIn = true);
@@ -51,7 +54,7 @@ class DgHierNdx {
       const DgHierNdxStringCoord& strNdx (void) const { return strNdx_; }
       
       void setIntNdx (const DgHierNdxIntCoord& intNdxIn) { intNdx_ = intNdxIn; }
-      void setStrNdx (const DgHierNdxStrCoord& strNdxIn) { strNdx_ = strNdxIn; }
+      void setStrNdx (const DgHierNdxStringCoord& strNdxIn) { strNdx_ = strNdxIn; }
     
       void setOutModeInt (bool outModeIntIn) { outModeInt_ = outModeIntIn; }
 
@@ -72,9 +75,9 @@ class DgHierNdx {
       DgHierNdx& operator= (const DgHierNdx& ndx)
         {
            if (ndx != *this) {
-              setIntNdx(ndx->intNdx());
-              setStrNdx(ndx->strNdx());
-              setOutModeInt(ndx->outModeInt());
+               setIntNdx(ndx.intNdx());
+               setStrNdx(ndx.strNdx());
+               setOutModeInt(ndx.outModeInt());
            }
            
            return *this;
@@ -86,6 +89,11 @@ class DgHierNdx {
       DgHierNdxStringCoord strNdx_;
       bool outModeInt_;
 };
+
+////////////////////////////////////////////////////////////////////////////////
+inline ostream&
+operator<< (ostream& stream, const DgHierNdx& ndx)
+{ return stream << string(ndx); }
 
 ////////////////////////////////////////////////////////////////////////////////
 #endif

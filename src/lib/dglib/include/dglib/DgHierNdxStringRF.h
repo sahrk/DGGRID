@@ -30,8 +30,6 @@
 
 #include <dglib/DgHierNdxRF.h>
 
-//using namespace std;
-
 ////////////////////////////////////////////////////////////////////////////////
 class DgHierNdxStringCoord : public DgHierNdxCoord<std::string> {
 
@@ -47,11 +45,6 @@ class DgHierNdxStringCoord : public DgHierNdxCoord<std::string> {
 class DgHierNdxStringRF : public DgHierNdxRF<DgHierNdxStringCoord> {
 
    public:
-/*
-      static DgHierNdxStringRF* makeRF (const DgIDGGS& dggsIn, int resIn,
-                                     const string& nameIn = "IntNdx")
-         { return new DgHierNdxStringRF(dggsIn, resIn, nameIn); }
- */
 
       virtual string add2str (const DgHierNdxStringCoord& add) const
                         { return add.value(); }
