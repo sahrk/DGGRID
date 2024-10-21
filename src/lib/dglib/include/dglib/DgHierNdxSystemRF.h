@@ -67,6 +67,7 @@ template <class TINT, class TSTR> class DgHierNdxSystemRF :
          curRes_.strRF_ = new TSTR(*this, resIn, name() + "StrRF"); // use default name
          DgHierNdx2WayIntToStringConverter* c2way =
                                new DgHierNdx2WayIntToStringConverter(*this);
+         (void) c2way;
       }
 };
 

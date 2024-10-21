@@ -55,7 +55,7 @@ template <class TINT, class TSTR> class DgHierNdxSystemRFS :
          // move into our grids_
          for (int r = 0; r < nRes(); r++)
              (*grids_)[r] =
-                  static_cast<const DgDiscRF<DgHierNdx, DgQ2DICoord, long long>*>(rfGrids[r]);
+                  static_cast<const DgDiscRF<DgResAdd<DgHierNdx>, DgResAdd<DgQ2DICoord>, long long int>*>(rfGrids[r]);
      };
 
      // pure virtual functions passed down from above

@@ -76,7 +76,7 @@ DgHierNdx2WayIntToStringConverter (const DgHierNdxSystemRF& sys)
 DgHierNdxSystemRFBase::DgHierNdxSystemRFBase (
          const DgHierNdxSystemRFSBase& hierNdxRFSIn, int resIn,
          const string& nameIn = "HierNdxSysRF")
-   : DgDiscRF<DgHierNdx, DgQ2DICoord, long long int>(hierNdxRFSIn.dggs().network,
+   : DgDiscRF<DgResAdd<DgHierNdx>, DgResAdd<DgQ2DICoord>, long long int>(hierNdxRFSIn.dggs().network,
               hierNdxRFSIn.dggs()[resIn], nameIn),
      hierNdxRFS_ (hierNdxRFSIn), dggs_ (hierNdxRFSIn.dggs()), res_ (resIn),
      aperture_ (hierNdxRFSIn.dggs().aperture()), pRes_ {nullptr, nullptr, nullptr},
@@ -89,43 +89,45 @@ DgHierNdxSystemRFBase::DgHierNdxSystemRFBase (
 
 ////////////////////////////////////////////////////////////////////////////////
 string
-DgHierNdxSystemRFBase::add2str (const DgHierNdx& add) const
+DgHierNdxSystemRFBase::add2str (const DgResAdd<DgHierNdx>& add) const
 {
     return std::string(add);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 string
-DgHierNdxSystemRFBase::add2str (const DgHierNdx& add, char delimiter) const
+DgHierNdxSystemRFBase::add2str (const DgResAdd<DgHierNdx>& add, char delimiter) const
 {
     return std::string(add);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 const char* 
-DgHierNdxSystemRFBase::str2add (DgHierNdx* add, const char* str, char delimiter) const
+DgHierNdxSystemRFBase::str2add (DgResAdd<DgHierNdx>* add, const char* str, char delimiter) const
 {
   const char* newS = str;
+  // assume resolution is correct and ignore it
+  DgHierNdx* ndx = &add->address();
   if (outModeInt()) {
      DgHierNdxIntCoord intNdx;     
      newS = intRF()->str2add(intNdx, str, delimiter);
-     add->setIntNdx(intNdx);
-     setStringFromIntCoord(*add);
+     ndx->setIntNdx(intNdx);
+     setStringFromIntCoord(*ndx);
   } else {
      DgHierNdxStringCoord strNdx;     
      newS = strRF()->str2add(strNdx, str, delimiter);
-     add->setStrNdx(strNdx);
-     setIntFromStrCoord(*add);
+     ndx->setStrNdx(strNdx);
+     setIntFromStrCoord(*ndx);
   }
 
   return newS;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-const DgHierNdx& 
+const DgResAdd<DgHierNdx>& 
 DgHierNdxSystemRFBase::undefAddress (void) const
 {
-   return DgHierNdx::undefAddress();
+   return DgResAdd<DgHierNdx>::undefAddress();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -137,14 +139,14 @@ DgHierNdxSystemRFBase::outModeInt (void)
 
 ////////////////////////////////////////////////////////////////////////////////
 void 
-DgHierNdxSystemRFBase::setIntFromStringCoord (DgHierNdx& hn) const
+DgHierNdxSystemRFBase::setIntFromStringCoord (DgResAdd<DgHierNdx>& hn) const
 { 
    hn.intNdx_ = this->toIntCoord(hn.strNdx_); 
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 void 
-DgHierNdxSystemRFBase::setStringFromIntCoord (DgHierNdx& hn) const
+DgHierNdxSystemRFBase::setStringFromIntCoord (DgResAdd<DgHierNdx>& hn) const
 { 
    hn.strNdx_ = this->toStringCoord(hn.intNdx_); 
 }
@@ -177,20 +179,27 @@ DgHierNdxSystemRFBase::setSystemSet (DgSystemSet& set, int res)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-DgHierNdx
-DgHierNdxSystemRFBase::quantify (const DgQ2DICoord& point) const
+DgResAdd<DgHierNdx>
+DgHierNdxSystemRFBase::quantify (const DgResAdd<DgQ2DICoord>& point) const
 {
-   DgHierNdx add(outModeInt());
-   add.strNdx_ = strRF()->quantify(point);
-   setIntFromStringCoord(add);
+   DgHierNdx ndx(outModeInt());
+   if (point.res() != res()) 
+      report("DgInLocFile::extract(DgLocList) not implemented.", DgBase::Fatal);
+      
+   ndx.strNdx_ = strRF()->quantify(point.address());
+   setIntFromStringCoord(ndx);
+
+   DgResAdd<DgHierNdx> add(ndx, res());
    return add;
 }
    
 ////////////////////////////////////////////////////////////////////////////////
-DgQ2DICoord
-DgHierNdxSystemRFBase::invQuantify (const DgHierNdx& add) const
+DgResAdd<DgQ2DICoord>
+DgHierNdxSystemRFBase::invQuantify (const DgResAdd<DgHierNdx>& add) const
 {
-   DgQ2DICoord point = strRF()->invQuantify(add.strNdx_);
+   DgHierNdx& ndx = add.address();
+   DgResAdd<DgQ2DICoord> point(strRF()->invQuantify(ndx.strNdx_), res());
+
    return point;
 }
 

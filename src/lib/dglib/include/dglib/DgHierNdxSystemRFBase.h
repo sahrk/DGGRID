@@ -108,7 +108,7 @@ class DgHierNdx {
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgHierNdxSystemRFBase
-        : public DgDiscRF<DgHierNdx, DgQ2DICoord, long long int> {
+        : public DgDiscRF<DgResAdd<DgHierNdx>, DgResAdd<DgQ2DICoord>, long long int> {
 
    struct DgSystemSet {
       const DgIDGG*         dgg_;
@@ -144,17 +144,17 @@ class DgHierNdxSystemRFBase
       void setStringFromIntCoord (DgHierNdx& hn) const;
 
       // provide default methods that quantify via the string representation
-      virtual DgHierNdx quantify (const DgQ2DICoord& point) const;
-      virtual DgQ2DICoord invQuantify (const DgHierNdx& add) const;
+      virtual DgResAdd<DgHierNdx> quantify (const DgResAdd<DgQ2DICoord>& point) const;
+      virtual DgResAdd<DgQ2DICoord> invQuantify (const DgResAdd<DgHierNdx>& add) const;
     
       // abstract methods
-      virtual string add2str (const DgHierNdx& add) const;
+      virtual string add2str (const DgResAdd<DgHierNdx>& add) const;
        
-      virtual string add2str (const DgHierNdx& add, char delimiter) const;
+      virtual string add2str (const DgResAdd<DgHierNdx>& add, char delimiter) const;
                           
-      virtual const DgHierNdx& undefAddress (void) const;
+      virtual const DgResAdd<DgHierNdx>& undefAddress (void) const;
 
-      virtual const char* str2add (DgHierNdx* add, const char* str, char delimiter) const;
+      virtual const char* str2add (DgResAdd<DgHierNdx>* add, const char* str, char delimiter) const;
                                     
       // abstract methods for sub-classes; given dummy definitions here
       virtual DgHierNdxIntCoord toIntCoord (const DgHierNdxStringCoord& c) const;
