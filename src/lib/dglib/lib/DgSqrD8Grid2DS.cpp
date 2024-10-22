@@ -145,7 +145,7 @@ DgSqrD8Grid2DS::setAddParents (const DgResAdd<DgIVec2D>& add,
       delete tmpLoc;
 
 //cout << "   verts 1: " << *verts << endl;
-
+`
       grids()[add.res() - 1]->convert(*verts);
 //cout << "   verts 2: " << *verts << endl;
       convert(*verts);
@@ -223,7 +223,6 @@ DgSqrD8Grid2DS::setAddBoundaryChildren (const DgResAdd<DgIVec2D>& add,
       DgLocation* tmpLoc = makeLocation(add);
       grids()[add.res() + 1]->convert(tmpLoc);
       convert(tmpLoc);
-      setNeighbors(*tmpLoc, vec);
 
       delete tmpLoc;
    }
