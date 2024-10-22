@@ -20,9 +20,6 @@
 //
 // DgDiscRFS2D.h: DgDiscRFS2D class definitions
 //
-// Version 7.0 - Kevin Sahr, 12/14/14
-// Version 6.1 - Kevin Sahr, 5/23/13
-//
 ////////////////////////////////////////////////////////////////////////////////
 
 #ifndef DGDISCRFS2D_H
