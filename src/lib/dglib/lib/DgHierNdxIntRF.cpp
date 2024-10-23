@@ -33,7 +33,7 @@
 #include <dglib/DgHierNdxIntRF.h>
 
 ////////////////////////////////////////////////////////////////////////////////
-template<> const DgHierNdxCoord<uint64_t> DgHierNdxCoord<uint64_t>::undefCoord(UINT64_MAX);
+template<> const DgHierNdxIntCoord DgHierNdxIntRF::undefCoord(UINT64_MAX);
 
 ////////////////////////////////////////////////////////////////////////////////
 std::string

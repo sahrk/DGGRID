@@ -89,7 +89,7 @@ template <class C> class DgHierNdxRF :
    public:
 
       // this should be initialized in the instantiated class
-      static const C undefCoord;
+      //static const C undefCoord;
 
       // sub-classes should create a factory method
       const DgHierNdxSystemRFBase& system (void) { return sys_; }
@@ -104,7 +104,8 @@ template <class C> class DgHierNdxRF :
       virtual string add2str (const C& add, char delimiter) const
                        { return add2str(add); }
 
-      virtual const C& undefAddress (void) const { return undefCoord; }
+      //virtual const C& undefAddress (void) const { return undefCoord; }
+      virtual const C& undefAddress (void) const = 0;
 
       // these need to be defined by specializations
       // given dummy definitions for now so the class isn't abstract

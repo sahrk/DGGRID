@@ -46,6 +46,11 @@ class DgHierNdxStringRF : public DgHierNdxRF<DgHierNdxStringCoord> {
 
    public:
 
+      static const DgHierNdxStringCoord undefCoord;
+  
+      virtual const DgHierNdxStringCoord& undefAddress (void) const
+                       { return undefCoord; }
+
       virtual string add2str (const DgHierNdxStringCoord& add) const
                         { return add.value(); }
 
