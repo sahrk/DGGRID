@@ -95,7 +95,7 @@ template<class A> ostream& operator<< (ostream& stream, const DgResAdd<A>& add)
 } // ostream& operator<<
 
 ////////////////////////////////////////////////////////////////////////////////
-template<class DRF, class A, class B, class DB> class DgDiscRFSGrids {
+template<template <class, class, class> class DRF, class A, class B, class DB> class DgDiscRFSGrids {
 //                               : public DgDiscRF<DgResAdd<A>, B, DB> {
 
    public:
@@ -151,7 +151,7 @@ template<class DRF, class A, class B, class DB> class DgDiscRFSGrids {
 
       virtual operator string (void) const
       {
-         string s = "*** DgDiscRFSGrids " + DgRFBase::name() +
+         string s = "*** DgDiscRFSGrids " + this->name() +
                "\nnRes: " + dgg::util::to_string(nRes()) + "\n";
          for (int i = 0; i < nRes(); i++)
             s += " >>> " + dgg::util::to_string(i) + ": " +
@@ -207,11 +207,10 @@ template<class DRF, class A, class B, class DB> class DgDiscRFSGrids {
 
       const DgRF<B, DB>* backFrame_;
     
-    typedef const typename DRF<A, B, DB>* ConstDRFPtr;
+    //using ConstDRFPtr = const typename DRF<A, B, DB>*;
+    //std::vector<ConstDRFPtr>* grids_;
 
-    std::vector<ConstDRFPtr>* grids_;
-
-      //vector<const typename DRF<A, B, DB>*>* grids_;
+      vector<const DRF<A, B, DB>*>* grids_;
       int nRes_;
 
 };
