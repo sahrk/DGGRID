@@ -66,6 +66,8 @@ class DgDiscRF : public DgRF<A, long long int> {
 
       };
 
+      virtual ~DgDiscRF (void) { }
+
       DgDiscRF& operator= (const DgDiscRF<A, B, DB>& rf)
           {
              if (&rf != this) {

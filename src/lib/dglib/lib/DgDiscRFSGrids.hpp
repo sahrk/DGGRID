@@ -18,7 +18,7 @@
 *******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
-// DgDiscRFS.hpp: DgDiscRFS template class definition.
+// DgDiscRFSGrids.hpp: DgDiscRFSGrids template class definition.
 //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -26,8 +26,8 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-template<class A, class B, class DB> const char*
-DgDiscRFS<A, B, DB>::str2add (DgResAdd<A>* add, const char* str,
+template<class DRF, class A, class B, class DB> const char*
+DgDiscRFSGrids<DRF, A, B, DB>::str2add (DgResAdd<A>* add, const char* str,
                               char delimiter) const
 {
    if (!add) add = new DgResAdd<A>();
@@ -47,7 +47,7 @@ DgDiscRFS<A, B, DB>::str2add (DgResAdd<A>* add, const char* str,
    int res;
    if (sscanf(tok, "%d", &res) != 1)
    {
-      ::report("DgDiscRFS<A, B, DB>::str2add() invalid res string " +
+      ::report("DgDiscRFSGrids<A, B, DB>::str2add() invalid res string " +
                string(tok), DgBase::Fatal);
    }
 
@@ -61,7 +61,7 @@ DgDiscRFS<A, B, DB>::str2add (DgResAdd<A>* add, const char* str,
 
    return tmp;
 
-} // const char* DgDiscRFS::str2add
+} // const char* DgDiscRFSGrids::str2add
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

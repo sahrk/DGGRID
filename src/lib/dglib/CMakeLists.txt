@@ -22,7 +22,7 @@ add_library(dglib
   lib/DgDiscRF.hpp
   lib/DgDiscTopoRF.hpp
   lib/DgDiscRFS2D.cpp
-  lib/DgDiscRFS.hpp
+  lib/DgDiscRFSGrids.hpp
   lib/DgDiscTopoRFS.hpp
   lib/DgDistanceBase.cpp
   lib/DgDmdD4Grid2D.cpp
@@ -150,6 +150,7 @@ add_library(dglib
   include/dglib/DgDiscTopoRF.h
   include/dglib/DgDiscRF2D.h
   include/dglib/DgDiscRFS.h
+  include/dglib/DgDiscRFSGrids.h
   include/dglib/DgDiscTopoRFS.h
   include/dglib/DgDiscRFS2D.h
   include/dglib/DgDistance.h

@@ -36,10 +36,11 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 template<class A, class B, class DB> class DgDiscTopoRFS
-                               : public DgDiscRFS<A, B, DB> {
-
+         : public DgDiscTopoRF<DgResAdd<A>, B, DB>, 
+           public DgDiscRFSGrids<DgDiscTopoRF, A, B, DB> {
+   
    public:
-
+      
       DgDiscTopoRFS<A, B, DB>& operator= (const DgDiscTopoRFS<A, B, DB>& rf)
       // shallow copy with possible memory leak; don't use if avoidable
           {
@@ -50,7 +51,7 @@ template<class A, class B, class DB> class DgDiscTopoRFS
                 isCongruent_ = rf.isCongruent();
                 isAligned_ = rf.isAligned();
 
-                this->grids_ = new vector<const DgDiscRF<A, B, DB>*>(rf.nRes(), nullptr);
+                this->grids_ = new vector<const DgDiscTopoRF<A, B, DB>*>(rf.nRes(), nullptr);
                 for (int i = 0; i < rf.nRes(); i++)
                 {
                    // KLUDGE: don't know real type of each grid so can't
@@ -281,15 +282,16 @@ template<class A, class B, class DB> class DgDiscTopoRFS
    protected:
 
       DgDiscTopoRFS (DgRFNetwork& network, const DgRF<B, DB>& backFrame,
-                 int nRes, unsigned int aperture,
+                 int nResIn, unsigned int aperture,
                  dgg::topo::DgGridTopology gridTopo = dgg::topo::Hexagon,
                  dgg::topo::DgGridMetric gridMetric = dgg::topo::D6,
                  bool isCongruent = true, bool isAligned = false,
                  const string& name = "DiscS")
-        : DgDiscRFS<A, B, DB> (network, backFrame, nRes, name),
+        : DgDiscTopoRF<DgResAdd<A>, B, DB> (network, backFrame, name),
+          DgDiscRFSGrids<DgDiscTopoRF, A, B, DB> (backFrame, nResIn),
           aperture_ (aperture), isCongruent_ (isCongruent), isAligned_ (isAligned)
         {
-          this->grids_ = new vector<const DgDiscRF<A, B, DB>*>(nRes, nullptr);
+          //this->grids_ = new vector<const DgDiscTopoRF<A, B, DB>*>(nRes, nullptr);
           if (!this->isAligned() && !this->isCongruent()) {
              report("DgDiscRFS::DgDiscRFS() grid system must be either "
                     "congruent, aligned, or both", DgBase::Fatal);
