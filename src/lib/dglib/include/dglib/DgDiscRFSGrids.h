@@ -216,7 +216,7 @@ template<template <class, class, class> class DRF, class A, class B, class DB> c
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-template<class DRF, class A, class B, class DB> ostream& operator<< (ostream& stream,
+template<template <class, class, class> class DRF, class A, class B, class DB> ostream& operator<< (ostream& stream,
           const DgDiscRFSGrids<DRF, A, B, DB>& g)
 {
    stream << string(g) << endl;
@@ -226,7 +226,7 @@ template<class DRF, class A, class B, class DB> ostream& operator<< (ostream& st
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-template <class DRF, class A, class B, class DB> class DgResAddConverter :
+template <template <class, class, class> class DRF, class A, class B, class DB> class DgResAddConverter :
     public DgConverter<DgResAdd<A>, long long int, A, long long int> {
 
    public:
@@ -282,7 +282,7 @@ template <class DRF, class A, class B, class DB> class DgResAddConverter :
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-template <class DRF, class A, class B, class DB> class DgAddResConverter :
+template <template <class, class, class> class DRF, class A, class B, class DB> class DgAddResConverter :
     public DgConverter<A, long long int, DgResAdd<A>, long long int> {
 
    public:
@@ -331,7 +331,7 @@ template <class DRF, class A, class B, class DB> class DgAddResConverter :
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-template <class DRF, class A, class B, class DB> class Dg2WayResAddConverter
+template <template <class, class, class> class DRF, class A, class B, class DB> class Dg2WayResAddConverter
                                                : public Dg2WayConverter {
 
    public:
