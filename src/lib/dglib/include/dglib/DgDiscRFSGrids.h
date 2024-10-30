@@ -117,10 +117,10 @@ template<template <class, class, class> class DRF, class A, class B, class DB> c
           {
              if (*this != rf)
              {
-                DRF<DgResAdd<A>, B, DB>::operator=(rf);
+                //DRF<DgResAdd<A>, B, DB>::operator=(rf);
 
                 nRes_ = rf.nRes();
-                delete grids_; // the DgRFNetwork deleteds the grids themselves
+                delete grids_; // the DgRFNetwork will delete the grids themselves
 
                 grids_ = new vector<const DRF<A, B, DB>*>(rf.nRes());
                 for (int i = 0; i < nRes(); i++)
@@ -151,8 +151,7 @@ template<template <class, class, class> class DRF, class A, class B, class DB> c
 
       virtual operator string (void) const
       {
-         string s = "*** DgDiscRFSGrids " + this->name() +
-               "\nnRes: " + dgg::util::to_string(nRes()) + "\n";
+         string s = "*** DgDiscRFSGrids\nnRes: " + dgg::util::to_string(nRes()) + "\n";
          for (int i = 0; i < nRes(); i++)
             s += " >>> " + dgg::util::to_string(i) + ": " +
                    string(*(*grids_)[i]) + "\n";
@@ -163,9 +162,10 @@ template<template <class, class, class> class DRF, class A, class B, class DB> c
    protected:
 
       DgDiscRFSGrids (const DgRF<B, DB>& backFrameIn, int nResIn)
-           : backFrame_ (backFrameIn), grids_ (nullptr), nRes_ (nResIn)
+         : backFrameLocal_ (backFrameIn), grids_ (nullptr), nRes_ (nResIn)
+
         {
-          this->grids_ = new vector<const DRF<A, B, DB>*>(nRes, nullptr);
+          this->grids_ = new vector<const DRF<A, B, DB>*>(nRes(), nullptr);
           if (nRes() < 0) {
              report("DgDiscRFSGrids<DRF, A, B, DB>::DgDiscRF() nRes < 0",
                     DgBase::Fatal);
@@ -183,7 +183,7 @@ template<template <class, class, class> class DRF, class A, class B, class DB> c
                // quantify using max res grid
 
                int maxRes = nRes() - 1;
-               DgLocation* loc = this->backFrame().makeLocation(point);
+               DgLocation* loc = backFrameLocal_.makeLocation(point);
                const DRF<A, B, DB>& grid = *grids()[maxRes];
                grid.convert(loc);
                DgResAdd<A> add(*grid.getAddress(*loc), maxRes);
@@ -197,32 +197,19 @@ template<template <class, class, class> class DRF, class A, class B, class DB> c
              {
                const DRF<A, B, DB>& grid = *grids()[add.res()];
                DgLocation* loc = grid.makeLocation(add.address());
-               this->backFrame().convert(loc);
-               B newAdd(*(this->backFrame().getAddress(*loc)));
+               backFrameLocal_.convert(loc);
+               B newAdd(*(backFrameLocal_.getAddress(*loc)));
                delete loc;
                return newAdd;
              }
 
       // state data
-
-      const DgRF<B, DB>* backFrame_;
-    
-    //using ConstDRFPtr = const typename DRF<A, B, DB>*;
-    //std::vector<ConstDRFPtr>* grids_;
-
+      //using ConstDRFPtr = const typename DRF<A, B, DB>*;
+      //std::vector<ConstDRFPtr>* grids_;
+      const DgRF<B, DB>& backFrameLocal_;
       vector<const DRF<A, B, DB>*>* grids_;
       int nRes_;
-
 };
-
-////////////////////////////////////////////////////////////////////////////////
-template<template <class, class, class> class DRF, class A, class B, class DB> ostream& operator<< (ostream& stream,
-          const DgDiscRFSGrids<DRF, A, B, DB>& g)
-{
-   stream << string(g) << endl;
-
-   return stream;
-}
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -339,8 +326,8 @@ template <template <class, class, class> class DRF, class A, class B, class DB> 
       Dg2WayResAddConverter (const DgDiscRFSGrids<DRF, A, B, DB>& fromFrame,
                              const DgDiscRF<A, B, DB>& toFrame, int res)
          : Dg2WayConverter
-              (*(new DgResAddConverter<A, B, DB>(fromFrame, toFrame, res)),
-               *(new DgAddResConverter<A, B, DB>(toFrame, fromFrame, res)))
+              (*(new DgResAddConverter<DRF, A, B, DB>(fromFrame, toFrame, res)),
+               *(new DgAddResConverter<DRF, A, B, DB>(toFrame, fromFrame, res)))
            { }
 
 };

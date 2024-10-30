@@ -26,7 +26,8 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-template<class DRF, class A, class B, class DB> const char*
+template<template <class, class, class> class DRF, class A, class B, class DB>
+const char*
 DgDiscRFSGrids<DRF, A, B, DB>::str2add (DgResAdd<A>* add, const char* str,
                               char delimiter) const
 {

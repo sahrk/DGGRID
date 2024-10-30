@@ -29,10 +29,11 @@
 
 #include <dglib/Dg2WayConverter.h>
 #include <dglib/DgConverter.h>
-//#include <dglib/DgDiscTopoRF.h>
-#include <dglib/DgDiscRFS.h>
+#include <dglib/DgDiscTopoRF.h>
+#include <dglib/DgDiscRFSGrids.h>
+//#include <dglib/DgDiscRFS.h>
 #include <dglib/DgPolygon.h>
-#include <dglib/DgRF.h>
+//#include <dglib/DgRF.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 template<class A, class B, class DB> class DgDiscTopoRFS
@@ -46,7 +47,7 @@ template<class A, class B, class DB> class DgDiscTopoRFS
           {
              if (*this != rf)
              {
-                DgDiscRFS<A, B, DB>::operator=(rf);
+                DgDiscRFSGrids<DgDiscTopoRF, A, B, DB>::operator=(rf);
                 aperture_ = rf.aperture();
                 isCongruent_ = rf.isCongruent();
                 isAligned_ = rf.isAligned();
@@ -289,6 +290,8 @@ template<class A, class B, class DB> class DgDiscTopoRFS
                  const string& name = "DiscS")
         : DgDiscTopoRF<DgResAdd<A>, B, DB> (network, backFrame, name),
           DgDiscRFSGrids<DgDiscTopoRF, A, B, DB> (backFrame, nResIn),
+               //DgDiscRFSGrids<DgDiscTopoRF, A, B, DB> (backFrame, nResIn),
+
           aperture_ (aperture), isCongruent_ (isCongruent), isAligned_ (isAligned)
         {
           //this->grids_ = new vector<const DgDiscTopoRF<A, B, DB>*>(nRes, nullptr);
@@ -299,7 +302,8 @@ template<class A, class B, class DB> class DgDiscTopoRFS
         }
 
       DgDiscTopoRFS (const DgDiscTopoRFS<A, B, DB>& rf) // uses dubious operator=
-        : DgDiscRFS<A, B, DB> (rf)
+         : DgDiscTopoRF<DgResAdd<A>, B, DB> (rf.network(), rf.backFrame(), rf.name()),
+                 DgDiscRFSGrids<DgDiscTopoRF, A, B, DB> (rf.backFrame(), rf.nRes())
         { *this = rf; }
 
 

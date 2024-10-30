@@ -133,7 +133,6 @@ template<class A, class B, class DB> ostream& operator<< (ostream& stream,
           const DgDiscRF<A, B, DB>& g)
 {
    stream << string(g) << endl;
-
    return stream;
 }
 

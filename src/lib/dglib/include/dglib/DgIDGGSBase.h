@@ -121,7 +121,7 @@ class DgIDGGSBase : public DgDiscTopoRFS<DgQ2DICoord, DgGeoCoord, long double> {
 ////////////////////////////////////////////////////////////////////////////////
 inline ostream& operator<< (ostream& stream, const DgIDGGSBase& dggs)
 {
-   stream << "** DgIDGGSBase: " <<
+   stream << string("** DgIDGGSBase: ") <<
          (const DgDiscTopoRFS<DgQ2DICoord, DgGeoCoord, long double>&) dggs << endl;
    stream << "geoRF: " << dggs.geoRF();
    stream << "\nvert0: " << dggs.vert0();

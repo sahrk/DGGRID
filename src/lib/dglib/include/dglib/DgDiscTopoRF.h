@@ -206,13 +206,6 @@ class DgDiscTopoRF : public DgDiscRF<A, B, DB> {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-template<class A, class B, class DB> ostream& operator<< (ostream& stream,
-          const DgDiscTopoRF<A, B, DB>& g)
-{
-   stream << string(g) << endl;
-
-   return stream;
-}
 
 #include "../lib/DgDiscTopoRF.hpp"
 
