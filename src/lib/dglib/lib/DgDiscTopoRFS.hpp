@@ -25,6 +25,44 @@
 #include <dglib/DgRF.h>
 
 ////////////////////////////////////////////////////////////////////////////////
+template<class A, class B, class DB>
+const char*
+DgDiscTopoRFS<A, B, DB>::str2add (DgResAdd<A>* add, const char* str,
+                              char delimiter) const
+{
+   if (!add) add = new DgResAdd<A>();
+
+   char delimStr[2];
+   delimStr[0] = delimiter;
+   delimStr[1] = '\0';
+
+   char* tmpStr = new char[strlen(str) + 1];
+   strcpy(tmpStr, str);
+
+   char* tok;
+
+   // get the resolution
+
+   tok = strtok(tmpStr, delimStr);
+   int res;
+   if (sscanf(tok, "%d", &res) != 1)
+   {
+      ::report("DgDiscTopoRFS<A, B, DB>::str2add() invalid res string " +
+               string(tok), DgBase::Fatal);
+   }
+
+   // now get the address
+
+   const char* tmp = &(str[strlen(tok) + 1]);
+   DgLocation tloc(*this->grids()[res]);
+   tmp = tloc.fromString(tmp, delimiter);
+   const A& subAdd = *(this->grids()[res]->getAddress(tloc));
+   *add = DgResAdd<A>(subAdd, res);
+
+   return tmp;
+
+} // const char* DgDiscTopoRFS::str2add
+
 ////////////////////////////////////////////////////////////////////////////////
 template<class A, class B, class DB> void
 DgDiscTopoRFS<A, B, DB>::setAddNeighbors (const DgResAdd<A>& add,

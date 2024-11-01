@@ -101,7 +101,7 @@ template<template <class, class, class> class DRF, class A, class B, class DB> c
    public:
 
       virtual ~DgDiscRFSGrids (void) { delete grids_; }
-
+/*
       virtual string add2str (const DgResAdd<A>& add) const
                                               { return string(add); }
 
@@ -111,6 +111,7 @@ template<template <class, class, class> class DRF, class A, class B, class DB> c
 
       virtual const char* str2add (DgResAdd<A>* add, const char* str,
                                    char delimiter) const;
+ */
 
       DgDiscRFSGrids<DRF, A, B, DB>& operator= (const DgDiscRFSGrids<DRF, A, B, DB>& rf)
       // shallow copy with possible memory leak; don't use if avoidable
@@ -333,6 +334,6 @@ template <template <class, class, class> class DRF, class A, class B, class DB> 
 };
 
 // JFW: is this really what we mean?
-#include "../lib/DgDiscRFSGrids.hpp"
+//#include "../lib/DgDiscRFSGrids.hpp"
 
 #endif

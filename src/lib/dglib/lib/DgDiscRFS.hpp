@@ -18,17 +18,18 @@
 *******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
-// DgDiscRFSGrids.hpp: DgDiscRFSGrids template class definition.
+// DgDiscRFS.hpp: DgDiscRFS template class definition.
 //
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <dglib/DgRF.h>
 
 ////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-template<template <class, class, class> class DRF, class A, class B, class DB>
+/////////////////////////////////////////////////////////////////////////////////
+//
+template<class A, class B, class DB>
 const char*
-DgDiscRFSGrids<DRF, A, B, DB>::str2add (DgResAdd<A>* add, const char* str,
+DgDiscRFS<A, B, DB>::str2add (DgResAdd<A>* add, const char* str,
                               char delimiter) const
 {
    if (!add) add = new DgResAdd<A>();
@@ -48,21 +49,21 @@ DgDiscRFSGrids<DRF, A, B, DB>::str2add (DgResAdd<A>* add, const char* str,
    int res;
    if (sscanf(tok, "%d", &res) != 1)
    {
-      ::report("DgDiscRFSGrids<A, B, DB>::str2add() invalid res string " +
+      ::report("DgDiscRFS<A, B, DB>::str2add() invalid res string " +
                string(tok), DgBase::Fatal);
    }
 
    // now get the address
 
    const char* tmp = &(str[strlen(tok) + 1]);
-   DgLocation tloc(*grids()[res]);
+   DgLocation tloc(*this->grids()[res]);
    tmp = tloc.fromString(tmp, delimiter);
-   const A& subAdd = *grids()[res]->getAddress(tloc);
+   const A& subAdd = *this->grids()[res]->getAddress(tloc);
    *add = DgResAdd<A>(subAdd, res);
 
    return tmp;
 
-} // const char* DgDiscRFSGrids::str2add
+} // const char* DgDiscRFS::str2add
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

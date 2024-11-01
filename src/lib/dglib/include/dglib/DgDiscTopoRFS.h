@@ -64,6 +64,17 @@ template<class A, class B, class DB> class DgDiscTopoRFS
             return *this;
          }
 
+      // abstract functions from DgDiscRF
+      // these functions are the same as in DgDiscRFS
+      virtual string add2str (const DgResAdd<A>& add) const
+                         { return string(add); }
+
+      virtual string add2str (const DgResAdd<A>& add, char delimiter) const
+                           { return dgg::util::to_string(add.res()) + delimiter +
+                               (*(this->grids_))[add.res()]->add2str(add.address(), delimiter); }
+
+      virtual const char* str2add (DgResAdd<A>* add, const char* str, char delimiter) const;
+               
       unsigned int aperture (void) const { return aperture_; }
 
       bool isCongruent (void) const { return isCongruent_; }
