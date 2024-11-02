@@ -63,32 +63,19 @@ template<class A, class B, class DB> class DgDiscRFS
                
       //vector<const DgDiscRF<A, B, DB>*>& gridsMutable (void) const { return *grids_; }
 
-/*
-      virtual DgResAdd<A> quantify (const B& point) const
+      protected:
+               
+         virtual DgResAdd<A> quantify (const B& point) const
             {
-               // quantify using max res grid
-
-               int maxRes = this->nRes() - 1;
-               DgLocation* loc = this->backFrame().makeLocation(point);
-               const DgDiscRF<A, B, DB>& grid = *this->grids()[maxRes];
-               grid.convert(loc);
-               DgResAdd<A> add(*grid.getAddress(*loc), maxRes);
-
-               delete loc;
-
-               return add;
+                // quantify using max res grid
+                return this->quantifyRFS(point);
              }
 
-      virtual B invQuantify (const DgResAdd<A>& add) const
+         virtual B invQuantify (const DgResAdd<A>& add) const
              {
-               const DgDiscRF<A, B, DB>& grid = *this->grids()[add.res()];
-               DgLocation* loc = grid.makeLocation(add.address());
-               this->backFrame().convert(loc);
-               B newAdd(*(this->backFrame().getAddress(*loc)));
-               delete loc;
-               return newAdd;
+                 return this->invQuantifyRFS(add);
              }
-
+/*
       // state data
 
       const DgRF<B, DB>* backFrame_;

@@ -179,7 +179,7 @@ template<template <class, class, class> class DRF, class A, class B, class DB> c
 
       vector<const DRF<A, B, DB>*>& gridsMutable (void) const { return *grids_; }
 
-      virtual DgResAdd<A> quantify (const B& point) const
+      virtual DgResAdd<A> quantifyRFS (const B& point) const
             {
                // quantify using max res grid
 
@@ -194,7 +194,7 @@ template<template <class, class, class> class DRF, class A, class B, class DB> c
                return add;
              }
 
-      virtual B invQuantify (const DgResAdd<A>& add) const
+      virtual B invQuantifyRFS (const DgResAdd<A>& add) const
              {
                const DRF<A, B, DB>& grid = *grids()[add.res()];
                DgLocation* loc = grid.makeLocation(add.address());

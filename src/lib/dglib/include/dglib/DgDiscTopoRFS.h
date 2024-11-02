@@ -316,7 +316,17 @@ template<class A, class B, class DB> class DgDiscTopoRFS
          : DgDiscTopoRF<DgResAdd<A>, B, DB> (rf.network(), rf.backFrame(), rf.name()),
                  DgDiscRFSGrids<DgDiscTopoRF, A, B, DB> (rf.backFrame(), rf.nRes())
         { *this = rf; }
+                    
+              virtual DgResAdd<A> quantify (const B& point) const
+                 {
+                     // quantify using max res grid
+                     return this->quantifyRFS(point);
+                  }
 
+              virtual B invQuantify (const DgResAdd<A>& add) const
+                  {
+                      return this->invQuantifyRFS(add);
+                  }
 
       virtual void setAddVertices (const DgResAdd<A>& add,
                                    DgPolygon& vec) const
