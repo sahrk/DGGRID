@@ -65,6 +65,10 @@ template<class A, class B, class DB> class DgDiscRFS
 
       protected:
                
+               virtual long long int dist (const DgResAdd<A>& add1,
+                                        const DgResAdd<A>& add2) const
+                              { return this->distRFS(add1, add2); }
+
          virtual DgResAdd<A> quantify (const B& point) const
             {
                 // quantify using max res grid

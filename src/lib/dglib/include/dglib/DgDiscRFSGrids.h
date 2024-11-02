@@ -179,6 +179,12 @@ template<template <class, class, class> class DRF, class A, class B, class DB> c
 
       vector<const DRF<A, B, DB>*>& gridsMutable (void) const { return *grids_; }
 
+      // hokey temporary notion of distance
+
+      virtual long long int distRFS (const DgResAdd<A>& add1,
+                      const DgResAdd<A>& add2) const
+            { return abs(add2.res() - add1.res()); }
+    
       virtual DgResAdd<A> quantifyRFS (const B& point) const
             {
                // quantify using max res grid
