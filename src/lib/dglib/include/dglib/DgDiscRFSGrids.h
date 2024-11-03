@@ -178,7 +178,7 @@ template<template <class, class, class> class DRF, class A, class B, class DB> c
       virtual long long int distRFS (const DgResAdd<A>& add1,
                       const DgResAdd<A>& add2) const
             { return abs(add2.res() - add1.res()); }
-    
+    /*
       virtual DgResAdd<A> quantifyRFS (const B& point) const
             {
                // quantify using max res grid
@@ -202,6 +202,7 @@ template<template <class, class, class> class DRF, class A, class B, class DB> c
                delete loc;
                return newAdd;
              }
+     */
 
       // state data
       //using ConstDRFPtr = const typename DRF<A, B, DB>*;

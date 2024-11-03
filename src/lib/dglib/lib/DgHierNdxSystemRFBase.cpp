@@ -76,7 +76,7 @@ DgHierNdx2WayIntToStringConverter (const DgHierNdxSystemRF& sys)
 DgHierNdxSystemRFBase::DgHierNdxSystemRFBase (
          const DgHierNdxSystemRFSBase& hierNdxRFSIn, int resIn,
          const string& nameIn = "HierNdxSysRF")
-   : DgDiscRF<DgHierNdx, DgResAdd<DgQ2DICoord>, long long int>(hierNdxRFSIn.dggs().network,
+   : DgDiscRF<DgHierNdx, DgQ2DICoord, long long int>(hierNdxRFSIn.dggs().network,
               hierNdxRFSIn.dggs()[resIn], nameIn),
      hierNdxRFS_ (hierNdxRFSIn), dggs_ (hierNdxRFSIn.dggs()), res_ (resIn),
      aperture_ (hierNdxRFSIn.dggs().aperture()), pRes_ {nullptr, nullptr, nullptr},
@@ -180,13 +180,11 @@ DgHierNdxSystemRFBase::setSystemSet (DgSystemSet& set, int res)
 
 ////////////////////////////////////////////////////////////////////////////////
 DgHierNdx
-DgHierNdxSystemRFBase::quantify (const DgResAdd<DgQ2DICoord>& point) const
+DgHierNdxSystemRFBase::quantify (const DgQ2DICoord& point) const
 {
    DgHierNdx ndx(outModeInt());
-   if (point.res() != res()) 
-      report("DgInLocFile::extract(DgLocList) not implemented.", DgBase::Fatal);
       
-   ndx.strNdx_ = strRF()->quantify(point.address());
+   ndx.strNdx_ = strRF()->quantify(point);
    setIntFromStringCoord(ndx);
 
    //DgResAdd<DgHierNdx> add(ndx, res());
@@ -199,7 +197,7 @@ DgResAdd<DgQ2DICoord>
 DgHierNdxSystemRFBase::invQuantify (const DgHierNdx& add) const
 {
    DgHierNdx& ndx = add.address();
-   DgResAdd<DgQ2DICoord> point(strRF()->invQuantify(ndx.strNdx_), res());
+   DgQ2DICoord point(strRF()->invQuantify(ndx.strNdx_));
 
    return point;
 }

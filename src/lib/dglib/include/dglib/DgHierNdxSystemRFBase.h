@@ -108,7 +108,7 @@ class DgHierNdx {
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgHierNdxSystemRFBase
-        : public DgDiscRF<DgHierNdx, DgResAdd<DgQ2DICoord>, long long int> {
+        : public DgDiscRF<DgHierNdx, DgQ2DICoord, long long int> {
 
    struct DgSystemSet {
       const DgIDGG*         dgg_;
@@ -144,8 +144,8 @@ class DgHierNdxSystemRFBase
       void setStringFromIntCoord (DgHierNdx& hn) const;
 
       // provide default methods that quantify via the string representation
-      virtual DgHierNdx quantify (const DgResAdd<DgQ2DICoord>& point) const;
-      virtual DgResAdd<DgQ2DICoord> invQuantify (const DgHierNdx& add) const;
+      virtual DgHierNdx quantify (const DgQ2DICoord& point) const;
+      virtual DgQ2DICoord invQuantify (const DgHierNdx& add) const;
     
       // abstract methods
       virtual string add2str (const DgHierNdx& add) const;

@@ -33,7 +33,7 @@ class DgHierNdx;
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgHierNdxSystemRFSBase : 
-              public DgDiscRFS<DgHierNdx, DgResAdd<DgQ2DICoord>, long long int> {
+              public DgDiscRFS<DgHierNdx, DgQ2DICoord, long long int> {
 
    public:
 
@@ -79,11 +79,12 @@ class DgHierNdxSystemRFSBase :
                   
      // from above
      virtual const DgResAdd<DgHierNdx>& undefAddress (void) const;
-
+/*
      // override the default definitions from DgDiscRFS (which quantify at
      // the highest resolution)
      virtual DgResAdd<DgHierNdx> quantify (const DgResAdd<DgQ2DICoord>& point) const;
      virtual DgResAdd<DgQ2DICoord> invQuantify (const DgResAdd<DgHierNdx>& add) const;
+ */
 
      // pure virtual functions passed down from above
      virtual void setAddNdxParent (const DgResAdd<DgHierNdx>& add,

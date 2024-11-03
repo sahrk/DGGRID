@@ -324,12 +324,10 @@ template<class A, class B, class DB> class DgDiscTopoRFS
 
       virtual DgResAdd<A> quantify (const B& point) const
                  {
-                     //return this->quantifyRFS(point);
-                     
                      // quantify using max res grid
-                     int maxRes = nRes() - 1;
-                     DgLocation* loc = backFrameLocal_.makeLocation(point);
-                     const DRF<A, B, DB>& grid = *grids()[maxRes];
+                     int maxRes = this->nRes() - 1;
+                     DgLocation* loc = this->backFrame().makeLocation(point);
+                     const DgDiscTopoRF<A, B, DB>& grid = *this->grids()[maxRes];
                      grid.convert(loc);
                      DgResAdd<A> add(*grid.getAddress(*loc), maxRes);
                      delete loc;
@@ -338,9 +336,14 @@ template<class A, class B, class DB> class DgDiscTopoRFS
                   }
 
        virtual B invQuantify (const DgResAdd<A>& add) const
-                  {
-                      return this->invQuantifyRFS(add);
-                  }
+               {
+                   const DgDiscTopoRF<A, B, DB>& grid = *this->grids()[add.res()];
+                   DgLocation* loc = grid.makeLocation(add.address());
+                   this->backFrame().convert(loc);
+                   B newAdd(*(this->backFrame().getAddress(*loc)));
+                   delete loc;
+                   return newAdd;
+               }
 
        virtual void setAddVertices (const DgResAdd<A>& add,
                                    DgPolygon& vec) const

@@ -28,7 +28,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 DgHierNdxSystemRFSBase::DgHierNdxSystemRFSBase (const DgIDGGSBase& dggsIn, 
          bool outModeIntIn, const string& nameIn)
-   : DiscRFS<DgHierNdx, ResAdd<DgQ2DICoord>, long long int> 
+   : DiscRFS<DgHierNdx, DgQ2DICoord, long long int> 
                          (dggsIn.network(), dggsIn, dggsIn.nRes(), nameIn),
      dggs_ (dggsIn), outModeInt_ (outModeIntIn)
 { 
@@ -172,26 +172,6 @@ DgHierNdxSystemRFSBase::makeNdxChildren (const DgResAdd<DgHierNdx>& add) const
   setNdxChildren(add, *chld);
 
   return chld;
-}
-
-/////////////////////////////////////////////////////////////////////////////////
-DgResAdd<DgHierNdx> 
-DgHierNdxSystemRFSBase::quantify (const DgResAdd<DgQ2DICoord>& point) const
-{
-   const DgHierNdxSystemRFBase& grid = *grids()[point.res()];   
-   DgHierNdx hierNdx = grid.quantify(point.address());
-   DgResAdd<DgHierNdx> add(hierNdx, point.res());
-   return add;
-}
-                  
-////////////////////////////////////////////////////////////////////////////////
-DgResAdd<DgQ2DICoord> 
-DgHierNdxSystemRFSBase::invQuantify (const DgResAdd<DgHierNdx>& add) const
-{
-   const DgHierNdxSystemRFBase& grid = *grids()[add.res()];   
-   DgQ2DICoord q2di = grid.invQuantify(add.address());
-   DgResAdd<DgQ2DICoord> newPoint(q2di, add.res());
-   return newPoint;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

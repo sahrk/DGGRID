@@ -33,20 +33,20 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 template<class A, class B, class DB> class DgDiscRFS
-         : public DgDiscRF<DgResAdd<A>, B, DB>, 
-           public DgDiscRFSGrids<DgDiscRF, A, B, DB> {
+         : public DgDiscRF<DgResAdd<A>, DgResAdd<B>, DB>,
+           public DgDiscRFSGrids<DgDiscRF, A, DgResAdd<B>, DB> {
 
    public:
 
       DgDiscRFS (DgRFNetwork& network, const DgRF<B, DB>& backFrame,
                  int nResIn, const string& name = "DiscS")
-        : DgDiscRF<DgResAdd<A>, B, DB> (network, backFrame, name), 
-          DgDiscRFSGrids<DgDiscRF, A, B, DB> (backFrame, nResIn)
+        : DgDiscRF<DgResAdd<A>, DgResAdd<B>, DB> (network, backFrame, name),
+          DgDiscRFSGrids<DgDiscRF, A, DgResAdd<B>, DB> (backFrame, nResIn)
         {
         }
 
       DgDiscRFS (const DgDiscRFS<A, B, DB>& rf) // uses dubious operator=
-        : DgDiscRF<DgResAdd<A>, B, DB> (rf)
+        : DgDiscRF<DgResAdd<A>, DgResAdd<B>, DB> (rf)
         { *this = rf; }
                
       // abstract functions from DgDiscRF
@@ -69,15 +69,18 @@ template<class A, class B, class DB> class DgDiscRFS
                                         const DgResAdd<A>& add2) const
                               { return this->distRFS(add1, add2); }
 
-         virtual DgResAdd<A> quantify (const B& point) const
+         virtual DgResAdd<A> quantify (const DgResAdd<B>& point) const
             {
-                // quantify using max res grid
-                return this->quantifyRFS(point);
+                A newAdd = (this->grids()[point.res()])->quantify(point.address());
+                DgResAdd<A> add(newAdd, point.res());
+                return add;
              }
 
-         virtual B invQuantify (const DgResAdd<A>& add) const
+         virtual DgResAdd<B> invQuantify (const DgResAdd<A>& add) const
              {
-                 return this->invQuantifyRFS(add);
+                 B newPt = (this->grids()[add.res()])->invQuantify(add.address());
+                 DgResAdd<B> point(B, add.res());
+                 return point;
              }
 /*
       // state data
