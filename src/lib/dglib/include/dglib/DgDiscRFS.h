@@ -65,7 +65,7 @@ template<class A, class B, class DB> class DgDiscRFS
 
       protected:
                
-               virtual long long int dist (const DgResAdd<A>& add1,
+         virtual long long int dist (const DgResAdd<A>& add1,
                                         const DgResAdd<A>& add2) const
                               { return this->distRFS(add1, add2); }
 

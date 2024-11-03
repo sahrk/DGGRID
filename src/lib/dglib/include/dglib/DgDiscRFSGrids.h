@@ -145,11 +145,6 @@ template<template <class, class, class> class DRF, class A, class B, class DB> c
       const DRF<A, B, DB>& operator[] (int res) const
                            { return *((*grids_)[res]); }
 
-      // hokey temporary notion of distance
-      virtual long long int dist (const DgResAdd<A>& add1,
-                        const DgResAdd<A>& add2) const
-           { return abs(add2.res() - add1.res()); }
-
       virtual operator string (void) const
       {
          string s = "*** DgDiscRFSGrids\nnRes: " + dgg::util::to_string(nRes()) + "\n";
@@ -180,7 +175,6 @@ template<template <class, class, class> class DRF, class A, class B, class DB> c
       vector<const DRF<A, B, DB>*>& gridsMutable (void) const { return *grids_; }
 
       // hokey temporary notion of distance
-
       virtual long long int distRFS (const DgResAdd<A>& add1,
                       const DgResAdd<A>& add2) const
             { return abs(add2.res() - add1.res()); }
@@ -188,7 +182,6 @@ template<template <class, class, class> class DRF, class A, class B, class DB> c
       virtual DgResAdd<A> quantifyRFS (const B& point) const
             {
                // quantify using max res grid
-
                int maxRes = nRes() - 1;
                DgLocation* loc = backFrameLocal_.makeLocation(point);
                const DRF<A, B, DB>& grid = *grids()[maxRes];
