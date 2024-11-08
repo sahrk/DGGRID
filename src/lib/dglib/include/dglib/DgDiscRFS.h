@@ -34,14 +34,14 @@
 ////////////////////////////////////////////////////////////////////////////////
 template<class A, class B, class DB> class DgDiscRFS
          : public DgDiscRF<DgResAdd<A>, DgResAdd<B>, DB>,
-           public DgDiscRFSGrids<DgDiscRF, A, DgResAdd<B>, DB> {
+           public DgDiscRFSGrids<DgDiscRF, A, DgResAdd<B>, DB, B> {
 
    public:
 
       DgDiscRFS (DgRFNetwork& network, const DgRF<B, DB>& backFrame,
                  int nResIn, const string& name = "DiscS")
         : DgDiscRF<DgResAdd<A>, DgResAdd<B>, DB> (network, backFrame, name),
-          DgDiscRFSGrids<DgDiscRF, A, DgResAdd<B>, DB> (backFrame, nResIn)
+          DgDiscRFSGrids<DgDiscRF, A, DgResAdd<B>, DB, B> (backFrame, nResIn)
         {
         }
 
@@ -79,7 +79,7 @@ template<class A, class B, class DB> class DgDiscRFS
          virtual DgResAdd<B> invQuantify (const DgResAdd<A>& add) const
              {
                  B newPt = (this->grids()[add.res()])->invQuantify(add.address());
-                 DgResAdd<B> point(B, add.res());
+                 DgResAdd<B> point(newPt, add.res());
                  return point;
              }
 /*

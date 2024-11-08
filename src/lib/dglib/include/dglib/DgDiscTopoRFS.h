@@ -38,7 +38,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 template<class A, class B, class DB> class DgDiscTopoRFS
          : public DgDiscTopoRF<DgResAdd<A>, B, DB>, 
-           public DgDiscRFSGrids<DgDiscTopoRF, A, B, DB> {
+           public DgDiscRFSGrids<DgDiscTopoRF, A, B, DB, B> {
    
    public:
       
@@ -47,7 +47,7 @@ template<class A, class B, class DB> class DgDiscTopoRFS
           {
              if (*this != rf)
              {
-                DgDiscRFSGrids<DgDiscTopoRF, A, B, DB>::operator=(rf);
+                DgDiscRFSGrids<DgDiscTopoRF, A, B, DB, B>::operator=(rf);
                 aperture_ = rf.aperture();
                 isCongruent_ = rf.isCongruent();
                 isAligned_ = rf.isAligned();
@@ -300,7 +300,7 @@ template<class A, class B, class DB> class DgDiscTopoRFS
                  bool isCongruent = true, bool isAligned = false,
                  const string& name = "DiscS")
         : DgDiscTopoRF<DgResAdd<A>, B, DB> (network, backFrame, name),
-          DgDiscRFSGrids<DgDiscTopoRF, A, B, DB> (backFrame, nResIn),
+          DgDiscRFSGrids<DgDiscTopoRF, A, B, DB, B> (backFrame, nResIn),
                //DgDiscRFSGrids<DgDiscTopoRF, A, B, DB> (backFrame, nResIn),
 
           aperture_ (aperture), isCongruent_ (isCongruent), isAligned_ (isAligned)
@@ -314,7 +314,7 @@ template<class A, class B, class DB> class DgDiscTopoRFS
 
       DgDiscTopoRFS (const DgDiscTopoRFS<A, B, DB>& rf) // uses dubious operator=
          : DgDiscTopoRF<DgResAdd<A>, B, DB> (rf.network(), rf.backFrame(), rf.name()),
-                 DgDiscRFSGrids<DgDiscTopoRF, A, B, DB> (rf.backFrame(), rf.nRes())
+                 DgDiscRFSGrids<DgDiscTopoRF, A, B, DB, B> (rf.backFrame(), rf.nRes())
         { *this = rf; }
                     
       // use default RFS dist

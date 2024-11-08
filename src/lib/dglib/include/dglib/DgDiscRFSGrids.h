@@ -95,7 +95,7 @@ template<class A> ostream& operator<< (ostream& stream, const DgResAdd<A>& add)
 } // ostream& operator<<
 
 ////////////////////////////////////////////////////////////////////////////////
-template<template <class, class, class> class DRF, class A, class B, class DB> class DgDiscRFSGrids {
+template<template <class, class, class> class DRF, class A, class B, class DB, class BG> class DgDiscRFSGrids {
 //                               : public DgDiscRF<DgResAdd<A>, B, DB> {
 
    public:
@@ -113,7 +113,8 @@ template<template <class, class, class> class DRF, class A, class B, class DB> c
                                    char delimiter) const;
  */
 
-      DgDiscRFSGrids<DRF, A, B, DB>& operator= (const DgDiscRFSGrids<DRF, A, B, DB>& rf)
+      DgDiscRFSGrids<DRF, A, B, DB, BG>& operator=
+                      (const DgDiscRFSGrids<DRF, A, B, DB, BG>& rf)
       // shallow copy with possible memory leak; don't use if avoidable
           {
              if (*this != rf)
@@ -123,7 +124,7 @@ template<template <class, class, class> class DRF, class A, class B, class DB> c
                 nRes_ = rf.nRes();
                 delete grids_; // the DgRFNetwork will delete the grids themselves
 
-                grids_ = new vector<const DRF<A, B, DB>*>(rf.nRes());
+                grids_ = new vector<const DRF<A, BG, DB>*>(rf.nRes());
                 for (int i = 0; i < nRes(); i++)
                 {
                    // KLUDGE: don't know real type of each grid so can't
@@ -136,13 +137,13 @@ template<template <class, class, class> class DRF, class A, class B, class DB> c
             return *this;
          }
 
-      const vector<const DRF<A, B, DB>*>& grids (void) const { return *grids_; }
+      const vector<const DRF<A, BG, DB>*>& grids (void) const { return *grids_; }
 
       int nRes (void) const { return nRes_; }
 
       // no bounds checking
 
-      const DRF<A, B, DB>& operator[] (int res) const
+      const DRF<A, BG, DB>& operator[] (int res) const
                            { return *((*grids_)[res]); }
 
       virtual operator string (void) const
@@ -159,20 +160,19 @@ template<template <class, class, class> class DRF, class A, class B, class DB> c
 
       DgDiscRFSGrids (const DgRF<B, DB>& backFrameIn, int nResIn)
          : backFrameLocal_ (backFrameIn), grids_ (nullptr), nRes_ (nResIn)
-
         {
-          this->grids_ = new vector<const DRF<A, B, DB>*>(nRes(), nullptr);
+          this->grids_ = new vector<const DRF<A, BG, DB>*>(nRes(), nullptr);
           if (nRes() < 0) {
-             report("DgDiscRFSGrids<DRF, A, B, DB>::DgDiscRF() nRes < 0",
+             report("DgDiscRFSGrids<DRF, A, B, DB, BG>::DgDiscRF() nRes < 0",
                     DgBase::Fatal);
           }
         }
 
-      DgDiscRFSGrids (const DgDiscRFSGrids<DRF, A, B, DB>& rf) // uses dubious operator=
+      DgDiscRFSGrids (const DgDiscRFSGrids<DRF, A, B, DB, BG>& rf) // uses dubious operator=
         //: DgDiscRF<DgResAdd<A>, B, DB> (rf)
         { *this = rf; }
 
-      vector<const DRF<A, B, DB>*>& gridsMutable (void) const { return *grids_; }
+      vector<const DRF<A, BG, DB>*>& gridsMutable (void) const { return *grids_; }
 
       // hokey temporary notion of distance
       virtual long long int distRFS (const DgResAdd<A>& add1,
@@ -208,19 +208,19 @@ template<template <class, class, class> class DRF, class A, class B, class DB> c
       //using ConstDRFPtr = const typename DRF<A, B, DB>*;
       //std::vector<ConstDRFPtr>* grids_;
       const DgRF<B, DB>& backFrameLocal_;
-      vector<const DRF<A, B, DB>*>* grids_;
+      vector<const DRF<A, BG, DB>*>* grids_;
       int nRes_;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-template <template <class, class, class> class DRF, class A, class B, class DB> class DgResAddConverter :
+template <template <class, class, class> class DRF, class A, class B, class DB, class BG> class DgResAddConverter :
     public DgConverter<DgResAdd<A>, long long int, A, long long int> {
 
    public:
 
-      DgResAddConverter (const DgDiscRFSGrids<DRF, A, B, DB>& fromFrame,
-                         const DgDiscRF<A, B, DB>& toFrame, int resIn)
+      DgResAddConverter (const DgDiscRFSGrids<DRF, A, B, DB, BG>& fromFrame,
+                         const DgDiscRF<A, BG, DB>& toFrame, int resIn)
          : DgConverter<DgResAdd<A>, long long int, A,
                  long long int> (fromFrame, toFrame),
            res_ (resIn), discRFS_ (fromFrame), discRF_ (toFrame)
@@ -229,13 +229,13 @@ template <template <class, class, class> class DRF, class A, class B, class DB> 
               if (res() < 0 ||
                   static_cast<unsigned long>(res()) >= discRFS().grids().size())
               {
-                 report("DgResAddConverter<A, B, DB>::DgResAddConverter() "
+                 report("DgResAddConverter<A, B, DB, BG>::DgResAddConverter() "
                         "invalid resolution", DgBase::Fatal);
               }
 
               if (*(discRFS().grids()[res()]) != discRF())
               {
-                 report("DgDgResAddConverter<A, B, DB>::DgResAddConverter() "
+                 report("DgDgResAddConverter<A, B, DB, BG>::DgResAddConverter() "
                         "grid mismatch", DgBase::Fatal);
               }
            }
@@ -245,7 +245,7 @@ template <template <class, class, class> class DRF, class A, class B, class DB> 
 
       int res (void) const { return res_; }
 
-      const DgDiscRFSGrids<DRF, A, B, DB>& discRFS (void) const { return discRFS_; }
+      const DgDiscRFSGrids<DRF, A, B, DB, BG>& discRFS (void) const { return discRFS_; }
 
       const DRF<A, B, DB>& discRF (void) const { return discRF_; }
 
@@ -264,19 +264,19 @@ template <template <class, class, class> class DRF, class A, class B, class DB> 
    protected:
 
       int res_;
-      const DgDiscRFSGrids<DRF, A, B, DB>& discRFS_;
-      const DRF<A, B, DB>& discRF_;
+      const DgDiscRFSGrids<DRF, A, B, DB, BG>& discRFS_;
+      const DRF<A, BG, DB>& discRF_;
 
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-template <template <class, class, class> class DRF, class A, class B, class DB> class DgAddResConverter :
+template <template <class, class, class> class DRF, class A, class B, class DB, class BG> class DgAddResConverter :
     public DgConverter<A, long long int, DgResAdd<A>, long long int> {
 
    public:
 
-      DgAddResConverter (const DgDiscRF<A, B, DB>& fromFrame,
-                         const DgDiscRFSGrids<DRF, A, B, DB>& toFrame, int resIn)
+      DgAddResConverter (const DgDiscRF<A, BG, DB>& fromFrame,
+                         const DgDiscRFSGrids<DRF, A, B, DB, BG>& toFrame, int resIn)
          : DgConverter<A, long long int, DgResAdd<A>,
                        long long int> (fromFrame, toFrame),
            res_ (resIn), discRFS_ (toFrame), discRF_ (fromFrame)
@@ -285,13 +285,13 @@ template <template <class, class, class> class DRF, class A, class B, class DB> 
               if (res() < 0 ||
                 static_cast<unsigned long>(res()) >= discRFS().grids().size())
               {
-                 report("DgDgAddResConverter<A, B, DB>::DgAddResConverter() "
+                 report("DgDgAddResConverter<A, B, DB, BG>::DgAddResConverter() "
                         "invalid resolution", DgBase::Fatal);
               }
 
               if (*(discRFS().grids()[res()]) != discRF())
               {
-                 report("DgAddResConverter<A, B, DB>::DgAddResConverter() "
+                 report("DgAddResConverter<A, B, DB, BG>::DgAddResConverter() "
                         "grid mismatch", DgBase::Fatal);
               }
            }
@@ -301,9 +301,9 @@ template <template <class, class, class> class DRF, class A, class B, class DB> 
 
       int res (void) const { return res_; }
 
-      const DgDiscRFSGrids<DRF, A, B, DB>& discRFS (void) const { return discRFS_; }
+      const DgDiscRFSGrids<DRF, A, B, DB, BG>& discRFS (void) const { return discRFS_; }
 
-      const DRF<A, B, DB>& discRF (void) const { return discRF_; }
+      const DRF<A, BG, DB>& discRF (void) const { return discRF_; }
 
       virtual DgResAdd<A> convertTypedAddress (const A& add) const
         {
@@ -313,22 +313,22 @@ template <template <class, class, class> class DRF, class A, class B, class DB> 
    protected:
 
       int res_;
-      const DgDiscRFSGrids<DRF, A, B, DB>& discRFS_;
-      const DRF<A, B, DB>& discRF_;
+      const DgDiscRFSGrids<DRF, A, B, DB, BG>& discRFS_;
+      const DRF<A, BG, DB>& discRF_;
 
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-template <template <class, class, class> class DRF, class A, class B, class DB> class Dg2WayResAddConverter
+template <template <class, class, class> class DRF, class A, class B, class DB, class BG> class Dg2WayResAddConverter
                                                : public Dg2WayConverter {
 
    public:
 
-      Dg2WayResAddConverter (const DgDiscRFSGrids<DRF, A, B, DB>& fromFrame,
-                             const DgDiscRF<A, B, DB>& toFrame, int res)
+      Dg2WayResAddConverter (const DgDiscRFSGrids<DRF, A, B, DB, BG>& fromFrame,
+                             const DgDiscRF<A, BG, DB>& toFrame, int res)
          : Dg2WayConverter
-              (*(new DgResAddConverter<DRF, A, B, DB>(fromFrame, toFrame, res)),
-               *(new DgAddResConverter<DRF, A, B, DB>(toFrame, fromFrame, res)))
+              (*(new DgResAddConverter<DRF, A, B, DB, BG>(fromFrame, toFrame, res)),
+               *(new DgAddResConverter<DRF, A, B, DB, BG>(toFrame, fromFrame, res)))
            { }
 
 };
