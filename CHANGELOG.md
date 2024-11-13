@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 All changes are by Kevin Sahr, unless otherwise noted.
 
+## [8.34] - 2024-11-13
+### Fixed
+- correctly handles math constants in Windows (thanks to @allixender)
+
 ## [8.33] - 2024-10-16
 ### Added
 - output whether or not built with GDAL
