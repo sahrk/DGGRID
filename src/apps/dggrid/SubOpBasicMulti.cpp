@@ -63,7 +63,7 @@ SubOpBasicMulti::inStrToPointLoc (const string& inStr) const {
       DgLocation* tmpLoc = static_cast<const DgIDGGBase&>(*op.inOp.pInRF).bndRF().locFromSeqNum(sNum);
       loc = new DgLocationData(*tmpLoc);
       delete tmpLoc;
-      remainder = &(buff[strlen(snStr) + 1]);
+      remainder = &(buff[strlen(snStr)]);
    } else {
       loc = new DgLocationData(*op.inOp.pInRF);
       remainder = loc->fromString(buff, op.inOp.inputDelimiter);
@@ -114,7 +114,7 @@ SubOpBasicMulti::inStrToPointCell (const string& inStr) const {
       }
 
       loc = static_cast<const DgIDGGBase&>(*op.inOp.pInRF).bndRF().locFromSeqNum(sNum);
-      remainder = &(buff[strlen(snStr) + 1]);
+      remainder = &(buff[strlen(snStr)]);
    } else {
       loc = new DgLocation(*op.inOp.pInRF);
       remainder = loc->fromString(buff, op.inOp.inputDelimiter);
