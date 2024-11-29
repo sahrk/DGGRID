@@ -1,4 +1,4 @@
-** executing DGGRID version 8.34 with GDAL version 3090200 **
+** executing DGGRID version 8.34 with GDAL version 3100000 **
 type sizes: big int: 64 bits / big double: 128 bits
 
 ** using meta file gdalExample.meta...
@@ -39,10 +39,10 @@ output_cell_label_type GLOBAL_SEQUENCE (default)
 cell_output_type GDAL (user set)
 point_output_type GDAL (user set)
 randpts_output_type NONE (default)
-cell_output_gdal_format KML (user set)
+cell_output_gdal_format GeoJSON (user set)
 point_output_gdal_format GeoJSON (user set)
 collection_output_gdal_format GeoJSON (default)
-cell_output_file_name ./outputfiles/corvallisCells.kml (user set)
+cell_output_file_name ./outputfiles/corvallisCells.geojson (user set)
 point_output_file_name ./outputfiles/corvallisPts.geojson (user set)
 randpts_output_file_name randPts (default)
 collection_output_file_name cells (default)

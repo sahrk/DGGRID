@@ -37,7 +37,8 @@ SubOpBasicMulti::SubOpBasicMulti (OpBasic& _op, bool _activate)
    : SubOpBasic (_op, _activate)
 { }
 
-////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+/*
 DgLocationData*
 SubOpBasicMulti::inStrToPointLoc (const string& inStr) const {
 
@@ -88,6 +89,69 @@ SubOpBasicMulti::inStrToPointLoc (const string& inStr) const {
    return loc;
 
 } // DgLocationData* SubOpBasicMulti::inStrToPointLoc
+*/
+DgLocationData* SubOpBasicMulti::inStrToPointLoc(const std::string& inStr) const {
+    // Setup for strtok
+    char delimStr[2];
+    delimStr[0] = op.inOp.inputDelimiter;
+    delimStr[1] = '\0';
+
+    // Allocate a modifiable buffer for strtok
+    char* buff = new char[inStr.length() + 1];
+    strcpy(buff, inStr.c_str());
+
+    DgLocationData* loc = nullptr;
+    const char* remainder = nullptr;
+
+    if (op.inOp.inSeqNum) {
+        // Parse sequence number
+        char* snStr = strtok(buff, delimStr);
+        if (!snStr) {
+            ::report("inStrToPointLoc(): missing sequence number", DgBase::Fatal);
+        }
+
+        unsigned long int sNum;
+        if (sscanf(snStr, "%lu", &sNum) != 1) {
+            ::report("inStrToPointLoc(): invalid SEQNUM " + std::string(snStr), DgBase::Fatal);
+        }
+
+        // Retrieve location from sequence number
+        DgLocation* tmpLoc = static_cast<const DgIDGGBase&>(*op.inOp.pInRF).bndRF().locFromSeqNum(sNum);
+        loc = new DgLocationData(*tmpLoc);
+        delete tmpLoc;
+
+        if (inStr.length() > strlen(buff))
+           remainder = buff + strlen(snStr) + 1;
+    } else {
+        // Parse location directly from string
+        loc = new DgLocationData(*op.inOp.pInRF);
+        remainder = loc->fromString(buff, op.inOp.inputDelimiter);
+    }
+
+    // Skip leading whitespace in the remainder
+    while (remainder && isspace(*remainder)) {
+        remainder++;
+    }
+
+    // Parse remainder into a single data field
+    DgDataList* data = nullptr;
+    if (remainder && strlen(remainder) > 0) {
+        data = new DgDataList();
+        std::string remStr(remainder);
+
+        // Create and add data field
+        DgDataFieldString* field = new DgDataFieldString("data", remStr);
+        data->list().push_back(field);
+    }
+
+    // Assign the parsed data list to the location
+    loc->setDataList(data);
+
+    // Clean up dynamically allocated memory
+    delete[] buff;
+
+    return loc;
+}
 
 /*
 ////////////////////////////////////////////////////////////////////////////////

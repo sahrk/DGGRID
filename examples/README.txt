@@ -16,8 +16,10 @@ subdirectory using:
 
   dggrid theFileName.meta
 
-Two bash shell scripts are provided for running the 
-examples: 
+The two bash shell scripts below are provided for running the 
+examples. We recommend running cleanexamples.sh (see below)
+before each run of these scripts to avoid spurious error
+messages.
 
   doexamples.sh - executes all examples and performs a
     diff of the output files with output that has been
@@ -46,4 +48,4 @@ maintain the examples directory:
 
   copyexamples.sh - copy the outputs generated in the
     examples directories by the last run of doexamples.sh 
-    into sampleOutput
+    into sampleOutput.
