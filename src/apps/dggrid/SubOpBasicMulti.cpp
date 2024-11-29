@@ -37,59 +37,7 @@ SubOpBasicMulti::SubOpBasicMulti (OpBasic& _op, bool _activate)
    : SubOpBasic (_op, _activate)
 { }
 
-//////////////////////////////////////////////////////////////////////////////////
-/*
-DgLocationData*
-SubOpBasicMulti::inStrToPointLoc (const string& inStr) const {
-
-   // setup for strtok
-   char delimStr[2];
-   delimStr[0] = op.inOp.inputDelimiter;
-   delimStr[1] = '\0';
-
-   // parse the address to get the node
-   const char* remainder = nullptr;
-   char* buff = new char[inStr.length() + 1];
-   strcpy(buff, inStr.c_str());
-   DgLocationData* loc = nullptr;
-   if (op.inOp.inSeqNum) {
-      char* snStr;
-      snStr = strtok(buff, delimStr);
-      unsigned long int sNum;
-      if (sscanf(snStr, "%lu", &sNum) != 1) {
-         ::report("doTransform(): invalid SEQNUM " + string(snStr),
-                     DgBase::Fatal);
-      }
-
-      DgLocation* tmpLoc = static_cast<const DgIDGGBase&>(*op.inOp.pInRF).bndRF().locFromSeqNum(sNum);
-      loc = new DgLocationData(*tmpLoc);
-      delete tmpLoc;
-      remainder = &(buff[strlen(snStr)]);
-   } else {
-      loc = new DgLocationData(*op.inOp.pInRF);
-      remainder = loc->fromString(buff, op.inOp.inputDelimiter);
-   }
-
-   // skip any whitespace
-   while (remainder && isspace(*remainder)) remainder++;
-
-   // remainder of line is a single data field
-   // (this should really parse the line into multiple fields)
-   DgDataList* data = nullptr;
-   if (remainder && strlen(remainder) > 0) {
-      data = new DgDataList();
-      string remStr(remainder);
-      DgDataFieldString* field = new DgDataFieldString("data", remStr);
-      data->list().push_back(field);
-   }
-
-   // build the cell
-   loc->setDataList(data);
-
-   return loc;
-
-} // DgLocationData* SubOpBasicMulti::inStrToPointLoc
-*/
+////////////////////////////////////////////////////////////////////////////////
 DgLocationData* SubOpBasicMulti::inStrToPointLoc(const std::string& inStr) const {
     // Setup for strtok
     char delimStr[2];
@@ -151,7 +99,7 @@ DgLocationData* SubOpBasicMulti::inStrToPointLoc(const std::string& inStr) const
     delete[] buff;
 
     return loc;
-}
+} // DgLocationData* SubOpBasicMulti::inStrToPointLoc
 
 /*
 ////////////////////////////////////////////////////////////////////////////////

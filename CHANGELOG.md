@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file.
 
 All changes are by Kevin Sahr, unless otherwise noted.
 
+## [8.35] - 2024-11-28
+### Changed
+- cell output format in example gdalExample was changed to GeoJSON to avoid potential issues with GDAL KML driver
+### Fixed
+- incorrect parsing of text input lines in SubOpBasicMulti::inStrToPointLoc
+
 ## [8.34] - 2024-11-13
 ### Fixed
 - correctly handles math constants in Windows (thanks to @allixender)
