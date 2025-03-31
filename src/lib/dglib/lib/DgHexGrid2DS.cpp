@@ -84,7 +84,7 @@ DgHexGrid2DS::DgHexGrid2DS (DgRFNetwork& networkIn,
             (*grids_)[r] = DgHexC2Grid2D::makeRF(network(), *ccRF, newName);
       }
 
-      Dg2WayResAddConverter<DgIVec2D, DgDVec2D, long double>(*this, *(grids()[r]), r);
+      Dg2WayTopoResAddConverter<DgIVec2D, DgDVec2D, long double>(*this, *(grids()[r]), r);
       // setup for next res
       if (r < apSeq().lastRes())
          ap = apSeq().getAperture(r + 1).aperture();
@@ -181,7 +181,7 @@ cerr << "KEVIN: DEPRECATED DgHexGrid2DS" << endl;
          (*grids_)[i] = DgHexC2Grid2D::makeRF(network(), *ccRF, newName);
       }
 
-      Dg2WayResAddConverter<DgIVec2D, DgDVec2D, long double>(*this, *(grids()[i]), i);
+      Dg2WayTopoResAddConverter<DgIVec2D, DgDVec2D, long double>(*this, *(grids()[i]), i);
       if (isMixed43())
       {
          if (i < numAp4())

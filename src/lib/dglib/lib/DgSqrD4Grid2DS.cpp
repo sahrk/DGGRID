@@ -25,10 +25,13 @@
 #include <cmath>
 
 #include <dglib/DgContCartRF.h>
+#include <dglib/DgDVec2D.h>
+#include <dglib/DgIVec2D.h>
 #include <dglib/DgDiscTopoRF.h>
 #include <dglib/DgSqrD4Grid2D.h>
 #include <dglib/DgSqrD4Grid2DS.h>
 #include <dglib/DgSqrD8Grid2D.h>
+#include <dglib/DgDiscRFSGrids.h>
 
 using namespace dgg::topo;
 
@@ -86,7 +89,8 @@ DgSqrD4Grid2DS::DgSqrD4Grid2DS (DgRFNetwork& networkIn,
       Dg2WayContAffineConverter(backFrame(), *ccRF, (long double) fac, 0.0, trans);
 
       (*grids_)[i] = DgSqrD4Grid2D::makeRF(network(), *ccRF, newName);
-      Dg2WayResAddConverter<DgIVec2D, DgDVec2D, long double>(*this, *(grids()[i]), i);
+      //Dg2WayResAddConverter<DgIVec2D, DgDVec2D, long double> converter(*this, *(grids()[i]), i);
+      Dg2WayTopoResAddConverter<DgIVec2D, DgDVec2D, long double>{*this, *(grids()[i]), i};
 
       fac *= radix();
    }

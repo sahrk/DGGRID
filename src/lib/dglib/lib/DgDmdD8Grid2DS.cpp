@@ -94,7 +94,7 @@ DgDmdD8Grid2DS::DgDmdD8Grid2DS (DgRFNetwork& networkIn,
       Dg2WayContAffineConverter (backFrame(), *ccRF, (long double) fac, 0.0, trans);
 
       (*grids_)[i] = DgDmdD8Grid2D::makeRF(network(), *ccRF, newName);
-      Dg2WayResAddConverter<DgIVec2D, DgDVec2D, long double> (*this, *(grids()[i]), i);
+      Dg2WayTopoResAddConverter<DgIVec2D, DgDVec2D, long double> (*this, *(grids()[i]), i);
 
       fac *= radix();
    }

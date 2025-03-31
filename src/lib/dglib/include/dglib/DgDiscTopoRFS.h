@@ -379,6 +379,18 @@ template<class A, class B, class DB> class DgDiscTopoRFS
 
 };
 
+////////////////////////////////////////////////////////////////////////////////
+template <class A, class B, class DB> class Dg2WayTopoResAddConverter
+                                : public Dg2WayResAddConverter<DgDiscTopoRF, A, B, DB, B> {
+
+   public:
+
+      Dg2WayTopoResAddConverter (DgDiscRF<DgResAdd<A>, B, DB>& fromFrame,
+                                 //const DgDiscRFSGrids<DgDiscTopoRF, A, B, DB, B>& fromFrame,
+                                 const DgDiscRF<A, B, DB>& toFrame, int res)
+                                    : Dg2WayResAddConverter<DgDiscTopoRF, A, B, DB, B> (fromFrame, toFrame, res) {  }
+};
+
 // JFW: is this really what we mean?
 #include "../lib/DgDiscTopoRFS.hpp"
 

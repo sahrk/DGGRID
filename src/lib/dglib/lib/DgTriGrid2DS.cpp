@@ -25,10 +25,12 @@
 #include <cmath>
 
 #include <dglib/DgContCartRF.h>
+#include <dglib/DgDVec2D.h>
 #include <dglib/DgIVec2D.h>
 #include <dglib/DgDiscTopoRF.h>
 #include <dglib/DgTriGrid2D.h>
 #include <dglib/DgTriGrid2DS.h>
+#include <dglib/DgDiscRFSGrids.h>
 
 using namespace dgg::topo;
 
@@ -73,7 +75,7 @@ DgTriGrid2DS::DgTriGrid2DS (DgRFNetwork& networkIn,
       Dg2WayContAffineConverter(backFrame(), *ccRF, (long double) fac, 0.0, trans);
 
       (*grids_)[i] = DgTriGrid2D::makeRF(network(), *ccRF, newName);
-      Dg2WayResAddConverter<DgIVec2D, DgDVec2D, long double>(*this, *(grids()[i]), i);
+      Dg2WayTopoResAddConverter<DgIVec2D, DgDVec2D, long double>(*this, *(grids()[i]), i);
 
       fac *= radix();
    }
