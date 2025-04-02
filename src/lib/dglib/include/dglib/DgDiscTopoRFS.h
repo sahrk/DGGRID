@@ -37,7 +37,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 template<class A, class B, class DB> class DgDiscTopoRFS
-         : public DgDiscTopoRF<DgResAdd<A>, B, DB>, 
+         : public DgDiscTopoRF<DgResAdd<A>, B, DB>,
            public DgDiscRFSGrids<DgDiscTopoRF, A, B, DB, B> {
    
    public:

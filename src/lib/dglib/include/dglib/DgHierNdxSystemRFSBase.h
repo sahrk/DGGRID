@@ -30,6 +30,8 @@
 
 class DgHierNdxSystemRFBase;
 class DgHierNdx;
+class DgQ2DICoord;
+class DgIDGGSBase;
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgHierNdxSystemRFSBase : 

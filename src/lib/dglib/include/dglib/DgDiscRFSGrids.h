@@ -95,8 +95,21 @@ template<class A> ostream& operator<< (ostream& stream, const DgResAdd<A>& add)
 } // ostream& operator<<
 
 ////////////////////////////////////////////////////////////////////////////////
+/** @class DgDiscRFSGrids
+ *  @brief A multi-resolution array of pointers to DgDiscRF's
+ *
+ *   Has template parameters:
+ *
+ *   DRF - class of each resolution in the grids_ array; should have A addresses
+ *   A - the DiscRF type to be wrapped in DgResAdd
+ *   B - background RF type for DgResAdd<A>
+ *   DB - distance type of background RF
+ *   BG -  background RF for each resolution grid 
+ *   
+ *   each resolution in the grids_ array is a DRF<A, BG, DB>*
+ */
+
 template<template <class, class, class> class DRF, class A, class B, class DB, class BG> class DgDiscRFSGrids {
-//                               : public DgDiscRF<DgResAdd<A>, B, DB> {
 
    public:
 

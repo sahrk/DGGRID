@@ -78,7 +78,7 @@ DgTriGrid2DS::DgTriGrid2DS (DgRFNetwork& networkIn,
       Dg2WayTopoResAddConverter<DgIVec2D, DgDVec2D, long double>(*this, *(grids()[i]), i);
 
       fac *= radix();
-   }
+   } 
 
 } // DgTriGrid2DS::DgTriGrid2DS
 
