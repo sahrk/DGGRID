@@ -229,12 +229,12 @@ template<template <class, class, class> class DRF, class A, class B, class DB, c
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-template <template <class, class, class> class DRF, class A, class B, class DB, class BG> class DgResAddConverter :
+template <template <class, class, class> class DRFS, class DRF, class A, class B, class DB, class BG> class DgResAddConverter :
     public DgConverter<DgResAdd<A>, long long int, A, long long int> {
 
    public:
 
-      DgResAddConverter (const DgDiscRFSGrids<DRF, A, B, DB, BG>& fromFrame,
+      DgResAddConverter (const DRFS<A, B, DB>& fromFrame,
                          const DgDiscRF<A, BG, DB>& toFrame, int resIn)
          : DgConverter<DgResAdd<A>, long long int, A,
                  long long int> (fromFrame, toFrame),
@@ -260,9 +260,9 @@ template <template <class, class, class> class DRF, class A, class B, class DB, 
 
       int res (void) const { return res_; }
 
-      const DgDiscRFSGrids<DRF, A, B, DB, BG>& discRFS (void) const { return discRFS_; }
+      const DRFS<A, B, DB>& discRFS (void) const { return discRFS_; }
 
-      const DRF<A, B, DB>& discRF (void) const { return discRF_; }
+      const DRF<A, BG, DB>& discRF (void) const { return discRF_; }
 
       virtual A convertTypedAddress (const DgResAdd<A>& add) const
         {
@@ -285,13 +285,13 @@ template <template <class, class, class> class DRF, class A, class B, class DB, 
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-template <template <class, class, class> class DRF, class A, class B, class DB, class BG> class DgAddResConverter :
+template <template <class, class, class> class DRFS, class A, class B, class DB, class BG> class DgAddResConverter :
     public DgConverter<A, long long int, DgResAdd<A>, long long int> {
 
    public:
 
       DgAddResConverter (const DgDiscRF<A, BG, DB>& fromFrame,
-                         const DgDiscRFSGrids<DRF, A, B, DB, BG>& toFrame, int resIn)
+                         const DRFS<A, B, DB>& toFrame, int resIn)
          : DgConverter<A, long long int, DgResAdd<A>,
                        long long int> (fromFrame, toFrame),
            res_ (resIn), discRFS_ (toFrame), discRF_ (fromFrame)
