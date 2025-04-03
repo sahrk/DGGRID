@@ -33,6 +33,8 @@
 #include <dglib/DgPolygon.h>
 #include <dglib/DgRF.h>
 
+//class DgDiscTopoRFS;
+
 ////////////////////////////////////////////////////////////////////////////////
 template<class A> class DgResAdd {
 
@@ -331,20 +333,6 @@ template <template <class, class, class> class DRF, class A, class B, class DB, 
 
 };
 
-////////////////////////////////////////////////////////////////////////////////
-template <template <class, class, class> class DRF, class A, class B, class DB, class BG> class Dg2WayResAddConverter
-                                               : public Dg2WayConverter {
-
-   public:
-
-      Dg2WayResAddConverter (const DgDiscRFSGrids<DRF, A, B, DB, BG>& fromFrame,
-                             const DgDiscRF<A, BG, DB>& toFrame, int res)
-         : Dg2WayConverter
-              (*(new DgResAddConverter<DRF, A, B, DB, BG>(fromFrame, toFrame, res)),
-               *(new DgAddResConverter<DRF, A, B, DB, BG>(toFrame, fromFrame, res)))
-           { }
-
-};
 
 // JFW: is this really what we mean?
 //#include "../lib/DgDiscRFSGrids.hpp"

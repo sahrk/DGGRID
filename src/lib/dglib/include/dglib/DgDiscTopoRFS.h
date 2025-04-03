@@ -385,10 +385,40 @@ template <class A, class B, class DB> class Dg2WayTopoResAddConverter
 
    public:
 
-      Dg2WayTopoResAddConverter (DgDiscRF<DgResAdd<A>, B, DB>& fromFrame,
+      Dg2WayTopoResAddConverter (const DgDiscTopoRFS<A, B, DB>& fromFrame,
+                                 //DgDiscRF<DgResAdd<A>, B, DB>& fromFrame,
                                  //const DgDiscRFSGrids<DgDiscTopoRF, A, B, DB, B>& fromFrame,
                                  const DgDiscRF<A, B, DB>& toFrame, int res)
                                     : Dg2WayResAddConverter<DgDiscTopoRF, A, B, DB, B> (fromFrame, toFrame, res) {  }
+};
+
+////////////////////////////////////////////////////////////////////////////////
+/** @class Dg2WayResAddConverter
+*  @brief Converts to/from DgResAdd<A> and an A in the correct resolution grid
+*
+*   Has template parameters:
+*
+*   DRF - class of each resolution in the grids_ array; should have A addresses
+*   A - the DiscRF type to be wrapped in DgResAdd
+*   B - background RF type for DgResAdd<A>
+*   DB - distance type of background RF
+*   BG -  background RF for each resolution grid
+*
+*   each resolution in DgDiscRFSGrids fromFrame grids_ array is a DRF<A, BG, DB>*
+*/
+
+template <template <class, class, class> class DRF, class A, class B, class DB, class BG> class Dg2WayResAddConverter
+                                               : public Dg2WayConverter {
+
+   public:
+
+      Dg2WayResAddConverter (const DgDiscTopoRFS<A, B, DB>& fromFrame,
+                             const DgDiscRF<A, BG, DB>& toFrame, int res)
+         : Dg2WayConverter
+              (*(new DgResAddConverter<DRF, A, B, DB, BG>(fromFrame, toFrame, res)),
+               *(new DgAddResConverter<DRF, A, B, DB, BG>(toFrame, fromFrame, res)))
+           { }
+
 };
 
 // JFW: is this really what we mean?
