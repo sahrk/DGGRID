@@ -383,7 +383,7 @@ SubOpOut::outputCellAdd2D (const DgLocation& add2D, const string* labelIn,
    if (ndxParentOutType != "NONE") {
 
 // KEVIN XXX
-       hierNdxIDGGS->setNdxParent(q2diR, ndxParent);
+       pHierNdxIDGGS->setNdxParent(q2diR, ndxParent);
 
       if (ndxPrtOut)
          ndxPrtOut->insert(add2D, ndxParent);

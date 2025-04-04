@@ -97,98 +97,43 @@ template<class A> ostream& operator<< (ostream& stream, const DgResAdd<A>& add)
 } // ostream& operator<<
 
 ////////////////////////////////////////////////////////////////////////////////
-/** @class DgDiscRFSGrids
- *  @brief A multi-resolution array of pointers to DgDiscRF's
- *
- *   Has template parameters:
- *
- *   DRF - class of each resolution in the grids_ array; should have A addresses
- *   A - the DiscRF type to be wrapped in DgResAdd
- *   B - background RF type for DgResAdd<A>
- *   DB - distance type of background RF
- *   BG -  background RF for each resolution grid 
- *   
- *   each resolution in the grids_ array is a DRF<A, BG, DB>*
- */
-
-template<template <class, class, class> class DRF, class A, class B, class DB, class BG> class DgDiscRFSGrids {
+template<class A, class B, class BG, class DB> class DgDiscRFSGridsBase {
 
    public:
 
-      virtual ~DgDiscRFSGrids (void) { delete grids_; }
-/*
-      virtual string add2str (const DgResAdd<A>& add) const
-                                              { return string(add); }
+      virtual ~DgDiscRFSGridsBase (void) { }
 
-      virtual string add2str (const DgResAdd<A>& add, char delimiter) const
-                  { return dgg::util::to_string(add.res()) + delimiter +
-                        grids()[add.res()]->add2str(add.address(), delimiter); }
-
-      virtual const char* str2add (DgResAdd<A>* add, const char* str,
-                                   char delimiter) const;
- */
-
-      DgDiscRFSGrids<DRF, A, B, DB, BG>& operator=
-                      (const DgDiscRFSGrids<DRF, A, B, DB, BG>& rf)
-      // shallow copy with possible memory leak; don't use if avoidable
-          {
-             if (*this != rf)
-             {
-                //DRF<DgResAdd<A>, B, DB>::operator=(rf);
-
-                nRes_ = rf.nRes();
-                delete grids_; // the DgRFNetwork will delete the grids themselves
-
-                grids_ = new vector<const DRF<A, BG, DB>*>(rf.nRes());
-                for (int i = 0; i < nRes(); i++)
-                {
-                   // KLUDGE: don't know real type of each grid so can't
-                   // easily create them here; opt for shallow copy
-
-                   (*grids_)[i] = rf.grids()[i];
-                }
-            }
-
-            return *this;
-         }
-
-      const vector<const DRF<A, BG, DB>*>& grids (void) const { return *grids_; }
+      // sub-classes must define
+      virtual const DgDiscRF<A, BG, DB>& discRF (int res) const = 0;
 
       int nRes (void) const { return nRes_; }
 
-      // no bounds checking
-
-      const DRF<A, BG, DB>& operator[] (int res) const
-                           { return *((*grids_)[res]); }
-
       virtual operator string (void) const
       {
-         string s = "*** DgDiscRFSGrids\nnRes: " + dgg::util::to_string(nRes()) + "\n";
+         string s = "*** DgDiscRFSGridsBase\nnRes: " + dgg::util::to_string(nRes()) + "\n";
          for (int i = 0; i < nRes(); i++)
             s += " >>> " + dgg::util::to_string(i) + ": " +
-                   string(*(*grids_)[i]) + "\n";
+                   string(discRF(i)) + "\n";
 
          return s;
       }
 
    protected:
 
-      DgDiscRFSGrids (const DgRF<B, DB>& backFrameIn, int nResIn)
-         : backFrameLocal_ (backFrameIn), grids_ (nullptr), nRes_ (nResIn)
+      DgDiscRFSGridsBase (const DgRF<B, DB>& backFrameIn, int nResIn)
+         : backFrameLocal_ (backFrameIn), nRes_ (nResIn)
         {
-          this->grids_ = new vector<const DRF<A, BG, DB>*>(nRes(), nullptr);
           if (nRes() < 0) {
-             report("DgDiscRFSGrids<DRF, A, B, DB, BG>::DgDiscRF() nRes < 0",
+             report("DgDiscRFSGridsBase<A, B, DB>::DgDiscRFSGridsBase() nRed < 0",
                     DgBase::Fatal);
           }
         }
 
+/*
       DgDiscRFSGrids (const DgDiscRFSGrids<DRF, A, B, DB, BG>& rf) // uses dubious operator=
         //: DgDiscRF<DgResAdd<A>, B, DB> (rf)
         { *this = rf; }
-
-      vector<const DRF<A, BG, DB>*>& gridsMutable (void) const { return *grids_; }
-
+*/
       // hokey temporary notion of distance
       virtual long long int distRFS (const DgResAdd<A>& add1,
                       const DgResAdd<A>& add2) const
@@ -220,37 +165,151 @@ template<template <class, class, class> class DRF, class A, class B, class DB, c
      */
 
       // state data
-      //using ConstDRFPtr = const typename DRF<A, B, DB>*;
-      //std::vector<ConstDRFPtr>* grids_;
       const DgRF<B, DB>& backFrameLocal_;
-      vector<const DRF<A, BG, DB>*>* grids_;
       int nRes_;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
+/** @class DgDiscRFSGrids
+ *  @brief A multi-resolution array of pointers to DgDiscRF's
+ *
+ *   Has template parameters:
+ *
+ *   DRF - class of each resolution in the grids_ array; should have A addresses
+ *   A - the DiscRF type to be wrapped in DgResAdd
+ *   B - background RF type for DgResAdd<A>
+ *   DB - distance type of background RF
+ *   BG -  background RF for each resolution grid 
+ *   
+ *   each resolution in the grids_ array is a DRF<A, BG, DB>*
+ */
+
+template<template <class, class, class> class DRF, class A, class B, class DB, class BG> class DgDiscRFSGrids 
+               : public DgDiscRFSGridsBase<A, B, BG, DB> {
+
+   public:
+
+      virtual ~DgDiscRFSGrids (void) { delete grids_; }
+/*
+      virtual string add2str (const DgResAdd<A>& add) const
+                                              { return string(add); }
+
+      virtual string add2str (const DgResAdd<A>& add, char delimiter) const
+                  { return dgg::util::to_string(add.res()) + delimiter +
+                        grids()[add.res()]->add2str(add.address(), delimiter); }
+
+      virtual const char* str2add (DgResAdd<A>* add, const char* str,
+                                   char delimiter) const;
+ */
+
+      DgDiscRFSGrids<DRF, A, B, DB, BG>& operator=
+                      (const DgDiscRFSGrids<DRF, A, B, DB, BG>& rf)
+      // shallow copy with possible memory leak; don't use if avoidable
+          {
+             if (*this != rf)
+             {
+                //DRF<DgResAdd<A>, B, DB>::operator=(rf);
+
+                this->nRes_ = rf.nRes();
+                delete grids_; // the DgRFNetwork will delete the grids themselves
+
+                grids_ = new vector<const DRF<A, BG, DB>*>(rf.nRes());
+                for (int i = 0; i < rf.nRes(); i++)
+                {
+                   // KLUDGE: don't know real type of each grid so can't
+                   // easily create them here; opt for shallow copy
+
+                   (*grids_)[i] = rf.grids()[i];
+                }
+            }
+
+            return *this;
+         }
+
+      const vector<const DRF<A, BG, DB>*>& grids (void) const { return *grids_; }
+
+      // no bounds checking
+      const DRF<A, BG, DB>& operator[] (int res) const
+                           { return *((*grids_)[res]); }
+
+      // pure virtual from above
+      virtual const DgDiscRF<A, BG, DB>& discRF (int res) const
+                           { return *((*grids_)[res]); }
+
+   protected:
+
+      DgDiscRFSGrids (const DgRF<B, DB>& backFrameIn, int nResIn)
+         : DgDiscRFSGridsBase<A, B, BG, DB>(backFrameIn, nResIn), grids_ (nullptr)
+        {
+          this->grids_ = new vector<const DRF<A, BG, DB>*>(this->nRes(), nullptr);
+        }
+
+      DgDiscRFSGrids (const DgDiscRFSGrids<DRF, A, B, DB, BG>& rf) // uses dubious operator=
+        //: DgDiscRF<DgResAdd<A>, B, DB> (rf)
+        { *this = rf; }
+
+      vector<const DRF<A, BG, DB>*>& gridsMutable (void) const { return *grids_; }
+
+    /*
+      virtual DgResAdd<A> quantifyRFS (const B& point) const
+            {
+               // quantify using max res grid
+               int maxRes = nRes() - 1;
+               DgLocation* loc = backFrameLocal_.makeLocation(point);
+               const DRF<A, B, DB>& grid = *grids()[maxRes];
+               grid.convert(loc);
+               DgResAdd<A> add(*grid.getAddress(*loc), maxRes);
+
+               delete loc;
+
+               return add;
+             }
+
+      virtual B invQuantifyRFS (const DgResAdd<A>& add) const
+             {
+               const DRF<A, B, DB>& grid = *grids()[add.res()];
+               DgLocation* loc = grid.makeLocation(add.address());
+               backFrameLocal_.convert(loc);
+               B newAdd(*(backFrameLocal_.getAddress(*loc)));
+               delete loc;
+               return newAdd;
+             }
+     */
+
+      // state data
+      vector<const DRF<A, BG, DB>*>* grids_;
+};
+
 ////////////////////////////////////////////////////////////////////////////////
-template <template <class, class, class> class DRFS, class DRF, class A, class B, class DB, class BG> class DgResAddConverter :
+////////////////////////////////////////////////////////////////////////////////
+template <class A, class B, class BG, class DB> class DgResAddConverter :
     public DgConverter<DgResAdd<A>, long long int, A, long long int> {
 
    public:
 
-      DgResAddConverter (const DRFS<A, B, DB>& fromFrame,
-                         const DgDiscRF<A, BG, DB>& toFrame, int resIn)
+      DgResAddConverter (const DgDiscRF<DgResAdd<A>, B, DB>& fromFrameRFS,
+                         const DgDiscRF<A, BG, DB>& toFrameRF, int resIn)
          : DgConverter<DgResAdd<A>, long long int, A,
-                 long long int> (fromFrame, toFrame),
-           res_ (resIn), discRFS_ (fromFrame), discRF_ (toFrame)
+                 long long int> (fromFrameRFS, toFrameRF),
+           res_ (resIn), discRF_ (toFrameRF)
            {
+              discRFS_ = dynamic_cast<const DgDiscRFSGridsBase<A, B, BG, DB>*>(&fromFrameRFS);
+              if (!discRFS_) {
+                 report("DgResAddConverter<A, B, BG, DB>::DgResAddConverter() "
+                        "from frame is not a DgDiscRFSGridsBase", DgBase::Fatal);
+              }
+
 	      // JFW: second clause will never be > (int vs long):
               if (res() < 0 ||
-                  static_cast<unsigned long>(res()) >= discRFS().grids().size())
+                  static_cast<unsigned long>(res()) >= discRFS().nRes() + 1)
               {
-                 report("DgResAddConverter<A, B, DB, BG>::DgResAddConverter() "
+                 report("DgResAddConverter<A, B, BG, DB>::DgResAddConverter() "
                         "invalid resolution", DgBase::Fatal);
               }
 
-              if (*(discRFS().grids()[res()]) != discRF())
+              if (*(discRFS().discRF(res())) != discRF())
               {
-                 report("DgDgResAddConverter<A, B, DB, BG>::DgResAddConverter() "
+                 report("DgDgResAddConverter<A, B, BG, DB>::DgResAddConverter() "
                         "grid mismatch", DgBase::Fatal);
               }
            }
@@ -260,16 +319,16 @@ template <template <class, class, class> class DRFS, class DRF, class A, class B
 
       int res (void) const { return res_; }
 
-      const DRFS<A, B, DB>& discRFS (void) const { return discRFS_; }
+      const DgDiscRFSGridsBase<A, B, BG, DB>& discRFS (void) const { return discRFS_; }
 
-      const DRF<A, BG, DB>& discRF (void) const { return discRF_; }
+      const DgDiscRF<A, BG, DB>& discRF (void) const { return discRF_; }
 
       virtual A convertTypedAddress (const DgResAdd<A>& add) const
         {
            if (add.res() == res()) return add.address();
 
            DgLocation* tmpLoc =
-             discRFS().grids()[add.res()]->makeLocation(add.address());
+             discRFS().discRF(add.res())->makeLocation(add.address());
            discRF().convert(tmpLoc);
            A newAdd = *(discRF().getAddress(*tmpLoc));
            delete tmpLoc;
@@ -279,46 +338,53 @@ template <template <class, class, class> class DRFS, class DRF, class A, class B
    protected:
 
       int res_;
-      const DgDiscRFSGrids<DRF, A, B, DB, BG>& discRFS_;
-      const DRF<A, BG, DB>& discRF_;
+      const DgDiscRFSGridsBase<A, B, BG, DB>& discRFS_;
+      const DgDiscRF<A, BG, DB>& discRF_;
 
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-template <template <class, class, class> class DRFS, class A, class B, class DB, class BG> class DgAddResConverter :
-    public DgConverter<A, long long int, DgResAdd<A>, long long int> {
+////////////////////////////////////////////////////////////////////////////////
+template <class A, class B, class BG, class DB> class DgAddResConverter :
+    public DgConverter<DgResAdd<A>, long long int, A, long long int> {
 
    public:
 
-      DgAddResConverter (const DgDiscRF<A, BG, DB>& fromFrame,
-                         const DRFS<A, B, DB>& toFrame, int resIn)
+      DgAddResConverter (const DgDiscRF<A, BG, DB>& fromFrameRF,
+                         const DgDiscRF<DgResAdd<A>, B, DB>& toFrameRFS, int resIn)
          : DgConverter<A, long long int, DgResAdd<A>,
-                       long long int> (fromFrame, toFrame),
-           res_ (resIn), discRFS_ (toFrame), discRF_ (fromFrame)
+                 long long int> (fromFrameRF, toFrameRFS),
+           res_ (resIn), discRF_ (fromFrameRF)
            {
-              // JFW: Note that int res() > long size() can never occur:
+              discRFS_ = dynamic_cast<const DgDiscRFSGridsBase<A, B, BG, DB>*>(&toFrameRFS);
+              if (!discRFS_) {
+                 report("DgAddResConverter<A, B, DB>::DgAddResConverter() "
+                        "from frame is not a DgDiscRFSGridsBase", DgBase::Fatal);
+              }
+
+	      // JFW: second clause will never be > (int vs long):
               if (res() < 0 ||
-                static_cast<unsigned long>(res()) >= discRFS().grids().size())
+                  static_cast<unsigned long>(res()) >= discRFS().nRes() + 1)
               {
-                 report("DgDgAddResConverter<A, B, DB, BG>::DgAddResConverter() "
+                 report("DgAddResConverter<A, B, DB>::DgAddResConverter() "
                         "invalid resolution", DgBase::Fatal);
               }
 
-              if (*(discRFS().grids()[res()]) != discRF())
+              if (*(discRFS().discRF(res())) != discRF())
               {
-                 report("DgAddResConverter<A, B, DB, BG>::DgAddResConverter() "
+                 report("DgDgAddResConverter<A, B, DB>::DgAddResConverter() "
                         "grid mismatch", DgBase::Fatal);
               }
            }
 
       DgAddResConverter (const DgAddResConverter& con)
-         : DgConverter<A, long long int, DgResAdd<A>, long long int> (con) { }
+         : DgConverter<DgResAdd<A>, long long int, A, long long int> (con) { }
 
       int res (void) const { return res_; }
 
-      const DgDiscRFSGrids<DRF, A, B, DB, BG>& discRFS (void) const { return discRFS_; }
+      const DgDiscRFSGridsBase<A, B, BG, DB>& discRFS (void) const { return discRFS_; }
 
-      const DRF<A, BG, DB>& discRF (void) const { return discRF_; }
+      const DgDiscRF<A, BG, DB>& discRF (void) const { return discRF_; }
 
       virtual DgResAdd<A> convertTypedAddress (const A& add) const
         {
@@ -328,13 +394,11 @@ template <template <class, class, class> class DRFS, class A, class B, class DB,
    protected:
 
       int res_;
-      const DgDiscRFSGrids<DRF, A, B, DB, BG>& discRFS_;
-      const DRF<A, BG, DB>& discRF_;
+      const DgDiscRFSGridsBase<A, B, BG, DB>& discRFS_;
+      const DgDiscRF<A, BG, DB>& discRF_;
 
 };
 
-
-// JFW: is this really what we mean?
-//#include "../lib/DgDiscRFSGrids.hpp"
-
 #endif
+
+

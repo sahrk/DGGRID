@@ -380,19 +380,6 @@ template<class A, class B, class DB> class DgDiscTopoRFS
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-template <class A, class B, class DB> class Dg2WayTopoResAddConverter
-                                : public Dg2WayResAddConverter<DgDiscTopoRF, A, B, DB, B> {
-
-   public:
-
-      Dg2WayTopoResAddConverter (const DgDiscTopoRFS<A, B, DB>& fromFrame,
-                                 //DgDiscRF<DgResAdd<A>, B, DB>& fromFrame,
-                                 //const DgDiscRFSGrids<DgDiscTopoRF, A, B, DB, B>& fromFrame,
-                                 const DgDiscRF<A, B, DB>& toFrame, int res)
-                                    : Dg2WayResAddConverter<DgDiscTopoRF, A, B, DB, B> (fromFrame, toFrame, res) {  }
-};
-
-////////////////////////////////////////////////////////////////////////////////
 /** @class Dg2WayResAddConverter
 *  @brief Converts to/from DgResAdd<A> and an A in the correct resolution grid
 *
@@ -407,18 +394,31 @@ template <class A, class B, class DB> class Dg2WayTopoResAddConverter
 *   each resolution in DgDiscRFSGrids fromFrame grids_ array is a DRF<A, BG, DB>*
 */
 
-template <template <class, class, class> class DRF, class A, class B, class DB, class BG> class Dg2WayResAddConverter
+template <class A, class B, class BG, class DB> class Dg2WayResAddConverter
                                                : public Dg2WayConverter {
 
    public:
 
-      Dg2WayResAddConverter (const DgDiscRFS<A, B, DB>& fromFrame,
-                             const DgDiscRF<A, BG, DB>& toFrame, int res)
+      Dg2WayResAddConverter (const DgDiscRF<DgResAdd<A>, B, DB>& fromFrameRFS,
+                             const DgDiscRF<A, BG, DB>& toFrameRF, int res)
          : Dg2WayConverter
-              (*(new DgResAddConverter<DRF, A, B, DB, BG>(fromFrame, toFrame, res)),
-               *(new DgAddResConverter<DRF, A, B, DB, BG>(toFrame, fromFrame, res)))
+              (*(new DgResAddConverter<A, B, BG, DB>(fromFrameRFS, toFrameRF, res)),
+               *(new DgAddResConverter<A, B, BG, DB>(toFrameRF, fromFrameRFS, res)))
            { }
 
+};
+
+////////////////////////////////////////////////////////////////////////////////
+template <class A, class B, class DB> class Dg2WayTopoResAddConverter
+                                : public Dg2WayResAddConverter<A, B, B, DB> {
+
+   public:
+
+      Dg2WayTopoResAddConverter (const DgDiscTopoRFS<DgResAdd<A>, B, DB>& fromFrameRFS,
+                                 //DgDiscRF<DgResAdd<A>, B, DB>& fromFrame,
+                                 //const DgDiscRFSGrids<DgDiscTopoRF, A, B, DB, B>& fromFrame,
+                                 const DgDiscRF<A, B, DB>& toFrameRF, int res)
+                                    : Dg2WayResAddConverter<A, B, B, DB> (fromFrameRFS, toFrameRF, res) {  }
 };
 
 // JFW: is this really what we mean?

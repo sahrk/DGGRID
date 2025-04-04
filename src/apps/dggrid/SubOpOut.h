@@ -48,7 +48,7 @@ class DgOutNdxChildrenFile;
 class DgOutNdxParentFile;
 class DgRandom;
 class DgDataList;
-class DgNdxHierHexIDGGS;
+class DgHierNdxSystemRFS;
 
 struct OpBasic;
 
@@ -75,7 +75,7 @@ struct SubOpOut : public SubOpBasic {
    const DgRFBase* pOutRF;     // RF for output addresses
    const DgRFBase* pChdOutRF;  // RF for output addresses at child resolution
    const DgRFBase* pNdxPrtOutRF;  // RF for output addresses at parent resolution
-   const DgNdxHierHexIDGGS* ndxHierIDGGS; // defines hierarchical indexing
+   const DgHierNdxSystemRFS* pHierNdxIDGGS; // defines hierarchical indexing
    dgg::addtype::DgAddressType outAddType; // output address form
    dgg::addtype::DgAddressType hierNdxAddType;  // hierarchical indexing type
    bool outSeqNum;             // are the output addresses sequence numbers?
