@@ -65,6 +65,7 @@
 #include <dglib/DgTriGrid2D.h>
 #include <dglib/DgOutRandPtsText.h>
 #include <dglib/DgZ7RF.h>
+#include <dglib/DgHierNdxSysType.h>
 
 #include "DgHexSF.h"
 
@@ -73,6 +74,7 @@
 
 using namespace std;
 using namespace dgg::addtype;
+using namespace dgg::hiersystype;
 
 ////////////////////////////////////////////////////////////////////////////////
 void
@@ -413,7 +415,7 @@ SubOpOut::SubOpOut (OpBasic& op, bool _activate)
    : SubOpBasic (op, _activate),
      pOutRF (0), pChdOutRF (0), pNdxPrtOutRF (0),
      outAddType (dgg::addtype::InvalidAddressType),
-     hierNdxAddType (dgg::addtype::InvalidAddressType),
+     hierNdxSysType (dgg::hiersystype::InvalidHierNdxSysType),
      outSeqNum (false), outputDelimiter (' '), nDensify (1),
      lonWrapMode (DgGeoSphRF::Wrap), unwrapPts (true),
      doRandPts (true), ptsRand (0), nRandPts (0),
@@ -665,8 +667,8 @@ SubOpOut::setupOp (void)
    outAddType = dgg::addtype::stringToAddressType(dummy);
 
    // hierarchical indexing type
-   getParamValue(pList(), "indexing_hier_address_type", dummy, false);
-   hierNdxAddType = dgg::addtype::stringToAddressType(dummy);
+   getParamValue(pList(), "hier_indexing_system_type", dummy, false);
+   hierNdxSysType = dgg::hiersystype::stringToHierNdxSysType(dummy);
 
    // output delimiter
    getParamValue(pList(), "output_delimiter", dummy, false);
@@ -911,7 +913,7 @@ SubOpOut::executeOp (void) {
     //      const DgZXSystem*   zXSystem (void) const { return zXSystem_; }
 
    if (ndxChildrenOutType != "NONE" || ndxParentOutType != "NONE") {
-      if (hierNdxAddType == "ZX" && dgg.zXSystem()) {
+      if (hierNdxSysType == dgg::hiersystype::ZXSystem && dgg.zXSystem()) {
           //hierNdxIDGGS = dynamic_cast<const DgHierNdxHexIDGGS*>(dgg.z7RF());
           hierNdxIDGGS = dgg.zXSystem();
       } else {

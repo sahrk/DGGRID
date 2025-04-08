@@ -29,6 +29,7 @@
 #include <dglib/DgInShapefileAtt.h>
 #include <dglib/DgAddressType.h>
 #include <dglib/DgRunningStats.h>
+#include <dglib/DgHierNdxSysType.h>
 
 #include "SubOpBasic.h"
 
@@ -77,7 +78,7 @@ struct SubOpOut : public SubOpBasic {
    const DgRFBase* pNdxPrtOutRF;  // RF for output addresses at parent resolution
    const DgHierNdxSystemRFS* pHierNdxIDGGS; // defines hierarchical indexing
    dgg::addtype::DgAddressType outAddType; // output address form
-   dgg::addtype::DgAddressType hierNdxAddType;  // hierarchical indexing type
+   dgg::hiersystype::DgHierNdxSysType hierNdxSysType;  // hierarchical indexing system
    bool outSeqNum;             // are the output addresses sequence numbers?
    char outputDelimiter;
 

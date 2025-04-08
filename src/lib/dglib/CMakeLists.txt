@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 3.9)
+cmake_minimum_required (VERSION 3.10)
 
 add_library(dglib
   lib/DgAddressBase.cpp
@@ -46,6 +46,7 @@ add_library(dglib
   lib/DgHierNdxStringRF.cpp
   lib/DgHierNdxSystemRFBase.cpp
   lib/DgHierNdxSystemRFSBase.cpp
+  lib/DgHierNdxSysType.cpp
   lib/DgIcosaMap.cpp
   lib/DgIDGGBase.cpp
   lib/DgIDGG.cpp
@@ -179,6 +180,7 @@ add_library(dglib
   include/dglib/DgHierNdxSystemRFBase.h
   include/dglib/DgHierNdxSystemRFS.h
   include/dglib/DgHierNdxSystemRFSBase.h
+  include/dglib/DgHierNdxSysType.h
   include/dglib/DgIDGG.h
   include/dglib/DgIDGGBase.h
   include/dglib/DgIDGGS.h
