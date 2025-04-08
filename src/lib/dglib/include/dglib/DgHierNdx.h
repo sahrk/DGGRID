@@ -33,10 +33,9 @@
 class DgHierNdx {
 
    public:
-
+    
       static const DgHierNdx undefCoord;
-      static const DgHierNdx& undefAddress (void) { return undefCoord; }
-      
+ 
       DgHierNdx (const DgHierNdxIntCoord& intNdxIn, const DgHierNdxStringCoord& strNdxIn,
                  bool outModeIntIn = true)
          : intNdx_ (intNdxIn), strNdx_(strNdxIn), outModeInt_ (outModeIntIn)
@@ -48,6 +47,7 @@ class DgHierNdx {
 
       DgHierNdx (bool outModeIntIn = true);
     
+      // either int or string
       bool outModeInt (void) const { return outModeInt_; }
     
       const DgHierNdxIntCoord&    intNdx (void) const { return intNdx_; }
@@ -58,6 +58,8 @@ class DgHierNdx {
     
       void setOutModeInt (bool outModeIntIn) { outModeInt_ = outModeIntIn; }
 
+      virtual const DgHierNdx& undefAddress (void) const { return undefCoord; }
+    
       operator std::string (void) const { return valString(); }
 
       std::string valString (void) const;
@@ -82,7 +84,7 @@ class DgHierNdx {
            
            return *this;
         }
-
+    
    private:
 
       DgHierNdxIntCoord intNdx_;

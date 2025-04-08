@@ -35,6 +35,7 @@ class DgZ3RF;
 class DgZ3StringRF;
 class DgZ7RF;
 class DgZ7StringRF;
+class DgZXSystem;
 class DgZOrderRF;
 class DgZOrderStringRF;
 
@@ -105,6 +106,9 @@ class DgIDGGBase : public DgDiscTopoRF<DgQ2DICoord, DgGeoCoord, long double> {
       // these are only defined for aperture 3 and 4 so must be NULL-able
       const DgZOrderRF*       zorderRF     (void) const { return zorderRF_; }
       const DgZOrderStringRF* zorderStrRF  (void) const { return zorderStrRF_; }
+
+      // this is only defined for aperture 7 so must be NULL-able
+      const DgZXSystem*   zXSystem (void) const { return zXSystem_; }
 
       const DgContCartRF&   ccFrame (void) const { return *ccFrame_; }
       const DgDiscRF2D&     grid2D  (void) const { return *grid2D_; }
@@ -232,6 +236,7 @@ class DgIDGGBase : public DgDiscTopoRF<DgQ2DICoord, DgGeoCoord, long double> {
       const DgZ3StringRF* z3StrRF_;
       const DgZ7RF*       z7RF_;
       const DgZ7StringRF* z7StrRF_;
+      const DgZXSystem* zXSystem_;
 
    friend class DgQ2DItoDConverter;
    friend class DgQ2DDtoIConverter;

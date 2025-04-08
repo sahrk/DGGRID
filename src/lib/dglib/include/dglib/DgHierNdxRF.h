@@ -92,7 +92,7 @@ template <class C> class DgHierNdxRF :
       //static const C undefCoord;
 
       // sub-classes should create a factory method
-      const DgHierNdxSystemRFBase& system (void) { return sys_; }
+      const DgHierNdxSystemRFBase& system (void) const { return sys_; }
 
       const DgIDGGS& dggs (void) { return sys_.dggs(); }
       const DgIDGG& dgg (void) { return sys_.dgg(); }

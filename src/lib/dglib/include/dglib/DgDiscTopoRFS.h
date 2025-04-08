@@ -414,7 +414,7 @@ template <class A, class B, class DB> class Dg2WayTopoResAddConverter
 
    public:
 
-      Dg2WayTopoResAddConverter (const DgDiscTopoRFS<DgResAdd<A>, B, DB>& fromFrameRFS,
+      Dg2WayTopoResAddConverter (const DgDiscTopoRFS<A, B, DB>& fromFrameRFS,
                                  //DgDiscRF<DgResAdd<A>, B, DB>& fromFrame,
                                  //const DgDiscRFSGrids<DgDiscTopoRF, A, B, DB, B>& fromFrame,
                                  const DgDiscRF<A, B, DB>& toFrameRF, int res)

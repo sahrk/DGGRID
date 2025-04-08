@@ -117,6 +117,8 @@ class DgHierNdxSystemRFBase
    };
 
    public:
+            
+      static const DgHierNdx undefCoord;
 
       const DgHierNdxSystemRFSBase& hierNdxRFS (void) const
             { return hierNdxRFS_; }

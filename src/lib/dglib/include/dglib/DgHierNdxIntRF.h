@@ -39,6 +39,11 @@ class DgHierNdxIntCoord : public DgHierNdxCoord<HIERNDX_INT_TYPE> {
 
    public: 
 
+      DgHierNdxIntCoord (void);
+
+      DgHierNdxIntCoord (HIERNDX_INT_TYPE val)
+         : DgHierNdxCoord<HIERNDX_INT_TYPE>(val) { }
+        
       // define abstract method from above
       // output as hexadecimal string
       virtual std::string valString (void) const;
@@ -48,6 +53,8 @@ class DgHierNdxIntCoord : public DgHierNdxCoord<HIERNDX_INT_TYPE> {
 class DgHierNdxIntRF : public DgHierNdxRF<DgHierNdxIntCoord> {
 
    public:
+
+      static const DgHierNdxIntCoord undefCoord;
 
       // these assume input/output strings are in hexadecimal
       virtual string add2str (const DgHierNdxIntCoord& add) const { return add.valString(); }

@@ -73,6 +73,17 @@ DgHierNdx2WayIntToStringConverter (const DgHierNdxSystemRF& sys)
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
+static const DgHierNdx undefCoord (intRF()->undefAddress(), strRF->undefAddress(), true);
+
+////////////////////////////////////////////////////////////////////////////////
+static const DgHierNdx&
+DgHierNdx::undefAddress (void) const {
+   static const DgHierNdx undefCoord (intRF()->undefAddress(), strRF->undefAddress(), true);
+   return undefCoord;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
 DgHierNdxSystemRFBase::DgHierNdxSystemRFBase (
          const DgHierNdxSystemRFSBase& hierNdxRFSIn, int resIn,
          const string& nameIn = "HierNdxSysRF")
@@ -127,7 +138,7 @@ DgHierNdxSystemRFBase::str2add (DgHierNdx* add, const char* str, char delimiter)
 const DgHierNdx& 
 DgHierNdxSystemRFBase::undefAddress (void) const
 {
-   return DgHierNdx::undefAddress();
+   return DgHierNdxSystemRFBase::undefCoord();
 }
 
 ////////////////////////////////////////////////////////////////////////////////

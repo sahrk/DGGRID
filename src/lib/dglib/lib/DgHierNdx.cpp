@@ -24,10 +24,11 @@
 #include <dglib/DgHierNdx.h>
 #include <dglib/DgHierNdxIntRF.h>
 #include <dglib/DgHierNdxStringRF.h>
+#include <dglib/DgHierNdxStringRF.h>
 
 ////////////////////////////////////////////////////////////////////////////////
-const DgHierNdx DgHierNdx::undefCoord(
-                   intRF()->undefAddress(), strRF->undefAddress(), true);
+const DgHierNdx
+DgHierNdx::undefCoord(DgHierNdxIntRF::undefCoord, DgHierNdxStringRF::undefCoord, true);
 
 ////////////////////////////////////////////////////////////////////////////////
 DgHierNdx::DgHierNdx (bool outModeIntIn)
@@ -41,9 +42,9 @@ std::string
 DgHierNdx::valString (void) const 
 { 
   if (outModeInt()) 
-     return intRF()->valString();
+     return intNdx_.valString();
   else
-     return strRF()->valString();
+     return strNdx_.valString();
 }
 
 ////////////////////////////////////////////////////////////////////////////////

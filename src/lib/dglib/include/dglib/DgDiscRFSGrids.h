@@ -291,7 +291,7 @@ template <class A, class B, class BG, class DB> class DgResAddConverter :
                          const DgDiscRF<A, BG, DB>& toFrameRF, int resIn)
          : DgConverter<DgResAdd<A>, long long int, A,
                  long long int> (fromFrameRFS, toFrameRF),
-           res_ (resIn), discRF_ (toFrameRF)
+           res_ (resIn), discRFS_ (nullptr), discRF_ (toFrameRF)
            {
               discRFS_ = dynamic_cast<const DgDiscRFSGridsBase<A, B, BG, DB>*>(&fromFrameRFS);
               if (!discRFS_) {
@@ -307,7 +307,7 @@ template <class A, class B, class BG, class DB> class DgResAddConverter :
                         "invalid resolution", DgBase::Fatal);
               }
 
-              if (*(discRFS().discRF(res())) != discRF())
+              if (this->discRFS().discRF(res()) != discRF())
               {
                  report("DgDgResAddConverter<A, B, BG, DB>::DgResAddConverter() "
                         "grid mismatch", DgBase::Fatal);
@@ -319,7 +319,7 @@ template <class A, class B, class BG, class DB> class DgResAddConverter :
 
       int res (void) const { return res_; }
 
-      const DgDiscRFSGridsBase<A, B, BG, DB>& discRFS (void) const { return discRFS_; }
+      const DgDiscRFSGridsBase<A, B, BG, DB>& discRFS (void) const { return *discRFS_; }
 
       const DgDiscRF<A, BG, DB>& discRF (void) const { return discRF_; }
 
@@ -328,7 +328,7 @@ template <class A, class B, class BG, class DB> class DgResAddConverter :
            if (add.res() == res()) return add.address();
 
            DgLocation* tmpLoc =
-             discRFS().discRF(add.res())->makeLocation(add.address());
+             discRFS().discRF(add.res()).makeLocation(add.address());
            discRF().convert(tmpLoc);
            A newAdd = *(discRF().getAddress(*tmpLoc));
            delete tmpLoc;
@@ -338,7 +338,7 @@ template <class A, class B, class BG, class DB> class DgResAddConverter :
    protected:
 
       int res_;
-      const DgDiscRFSGridsBase<A, B, BG, DB>& discRFS_;
+      const DgDiscRFSGridsBase<A, B, BG, DB>* discRFS_;
       const DgDiscRF<A, BG, DB>& discRF_;
 
 };
@@ -346,7 +346,7 @@ template <class A, class B, class BG, class DB> class DgResAddConverter :
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 template <class A, class B, class BG, class DB> class DgAddResConverter :
-    public DgConverter<DgResAdd<A>, long long int, A, long long int> {
+    public DgConverter<A, long long int, DgResAdd<A>, long long int> {
 
    public:
 
@@ -354,7 +354,7 @@ template <class A, class B, class BG, class DB> class DgAddResConverter :
                          const DgDiscRF<DgResAdd<A>, B, DB>& toFrameRFS, int resIn)
          : DgConverter<A, long long int, DgResAdd<A>,
                  long long int> (fromFrameRF, toFrameRFS),
-           res_ (resIn), discRF_ (fromFrameRF)
+           res_ (resIn), discRFS_ (nullptr), discRF_ (fromFrameRF)
            {
               discRFS_ = dynamic_cast<const DgDiscRFSGridsBase<A, B, BG, DB>*>(&toFrameRFS);
               if (!discRFS_) {
@@ -370,7 +370,7 @@ template <class A, class B, class BG, class DB> class DgAddResConverter :
                         "invalid resolution", DgBase::Fatal);
               }
 
-              if (*(discRFS().discRF(res())) != discRF())
+              if (discRFS().discRF(res()) != discRF())
               {
                  report("DgDgAddResConverter<A, B, DB>::DgAddResConverter() "
                         "grid mismatch", DgBase::Fatal);
@@ -382,7 +382,7 @@ template <class A, class B, class BG, class DB> class DgAddResConverter :
 
       int res (void) const { return res_; }
 
-      const DgDiscRFSGridsBase<A, B, BG, DB>& discRFS (void) const { return discRFS_; }
+      const DgDiscRFSGridsBase<A, B, BG, DB>& discRFS (void) const { return *discRFS_; }
 
       const DgDiscRF<A, BG, DB>& discRF (void) const { return discRF_; }
 
@@ -394,7 +394,7 @@ template <class A, class B, class BG, class DB> class DgAddResConverter :
    protected:
 
       int res_;
-      const DgDiscRFSGridsBase<A, B, BG, DB>& discRFS_;
+      const DgDiscRFSGridsBase<A, B, BG, DB>* discRFS_;
       const DgDiscRF<A, BG, DB>& discRF_;
 
 };

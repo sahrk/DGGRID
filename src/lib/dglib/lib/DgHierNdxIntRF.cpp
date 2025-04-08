@@ -33,7 +33,12 @@
 #include <dglib/DgHierNdxIntRF.h>
 
 ////////////////////////////////////////////////////////////////////////////////
-template<> const DgHierNdxIntCoord DgHierNdxIntRF::undefCoord(UINT64_MAX);
+const DgHierNdxIntCoord DgHierNdxIntRF::undefCoord(UINT64_MAX);
+
+////////////////////////////////////////////////////////////////////////////////
+DgHierNdxIntCoord::DgHierNdxIntCoord (void)
+  : DgHierNdxCoord<HIERNDX_INT_TYPE>(DgHierNdxIntRF::undefCoord.value())
+{ }
 
 ////////////////////////////////////////////////////////////////////////////////
 std::string
@@ -49,7 +54,7 @@ DgHierNdxIntCoord::valString (void) const {
 // assumes hexadecimal
 const char* 
 DgHierNdxIntRF::str2add (DgHierNdxIntCoord* c, const char* str, 
-                    char delimiter) const;
+                    char delimiter) const
 {
    char delimStr[2];
    delimStr[0] = delimiter;
@@ -64,8 +69,8 @@ DgHierNdxIntRF::str2add (DgHierNdxIntCoord* c, const char* str,
    if (!sscanf(tok, "%" PRIx64, &val))
       report("DgHierNdxIntRF::str2add(): invalid index", DgBase::Fatal);
 
-   if (!add) add = new DgHierNdxIntCoord();
-   add->setValue(val);
+   if (!c) c = new DgHierNdxIntCoord();
+   c->setValue(val);
 
    unsigned long offset = strlen(tok) + 1;
    delete[] tmpStr;

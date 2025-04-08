@@ -908,10 +908,12 @@ SubOpOut::executeOp (void) {
          ::report("SubOpOut::executeOp(): invalid output RF", DgBase::Fatal);
    }
 
+    //      const DgZXSystem*   zXSystem (void) const { return zXSystem_; }
+
    if (ndxChildrenOutType != "NONE" || ndxParentOutType != "NONE") {
-      if (hierNdxAddType == Z7 && dgg.z7RF()) {
+      if (hierNdxAddType == "ZX" && dgg.zXSystem()) {
           //hierNdxIDGGS = dynamic_cast<const DgHierNdxHexIDGGS*>(dgg.z7RF());
-          hierNdxIDGGS = dgg.z7RF();
+          hierNdxIDGGS = dgg.zXSystem();
       } else {
           ::report("SubOpOut::executeOp(): hierarchical indexing type", DgBase::Fatal);
       }
@@ -1028,19 +1030,18 @@ SubOpOut::executeOp (void) {
                ((outSeqNum || useEnumLbl) ? NULL : pOutRF), pChdOutRF, "chd");
    }
 
-    if (ndxChildrenOutType == "TEXT" || ndxParentOutType == "TEXT") {
-        
-        if (ndxChildrenOutType == "TEXT") {
-            ndxChdOut = new DgOutNdxChildrenFile(ndxChildrenOutFileName, dgg,
-                                                 op.dggOp.chdDgg(), ((outSeqNum || useEnumLbl) ? NULL : pOutRF),
+         
+    if (ndxChildrenOutType == "TEXT") {
+            
+        ndxChdOut = new DgOutNdxChildrenFile(ndxChildrenOutFileName, dgg,
+                                  op.dggOp.chdDgg(), ((outSeqNum || useEnumLbl) ? NULL : pOutRF),
                                                      pChdOutRF, "ndxChd");
-        }
+    }
         
-        if (ndxParentOutType == "TEXT") {
+    if (ndxParentOutType == "TEXT") {
             ndxPrtOut = new DgOutNdxParentFile(ndxParentOutFileName, dgg,
                                                op.dggOp.ndxPrtDgg(), ((outSeqNum || useEnumLbl) ? NULL : pOutRF),
                                                    pNdxPrtOutRF, hierNdxIDGGS, "ndxPrt");
-        }
     }
 
    return 0;
