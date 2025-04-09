@@ -28,6 +28,7 @@
 #include <dglib/DgHierNdx.h>
 #include <dglib/DgHierNdxIntRF.h>
 #include <dglib/DgHierNdxStringRF.h>
+#include <dglib/DgHierNdxSystemRFSBase.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 DgHierNdxStringToIntConverter::DgHierNdxStringToIntConverter (
@@ -63,31 +64,10 @@ DgHierNdxIntToStringConverter::convertTypedAddress
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-DgHierNdx2WayIntToStringConverter (const DgHierNdxSystemRF& sys)
-   : Dg2WayConverter (*(new DgHierNdxStringToIntConverter(
-                               *sys.strRF(), *sys.intRF())),
-                      *(new DgHierNdxIntToStringConverter(
-                               *sys.intRF(), *sys.strRF())))
-{
-}
-
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-static const DgHierNdx undefCoord (intRF()->undefAddress(), strRF->undefAddress(), true);
-
-////////////////////////////////////////////////////////////////////////////////
-static const DgHierNdx&
-DgHierNdx::undefAddress (void) const {
-   static const DgHierNdx undefCoord (intRF()->undefAddress(), strRF->undefAddress(), true);
-   return undefCoord;
-}
-
-
 ////////////////////////////////////////////////////////////////////////////////
 DgHierNdxSystemRFBase::DgHierNdxSystemRFBase (
-         const DgHierNdxSystemRFSBase& hierNdxRFSIn, int resIn,
-         const string& nameIn = "HierNdxSysRF")
-   : DgDiscRF<DgHierNdx, DgQ2DICoord, long long int>(hierNdxRFSIn.dggs().network,
+         const DgHierNdxSystemRFSBase& hierNdxRFSIn, int resIn, const string& nameIn)
+   : DgDiscRF<DgHierNdx, DgQ2DICoord, long long int>(hierNdxRFSIn.dggs().network(),
               hierNdxRFSIn.dggs()[resIn], nameIn),
      hierNdxRFS_ (hierNdxRFSIn), dggs_ (hierNdxRFSIn.dggs()), res_ (resIn),
      aperture_ (hierNdxRFSIn.dggs().aperture()), pRes_ {nullptr, nullptr, nullptr},
@@ -231,3 +211,13 @@ DgHierNdxSystemRFBase::toStringCoord (const DgHierNdxIntCoord& c) const
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
+///
+///////////////////////////////////////////////////////////////////////////////////
+DgHierNdx2WayIntToStringConverter (const DgHierNdxSystemRFBase& sys)
+   : Dg2WayConverter (*(new DgHierNdxStringToIntConverter(
+                               *sys.strRF(), *sys.intRF())),
+                      *(new DgHierNdxIntToStringConverter(
+                               *sys.intRF(), *sys.strRF())))
+{
+}
+

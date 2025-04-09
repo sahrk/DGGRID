@@ -17,10 +17,9 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 *******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
-//
-// DgDiscTopoRFS.h: DgDiscRFS class definitions
-//
-////////////////////////////////////////////////////////////////////////////////
+/** @file DgDiscTopoRFS.h
+ * @brief   DgDiscTopoRFS class definitions.
+ */
 
 #ifndef DGDISCTOPORFS_H
 #define DGDISCTOPORFS_H
@@ -36,6 +35,13 @@
 //#include <dglib/DgRF.h>
 
 ////////////////////////////////////////////////////////////////////////////////
+/** @class DgDiscTopoRFS
+*  @brief A discrete RFS with pyramid addresses and an arbitrary backframe (e.g., lat/lon or a substrate
+*             grid. Specifies methods for forward/inverse quantification, center point, vertexes, boundary, and neighbors.
+*
+*             This is a parallel/alternate to DgDiscRFS, which has a pyramid address backframe and specifies
+*             only forward/inverse quantification.
+*/
 template<class A, class B, class DB> class DgDiscTopoRFS
          : public DgDiscTopoRF<DgResAdd<A>, B, DB>,
            public DgDiscRFSGrids<DgDiscTopoRF, A, B, DB, B> {

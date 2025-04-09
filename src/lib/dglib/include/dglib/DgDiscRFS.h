@@ -16,11 +16,9 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 *******************************************************************************/
-////////////////////////////////////////////////////////////////////////////////
-//
-// DgDiscRFS.h: DgDiscRFS class definitions
-//
-////////////////////////////////////////////////////////////////////////////////
+/** @file DgDiscRFS.h
+ * @brief   DgDiscRFS class definitions.
+ */
 
 #ifndef DGDISCRFS_H
 #define DGDISCRFS_H
@@ -32,13 +30,17 @@
 #include <dglib/DgDiscRFSGrids.h>
 
 ////////////////////////////////////////////////////////////////////////////////
+/** @class DgDiscRFS
+*  @brief A discrete RFS with pyramid addresses and a backframe that also has discfrete
+*             pyramid addresses. The only operations specified are forward and inverse quantization.
+*/
 template<class A, class B, class DB> class DgDiscRFS
          : public DgDiscRF<DgResAdd<A>, DgResAdd<B>, DB>,
            public DgDiscRFSGrids<DgDiscRF, A, DgResAdd<B>, DB, B> {
 
    public:
 
-      DgDiscRFS (DgRFNetwork& network, const DgRF<B, DB>& backFrame,
+      DgDiscRFS (DgRFNetwork& network, const DgRF<DgResAdd<B>, DB>& backFrame,
                  int nResIn, const string& name = "DiscS")
         : DgDiscRF<DgResAdd<A>, DgResAdd<B>, DB> (network, backFrame, name),
           DgDiscRFSGrids<DgDiscRF, A, DgResAdd<B>, DB, B> (backFrame, nResIn)

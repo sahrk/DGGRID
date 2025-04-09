@@ -24,11 +24,12 @@
 
 #include <dglib/DgHierNdxSystemRFSBase.h>
 #include <dglib/DgHierNdxRF.h>
+#include <dglib/DgDiscRFSGrids.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 DgHierNdxSystemRFSBase::DgHierNdxSystemRFSBase (const DgIDGGSBase& dggsIn, 
          bool outModeIntIn, const string& nameIn)
-   : DiscRFS<DgHierNdx, DgQ2DICoord, long long int> 
+   : DgDiscRFS<DgHierNdx, DgQ2DICoord, long long int>
                          (dggsIn.network(), dggsIn, dggsIn.nRes(), nameIn),
      dggs_ (dggsIn), outModeInt_ (outModeIntIn)
 { 
