@@ -50,6 +50,7 @@ class DgOutNdxParentFile;
 class DgRandom;
 class DgDataList;
 class DgHierNdxSystemRFS;
+class DgHierNdxSystemRFSBase;
 
 struct OpBasic;
 

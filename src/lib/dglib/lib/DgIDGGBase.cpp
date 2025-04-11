@@ -36,6 +36,7 @@
 #include <dglib/DgHexGrid2DS.h>
 #include <dglib/DgIDGGBase.h>
 #include <dglib/DgIDGGSBase.h>
+#include <dglib/DgHexIDGGS.h>
 #include <dglib/DgProjFuller.h>
 #include <dglib/DgProjISEA.h>
 #include <dglib/DgRadixString.h>
@@ -174,11 +175,14 @@ DgIDGGBase::createConverters (void)
 
    if (gridTopo() == Hexagon) {
        if (dggs()->aperture() == 7) {
+           /*
            const DgHexIDGGS* hexDggs = dynamic_cast<const DgHexIDGGS*>(dggs());
            if (!hexDggs) {
               report("hexagon gridTopo does not match IDGGS", DgBase::Fatal);
            }
            z7RF_ = DgZ7RF::makeRF(network(), *hexDggs, name() + string("z7"), res());
+            */
+           z7RF_ = DgZ7RF::makeRF(network(), name() + string("z7"), res());
            z7StrRF_ = DgZ7StringRF::makeRF(network(), name() + string("z7Str"), res());
        } else if (aperture() == 4 || aperture() == 3) {
          zorderRF_ = DgZOrderRF::makeRF(network(), name() + string("zorder"),
@@ -246,6 +250,10 @@ DgIDGGBase::createConverters (void)
        if (z7RF())
           toZ7 = new Dg2WayZ7ToStringConverter(*z7StrRF(), *z7RF());
     }
+    
+    // suppress unused variable error
+    (void)toZ7Str;
+    (void)toZ7;
 
    // create the series converters that will replace the default DgDiscRF
    // converters
