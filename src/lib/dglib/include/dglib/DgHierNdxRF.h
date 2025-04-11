@@ -133,7 +133,7 @@ template <class C> class DgHierNdxRF :
 
       DgHierNdxRF<C> (const DgHierNdxSystemRFBase& sysIn, int resIn, const string& nameIn)
          : DgDiscRF<C, DgQ2DICoord, long long int>(sysIn.dggs().network(),
-                       sysIn.dggs().idgg(resIn), nameIn),
+                       sysIn.dggs().idggBase(resIn), nameIn),
            sys_ (sysIn) { }
 /*
       void initSystem (const DgIDGGS& dggsIn, int resIn, const string& nameIn)

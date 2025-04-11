@@ -37,7 +37,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 /** @class DgDiscTopoRFS
 *  @brief A discrete RFS with pyramid addresses and an arbitrary backframe (e.g., lat/lon or a substrate
-*             grid. Specifies methods for forward/inverse quantification, center point, vertexes, boundary, and neighbors.
+*             grid. Specifies methods for forward/inverse quantification, spatial parents/children, and cell center point,
+*             vertexes, boundary, and neighbors.
 *
 *             This is a parallel/alternate to DgDiscRFS, which has a pyramid address backframe and specifies
 *             only forward/inverse quantification.

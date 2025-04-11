@@ -64,7 +64,7 @@ class DgHierNdxStringToIntConverter :
 
       const DgHierNdxSystemRFBase& sys;
 
-   friend class Dg2WayIntToStringConverter;
+   friend class DgHierNdx2WayIntToStringConverter;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -84,7 +84,7 @@ class DgHierNdxIntToStringConverter :
 
       const DgHierNdxSystemRFBase& sys;
 
-   friend class Dg2WayIntToStringConverter;
+   friend class DgHierNdx2WayIntToStringConverter;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -96,22 +96,12 @@ class DgHierNdx2WayIntToStringConverter : public Dg2WayConverter {
 
 };
 
-
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-/*
-class DgHierNdx {
-   DgHierNdxIntCoord intNdx_;
-   DgHierNdxStringCoord strNdx_;
-};
-*/
-
 ////////////////////////////////////////////////////////////////////////////////
 class DgHierNdxSystemRFBase
         : public DgDiscRF<DgHierNdx, DgQ2DICoord, long long int> {
 
    struct DgSystemSet {
-      const DgIDGG*         dgg_;
+      const DgIDGGBase*     dgg_;
       const DgHierNdxIntRF* intRF_;
       const DgHierNdxStringRF* strRF_;
    };
@@ -123,22 +113,22 @@ class DgHierNdxSystemRFBase
       const DgHierNdxSystemRFSBase& hierNdxRFS (void) const
             { return hierNdxRFS_; }
 
-      const DgIDGGS& dggs (void) const { return dggs_; }
+      const DgIDGGSBase& dggs (void) const { return dggs_; }
 
-      bool outModeInt (void);
+      bool outModeInt (void) const;
 
       int res      (void) const { return res_; }
       int aperture (void) const { return aperture_; }
       
-      const DgIDGG*            dgg   (void) const { return curRes_.dgg_; }
+      const DgIDGGBase*            dgg   (void) const { return curRes_.dgg_; }
       const DgHierNdxIntRF*    intRF (void) const { return curRes_.intRF_; }
       const DgHierNdxStringRF* strRF (void) const { return curRes_.strRF_; }
 
-      const DgIDGG*            pDgg   (void) const { return pRes_.dgg_; }
+      const DgIDGGBase*            pDgg   (void) const { return pRes_.dgg_; }
       const DgHierNdxIntRF*    pIntRF (void) const { return pRes_.intRF_; }
       const DgHierNdxStringRF* pStrRF (void) const { return pRes_.strRF_; }
       
-      const DgIDGG*            chDgg   (void) const { return chRes_.dgg_; }
+      const DgIDGGBase*            chDgg   (void) const { return chRes_.dgg_; }
       const DgHierNdxIntRF*    chIntRF (void) const { return chRes_.intRF_; }
       const DgHierNdxStringRF* chStrRF (void) const { return chRes_.strRF_; }
 
@@ -171,7 +161,7 @@ class DgHierNdxSystemRFBase
       virtual void initialize (void);
 
       const DgHierNdxSystemRFSBase& hierNdxRFS_;
-      const DgIDGGS& dggs_;
+      const DgIDGGSBase& dggs_;
       int res_;
       int aperture_;
 

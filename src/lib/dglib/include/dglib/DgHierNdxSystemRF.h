@@ -62,7 +62,7 @@ template <class TINT, class TSTR> class DgHierNdxSystemRF :
       {
          if (resIn < 0 || resIn >= hierNdxRFS_.nRes()) return;
 
-         curRes_.dgg_ = &dggs().idgg(resIn);
+         curRes_.dgg_ = &dggs().idggBase(resIn);
          curRes_.intRF_ = new TINT(*this, resIn, name() + "IntRF"); // use default name
          curRes_.strRF_ = new TSTR(*this, resIn, name() + "StrRF"); // use default name
          DgHierNdx2WayIntToStringConverter* c2way =

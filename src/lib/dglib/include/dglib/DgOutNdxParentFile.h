@@ -60,7 +60,7 @@ class DgOutNdxParentFile : public DgOutputStream {
       const DgIDGGBase& ndxPrtDgg_; // indexing parent res dgg
       const DgRFBase* outRF_;    // primary res output RF (NULL indicates seqNum)
       const DgRFBase* ndxPrtOutRF_; // indexing parent res output RF
-      const DgHierNdxSystemRFSBase* hierNdxRFS_; // defines the indexing operators
+      //const DgHierNdxSystemRFSBase* hierNdxRFS_; // defines the indexing operators
 };
 
 inline DgOutNdxParentFile& operator<< (DgOutNdxParentFile& file, const char* str)

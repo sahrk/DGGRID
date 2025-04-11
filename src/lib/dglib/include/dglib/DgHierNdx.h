@@ -90,6 +90,8 @@ class DgHierNdx {
       DgHierNdxIntCoord intNdx_;
       DgHierNdxStringCoord strNdx_;
       bool outModeInt_;
+    
+    friend class DgHierNdxSystemRFBase;
 };
 
 ////////////////////////////////////////////////////////////////////////////////

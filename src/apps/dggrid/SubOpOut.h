@@ -76,7 +76,7 @@ struct SubOpOut : public SubOpBasic {
    const DgRFBase* pOutRF;     // RF for output addresses
    const DgRFBase* pChdOutRF;  // RF for output addresses at child resolution
    const DgRFBase* pNdxPrtOutRF;  // RF for output addresses at parent resolution
-   const DgHierNdxSystemRFS* pHierNdxIDGGS; // defines hierarchical indexing
+   const DgHierNdxSystemRFSBase* pHierNdxSystem; // defines hierarchical indexing
    dgg::addtype::DgAddressType outAddType; // output address form
    dgg::hiersystype::DgHierNdxSysType hierNdxSysType;  // hierarchical indexing system
    bool outSeqNum;             // are the output addresses sequence numbers?

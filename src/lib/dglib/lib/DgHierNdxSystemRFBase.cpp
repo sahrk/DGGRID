@@ -63,7 +63,15 @@ DgHierNdxIntToStringConverter::convertTypedAddress
    return sys.toStringCoord(addIn); 
 }
 
-////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
+DgHierNdx2WayIntToStringConverter::DgHierNdx2WayIntToStringConverter (const DgHierNdxSystemRFBase& sys)
+   : Dg2WayConverter (*(new DgHierNdxStringToIntConverter(
+                               *sys.strRF(), *sys.intRF())),
+                      *(new DgHierNdxIntToStringConverter(
+                               *sys.intRF(), *sys.strRF())))
+{
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 DgHierNdxSystemRFBase::DgHierNdxSystemRFBase (
          const DgHierNdxSystemRFSBase& hierNdxRFSIn, int resIn, const string& nameIn)
@@ -94,21 +102,19 @@ DgHierNdxSystemRFBase::add2str (const DgHierNdx& add, char delimiter) const
 
 ////////////////////////////////////////////////////////////////////////////////
 const char* 
-DgHierNdxSystemRFBase::str2add (DgHierNdx* add, const char* str, char delimiter) const
+DgHierNdxSystemRFBase::str2add (DgHierNdx* ndx, const char* str, char delimiter) const
 {
   const char* newS = str;
-  // assume resolution is correct and ignore it
-  DgHierNdx* ndx = &add->address();
   if (outModeInt()) {
      DgHierNdxIntCoord intNdx;     
-     newS = intRF()->str2add(intNdx, str, delimiter);
+     newS = intRF()->str2add(&intNdx, str, delimiter);
      ndx->setIntNdx(intNdx);
      setStringFromIntCoord(*ndx);
   } else {
      DgHierNdxStringCoord strNdx;     
-     newS = strRF()->str2add(strNdx, str, delimiter);
+     newS = strRF()->str2add(&strNdx, str, delimiter);
      ndx->setStrNdx(strNdx);
-     setIntFromStrCoord(*ndx);
+     setIntFromStringCoord(*ndx);
   }
 
   return newS;
@@ -118,13 +124,13 @@ DgHierNdxSystemRFBase::str2add (DgHierNdx* add, const char* str, char delimiter)
 const DgHierNdx& 
 DgHierNdxSystemRFBase::undefAddress (void) const
 {
-   return DgHierNdxSystemRFBase::undefCoord();
+   return DgHierNdx::undefCoord;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 bool 
-DgHierNdxSystemRFBase::outModeInt (void) 
-{ 
+DgHierNdxSystemRFBase::outModeInt (void) const
+{
    return hierNdxRFS().outModeInt(); 
 }
 
@@ -132,14 +138,14 @@ DgHierNdxSystemRFBase::outModeInt (void)
 void 
 DgHierNdxSystemRFBase::setIntFromStringCoord (DgHierNdx& hn) const
 { 
-   hn.intNdx_ = this->toIntCoord(hn.strNdx_); 
+   hn.intNdx_ = this->toIntCoord(hn.strNdx());
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 void 
 DgHierNdxSystemRFBase::setStringFromIntCoord (DgHierNdx& hn) const
 { 
-   hn.strNdx_ = this->toStringCoord(hn.intNdx_); 
+   hn.strNdx_ = this->toStringCoord(hn.intNdx());
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -164,9 +170,11 @@ DgHierNdxSystemRFBase::setSystemSet (DgSystemSet& set, int res)
       return 1;
 
    // if we're here res is valid
-   set.dgg_ = hierNdxRFS_[res].dgg();
-   set.intRF_ = hierNdxRFS_[res].intRF();
-   set.strRF_ = hierNdxRFS_[res].strRF();
+   set.dgg_ = hierNdxRFS_.sysRF(res).dgg();
+   set.intRF_ = hierNdxRFS_.sysRF(res).intRF();
+   set.strRF_ = hierNdxRFS_.sysRF(res).strRF();
+    
+   return 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -184,10 +192,9 @@ DgHierNdxSystemRFBase::quantify (const DgQ2DICoord& point) const
 }
    
 ////////////////////////////////////////////////////////////////////////////////
-DgResAdd<DgQ2DICoord>
-DgHierNdxSystemRFBase::invQuantify (const DgHierNdx& add) const
+DgQ2DICoord
+DgHierNdxSystemRFBase::invQuantify (const DgHierNdx& ndx) const
 {
-   DgHierNdx& ndx = add.address();
    DgQ2DICoord point(strRF()->invQuantify(ndx.strNdx_));
 
    return point;
@@ -212,12 +219,4 @@ DgHierNdxSystemRFBase::toStringCoord (const DgHierNdxIntCoord& c) const
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 ///
-///////////////////////////////////////////////////////////////////////////////////
-DgHierNdx2WayIntToStringConverter (const DgHierNdxSystemRFBase& sys)
-   : Dg2WayConverter (*(new DgHierNdxStringToIntConverter(
-                               *sys.strRF(), *sys.intRF())),
-                      *(new DgHierNdxIntToStringConverter(
-                               *sys.intRF(), *sys.strRF())))
-{
-}
 

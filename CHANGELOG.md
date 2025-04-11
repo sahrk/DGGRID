@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 All changes are by Kevin Sahr, unless otherwise noted.
 
+## [9.0b] - 2025-04-30
+### Fixed
+- removed unicode characters from comments in clipper.cpp
+
 ## [8.31] - 2024-07-05
 ### Changed
 - igeo7 DGGS preset defaults output_cell_label_type to OUTPUT_ADDRESS_TYPE

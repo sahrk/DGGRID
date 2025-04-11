@@ -40,7 +40,7 @@ DgOutNdxParentFile::DgOutNdxParentFile (const string& fileName,
                         const string& suffix,
                         DgReportLevel failLevel)
    : DgOutputStream (fileName, suffix, failLevel), dgg_ (dgg), ndxPrtDgg_ (ndxPrtDgg),
-outRF_ (outRF), ndxPrtOutRF_ (ndxPrtOutRF), hierNdxRFS_(hierNdxRFS)
+outRF_ (outRF), ndxPrtOutRF_ (ndxPrtOutRF)
 {
 
 } // DgOutNdxParentFile::DgOutNdxParentFile

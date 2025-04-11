@@ -25,6 +25,11 @@
 #include <dglib/DgHierNdxSystemRFSBase.h>
 #include <dglib/DgHierNdxRF.h>
 #include <dglib/DgDiscRFSGrids.h>
+#include <dglib/DgHierNdx.h>
+
+////////////////////////////////////////////////////////////////////////////////
+const DgResAdd<DgHierNdx>
+DgHierNdxSystemRFSBase::undefCoord(DgHierNdx::undefCoord, -1);
 
 ////////////////////////////////////////////////////////////////////////////////
 DgHierNdxSystemRFSBase::DgHierNdxSystemRFSBase (const DgIDGGSBase& dggsIn, 
@@ -33,15 +38,14 @@ DgHierNdxSystemRFSBase::DgHierNdxSystemRFSBase (const DgIDGGSBase& dggsIn,
                          (dggsIn.network(), dggsIn, dggsIn.nRes(), nameIn),
      dggs_ (dggsIn), outModeInt_ (outModeIntIn)
 { 
-   grids_ = new vector<const DgHierNdxSystemRFBase*>(nRes_, nullptr);
+   //grids_ = new vector<const DgHierNdxSystemRFBase*>(nRes_, nullptr);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-const
-DgHierNdxSystemRFSBase::DgResAdd<DgHierNdx>& undefAddress (void) const
+const DgResAdd<DgHierNdx>&
+DgHierNdxSystemRFSBase::undefAddress (void) const
 {
-    static DgResAdd<DgHierNdx> undef(DgIVec2D::undefDgIVec2D, -1);
-    return undef;
+    return undefCoord;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -53,9 +57,9 @@ DgHierNdxSystemRFSBase::sysRF (int res) const
 
 ////////////////////////////////////////////////////////////////////////////////
 const DgIDGGBase&
-DgHierNdxSystemRFSBase::dggBase (int res) const
+DgHierNdxSystemRFSBase::dgg (int res) const
 {
-    return dggs()[res];
+    return dggs().idggBase(res);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -64,13 +68,13 @@ DgHierNdxSystemRFSBase::setNdxParent (int res, const DgLocation& loc,
                     DgLocation& parent) const
 {
    parent.clearAddress();
-   rfs().convert(&parent);
+   convert(&parent);
 
-   if (res > 0 && res < rfs().nRes()) {
+   if (res > 0 && res < nRes()) {
       DgLocation tmpLoc(loc);
-      rfs().grids()[res]->convert(&tmpLoc);
-      rfs().convert(&tmpLoc);
-      setAddNdxParent(*(rfs().getAddress(tmpLoc)), parent);
+      grids()[res]->convert(&tmpLoc);
+      convert(&tmpLoc);
+      setAddNdxParent(*(getAddress(tmpLoc)), parent);
    }
 
 } // void DgHierNdxSystemRFSBase::setNdxParent
@@ -121,14 +125,14 @@ DgHierNdxSystemRFSBase::setNdxChildren (int res, const DgLocation& loc,
                                    DgLocVector& children) const
 {
    children.clearAddress();
-   rfs().convert(children);
+   convert(children);
 
-   if (res >= 0 && res < (rfs().nRes() - 1))
+   if (res >= 0 && res < (nRes() - 1))
    {
       DgLocation tmpLoc(loc);
-      rfs().grids()[res]->convert(&tmpLoc);
-      rfs().convert(&tmpLoc);
-      setAddNdxChildren(*(rfs().getAddress(tmpLoc)), children);
+      grids()[res]->convert(&tmpLoc);
+      convert(&tmpLoc);
+      setAddNdxChildren(*(getAddress(tmpLoc)), children);
    }
 
 } // void DgHierNdxSystemRFSBase::setNdxChildren
