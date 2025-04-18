@@ -38,6 +38,7 @@ class DgZ7StringRF;
 class DgZXSystem;
 class DgZOrderRF;
 class DgZOrderStringRF;
+class DgHierNdxSystemRFSBase;
 
 using namespace dgg::topo;
 
@@ -107,8 +108,9 @@ class DgIDGGBase : public DgDiscTopoRF<DgQ2DICoord, DgGeoCoord, long double> {
       const DgZOrderRF*       zorderRF     (void) const { return zorderRF_; }
       const DgZOrderStringRF* zorderStrRF  (void) const { return zorderStrRF_; }
 
-      // this is only defined for aperture 7 so must be NULL-able
-      const DgZXSystem*   zXSystem (void) const { return zXSystem_; }
+      // these is only defined for aperture 7 so must be NULL-able
+      const DgZXSystem*             zXSystem     (void) const { return zXSystem_; }
+      const DgHierNdxSystemRFSBase* zXSystemBase (void) const;
 
       const DgContCartRF&   ccFrame (void) const { return *ccFrame_; }
       const DgDiscRF2D&     grid2D  (void) const { return *grid2D_; }

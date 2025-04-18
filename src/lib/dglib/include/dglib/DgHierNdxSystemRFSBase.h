@@ -27,9 +27,9 @@
 
 #include <vector>
 #include <dglib/DgDiscRFS.h>
+#include <dglib/DgHierNdx.h>
 
 class DgHierNdxSystemRFBase;
-class DgHierNdx;
 class DgQ2DICoord;
 class DgIDGGSBase;
 class DgIDGGBase;
@@ -67,7 +67,7 @@ class DgHierNdxSystemRFSBase :
       virtual void setNdxParent (const DgResAdd<DgHierNdx>& add, DgLocation& parent) const;
       virtual DgLocation* makeNdxParent (int res, const DgLocation& loc) const;
       virtual DgLocation* makeNdxParent (const DgResAdd<DgHierNdx>& add) const;
-
+                  
       // indexing children
       // only the DgLocation version performs checking on the input
       virtual void setNdxChildren (int res, const DgLocation& loc, DgLocVector& chld) const;
@@ -75,6 +75,10 @@ class DgHierNdxSystemRFSBase :
       virtual void setNdxChildren (const DgResAdd<DgHierNdx>& add, DgLocVector& chld) const;
       virtual DgLocVector* makeNdxChildren (int res, const DgLocation& loc) const;
       virtual DgLocVector* makeNdxChildren (const DgResAdd<DgHierNdx>& add) const;
+
+      // convenience methods
+      virtual void setNdxChildren (const DgResAdd<DgQ2DICoord>& add, DgLocVector& chld) const;
+      virtual void setNdxParent (const DgResAdd<DgQ2DICoord>& add, DgLocation& parent) const;
 
    protected:
 

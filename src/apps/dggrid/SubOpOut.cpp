@@ -915,7 +915,7 @@ SubOpOut::executeOp (void) {
    if (ndxChildrenOutType != "NONE" || ndxParentOutType != "NONE") {
       if (hierNdxSysType == dgg::hiersystype::ZXSystem && dgg.zXSystem()) {
           //hierNdxIDGGS = dynamic_cast<const DgHierNdxHexIDGGS*>(dgg.z7RF());
-          pHierNdxSystem = dgg.zXSystem();
+          pHierNdxSystem = dgg.zXSystemBase();
       } else {
           ::report("SubOpOut::executeOp(): hierarchical indexing system is required for indexing parent/child operations", DgBase::Fatal);
       }

@@ -100,6 +100,15 @@ DgHierNdxSystemRFSBase::setNdxParent (const DgResAdd<DgHierNdx>& add,
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+void
+DgHierNdxSystemRFSBase::setNdxParent (const DgResAdd<DgQ2DICoord>& add,
+                         DgLocation& parent) const
+{
+    DgResAdd<DgHierNdx> hierNdx = quantify(add);
+    setNdxParent(hierNdx, parent);
+}
+
+////////////////////////////////////////////////////////////////////////////////
 DgLocation* 
 DgHierNdxSystemRFSBase::makeNdxParent (int res, const DgLocation& loc) const
 {
@@ -156,6 +165,15 @@ DgHierNdxSystemRFSBase::setNdxChildren (const DgResAdd<DgHierNdx>& add,
   if (add.res() >= 0 && add.res() < (nRes() - 1)) {
      setAddNdxChildren(add, chld);
   }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+void
+DgHierNdxSystemRFSBase::setNdxChildren (const DgResAdd<DgQ2DICoord>& add,
+       DgLocVector& chld) const
+{
+  DgResAdd<DgHierNdx> hierNdx = quantify(add);
+  setNdxChildren(hierNdx, chld);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
