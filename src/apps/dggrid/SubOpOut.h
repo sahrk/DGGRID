@@ -49,8 +49,8 @@ class DgOutNdxChildrenFile;
 class DgOutNdxParentFile;
 class DgRandom;
 class DgDataList;
-class DgHierNdxSystemRFS;
-class DgHierNdxSystemRFSBase;
+//class DgHierNdxSystemRFS;
+//class DgHierNdxSystemRFSBase;
 
 struct OpBasic;
 

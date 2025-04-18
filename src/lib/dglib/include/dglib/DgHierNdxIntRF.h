@@ -56,6 +56,9 @@ class DgHierNdxIntRF : public DgHierNdxRF<DgHierNdxIntCoord> {
 
       static const DgHierNdxIntCoord undefCoord;
 
+      virtual const DgHierNdxIntCoord& undefAddress (void) const
+                       { return undefCoord; }
+
       // these assume input/output strings are in hexadecimal
       virtual string add2str (const DgHierNdxIntCoord& add) const { return add.valString(); }
       virtual const char* str2add (DgHierNdxIntCoord* c, const char* str, char delimiter) const;

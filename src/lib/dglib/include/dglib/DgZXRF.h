@@ -34,11 +34,6 @@ class DgZXRF : public DgHierNdxIntRF {
 
    public:
 
-      static const DgHierNdxIntCoord undefCoord;
-    
-      virtual const DgHierNdxIntCoord& undefAddress (void) const
-               { return undefCoord; }
-    
       // these need to be defined by specializations
       virtual const char* str2add (DgHierNdxIntCoord* c, const char* str, 
                    char delimiter) const;
