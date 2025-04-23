@@ -25,7 +25,7 @@
 #include <dglib/DgHierNdxStringRF.h>
 
 ////////////////////////////////////////////////////////////////////////////////
-const DgHierNdxStringCoord DgHierNdxStringRF::undefCoord("INVALID");
+const DgHierNdxStringCoord DgHierNdxStringRF::undefCoord("99");
 
 DgHierNdxStringCoord::DgHierNdxStringCoord (void)
   : DgHierNdxCoord<std::string>(DgHierNdxStringRF::undefCoord.value())

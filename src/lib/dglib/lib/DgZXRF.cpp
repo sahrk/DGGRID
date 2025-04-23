@@ -22,15 +22,15 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-//#define __STDC_FORMAT_MACROS
-//#include <inttypes.h>
-//#include <cmath>
-//#include <climits>
-//#include <cfloat>
-//#include <string.h>
+#define __STDC_FORMAT_MACROS
+#include <inttypes.h>
+#include <cmath>
+#include <climits>
+#include <cfloat>
+#include <string.h>
 
 #include <dglib/DgZXRF.h>
-//#include <dglib/DgZXSystem.h>
+#include <dglib/DgZXSystem.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 DgZXRF::DgZXRF (const DgHierNdxSystemRFBase& sysIn, int resIn, const std::string& nameIn)
@@ -42,7 +42,26 @@ DgZXRF::DgZXRF (const DgHierNdxSystemRFBase& sysIn, int resIn, const std::string
 const char*
 DgZXRF::str2add (DgHierNdxIntCoord* add, const char* str, char delimiter) const
 {
-   return str;
+    char delimStr[2];
+    delimStr[0] = delimiter;
+    delimStr[1] = '\0';
+
+    char* tmpStr = new char[strlen(str) + 1];
+    strcpy(tmpStr, str);
+    char* tok = strtok(tmpStr, delimStr);
+
+    // convert to a unit64_t
+    uint64_t val = 0;
+    if (!sscanf(tok, "%" PRIx64, &val))
+       report("DgZXRF::str2add(): invalid ZX index", DgBase::Fatal);
+
+    if (!add) add = new DgHierNdxIntCoord();
+    add->setValue(val);
+
+    unsigned long offset = strlen(tok) + 1;
+    delete[] tmpStr;
+    if (offset >= strlen(str)) return 0;
+    else return &str[offset];
 
 } // const char* DgZXRF::str2add
 
@@ -50,7 +69,10 @@ DgZXRF::str2add (DgHierNdxIntCoord* add, const char* str, char delimiter) const
 DgHierNdxIntCoord 
 DgZXRF::quantify (const DgQ2DICoord& point) const 
 {
-   DgHierNdxIntCoord c;
+   // use string form to quantify
+   DgHierNdxStringCoord strC = system().pStrRF()->quantify(point);
+   DgHierNdxIntCoord c = system().toIntCoord(strC);
+
    return c;
 }
 
@@ -58,8 +80,10 @@ DgZXRF::quantify (const DgQ2DICoord& point) const
 DgQ2DICoord 
 DgZXRF::invQuantify (const DgHierNdxIntCoord& add) const
 {
-   DgQ2DICoord c;
-   return c;
+   // via string form
+   DgHierNdxStringCoord strC = system().toStringCoord(add);
+   DgQ2DICoord q = system().pStrRF()->invQuantify(strC);
+   return q;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -94,8 +94,8 @@ template <class C> class DgHierNdxRF :
       // sub-classes should create a factory method
       const DgHierNdxSystemRFBase& system (void) const { return sys_; }
 
-      const DgIDGGS& dggs (void) { return sys_.dggs(); }
-      const DgIDGG& dgg (void) { return sys_.dgg(); }
+      const DgIDGGS&    dggs (void) const { return *sys_.dggs(); }
+      const DgIDGGBase& dgg  (void) const { return *sys_.dgg(); }
 
       int res      (void) const { return sys_.res(); }
       int aperture (void) const { return sys_.aperture(); }

@@ -37,7 +37,7 @@ class DgZXStringRF : public DgHierNdxStringRF {
 
    public:
 
-      // these need to be defined by specializations
+      // abstract method from above
       virtual const char* str2add (DgHierNdxStringCoord* add, const char* str,
                                    char delimiter) const;
 
@@ -48,6 +48,8 @@ class DgZXStringRF : public DgHierNdxStringRF {
    protected:
 
     DgZXStringRF (const DgHierNdxSystemRFBase& sysIn, int resIn, const std::string& nameIn);
+    
+    unsigned long long int unitScaleClassIres_;
 
     friend DgZXSystem;
     template<class TINT, class TSTR> friend class DgHierNdxSystemRF;

@@ -34,8 +34,8 @@ class DgZXRF : public DgHierNdxIntRF {
 
    public:
 
-      // these need to be defined by specializations
-      virtual const char* str2add (DgHierNdxIntCoord* c, const char* str, 
+      // abstract method from above
+      virtual const char* str2add (DgHierNdxIntCoord* c, const char* str,
                    char delimiter) const;
 
       // these have dummy definitions from the superclass
