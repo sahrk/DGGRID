@@ -43,9 +43,8 @@ class DgHexIDGGS : public DgIDGGS {
                const DgGeoCoord& vert0, long double azDegs, unsigned int aperture = 4,
                int nRes = 1, const string& name = "IDGGS", const string& projType = "ISEA",
                const DgApSeq& apSeq = DgApSeq::defaultApSeq, bool isApSeq = false,
-               bool isMixed43 = false, int numAp4 = 0, bool isSuperfund = false)
-         { return new DgHexIDGGS(network, backFrame, vert0, azDegs, aperture, nRes, name,
-               projType, apSeq, isApSeq, isMixed43, numAp4, isSuperfund); }
+               bool isMixed43 = false, int numAp4 = 0, bool isSuperfund = false,
+               const string& hierNdxSysType = "NONE");
 
       // copy constructor and operator= not implemented
 
@@ -59,8 +58,9 @@ class DgHexIDGGS : public DgIDGGS {
       DgHexIDGGS (DgRFNetwork& network, const DgGeoSphRF& backFrame, const DgGeoCoord& vert0,
                long double azDegs, unsigned int aperture = 4, int nRes = 1,
                const string& name = "IDGGS", const string& projType = "ISEA",
-               const DgApSeq& apSeq = DgApSeq::defaultApSeq, bool isApSeq = false,
-               bool isMixed43 = false, int numAp4 = 0, bool isSuperfund = false);
+               bool isApSeq = false, const DgApSeq& apSeq = DgApSeq::defaultApSeq,
+               bool isMixed43 = false, int numAp4 = 0, bool isSuperfund = false,
+               const string& hierNdxSysType = "NONE");
 
       // pure virtual functions remaining from above
 

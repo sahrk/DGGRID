@@ -40,8 +40,9 @@ const DgIDGGS*
 DgIDGGS::makeRF (DgRFNetwork& network, const DgGeoSphRF& backFrame,
           const DgGeoCoord& vert0, long double azDegs, unsigned int apertureIn,
           int nRes, DgGridTopology gridTopo, DgGridMetric gridMetric,
-          const string& name, const string& projTypeIn, bool isMixed43In,
-          int numAp4In, bool isSuperfundIn, bool isApSeqIn, const DgApSeq& apSeqIn)
+          const string& name, const string& projTypeIn, bool isApSeqIn,
+          const DgApSeq& apSeqIn, bool isMixed43In, int numAp4In, bool isSuperfundIn,
+          const string& hierNdxSysType)
 {
    if (isApSeqIn)
       report("DgIDGGS::makeRF(): isApSeq must be false", DgBase::Fatal);
@@ -71,10 +72,10 @@ DgIDGGS::makeRF (DgRFNetwork& network, const DgGeoSphRF& backFrame,
       }
 
       dg0 = DgHexIDGGS::makeRF(network, backFrame, vert0, azDegs, apertureIn, nRes,
-              theName, projTypeIn, apSeqIn, isApSeqIn, isMixed43In, numAp4In, isSuperfundIn);
+              theName, projTypeIn, apSeqIn, isApSeqIn, isMixed43In, numAp4In, isSuperfundIn, hierNdxSysType);
    } else if (gridTopo == Diamond) {
 
-      if (apertureIn != 4)
+       if (apertureIn != 4)
             report(apErrStr, DgBase::Fatal);
 
       // assume D4
@@ -109,9 +110,15 @@ DgIDGGS::DgIDGGS (DgRFNetwork& network, const DgGeoSphRF& backFrame,
                   const DgGeoCoord& vert0, long double azDegs,
                   unsigned int aperture, int nRes, DgGridTopology gridTopo,
                   DgGridMetric gridMetric,
-                  const string& name, const string& projType, bool isMixed43,
-                  int numAp4, bool isSuperfund, bool isApSeq,
-                  const DgApSeq& apSeq)
+                  const string& name, const string& projType,
+                  bool isApSeq, const DgApSeq& apSeq,
+                  bool isMixed43, int numAp4, bool isSuperfund,
+                  const string& hierNdxSysType)
+/*
+const DgApSeq& apSeq = DgApSeq::defaultApSeq, bool isApSeq = false,
+bool isMixed43 = false, int numAp4 = 0, bool isSuperfund = false,
+const string& hierNdxSysType = "NONE");
+ */
         : DgIDGGSBase (network, backFrame, vert0, azDegs, nRes, aperture, name,
                        gridTopo, gridMetric, projType, !(isMixed43 || isApSeq)),
           numAp4_ (numAp4), isSuperfund_ (isSuperfund), isApSeq_ (isApSeq),

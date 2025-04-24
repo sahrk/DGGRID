@@ -37,6 +37,8 @@
 
 using namespace dgg::topo;
 
+class DgHierNdxSystemRFSBase;
+
 ////////////////////////////////////////////////////////////////////////////////
 class DgIDGGSBase : public DgDiscTopoRFS<DgQ2DICoord, DgGeoCoord, long double> {
 
@@ -50,7 +52,8 @@ class DgIDGGSBase : public DgDiscTopoRFS<DgQ2DICoord, DgGeoCoord, long double> {
                const string& name = "IDGGS", const string& projType = "ISEA",
                bool isMixed43 = false, int numAp4 = 0,
                bool isSuperfund = false, bool isApSeq = false,
-               const DgApSeq& apSeq = DgApSeq::defaultApSeq);
+               const DgApSeq& apSeq = DgApSeq::defaultApSeq,
+               const string& hierNdxSysType = "NONE");
 
       // copy constructor and operator= not implemented
 
@@ -67,6 +70,8 @@ class DgIDGGSBase : public DgDiscTopoRFS<DgQ2DICoord, DgGeoCoord, long double> {
       long double       azDegs      (void) const { return azDegs_; }
       bool              isPure      (void) const { return isPure_; }
       const string&     projType    (void) const { return projType_; }
+    
+      const DgHierNdxSystemRFSBase* hierNdxSystem (void) const { return hierNdxSystem_; }
 /*
       DgGridTopology    gridTopo    (void) const { return gridTopo_; }
       DgGridMetric      gridMetric  (void) const { return gridMetric_; }
@@ -86,7 +91,7 @@ class DgIDGGSBase : public DgDiscTopoRFS<DgQ2DICoord, DgGeoCoord, long double> {
                bool isPure = true)
         : DgDiscTopoRFS<DgQ2DICoord, DgGeoCoord, long double> (network, backFrame,
                   nRes, aperture, gridTopo, gridMetric, true, false, name),
-          geoRF_ (backFrame), vert0_ (vert0), azDegs_ (azDegs),
+          geoRF_ (backFrame), vert0_ (vert0), azDegs_ (azDegs), hierNdxSystem_ (nullptr),
           projType_ (projType), isPure_ (isPure) { }
 
       // remind sub-classes of the pure virtual functions remaining from above
@@ -103,12 +108,13 @@ class DgIDGGSBase : public DgDiscTopoRFS<DgQ2DICoord, DgGeoCoord, long double> {
       virtual void setAddAllChildren (const DgResAdd<DgQ2DICoord>& add,
                                       DgLocVector& vec) const = 0;
 
-   private:
+   //private:
 
       const DgGeoSphRF& geoRF_;
 
       DgGeoCoord vert0_;
       long double azDegs_;
+      DgHierNdxSystemRFSBase* hierNdxSystem_;
 
 /*
       DgGridTopology gridTopo_;

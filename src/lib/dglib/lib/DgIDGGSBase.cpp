@@ -35,18 +35,20 @@ DgIDGGSBase::makeRF (DgRFNetwork& network, const DgGeoSphRF& backFrame,
           const DgGeoCoord& vert0, long double azDegs, unsigned int apertureIn,
           int nResIn, DgGridTopology gridTopo, DgGridMetric gridMetric,
           const string& name, const string& projTypeIn, bool isMixed43In,
-          int numAp4In, bool isSuperfundIn, bool isApSeqIn, const DgApSeq& apSeqIn)
+          int numAp4In, bool isSuperfundIn, bool isApSeqIn, const DgApSeq& apSeqIn,
+          const string& hierNdxSysType)
 {
    const DgIDGGSBase* dg0 = NULL;
 
    if (gridTopo == Hexagon)
       dg0 = DgHexIDGGS::makeRF(network, backFrame, vert0, azDegs, apertureIn, nResIn,
             name, projTypeIn, apSeqIn, isApSeqIn, isMixed43In, numAp4In,
-            isSuperfundIn);
+            isSuperfundIn, hierNdxSysType);
    else
       dg0 = DgIDGGS::makeRF(network, backFrame, vert0, azDegs,
             apertureIn, nResIn, gridTopo, gridMetric, name, projTypeIn,
-            isMixed43In, numAp4In, isSuperfundIn);
+            isApSeqIn, apSeqIn, isMixed43In, numAp4In,
+            isSuperfundIn, hierNdxSysType);
 
    return dg0;
 

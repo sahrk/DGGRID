@@ -111,6 +111,7 @@ struct SubOpDGG : public SubOpBasic {
    bool   isApSeq;      // are we using an aperture sequence?
    DgApSeq apSeq;
    int   sfRes; // superfund digit resolution
+   string hierNdxSysType;
 };
 
 ////////////////////////////////////////////////////////////////////////////////

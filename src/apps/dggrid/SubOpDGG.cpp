@@ -54,7 +54,7 @@ SubOpDGG::SubOpDGG (OpBasic& op, bool _activate)
      placeRandom (false), orientCenter (false), orientRand (0),
      numGrids (1), curGrid (0), lastGrid (false), sampleCount(0), nSamplePts(0),
      azimuthDegs (0.0), datum (""), apertureType (""),
-     isMixed43 (false), isSuperfund (false), isApSeq (false)
+     isMixed43 (false), isSuperfund (false), isApSeq (false), hierNdxSysType ("")
 {
 }
 
@@ -371,6 +371,12 @@ SubOpDGG::initializeOp (void)
    // dggs_res_spec <int> (0 <= v <= MAX_DGG_RES)
    pList().insertParam(new DgIntParam("dggs_res_spec", 9, 0, MAX_DGG_RES));
 
+   // hier_indexing_system_type <Z7 | NONE>
+   choices.push_back(new string("Z7"));
+   choices.push_back(new string("NONE"));
+   pList().insertParam(new DgStringChoiceParam("hier_indexing_system_type", "NONE", &choices));
+   dgg::util::release(choices);
+
    return 0;
 
 } // int SubOpDGG::initializeOp
@@ -558,6 +564,18 @@ SubOpDGG::setupOp (void)
          orientRand = new DgRand(ranSeed);
       }
    }
+
+   getParamValue(pList(), "hier_indexing_system_type", hierNdxSysType, false);
+   if (hierNdxSysType != string("NONE")) {
+
+      if (hierNdxSysType == string("Z7")) {
+         if (apertureType != "PURE" || aperture != 7)
+            ::report("SubOpDGG::setupOp() hier_indexing_system_type Z7 "
+                     "requires a pure aperture 7 DGGS", DgBase::Fatal);
+      } else {
+         ::report("SubOpDGG::setupOp() invalid hier_indexing_system_type", DgBase::Fatal);
+      }
+   } 
 
    curGrid = 0;
    lastGrid = false;
