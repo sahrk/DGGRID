@@ -33,6 +33,8 @@
 #include <dglib/DgApSeq.h>
 #include <dglib/DgHexIDGG.h>
 #include <dglib/DgIDGGS.h>
+#include <dglib/DgHierNdxSysType.h>
+using namespace dgg::hiersystype;
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgHexIDGGS : public DgIDGGS {
@@ -42,9 +44,9 @@ class DgHexIDGGS : public DgIDGGS {
       static const DgHexIDGGS* makeRF (DgRFNetwork& network, const DgGeoSphRF& backFrame,
                const DgGeoCoord& vert0, long double azDegs, unsigned int aperture = 4,
                int nRes = 1, const string& name = "IDGGS", const string& projType = "ISEA",
-               const DgApSeq& apSeq = DgApSeq::defaultApSeq, bool isApSeq = false,
+               bool isApSeq = false, const DgApSeq& apSeq = DgApSeq::defaultApSeq, 
                bool isMixed43 = false, int numAp4 = 0, bool isSuperfund = false,
-               const string& hierNdxSysType = "NONE");
+               const DgHierNdxSysType hierNdxSysType = dgg::hiersystype::InvalidHierNdxSysType);
 
       // copy constructor and operator= not implemented
 
@@ -60,7 +62,7 @@ class DgHexIDGGS : public DgIDGGS {
                const string& name = "IDGGS", const string& projType = "ISEA",
                bool isApSeq = false, const DgApSeq& apSeq = DgApSeq::defaultApSeq,
                bool isMixed43 = false, int numAp4 = 0, bool isSuperfund = false,
-               const string& hierNdxSysType = "NONE");
+               DgHierNdxSysType hierNdxSysType = dgg::hiersystype::InvalidHierNdxSysType);
 
       // pure virtual functions remaining from above
 

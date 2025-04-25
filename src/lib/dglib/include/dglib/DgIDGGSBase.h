@@ -32,6 +32,8 @@
 #include <dglib/DgEllipsoidRF.h>
 #include <dglib/DgApSeq.h>
 #include <dglib/DgGridTopo.h>
+#include <dglib/DgHierNdxSysType.h>
+using namespace dgg::hiersystype;
 
 #include <cmath>
 
@@ -50,10 +52,10 @@ class DgIDGGSBase : public DgDiscTopoRFS<DgQ2DICoord, DgGeoCoord, long double> {
                DgGridTopology gridTopo = Hexagon,
                DgGridMetric gridMetric = D6,
                const string& name = "IDGGS", const string& projType = "ISEA",
+               bool isApSeq = false, const DgApSeq& apSeq = DgApSeq::defaultApSeq,
                bool isMixed43 = false, int numAp4 = 0,
-               bool isSuperfund = false, bool isApSeq = false,
-               const DgApSeq& apSeq = DgApSeq::defaultApSeq,
-               const string& hierNdxSysType = "NONE");
+               bool isSuperfund = false,
+               const DgHierNdxSysType hierNdxSysType = dgg::hiersystype::InvalidHierNdxSysType);
 
       // copy constructor and operator= not implemented
 

@@ -38,9 +38,9 @@ const DgHexIDGGS*
 DgHexIDGGS::makeRF (DgRFNetwork& network, const DgGeoSphRF& backFrame,
          const DgGeoCoord& vert0, long double azDegs, unsigned int aperture,
          int nRes, const string& name, const string& projType,
-         const DgApSeq& apSeq, bool isApSeq,
+         bool isApSeq, const DgApSeq& apSeq,
          bool isMixed43, int numAp4, bool isSuperfund,
-         const string& hierNdxSysType)
+         DgHierNdxSysType hierNdxSysType)
 {
     const DgHexIDGGS* idggs = new DgHexIDGGS(network, backFrame, vert0, azDegs, aperture, nRes, name,
                                              projType, isApSeq, apSeq, isMixed43, numAp4, isSuperfund, hierNdxSysType);
@@ -55,7 +55,7 @@ DgHexIDGGS::DgHexIDGGS (DgRFNetwork& network, const DgGeoSphRF& backFrame,
                   const string& name, const string& projType,
                   bool isApSeq, const DgApSeq& apSeq,
                   bool isMixed43, int numAp4, bool isSuperfund,
-                  const string& hierNdxSysType)
+                  const DgHierNdxSysType hierNdxSysType)
         : DgIDGGS (network, backFrame, vert0, azDegs, aperture, nRes,
                        Hexagon, D6, name, projType, isApSeq, apSeq, isMixed43, numAp4,
                        isSuperfund, hierNdxSysType),
@@ -103,8 +103,8 @@ DgHexIDGGS::DgHexIDGGS (DgRFNetwork& network, const DgGeoSphRF& backFrame,
        Dg2WayTopoResAddConverter<DgQ2DICoord, DgGeoCoord, long double>(*this, *(grids()[r]), r);
 
    // create the hierarchical indexing system
-    if (hierNdxSysType != "NONE") {
-        if (hierNdxSysType == "Z7") {
+    if (hierNdxSysType != NoHierNdxSysType) {
+        if (hierNdxSysType == ZXSystem) {
             if (isApSeq || isMixed43 || aperture != 7) {
                 ::report("DgHexIDGGS::DgHexIDGGS() invalid hierNdxSysType", DgBase::Fatal);
             }

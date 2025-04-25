@@ -30,6 +30,8 @@
 
 #include <dglib/DgIDGGSBase.h>
 #include <dglib/DgIDGG.h>
+#include <dglib/DgHierNdxSysType.h>
+using namespace dgg::hiersystype;
 
 #include <cmath>
 
@@ -48,7 +50,7 @@ class DgIDGGS : public DgIDGGSBase {
                const string& name = "IDGGS", const string& projType = "ISEA",
                bool isApSeq = false, const DgApSeq& apSeq = DgApSeq::defaultApSeq,
                bool isMixed43 = false, int numAp4 = 0, bool isSuperfund = false,
-               const string& hierNdxSysType = "NONE");
+               const DgHierNdxSysType hierNdxSysType = dgg::hiersystype::InvalidHierNdxSysType);
 
       // copy constructor and operator= not implemented
 
@@ -75,7 +77,7 @@ class DgIDGGS : public DgIDGGSBase {
                bool isApSeq = false, const DgApSeq& apSeq = DgApSeq::defaultApSeq,
                bool isMixed43 = false, int numAp4 = 0,
                bool isSuperfund = false,
-               const string& hierNdxSysType = "NONE");
+               const DgHierNdxSysType hierNdxSysType = dgg::hiersystype::InvalidHierNdxSysType);
 
       // remind sub-classes of the pure virtual functions remaining from above
 

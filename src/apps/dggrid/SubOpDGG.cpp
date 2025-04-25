@@ -54,7 +54,8 @@ SubOpDGG::SubOpDGG (OpBasic& op, bool _activate)
      placeRandom (false), orientCenter (false), orientRand (0),
      numGrids (1), curGrid (0), lastGrid (false), sampleCount(0), nSamplePts(0),
      azimuthDegs (0.0), datum (""), apertureType (""),
-     isMixed43 (false), isSuperfund (false), isApSeq (false), hierNdxSysType ("")
+     isMixed43 (false), isSuperfund (false), isApSeq (false), 
+     hierNdxSysType (dgg::hiersystype::InvalidHierNdxSysType)
 {
 }
 
@@ -289,8 +290,7 @@ SubOpDGG::initializeOp (void)
    choices.push_back(new string("3"));
    choices.push_back(new string("4"));
    choices.push_back(new string("7"));
-   pList().insertParam(new DgStringChoiceParam("dggs_aperture", "4",
-             &choices));
+   pList().insertParam(new DgStringChoiceParam("dggs_aperture", "4", &choices));
    dgg::util::release(choices);
 
    // dggs_aperture_sequence < apertureSequence >
@@ -371,9 +371,12 @@ SubOpDGG::initializeOp (void)
    // dggs_res_spec <int> (0 <= v <= MAX_DGG_RES)
    pList().insertParam(new DgIntParam("dggs_res_spec", 9, 0, MAX_DGG_RES));
 
-   // hier_indexing_system_type <Z7 | NONE>
-   choices.push_back(new string("Z7"));
-   choices.push_back(new string("NONE"));
+   // hier_indexing_system_type <ZX_SYSTEM | NONE>
+   for (int i = 0; ; i++) {
+      if (hierNdxSysTypeStrings[i] == "INVALID")
+         break;
+      choices.push_back(new string(hierNdxSysTypeStrings[i]));
+   }
    pList().insertParam(new DgStringChoiceParam("hier_indexing_system_type", "NONE", &choices));
    dgg::util::release(choices);
 
@@ -565,10 +568,11 @@ SubOpDGG::setupOp (void)
       }
    }
 
-   getParamValue(pList(), "hier_indexing_system_type", hierNdxSysType, false);
-   if (hierNdxSysType != string("NONE")) {
-
-      if (hierNdxSysType == string("Z7")) {
+   // hierarchical indexing type
+   getParamValue(pList(), "hier_indexing_system_type", dummy, false);
+   hierNdxSysType = dgg::hiersystype::stringToHierNdxSysType(dummy);
+   if (hierNdxSysType != dgg::hiersystype::NoHierNdxSysType) {
+      if (hierNdxSysType == dgg::hiersystype::ZXSystem) {
          if (apertureType != "PURE" || aperture != 7)
             ::report("SubOpDGG::setupOp() hier_indexing_system_type Z7 "
                      "requires a pure aperture 7 DGGS", DgBase::Fatal);
@@ -612,8 +616,8 @@ SubOpDGG::executeOp (void) {
 
    _pDGGS  = DgIDGGSBase::makeRF(net0(), geoRF(), vert0,
              azimuthDegs, aperture, actualRes+2, gridTopo,
-             gridMetric, "IDGGS", projType, isMixed43, numAp4,
-             isSuperfund, isApSeq, apSeq);
+             gridMetric, "IDGGS", projType, isApSeq, apSeq,
+             isMixed43, numAp4, isSuperfund, hierNdxSysType);
 
    _pDGG = &dggs().idggBase(actualRes);
 
@@ -667,7 +671,7 @@ SubOpDGG::determineRes (void)
       const DgGeoSphRF& geoRF = *(DgGeoSphRF::makeRF(net0, "GS0", earthRadius));
       const DgIDGGSBase *idggs = DgIDGGSBase::makeRF(net0, geoRF, vert0,
              azimuthDegs, aperture, maxRes, gridTopo, gridMetric, "IDGGS",
-             projType, isMixed43, numAp4, isSuperfund, isApSeq, apSeq);
+             projType, isApSeq, apSeq, isMixed43, numAp4, isSuperfund, hierNdxSysType);
 
       long double last = 0.0;
       res = maxRes + 1;

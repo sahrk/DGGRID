@@ -31,6 +31,8 @@
 #include <dglib/DgGeoSphRF.h>
 #include <dglib/DgIDGGSBase.h>
 #include <dglib/DgAddressType.h>
+#include <dglib/DgHierNdxSysType.h>
+using namespace dgg::hiersystype;
 
 #include "SubOpBasic.h"
 
@@ -111,7 +113,7 @@ struct SubOpDGG : public SubOpBasic {
    bool   isApSeq;      // are we using an aperture sequence?
    DgApSeq apSeq;
    int   sfRes; // superfund digit resolution
-   string hierNdxSysType;
+   DgHierNdxSysType hierNdxSysType;
 };
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -29,9 +29,9 @@
 
 namespace dgg { namespace hiersystype {
 
-enum DgHierNdxSysType { ZXSystem, InvalidHierNdxSysType };
+enum DgHierNdxSysType { ZXSystem, NoHierNdxSysType, InvalidHierNdxSysType };
 
-static const std::string hierNdxSysTypeStrings[] = { "ZX_SYSTEM", "INVALID" };
+static const std::string hierNdxSysTypeStrings[] = { "ZX_SYSTEM", "NONE", "INVALID" };
 
 DgHierNdxSysType stringToHierNdxSysType (const std::string& str);
 const std::string& to_string (DgHierNdxSysType t);

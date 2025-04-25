@@ -415,7 +415,6 @@ SubOpOut::SubOpOut (OpBasic& op, bool _activate)
    : SubOpBasic (op, _activate),
      pOutRF (0), pChdOutRF (0), pNdxPrtOutRF (0),
      outAddType (dgg::addtype::InvalidAddressType),
-     hierNdxSysType (dgg::hiersystype::InvalidHierNdxSysType),
      outSeqNum (false), outputDelimiter (' '), nDensify (1),
      lonWrapMode (DgGeoSphRF::Wrap), unwrapPts (true),
      doRandPts (true), ptsRand (0), nRandPts (0),
@@ -666,10 +665,6 @@ SubOpOut::setupOp (void)
    getParamValue(pList(), "output_address_type", dummy, false);
    outAddType = dgg::addtype::stringToAddressType(dummy);
 
-   // hierarchical indexing type
-   getParamValue(pList(), "hier_indexing_system_type", dummy, false);
-   hierNdxSysType = dgg::hiersystype::stringToHierNdxSysType(dummy);
-
    // output delimiter
    getParamValue(pList(), "output_delimiter", dummy, false);
    if (dummy.length() != 3 || dummy.c_str()[0] != '"' ||
@@ -913,11 +908,12 @@ SubOpOut::executeOp (void) {
     //      const DgZXSystem*   zXSystem (void) const { return zXSystem_; }
 
    if (ndxChildrenOutType != "NONE" || ndxParentOutType != "NONE") {
-      if (hierNdxSysType == dgg::hiersystype::ZXSystem && dgg.zXSystem()) {
+      if (hierNdxSysType != dgg::hiersystype::ZXSystem && dgg.zXSystem()) {
           //hierNdxIDGGS = dynamic_cast<const DgHierNdxHexIDGGS*>(dgg.z7RF());
           pHierNdxSystem = dgg.zXSystemBase();
+YYYYYYY
       } else {
-          ::report("SubOpOut::executeOp(): hierarchical indexing system is required for indexing parent/child operations", DgBase::Fatal);
+          ::report("SubOpOut::executeOp(): a hierarchical indexing system is required for indexing parent/child operations", DgBase::Fatal);
       }
    }
 
