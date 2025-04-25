@@ -373,9 +373,7 @@ SubOpOut::outputCellAdd2D (const DgLocation& add2D, const string* labelIn,
 
    DgLocVector ndxChildren;
    if (ndxChildrenOutType != "NONE") {
-
-// KEVIN XXX
-      op.dggOp.dggs().setAllChildren(q2diR, ndxChildren);
+      op.dggOp.dggs().hierNdxSystem()->setNdxChildren(q2diR, ndxChildren);
 
       if (ndxChdOut)
          ndxChdOut->insert(add2D, ndxChildren);
@@ -384,8 +382,7 @@ SubOpOut::outputCellAdd2D (const DgLocation& add2D, const string* labelIn,
    DgLocation ndxParent;
    if (ndxParentOutType != "NONE") {
 
-// KEVIN XXX
-      pHierNdxSystem->setNdxParent(q2diR, ndxParent);
+      op.dggOp.dggs().hierNdxSystem()->setNdxParent(q2diR, ndxParent);
 
       if (ndxPrtOut)
          ndxPrtOut->insert(add2D, ndxParent);
@@ -907,11 +904,10 @@ SubOpOut::executeOp (void) {
 
     //      const DgZXSystem*   zXSystem (void) const { return zXSystem_; }
 
+   pHierNdxSystem = nullptr;
    if (ndxChildrenOutType != "NONE" || ndxParentOutType != "NONE") {
-      if (hierNdxSysType != dgg::hiersystype::ZXSystem && dgg.zXSystem()) {
-          //hierNdxIDGGS = dynamic_cast<const DgHierNdxHexIDGGS*>(dgg.z7RF());
-          pHierNdxSystem = dgg.zXSystemBase();
-YYYYYYY
+       if (dgg.dggs()->hierNdxSystem()) {
+          pHierNdxSystem = dgg.dggs()->hierNdxSystem();
       } else {
           ::report("SubOpOut::executeOp(): a hierarchical indexing system is required for indexing parent/child operations", DgBase::Fatal);
       }

@@ -58,8 +58,24 @@ template <class TINT, class TSTR> class DgHierNdxSystemRFS :
                   static_cast<const DgDiscRF<DgHierNdx, DgQ2DICoord, long long int>*>(rfGrids[r]);
      };
 
-     // pure virtual functions passed down from above
-
+     virtual void initNdxFromInt (DgResAdd<DgHierNdx>& ndx, int res, HIERNDX_INT_TYPE val) const {
+         DgHierNdx newAdd (outModeInt());
+         DgHierNdxIntCoord ic(val);
+         newAdd.setIntNdx(ic);
+         this->sysRF(res).setStringFromIntCoord(newAdd);
+         ndx.setRes(res);
+         ndx.setAddress(newAdd);
+     }
+   
+     virtual void initNdxFromString (DgResAdd<DgHierNdx>& ndx, int res, const string& val) const {
+         DgHierNdx newAdd (outModeInt());
+         DgHierNdxStringCoord sc(val);
+         newAdd.setStrNdx(sc);
+         this->sysRF(res).setIntFromStringCoord(newAdd);
+         ndx.setRes(res);
+         ndx.setAddress(newAdd);
+      }
+                                                                      
      // pure virtual functions passed down from above
      virtual void setAddNdxParent (const DgResAdd<DgHierNdx>& add,
                                    DgLocation& parent) const = 0;

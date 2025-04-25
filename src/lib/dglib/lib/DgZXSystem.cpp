@@ -79,6 +79,16 @@ void
 DgZXSystem::setAddNdxParent (const DgResAdd<DgHierNdx>& add,
                                    DgLocation& parent) const
 {
+    // res has already been verified by the caller
+    int pRes = add.res() - 1;
+    string addStr = add.address().strNdx().value();
+    string pStr = addStr.substr(0, addStr.size() - 1);
+    
+    // build the parent address
+        
+    DgResAdd<DgHierNdx> pAdd;
+    initNdxFromString(pAdd, pRes, pStr);
+    forceAddress(&parent, pAdd);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -86,6 +96,17 @@ void
 DgZXSystem::setAddNdxChildren (const DgResAdd<DgHierNdx>& add,
                                      DgLocVector& children) const
 {
+    int pRes = add.res() - 1;
+    string addStr = add.address().strNdx().value();
+    string pStr = addStr.substr(0, addStr.size() - 1);
+    
+    vector<DgAddressBase*>& v = children.addressVec();
+    for (int i = 0; i < (int) tmpVec.size(); i++)
+    {
+       string childString =
+       v.push_back(new DgAddress<DgResAdd<DgHierNdx>>();
+    }
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////
