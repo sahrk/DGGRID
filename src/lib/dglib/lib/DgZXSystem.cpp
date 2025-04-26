@@ -197,39 +197,40 @@ DgZXSystem::setAddNdxChildren (const DgResAdd<DgHierNdx>& add,
                                      DgLocVector& children) const
 {
     int chdRes = add.res() + 1;
-    string addStr = add.address().strNdx().value();
+    string valStr = add.address().strNdx().value();
      
      // first get the base cell number
-      string quadStr = addStr.substr(0, 2);
+      string quadStr = valStr.substr(0, 2);
       if (quadStr[0] == '0') // leading 0
           quadStr = quadStr.substr(1, 1);
       int quadNum = std::stoi(quadStr);
-       if (quadNum < 0 || quadNum > 11) {
+      if (quadNum < 0 || quadNum > 11) {
            report("DgZXSystem::setAddNdxChildren(): "
               "index has invalid base cell number", DgBase::Fatal);
-        }
+     }
+    
+    string addStr = valStr.substr(2);
     
     // KEVIN: this should all be done with integers and c_str's
-    string skipDigit = to_string((quadNum <= 5) ? 2 : 5);
- 
+    // assume no skip digit
+    int skipDigit = -1;
+    // check if current address is all zeros
+    size_t pos = addStr.find_first_not_of('0');
+    if (pos == std::string::npos) { // all digits are zero
+        skipDigit = (quadNum <= 5) ? 2 : 5;
+    }
+    
     children.clearAddress();
     vector<DgAddressBase*>& v = children.addressVec();
-    for (int i = 1; i <= 6; ++i) {
+    for (int i = 0; i <= 6; i++) {
         // KEVIN pentagon sub-sequence check
         
-        // check first non-zero digit for deleted sub-sequence
-        int firstDigitNdx = 2;
-        string firstDigit = "0";
-        while (firstDigit == "0" && firstDigitNdx < addStr.size()) {
-            firstDigit = addStr.substr(firstDigitNdx, 1);
-            firstDigitNdx++;
-        }
-        
-        if (firstDigit == skipDigit)
+        // skip pentagon sub-sequence digits as per above
+        if (i == skipDigit)
             continue;
-        
+
         // build the child address
-        string chdStr = addStr + std::to_string(i);
+        string chdStr = valStr + std::to_string(i);
         DgResAdd<DgHierNdx> chdAdd;
         initNdxFromString(chdAdd, chdRes, chdStr);
         
