@@ -157,8 +157,8 @@ class DgHierNdxSystemRFBase
       DgHierNdxSystemRFBase (const DgHierNdxSystemRFSBase& hierNdxRFSIn, int resIn,
             const string& nameIn = "HierNdxSysRFBase");
 
-      int setSystemSet (DgSystemSet& set, int res);
-      virtual void initialize (void);
+      int setSystemSet (DgSystemSet& set, vector<DgHierNdxSystemRFBase*>& rfGrids, int res);
+      virtual void initialize (vector<DgHierNdxSystemRFBase*>& rfGrids);
 
       const DgHierNdxSystemRFSBase& hierNdxRFS_;
       const DgIDGGSBase& dggs_;

@@ -42,8 +42,19 @@ DgHexIDGGS::makeRF (DgRFNetwork& network, const DgGeoSphRF& backFrame,
          bool isMixed43, int numAp4, bool isSuperfund,
          DgHierNdxSysType hierNdxSysType)
 {
-    const DgHexIDGGS* idggs = new DgHexIDGGS(network, backFrame, vert0, azDegs, aperture, nRes, name,
+    DgHexIDGGS* idggs = new DgHexIDGGS(network, backFrame, vert0, azDegs, aperture, nRes, name,
                                              projType, isApSeq, apSeq, isMixed43, numAp4, isSuperfund, hierNdxSysType);
+    
+    // create the hierarchical indexing system
+     if (hierNdxSysType != NoHierNdxSysType) {
+         if (hierNdxSysType == ZXSystem) {
+             if (isApSeq || isMixed43 || aperture != 7) {
+                 ::report("DgHexIDGGS::makeRF() invalid hierNdxSysType", DgBase::Fatal);
+             }
+             
+             idggs->hierNdxSystem_ = DgZXSystem::makeSystem(*idggs, true, "Z7");
+         }
+     }
     
     return idggs;
 }
@@ -101,7 +112,7 @@ DgHexIDGGS::DgHexIDGGS (DgRFNetwork& network, const DgGeoSphRF& backFrame,
 
    for (int r = 0; r < nRes; r++)
        Dg2WayTopoResAddConverter<DgQ2DICoord, DgGeoCoord, long double>(*this, *(grids()[r]), r);
-
+/*
    // create the hierarchical indexing system
     if (hierNdxSysType != NoHierNdxSysType) {
         if (hierNdxSysType == ZXSystem) {
@@ -112,6 +123,7 @@ DgHexIDGGS::DgHexIDGGS (DgRFNetwork& network, const DgGeoSphRF& backFrame,
             hierNdxSystem_ = DgZXSystem::makeSystem(*this, true, "Z7");
         }
     }
+ */
        
 } // DgHexIDGGS::DgHexIDGGS
 

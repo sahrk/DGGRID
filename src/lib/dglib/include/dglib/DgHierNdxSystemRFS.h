@@ -49,9 +49,10 @@ template <class TINT, class TSTR> class DgHierNdxSystemRFS :
              rfGrids[r] = new DgHierNdxSystemRF<TINT, TSTR>(*this, r,
                                             nameIn + to_string(r));
          
+         // initializ
          for (int r = 0; r < nRes(); r++)
-             rfGrids[r]->initialize();
-         
+             rfGrids[r]->initialize(rfGrids);
+
          // move into our grids_
          for (int r = 0; r < nRes(); r++)
              (*grids_)[r] =

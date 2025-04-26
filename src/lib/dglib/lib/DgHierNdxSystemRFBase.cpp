@@ -149,32 +149,33 @@ DgHierNdxSystemRFBase::setStringFromIntCoord (DgHierNdx& hn) const
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void
-DgHierNdxSystemRFBase::initialize (void)
-{
-   // current res set in the sub-class constructor
-   //setSystemSet(curRes_, res_);
-
-   setSystemSet(pRes_, res_ - 1);
-   setSystemSet(chRes_, res_ + 1);
-}
-
-////////////////////////////////////////////////////////////////////////////////
-int 
-DgHierNdxSystemRFBase::setSystemSet (DgSystemSet& set, int res)
+int
+DgHierNdxSystemRFBase::setSystemSet (DgSystemSet& set, vector<DgHierNdxSystemRFBase*>& rfGrids, int res)
 {
    set.dgg_ = nullptr;
    set.intRF_ = nullptr;
    set.strRF_ = nullptr;
    if (res < 0 || res >= hierNdxRFS_.nRes())
       return 1;
-
+    
    // if we're here res is valid
-   set.dgg_ = hierNdxRFS_.sysRF(res).dgg();
-   set.intRF_ = hierNdxRFS_.sysRF(res).intRF();
-   set.strRF_ = hierNdxRFS_.sysRF(res).strRF();
+   set.dgg_ = rfGrids[res]->dgg();
+   set.intRF_ = rfGrids[res]->intRF();
+   set.strRF_ = rfGrids[res]->strRF();
     
    return 0;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+void
+DgHierNdxSystemRFBase::initialize (vector<DgHierNdxSystemRFBase*>& rfGrids)
+{
+   // current res set in the sub-class constructor
+   //setSystemSet(curRes_, res_);
+
+   setSystemSet(pRes_, rfGrids, res_ - 1);
+   setSystemSet(chRes_, rfGrids, res_ + 1);
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////
