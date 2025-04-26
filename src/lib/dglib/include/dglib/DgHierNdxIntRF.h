@@ -35,7 +35,7 @@ using namespace std;
 #define HIERNDX_INT_TYPE uint64_t
 
 ////////////////////////////////////////////////////////////////////////////////
-class DgHierNdxIntCoord : public DgHierNdxCoord<> {
+class DgHierNdxIntCoord : public DgHierNdxCoord<HIERNDX_INT_TYPE> {
 
    public: 
 

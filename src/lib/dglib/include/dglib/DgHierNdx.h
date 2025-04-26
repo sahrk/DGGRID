@@ -56,7 +56,7 @@ class DgHierNdx {
       void setIntNdx (const DgHierNdxIntCoord& intNdxIn) { intNdx_ = intNdxIn; }
       void setStrNdx (const DgHierNdxStringCoord& strNdxIn) { strNdx_ = strNdxIn; }
     
-      void setIntFromStringCoord (void)
+      void setIntFromStringCoord (void);
     
       void setOutModeInt (bool outModeIntIn) { outModeInt_ = outModeIntIn; }
 
