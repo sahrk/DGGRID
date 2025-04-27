@@ -197,7 +197,6 @@ DgQ2DICoord
 DgHierNdxSystemRFBase::invQuantify (const DgHierNdx& ndx) const
 {
    DgQ2DICoord point(strRF()->invQuantify(ndx.strNdx_));
-
    return point;
 }
 
@@ -205,16 +204,14 @@ DgHierNdxSystemRFBase::invQuantify (const DgHierNdx& ndx) const
 DgHierNdxIntCoord 
 DgHierNdxSystemRFBase::toIntCoord (const DgHierNdxStringCoord& c) const
 {
-    DgHierNdxIntCoord add;
-    return add;
+    return hierNdxRFS().toIntCoord(c);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 DgHierNdxStringCoord 
 DgHierNdxSystemRFBase::toStringCoord (const DgHierNdxIntCoord& c) const
 {
-    DgHierNdxStringCoord add;
-    return add;
+    return hierNdxRFS().toStringCoord(c);
 }
 
 ////////////////////////////////////////////////////////////////////////////////

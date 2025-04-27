@@ -94,7 +94,10 @@ class DgHierNdxSystemRFSBase :
      virtual DgResAdd<DgQ2DICoord> invQuantify (const DgResAdd<DgHierNdx>& add) const;
  */
 
-     // pure virtual functions passed down from above
+     // pure virtual functions to be defined by particular systems
+     virtual DgHierNdxIntCoord toIntCoord (const DgHierNdxStringCoord& c) const = 0;
+     virtual DgHierNdxStringCoord toStringCoord (const DgHierNdxIntCoord& c) const = 0;
+
      virtual void setAddNdxParent (const DgResAdd<DgHierNdx>& add,
                                    DgLocation& parent) const = 0;
      virtual void setAddNdxChildren (const DgResAdd<DgHierNdx>& add,
@@ -103,7 +106,8 @@ class DgHierNdxSystemRFSBase :
      // state data
      const DgIDGGSBase& dggs_;
      bool outModeInt_;
-
+                  
+     friend class DgHierNdxSystemRFBase;
 };
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -78,6 +78,9 @@ template <class TINT, class TSTR> class DgHierNdxSystemRFS :
       }
                                                                       
      // pure virtual functions passed down from above
+     virtual DgHierNdxIntCoord toIntCoord (const DgHierNdxStringCoord& c) const = 0;
+     virtual DgHierNdxStringCoord toStringCoord (const DgHierNdxIntCoord& c) const = 0;
+
      virtual void setAddNdxParent (const DgResAdd<DgHierNdx>& add,
                                    DgLocation& parent) const = 0;
      virtual void setAddNdxChildren (const DgResAdd<DgHierNdx>& add,
