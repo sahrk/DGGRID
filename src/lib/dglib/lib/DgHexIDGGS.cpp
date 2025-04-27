@@ -52,7 +52,7 @@ DgHexIDGGS::makeRF (DgRFNetwork& network, const DgGeoSphRF& backFrame,
                  ::report("DgHexIDGGS::makeRF() invalid hierNdxSysType", DgBase::Fatal);
              }
              
-             idggs->hierNdxSystem_ = DgZXSystem::makeSystem(*idggs, true, "Z7");
+             idggs->hierNdxSystem_ = DgZXSystem::makeSystem(*idggs, false, "Z7");
          }
      }
     
