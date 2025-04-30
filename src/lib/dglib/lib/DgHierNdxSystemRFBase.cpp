@@ -197,6 +197,7 @@ DgQ2DICoord
 DgHierNdxSystemRFBase::invQuantify (const DgHierNdx& ndx) const
 {
    DgQ2DICoord point(strRF()->invQuantify(ndx.strNdx_));
+    cout << "KEVIN: " << ndx.strNdx_ << " " << point << endl;
    return point;
 }
 

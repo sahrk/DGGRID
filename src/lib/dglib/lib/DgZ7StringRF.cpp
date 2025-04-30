@@ -214,8 +214,21 @@ DgQ2DItoZ7StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
 
     string bcstr = dgg::util::to_string(baseCell, 2);
     string addstr = bcstr;
+    DgIVec3D::Direction skipDigit = ((baseCell < 6) ? DgIVec3D::PENTAGON_SKIPPED_DIGIT_TYPE1 : DgIVec3D::PENTAGON_SKIPPED_DIGIT_TYPE2);
+    int skipRotate = false;
+    int firstNonZero = false;
     for (int r = 1; r < res+1; r++) {
-         addstr = addstr + to_string((int) digits[r]);
+        DgIVec3D::Direction d = digits[r];
+        if (!firstNonZero && d != DgIVec3D::CENTER_DIGIT) {
+            firstNonZero = true;
+            if (d == skipDigit)
+                skipRotate = true;
+        }
+        
+        if (skipRotate)
+           d = DgIVec3D::rotate60ccw(d);
+        
+        addstr = addstr + to_string((int) d);
     }
 
     free(digits);
@@ -223,7 +236,7 @@ DgQ2DItoZ7StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
 
     DgZ7StringCoord z7str;
     z7str.setValString(addstr);
-    //dgcout << "addIn: " << addIn << " baseijk: " << baseCellIjk << " z7str: " << z7str << endl;
+    dgcout << "KEVIN addIn: " << addIn << " baseijk: " << baseCellIjk << " z7str: " << z7str << endl;
     //dgcout << z7str << " " << addIn << endl;
 
     return z7str;
