@@ -364,10 +364,12 @@ DgZ7StringToQ2DIConverter::convertTypedAddress (const DgZ7StringCoord& addIn) co
         { 11, 11 } // q11
     };
 
-    //dgcout << addIn << " " << ij << " ";
+    dgcout << addIn << " " << ij << " ";
 
     bool negI = ij.i() < 0;
     bool negJ = ij.j() < 0;
+    if (negI || negJ) printf(" NEG "); // KEVIN
+    
     long int origI = ij.i();
     if (bcNum == 0) {
         if (!negI) {
@@ -458,6 +460,11 @@ DgZ7StringToQ2DIConverter::convertTypedAddress (const DgZ7StringCoord& addIn) co
             } else { // only j negative
                 quadNum = inverseAdjacentBaseCellTable[bcNum][1];
             }
+        } else if (negI) {
+            // need to rotate digit 3 into the missing digit 2 area
+            DgIVec3D ijk(ij);
+            ijk.ijkRotate60cw();
+            ij = DgIVec2D(ijk);
         }
     } else { // 6 - 10
         if (negI) {
@@ -468,6 +475,11 @@ DgZ7StringToQ2DIConverter::convertTypedAddress (const DgZ7StringCoord& addIn) co
             } else { // only i negative
                 quadNum = inverseAdjacentBaseCellTable[bcNum][1];
             }
+        } else if (negJ) {
+            // need to rotate digit ? into the missing digit 5 area
+            DgIVec3D ijk(ij);
+            ijk.ijkRotate60ccw();
+            ij = DgIVec2D(ijk);
         }
     }
 
