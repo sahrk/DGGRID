@@ -177,10 +177,24 @@ DgZXStringRF::quantify (const DgQ2DICoord& addIn) const
 
     string bcstr = dgg::util::to_string(baseCell, 2);
     string addstr = bcstr;
+    DgIVec3D::Direction skipDigit = ((baseCell < 6) ? DgIVec3D::PENTAGON_SKIPPED_DIGIT_TYPE1 : DgIVec3D::PENTAGON_SKIPPED_DIGIT_TYPE2);
+    int skipRotate = false;
+    int firstNonZero = false;
     for (int r = 1; r < res+1; r++) {
-         addstr = addstr + to_string((int) digits[r]);
+        DgIVec3D::Direction d = digits[r];
+        if (!firstNonZero && d != DgIVec3D::CENTER_DIGIT) {
+            firstNonZero = true;
+            if (d == skipDigit)
+                skipRotate = true;
+        }
+        
+        if (skipRotate) {
+            d = DgIVec3D::rotate60ccw(d);
+        }
+        
+        addstr = addstr + to_string((int) d);
     }
-
+        
     free(digits);
     digits = NULL;
 
@@ -356,6 +370,11 @@ DgZXStringRF::invQuantify (const DgHierNdxStringCoord& addIn) const
             } else { // only j negative
                 quadNum = inverseAdjacentBaseCellTable[bcNum][1];
             }
+        } else if (negI) {
+            // need to rotate digit 3 into the missing digit 2 area
+            DgIVec3D ijk(ij);
+            ijk.ijkRotate60cw();
+            ij = DgIVec2D(ijk);
         }
     } else { // 6 - 10
         if (negI) {
@@ -366,6 +385,11 @@ DgZXStringRF::invQuantify (const DgHierNdxStringCoord& addIn) const
             } else { // only i negative
                 quadNum = inverseAdjacentBaseCellTable[bcNum][1];
             }
+        } else if (negJ) {
+            // need to rotate digit 1 into the missing digit 5 area
+            DgIVec3D ijk(ij);
+            ijk.ijkRotate60ccw();
+            ij = DgIVec2D(ijk);
         }
     }
 

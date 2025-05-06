@@ -108,7 +108,7 @@ DgQ2DItoZ7StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
         return h;
     }
 */
-    dgcout << "KEVIN " << addIn << " ";
+    //dgcout << "KEVIN " << addIn << " ";
     
     // we need to find the correct base cell for this H3 index;
     // start with the passed in quad and resolution res ijk coordinates
@@ -164,8 +164,8 @@ DgQ2DItoZ7StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
         //H3_SET_INDEX_DIGIT(h, r + 1, _unitIjkToDigit(&diff));
     }
     
-    for (int r = 0; r < res+1; r++)
-        dgcout << digits[r]; // KEVIN
+    //for (int r = 0; r < res+1; r++)
+    //    dgcout << digits[r]; // KEVIN
 
     // adjust the base cell if necessary
     // {i, j} = {0,0}, {1, 0}, {1, 1}, and {0,1} respectively
@@ -193,7 +193,7 @@ DgQ2DItoZ7StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
     } else if (baseCellIjk.j() == 1) // { 0, 1 }
         baseCell = adjacentBaseCellTable[baseCell][3];
 
-    dgcout << " " << quadOriginBaseCell << "/" << baseCell << " "; // KEVIN
+    //dgcout << " " << quadOriginBaseCell << "/" << baseCell << " "; // KEVIN
 
     // all base cells should be correct except for 0 and 11
     // Base Cell 0 maps to all 5’s, rotate into correct subdigit, skip 2
@@ -248,7 +248,7 @@ DgQ2DItoZ7StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
 
     DgZ7StringCoord z7str;
     z7str.setValString(addstr);
-dgcout << z7str << endl; // KEVIN
+//dgcout << z7str << endl; // KEVIN
     //dgcout << "KEVIN addIn: " << addIn << " baseijk: " << baseCellIjk << " z7str: " << z7str << endl;
     //dgcout << z7str << " " << addIn << endl;
 
@@ -364,11 +364,11 @@ DgZ7StringToQ2DIConverter::convertTypedAddress (const DgZ7StringCoord& addIn) co
         { 11, 11 } // q11
     };
 
-    dgcout << addIn << " " << ij << " ";
+    //dgcout << addIn << " " << ij << " ";
 
     bool negI = ij.i() < 0;
     bool negJ = ij.j() < 0;
-    if (negI || negJ) printf(" NEG "); // KEVIN
+    //if (negI || negJ) printf(" NEG "); // KEVIN
     
     long int origI = ij.i();
     if (bcNum == 0) {
@@ -484,7 +484,7 @@ DgZ7StringToQ2DIConverter::convertTypedAddress (const DgZ7StringCoord& addIn) co
     }
 
    DgQ2DICoord q2di(quadNum, ij);
-   dgcout << addIn << " " << q2di << endl; // KEVIN
+   //dgcout << addIn << " " << q2di << endl; // KEVIN
 
    return q2di;
 
