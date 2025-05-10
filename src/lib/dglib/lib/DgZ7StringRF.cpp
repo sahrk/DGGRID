@@ -475,11 +475,19 @@ DgZ7StringToQ2DIConverter::convertTypedAddress (const DgZ7StringCoord& addIn) co
             } else { // only i negative
                 quadNum = inverseAdjacentBaseCellTable[bcNum][1];
             }
-        } else if (negJ) {
+        } else if (negJ) { // only j negative
+            ij.setI(ij.j() + unitScaleClassIres_);
+            ij.setJ(ij.j() + unitScaleClassIres_ - origI);
+
+            quadNum = inverseAdjacentBaseCellTable[bcNum][0];
+        /*
+            // only do if leading ??
             // need to rotate digit ? into the missing digit 5 area
             DgIVec3D ijk(ij);
             ijk.ijkRotate60ccw();
             ij = DgIVec2D(ijk);
+         */
+            
         }
     }
 
