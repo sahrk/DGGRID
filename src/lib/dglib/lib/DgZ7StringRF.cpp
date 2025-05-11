@@ -108,6 +108,8 @@ DgQ2DItoZ7StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
         return h;
     }
 */
+    //dgcout << "KEVIN " << addIn << " ";
+    
     // we need to find the correct base cell for this H3 index;
     // start with the passed in quad and resolution res ijk coordinates
     // in that quad's coordinate system
@@ -161,6 +163,9 @@ DgQ2DItoZ7StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
         digits[r] = diff.unitIjkPlusToDigit();
         //H3_SET_INDEX_DIGIT(h, r + 1, _unitIjkToDigit(&diff));
     }
+    
+    //for (int r = 0; r < res+1; r++)
+    //    dgcout << digits[r]; // KEVIN
 
     // adjust the base cell if necessary
     // {i, j} = {0,0}, {1, 0}, {1, 1}, and {0,1} respectively
@@ -188,6 +193,8 @@ DgQ2DItoZ7StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
     } else if (baseCellIjk.j() == 1) // { 0, 1 }
         baseCell = adjacentBaseCellTable[baseCell][3];
 
+    //dgcout << " " << quadOriginBaseCell << "/" << baseCell << " "; // KEVIN
+
     // all base cells should be correct except for 0 and 11
     // Base Cell 0 maps to all 5’s, rotate into correct subdigit, skip 2
     // BC 1 - 5 skip subsequence 2
@@ -196,12 +203,14 @@ DgQ2DItoZ7StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
 
     // handle the single-cell quads 0 and 11
     if (baseCell != quadOriginBaseCell) {
+                
         if (baseCell == 0) {
             // must be quad 1 - 5
             // rotate once for each quad past 1
             for (int q = 1; q < quadOriginBaseCell; q++) {
                 DgIVec3D::rotateDigitVecCCW(digits, res, DgIVec3D::PENTAGON_SKIPPED_DIGIT_TYPE1);
             }
+
         } else if (baseCell == 11) {
             // must be quad 6 - 10
             // rotate once for each quad less than 10
@@ -211,11 +220,27 @@ DgQ2DItoZ7StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
             }
         }
     }
+    
+   // dgcout << " "; // KEVIN
 
     string bcstr = dgg::util::to_string(baseCell, 2);
     string addstr = bcstr;
+    DgIVec3D::Direction skipDigit = ((baseCell < 6) ? DgIVec3D::PENTAGON_SKIPPED_DIGIT_TYPE1 : DgIVec3D::PENTAGON_SKIPPED_DIGIT_TYPE2);
+    int skipRotate = false;
+    int firstNonZero = false;
     for (int r = 1; r < res+1; r++) {
-         addstr = addstr + to_string((int) digits[r]);
+        DgIVec3D::Direction d = digits[r];
+        if (!firstNonZero && d != DgIVec3D::CENTER_DIGIT) {
+            firstNonZero = true;
+            if (d == skipDigit)
+                skipRotate = true;
+        }
+        
+        if (skipRotate) {
+            d = DgIVec3D::rotate60ccw(d);
+        }
+        
+        addstr = addstr + to_string((int) d);
     }
 
     free(digits);
@@ -223,7 +248,8 @@ DgQ2DItoZ7StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
 
     DgZ7StringCoord z7str;
     z7str.setValString(addstr);
-    //dgcout << "addIn: " << addIn << " baseijk: " << baseCellIjk << " z7str: " << z7str << endl;
+//dgcout << z7str << endl; // KEVIN
+    //dgcout << "KEVIN addIn: " << addIn << " baseijk: " << baseCellIjk << " z7str: " << z7str << endl;
     //dgcout << z7str << " " << addIn << endl;
 
     return z7str;
@@ -274,7 +300,6 @@ DgZ7StringToQ2DIConverter::convertTypedAddress (const DgZ7StringCoord& addIn) co
    //printf("DgZ7StringToQ2DIConverter::convertTypedAddress\n");
 
    string addstr = addIn.valString();
-
    // first get the base cell number
    string bstr = addstr.substr(0, 2);
    if (bstr[0] == '0') // leading 0
@@ -343,6 +368,8 @@ DgZ7StringToQ2DIConverter::convertTypedAddress (const DgZ7StringCoord& addIn) co
 
     bool negI = ij.i() < 0;
     bool negJ = ij.j() < 0;
+    //if (negI || negJ) printf(" NEG "); // KEVIN
+    
     long int origI = ij.i();
     if (bcNum == 0) {
         if (!negI) {
@@ -433,6 +460,11 @@ DgZ7StringToQ2DIConverter::convertTypedAddress (const DgZ7StringCoord& addIn) co
             } else { // only j negative
                 quadNum = inverseAdjacentBaseCellTable[bcNum][1];
             }
+        } else if (negI) {
+            // need to rotate digit 3 into the missing digit 2 area
+            DgIVec3D ijk(ij);
+            ijk.ijkRotate60cw();
+            ij = DgIVec2D(ijk);
         }
     } else { // 6 - 10
         if (negI) {
@@ -443,11 +475,24 @@ DgZ7StringToQ2DIConverter::convertTypedAddress (const DgZ7StringCoord& addIn) co
             } else { // only i negative
                 quadNum = inverseAdjacentBaseCellTable[bcNum][1];
             }
+        } else if (negJ) { // only j negative
+            ij.setI(ij.j() + unitScaleClassIres_);
+            ij.setJ(ij.j() + unitScaleClassIres_ - origI);
+
+            quadNum = inverseAdjacentBaseCellTable[bcNum][0];
+        /*
+            // only do if leading ??
+            // need to rotate digit ? into the missing digit 5 area
+            DgIVec3D ijk(ij);
+            ijk.ijkRotate60ccw();
+            ij = DgIVec2D(ijk);
+         */
+            
         }
     }
 
    DgQ2DICoord q2di(quadNum, ij);
-   //dgcout << addIn << " " << q2di << endl;
+   //dgcout << addIn << " " << q2di << endl; // KEVIN
 
    return q2di;
 
