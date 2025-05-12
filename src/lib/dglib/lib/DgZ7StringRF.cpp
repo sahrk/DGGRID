@@ -109,7 +109,7 @@ DgQ2DItoZ7StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
     }
 */
     //dgcout << "KEVIN " << addIn << " ";
-    
+
     // we need to find the correct base cell for this H3 index;
     // start with the passed in quad and resolution res ijk coordinates
     // in that quad's coordinate system
@@ -163,7 +163,7 @@ DgQ2DItoZ7StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
         digits[r] = diff.unitIjkPlusToDigit();
         //H3_SET_INDEX_DIGIT(h, r + 1, _unitIjkToDigit(&diff));
     }
-    
+
     //for (int r = 0; r < res+1; r++)
     //    dgcout << digits[r]; // KEVIN
 
@@ -203,7 +203,7 @@ DgQ2DItoZ7StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
 
     // handle the single-cell quads 0 and 11
     if (baseCell != quadOriginBaseCell) {
-                
+
         if (baseCell == 0) {
             // must be quad 1 - 5
             // rotate once for each quad past 1
@@ -220,7 +220,7 @@ DgQ2DItoZ7StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
             }
         }
     }
-    
+
    // dgcout << " "; // KEVIN
 
     string bcstr = dgg::util::to_string(baseCell, 2);
@@ -235,11 +235,11 @@ DgQ2DItoZ7StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
             if (d == skipDigit)
                 skipRotate = true;
         }
-        
+
         if (skipRotate) {
             d = DgIVec3D::rotate60ccw(d);
         }
-        
+
         addstr = addstr + to_string((int) d);
     }
 
@@ -369,7 +369,7 @@ DgZ7StringToQ2DIConverter::convertTypedAddress (const DgZ7StringCoord& addIn) co
     bool negI = ij.i() < 0;
     bool negJ = ij.j() < 0;
     //if (negI || negJ) printf(" NEG "); // KEVIN
-    
+
     long int origI = ij.i();
     if (bcNum == 0) {
         if (!negI) {
@@ -487,7 +487,7 @@ DgZ7StringToQ2DIConverter::convertTypedAddress (const DgZ7StringCoord& addIn) co
             ijk.ijkRotate60ccw();
             ij = DgIVec2D(ijk);
          */
-            
+
         }
     }
 
