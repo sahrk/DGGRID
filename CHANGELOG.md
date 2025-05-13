@@ -3,7 +3,7 @@ All notable changes to this project will be documented in this file.
 
 All changes are by Kevin Sahr, unless otherwise noted.
 
-## [8.36] - 2024-05-11
+## [8.36] - 2025-05-11
 ### Fixed
 - errors indexing pentagonal descendents with Z7 indexing. NOTE: this changes some of the the outputs from the Z7 examples.
 ### Changed
