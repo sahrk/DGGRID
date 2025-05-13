@@ -1,4 +1,4 @@
-** executing DGGRID version 8.35 with GDAL version 3100000 **
+** executing DGGRID version 8.36 with GDAL version 3100200 **
 type sizes: big int: 64 bits / big double: 128 bits
 
 ** using meta file table.meta...

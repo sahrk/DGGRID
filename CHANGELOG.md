@@ -6,6 +6,8 @@ All changes are by Kevin Sahr, unless otherwise noted.
 ## [8.36] - 2024-05-11
 ### Fixed
 - errors indexing pentagonal descendents with Z7 indexing. NOTE: this changes some of the the outputs from the Z7 examples.
+### Changed
+- minimum cmake version to 3.20
 
 ## [8.35] - 2024-11-28
 ### Changed
