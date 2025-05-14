@@ -3,9 +3,35 @@ All notable changes to this project will be documented in this file.
 
 All changes are by Kevin Sahr, unless otherwise noted.
 
-## [9.0b] - 2025-04-30
+## [9.0b] - 2025-XX-XX
 ### Fixed
 - removed unicode characters from comments in clipper.cpp
+
+## [8.36] - 2025-05-11
+### Fixed
+- errors indexing pentagonal descendents with Z7 indexing. NOTE: this changes some of the the outputs from the Z7 examples.
+### Changed
+- minimum cmake version to 3.20
+
+## [8.35] - 2024-11-28
+### Changed
+- cell output format in example gdalExample was changed to GeoJSON to avoid potential issues with GDAL KML driver
+### Fixed
+- incorrect parsing of text input lines in SubOpBasicMulti::inStrToPointLoc
+
+## [8.34] - 2024-11-13
+### Fixed
+- correctly handles math constants in Windows (thanks to @allixender)
+
+## [8.33] - 2024-10-16
+### Added
+- output whether or not built with GDAL
+### Fixed
+- suppressed remaining compiler warnings
+
+## [8.32] - 2024-09-18
+### Fixed
+- template definition errors in DgPhysicalRF
 
 ## [8.31] - 2024-07-05
 ### Changed

@@ -1,4 +1,4 @@
-** executing DGGRID version 8.3 **
+** executing DGGRID version 8.36 with GDAL version 3100200 **
 type sizes: big int: 64 bits / big double: 128 bits
 
 ** using meta file igeo7WholeEarth.meta...
@@ -52,14 +52,10 @@ kml_default_width 3 (user set)
 kml_default_color ffff0000 (user set)
 kml_name igeo7 Res 3 (user set)
 kml_description www.discreteglobalgrids.org (user set)
-neighbor_output_type TEXT (user set)
-neighbor_output_file_name outputfiles/neighbors (user set)
-children_output_type TEXT (user set)
-children_output_file_name outputfiles/spatChld (user set)
-indexing_children_output_type TEXT (user set)
-indexing_children_output_file_name ndxChld (user set)
-indexing_parent_output_type TEXT (user set)
-indexing_parent_output_file_name ndxPrt (user set)
+neighbor_output_type NONE (default)
+neighbor_output_file_name nbr (default)
+children_output_type NONE (default)
+children_output_file_name chld (default)
 max_cells_per_output_file 0 (default)
 output_first_seqnum 1 (default)
 output_last_seqnum 18446744073709551615 (default)
