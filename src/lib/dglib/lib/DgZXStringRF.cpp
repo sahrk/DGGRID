@@ -187,11 +187,11 @@ DgZXStringRF::quantify (const DgQ2DICoord& addIn) const
             if (d == skipDigit)
                 skipRotate = true;
         }
-        
+         
         if (skipRotate) {
             d = DgIVec3D::rotate60ccw(d);
         }
-        
+
         addstr = addstr + to_string((int) d);
     }
         
@@ -385,11 +385,11 @@ DgZXStringRF::invQuantify (const DgHierNdxStringCoord& addIn) const
             } else { // only i negative
                 quadNum = inverseAdjacentBaseCellTable[bcNum][1];
             }
-        } else if (negJ) {
-            // need to rotate digit 1 into the missing digit 5 area
-            DgIVec3D ijk(ij);
-            ijk.ijkRotate60ccw();
-            ij = DgIVec2D(ijk);
+        } else if (negJ) { // only j negative
+            ij.setI(ij.j() + unitScaleClassIres_);
+            ij.setJ(ij.j() + unitScaleClassIres_ - origI);
+
+            quadNum = inverseAdjacentBaseCellTable[bcNum][0];
         }
     }
 
