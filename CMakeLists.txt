@@ -1,7 +1,7 @@
-cmake_minimum_required (VERSION 3.10)
+cmake_minimum_required (VERSION 3.20)
 
 project (dggrid
-  VERSION 9.0 
+  VERSION 9.0
   LANGUAGES C CXX
 )
 
@@ -11,6 +11,7 @@ find_package(Doxygen)
 if(MSVC)
   # add_compile_options(/W4 /WX)
   add_compile_options(/W2)
+  add_compile_definitions(_USE_MATH_DEFINES)
 else()
   add_compile_options(-Wall -pedantic)
 endif()
