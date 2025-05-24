@@ -79,10 +79,13 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 const DgZ3Coord DgZ3Coord::undefDgZ3Coord(0xffffffffffffffff);
+int DgZ3RF::defaultInvalidDigit = 3;
 
 ////////////////////////////////////////////////////////////////////////////////
-DgZ3RF::DgZ3RF (DgRFNetwork& networkIn, const std::string& nameIn, int resIn)
-         : DgRF<DgZ3Coord, long long int>(networkIn, nameIn), res_ (resIn)
+DgZ3RF::DgZ3RF (DgRFNetwork& networkIn, const std::string& nameIn, 
+            int resIn, int invalidDigitIn)
+         : DgRF<DgZ3Coord, long long int>(networkIn, nameIn), res_ (resIn),
+           invalidDigit_ (invalidDigitIn)
 {
 }
 
@@ -189,6 +192,14 @@ DgZ3StringtoZ3Converter::convertTypedAddress (const DgZ3StringCoord& addIn) cons
       int d = digit - '0'; // convert to int
       Z3_SET_INDEX_DIGIT(z, r, d);
       r++;
+   }
+
+   // pad as needed
+   if (DgZ3RF::defaultInvalidDigit != 0) {
+      while (r <= MAX_Z3_RES) {
+         Z3_SET_INDEX_DIGIT(z, r, DgZ3RF::defaultInvalidDigit);
+         r++;
+      }
    }
 
    DgZ3Coord coord;

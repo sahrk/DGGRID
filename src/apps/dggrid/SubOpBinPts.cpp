@@ -136,7 +136,7 @@ SubOpBinPts::outputCell(const DgLocation& loc, const Val& val) const
 
       if (op.mainOp.operation == "BIN_POINT_PRESENCE") {
          string vecStr;
-         int numClasses = presVecToString(val.presVec, op.inOp.inputFiles.size(), vecStr);
+         int numClasses = (int) presVecToString(val.presVec, op.inOp.inputFiles.size(), vecStr);
          if (outputNumClasses) {
             DgDataFieldInt* fld =
                  new DgDataFieldInt(outputNumClassesFldName, numClasses);

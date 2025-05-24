@@ -105,7 +105,8 @@ struct SubOpDGG : public SubOpBasic {
    bool   isSuperfund;
    bool   isApSeq;      // are we using an aperture sequence?
    DgApSeq apSeq;
-   int   sfRes; // superfund digit resolution
+   int   sfRes;         // superfund digit resolution
+   int z3invalidDigit;  // padding digit for all Z3 systems
 };
 
 ////////////////////////////////////////////////////////////////////////////////
