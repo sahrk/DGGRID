@@ -167,8 +167,16 @@ DgZ3StringtoZ3Converter::convertTypedAddress (const DgZ3StringCoord& addIn) cons
          " input resolution exceeds max Z3 resolution of 30", DgBase::Fatal);
    }
 
+   // initialize the Z3 index so it is padded with the correct value
+   static uint64_t fillDigit[4] = {
+       UINT64_C(0x0000000000000000), // index 0: base-4 digit 0 repeated (00)
+       UINT64_C(0x5555555555555555), // index 1: base-4 digit 1 repeated (01)
+       UINT64_C(0xAAAAAAAAAAAAAAAA), // index 2: base-4 digit 2 repeated (10)
+       UINT64_C(0xFFFFFFFFFFFFFFFF)  // index 3: base-4 digit 3 repeated (11)
+   };
+   uint64_t z = fillDigit[DgZ3RF::defaultInvalidDigit];
+    
    string addstr = addIn.valString();
-   uint64_t z = 0;
 
    // first get the quad number and add to the val
    string qstr = addstr.substr(0, 2);
@@ -193,7 +201,7 @@ DgZ3StringtoZ3Converter::convertTypedAddress (const DgZ3StringCoord& addIn) cons
       Z3_SET_INDEX_DIGIT(z, r, d);
       r++;
    }
-
+/*
    // pad as needed
    if (DgZ3RF::defaultInvalidDigit != 0) {
       while (r <= MAX_Z3_RES) {
@@ -201,6 +209,7 @@ DgZ3StringtoZ3Converter::convertTypedAddress (const DgZ3StringCoord& addIn) cons
          r++;
       }
    }
+ */
 
    DgZ3Coord coord;
    coord.setValue(z);

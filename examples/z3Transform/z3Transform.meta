@@ -17,11 +17,16 @@ dggs_type ISEA3H
 dggs_res_spec 9
 
 # specify bin controls
-input_address_type Z3_STRING
-input_file_name inputfiles/z3str.txt
+input_address_type SEQNUM
+input_file_name inputfiles/seqNum.txt
+#input_address_type Z3_STRING
+#input_file_name inputfiles/z3str.txt
 input_delimiter " "
 
 # specify the output
-output_address_type SEQNUM
-output_file_name outputfiles/seqNum.txt
+#output_address_type SEQNUM
+#output_file_name outputfiles/seqNum.txt
+z3_invalid_digit 3
+output_address_type Z3
+output_file_name outputfiles/z3.txt
 output_delimiter " "

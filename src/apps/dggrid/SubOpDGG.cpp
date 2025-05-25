@@ -125,7 +125,7 @@ SubOpDGG::addressTypeToRF (DgAddressType type, const DgRFBase** rf,
 
       case Z3:
          if (isApSeq)
-            ::report("address_type of Z3/Z3_INT64 not supported for dggs_aperture_type of SEQUENCE",
+            ::report("address_type of Z3 INT64 not supported for dggs_aperture_type of SEQUENCE",
                      DgBase::Fatal);
 
          if (dgg->z3RF()) {
@@ -133,82 +133,82 @@ SubOpDGG::addressTypeToRF (DgAddressType type, const DgRFBase** rf,
             if (chdRF) *chdRF = chdDgg->z3RF();
 
             if (z3invalidDigit != 3) {
-               ::report("default padding digit for Z3/Z3_INT64 indexes will switch "
-                        " from 0 to 3 starting with DGGRID version 9.0.\n"
-                        "Set z3_invalid_digit to change.", DgBase::Warning);
+               ::report("default padding digit for Z3 INT64 indexes will switch "
+                        "from 0 to 3 starting with DGGRID version 9.0.\n"
+                        "Set parameter z3_invalid_digit if you want a different digit used.", DgBase::Warning);
             }
          } else
-            ::report("address_type of Z3/Z3_INT64 only supported for aperture 3 hexagon grids",
+            ::report("address_type of Z3 INT64 only supported for aperture 3 hexagon grids",
                      DgBase::Fatal);
 
          break;
 
       case Z3String:
          if (isApSeq)
-            ::report("address_type of Z3_STRING/Z3_DIGIT_STRING not supported for dggs_aperture_type of SEQUENCE",
+            ::report("address_type of Z3 DIGIT_STRING not supported for dggs_aperture_type of SEQUENCE",
                      DgBase::Fatal);
 
          if (dgg->z3StrRF()) {
             *rf = dgg->z3StrRF();
             if (chdRF) *chdRF = chdDgg->z3StrRF();
          } else
-            ::report("address_type of Z3_STRING/Z3_DIGIT_STRING only supported for aperture 3 hexagon grids",
+            ::report("address_type of Z3 DIGIT_STRING only supported for aperture 3 hexagon grids",
                      DgBase::Fatal);
 
          break;
 
       case Z7:
          if (isApSeq)
-            ::report("address_type of Z7/Z7_INT64 not supported for dggs_aperture_type of SEQUENCE",
+            ::report("address_type of Z7 INT64 not supported for dggs_aperture_type of SEQUENCE",
                      DgBase::Fatal);
 
          if (dgg->z7RF()) {
             *rf = dgg->z7RF();
             if (chdRF) *chdRF = chdDgg->z7RF();
          } else
-            ::report("address_type of Z7/Z7_INT64 only supported for aperture 7 hexagon grids",
+            ::report("address_type of Z7 INT64 only supported for aperture 7 hexagon grids",
                      DgBase::Fatal);
 
          break;
 
       case Z7String:
          if (isApSeq)
-            ::report("address_type of Z7_STRING/Z7_DIGIT_STRING not supported for dggs_aperture_type of SEQUENCE",
+            ::report("address_type of Z7 DIGIT_STRING not supported for dggs_aperture_type of SEQUENCE",
                      DgBase::Fatal);
 
          if (dgg->z7StrRF()) {
             *rf = dgg->z7StrRF();
             if (chdRF) *chdRF = chdDgg->z7StrRF();
          } else
-            ::report("address_type of Z7_STRING/Z7_DIGIT_STRING only supported for aperture 7 hexagon grids",
+            ::report("address_type of Z7 DIGIT_STRING only supported for aperture 7 hexagon grids",
                      DgBase::Fatal);
 
          break;
 
       case ZOrder:
          if (isApSeq)
-            ::report("address_type of ZORDER/ZORDER_INT64 not supported for dggs_aperture_type of SEQUENCE",
+            ::report("address_type of ZORDER INT64 not supported for dggs_aperture_type of SEQUENCE",
                      DgBase::Fatal);
 
          if (dgg->zorderRF()) {
             *rf = dgg->zorderRF();
             if (chdRF) *chdRF = chdDgg->zorderRF();
          } else
-            ::report("address_type of ZORDER/ZORDER_INT64 only supported for aperture 3 or 4",
+            ::report("address_type of ZORDER INT64 only supported for aperture 3 or 4",
                      DgBase::Fatal);
 
          break;
 
       case ZOrderString:
          if (isApSeq)
-            ::report("address_type of ZORDER_STRING/ZORDER_DIGIT_STRING not supported for dggs_aperture_type of SEQUENCE",
+            ::report("address_type of ZORDER DIGIT_STRING not supported for dggs_aperture_type of SEQUENCE",
                      DgBase::Fatal);
 
          if (dgg->zorderStrRF()) {
             *rf = dgg->zorderStrRF();
             if (chdRF) *chdRF = chdDgg->zorderStrRF();
          } else
-            ::report("address_type of ZORDER_STRING/ZORDER_DIGIT_STRING only supported for aperture 3 or 4",
+            ::report("address_type of ZORDER DIGIT_STRING only supported for aperture 3 or 4",
                      DgBase::Fatal);
 
          break;
