@@ -23,6 +23,7 @@ dggs_vert0_lat 58.2825 (user set)
 dggs_vert0_azimuth 0 (user set)
 dggs_res_specify_type SPECIFIED (user set)
 dggs_res_spec 4 (user set)
+z3_invalid_digit 0 (default)
 input_files vals.txt (default)
 input_file_name valsin.txt (default)
 point_input_file_type NONE (default)
@@ -69,6 +70,8 @@ clip_region_files test.gen (default)
 clip_type POLY_INTERSECT (default)
 clipper_scale_factor 1000000 (default)
 
+WARNING: default padding digit for Z3 INT64 indexes will switch from 0 to 3 starting with DGGRID version 9.0.
+Set parameter z3_invalid_digit if you want a different digit used.
 
 ** grid generation complete **
 * generated 812 cells
