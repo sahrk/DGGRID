@@ -30,6 +30,10 @@
 #include "SubOpBasicMulti.h"
 #include "SubOpIn.h"
 
+using dgg::addtype::DgAddressType;
+using dgg::addtype::DgHierNdxSysType;
+using dgg::addtype::DgHierNdxFormType;
+
 ////////////////////////////////////////////////////////////////////////////////
 SubOpIn::SubOpIn (OpBasic& op, bool _activate)
    : SubOpBasic (op, _activate),
@@ -89,18 +93,39 @@ SubOpIn::initializeOp (void)
 */
 
    // input_address_type < GEO | PLANE | PROJTRI | Q2DD | Q2DI |
-   //        SEQNUM | VERTEX2DD | ZORDER | ZORDER_STRING |
-   //        Z3 | Z3_STRING | Z7 | Z7_STRING >
+   //        SEQNUM | VERTEX2DD | HIERNDX >
    for (int i = 0; ; i++) {
       if (dgg::addtype::addTypeStrings[i] == "INVALID")
          break;
       choices.push_back(new string(dgg::addtype::addTypeStrings[i]));
    }
 
-   //def = ((op.mainOp.operation != "TRANSFORM_POINTS") ? "GEO" : "SEQNUM");
+   // KEVIN?? def = ((op.mainOp.operation != "TRANSFORM_POINTS") ? "GEO" : "SEQNUM");
    def = "GEO";
    pList().insertParam(new DgStringChoiceParam("input_address_type", def, &choices));
    dgg::util::release(choices);
+
+    // input_hier_ndx_system < ZORDER | Z3 | Z7 >
+    // used if input_address_type is HIERNDX
+    for (int i = 0; ; i++) {
+       if (dgg::addtype::hierNdxSysTypeStrings[i] == "INVALID")
+          break;
+       choices.push_back(new string(dgg::addtype::hierNdxSysTypeStrings[i]));
+    }
+    def = "Z3";
+    pList().insertParam(new DgStringChoiceParam("input_hier_ndx_system", def, &choices));
+    dgg::util::release(choices);
+
+    // input_hier_ndx_form < INT64 | DIGIT_STRING >
+    // used if input_address_type is HIERNDX
+    for (int i = 0; ; i++) {
+       if (dgg::addtype::hierNdxFormTypeStrings[i] == "INVALID")
+          break;
+       choices.push_back(new string(dgg::addtype::hierNdxFormTypeStrings[i]));
+    }
+    def = "INT64";
+    pList().insertParam(new DgStringChoiceParam("input_hier_ndx_form", def, &choices));
+    dgg::util::release(choices);
 
    // input_delimiter <v is any character in long double quotes>
    pList().insertParam(new DgStringParam("input_delimiter", "\" \"", true ,false));
@@ -169,7 +194,58 @@ SubOpIn::setupOp (void)
    string dummy;
    getParamValue(pList(), "input_address_type", dummy, false);
    inAddType = dgg::addtype::stringToAddressType(dummy);
+    if (inAddType == dgg::addtype::HierNdx) {
+       getParamValue(pList(), "input_hier_ndx_system", dummy, false);
+       DgHierNdxSysType inHierNdxSysType = dgg::addtype::stringToHierNdxSysType(dummy);
+       getParamValue(pList(), "input_hier_ndx_form", dummy, false);
+       DgHierNdxFormType inHierNdxFormType = dgg::addtype::stringToHierNdxFormType(dummy);
 
+       // KEVIN: this will all go away in version 9.0
+        if (inHierNdxFormType == dgg::addtype::Int64) {
+           switch (inHierNdxSysType) {
+               case DgHierNdxSysType::Z3:
+                   inAddType = dgg::addtype::Z3;
+                   break;
+               case DgHierNdxSysType::Z7:
+                   inAddType = dgg::addtype::Z7;
+                   break;
+               case DgHierNdxSysType::ZOrder:
+                   inAddType = dgg::addtype::ZOrder;
+                   break;
+               default: ;
+           }
+       } else { // must be DigitString
+           switch (inHierNdxSysType) {
+               case DgHierNdxSysType::Z3:
+                   inAddType = dgg::addtype::Z3String;
+                   break;
+               case DgHierNdxSysType::Z7:
+                   inAddType = dgg::addtype::Z7String;
+                   break;
+               case DgHierNdxSysType::ZOrder:
+                   inAddType = dgg::addtype::ZOrderString;
+                   break;
+               default: ;
+           }
+       }
+
+    } else if (inAddType > dgg::addtype::HierNdx) { // these are deprecated
+      ::report(
+         "input_address_type values of ZORDER, ZORDER_STRING, Z3, Z3_STRING, Z7, and "
+         "Z7_STRING are deprecated and will go away in version 9.0. Instead set "
+         "input_address_type to HIERNDX, input_hier_ndx_system to the desired system "
+         "ZORDER, Z3, or Z7 (Z3 is the default), and input_hier_ndx_form to the "
+         "specific input format INT64 or DIGIT_STRING (default is INT64).",
+      DgBase::Warning);
+   }
+
+    if (inAddType == dgg::addtype::Z3) {
+        ::report("the default padding digit for Z3 INT64 indexes will switch "
+                 "from 0 to 3 starting with DGGRID version 9.0.\n"
+                 "Set parameter z3_invalid_digit if you want a different digit used.",
+                 DgBase::Warning);
+    }
+    
    // input delimiter
    getParamValue(pList(), "input_delimiter", dummy, false);
    if (dummy.length() != 3 || dummy.c_str()[0] != '"' ||

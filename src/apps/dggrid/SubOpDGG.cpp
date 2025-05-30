@@ -369,6 +369,7 @@ SubOpDGG::initializeOp (void)
    choices.push_back(new string("1"));
    choices.push_back(new string("2"));
    choices.push_back(new string("3"));
+// KEVIN change default to "3" in version 9
    pList().insertParam(new DgStringChoiceParam("z3_invalid_digit", "0",
              &choices));
    dgg::util::release(choices);

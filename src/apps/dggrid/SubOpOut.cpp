@@ -417,21 +417,44 @@ SubOpOut::initializeOp (void)
    dgg::util::release(choices);
 
    // output_address_type < GEO | PLANE | PROJTRI | Q2DD | Q2DI |
-   //        SEQNUM | VERTEX2DD | ZORDER | ZORDER_STRING >
-   for (int i = 0; ; i++) {
-      if (addTypeStrings[i] == "INVALID")
-         break;
-      choices.push_back(new string(addTypeStrings[i]));
-   }
-   pList().insertParam(new DgStringChoiceParam("output_address_type",
-               "SEQNUM", &choices));
-   dgg::util::release(choices);
+   //        SEQNUM | VERTEX2DD | HIERNDX >
+   // KEVIN: still supports version 8 z* types
+    for (int i = 0; ; i++) {
+       if (dgg::addtype::addTypeStrings[i] == "INVALID")
+          break;
+       choices.push_back(new string(dgg::addtype::addTypeStrings[i]));
+    }
+    pList().insertParam(new DgStringChoiceParam("output_address_type",
+                "SEQNUM", &choices));
+    dgg::util::release(choices);
 
-   // output_delimiter <v is any character in double quotes>
-   pList().insertParam(new DgStringParam("output_delimiter", "\" \"", true, false));
+    // output_hier_ndx_system < ZORDER | Z3 | Z7 >
+    // used if output_address_type is HIERNDX
+    for (int i = 0; ; i++) {
+       if (dgg::addtype::hierNdxSysTypeStrings[i] == "INVALID")
+          break;
+       choices.push_back(new string(dgg::addtype::hierNdxSysTypeStrings[i]));
+    }
+    def = "Z3";
+    pList().insertParam(new DgStringChoiceParam("output_hier_ndx_system", def, &choices));
+    dgg::util::release(choices);
 
-   // densification <int> (0 <= v <= 500)
-   pList().insertParam(new DgIntParam("densification", 0, 0, 500));
+    // output_hier_ndx_form < INT64 | DIGIT_STRING >
+    // used if output_address_type is HIERNDX
+    for (int i = 0; ; i++) {
+       if (dgg::addtype::hierNdxFormTypeStrings[i] == "INVALID")
+          break;
+       choices.push_back(new string(dgg::addtype::hierNdxFormTypeStrings[i]));
+    }
+    def = "INT64";
+    pList().insertParam(new DgStringChoiceParam("output_hier_ndx_form", def, &choices));
+    dgg::util::release(choices);
+    
+    // output_delimiter <v is any character in double quotes>
+    pList().insertParam(new DgStringParam("output_delimiter", "\" \"", true, false));
+
+    // densification <int> (0 <= v <= 500)
+    pList().insertParam(new DgIntParam("densification", 0, 0, 500));
 
    // longitude_wrap_mode < WRAP | UNWRAP_WEST | UNWRAP_EAST >
    choices.push_back(new string("WRAP"));
@@ -608,6 +631,57 @@ SubOpOut::setupOp (void)
    // output address type
    getParamValue(pList(), "output_address_type", dummy, false);
    outAddType = dgg::addtype::stringToAddressType(dummy);
+    if (outAddType == dgg::addtype::HierNdx) {
+       getParamValue(pList(), "output_hier_ndx_system", dummy, false);
+       DgHierNdxSysType inHierNdxSysType = dgg::addtype::stringToHierNdxSysType(dummy);
+       getParamValue(pList(), "output_hier_ndx_form", dummy, false);
+       DgHierNdxFormType inHierNdxFormType = dgg::addtype::stringToHierNdxFormType(dummy);
+
+       // KEVIN: this will all go away in version 9.0
+        if (inHierNdxFormType == dgg::addtype::Int64) {
+           switch (inHierNdxSysType) {
+               case DgHierNdxSysType::Z3:
+                   outAddType = dgg::addtype::Z3;
+                   break;
+               case DgHierNdxSysType::Z7:
+                   outAddType = dgg::addtype::Z7;
+                   break;
+               case DgHierNdxSysType::ZOrder:
+                   outAddType = dgg::addtype::ZOrder;
+                   break;
+               default: ;
+           }
+       } else { // must be DigitString
+           switch (inHierNdxSysType) {
+               case DgHierNdxSysType::Z3:
+                   outAddType = dgg::addtype::Z3String;
+                   break;
+               case DgHierNdxSysType::Z7:
+                   outAddType = dgg::addtype::Z7String;
+                   break;
+               case DgHierNdxSysType::ZOrder:
+                   outAddType = dgg::addtype::ZOrderString;
+                   break;
+               default: ;
+           }
+       }
+
+    } else if (outAddType > dgg::addtype::HierNdx) { // these are deprecated
+      ::report(
+         "output_address_type values of ZORDER, ZORDER_STRING, Z3, Z3_STRING, Z7, and "
+         "Z7_STRING are deprecated and will go away in version 9.0. Instead set "
+         "output_address_type to HIERNDX, output_hier_ndx_system to the desired system "
+         "ZORDER, Z3, or Z7 (Z3 is the default), and output_hier_ndx_form to the "
+         "specific output format INT64 or DIGIT_STRING (default is INT64).",
+      DgBase::Warning);
+   }
+
+    if (outAddType == dgg::addtype::Z3) {
+        ::report("the default padding digit for Z3 INT64 indexes will switch "
+                 "from 0 to 3 starting with DGGRID version 9.0.\n"
+                 "Set parameter z3_invalid_digit if you want a different digit used.",
+                 DgBase::Warning);
+    }
 
    // output delimiter
    getParamValue(pList(), "output_delimiter", dummy, false);

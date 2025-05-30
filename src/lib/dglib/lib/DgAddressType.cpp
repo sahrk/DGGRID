@@ -30,11 +30,7 @@ using namespace std;
 
 namespace dgg { namespace addtype {
 
-/*
-static const string addTypeStrings[] = { "GEO", "PLANE", "PROJTRI", "Q2DD",
-    "Q2DI", "SEQNUM", "VERTEX2DD", "ZORDER", "ZORDER_STRING", "INVALID" };
-*/
-
+////////////////////////////////////////////////////////////////////////////////
 DgAddressType stringToAddressType (const string& str) {
    for (int i = 0; i < InvalidAddressType; i++)
       if (str == addTypeStrings[i]) return static_cast<DgAddressType>(i);
@@ -42,9 +38,38 @@ DgAddressType stringToAddressType (const string& str) {
    return InvalidAddressType;
 }
 
+////////////////////////////////////////////////////////////////////////////////
 const string& to_string (DgAddressType t) {
    if (t <= InvalidAddressType) return addTypeStrings[t];
    return addTypeStrings[InvalidAddressType];
+}
+
+////////////////////////////////////////////////////////////////////////////////
+DgHierNdxSysType stringToHierNdxSysType (const string& str) {
+   for (int i = 0; i < static_cast<int>(DgHierNdxSysType::InvalidHierNdxSysType); i++)
+      if (str == hierNdxSysTypeStrings[i]) return static_cast<DgHierNdxSysType>(i);
+
+   return DgHierNdxSysType::InvalidHierNdxSysType;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+const string& to_string (DgHierNdxSysType t) {
+   if (t <= DgHierNdxSysType::InvalidHierNdxSysType) return hierNdxSysTypeStrings[static_cast<int>(t)];
+   return hierNdxSysTypeStrings[static_cast<int>(DgHierNdxSysType::InvalidHierNdxSysType)];
+}
+
+////////////////////////////////////////////////////////////////////////////////
+DgHierNdxFormType stringToHierNdxFormType (const string& str) {
+   for (int i = 0; i < InvalidHierNdxFormType; i++)
+      if (str == hierNdxFormTypeStrings[i]) return static_cast<DgHierNdxFormType>(i);
+
+   return InvalidHierNdxFormType;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+const string& to_string (DgHierNdxFormType t) {
+   if (t <= InvalidHierNdxFormType) return hierNdxFormTypeStrings[t];
+   return hierNdxFormTypeStrings[InvalidHierNdxFormType];
 }
 
 }} // namespace dgg::addtype
