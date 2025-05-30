@@ -31,8 +31,8 @@
 using namespace std;
 
 #define DGDEBUG             0
-#define DGGRID_VERSION      "8.37"
-#define DGGRID_RELEASE_DATE "May 24, 2025"
+#define DGGRID_VERSION      "8.4"
+#define DGGRID_RELEASE_DATE "May 29, 2025"
 
 // adapted from stackoverflow user Pierre
 #define WHERE fprintf(stderr,"[LOG]%s:%s#%d\n",__PRETTY_FUNCTION__,__FILE__,__LINE__);

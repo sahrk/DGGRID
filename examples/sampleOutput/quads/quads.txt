@@ -1,4 +1,4 @@
-** executing DGGRID version 8.37 with GDAL version 3100300 **
+** executing DGGRID version 8.4 with GDAL version 3100300 **
 type sizes: big int: 64 bits / big double: 128 bits
 
 ** using meta file quads.meta...
@@ -28,10 +28,14 @@ input_files vals.txt (default)
 input_file_name valsin.txt (default)
 point_input_file_type NONE (default)
 input_address_type GEO (default)
+input_hier_ndx_system Z3 (default)
+input_hier_ndx_form INT64 (default)
 input_delimiter " " (default)
 output_file_name valsout.txt (default)
 output_file_type NONE (default)
 output_address_type SEQNUM (default)
+output_hier_ndx_system Z3 (default)
+output_hier_ndx_form INT64 (default)
 output_delimiter " " (default)
 densification 0 (user set)
 longitude_wrap_mode WRAP (default)

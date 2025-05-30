@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file.
 
 All changes are by Kevin Sahr, unless otherwise noted.
 
+## [8.4] - 2025-05-29
+### Added
+- parameter z3_invalid_digit which specifies the digit to use for unused bits in a Z3 INT64 index. The current
+default value is 0. The default will switch from 0 to 3 starting with DGGRID version 9.0. Set parameter 
+z3_invalid_digit if you want a different digit used.
+- parameters input/output_hier_ndx_system and input/output_hier_ndx_form. The input_/output_address_type values of ZORDER, ZORDER_STRING, Z3, Z3_STRING, Z7, and Z7_STRING are deprecated and will go away in version 9.0. Instead set input_address_type to HIERNDX, new parameter input_hier_ndx_system to the desired system ZORDER, Z3, or Z7 (Z3 is the default), and new parameter input_hier_ndx_form to the specific input format INT64 or DIGIT_STRING (default is INT64).
+
 ## [8.36] - 2025-05-11
 ### Fixed
 - errors indexing pentagonal descendents with Z7 indexing. NOTE: this changes some of the the outputs from the Z7 examples.

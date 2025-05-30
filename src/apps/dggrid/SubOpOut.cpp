@@ -631,12 +631,12 @@ SubOpOut::setupOp (void)
    // output address type
    getParamValue(pList(), "output_address_type", dummy, false);
    outAddType = dgg::addtype::stringToAddressType(dummy);
-    if (outAddType == dgg::addtype::HierNdx) {
-       getParamValue(pList(), "output_hier_ndx_system", dummy, false);
-       DgHierNdxSysType inHierNdxSysType = dgg::addtype::stringToHierNdxSysType(dummy);
-       getParamValue(pList(), "output_hier_ndx_form", dummy, false);
-       DgHierNdxFormType inHierNdxFormType = dgg::addtype::stringToHierNdxFormType(dummy);
 
+   getParamValue(pList(), "output_hier_ndx_system", dummy, false);
+   DgHierNdxSysType inHierNdxSysType = dgg::addtype::stringToHierNdxSysType(dummy);
+   getParamValue(pList(), "output_hier_ndx_form", dummy, false);
+   DgHierNdxFormType inHierNdxFormType = dgg::addtype::stringToHierNdxFormType(dummy);
+    if (outAddType == dgg::addtype::HierNdx) {
        // KEVIN: this will all go away in version 9.0
         if (inHierNdxFormType == dgg::addtype::Int64) {
            switch (inHierNdxSysType) {
@@ -670,9 +670,10 @@ SubOpOut::setupOp (void)
       ::report(
          "output_address_type values of ZORDER, ZORDER_STRING, Z3, Z3_STRING, Z7, and "
          "Z7_STRING are deprecated and will go away in version 9.0. Instead set "
-         "output_address_type to HIERNDX, output_hier_ndx_system to the desired system "
-         "ZORDER, Z3, or Z7 (Z3 is the default), and output_hier_ndx_form to the "
-         "specific output format INT64 or DIGIT_STRING (default is INT64).",
+         "output_address_type to HIERNDX, new parameter output_hier_ndx_system to the "
+         "desired system ZORDER, Z3, or Z7 (Z3 is the default), and new parameter "
+         "output_hier_ndx_form to the specific output format INT64 or DIGIT_STRING "
+         "(default is INT64).",
       DgBase::Warning);
    }
 

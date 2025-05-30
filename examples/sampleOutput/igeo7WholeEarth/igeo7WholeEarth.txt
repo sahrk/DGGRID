@@ -1,7 +1,9 @@
-** executing DGGRID version 8.37 with GDAL version 3100300 **
+** executing DGGRID version 8.4 with GDAL version 3100300 **
 type sizes: big int: 64 bits / big double: 128 bits
 
 ** using meta file igeo7WholeEarth.meta...
+WARNING: input_address_type values of ZORDER, ZORDER_STRING, Z3, Z3_STRING, Z7, and Z7_STRING are deprecated and will go away in version 9.0. Instead set input_address_type to HIERNDX, new parameter input_hier_ndx_system to the desired system ZORDER, Z3, or Z7 (Z3 is the default), and new parameter input_hier_ndx_form to the specific input format INT64 or DIGIT_STRING (default is INT64).
+WARNING: output_address_type values of ZORDER, ZORDER_STRING, Z3, Z3_STRING, Z7, and Z7_STRING are deprecated and will go away in version 9.0. Instead set output_address_type to HIERNDX, new parameter output_hier_ndx_system to the desired system ZORDER, Z3, or Z7 (Z3 is the default), and new parameter output_hier_ndx_form to the specific output format INT64 or DIGIT_STRING (default is INT64).
 * parameter values:
 dggrid_operation GENERATE_GRID (user set)
 rng_type RAND (default)
@@ -28,10 +30,14 @@ input_files vals.txt (default)
 input_file_name valsin.txt (default)
 point_input_file_type NONE (default)
 input_address_type Z7 (user set)
+input_hier_ndx_system Z3 (default)
+input_hier_ndx_form INT64 (default)
 input_delimiter " " (default)
 output_file_name valsout.txt (default)
 output_file_type NONE (default)
 output_address_type Z7 (user set)
+output_hier_ndx_system Z3 (default)
+output_hier_ndx_form INT64 (default)
 output_delimiter " " (default)
 densification 0 (user set)
 longitude_wrap_mode WRAP (default)
