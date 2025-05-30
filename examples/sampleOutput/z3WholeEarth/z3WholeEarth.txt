@@ -2,7 +2,6 @@
 type sizes: big int: 64 bits / big double: 128 bits
 
 ** using meta file z3WholeEarth.meta...
-WARNING: output_address_type values of ZORDER, ZORDER_STRING, Z3, Z3_STRING, Z7, and Z7_STRING are deprecated and will go away in version 9.0. Instead set output_address_type to HIERNDX, new parameter output_hier_ndx_system to the desired system ZORDER, Z3, or Z7 (Z3 is the default), and new parameter output_hier_ndx_form to the specific output format INT64 or DIGIT_STRING (default is INT64).
 WARNING: the default padding digit for Z3 INT64 indexes will switch from 0 to 3 starting with DGGRID version 9.0.
 Set parameter z3_invalid_digit if you want a different digit used.
 * parameter values:
@@ -26,7 +25,7 @@ dggs_vert0_lat 58.2825 (user set)
 dggs_vert0_azimuth 0 (user set)
 dggs_res_specify_type SPECIFIED (user set)
 dggs_res_spec 4 (user set)
-z3_invalid_digit 0 (default)
+z3_invalid_digit 3 (user set)
 input_files vals.txt (default)
 input_file_name valsin.txt (default)
 point_input_file_type NONE (default)
@@ -36,9 +35,9 @@ input_hier_ndx_form INT64 (default)
 input_delimiter " " (default)
 output_file_name valsout.txt (default)
 output_file_type NONE (default)
-output_address_type Z3 (user set)
-output_hier_ndx_system Z3 (default)
-output_hier_ndx_form INT64 (default)
+output_address_type HIERNDX (user set)
+output_hier_ndx_system Z3 (user set)
+output_hier_ndx_form INT64 (user set)
 output_delimiter " " (default)
 densification 0 (user set)
 longitude_wrap_mode WRAP (default)
@@ -77,8 +76,6 @@ clip_region_files test.gen (default)
 clip_type POLY_INTERSECT (default)
 clipper_scale_factor 1000000 (default)
 
-WARNING: default padding digit for Z3 INT64 indexes will switch from 0 to 3 starting with DGGRID version 9.0.
-Set parameter z3_invalid_digit if you want a different digit used.
 
 ** grid generation complete **
 * generated 812 cells

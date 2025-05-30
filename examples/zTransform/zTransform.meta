@@ -23,5 +23,7 @@ input_delimiter " "
 
 # specify the output
 output_file_name outputfiles/zorder.txt
-output_address_type ZORDER
+output_address_type HIERNDX
+output_hier_ndx_system ZORDER
+output_hier_ndx_form INT64
 output_delimiter " "

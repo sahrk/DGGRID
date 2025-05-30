@@ -28,6 +28,9 @@ input_delimiter " "
 
 # specify the output
 z3_invalid_digit 3
-output_address_type Z3
+output_address_type HIERNDX
+output_hier_ndx_system Z3
+output_hier_ndx_form INT64
+z3_invalid_digit 3
 output_file_name outputfiles/z3d3.txt
 output_delimiter " "

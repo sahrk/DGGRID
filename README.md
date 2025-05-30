@@ -2,7 +2,7 @@
 
 ## General Information
 
-__DGGRID__ version 8.36 released May 11, 2025
+__DGGRID__ version 8.4 released May 29, 2025
 
 __Southern Terra Cognita Laboratory__  
 www.discreteglobalgrids.org  

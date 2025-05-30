@@ -14,12 +14,17 @@ dggs_res_spec 4
 
 # control grid generation
 clip_subset_type INPUT_ADDRESS_TYPE
-input_address_type ZORDER
+input_address_type HIERNDX
+input_hier_ndx_system ZORDER
+input_hier_ndx_form INT64
+
 clip_region_files inputfiles/zorder1.txt inputfiles/zorder2.txt
 
 # specify output address information
 output_cell_label_type OUTPUT_ADDRESS_TYPE
-output_address_type ZORDER
+output_address_type HIERNDX
+output_hier_ndx_system ZORDER
+output_hier_ndx_form INT64
 
 # specify the output
 cell_output_type KML

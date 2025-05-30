@@ -15,7 +15,10 @@ dggs_res_spec 5
 
 # control the generation
 clip_subset_type COARSE_CELLS
-input_address_type Z3
+input_address_type HIERNDX
+input_hier_ndx_system Z3
+input_hier_ndx_form INT64
+
 clip_cell_res 1
 clip_cell_addresses 2000000000000000 3800000000000000 1800000000000000
 
@@ -25,7 +28,11 @@ geodetic_densify 0.0
 # specify the output
 
 output_cell_label_type OUTPUT_ADDRESS_TYPE
-output_address_type Z3
+output_address_type HIERNDX
+output_hier_ndx_system Z3
+output_hier_ndx_form INT64
+
+z3_invalid_digit 3
 
 cell_output_type KML
 cell_output_file_name outputfiles/cells

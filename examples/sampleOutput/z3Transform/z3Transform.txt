@@ -2,7 +2,6 @@
 type sizes: big int: 64 bits / big double: 128 bits
 
 ** using meta file z3Transform.meta...
-WARNING: output_address_type values of ZORDER, ZORDER_STRING, Z3, Z3_STRING, Z7, and Z7_STRING are deprecated and will go away in version 9.0. Instead set output_address_type to HIERNDX, new parameter output_hier_ndx_system to the desired system ZORDER, Z3, or Z7 (Z3 is the default), and new parameter output_hier_ndx_form to the specific output format INT64 or DIGIT_STRING (default is INT64).
 WARNING: the default padding digit for Z3 INT64 indexes will switch from 0 to 3 starting with DGGRID version 9.0.
 Set parameter z3_invalid_digit if you want a different digit used.
 * parameter values:
@@ -36,9 +35,9 @@ input_hier_ndx_form INT64 (default)
 input_delimiter " " (user set)
 output_file_name outputfiles/z3d3.txt (user set)
 output_file_type TEXT (default)
-output_address_type Z3 (user set)
-output_hier_ndx_system Z3 (default)
-output_hier_ndx_form INT64 (default)
+output_address_type HIERNDX (user set)
+output_hier_ndx_system Z3 (user set)
+output_hier_ndx_form INT64 (user set)
 output_delimiter " " (user set)
 densification 0 (default)
 longitude_wrap_mode WRAP (default)
