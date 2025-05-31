@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 All changes are by Kevin Sahr, unless otherwise noted.
 
+## [8.41] - 2025-05-31
+### Changed
+- updated manual to this version
+- updated IGEO7 preset to use the new HIERNDX adress specification
+
 ## [8.4] - 2025-05-29
 ### Added
 - parameter z3_invalid_digit which specifies the digit to use for unused bits in a Z3 INT64 index. The current

@@ -417,9 +417,13 @@ SubOpDGG::setupOp (void)
          pList().setPresetParam("dggs_aperture_type", "PURE");
          pList().setPresetParam("dggs_aperture", "7");
          pList().setPresetParam("dggs_res_spec", "9");
-         pList().setPresetParam("input_address_type", "Z7");
-         pList().setPresetParam("output_address_type", "Z7");
-          pList().setPresetParam("output_cell_label_type", "OUTPUT_ADDRESS_TYPE");
+         pList().setPresetParam("input_address_type", "HIERNDX");
+         pList().setPresetParam("input_hier_ndx_system", "Z7");
+         pList().setPresetParam("input_hier_ndx_form", "INT64");
+         pList().setPresetParam("output_cell_label_type", "OUTPUT_ADDRESS_TYPE");
+         pList().setPresetParam("output_address_type", "HIERNDX");
+         pList().setPresetParam("output_hier_ndx_system", "Z7");
+         pList().setPresetParam("output_hier_ndx_form", "INT64");
       } else {
          // get the topology
          char topo = tmplc[tmplc.length() - 1];
