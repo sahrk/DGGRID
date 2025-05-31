@@ -449,7 +449,7 @@ SubOpOut::initializeOp (void)
     def = "INT64";
     pList().insertParam(new DgStringChoiceParam("output_hier_ndx_form", def, &choices));
     dgg::util::release(choices);
-    
+
     // output_delimiter <v is any character in double quotes>
     pList().insertParam(new DgStringParam("output_delimiter", "\" \"", true, false));
 

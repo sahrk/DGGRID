@@ -82,7 +82,7 @@ const DgZ3Coord DgZ3Coord::undefDgZ3Coord(0xffffffffffffffff);
 int DgZ3RF::defaultInvalidDigit = 3;
 
 ////////////////////////////////////////////////////////////////////////////////
-DgZ3RF::DgZ3RF (DgRFNetwork& networkIn, const std::string& nameIn, 
+DgZ3RF::DgZ3RF (DgRFNetwork& networkIn, const std::string& nameIn,
             int resIn, int invalidDigitIn)
          : DgRF<DgZ3Coord, long long int>(networkIn, nameIn), res_ (resIn),
            invalidDigit_ (invalidDigitIn)
@@ -175,7 +175,7 @@ DgZ3StringtoZ3Converter::convertTypedAddress (const DgZ3StringCoord& addIn) cons
        UINT64_C(0xFFFFFFFFFFFFFFFF)  // index 3: base-4 digit 3 repeated (11)
    };
    uint64_t z = fillDigit[DgZ3RF::defaultInvalidDigit];
-    
+
    string addstr = addIn.valString();
 
    // first get the quad number and add to the val

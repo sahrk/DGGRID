@@ -247,7 +247,7 @@ SubOpIn::setupOp (void)
                  "Set parameter z3_invalid_digit if you want a different digit used.",
                  DgBase::Warning);
     }
-    
+
    // input delimiter
    getParamValue(pList(), "input_delimiter", dummy, false);
    if (dummy.length() != 3 || dummy.c_str()[0] != '"' ||
