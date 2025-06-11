@@ -60,6 +60,7 @@ junk
 .DS_Store
 .gdb_history
 docs
+documentation/source/_build
 
 .idea/
 cmake-build-debug/
