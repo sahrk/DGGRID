@@ -1,0 +1,1361 @@
+
+.. DGGRID examples folder
+
+DGGRID Examples
+===============
+
+
+.. _seqnums:
+
+seqnums
+-------
+
+seqnums.meta - example of a DGGRID metafile that generates kml cells for a
+resolution 4 ISEA3H grid for sequence numbers specified in a text file.
+Kevin Sahr, 09/18/18
+
+.. code-block:: python
+
+    # parameters
+    # specify the operation
+    dggrid_operation GENERATE_GRID
+    # specify a ISEA3H; override the default resolution
+    dggs_type ISEA3H
+    dggs_res_spec 4
+    # control grid generation
+    clip_subset_type SEQNUMS
+    clip_region_files inputfiles/seqnums1.txt inputfiles/seqnums2.txt
+    # specify the output
+    cell_output_type KML
+    cell_output_file_name ./outputfiles/seqcells
+    densification 3
+
+
+.. _multipleOrientations:
+
+multipleOrientations
+--------------------
+
+multipleOrientations.meta - example of a DGGRID metafile that generates
+multiple orientations of a resolution 2 ISEA aperture 3 grid. The whole
+earth is output in KML format. Each output file contains a maximum of
+50 cells.
+
+.. code-block:: python
+
+    # parameters
+    # specify the operation
+    dggrid_operation GENERATE_GRID
+    # specify the DGG
+    dggs_type ISEA3H
+    dggs_res_spec 2
+    # control the generation
+    clip_subset_type WHOLE_EARTH
+    geodetic_densify 0.0
+    # create four orientations randomly
+    dggs_num_placements 4
+    dggs_orient_specify_type RANDOM
+    dggs_orient_rand_seed 1013
+    dggs_orient_output_file_name outputfiles/isea3h2.meta
+    # specify the output
+    max_cells_per_output_file 50
+    cell_output_type KML
+    cell_output_file_name outputfiles/isea3h2
+    point_output_type KML
+    point_output_file_name outputfiles/isea3h2p
+    kml_default_width 2
+    kml_default_color ff0000ff
+    precision 5
+
+
+.. _genPtsV8:
+
+genPtsV8
+--------
+
+genPtsV8.meta - example of a dggrid meta-file which outputs all cells which
+contain one or more input points, using GDAL Shapefiles for input and
+output.
+Determine the cells that contain Oregon airports in resolution 10 of the
+ISEA3H DGGS.
+
+.. code-block:: python
+
+    # parameters
+    # specify the operation
+    dggrid_operation GENERATE_GRID_FROM_POINTS
+    # specify the DGG
+    dggs_type ISEA3H
+    dggs_res_spec 10
+    # specify bin controls
+    # indicate that we're only using a small part of the globe
+    # this helps DGGRID use memory more efficiently
+    bin_coverage PARTIAL
+    # specify the input
+    input_files inputfiles/airport_point.geojson
+    point_input_file_type GDAL
+    # specify the output
+    cell_output_control OUTPUT_OCCUPIED
+    output_cell_label_type OUTPUT_ADDRESS_TYPE
+    output_address_type SEQNUM
+    output_delimiter ","
+    precision 7
+    # output the count of contained input points for each cell?
+    # note Shapefile field names must be 10 characters or less
+    output_count TRUE
+    output_count_field_name numAirports
+    # version 7 style text output parameters
+    # for backwards compatibility the text file is output by default. 
+    output_file_name outputfiles/textOutput.txt
+    # Set to NONE for no text output.
+    output_file_type TEXT
+    # specify the per-cell output using GDAL-supported file formats
+    # output the cells
+    cell_output_type GDAL
+    cell_output_gdal_format GeoJSON
+    cell_output_file_name outputfiles/airportCells.geojson
+    # other output parameters
+    densification 0
+    precision 7
+
+
+.. _binvalsV8:
+
+binvalsV8
+---------
+
+binvalsV8.meta - example of a dggrid meta-file which performs point value
+binning that uses GDAL Shapefiles for input and output.
+Determine the number of Oregon bridges and their total and mean lengths in the
+cells of resolution 10 of an ISEA3H DGGS.
+
+.. code-block:: python
+
+    # parameters
+    # specify the operation
+    dggrid_operation BIN_POINT_VALS
+    # specify the DGG
+    dggs_type ISEA3H
+    dggs_res_spec 10
+    # specify bin controls
+    # indicate that we're only using a small part of the globe
+    # this helps DGGRID use memory more efficiently
+    bin_coverage PARTIAL
+    # specify the input
+    input_files inputfiles/bridges_2020_WGS84/bridges_2020_WGS84.shp
+    point_input_file_type GDAL
+    input_value_field_name LENGTH_FT
+    # specify the output
+    cell_output_control OUTPUT_OCCUPIED
+    output_cell_label_type OUTPUT_ADDRESS_TYPE
+    output_address_type SEQNUM
+    precision 7
+    # what data to output for each cell?
+    # note Shapefile field names must be 10 characters or less
+    output_count TRUE
+    output_count_field_name numBridges
+    output_total TRUE
+    output_total_field_name totLenFt
+    output_mean TRUE
+    output_mean_field_name meanLenFt
+    # specify the per-cell output using GDAL-supported file formats
+    # output cell boundaries
+    cell_output_type GDAL
+    cell_output_gdal_format "ESRI Shapefile"
+    cell_output_file_name outputfiles/cells
+    # output the points to a seperate file
+    point_output_type GDAL
+    point_output_gdal_format "ESRI Shapefile"
+    point_output_file_name outputfiles/points
+    # version 7 style text output parameters
+    # for backwards compatibility the text file is output by default. 
+    output_file_name outputfiles/textOutput.txt
+    # Set to NONE for no text output.
+    output_file_type TEXT
+    output_delimiter ","
+
+
+.. _isea4t:
+
+isea4t
+------
+
+isea4t.meta - example of a DGGRID metafile that generates a resolution
+7 ISEA4T triangle grid for the state of Oregon (with a 100 mile buffer)
+Kevin Sahr, 04/29/23
+
+.. code-block:: python
+
+    # parameters
+    # specify the operation
+    dggrid_operation GENERATE_GRID
+    # specify an ISEA4T DGG; override the default resolution
+    dggs_type ISEA4T
+    dggs_res_spec 7
+    # control grid generation
+    clip_subset_type SHAPEFILE
+    clip_region_files ./inputfiles/orbuff.shp
+    # specify the output
+    cell_output_type KML
+    cell_output_file_name ./outputfiles/orgrid
+    densification 3
+
+
+.. _z3Transform:
+
+z3Transform
+-----------
+
+z3Transform.meta - example of a dggrid meta-file which performs address
+conversion from GEO to Z3 indexes
+Note that the inputfiles directory contains GEO, Z3, Z3_STRING, and
+SEQNUM files, all describing the same set of cells. You can experiment with
+transforming between these by changing the input_* (and output_*) parameters.
+
+.. code-block:: python
+
+    # parameters
+    # specify the operation
+    dggrid_operation TRANSFORM_POINTS
+    # specify the DGG
+    dggs_type ISEA3H
+    dggs_res_spec 9
+    # specify bin controls
+    input_file_name inputfiles/geo.txt
+    input_address_type GEO
+    input_delimiter " "
+    # specify the output
+    output_file_name outputfiles/z3str.txt
+    output_address_type Z3_STRING
+    output_delimiter " "
+
+
+.. _zCollection:
+
+zCollection
+-----------
+
+zCollection.meta - example of a DGGRID metafile that outputs to a GDAL
+collection file using ZOrder cell indexes.
+
+.. code-block:: python
+
+    # parameters
+    # specify the operation
+    dggrid_operation GENERATE_GRID
+    # specify the DGG
+    dggs_type ISEA3H
+    dggs_res_spec 2
+    # control grid generation
+    clip_subset_type SEQNUMS
+    clip_region_files inputfiles/seqnums.txt
+    longitude_wrap_mode UNWRAP_EAST
+    unwrap_points TRUE
+    # specify output address information
+    output_cell_label_type OUTPUT_ADDRESS_TYPE
+    output_address_type ZORDER
+    # specify the output collection file used
+    # when GDAL_COLLECTION is specified below
+    collection_output_gdal_format GeoJSON
+    collection_output_file_name ./outputfiles/everything.geojson
+    # specify which output you want to put together in a GDAL_COLLECTION
+    # this must include cell and/or point output
+    cell_output_type GDAL_COLLECTION
+    point_output_type GDAL_COLLECTION
+    children_output_type GDAL_COLLECTION
+    neighbor_output_type GDAL_COLLECTION
+
+
+.. _gdalCollection:
+
+gdalCollection
+--------------
+
+gdalCollection.meta - example of a DGGRID metafile that combines all data for
+each cell into a single file.
+Kevin Sahr, 02/08/22
+
+.. code-block:: python
+
+    # parameters
+    # specify the operation
+    dggrid_operation GENERATE_GRID
+    # specify the DGG
+    dggs_type ISEA3H
+    dggs_res_spec 2
+    # control grid generation
+    clip_subset_type SEQNUMS
+    clip_region_files inputfiles/seqnums.txt
+    longitude_wrap_mode UNWRAP_EAST
+    unwrap_points TRUE
+    # specify the output collection file used
+    # when GDAL_COLLECTION is specified below
+    collection_output_gdal_format GeoJSON
+    collection_output_file_name ./outputfiles/everything.geojson
+    # specify which output you want to put together in a GDAL_COLLECTION
+    # this must include cell and/or point output
+    cell_output_type GDAL_COLLECTION
+    point_output_type GDAL_COLLECTION
+    children_output_type GDAL_COLLECTION
+    neighbor_output_type GDAL_COLLECTION
+
+
+.. _binvals:
+
+binvals
+-------
+
+binvals.meta - example of a dggrid meta-file which performs point value
+binning
+Determine the average population of large Oregon cities in the cells of
+resolution 9 of an ISEA3H DGGS.
+Created by Kevin Sahr, November 11, 2001
+Revised by Kevin Sahr, June 20, 2003
+Revised by Kevin Sahr, October 20, 2014
+Revised by Kevin Sahr, November 11, 2014
+
+.. code-block:: python
+
+    # parameters
+    # specify the operation
+    dggrid_operation BIN_POINT_VALS
+    # specify the DGG
+    dggs_type ISEA3H
+    dggs_res_spec 9
+    # specify bin controls
+    bin_coverage PARTIAL
+    input_files inputfiles/20k.txt inputfiles/50k.txt inputfiles/100k.txt inputfiles/200k.txt
+    input_delimiter " "
+    # specify text file output
+    output_file_type TEXT
+    output_file_name outputfiles/popval3h9.txt
+    output_address_type SEQNUM
+    output_delimiter ","
+    precision 7
+    cell_output_control OUTPUT_OCCUPIED
+
+
+.. _gridgenGeoJSON:
+
+gridgenGeoJSON
+--------------
+
+gridgenGeoJSON.meta - example of a DGGRID metafile that generates a high
+resolution grid for testing using a mixed aperture ISEA
+projection and clipped to a small area in Corvallis, Oregon. The output
+grid is in GeoJSON format.
+Matt Gregory, 11/4/13
+
+.. code-block:: python
+
+    # parameters
+    # specify the operation
+    dggrid_operation GENERATE_GRID
+    # specify the DGG
+    dggs_type ISEA43H
+    dggs_num_aperture_4_res 6 
+    dggs_res_spec 16
+    # control the generation
+    clip_subset_type SHAPEFILE
+    clip_region_files inputfiles/corvallis
+    geodetic_densify 0.0
+    # specify the output
+    cell_output_type GEOJSON
+    cell_output_file_name outputfiles/corvallis_cell
+    point_output_type GEOJSON
+    point_output_file_name outputfiles/corvallis_point
+    densification 3
+
+
+.. _gridgenDiamond:
+
+gridgenDiamond
+--------------
+
+gridgenDiamond.meta - example of a DGGRID metafile that generates resolution 3
+of a diamond grid in KML format.
+Kevin Sahr, 03/15/21
+
+.. code-block:: python
+
+    # parameters
+    # specify the operation
+    dggrid_operation GENERATE_GRID
+    # specify the DGG
+    dggs_type ISEA4D
+    dggs_res_spec 3
+    # control the generation
+    clip_subset_type WHOLE_EARTH
+    geodetic_densify 0.0
+    # specify the output
+    cell_output_type KML
+    cell_output_file_name outputfiles/dmd
+    kml_default_color ffff0000
+    kml_default_width 6
+    kml_name ISEA4D
+    kml_description www.discreteglobalgrids.org
+    kml_default_width 6
+    densification 0
+    precision 6
+
+
+.. _mixedAperture:
+
+mixedAperture
+-------------
+
+mixedAperture.meta - example of generating a grid with a mixed aperture
+sequence, neighbors, and children.
+Kevin Sahr, 7/14/19
+
+.. code-block:: python
+
+    # parameters
+    # specify the operation
+    dggrid_operation GENERATE_GRID
+    # specify the DGG
+    dggs_type CUSTOM
+    dggs_topology HEXAGON
+    dggs_proj ISEA
+    dggs_aperture_type SEQUENCE
+    dggs_aperture_sequence 434747
+    dggs_res_spec 5
+    # control the generation
+    clip_subset_type WHOLE_EARTH
+    geodetic_densify 0.0
+    # specify the output
+    cell_output_type NONE
+    point_output_type KML
+    point_output_file_name outputfiles/mixedPts
+    neighbor_output_type TEXT
+    neighbor_output_file_name outputfiles/mixed
+    children_output_type TEXT
+    children_output_file_name outputfiles/mixed
+    densification 0
+    precision 5
+    verbosity 0
+
+
+.. _isea7hGen:
+
+isea7hGen
+---------
+
+isea7hGen.meta - example of a DGGRID metafile that generates a
+resolution 3 ISEA aperture 7 grid for the whole earth. Output is in
+KML format.
+Kevin Sahr, 08/28/19
+
+.. code-block:: python
+
+    # parameters
+    # specify the operation
+    dggrid_operation GENERATE_GRID
+    # specify the DGG
+    dggs_type ISEA7H
+    dggs_res_spec 3
+    # control the generation
+    clip_subset_type WHOLE_EARTH
+    geodetic_densify 0.0
+    # specify the output
+    cell_output_type KML
+    cell_output_file_name outputfiles/isea7h3
+    point_output_type KML
+    point_output_file_name outputfiles/isea7h3p
+    kml_default_width 2
+    kml_default_color ff0000ff
+    densification 3
+    precision 5
+
+
+.. _planetRiskClipMulti:
+
+planetRiskClipMulti
+-------------------
+
+planetRiskClipMulti.meta - example of a DGGRID metafile that generates a resolution
+14 PlanetRisk grid for a polygons over the Alexandria and Tysons
+Corner offices of Culmen International, the White House, the Reflecting
+Pool, and the Pentagon.
+Kevin Sahr, 07/15/19
+
+.. code-block:: python
+
+    # parameters
+    # specify the operation
+    dggrid_operation GENERATE_GRID
+    # specify a PLANETRISK grid and resolution (11 is ~1.0 km^2)
+    dggs_type PLANETRISK
+    dggs_res_spec 14 
+    # control grid generation
+    clip_subset_type GDAL
+    clip_region_files ./inputfiles/WashingtonDC.geojson ./inputfiles/culmenUSA.geojson
+    # specify the output
+    cell_output_type KML
+    cell_output_file_name ./outputfiles/culmenCells
+    densification 0
+    # output neighbors and children
+    neighbor_output_type TEXT
+    neighbor_output_file_name outputfiles/neighbors
+    children_output_type TEXT
+    children_output_file_name outputfiles/children
+
+
+.. _z3Collection:
+
+z3Collection
+------------
+
+z3Collection.meta - example of a DGGRID metafile that outputs to a GDAL
+collection file using Z3 cell indexes.
+
+.. code-block:: python
+
+    # parameters
+    # specify the operation
+    dggrid_operation GENERATE_GRID
+    # specify the DGG
+    dggs_type ISEA3H
+    dggs_res_spec 2
+    # control grid generation
+    clip_subset_type SEQNUMS
+    clip_region_files inputfiles/seqnums.txt
+    longitude_wrap_mode UNWRAP_EAST
+    unwrap_points TRUE
+    # specify output address information
+    output_cell_label_type OUTPUT_ADDRESS_TYPE
+    output_address_type Z3
+    # specify the output collection file used
+    # when GDAL_COLLECTION is specified below
+    collection_output_gdal_format GeoJSON
+    collection_output_file_name ./outputfiles/everything.geojson
+    # specify which output you want to put together in a GDAL_COLLECTION
+    # this must include cell and/or point output
+    cell_output_type GDAL_COLLECTION
+    point_output_type GDAL_COLLECTION
+    children_output_type GDAL_COLLECTION
+    neighbor_output_type GDAL_COLLECTION
+
+
+.. _binpres:
+
+binpres
+-------
+
+binpres.meta - example of a dggrid meta-file which performs presence/absence
+binning
+Determine the presence/absence of Oregon cities with various populations in
+the cells of resolution 7 of an ISEA3H DGGS.
+Created by Kevin Sahr, November 11, 2001
+Revised by Kevin Sahr, June 20, 2003
+Revised by Kevin Sahr, October 20, 2014
+Revised by Kevin Sahr, November 11, 2014
+
+.. code-block:: python
+
+    # parameters
+    # specify the operation
+    dggrid_operation BIN_POINT_PRESENCE
+    # specify the DGG
+    dggs_type ISEA3H
+    dggs_res_spec 7
+    # specify bin controls
+    bin_coverage PARTIAL
+    input_files inputfiles/20k.txt inputfiles/50k.txt inputfiles/100k.txt inputfiles/200k.txt
+    input_delimiter " "
+    # specify the output
+    output_file_name outputfiles/popclass3h7.txt
+    output_address_type SEQNUM
+    output_delimiter ","
+    output_num_classes TRUE
+    cell_output_control OUTPUT_OCCUPIED
+
+
+.. _z3Nums:
+
+z3Nums
+------
+
+z3Nums.meta - example of a DGGRID metafile that generates kml cells for a
+resolution 4 ISEA3H grid for Z3 indexes specified in text files.
+
+.. code-block:: python
+
+    # parameters
+    # specify the operation
+    dggrid_operation GENERATE_GRID
+    # specify a ISEA3H; override the default resolution
+    dggs_type ISEA3H
+    dggs_res_spec 9
+    # control grid generation
+    clip_subset_type INPUT_ADDRESS_TYPE
+    input_address_type Z3
+    clip_region_files inputfiles/z3a.txt inputfiles/z3b.txt
+    # specify output address information
+    output_cell_label_type OUTPUT_ADDRESS_TYPE
+    output_address_type Z3
+    # specify the output
+    cell_output_type KML
+    cell_output_file_name ./outputfiles/zcells
+    point_output_type KML
+    point_output_file_name ./outputfiles/zpoints
+
+
+.. _gdalExample:
+
+gdalExample
+-----------
+
+gdalExample.meta - example of a DGGRID metafile that generates a resolution
+9 ISEA7H grid. The clipping and output files all use GDAL-readable file
+formats.
+Kevin Sahr, 08/29/19
+
+.. code-block:: python
+
+    # parameters
+    # specify the operation
+    dggrid_operation GENERATE_GRID
+    # specify the DGG
+    dggs_type ISEA7H
+    dggs_res_spec 9
+    # control grid generation
+    clip_subset_type GDAL
+    # gdal uses the file extension to determine the file format
+    clip_region_files inputfiles/corvallis.shp
+    # specify the output
+    cell_output_type GDAL
+    # for output the format needs to be explicit
+    cell_output_gdal_format KML
+    cell_output_file_name ./outputfiles/corvallisCells.kml
+    point_output_type GDAL
+    point_output_gdal_format GeoJSON
+    point_output_file_name ./outputfiles/corvallisPts.geojson
+
+
+.. _z3CellClip:
+
+z3CellClip
+----------
+
+z3CellClip.meta - example of generating part of an ISEA3H grid using
+coarser resolution cells specified as Z3 indexes as the
+clipping polygons
+
+.. code-block:: python
+
+    # parameters
+    # specify the operation
+    dggrid_operation GENERATE_GRID
+    # specify the DGG
+    dggs_type ISEA3H
+    dggs_res_spec 5
+    # control the generation
+    clip_subset_type COARSE_CELLS
+    input_address_type Z3
+    clip_cell_res 1
+    clip_cell_addresses 2000000000000000 3800000000000000 1800000000000000
+    clip_cell_densification 1
+    geodetic_densify 0.0
+    # specify the output
+    output_cell_label_type OUTPUT_ADDRESS_TYPE
+    output_address_type Z3
+    cell_output_type KML
+    cell_output_file_name outputfiles/cells
+    point_output_type KML
+    point_output_file_name outputfiles/points
+    densification 0
+    precision 6
+
+
+.. _zTransform:
+
+zTransform
+----------
+
+zTransform.meta - example of a dggrid meta-file which performs address
+conversion from GEO to ZORDER indexes
+Note that the inputfiles directory contains GEO, ZORDER, ZORDER_STRING, and
+SEQNUM files, all describing the same set of cells. You can experiment with
+transforming between these by changing the input_* (and output_*) parameters.
+
+.. code-block:: python
+
+    # parameters
+    # specify the operation
+    dggrid_operation TRANSFORM_POINTS
+    # specify the DGG
+    dggs_type ISEA3H
+    dggs_res_spec 9
+    # specify bin controls
+    input_file_name inputfiles/geo.txt
+    input_address_type GEO
+    input_delimiter " "
+    # specify the output
+    output_file_name outputfiles/zorder.txt
+    output_address_type ZORDER
+    output_delimiter " "
+
+
+.. _icosahedron:
+
+icosahedron
+-----------
+
+icosahedron.meta - example of a DGGRID metafile that generates a spherical
+icosahedron (a resolution 0 triangle grid) in KML format.
+Kevin Sahr, 10/23/14
+
+.. code-block:: python
+
+    # parameters
+    # specify the operation
+    dggrid_operation GENERATE_GRID
+    # specify the DGG
+    dggs_type FULLER4T
+    dggs_res_spec 0
+    # control the generation
+    clip_subset_type WHOLE_EARTH
+    geodetic_densify 0.0
+    # specify the output
+    cell_output_type KML
+    cell_output_file_name outputfiles/icosa
+    kml_default_color ffff0000
+    kml_default_width 6
+    kml_name Spherical Icosahedron
+    kml_description www.discreteglobalgrids.org
+    kml_default_width 6
+    densification 0
+
+
+.. _transformV8:
+
+transformV8
+-----------
+
+transformV8.meta - example of a dggrid meta-file which performs address
+conversion with GDAL cell geometry output
+Transformation from GEO to DGGS cells effectively determines the cell in which
+each of the input Oregon cities are located in a resolution 8 ISEA3H DGGS.
+
+.. code-block:: python
+
+    # parameters
+    # specify the operation
+    dggrid_operation TRANSFORM_POINTS
+    # specify the DGG
+    dggs_type ISEA3H
+    dggs_res_spec 9
+    # specify bin controls
+    input_files inputfiles/100k.txt inputfiles/200k.txt inputfiles/20k.txt inputfiles/50k.txt
+    input_address_type GEO
+    input_delimiter " "
+    # specify the output
+    output_address_type SEQNUM
+    output_delimiter ","
+    # version 7 style text output parameters
+    # for backwards compatibility the text file is output by default.
+    output_file_name outputfiles/cities3h9.txt
+    # Set to NONE for no text output.
+    output_file_type TEXT
+    # specify the output collection file used
+    # when GDAL_COLLECTION is specified below
+    collection_output_gdal_format GeoJSON
+    collection_output_file_name ./outputfiles/cities3h9.geojson
+    # specify which output you want to put together in a GDAL_COLLECTION
+    # this must include cell and/or point output
+    cell_output_type GDAL_COLLECTION
+    point_output_type GDAL_COLLECTION
+
+
+.. _zNums:
+
+zNums
+-----
+
+zNums.meta - example of a DGGRID metafile that generates kml cells for a
+resolution 4 ISEA3H grid for zorder indexes specified in text files.
+
+.. code-block:: python
+
+    # parameters
+    # specify the operation
+    dggrid_operation GENERATE_GRID
+    # specify a ISEA3H; override the default resolution
+    dggs_type ISEA3H
+    dggs_res_spec 4
+    # control grid generation
+    clip_subset_type INPUT_ADDRESS_TYPE
+    input_address_type ZORDER
+    clip_region_files inputfiles/zorder1.txt inputfiles/zorder2.txt
+    # specify output address information
+    output_cell_label_type OUTPUT_ADDRESS_TYPE
+    output_address_type ZORDER
+    # specify the output
+    cell_output_type KML
+    cell_output_file_name ./outputfiles/zcells
+    densification 3
+
+
+.. _holes:
+
+holes
+-----
+
+holes.meta - example of a DGGRID metafile that generates a ISEA3H
+resolution 17 grid using an input clipping polygon with holes.
+Kevin Sahr, 06/20/22
+
+.. code-block:: python
+
+    # parameters
+    # specify the operation
+    dggrid_operation GENERATE_GRID
+    # specify the DGG
+    dggs_type ISEA3H
+    dggs_res_spec 17
+    # control the generation
+    clip_subset_type GDAL
+    clip_region_files ./inputfiles/holes00.geojson
+    clip_using_holes TRUE
+    geodetic_densify 0.01 
+    # specify the output
+    cell_output_type KML
+    cell_output_file_name ./outputfiles/res17
+    densification 1
+
+
+.. _planetRiskTable:
+
+planetRiskTable
+---------------
+
+planetRiskTable.meta - example of outputting a table of statistics for the
+first 20 resolutions of the PlanetRisk grid.
+Kevin Sahr, 7/14/19
+
+.. code-block:: python
+
+    # parameters
+    # specify the operation
+    dggrid_operation OUTPUT_STATS
+    # specify the DGG
+    dggs_type PLANETRISK
+    dggs_res_spec 20
+
+
+.. _table:
+
+table
+-----
+
+table.meta - example of a DGGRID metafile that outputs a table of grid
+characteristics for a mixed aperture DGG.
+Kevin Sahr, 01/14/13
+
+.. code-block:: python
+
+    # parameters
+    # specify the operation
+    dggrid_operation OUTPUT_STATS
+    # specify the DGG
+    dggs_type ISEA43H
+    dggs_num_aperture_4_res 5
+    dggs_res_spec 15
+
+
+.. _z3WholeEarth:
+
+z3WholeEarth
+------------
+
+z3WholeEarth.meta - example of generating a whole earth resolution 4 ISEA3H
+grid with Z3 indexes.
+
+.. code-block:: python
+
+    # parameters
+    # specify the operation
+    dggrid_operation GENERATE_GRID
+    # specify the DGG
+    dggs_type ISEA3H
+    dggs_res_spec 4
+    # specify the output
+    output_cell_label_type OUTPUT_ADDRESS_TYPE
+    output_address_type Z3
+    cell_output_type KML
+    cell_output_file_name outputfiles/z3cells
+    point_output_type KML
+    point_output_file_name outputfiles/z3points
+    densification 0
+    precision 6
+
+
+.. _gridgenMixedSHP:
+
+gridgenMixedSHP
+---------------
+
+gridgenMixedSHP.meta - example of a DGGRID metafile that generates a
+resolution 10 mixed aperture grid using the Fuller projection and clipped
+to Benton County, Oregon. The output grid is in ShapeFile format.
+Kevin Sahr, 01/14/13
+
+.. code-block:: python
+
+    # parameters
+    # specify the operation
+    dggrid_operation GENERATE_GRID
+    # specify the DGG
+    dggs_type FULLER43H
+    dggs_num_aperture_4_res 3
+    dggs_res_spec 10
+    # control the generation
+    clip_subset_type AIGEN
+    clip_region_files inputfiles/benton.gen
+    geodetic_densify 0.0
+    # specify the output
+    cell_output_type SHAPEFILE
+    cell_output_file_name outputfiles/benton10
+    shapefile_id_field_length 5
+    densification 3
+
+
+.. _isea4d:
+
+isea4d
+------
+
+isea4d.meta - example of a DGGRID metafile that generates a resolution
+7 ISEA4D diamond grid for the state of Oregon (with a 100 mile buffer)
+Kevin Sahr, 04/29/23
+
+.. code-block:: python
+
+    # parameters
+    # specify the operation
+    dggrid_operation GENERATE_GRID
+    # specify an ISEA4D DGG; override the default resolution
+    dggs_type ISEA4D
+    dggs_res_spec 7
+    # control grid generation
+    clip_subset_type SHAPEFILE
+    clip_region_files ./inputfiles/orbuff.shp
+    # specify the output
+    cell_output_type KML
+    cell_output_file_name ./outputfiles/orgrid
+    densification 3
+
+
+.. _superfundGrid:
+
+superfundGrid
+-------------
+
+superfundGrid.meta - example of a DGGRID metafile that generates a resolution
+5 Superfund_500m grid for the state of Oregon (with a 100 mile buffer);
+also demonstrates breaking up output into multiple files
+Kevin Sahr, 01/14/13
+
+.. code-block:: python
+
+    # parameters
+    # specify the operation
+    dggrid_operation GENERATE_GRID
+    # specify a Superfund_500m DGG; override the default resolution
+    dggs_type SUPERFUND
+    dggs_res_spec 5
+    # control grid generation
+    clip_subset_type SHAPEFILE
+    clip_region_files ./inputfiles/orbuff.shp
+    update_frequency 10000000
+    # specify the output
+    cell_output_type SHAPEFILE
+    cell_output_file_name ./outputfiles/orgrid
+    densification 3
+    max_cells_per_output_file 500
+
+
+.. _planetRiskGridGen:
+
+planetRiskGridGen
+-----------------
+
+planetRiskGridGen.meta - example of generating a PlanetRisk grid with
+neighbors and children.
+Kevin Sahr, 7/14/19
+
+.. code-block:: python
+
+    # parameters
+    # specify the operation
+    dggrid_operation GENERATE_GRID
+    # specify the DGG
+    dggs_type PLANETRISK
+    dggs_res_spec 5
+    # control the generation
+    clip_subset_type WHOLE_EARTH
+    geodetic_densify 0.0
+    # specify the output using GDAL-supported file formats
+    cell_output_type GDAL
+    cell_output_gdal_format GeoJSON
+    cell_output_file_name outputfiles/cells.geojson
+    point_output_type GDAL
+    point_output_gdal_format GeoJSON
+    point_output_file_name outputfiles/points.geojson
+    neighbor_output_type TEXT
+    neighbor_output_file_name outputfiles/neighbors
+    children_output_type TEXT
+    children_output_file_name outputfiles/children
+    densification 0
+    precision 6
+
+
+.. _transform:
+
+transform
+---------
+
+transform.meta - example of a dggrid meta-file which performs address
+conversion
+Determine the cells in which some Oregon cities are located in resolution 8
+an ISEA3H DGGS.
+Created by Kevin Sahr, November 11, 2001
+Revised by Kevin Sahr, June 20, 2003
+Revised by Kevin Sahr, October 20, 2014
+Revised by Kevin Sahr, November 11, 2014
+
+.. code-block:: python
+
+    # parameters
+    # specify the operation
+    dggrid_operation TRANSFORM_POINTS
+    # specify the DGG
+    dggs_type ISEA3H
+    dggs_res_spec 9
+    # specify bin controls
+    input_file_name inputfiles/20k.txt
+    input_address_type GEO
+    input_delimiter " "
+    # specify the output
+    output_file_name outputfiles/cities3h9.txt
+    output_address_type SEQNUM
+    output_delimiter ","
+
+
+.. _hiRes:
+
+hiRes
+-----
+
+hiRes.meta - example of a DGGRID metafile that generates a very high
+resolution grid (cell area of less than 3 square cm) using a mixed
+aperture ISEA projection and clipped to a small triangle in Ashland, Oregon.
+NOTES:
+- this metafile causes DGGRID to generate a warning indicating that the
+number of cells may cause an integer overflow for some operations; this
+message should not stop DGGRID from generating portions of the grid
+Kevin Sahr, 09/01/18
+
+.. code-block:: python
+
+    # parameters
+    # specify the operation
+    dggrid_operation GENERATE_GRID
+    # specify the DGG
+    dggs_type ISEA43H
+    dggs_num_aperture_4_res 20
+    dggs_res_spec 27
+    # control the generation
+    clip_subset_type SHAPEFILE
+    clip_region_files inputfiles/littleTri
+    geodetic_densify 0.0
+    clipper_scale_factor 1000000000
+    # specify the output
+    cell_output_type SHAPEFILE
+    cell_output_file_name outputfiles/littleTri31
+    densification 3
+    shapefile_id_field_length 21
+    precision 12
+
+
+.. _binpresV8:
+
+binpresV8
+---------
+
+binpresV8.meta - example of a dggrid meta-file which performs point
+presence/absence binning with GDAL input and output files
+Determine the presence/absence of Oregon cities with various population sizes
+in the cells of resolution 7 of an ISEA3H DGGS.
+
+.. code-block:: python
+
+    # parameters
+    # specify the operation
+    dggrid_operation BIN_POINT_PRESENCE
+    # specify the DGG
+    dggs_type ISEA3H
+    dggs_res_spec 7
+    # specify bin controls
+    bin_coverage PARTIAL
+    # specify input files
+    point_input_file_type GDAL
+    input_files inputfiles/20k.geojson inputfiles/50k.geojson inputfiles/100k.geojson inputfiles/200k.geojson
+    # specify the output
+    cell_output_control OUTPUT_OCCUPIED
+    output_cell_label_type OUTPUT_ADDRESS_TYPE
+    output_address_type SEQNUM
+    output_delimiter ","
+    precision 7
+    # data fields to output
+    # note Shapefile field names must be 10 characters or less
+    output_presence_vector_field_name classes
+    # output a count of all cities in each cell?
+    output_count TRUE
+    output_count_field_name numCities
+    # output the number of population classes present in each cell
+    output_num_classes TRUE
+    output_num_classes_field_name numClass
+    # version 7 style text output parameters
+    # for backwards compatibility the text file is output by default. 
+    output_file_name outputfiles/popclass3h7.txt
+    # Set to NONE for no text output.
+    output_file_type TEXT
+    # specify the per-cell output using GDAL-supported file formats
+    # output the points
+    point_output_type GDAL
+    point_output_gdal_format GeoJSON
+    point_output_file_name outputfiles/points.geojson
+
+
+.. _planetRiskGridNoWrap:
+
+planetRiskGridNoWrap
+--------------------
+
+planetRiskGridNoWrap.meta - example of generating a PlanetRisk grid with
+neighbors and children, where cell boundaries and their associated
+points are "unwrapped" to facilitate 2D display (see the last two
+parameters at the bottom of this file).
+Kevin Sahr, 1/10/22
+
+.. code-block:: python
+
+    # parameters
+    # specify the operation
+    dggrid_operation GENERATE_GRID
+    # specify the DGG
+    dggs_type PLANETRISK
+    dggs_res_spec 2
+    # control the generation
+    clip_subset_type WHOLE_EARTH
+    geodetic_densify 0.0
+    # specify the output using GDAL-supported file formats
+    cell_output_type GDAL
+    cell_output_gdal_format GeoJSON
+    cell_output_file_name outputfiles/cells.geojson
+    point_output_type GDAL
+    point_output_gdal_format GeoJSON
+    point_output_file_name outputfiles/points.geojson
+    neighbor_output_type TEXT
+    neighbor_output_file_name outputfiles/neighbors
+    children_output_type TEXT
+    children_output_file_name outputfiles/children
+    # other output parameters
+    densification 0
+    precision 6
+    # force cells who straddle the anti-meridian to "unwrap" to the east 
+    # (i.e., all vertices output with a positive longitude)
+    longitude_wrap_mode UNWRAP_EAST
+    # force points to follow the associated cells when the cell is "unwrapped"
+    unwrap_points TRUE
+
+
+.. _determineRes:
+
+determineRes
+------------
+
+gridgenMixed.meta - example of a DGGRID metafile that generates a grid for
+the entire earth with a cell area of approximately 120,000km^2.
+Kevin Sahr, 01/14/13
+
+.. code-block:: python
+
+    # parameters
+    # specify the operation
+    dggrid_operation GENERATE_GRID
+    # specify the DGG
+    dggs_type ISEA43H
+    dggs_num_aperture_4_res 2
+    dggs_res_specify_type CELL_AREA
+    dggs_res_specify_area 120000.0
+    dggs_res_specify_rnd_down TRUE
+    # control the generation
+    clip_subset_type WHOLE_EARTH
+    # specify the output
+    cell_output_type KML
+    cell_output_file_name outputfiles/earth120k
+    densification 1
+    precision 6
+
+
+.. _gridgenPureKML:
+
+gridgenPureKML
+--------------
+
+gridgenPureKML.meta - example of a DGGRID metafile that generates a
+resolution 5 ISEA aperture 3 grid for the whole earth. Output is in
+KML format.
+Kevin Sahr, 05/23/13
+Revised November 11, 2014
+
+.. code-block:: python
+
+    # parameters
+    # specify the operation
+    dggrid_operation GENERATE_GRID
+    # specify the DGG
+    dggs_type ISEA3H
+    dggs_res_spec 5
+    # control the generation
+    clip_subset_type WHOLE_EARTH
+    geodetic_densify 0.0
+    # specify the output
+    cell_output_type KML
+    cell_output_file_name outputfiles/isea3h5
+    point_output_type KML
+    point_output_file_name outputfiles/isea3h5p
+    kml_default_width 2
+    kml_default_color ff0000ff
+    densification 3
+    precision 5
+
+
+.. _planetRiskClipHiRes:
+
+planetRiskClipHiRes
+-------------------
+
+planetRiskClipHiRes.meta - example of a DGGRID metafile that generates a
+resolution 19 PlanetRisk grid for a polygon over the Alexandria HQ
+of Culmen International.
+Kevin Sahr, 07/15/19
+
+.. code-block:: python
+
+    # parameters
+    # specify the operation
+    dggrid_operation GENERATE_GRID
+    # specify a PLANETRISK grid and resolution (11 is ~1.0 km^2)
+    dggs_type PLANETRISK
+    # res 19 is ~0.2 m^2 cells
+    dggs_res_spec 19 
+    # control grid generation
+    clip_subset_type GDAL
+    clip_region_files ./inputfiles/AlexandriaOffice.geojson
+    # increase granularity of the clipping algorithm for high res
+    clipper_scale_factor 1000000000
+    # specify the output
+    cell_output_type KML
+    cell_output_file_name ./outputfiles/AlexandriaOfficeCells
+    densification 0
+
+
+.. _zCellClip:
+
+zCellClip
+---------
+
+zCellClip.meta - example of generating part of an ISEA3H grid using
+coarser resolution cells specified as ZORDER indexes as the
+clipping polygons
+
+.. code-block:: python
+
+    # parameters
+    # specify the operation
+    dggrid_operation GENERATE_GRID
+    # specify the DGG
+    dggs_type ISEA3H
+    dggs_res_spec 5
+    # control the generation
+    clip_subset_type COARSE_CELLS
+    input_address_type ZORDER
+    clip_cell_res 1
+    clip_cell_addresses 8400000000000000 a400000000000000 b000000000000000
+    clip_cell_densification 1
+    geodetic_densify 0.0
+    # specify the output
+    cell_output_type KML
+    cell_output_file_name outputfiles/cells
+    point_output_type KML
+    point_output_file_name outputfiles/points
+    densification 0
+    precision 6
+
+
+.. _aigenerate:
+
+aigenerate
+----------
+
+aigenerate.meta - example of a DGGRID metafile that generates a resolution
+6 ISEA3H grid for the state of Oregon (with a 100 mile buffer) with
+ArcInfo Generate file format output
+Kevin Sahr, 05/22/13
+
+.. code-block:: python
+
+    # parameters
+    # specify the operation
+    dggrid_operation GENERATE_GRID
+    # specify a ISEA3H; override the default resolution
+    dggs_type ISEA3H
+    dggs_res_spec 6
+    # control grid generation
+    clip_subset_type SHAPEFILE
+    clip_region_files ./inputfiles/orbuff.shp
+    update_frequency 10000000
+    # specify the output
+    cell_output_type AIGEN
+    cell_output_file_name ./outputfiles/orCells
+    densification 5
+    point_output_type AIGEN
+    point_output_file_name ./outputfiles/orPts
+
+
+.. _gridgenCellClip:
+
+gridgenCellClip
+---------------
+
+gridgenCellClip.meta - example of generating part of an ISEA3H grid using
+coarser resolution cells as the clipping polygons
+Kevin Sahr, 1/18/22
+
+.. code-block:: python
+
+    # parameters
+    # specify the operation
+    dggrid_operation GENERATE_GRID
+    # specify the DGG
+    dggs_type ISEA3H
+    dggs_res_spec 5
+    # control the generation
+    clip_subset_type COARSE_CELLS
+    input_address_type SEQNUM
+    clip_cell_res 1
+    clip_cell_addresses 1 13 22
+    clip_cell_densification 1
+    geodetic_densify 0.0
+    # specify the output
+    cell_output_type KML
+    cell_output_file_name outputfiles/cells
+    point_output_type KML
+    point_output_file_name outputfiles/points
+    densification 0
+    precision 6
+
