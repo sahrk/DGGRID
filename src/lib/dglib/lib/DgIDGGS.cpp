@@ -119,8 +119,8 @@ const DgApSeq& apSeq = DgApSeq::defaultApSeq, bool isApSeq = false,
 bool isMixed43 = false, int numAp4 = 0, bool isSuperfund = false,
 const string& hierNdxSysType = "NONE");
  */
-        : DgIDGGSBase (network, backFrame, vert0, azDegs, nRes, aperture, name,
-                       gridTopo, gridMetric, projType, !(isMixed43 || isApSeq)),
+        : DgIDGGSBase (network, backFrame, vert0, azDegs, nRes, gridTopo, gridMetric,
+                       aperture, name, projType, !(isMixed43 || isApSeq)),
           numAp4_ (numAp4), isSuperfund_ (isSuperfund), isApSeq_ (isApSeq),
           apSeq_ (apSeq)
 {

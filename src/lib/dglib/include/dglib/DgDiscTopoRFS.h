@@ -55,6 +55,8 @@ template<class A, class B, class DB> class DgDiscTopoRFS
              if (*this != rf)
              {
                 DgDiscRFSGrids<DgDiscTopoRF, A, B, DB, B>::operator=(rf);
+                gridTopo_ = rf.gridTopo();
+                gridMetric_ = rf.gridMetric();
                 aperture_ = rf.aperture();
                 isCongruent_ = rf.isCongruent();
                 isAligned_ = rf.isAligned();
@@ -83,6 +85,9 @@ template<class A, class B, class DB> class DgDiscTopoRFS
       virtual const char* str2add (DgResAdd<A>* add, const char* str, char delimiter) const;
                
       unsigned int aperture (void) const { return aperture_; }
+
+      DgGridTopology    gridTopo    (void) const { return gridTopo_; }
+      DgGridMetric      gridMetric  (void) const { return gridMetric_; }
 
       bool isCongruent (void) const { return isCongruent_; }
       bool isAligned   (void) const { return isAligned_; }
@@ -299,18 +304,16 @@ template<class A, class B, class DB> class DgDiscTopoRFS
            }
 
    protected:
-
       DgDiscTopoRFS (DgRFNetwork& network, const DgRF<B, DB>& backFrame,
-                 int nResIn, unsigned int aperture,
-                 dgg::topo::DgGridTopology gridTopo = dgg::topo::Hexagon,
+                 int nResIn, dgg::topo::DgGridTopology gridTopo = dgg::topo::Hexagon,
                  dgg::topo::DgGridMetric gridMetric = dgg::topo::D6,
-                 bool isCongruent = true, bool isAligned = false,
-                 const string& name = "DiscS")
+                 unsigned int aperture = 3, bool isCongruent = true,
+                 bool isAligned = false, const string& name = "DiscS")
         : DgDiscTopoRF<DgResAdd<A>, B, DB> (network, backFrame, name),
           DgDiscRFSGrids<DgDiscTopoRF, A, B, DB, B> (backFrame, nResIn),
                //DgDiscRFSGrids<DgDiscTopoRF, A, B, DB> (backFrame, nResIn),
-
-          aperture_ (aperture), isCongruent_ (isCongruent), isAligned_ (isAligned)
+               gridTopo_ (gridTopo), gridMetric_ (gridMetric), aperture_ (aperture),
+               isCongruent_ (isCongruent), isAligned_ (isAligned)
         {
           //this->grids_ = new vector<const DgDiscTopoRF<A, B, DB>*>(nRes, nullptr);
           if (!this->isAligned() && !this->isCongruent()) {
@@ -380,6 +383,8 @@ template<class A, class B, class DB> class DgDiscTopoRFS
                                       DgLocVector& vec) const = 0;
 
       // state data
+      DgGridTopology gridTopo_;
+      DgGridMetric gridMetric_;
       int aperture_;
       bool isCongruent_;
       bool isAligned_;

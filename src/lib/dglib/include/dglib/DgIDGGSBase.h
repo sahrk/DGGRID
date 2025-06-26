@@ -85,14 +85,14 @@ class DgIDGGSBase : public DgDiscTopoRFS<DgQ2DICoord, DgGeoCoord, long double> {
                const DgGeoSphRF& backFrame,
                const DgGeoCoord& vert0,
                long double azDegs, int nRes = 1,
-               unsigned int aperture = 4,
-               const string& name = "IDGGS",
                DgGridTopology gridTopo = Hexagon,
                DgGridMetric gridMetric = D6,
+               unsigned int aperture = 4,
+               const string& name = "IDGGS",
                const string& projType = "ISEA",
                bool isPure = true)
         : DgDiscTopoRFS<DgQ2DICoord, DgGeoCoord, long double> (network, backFrame,
-                  nRes, aperture, gridTopo, gridMetric, true, false, name),
+                  nRes, gridTopo, gridMetric, aperture, true, false, name),
           geoRF_ (backFrame), vert0_ (vert0), azDegs_ (azDegs), hierNdxSystem_ (nullptr),
           projType_ (projType), isPure_ (isPure) { }
 

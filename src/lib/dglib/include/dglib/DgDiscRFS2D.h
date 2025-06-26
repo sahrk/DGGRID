@@ -51,14 +51,13 @@ class DgDiscRFS2D : public DgDiscTopoRFS<DgIVec2D, DgDVec2D, long double> {
 
       DgDiscRFS2D (DgRFNetwork& network,
                    const DgRF<DgDVec2D, long double>& backFrame,
-                   int nRes = 1, unsigned int aperture = 4,
-                   DgGridTopology gridTopo = Hexagon,
-                   DgGridMetric gridMetric = D6,
+                   int nRes = 1, DgGridTopology gridTopo = Hexagon,
+                   DgGridMetric gridMetric = D6, unsigned int aperture = 4,
                    bool isCongruent = true, bool isAligned = false,
                    const string& name = "DiscRFS2D")
         : DgDiscTopoRFS<DgIVec2D, DgDVec2D, long double>
-              (network, backFrame, nRes, aperture, gridTopo, gridMetric,
-                               isCongruent, isAligned, name)
+              (network, backFrame, nRes, gridTopo, gridMetric, aperture,
+               isCongruent, isAligned, name)
            { setUndefLoc(makeLocation(undefAddress())); }
 
       DgDiscRFS2D (const DgDiscRFS2D& grd)

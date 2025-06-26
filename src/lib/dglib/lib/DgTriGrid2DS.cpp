@@ -39,7 +39,7 @@ DgTriGrid2DS::DgTriGrid2DS (DgRFNetwork& networkIn,
                const DgRF<DgDVec2D, long double>& backFrameIn, int nResIn,
                unsigned int apertureIn, bool isCongruentIn, bool isAlignedIn,
                const string& nameIn)
-        : DgDiscRFS2D (networkIn, backFrameIn, nResIn, apertureIn, Triangle, D3,
+        : DgDiscRFS2D (networkIn, backFrameIn, nResIn, Triangle, D3, apertureIn,
                        isCongruentIn, isAlignedIn, nameIn)
 {
    if (!isCongruent())
