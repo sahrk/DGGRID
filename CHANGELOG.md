@@ -7,6 +7,8 @@ All changes are by Kevin Sahr, unless otherwise noted.
 ### Changed
 - updated manual to this version
 - updated IGEO7 preset to use the new HIERNDX adress specification
+### Added
+- web-based version of the documentation (thanks to @allixender)
 
 ## [8.4] - 2025-05-29
 ### Added
