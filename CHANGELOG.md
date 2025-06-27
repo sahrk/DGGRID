@@ -3,6 +3,17 @@ All notable changes to this project will be documented in this file.
 
 All changes are by Kevin Sahr, unless otherwise noted.
 
+## [9.0b] - 2025-XX-XX
+### Fixed
+- removed unicode characters from comments in clipper.cpp to suppress warnings
+### Added 
+- new parameters (see user documentation):
+hier_indexing_system_type (default NONE)
+indexing_children_output_type (default NONE)
+indexing_children_output_file_name (default ndxChld)
+indexing_parent_output_type (default NONE)
+indexing_parent_output_file_name (default ndxPrt)
+
 ## [8.41] - 2025-05-31
 ### Changed
 - updated manual to this version
