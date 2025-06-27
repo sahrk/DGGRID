@@ -5,7 +5,14 @@ All changes are by Kevin Sahr, unless otherwise noted.
 
 ## [9.0b] - 2025-XX-XX
 ### Fixed
-- removed unicode characters from comments in clipper.cpp
+- removed unicode characters from comments in clipper.cpp to suppress warnings
+
+new parameters:
+< hier_indexing_system_type NONE (default)
+< indexing_children_output_type NONE (default)
+< indexing_children_output_file_name ndxChld (default)
+< indexing_parent_output_type NONE (default)
+< indexing_parent_output_file_name ndxPrt (default)
 
 ## [8.36] - 2025-05-11
 ### Fixed
