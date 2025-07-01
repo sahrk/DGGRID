@@ -25,7 +25,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <dglib/DgDiscRF.h>
+#include <dglib/DgDiscTopoRF.h>
 #include <dglib/DgContCartRF.h>
 #include <dglib/DgDmdD4Grid2D.h>
 #include <dglib/DgDmdD4Grid2DS.h>
@@ -37,7 +37,7 @@ DgDmdD4Grid2DS::DgDmdD4Grid2DS (DgRFNetwork& networkIn,
                const DgRF<DgDVec2D, long double>& backFrameIn, int nResIn,
                unsigned int apertureIn, bool isCongruentIn, bool isAlignedIn,
                const string& nameIn)
-        : DgDiscRFS2D (networkIn, backFrameIn, nResIn, apertureIn, Diamond, D4,
+        : DgDiscRFS2D (networkIn, backFrameIn, nResIn, Diamond, D4, apertureIn, 
                        isCongruentIn, isAlignedIn, nameIn)
 {
    // determine the radix
@@ -93,7 +93,7 @@ DgDmdD4Grid2DS::DgDmdD4Grid2DS (DgRFNetwork& networkIn,
       Dg2WayContAffineConverter(backFrame(), *ccRF, (long double) fac, 0.0, trans);
 
       (*grids_)[i] = DgDmdD4Grid2D::makeRF(network(), *ccRF, newName);
-      Dg2WayResAddConverter<DgIVec2D, DgDVec2D, long double>(*this, *(grids()[i]), i);
+      Dg2WayTopoResAddConverter<DgIVec2D, DgDVec2D, long double>(*this, *(grids()[i]), i);
 
       fac *= radix();
    }

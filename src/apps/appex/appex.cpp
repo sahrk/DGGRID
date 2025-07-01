@@ -27,7 +27,8 @@
 
 using namespace std;
 
-#include <dglib/DgIDGGS4H.h>
+#include <dglib/DgIDGGS7H.h>
+#include <dglib/DgZXSystem.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 int main (int, char**)
@@ -49,13 +50,17 @@ int main (int, char**)
 
    // all DGGS's must be created using a factory makeRF method
    // the DGGS is memory managed by the DgRFNetwork
-   const DgIDGGS4H* idggsPtr = DgIDGGS4H::makeRF(net0, geoRF, vert0, azimuth, 10);
-   const DgIDGGS4H& idggs = *idggsPtr;
+   const DgIDGGS7H* idggsPtr = DgIDGGS7H::makeRF(net0, geoRF, vert0, azimuth, 10);
+   const DgIDGGS7H& idggs = *idggsPtr;
 
    // get the resolution 7 dgg from the dggs
    const DgIDGG& dgg = idggs.idgg(7);
    cout << dgg.gridStats() << endl;
 
+   //DgZXSystem* rfx = new DgZXSystem(idggs, 7, "ZX");
+   DgZXSystem* rfx = DgZXSystem::makeSystem (idggs, true, "ZX");
+
+/*
    //////// now use the DGG /////////
 
    ///// given a point in lon/lat, get the cell it lies within /////
@@ -93,6 +98,7 @@ int main (int, char**)
         << lonDegs << ", " << latDegs << endl;
 
    delete thePt;
+*/
 
    return 0;
 

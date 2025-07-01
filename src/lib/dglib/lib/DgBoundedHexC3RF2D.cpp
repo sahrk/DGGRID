@@ -27,12 +27,12 @@
 #include <climits>
 
 #include <dglib/DgBoundedHexC3RF2D.h>
-#include <dglib/DgDiscRF.h>
+#include <dglib/DgDiscTopoRF.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgBoundedHexC3RF2D::DgBoundedHexC3RF2D
-           (const DgDiscRF<DgIVec2D, DgDVec2D, long double>& rf,
+           (const DgDiscTopoRF<DgIVec2D, DgDVec2D, long double>& rf,
             const DgIVec2D& lowerLeft, const DgIVec2D& upperRightIn,
             unsigned long long int sizeIn)
    : DgBoundedRF2D (rf, lowerLeft, upperRightIn)

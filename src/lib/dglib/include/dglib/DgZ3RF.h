@@ -139,15 +139,12 @@ class DgZ3RF : public DgRF<DgZ3Coord, long long int> {
 
    public:
 
-      static int defaultInvalidDigit;
-
       static DgZ3RF* makeRF (DgRFNetwork& networkIn, const std::string& nameIn,
-                       int resIn, int invalidDigitIn = defaultInvalidDigit)
-         { return new DgZ3RF (networkIn, nameIn, resIn, invalidDigitIn); }
+                                  int resIn)
+         { return new DgZ3RF (networkIn, nameIn, resIn); }
 
-      int res          (void) const { return res_; }
-      int aperture     (void) const { return 3; }
-      int invalidDigit (void) const { return invalidDigit_; }
+      int res      (void) const { return res_; }
+      int aperture (void) const { return 3; }
 
       virtual long long int dist (const DgZ3Coord& add1,
                         const DgZ3Coord& add2) const
@@ -177,11 +174,9 @@ class DgZ3RF : public DgRF<DgZ3Coord, long long int> {
 
    protected:
 
-      DgZ3RF (DgRFNetwork& networkIn, const std::string& nameIn,
-              int resIn, int invalidDigitIn = 3);
+      DgZ3RF (DgRFNetwork& networkIn, const std::string& nameIn, int resIn);
 
       int res_;
-      int invalidDigit_;
 
 };
 

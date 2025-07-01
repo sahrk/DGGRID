@@ -28,7 +28,7 @@
 #include <cmath>
 
 #include <dglib/DgContCartRF.h>
-#include <dglib/DgDiscRF.h>
+#include <dglib/DgDiscTopoRF.h>
 #include <dglib/DgDmdD4Grid2D.h>
 #include <dglib/DgDmdD8Grid2D.h>
 #include <dglib/DgDmdIDGG.h>
@@ -60,7 +60,7 @@ DgIDGGS4D::DgIDGGS4D (DgRFNetwork& network, const DgGeoSphRF& backFrame,
    }
 
    for (int r = 0; r < nRes; r++)
-      Dg2WayResAddConverter<DgQ2DICoord, DgGeoCoord, long double>(*this, *(grids()[r]), r);
+       Dg2WayTopoResAddConverter<DgQ2DICoord, DgGeoCoord, long double>(*this, *(grids()[r]), r);
 
 } // DgDmdIDGGS::DgDmdIDGGS
 

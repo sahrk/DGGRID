@@ -28,18 +28,21 @@
 #define DGIDGGSBASE_H
 
 #include <dglib/DgIDGGBase.h>
-#include <dglib/DgDiscRFS.h>
-#include <dglib/DgEllipsoidRF.h>
+#include <dglib/DgDiscTopoRFS.h>
 #include <dglib/DgEllipsoidRF.h>
 #include <dglib/DgApSeq.h>
 #include <dglib/DgGridTopo.h>
+#include <dglib/DgHierNdxSysType.h>
+using namespace dgg::hiersystype;
 
 #include <cmath>
 
 using namespace dgg::topo;
 
+class DgHierNdxSystemRFSBase;
+
 ////////////////////////////////////////////////////////////////////////////////
-class DgIDGGSBase : public DgDiscRFS<DgQ2DICoord, DgGeoCoord, long double> {
+class DgIDGGSBase : public DgDiscTopoRFS<DgQ2DICoord, DgGeoCoord, long double> {
 
    public:
 
@@ -49,9 +52,10 @@ class DgIDGGSBase : public DgDiscRFS<DgQ2DICoord, DgGeoCoord, long double> {
                DgGridTopology gridTopo = Hexagon,
                DgGridMetric gridMetric = D6,
                const string& name = "IDGGS", const string& projType = "ISEA",
+               bool isApSeq = false, const DgApSeq& apSeq = DgApSeq::defaultApSeq,
                bool isMixed43 = false, int numAp4 = 0,
-               bool isSuperfund = false, bool isApSeq = false,
-               const DgApSeq& apSeq = DgApSeq::defaultApSeq);
+               bool isSuperfund = false,
+               const DgHierNdxSysType hierNdxSysType = dgg::hiersystype::InvalidHierNdxSysType);
 
       // copy constructor and operator= not implemented
 
@@ -68,6 +72,8 @@ class DgIDGGSBase : public DgDiscRFS<DgQ2DICoord, DgGeoCoord, long double> {
       long double       azDegs      (void) const { return azDegs_; }
       bool              isPure      (void) const { return isPure_; }
       const string&     projType    (void) const { return projType_; }
+    
+      const DgHierNdxSystemRFSBase* hierNdxSystem (void) const { return hierNdxSystem_; }
 /*
       DgGridTopology    gridTopo    (void) const { return gridTopo_; }
       DgGridMetric      gridMetric  (void) const { return gridMetric_; }
@@ -79,15 +85,15 @@ class DgIDGGSBase : public DgDiscRFS<DgQ2DICoord, DgGeoCoord, long double> {
                const DgGeoSphRF& backFrame,
                const DgGeoCoord& vert0,
                long double azDegs, int nRes = 1,
-               unsigned int aperture = 4,
-               const string& name = "IDGGS",
                DgGridTopology gridTopo = Hexagon,
                DgGridMetric gridMetric = D6,
+               unsigned int aperture = 4,
+               const string& name = "IDGGS",
                const string& projType = "ISEA",
                bool isPure = true)
-        : DgDiscRFS<DgQ2DICoord, DgGeoCoord, long double> (network, backFrame,
-                  nRes, aperture, gridTopo, gridMetric, true, false, name),
-          geoRF_ (backFrame), vert0_ (vert0), azDegs_ (azDegs),
+        : DgDiscTopoRFS<DgQ2DICoord, DgGeoCoord, long double> (network, backFrame,
+                  nRes, gridTopo, gridMetric, aperture, true, false, name),
+          geoRF_ (backFrame), vert0_ (vert0), azDegs_ (azDegs), hierNdxSystem_ (nullptr),
           projType_ (projType), isPure_ (isPure) { }
 
       // remind sub-classes of the pure virtual functions remaining from above
@@ -104,12 +110,13 @@ class DgIDGGSBase : public DgDiscRFS<DgQ2DICoord, DgGeoCoord, long double> {
       virtual void setAddAllChildren (const DgResAdd<DgQ2DICoord>& add,
                                       DgLocVector& vec) const = 0;
 
-   private:
+   //private:
 
       const DgGeoSphRF& geoRF_;
 
       DgGeoCoord vert0_;
       long double azDegs_;
+      DgHierNdxSystemRFSBase* hierNdxSystem_;
 
 /*
       DgGridTopology gridTopo_;
@@ -122,13 +129,13 @@ class DgIDGGSBase : public DgDiscRFS<DgQ2DICoord, DgGeoCoord, long double> {
 ////////////////////////////////////////////////////////////////////////////////
 inline ostream& operator<< (ostream& stream, const DgIDGGSBase& dggs)
 {
-   stream << "** DgIDGGSBase: " <<
-         (const DgDiscRFS<DgQ2DICoord, DgGeoCoord, long double>&) dggs << endl;
+   stream << string("** DgIDGGSBase: ") <<
+         (const DgDiscTopoRFS<DgQ2DICoord, DgGeoCoord, long double>&) dggs << endl;
    stream << "geoRF: " << dggs.geoRF();
    stream << "\nvert0: " << dggs.vert0();
    stream << "\nazDegs: " << dggs.azDegs();
-   stream << "\ngridTopo: " << dggs.gridTopo();
-   stream << "\ngridMetric: " << dggs.gridMetric();
+   //stream << "\ngridTopo: " << dggs.gridTopo();
+   //stream << "\ngridMetric: " << dggs.gridMetric();
    stream << "\nprojType: " << dggs.projType();
 
    return stream;

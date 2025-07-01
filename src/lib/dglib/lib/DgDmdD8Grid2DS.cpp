@@ -28,7 +28,7 @@
 #include <cmath>
 
 #include <dglib/DgContCartRF.h>
-#include <dglib/DgDiscRF.h>
+#include <dglib/DgDiscTopoRF.h>
 #include <dglib/DgDmdD8Grid2D.h>
 #include <dglib/DgDmdD8Grid2DS.h>
 
@@ -39,7 +39,7 @@ DgDmdD8Grid2DS::DgDmdD8Grid2DS (DgRFNetwork& networkIn,
                const DgRF<DgDVec2D, long double>& backFrameIn, int nResIn,
                unsigned int apertureIn, bool isCongruentIn, bool isAlignedIn,
                const string& nameIn)
-        : DgDiscRFS2D (networkIn, backFrameIn, nResIn, apertureIn, Diamond, D8,
+        : DgDiscRFS2D (networkIn, backFrameIn, nResIn, Diamond, D8, apertureIn, 
                        isCongruentIn, isAlignedIn, nameIn)
 {
    // determine the radix
@@ -94,7 +94,7 @@ DgDmdD8Grid2DS::DgDmdD8Grid2DS (DgRFNetwork& networkIn,
       Dg2WayContAffineConverter (backFrame(), *ccRF, (long double) fac, 0.0, trans);
 
       (*grids_)[i] = DgDmdD8Grid2D::makeRF(network(), *ccRF, newName);
-      Dg2WayResAddConverter<DgIVec2D, DgDVec2D, long double> (*this, *(grids()[i]), i);
+      Dg2WayTopoResAddConverter<DgIVec2D, DgDVec2D, long double> (*this, *(grids()[i]), i);
 
       fac *= radix();
    }

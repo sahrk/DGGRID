@@ -36,6 +36,7 @@
 #include <dglib/DgHexGrid2DS.h>
 #include <dglib/DgIDGGBase.h>
 #include <dglib/DgIDGGSBase.h>
+#include <dglib/DgHexIDGGS.h>
 #include <dglib/DgProjFuller.h>
 #include <dglib/DgProjISEA.h>
 #include <dglib/DgRadixString.h>
@@ -47,6 +48,8 @@
 #include <dglib/DgZ3StringRF.h>
 #include <dglib/DgZ7RF.h>
 #include <dglib/DgZ7StringRF.h>
+#include <dglib/DgZXSystem.h>
+#include <dglib/DgHierNdxSystemRFSBase.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 const DgGeoSphRF& DgIDGGBase::geoRF      (void) const { return dggs()->geoRF(); }
@@ -121,7 +124,7 @@ DgIDGGBase::DgIDGGBase (const DgIDGGSBase* dggs, const DgGeoSphRF& geoRF,
              unsigned int aperture, int res, const string& name,
              DgGridTopology gridTopo, DgGridMetric gridMetric,
              unsigned int precision)
-   : DgDiscRF<DgQ2DICoord, DgGeoCoord, long double>
+   : DgDiscTopoRF<DgQ2DICoord, DgGeoCoord, long double>
           (geoRF.network(), geoRF, name, gridTopo, gridMetric),
      dggs_ (dggs), sphIcosa_(0), aperture_(aperture), res_(res),
      precision_(precision), grid2D_(0), grid2DS_(0), ccFrame_(0),
@@ -174,6 +177,13 @@ DgIDGGBase::createConverters (void)
 
    if (gridTopo() == Hexagon) {
        if (dggs()->aperture() == 7) {
+           /*
+           const DgHexIDGGS* hexDggs = dynamic_cast<const DgHexIDGGS*>(dggs());
+           if (!hexDggs) {
+              report("hexagon gridTopo does not match IDGGS", DgBase::Fatal);
+           }
+           z7RF_ = DgZ7RF::makeRF(network(), *hexDggs, name() + string("z7"), res());
+            */
            z7RF_ = DgZ7RF::makeRF(network(), name() + string("z7"), res());
            z7StrRF_ = DgZ7StringRF::makeRF(network(), name() + string("z7Str"), res());
        } else if (aperture() == 4 || aperture() == 3) {
@@ -242,7 +252,7 @@ DgIDGGBase::createConverters (void)
        if (z7RF())
           toZ7 = new Dg2WayZ7ToStringConverter(*z7StrRF(), *z7RF());
     }
-
+    
     // suppress unused variable error
     (void)toZ7Str;
     (void)toZ7;
@@ -861,4 +871,11 @@ DgIDGGBase::setAddNeighborsBdry2 (const DgQ2DICoord& add,
 } // DgIDGGBase::setAddNeighborsBdry2
 
 ////////////////////////////////////////////////////////////////////////////////
+const DgHierNdxSystemRFSBase*
+DgIDGGBase::zXSystemBase (void) const
+{ return static_cast<const DgHierNdxSystemRFSBase*>(zXSystem_); }
+
+///////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

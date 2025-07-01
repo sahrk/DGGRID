@@ -80,8 +80,10 @@ class DgOutGdalFile : public DgOutLocFile
       // collection output
       virtual DgOutLocFile& insert (const DgIDGGBase& dgg, DgCell& cell,
            bool outputPoint, bool outputRegion, const DgIDGGBase& chdDgg,
-           const DgRFBase* outRF, const DgRFBase* chdOutRF,
-           const DgLocVector* neighbors, const DgLocVector* children);
+           const DgIDGGBase& ndxPrtDgg, const DgRFBase* outRF, const DgRFBase* chdOutRF,
+           const DgRFBase* ndxPrtOutRF, const DgRFBase* ndxChdOutRF,
+           const DgLocVector* neighbors, const DgLocVector* children,
+           const DgLocation* ndxParent, const DgLocVector* ndxChildren);
 
       virtual void setFormatStr(void) { }
 
@@ -95,6 +97,9 @@ class DgOutGdalFile : public DgOutLocFile
       OGRPoint* createPoint (const DgLocation& loc) const;
       //OGRPolygon createPolygon (const DgPolygon& poly) const;
       OGRGeometryCollection* createCollection (const DgCell& cell) const;
+
+    void createAddressProperty (const DgIDGGBase& dgg, OGRFeature* feature,
+         const char* fieldName, const DgLocation& loc, const DgRFBase* outRF);
 
       void createAddressesProperty (const DgIDGGBase& dgg, OGRFeature* feature,
            const char* fieldName, const DgLocVector& vec, const DgRFBase* outRF);
@@ -113,6 +118,7 @@ class DgOutGdalFile : public DgOutLocFile
 
       void init (bool outputPoint, bool outputRegion = false,
               bool outputNeighbors = false, bool outputChildren = false,
+              bool outputNdxParent = false, bool outputNdxChildren = false,
               const DgDataList* dataList = nullptr);
 };
 

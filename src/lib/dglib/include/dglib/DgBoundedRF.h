@@ -26,7 +26,7 @@
 #define DGBOUNDEDRF_H
 
 #include <dglib/DgBoundedRFBase.h>
-#include <dglib/DgDiscRF.h>
+#include <dglib/DgDiscTopoRF.h>
 #include <dglib/DgPolygon.h>
 
 class DgLocation;
@@ -38,12 +38,12 @@ template<class A, class B, class DB> class DgBoundedRF
 
    public:
 
-      DgBoundedRF<A, B, DB> (const DgDiscRF<A, B, DB>& rfIn,
+      DgBoundedRF<A, B, DB> (const DgDiscTopoRF<A, B, DB>& rfIn,
                              const A& firstAddIn,
                              const A& lastAddIn, const A& endAddIn,
                              bool zBasedIn = true);
 
-      const DgDiscRF<A, B, DB>& discRF (void) const { return discRF_; }
+      const DgDiscTopoRF<A, B, DB>& discRF (void) const { return discRF_; }
 
       virtual bool validLocation (const DgLocation& loc,
                                   bool convert = true) const;
@@ -149,7 +149,7 @@ template<class A, class B, class DB> class DgBoundedRF
 
    private:
 
-      const DgDiscRF<A, B, DB>& discRF_;
+      const DgDiscTopoRF<A, B, DB>& discRF_;
 
       A firstAdd_;
       A lastAdd_;

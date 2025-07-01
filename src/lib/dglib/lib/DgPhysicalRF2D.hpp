@@ -27,7 +27,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 template<class C>
 DgPhysicalRF2D<C>::DgPhysicalRF2D (const DgBoundedRF2D& rfIn, bool allocate)
-   : DgPhysicalRF<DgIVec2D, C, DgDVec2D, long double> (rfIn), boundedRF2D_ (rfIn)
+   : DgPhysicalRF<DgIVec2D, C> (rfIn), boundedRF2D_ (rfIn)
 {
    matrix_ = new (C (**[boundedRF2D().numI()]));
    for (int i = 0; i < boundedRF2D().numI(); i++)

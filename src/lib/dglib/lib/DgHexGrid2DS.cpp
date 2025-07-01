@@ -28,7 +28,7 @@
 #include <cmath>
 
 #include <dglib/DgContCartRF.h>
-#include <dglib/DgDiscRF.h>
+#include <dglib/DgDiscTopoRF.h>
 #include <dglib/DgHexC1Grid2D.h>
 #include <dglib/DgHexC2Grid2D.h>
 #include <dglib/DgHexC3Grid2D.h>
@@ -42,9 +42,9 @@ using namespace dgg::topo;
 DgHexGrid2DS::DgHexGrid2DS (DgRFNetwork& networkIn,
                const DgRF<DgDVec2D, long double>& backFrameIn, int nResIn,
                const DgApSeq& apSeqIn, const string& nameIn)
-        : DgDiscRFS2D (networkIn, backFrameIn, nResIn, 4,
+        : DgDiscRFS2D (networkIn, backFrameIn, nResIn, Hexagon, D6, 4,
                        //apSeqIn.getAperture(apSeqIn.lastRes()).aperture(),
-                       Hexagon, D6, 0, 1, nameIn),
+                       0, 1, nameIn),
           apSeq_ (apSeqIn),
           // these are deprecated and not used by this constructor
           isMixed43_ (0), numAp4_ (0), isSuperfund_ (0), isApSeq_ (0)
@@ -84,7 +84,7 @@ DgHexGrid2DS::DgHexGrid2DS (DgRFNetwork& networkIn,
             (*grids_)[r] = DgHexC2Grid2D::makeRF(network(), *ccRF, newName);
       }
 
-      Dg2WayResAddConverter<DgIVec2D, DgDVec2D, long double>(*this, *(grids()[r]), r);
+      Dg2WayTopoResAddConverter<DgIVec2D, DgDVec2D, long double>(*this, *(grids()[r]), r);
       // setup for next res
       if (r < apSeq().lastRes())
          ap = apSeq().getAperture(r + 1).aperture();
@@ -113,7 +113,7 @@ DgHexGrid2DS::DgHexGrid2DS (DgRFNetwork& networkIn,
                unsigned int apertureIn, bool isCongruentIn, bool isAlignedIn,
                const string& nameIn, bool isMixed43In, int numAp4In,
                bool isSuperfundIn, bool isApSeqIn, const DgApSeq& apSeqIn)
-        : DgDiscRFS2D (networkIn, backFrameIn, nResIn, apertureIn, Hexagon, D6,
+        : DgDiscRFS2D (networkIn, backFrameIn, nResIn, Hexagon, D6, apertureIn, 
               isCongruentIn, isAlignedIn, nameIn),
           apSeq_ (apSeqIn),
           isMixed43_ (isMixed43In), numAp4_ (numAp4In), isSuperfund_ (isSuperfundIn),
@@ -181,7 +181,7 @@ cerr << "KEVIN: DEPRECATED DgHexGrid2DS" << endl;
          (*grids_)[i] = DgHexC2Grid2D::makeRF(network(), *ccRF, newName);
       }
 
-      Dg2WayResAddConverter<DgIVec2D, DgDVec2D, long double>(*this, *(grids()[i]), i);
+      Dg2WayTopoResAddConverter<DgIVec2D, DgDVec2D, long double>(*this, *(grids()[i]), i);
       if (isMixed43())
       {
          if (i < numAp4())

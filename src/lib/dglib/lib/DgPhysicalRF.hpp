@@ -22,15 +22,15 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-template<A, C, B, DB> void
-DgPhysicalRF<A, C, B, DB>::deleteContents (const DgLocation& loc, bool convert)
+template<class A, class C> void
+DgPhysicalRF<A, C>::deleteContents (const DgLocation& loc, bool convert)
 {
    DgLocation* pLoc = discRF().createLocation(loc, convert);
    const A* add = discRF().getAddress(*pLoc);
 
    if (!boundedRF().validAddress(*add))
    {
-      report("DgPhysicalRF<A, C, B, DB>::deleteContents() invalid address",
+      report("DgPhysicalRF<A, C>::deleteContents() invalid address",
              DgBase::Fatal);
    }
 
@@ -38,11 +38,11 @@ DgPhysicalRF<A, C, B, DB>::deleteContents (const DgLocation& loc, bool convert)
 
    delete pLoc;
 
-} // void DgPhysicalRF<A, C, B, DB>::deleteContents
+} // void DgPhysicalRF<A, C>::deleteContents
 
 ////////////////////////////////////////////////////////////////////////////////
-template<class A, class C, class B, class DB> C*
-DgPhysicalRF<A, C, B, DB>::getContents (const DgLocation& loc, bool convert,
+template<class A, class C> C*
+DgPhysicalRF<A, C>::getContents (const DgLocation& loc, bool convert,
                                        bool allocate) const
 {
    DgLocation* pLoc = discRF().createLocation(loc, convert);
@@ -51,7 +51,7 @@ DgPhysicalRF<A, C, B, DB>::getContents (const DgLocation& loc, bool convert,
    if (!boundedRF().validAddress(*add)) return (C*) 0;
 /*
    {
-      report("DgPhysicalRF<A, C, B, DB>::getContents() invalid address",
+      report("DgPhysicalRF<A, C>::getContents() invalid address",
              DgBase::Fatal);
    }
 */
@@ -62,11 +62,11 @@ DgPhysicalRF<A, C, B, DB>::getContents (const DgLocation& loc, bool convert,
 
    return cont;
 
-} // C* DgPhysicalRF<A, C, B, DB>::getContents
+} // C* DgPhysicalRF<A, C>::getContents
 
 ////////////////////////////////////////////////////////////////////////////////
-template<class A, class C, class B, class DB> void
-DgPhysicalRF<A, C, B, DB>::replaceContents (const DgLocation& loc, C* cont,
+template<class A, class C> void
+DgPhysicalRF<A, C>::replaceContents (const DgLocation& loc, C* cont,
                                         bool convert)
 {
    DgLocation* pLoc = discRF().createLocation(loc, convert);
@@ -74,7 +74,7 @@ DgPhysicalRF<A, C, B, DB>::replaceContents (const DgLocation& loc, C* cont,
 
    if (!boundedRF().validAddress(*add))
    {
-      report("DgPhysicalRF<A, C, B, DB>::replaceContents() invalid address",
+      report("DgPhysicalRF<A, C>::replaceContents() invalid address",
              DgBase::Fatal);
    }
 
@@ -82,11 +82,11 @@ DgPhysicalRF<A, C, B, DB>::replaceContents (const DgLocation& loc, C* cont,
 
    delete pLoc;
 
-} // void DgPhysicalRF<A, C, B, DB>::setContents
+} // void DgPhysicalRF<A, C>::setContents
 
 ////////////////////////////////////////////////////////////////////////////////
-template<class A, class C, class B, class DB> void
-DgPhysicalRF<A, C, B, DB>::setContents (const DgLocation& loc, const C& cont,
+template<class A, class C> void
+DgPhysicalRF<A, C>::setContents (const DgLocation& loc, const C& cont,
                                     bool convert)
 {
    DgLocation* pLoc = discRF().createLocation(loc, convert);
@@ -94,7 +94,7 @@ DgPhysicalRF<A, C, B, DB>::setContents (const DgLocation& loc, const C& cont,
 
    if (!boundedRF().validAddress(*add))
    {
-      report("DgPhysicalRF<A, C, B, DB>::setContents() invalid address",
+      report("DgPhysicalRF<A, C>::setContents() invalid address",
              DgBase::Fatal);
    }
 
@@ -102,7 +102,7 @@ DgPhysicalRF<A, C, B, DB>::setContents (const DgLocation& loc, const C& cont,
 
    delete pLoc;
 
-} // void DgPhysicalRF<A, C, B, DB>::setContents
+} // void DgPhysicalRF<A, C>::setContents
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

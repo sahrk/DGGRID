@@ -57,7 +57,7 @@ class DgOutChildrenFile : public DgOutputStream {
 
       const DgIDGGBase& dgg_;    // primary res dgg
       const DgIDGGBase& chdDgg_; // child res dgg
-      const DgRFBase* outRF_;    // primary res output RF (NULL indictes seqNum)
+      const DgRFBase* outRF_;    // primary res output RF (NULL indicates seqNum)
       const DgRFBase* chdOutRF_; // child res output RF
 
 };

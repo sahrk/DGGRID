@@ -28,7 +28,7 @@
 #include <cmath>
 
 #include <dglib/DgContCartRF.h>
-#include <dglib/DgDiscRF.h>
+#include <dglib/DgDiscTopoRF.h>
 #include <dglib/DgHexC1Grid2D.h>
 #include <dglib/DgHexC2Grid2D.h>
 #include <dglib/DgIDGGS3H.h>
@@ -65,7 +65,7 @@ DgIDGGS3H::setAddParents (const DgResAdd<DgQ2DICoord>& add,
 {
    DgPolygon verts;
    DgLocation* tmpLoc = grids()[add.res()]->makeLocation(add.address());
-   grids()[add.res()]->setVertices(*tmpLoc, verts);
+   topoRF(add.res()).setVertices(*tmpLoc, verts);
    delete tmpLoc;
 
    // vertices lie in parents
@@ -112,7 +112,7 @@ DgIDGGS3H::setAddBoundaryChildren (const DgResAdd<DgQ2DICoord>& add,
 {
    DgPolygon verts;
    DgLocation* tmpLoc = grids()[add.res()]->makeLocation(add.address());
-   grids()[add.res()]->setVertices(*tmpLoc, verts);
+   topoRF(add.res()).setVertices(*tmpLoc, verts);
    delete tmpLoc;
 
    // vertices lie in children

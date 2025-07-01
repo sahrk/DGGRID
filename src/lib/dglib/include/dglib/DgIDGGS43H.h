@@ -56,7 +56,7 @@ class DgIDGGS43H : public DgHexIDGGS {
              const string& nameIn = "ISEA43H", const string& projType = "ISEA",
              int numAp4 = 0, bool isSuperfund = false)
          : DgHexIDGGS (networkIn, backFrameIn, vert0, azDegs, 3, nResIn,
-                nameIn, projType, DgApSeq::defaultApSeq, false, true,
+                nameIn, projType, false, DgApSeq::defaultApSeq, true,
                 numAp4, isSuperfund)
          { frequency_ = sqrtl(aperture()); }
 
