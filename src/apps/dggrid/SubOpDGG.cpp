@@ -54,7 +54,8 @@ SubOpDGG::SubOpDGG (OpBasic& op, bool _activate)
      placeRandom (false), orientCenter (false), orientRand (0),
      numGrids (1), curGrid (0), lastGrid (false), sampleCount(0), nSamplePts(0),
      azimuthDegs (0.0), datum (""), apertureType (""),
-     isMixed43 (false), isSuperfund (false), isApSeq (false)
+     isMixed43 (false), isSuperfund (false), isApSeq (false), 
+     hierNdxSysType (dgg::hiersystype::InvalidHierNdxSysType)
 {
 }
 
@@ -63,47 +64,52 @@ SubOpDGG::SubOpDGG (OpBasic& op, bool _activate)
 // returns whether or not seq nums are used
 bool
 SubOpDGG::addressTypeToRF (DgAddressType type, const DgRFBase** rf,
-             const DgRFBase** chdRF, int forceRes)
+             const DgRFBase** chdRF, const DgRFBase** ndxPrtRF, int forceRes)
 {
    const DgIDGGBase* dgg = &this->dgg();
    const DgIDGGBase* chdDgg = &this->chdDgg();
+   const DgIDGGBase* ndxPrtDgg = &this->ndxPrtDgg();
    if (forceRes >= 0) {
       dgg = &dggs().idggBase(forceRes);
       chdDgg = &dggs().idggBase(forceRes + 1);
+      if (forceRes > 0)
+         ndxPrtDgg = &dggs().idggBase(forceRes - 1);
    }
 
    bool seqNum = false;
    *rf = nullptr;
    if (chdRF) *chdRF = nullptr;
+   if (ndxPrtRF) *ndxPrtRF = nullptr;
 
    switch (type) {
       case Geo:
          *rf = &this->deg();
          if (chdRF) *chdRF = &this->chdDeg();
-/*
-         *rf = &dgg->geoRF();
-         if (chdRF) *chdRF = &chdDgg->geoRF();
-*/
+         if (ndxPrtRF) *ndxPrtRF = &this->ndxPrtDeg();
          break;
 
       case Plane:
          *rf = &dgg->planeRF();
          if (chdRF) *chdRF = &chdDgg->planeRF();
+         if (ndxPrtRF) *ndxPrtRF = &ndxPrtDgg->planeRF();
          break;
 
       case ProjTri:
          *rf = &dgg->projTriRF();
          if (chdRF) *chdRF = &chdDgg->projTriRF();
+         if (ndxPrtRF) *ndxPrtRF = &ndxPrtDgg->projTriRF();
          break;
 
       case Q2DD:
          *rf = &dgg->q2ddRF();
          if (chdRF) *chdRF = &chdDgg->q2ddRF();
+         if (ndxPrtRF) *ndxPrtRF = &ndxPrtDgg->q2ddRF();
          break;
 
       case Q2DI:
          *rf = dgg;
          if (chdRF) *chdRF = chdDgg;
+         if (ndxPrtRF) *ndxPrtRF = ndxPrtDgg;
          break;
 
       case SeqNum:
@@ -116,11 +122,13 @@ SubOpDGG::addressTypeToRF (DgAddressType type, const DgRFBase** rf,
          seqNum = true;
          *rf = dgg;
          if (chdRF) *chdRF = chdDgg;
+         if (ndxPrtRF) *ndxPrtRF = ndxPrtDgg;
          break;
 
       case Vertex2DD:
          *rf = &dgg->vertexRF();
          if (chdRF) *chdRF = &chdDgg->vertexRF();
+         if (ndxPrtRF) *ndxPrtRF = &ndxPrtDgg->vertexRF();
          break;
 
       case Z3:
@@ -131,10 +139,11 @@ SubOpDGG::addressTypeToRF (DgAddressType type, const DgRFBase** rf,
          if (dgg->z3RF()) {
             *rf = dgg->z3RF();
             if (chdRF) *chdRF = chdDgg->z3RF();
+            if (ndxPrtRF) *ndxPrtRF = ndxPrtDgg->z3RF();
 
             if (z3invalidDigit != 3) {
-               ::report("default padding digit for Z3 INT64 indexes will switch "
-                        "from 0 to 3 starting with DGGRID version 9.0.\n"
+               ::report("default padding digit for Z3 INT64 indexes have switched "
+                        "from 0 to 3 starting with DGGRID version 9.0b.\n"
                         "Set parameter z3_invalid_digit if you want a different digit used.", DgBase::Warning);
             }
          } else
@@ -151,6 +160,7 @@ SubOpDGG::addressTypeToRF (DgAddressType type, const DgRFBase** rf,
          if (dgg->z3StrRF()) {
             *rf = dgg->z3StrRF();
             if (chdRF) *chdRF = chdDgg->z3StrRF();
+            if (ndxPrtRF) *ndxPrtRF = ndxPrtDgg->z3StrRF();
          } else
             ::report("address_type of Z3 DIGIT_STRING only supported for aperture 3 hexagon grids",
                      DgBase::Fatal);
@@ -165,6 +175,7 @@ SubOpDGG::addressTypeToRF (DgAddressType type, const DgRFBase** rf,
          if (dgg->z7RF()) {
             *rf = dgg->z7RF();
             if (chdRF) *chdRF = chdDgg->z7RF();
+            if (ndxPrtRF) *ndxPrtRF = ndxPrtDgg->z7RF();
          } else
             ::report("address_type of Z7 INT64 only supported for aperture 7 hexagon grids",
                      DgBase::Fatal);
@@ -179,6 +190,7 @@ SubOpDGG::addressTypeToRF (DgAddressType type, const DgRFBase** rf,
          if (dgg->z7StrRF()) {
             *rf = dgg->z7StrRF();
             if (chdRF) *chdRF = chdDgg->z7StrRF();
+            if (ndxPrtRF) *ndxPrtRF = ndxPrtDgg->z7StrRF();
          } else
             ::report("address_type of Z7 DIGIT_STRING only supported for aperture 7 hexagon grids",
                      DgBase::Fatal);
@@ -193,6 +205,7 @@ SubOpDGG::addressTypeToRF (DgAddressType type, const DgRFBase** rf,
          if (dgg->zorderRF()) {
             *rf = dgg->zorderRF();
             if (chdRF) *chdRF = chdDgg->zorderRF();
+            if (ndxPrtRF) *ndxPrtRF = ndxPrtDgg->zorderRF();
          } else
             ::report("address_type of ZORDER INT64 only supported for aperture 3 or 4",
                      DgBase::Fatal);
@@ -207,6 +220,7 @@ SubOpDGG::addressTypeToRF (DgAddressType type, const DgRFBase** rf,
          if (dgg->zorderStrRF()) {
             *rf = dgg->zorderStrRF();
             if (chdRF) *chdRF = chdDgg->zorderStrRF();
+            if (ndxPrtRF) *ndxPrtRF = ndxPrtDgg->zorderStrRF();
          } else
             ::report("address_type of ZORDER DIGIT_STRING only supported for aperture 3 or 4",
                      DgBase::Fatal);
@@ -282,8 +296,7 @@ SubOpDGG::initializeOp (void)
    choices.push_back(new string("3"));
    choices.push_back(new string("4"));
    choices.push_back(new string("7"));
-   pList().insertParam(new DgStringChoiceParam("dggs_aperture", "4",
-             &choices));
+   pList().insertParam(new DgStringChoiceParam("dggs_aperture", "4", &choices));
    dgg::util::release(choices);
 
    // dggs_aperture_sequence < apertureSequence >
@@ -364,13 +377,23 @@ SubOpDGG::initializeOp (void)
    // dggs_res_spec <int> (0 <= v <= MAX_DGG_RES)
    pList().insertParam(new DgIntParam("dggs_res_spec", 9, 0, MAX_DGG_RES));
 
+   // hier_indexing_system_type <ZX_SYSTEM | NONE>
+   for (int i = 0; ; i++) {
+      if (hierNdxSysTypeStrings[i] == "INVALID")
+         break;
+      choices.push_back(new string(hierNdxSysTypeStrings[i]));
+   }
+   pList().insertParam(new DgStringChoiceParam("hier_indexing_system_type", "NONE", &choices));
+   dgg::util::release(choices);
+
    // z3_invalid_digit < 0 | 1 | 2 | 3 >
    choices.push_back(new string("0"));
    choices.push_back(new string("1"));
    choices.push_back(new string("2"));
    choices.push_back(new string("3"));
-// KEVIN change default to "3" in version 9
-   pList().insertParam(new DgStringChoiceParam("z3_invalid_digit", "0",
+// default changed to "3" in version 9.0b
+   //pList().insertParam(new DgStringChoiceParam("z3_invalid_digit", "0",
+   pList().insertParam(new DgStringChoiceParam("z3_invalid_digit", "3",
              &choices));
    dgg::util::release(choices);
 
@@ -424,6 +447,10 @@ SubOpDGG::setupOp (void)
          pList().setPresetParam("output_address_type", "HIERNDX");
          pList().setPresetParam("output_hier_ndx_system", "Z7");
          pList().setPresetParam("output_hier_ndx_form", "INT64");
+
+         //pList().setPresetParam("input_address_type", "Z7");
+         //pList().setPresetParam("output_address_type", "Z7");
+         //pList().setPresetParam("output_cell_label_type", "OUTPUT_ADDRESS_TYPE");
       } else {
          // get the topology
          char topo = tmplc[tmplc.length() - 1];
@@ -566,6 +593,19 @@ SubOpDGG::setupOp (void)
       }
    }
 
+   // hierarchical indexing type
+   getParamValue(pList(), "hier_indexing_system_type", dummy, false);
+   hierNdxSysType = dgg::hiersystype::stringToHierNdxSysType(dummy);
+   if (hierNdxSysType != dgg::hiersystype::NoHierNdxSysType) {
+      if (hierNdxSysType == dgg::hiersystype::ZXSystem) {
+         if (apertureType != "PURE" || aperture != 7)
+            ::report("SubOpDGG::setupOp() hier_indexing_system_type Z7 "
+                     "requires a pure aperture 7 DGGS", DgBase::Fatal);
+      } else {
+         ::report("SubOpDGG::setupOp() invalid hier_indexing_system_type", DgBase::Fatal);
+      }
+   } 
+
    // get the digit to fill unused resolutions in Z3
    // this is used by all Z3 values, whether input, output, or hier system
    getParamValue(pList(), "z3_invalid_digit", tmp, false);
@@ -607,17 +647,22 @@ SubOpDGG::executeOp (void) {
 
    _pDGGS  = DgIDGGSBase::makeRF(net0(), geoRF(), vert0,
              azimuthDegs, aperture, actualRes+2, gridTopo,
-             gridMetric, "IDGGS", projType, isMixed43, numAp4,
-             isSuperfund, isApSeq, apSeq);
+             gridMetric, "IDGGS", projType, isApSeq, apSeq,
+             isMixed43, numAp4, isSuperfund, hierNdxSysType);
 
    _pDGG = &dggs().idggBase(actualRes);
 
    // child dgg
    _pChdDgg = &dggs().idggBase(actualRes + 1);
+    
+   // parent dgg (for hierarchical indexing)
+    _pNdxPrtDgg = ((actualRes > 0) ? &dggs().idggBase(actualRes - 1) : nullptr);
 
    // set-up to convert to degrees
    _pDeg = DgGeoSphDegRF::makeRF(geoRF(), _pGeoRF->name() + "Deg");
    _pChdDeg = DgGeoSphDegRF::makeRF(_pChdDgg->geoRF(), _pChdDgg->geoRF().name() + "Deg");
+   if (_pNdxPrtDgg)
+       _pNdxPrtDeg = DgGeoSphDegRF::makeRF(_pNdxPrtDgg->geoRF(), _pNdxPrtDgg->geoRF().name() + "Deg");
 
    return 0;
 
@@ -657,7 +702,7 @@ SubOpDGG::determineRes (void)
       const DgGeoSphRF& geoRF = *(DgGeoSphRF::makeRF(net0, "GS0", earthRadius));
       const DgIDGGSBase *idggs = DgIDGGSBase::makeRF(net0, geoRF, vert0,
              azimuthDegs, aperture, maxRes, gridTopo, gridMetric, "IDGGS",
-             projType, isMixed43, numAp4, isSuperfund, isApSeq, apSeq);
+             projType, isApSeq, apSeq, isMixed43, numAp4, isSuperfund, hierNdxSysType);
 
       long double last = 0.0;
       res = maxRes + 1;

@@ -31,6 +31,8 @@
 #include <dglib/DgGeoSphRF.h>
 #include <dglib/DgIDGGSBase.h>
 #include <dglib/DgAddressType.h>
+#include <dglib/DgHierNdxSysType.h>
+using namespace dgg::hiersystype;
 
 #include "SubOpBasic.h"
 
@@ -52,11 +54,14 @@ struct SubOpDGG : public SubOpBasic {
    const DgGeoSphDegRF& deg    (void) { return *_pDeg; }
    const DgIDGGBase&    chdDgg (void) { return *_pChdDgg; }
    const DgGeoSphDegRF& chdDeg (void) { return *_pChdDeg; }
+   // note the indexing children use the same DGG as the spatial children
+   const DgIDGGBase&    ndxPrtDgg (void) { return *_pNdxPrtDgg; }
+   const DgGeoSphDegRF& ndxPrtDeg (void) { return *_pNdxPrtDeg; }
 
    // set rf and chdRF based on type
    // return if seq num
    bool addressTypeToRF (dgg::addtype::DgAddressType type, const DgRFBase** rf,
-             const DgRFBase** chdRF = nullptr, int forceRes = -1);
+             const DgRFBase** chdRF = nullptr, const DgRFBase** ndxPrtRF = nullptr, int forceRes = -1);
 
    // DgApSubOperation virtual methods that use the pList
    virtual int initializeOp (void);
@@ -78,6 +83,8 @@ struct SubOpDGG : public SubOpBasic {
    const DgGeoSphDegRF* _pDeg;
    const DgIDGGBase*    _pChdDgg;   // child res dgg
    const DgGeoSphDegRF* _pChdDeg;
+   const DgIDGGBase*    _pNdxPrtDgg;   // indexing parent res dgg
+   const DgGeoSphDegRF* _pNdxPrtDeg;
 
    // the parameters
    string dggsType;              // preset DGGS type
@@ -105,8 +112,9 @@ struct SubOpDGG : public SubOpBasic {
    bool   isSuperfund;
    bool   isApSeq;      // are we using an aperture sequence?
    DgApSeq apSeq;
-   int   sfRes;         // superfund digit resolution
-   int z3invalidDigit;  // padding digit for all Z3 systems
+   int   sfRes; // superfund digit resolution
+   DgHierNdxSysType hierNdxSysType;
+   int z3invalidDigit;  // padding digit for all Z3 systems`k
 };
 
 ////////////////////////////////////////////////////////////////////////////////
