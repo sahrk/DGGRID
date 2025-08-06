@@ -354,6 +354,7 @@ SubOpOut::outputCellAdd2D (const DgLocation& add2D, const string* labelIn,
          runStats.push(dgg.geoRF().dist(ctrGeo, neighbors[i]));
    }
 
+   // spatial children
    //const DgHexIDGG& hexdgg = static_cast<const DgHexIDGG&>(dgg);
    DgResAdd<DgQ2DICoord> q2diR(q2di, dgg.res());
    DgLocVector children;
@@ -365,6 +366,33 @@ SubOpOut::outputCellAdd2D (const DgLocation& add2D, const string* labelIn,
          chdOut->insert(add2D, children);
    }
 
+   // indexing parent
+   DgLocation* ndxParent = nullptr;
+   if (ndxParentOutType != "NONE") {
+;
+/*
+      op.dggOp.dggs().setAllChildren(q2diR, children);
+
+      if (chdOut)
+         chdOut->insert(add2D, children);
+*/
+   }
+
+
+   // indexing children
+   DgLocVector* ndxChildren = nullptr;
+   if (ndxChildrenOutType != "NONE") {
+;
+/*
+
+      op.dggOp.dggs().setAllChildren(q2diR, children);
+
+      if (chdOut)
+         chdOut->insert(add2D, children);
+*/
+   }
+
+
    if (collectOut) {
       collectOut->insert(dgg, cell,
             (pointOutType == "GDAL_COLLECTION"),
@@ -372,11 +400,11 @@ SubOpOut::outputCellAdd2D (const DgLocation& add2D, const string* labelIn,
             op.dggOp.chdDgg(), op.dggOp.prtDgg(),
             ((outSeqNum || useEnumLbl) ? NULL : pOutRF),
             ((outSeqNum || useEnumLbl) ? NULL : pChdOutRF),
-            ((outSeqNum || useEnumLbl) ? NULL : ndxPrtOutRF),
-            ((outSeqNum || useEnumLbl) ? NULL : ndxChdOutRF),
+            ((outSeqNum || useEnumLbl) ? NULL : pPrtOutRF),
             ((neighborsOutType == "GDAL_COLLECTION") ? &neighbors : NULL),
-            ((childrenOutType == "GDAL_COLLECTION") ? &children : NULL));
-       // const DgLocation* ndxParent, const DgLocVector* ndxChildren)
+            ((childrenOutType == "GDAL_COLLECTION") ? &children : NULL),
+            ((ndxParentOutType == "GDAL_COLLECTION") ? &ndxParent : NULL),
+            ((ndxChildrenOutType == "GDAL_COLLECTION") ? &ndxChildren : NULL));
    }
 
 } // void SubOpOut::outputCell
@@ -385,8 +413,7 @@ SubOpOut::outputCellAdd2D (const DgLocation& add2D, const string* labelIn,
 ////////////////////////////////////////////////////////////////////////////////
 SubOpOut::SubOpOut (OpBasic& op, bool _activate)
    : SubOpBasic (op, _activate),
-     pOutRF (0), pChdOutRF (0),
-     ndxPrtOutRF (0), ndxChdOutRF (0),
+     pOutRF (0), pChdOutRF (0), pPrtOutRF (0),
      outAddType (dgg::addtype::InvalidAddressType),
      outSeqNum (false), outputDelimiter (' '), nDensify (1),
      lonWrapMode (DgGeoSphRF::Wrap), unwrapPts (true),
@@ -915,7 +942,7 @@ SubOpOut::executeOp (void) {
       pOutRF = &dgg;
    else if (!op.dggOp.isSuperfund) { // use input address type
 
-      outSeqNum = op.dggOp.addressTypeToRF(outAddType, &pOutRF, &pChdOutRF);
+      outSeqNum = op.dggOp.addressTypeToRF(outAddType, &pOutRF, &pChdOutRF, &pPrtOutRF);
       if (!pOutRF)
          ::report("SubOpOut::executeOp(): invalid output RF", DgBase::Fatal);
    }

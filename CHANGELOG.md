@@ -14,6 +14,13 @@ indexing_children_output_file_name (default ndxChld)
 indexing_parent_output_type (default NONE)
 indexing_parent_output_file_name (default ndxPrt)
 
+/* added in 8.41
+input_hier_ndx_form < INT64 | DIGIT_STRING >
+input_hier_ndx_system < ZORDER | Z3 | Z7 >
+output_hier_ndx_form < INT64 | DIGIT_STRING >
+output_hier_ndx_system < ZORDER | Z3 | Z7 >
+*/
+
 ## [8.41] - 2025-05-31
 ### Changed
 - updated manual to this version

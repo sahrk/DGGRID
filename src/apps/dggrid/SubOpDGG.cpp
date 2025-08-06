@@ -68,7 +68,7 @@ SubOpDGG::addressTypeToRF (DgAddressType type, const DgRFBase** rf,
 {
    const DgIDGGBase* dgg = &this->dgg();
    const DgIDGGBase* chdDgg = &this->chdDgg();
-   const DgIDGGBase* prtDgg = this->prtDgg();
+   const DgIDGGBase* prtDgg = this->prtDgg(); // could be null
    if (forceRes >= 0) {
       dgg = &dggs().idggBase(forceRes);
       chdDgg = &dggs().idggBase(forceRes + 1);

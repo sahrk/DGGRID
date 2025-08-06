@@ -84,19 +84,12 @@ class DgOutLocFile : public DgBase {
       virtual DgOutLocFile& insert (DgLocList& list);
 
       // collection output; does nothing by default
-/* with parameter names
       virtual DgOutLocFile& insert (const DgIDGGBase& dgg, DgCell& cell,
            bool outputPoint, bool outputRegion, const DgIDGGBase& chdDgg,
-           const DgIDGGBase* prtDgg, const DgRFBase* outRF, const DgRFBase* chdOutRF,
-           const DgRFBase* ndxChdOutRF, const DgRFBase* ndxPrtOutRF,
+           const DgIDGGBase* prtDgg, const DgRFBase* outRF, 
+           const DgRFBase* chdOutRF, const DgRFBase* prtOutRF,
            const DgLocVector* neighbors, const DgLocVector* children,
            const DgLocation* ndxParent, const DgLocVector* ndxChildren)
-*/
-      virtual DgOutLocFile& insert (const DgIDGGBase&, DgCell&, bool, bool,
-           const DgIDGGBase&, const DgIDGGBase*,
-           const DgRFBase*, const DgRFBase*, const DgRFBase*, const DgRFBase*,
-           const DgLocVector*, const DgLocVector*, 
-           const DgLocation* ndxParent, const DgLocVector*)
         { return *this; }
 
       // abstract virtual methods
