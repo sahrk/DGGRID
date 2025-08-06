@@ -25,13 +25,14 @@
 #include <dglib/DgLocation.h>
 #include <dglib/DgInLocTextFile.h>
 #include <dglib/DgInGdalFile.h>
+#include <dglib/DgHierNdxSysType.h>
 
 #include "OpBasic.h"
 #include "SubOpBasicMulti.h"
 #include "SubOpIn.h"
 
 using dgg::addtype::DgAddressType;
-using dgg::addtype::DgHierNdxSysType;
+using dgg::hiersystype::DgHierNdxSysType;
 using dgg::addtype::DgHierNdxFormType;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -196,7 +197,7 @@ SubOpIn::setupOp (void)
    inAddType = dgg::addtype::stringToAddressType(dummy);
 
    getParamValue(pList(), "input_hier_ndx_system", dummy, false);
-   DgHierNdxSysType inHierNdxSysType = dgg::addtype::stringToHierNdxSysType(dummy);
+   DgHierNdxSysType inHierNdxSysType = dgg::hiersystype::stringToHierNdxSysType(dummy);
    getParamValue(pList(), "input_hier_ndx_form", dummy, false);
    DgHierNdxFormType inHierNdxFormType = dgg::addtype::stringToHierNdxFormType(dummy);
 
@@ -204,26 +205,26 @@ SubOpIn::setupOp (void)
        // KEVIN: this will all go away in version 9.0
         if (inHierNdxFormType == dgg::addtype::Int64) {
            switch (inHierNdxSysType) {
-               case DgHierNdxSysType::Z3:
+               case dgg::hiersystype::DgHierNdxSysType::Z3System:
                    inAddType = dgg::addtype::Z3;
                    break;
-               case DgHierNdxSysType::Z7:
+               case DgHierNdxSysType::Z7System:
                    inAddType = dgg::addtype::Z7;
                    break;
-               case DgHierNdxSysType::ZOrder:
+               case DgHierNdxSysType::ZOrderSystem:
                    inAddType = dgg::addtype::ZOrder;
                    break;
                default: ;
            }
        } else { // must be DigitString
            switch (inHierNdxSysType) {
-               case DgHierNdxSysType::Z3:
+               case DgHierNdxSysType::Z3System:
                    inAddType = dgg::addtype::Z3String;
                    break;
-               case DgHierNdxSysType::Z7:
+               case DgHierNdxSysType::Z7System:
                    inAddType = dgg::addtype::Z7String;
                    break;
-               case DgHierNdxSysType::ZOrder:
+               case DgHierNdxSysType::ZOrderSystem:
                    inAddType = dgg::addtype::ZOrderString;
                    break;
                default: ;
@@ -231,6 +232,7 @@ SubOpIn::setupOp (void)
        }
 
     } else if (inAddType > dgg::addtype::HierNdx) { // these are deprecated
+      // KEVIN: this should no longer be reachable in v9
       ::report(
          "input_address_type values of ZORDER, ZORDER_STRING, Z3, Z3_STRING, Z7, and "
          "Z7_STRING are deprecated and will go away in version 9.0. Instead set "

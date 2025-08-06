@@ -71,6 +71,8 @@ struct SubOpOut : public SubOpBasic {
    // the parameters
    const DgRFBase* pOutRF;     // RF for output addresses
    const DgRFBase* pChdOutRF;  // RF for output addresses at child resolution
+   const DgRFBase* ndxPrtOutRF;  // RF for output indexing parents
+   const DgRFBase* ndxChdOutRF;  // RF for output indexing children
    dgg::addtype::DgAddressType outAddType; // output address form
    bool outSeqNum;             // are the output addresses sequence numbers?
    char outputDelimiter;

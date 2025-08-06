@@ -64,52 +64,54 @@ SubOpDGG::SubOpDGG (OpBasic& op, bool _activate)
 // returns whether or not seq nums are used
 bool
 SubOpDGG::addressTypeToRF (DgAddressType type, const DgRFBase** rf,
-             const DgRFBase** chdRF, const DgRFBase** ndxPrtRF, int forceRes)
+             const DgRFBase** chdRF, const DgRFBase** prtRF, int forceRes)
 {
    const DgIDGGBase* dgg = &this->dgg();
    const DgIDGGBase* chdDgg = &this->chdDgg();
-   const DgIDGGBase* ndxPrtDgg = &this->ndxPrtDgg();
+   const DgIDGGBase* prtDgg = this->prtDgg();
    if (forceRes >= 0) {
       dgg = &dggs().idggBase(forceRes);
       chdDgg = &dggs().idggBase(forceRes + 1);
       if (forceRes > 0)
-         ndxPrtDgg = &dggs().idggBase(forceRes - 1);
+         prtDgg = &dggs().idggBase(forceRes - 1);
+      else
+         prtDgg = nullptr;
    }
 
    bool seqNum = false;
    *rf = nullptr;
    if (chdRF) *chdRF = nullptr;
-   if (ndxPrtRF) *ndxPrtRF = nullptr;
+   if (prtRF) *prtRF = nullptr;
 
    switch (type) {
       case Geo:
          *rf = &this->deg();
          if (chdRF) *chdRF = &this->chdDeg();
-         if (ndxPrtRF) *ndxPrtRF = &this->ndxPrtDeg();
+         if (prtRF) *prtRF = &this->prtDeg();
          break;
 
       case Plane:
          *rf = &dgg->planeRF();
          if (chdRF) *chdRF = &chdDgg->planeRF();
-         if (ndxPrtRF) *ndxPrtRF = &ndxPrtDgg->planeRF();
+         if (prtRF) *prtRF = &prtDgg->planeRF();
          break;
 
       case ProjTri:
          *rf = &dgg->projTriRF();
          if (chdRF) *chdRF = &chdDgg->projTriRF();
-         if (ndxPrtRF) *ndxPrtRF = &ndxPrtDgg->projTriRF();
+         if (prtRF) *prtRF = &prtDgg->projTriRF();
          break;
 
       case Q2DD:
          *rf = &dgg->q2ddRF();
          if (chdRF) *chdRF = &chdDgg->q2ddRF();
-         if (ndxPrtRF) *ndxPrtRF = &ndxPrtDgg->q2ddRF();
+         if (prtRF) *prtRF = &prtDgg->q2ddRF();
          break;
 
       case Q2DI:
          *rf = dgg;
          if (chdRF) *chdRF = chdDgg;
-         if (ndxPrtRF) *ndxPrtRF = ndxPrtDgg;
+         if (prtRF) *prtRF = prtDgg;
          break;
 
       case SeqNum:
@@ -122,13 +124,13 @@ SubOpDGG::addressTypeToRF (DgAddressType type, const DgRFBase** rf,
          seqNum = true;
          *rf = dgg;
          if (chdRF) *chdRF = chdDgg;
-         if (ndxPrtRF) *ndxPrtRF = ndxPrtDgg;
+         if (prtRF) *prtRF = prtDgg;
          break;
 
       case Vertex2DD:
          *rf = &dgg->vertexRF();
          if (chdRF) *chdRF = &chdDgg->vertexRF();
-         if (ndxPrtRF) *ndxPrtRF = &ndxPrtDgg->vertexRF();
+         if (prtRF) *prtRF = &prtDgg->vertexRF();
          break;
 
       case Z3:
@@ -139,7 +141,7 @@ SubOpDGG::addressTypeToRF (DgAddressType type, const DgRFBase** rf,
          if (dgg->z3RF()) {
             *rf = dgg->z3RF();
             if (chdRF) *chdRF = chdDgg->z3RF();
-            if (ndxPrtRF) *ndxPrtRF = ndxPrtDgg->z3RF();
+            if (prtRF) *prtRF = prtDgg->z3RF();
 
             if (z3invalidDigit != 3) {
                ::report("default padding digit for Z3 INT64 indexes have switched "
@@ -160,7 +162,7 @@ SubOpDGG::addressTypeToRF (DgAddressType type, const DgRFBase** rf,
          if (dgg->z3StrRF()) {
             *rf = dgg->z3StrRF();
             if (chdRF) *chdRF = chdDgg->z3StrRF();
-            if (ndxPrtRF) *ndxPrtRF = ndxPrtDgg->z3StrRF();
+            if (prtRF) *prtRF = prtDgg->z3StrRF();
          } else
             ::report("address_type of Z3 DIGIT_STRING only supported for aperture 3 hexagon grids",
                      DgBase::Fatal);
@@ -175,7 +177,7 @@ SubOpDGG::addressTypeToRF (DgAddressType type, const DgRFBase** rf,
          if (dgg->z7RF()) {
             *rf = dgg->z7RF();
             if (chdRF) *chdRF = chdDgg->z7RF();
-            if (ndxPrtRF) *ndxPrtRF = ndxPrtDgg->z7RF();
+            if (prtRF) *prtRF = prtDgg->z7RF();
          } else
             ::report("address_type of Z7 INT64 only supported for aperture 7 hexagon grids",
                      DgBase::Fatal);
@@ -190,7 +192,7 @@ SubOpDGG::addressTypeToRF (DgAddressType type, const DgRFBase** rf,
          if (dgg->z7StrRF()) {
             *rf = dgg->z7StrRF();
             if (chdRF) *chdRF = chdDgg->z7StrRF();
-            if (ndxPrtRF) *ndxPrtRF = ndxPrtDgg->z7StrRF();
+            if (prtRF) *prtRF = prtDgg->z7StrRF();
          } else
             ::report("address_type of Z7 DIGIT_STRING only supported for aperture 7 hexagon grids",
                      DgBase::Fatal);
@@ -205,7 +207,7 @@ SubOpDGG::addressTypeToRF (DgAddressType type, const DgRFBase** rf,
          if (dgg->zorderRF()) {
             *rf = dgg->zorderRF();
             if (chdRF) *chdRF = chdDgg->zorderRF();
-            if (ndxPrtRF) *ndxPrtRF = ndxPrtDgg->zorderRF();
+            if (prtRF) *prtRF = prtDgg->zorderRF();
          } else
             ::report("address_type of ZORDER INT64 only supported for aperture 3 or 4",
                      DgBase::Fatal);
@@ -220,7 +222,7 @@ SubOpDGG::addressTypeToRF (DgAddressType type, const DgRFBase** rf,
          if (dgg->zorderStrRF()) {
             *rf = dgg->zorderStrRF();
             if (chdRF) *chdRF = chdDgg->zorderStrRF();
-            if (ndxPrtRF) *ndxPrtRF = ndxPrtDgg->zorderStrRF();
+            if (prtRF) *prtRF = prtDgg->zorderStrRF();
          } else
             ::report("address_type of ZORDER DIGIT_STRING only supported for aperture 3 or 4",
                      DgBase::Fatal);
@@ -379,9 +381,9 @@ SubOpDGG::initializeOp (void)
 
    // hier_indexing_system_type <ZX_SYSTEM | NONE>
    for (int i = 0; ; i++) {
-      if (hierNdxSysTypeStrings[i] == "INVALID")
+      if (dgg::addtype::hierNdxSysTypeStrings[i] == "INVALID")
          break;
-      choices.push_back(new string(hierNdxSysTypeStrings[i]));
+      choices.push_back(new string(dgg::addtype::hierNdxSysTypeStrings[i]));
    }
    pList().insertParam(new DgStringChoiceParam("hier_indexing_system_type", "NONE", &choices));
    dgg::util::release(choices);
@@ -656,13 +658,13 @@ SubOpDGG::executeOp (void) {
    _pChdDgg = &dggs().idggBase(actualRes + 1);
     
    // parent dgg (for hierarchical indexing)
-    _pNdxPrtDgg = ((actualRes > 0) ? &dggs().idggBase(actualRes - 1) : nullptr);
+   _pPrtDgg = ((actualRes > 0) ? &dggs().idggBase(actualRes - 1) : nullptr);
 
    // set-up to convert to degrees
    _pDeg = DgGeoSphDegRF::makeRF(geoRF(), _pGeoRF->name() + "Deg");
    _pChdDeg = DgGeoSphDegRF::makeRF(_pChdDgg->geoRF(), _pChdDgg->geoRF().name() + "Deg");
-   if (_pNdxPrtDgg)
-       _pNdxPrtDeg = DgGeoSphDegRF::makeRF(_pNdxPrtDgg->geoRF(), _pNdxPrtDgg->geoRF().name() + "Deg");
+   if (_pPrtDgg)
+       _pPrtDeg = DgGeoSphDegRF::makeRF(_pPrtDgg->geoRF(), _pPrtDgg->geoRF().name() + "Deg");
 
    return 0;
 

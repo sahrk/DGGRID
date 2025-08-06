@@ -55,13 +55,13 @@ struct SubOpDGG : public SubOpBasic {
    const DgIDGGBase&    chdDgg (void) { return *_pChdDgg; }
    const DgGeoSphDegRF& chdDeg (void) { return *_pChdDeg; }
    // note the indexing children use the same DGG as the spatial children
-   const DgIDGGBase&    ndxPrtDgg (void) { return *_pNdxPrtDgg; }
-   const DgGeoSphDegRF& ndxPrtDeg (void) { return *_pNdxPrtDeg; }
+   const DgIDGGBase*    prtDgg (void) { return _pPrtDgg; }
+   const DgGeoSphDegRF* prtDeg (void) { return _pPrtDeg; }
 
    // set rf and chdRF based on type
    // return if seq num
    bool addressTypeToRF (dgg::addtype::DgAddressType type, const DgRFBase** rf,
-             const DgRFBase** chdRF = nullptr, const DgRFBase** ndxPrtRF = nullptr, int forceRes = -1);
+             const DgRFBase** chdRF = nullptr, const DgRFBase** prtDgg = nullptr, int forceRes = -1);
 
    // DgApSubOperation virtual methods that use the pList
    virtual int initializeOp (void);
@@ -83,8 +83,8 @@ struct SubOpDGG : public SubOpBasic {
    const DgGeoSphDegRF* _pDeg;
    const DgIDGGBase*    _pChdDgg;   // child res dgg
    const DgGeoSphDegRF* _pChdDeg;
-   const DgIDGGBase*    _pNdxPrtDgg;   // indexing parent res dgg
-   const DgGeoSphDegRF* _pNdxPrtDeg;
+   const DgIDGGBase*    _pPrtDgg;   // indexing parent res dgg
+   const DgGeoSphDegRF* _pPrtDeg;
 
    // the parameters
    string dggsType;              // preset DGGS type
