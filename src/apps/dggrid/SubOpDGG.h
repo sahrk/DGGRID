@@ -32,6 +32,8 @@
 #include <dglib/DgIDGGSBase.h>
 #include <dglib/DgAddressType.h>
 #include <dglib/DgHierNdxSysType.h>
+#include <dglib/DgOutLocFile.h>
+
 using namespace dgg::hiersystype;
 
 #include "SubOpBasic.h"

@@ -92,6 +92,15 @@ class DgOutLocFile : public DgBase {
            const DgLocation* ndxParent, const DgLocVector* ndxChildren)
         { return *this; }
 
+    virtual DgOutLocFile& foo (const DgIDGGBase& dgg, DgCell& cell,
+         bool outputPoint, bool outputRegion, const DgIDGGBase& chdDgg,
+         const DgIDGGBase* prtDgg, const DgRFBase* outRF,
+         const DgRFBase* chdOutRF, const DgRFBase* prtOutRF,
+         const DgLocVector* neighbors, const DgLocVector* children,
+         const DgLocation* ndxParent, const DgLocVector* ndxChildren)
+      { return *this; }
+
+
       // abstract virtual methods
       virtual DgOutLocFile& insert (DgLocation& loc,
                                 const string* label = nullptr,
@@ -147,3 +156,4 @@ inline DgOutLocFile& operator<< (DgOutLocFile& output, DgCell& cell)
 ////////////////////////////////////////////////////////////////////////////////
 
 #endif
+**

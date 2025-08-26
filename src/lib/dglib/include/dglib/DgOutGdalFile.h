@@ -78,12 +78,29 @@ class DgOutGdalFile : public DgOutLocFile
                                 const DgDataList* dataList = nullptr);
 
       // collection output
+    /*
+      virtual DgOutLocFile& insert (const DgIDGGBase& dgg, DgCell& cell,
+           bool outputPoint, bool outputRegion, const DgIDGGBase& chdDgg,
+           const DgIDGGBase* prtDgg, const DgRFBase* outRF,
+           const DgRFBase* chdOutRF, const DgRFBase* prtOutRF,
+           const DgLocVector* neighbors, const DgLocVector* children,
+           const DgLocation* ndxParent, const DgLocVector* ndxChildren);
+     */
+    virtual DgOutLocFile& insert (const DgIDGGBase& dgg, DgCell& cell,
+         bool outputPoint, bool outputRegion, const DgIDGGBase& chdDgg,
+         const DgIDGGBase* prtDgg, const DgRFBase* outRF,
+         const DgRFBase* chdOutRF, const DgRFBase* prtOutRF,
+         const DgLocVector* neighbors, const DgLocVector* children,
+         const DgLocation* ndxParent, const DgLocVector* ndxChildren);
+
+/*
       virtual DgOutLocFile& insert (const DgIDGGBase& dgg, DgCell& cell,
            bool outputPoint, bool outputRegion, const DgIDGGBase& chdDgg,
            const DgIDGGBase& ndxPrtDgg, const DgRFBase* outRF, const DgRFBase* chdOutRF,
            const DgRFBase* ndxPrtOutRF, const DgRFBase* ndxChdOutRF,
            const DgLocVector* neighbors, const DgLocVector* children,
            const DgLocation* ndxParent, const DgLocVector* ndxChildren);
+*/
 
       virtual void setFormatStr(void) { }
 
