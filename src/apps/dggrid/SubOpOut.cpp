@@ -394,7 +394,7 @@ SubOpOut::outputCellAdd2D (const DgLocation& add2D, const string* labelIn,
 
 
    if (collectOut) {
-      collectOut->foo(dgg, cell,
+      collectOut->insert(dgg, cell,
             (pointOutType == "GDAL_COLLECTION"),
             (cellOutType == "GDAL_COLLECTION"),
             op.dggOp.chdDgg(), op.dggOp.prtDgg(),
@@ -403,8 +403,8 @@ SubOpOut::outputCellAdd2D (const DgLocation& add2D, const string* labelIn,
             ((outSeqNum || useEnumLbl) ? NULL : pPrtOutRF),
             ((neighborsOutType == "GDAL_COLLECTION") ? &neighbors : nullptr),
             ((childrenOutType == "GDAL_COLLECTION") ? &children : nullptr),
-            ((ndxParentOutType == "GDAL_COLLECTION") ? &ndxParent : nullptr),
-            ((ndxChildrenOutType == "GDAL_COLLECTION") ? &ndxChildren : nullptr));
+            ((ndxParentOutType == "GDAL_COLLECTION") ? ndxParent : nullptr),
+            ((ndxChildrenOutType == "GDAL_COLLECTION") ? ndxChildren : nullptr));
    }
 
 } // void SubOpOut::outputCell
