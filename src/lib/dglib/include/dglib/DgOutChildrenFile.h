@@ -34,8 +34,6 @@
 #include <dglib/DgOutputStream.h>
 #include <dglib/DgUtil.h>
 
-using namespace std;
-
 class DgIDGGBase;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -43,12 +41,12 @@ class DgOutChildrenFile : public DgOutputStream {
 
    public:
 
-      DgOutChildrenFile (const string& fileName,
+      DgOutChildrenFile (const std::string& fileName,
                         const DgIDGGBase& dgg,
                         const DgIDGGBase& chdDgg,
                         const DgRFBase* outRF = NULL,
                         const DgRFBase* chdOutRF = NULL,
-                        const string& suffix = string("chd"),
+                        const std::string& suffix = std::string("chd"),
                         DgReportLevel failLevel = DgBase::Fatal);
 
       virtual DgOutChildrenFile& insert (const DgLocation& center, DgLocVector& vec);
@@ -63,21 +61,21 @@ class DgOutChildrenFile : public DgOutputStream {
 };
 
 inline DgOutChildrenFile& operator<< (DgOutChildrenFile& file, const char* str)
-              { ostream& o = file; o << str; return file; }
+              { std::ostream& o = file; o << str; return file; }
 
-inline DgOutChildrenFile& operator<< (DgOutChildrenFile& file, const string& str)
-              { ostream& o = file; o << str; return file; }
+inline DgOutChildrenFile& operator<< (DgOutChildrenFile& file, const std::string& str)
+              { std::ostream& o = file; o << str; return file; }
 
 inline DgOutChildrenFile& operator<< (DgOutChildrenFile& file, long double val)
-              { ostream& o = file; o << val; return file; }
+              { std::ostream& o = file; o << val; return file; }
 
 inline DgOutChildrenFile& operator<< (DgOutChildrenFile& file, float val)
-              { ostream& o = file; o << val; return file; }
+              { std::ostream& o = file; o << val; return file; }
 
 inline DgOutChildrenFile& operator<< (DgOutChildrenFile& file, int val)
-              { ostream& o = file; o << val; return file; }
+              { std::ostream& o = file; o << val; return file; }
 
 inline DgOutChildrenFile& operator<< (DgOutChildrenFile& file, unsigned long long val)
-              { ostream& o = file; o << val; return file; }
+              { std::ostream& o = file; o << val; return file; }
 
 #endif

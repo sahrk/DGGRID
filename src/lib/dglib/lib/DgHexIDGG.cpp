@@ -39,7 +39,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgHexIDGG::DgHexIDGG (const DgHexIDGGS& dggs, unsigned int aperture,
-              int res, const string& name, unsigned int precision)
+              int res, const std::string& name, unsigned int precision)
    : DgIDGG (&dggs, aperture, res, name, Hexagon, D6, precision),
 	   scaleFac_ (1.0L), rotRads_ (0.0L)
 {
@@ -72,8 +72,8 @@ DgHexIDGG::initialize (void)
 {
    // verify parameter validity
 
-   string apErrStr = string("DgHexIDGG::initialize(): invalid aperture " +
-             dgg::util::to_string(aperture()) + string(" for grid topo ") +
+   std::string apErrStr = std::string("DgHexIDGG::initialize(): invalid aperture " +
+             dgg::util::to_string(aperture()) + std::string(" for grid topo ") +
              to_string(gridTopo()));
 
    if (gridTopo() != Hexagon)
@@ -137,8 +137,8 @@ DgHexIDGG::initialize (void)
    // length is 1.0
    ccFrame_ = DgContCartRF::makeRF(locNet_, name() + "CC1");
    grid2DS_ = DgHexGrid2DS::makeRF(locNet_, ccFrame(), allocRes() + 1, hexDggs().apSeq(),
-        name() + string("H2DS"));
-   //cout << "== NEW GRID2DS:" << endl;
+        name() + std::string("H2DS"));
+   //cout << "== NEW GRID2DS:" << std::endl;
    //cout << *grid2DS_;
 
    if (res() == 0)
@@ -167,7 +167,7 @@ DgHexIDGG::initialize (void)
       maxD_ = factor+0.000001 - 1.0;
 
       //cout << res() << " " << aperture();
-      //cout << " f: " << factor << " maxD: " << maxD_ << endl;
+      //cout << " f: " << factor << " maxD: " << maxD_ << std::endl;
    }
 
    maxI_ = maxD();

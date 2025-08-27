@@ -37,8 +37,6 @@ class DgZ7StringCoord;
 class DgIDGGBase;
 class DgZ7Coord;
 
-//using namespace std;
-
 ////////////////////////////////////////////////////////////////////////////////
 class DgZ7StringtoZ7Converter :
         public DgConverter<DgZ7StringCoord, long long int, DgZ7Coord, long long int>
@@ -131,8 +129,8 @@ class DgZ7Coord  {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-inline ostream&
-operator<< (ostream& stream, const DgZ7Coord& coord)
+inline std::ostream&
+operator<< (std::ostream& stream, const DgZ7Coord& coord)
 { return stream << std::string(coord); }
 
 ////////////////////////////////////////////////////////////////////////////////

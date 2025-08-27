@@ -30,8 +30,6 @@
 
 #include <dglib/DgHierNdxRF.h>
 
-using namespace std;
-
 #define HIERNDX_INT_TYPE uint64_t
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -60,7 +58,7 @@ class DgHierNdxIntRF : public DgHierNdxRF<DgHierNdxIntCoord> {
                        { return undefCoord; }
 
       // these assume input/output strings are in hexadecimal
-      virtual string add2str (const DgHierNdxIntCoord& add) const { return add.valString(); }
+      virtual std::string add2str (const DgHierNdxIntCoord& add) const { return add.valString(); }
       virtual const char* str2add (DgHierNdxIntCoord* c, const char* str, char delimiter) const;
 
       // these need to be defined by specializations
@@ -70,7 +68,7 @@ class DgHierNdxIntRF : public DgHierNdxRF<DgHierNdxIntCoord> {
 
    protected:
 
-      DgHierNdxIntRF (const DgHierNdxSystemRFBase& sysIn, int resIn, const string& nameIn)
+      DgHierNdxIntRF (const DgHierNdxSystemRFBase& sysIn, int resIn, const std::string& nameIn)
          : DgHierNdxRF<DgHierNdxIntCoord>(sysIn, resIn, nameIn) { }
 
 };

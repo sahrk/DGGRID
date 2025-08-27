@@ -46,7 +46,7 @@
 #include <sstream>
 
 ////////////////////////////////////////////////////////////////////////////////
-DgInGdalFile::DgInGdalFile (const DgRFBase& rfIn, const string* fileNameIn,
+DgInGdalFile::DgInGdalFile (const DgRFBase& rfIn, const std::string* fileNameIn,
                               DgReportLevel failLevel)
     : DgInLocStreamFile (rfIn, fileNameIn, false, failLevel),
       forcePolyLine_ (false), forceCells_ (false),
@@ -192,7 +192,7 @@ DgInGdalFile::extract (DgPolygon& poly)
           OGRMultiPolygon* oMultiPolygon = (OGRMultiPolygon*) oGeometry;
           numMultiPolyGeometries_ = oMultiPolygon->getNumGeometries();
       } else {
-          dgcout << "WKBGeometryType: " << geomType << endl;
+          dgcout << "WKBGeometryType: " << geomType << std::endl;
           report("Geometry is not of type Polygon or MultiPolygon", DgBase::Fatal);
       }
    }
@@ -214,7 +214,7 @@ DgInGdalFile::extract (DgPolygon& poly)
 
    // convert the exterior ring to a DgPolygon
    ogrPolyToDg(oPolygon, poly);
-//cout << "=====\n" << poly << endl;
+//cout << "=====\n" << poly << std::endl;
 
    return *this;
 
@@ -254,7 +254,7 @@ DgInGdalFile::extractDataFields (void)
 
           DgDataFieldBase* fld = nullptr;
           OGRFieldDefn *oFieldDefn = oFDefn->GetFieldDefn( iField );
-          string fldName = string(oFieldDefn->GetNameRef());
+          std::string fldName = std::string(oFieldDefn->GetNameRef());
           switch( oFieldDefn->GetType() ) {
               case OFTInteger:
                  fld = new DgDataFieldInt(fldName,
@@ -283,7 +283,7 @@ DgInGdalFile::extractDataFields (void)
 /*
                  if (oFieldDefn->GetType() != OFTString)
                     dgcerr << "unsupported input field type: " <<
-                                oFeature_->GetFieldAsString(iField) << endl;
+                                oFeature_->GetFieldAsString(iField) << std::endl;
 */
                  break;
               }
@@ -296,13 +296,13 @@ DgInGdalFile::extractDataFields (void)
                  fld = new DgDataFieldString(fldName, cellVal);
                  if (oFieldDefn->GetType() != OFTString)
                     dgcerr << "unsupported input field type: " <<
-                                oFeature_->GetFieldAsString(iField) << endl;
+                                oFeature_->GetFieldAsString(iField) << std::endl;
                  break;
                  report("field ignored", DgBase::Warning);
 */
                  if (oFieldDefn->GetType() != OFTString)
                     dgcerr << "unsupported input field type: " <<
-                                oFeature_->GetFieldAsString(iField) << endl;
+                                oFeature_->GetFieldAsString(iField) << std::endl;
                  continue;
           }
 
@@ -367,7 +367,7 @@ DgInGdalFile::extractPointGeometry (DgLocation& point) {
     if (oGeometry != nullptr && geomType == wkbPoint) {
        oPoint = (OGRPoint*) oGeometry;
     } else {
-       dgcout << "WKBGeometryType: " << geomType << endl;
+       dgcout << "WKBGeometryType: " << geomType << std::endl;
        report("Geometry is not of type Point", DgBase::Fatal);
     }
 

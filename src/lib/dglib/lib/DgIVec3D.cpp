@@ -73,7 +73,7 @@ DgIVec3D::fromString (const char* str, char delimiter)
     }
    catch(...)
     {
-      ::report("DgIVec3D::fromString() invalid value in string " + string(tok),
+      ::report("DgIVec3D::fromString() invalid value in string " + std::string(tok),
                DgBase::Fatal);
     }
 

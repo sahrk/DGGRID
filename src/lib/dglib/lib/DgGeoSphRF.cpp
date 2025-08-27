@@ -38,7 +38,7 @@ long double DgGeoSphRF::icosaEdgeKM_ = icosaEdgeRads_ * earthRadiusKM_;
 long double DgGeoSphRF::totalAreaKM_ =
                       4.0L * M_PI * earthRadiusKM_ * earthRadiusKM_;
 
-const string DgGeoSphRF::lonWrapModeStrings[] =
+const std::string DgGeoSphRF::lonWrapModeStrings[] =
              { "Wrap", "UnwrapWest", "UnwrapEast", "InvalidLonWrapMode" };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -84,7 +84,7 @@ DgGeoSphRF::lonWrap (DgPolygon& p, DgLonWrapMode wrapMode)
    const DgGeoSphRF* gs = dynamic_cast<const DgGeoSphRF*>(&p.rf());
    if (gs == 0) report("DgGeoSphRF::lonWrap() with non-CCRF", DgBase::Fatal);
 
-   vector<DgAddressBase*>& v = p.addressVec();
+   std::vector<DgAddressBase*>& v = p.addressVec();
 
    // first determine the range of longitude values
    long double minLon = 360.0L;
@@ -98,13 +98,13 @@ DgGeoSphRF::lonWrap (DgPolygon& p, DgLonWrapMode wrapMode)
 
    // check for wrap
    long double deltaLon = maxLon - minLon;
-//cout << "DELTALON: " << deltaLon << endl;
+//cout << "DELTALON: " << deltaLon << std::endl;
    if (deltaLon < 120) // no wrap
       return false;
 
    // perform the wrap, putting the new vertices in unwrappedVerts
    DgPolygon unwrappedVerts(*gs);
-   vector<DgAddressBase*>& v2 = unwrappedVerts.addressVec();
+   std::vector<DgAddressBase*>& v2 = unwrappedVerts.addressVec();
    int wrapped = false; // has wrap occurred?
    for (unsigned long i = 0; i < v.size(); i++) {
 
@@ -136,8 +136,8 @@ DgGeoSphRF::densify (DgPolygon& p, long double maxDist, bool rads)
 
    DgPolygon densVerts(*gs);
 
-   vector<DgAddressBase*>& v0 = p.addressVec();
-   vector<DgAddressBase*>& v1 = densVerts.addressVec();
+   std::vector<DgAddressBase*>& v0 = p.addressVec();
+   std::vector<DgAddressBase*>& v1 = densVerts.addressVec();
 
    // for each edge
    for (unsigned long i = 0; i < v0.size(); i++)
@@ -247,7 +247,7 @@ DgGeoSphRF::travelGC (const DgGeoCoord& p0, long double distance, long double az
 } // long double DgGeoSphRF::azimuth
 
 ////////////////////////////////////////////////////////////////////////////////
-DgGeoSphDegRF::DgGeoSphDegRF (const DgGeoSphRF& geoRFin, const string& nameIn)
+DgGeoSphDegRF::DgGeoSphDegRF (const DgGeoSphRF& geoRFin, const std::string& nameIn)
          : DgContCartRF (geoRFin.network(), nameIn), geoRF_ (geoRFin)
 {
    DgDegRadConverter (geoRFin, *this);

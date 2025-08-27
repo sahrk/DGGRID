@@ -41,7 +41,7 @@ template<class A, class B, class DB> class DgDiscRFS
    public:
 
       DgDiscRFS (DgRFNetwork& network, const DgRF<DgResAdd<B>, DB>& backFrame,
-                 int nResIn, const string& name = "DiscS")
+                 int nResIn, const std::string& name = "DiscS")
         : DgDiscRF<DgResAdd<A>, DgResAdd<B>, DB> (network, backFrame, name),
           DgDiscRFSGrids<DgDiscRF, A, DgResAdd<B>, DB, B> (backFrame, nResIn)
         {
@@ -54,16 +54,16 @@ template<class A, class B, class DB> class DgDiscRFS
       // abstract functions from DgDiscRF
       // these functions are the same as in DgDiscRFS
 
-      virtual string add2str (const DgResAdd<A>& add) const
-                         { return string(add); }
+      virtual std::string add2str (const DgResAdd<A>& add) const
+                         { return std::string(add); }
 
-      virtual string add2str (const DgResAdd<A>& add, char delimiter) const
+      virtual std::string add2str (const DgResAdd<A>& add, char delimiter) const
                          { return dgg::util::to_string(add.res()) + delimiter +
                            this->grids()[add.res()]->add2str(add.address(), delimiter); }
 
       virtual const char* str2add (DgResAdd<A>* add, const char* str, char delimiter) const;
                
-      //vector<const DgDiscRF<A, B, DB>*>& gridsMutable (void) const { return *grids_; }
+      //std::vector<const DgDiscRF<A, B, DB>*>& gridsMutable (void) const { return *grids_; }
 
       protected:
                
@@ -88,7 +88,7 @@ template<class A, class B, class DB> class DgDiscRFS
       // state data
 
       const DgRF<B, DB>* backFrame_;
-      vector<const DgDiscRF<A, B, DB>*>* grids_;
+      std::vector<const DgDiscRF<A, B, DB>*>* grids_;
       int nRes_;
 */
 

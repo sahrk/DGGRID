@@ -30,31 +30,31 @@ using namespace std;
 
 namespace dgg { namespace topo {
 
-static const string topoStrings[] =
+static const std::string topoStrings[] =
                { "HEXAGON", "TRIANGLE", "SQUARE", "DIAMOND", "INVALID" };
-static const string metricStrings[] =
+static const std::string metricStrings[] =
                { "D3", "D4", "D6", "D8", "INVALID" };
 
-DgGridTopology stringToGridTopology (const string& str) {
+DgGridTopology stringToGridTopology (const std::string& str) {
    for (int i = 0; i < InvalidTopo; i++)
       if (str == topoStrings[i]) return static_cast<DgGridTopology>(i);
 
    return InvalidTopo;
 }
 
-DgGridMetric stringToGridMetric (const string& str) {
+DgGridMetric stringToGridMetric (const std::string& str) {
    for (int i = 0; i < InvalidMetric; i++)
       if (str == metricStrings[i]) return static_cast<DgGridMetric>(i);
 
    return InvalidMetric;
 }
 
-const string& to_string (DgGridTopology t) {
+const std::string& to_string (DgGridTopology t) {
    if (t <= InvalidTopo) return topoStrings[t];
    return topoStrings[InvalidTopo];
 }
 
-const string& to_string (DgGridMetric m) {
+const std::string& to_string (DgGridMetric m) {
    if (m <= InvalidMetric) return metricStrings[m];
    return metricStrings[InvalidMetric];
 }

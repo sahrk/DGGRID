@@ -94,7 +94,7 @@ DgOutGeoJSONFile::insert(const DgDVec2D& pt)
 }
 
 DgOutLocFile&
-DgOutGeoJSONFile::insert (DgLocation& loc, const string* label,
+DgOutGeoJSONFile::insert (DgLocation& loc, const std::string* label,
                   const DgDataList* /* dataList */)
 {
    DgOutGeoJSONFile& o(*this);
@@ -119,7 +119,7 @@ DgOutGeoJSONFile::insert (DgLocation& loc, const string* label,
 }
 
 DgOutLocFile&
-DgOutGeoJSONFile::insert (DgLocVector& vec, const string* label,
+DgOutGeoJSONFile::insert (DgLocVector& vec, const std::string* label,
    const DgLocation* /* cent */,
                   const DgDataList* /* dataList */)
 {
@@ -136,8 +136,8 @@ DgOutGeoJSONFile::insert (DgLocVector& vec, const string* label,
    o << "\"type\":\"Polygon\",";
    o << "\"coordinates\":[[";
 
-   vector<DgAddressBase *>& v = vec.addressVec();
-   for(vector<DgAddressBase *>::iterator i = v.begin(); v.end() != i; ++i)
+   std::vector<DgAddressBase *>& v = vec.addressVec();
+   for(std::vector<DgAddressBase *>::iterator i = v.begin(); v.end() != i; ++i)
    {
          o.insert(rf().getVecAddress(*(*i)));
          o << ",";
@@ -153,7 +153,7 @@ DgOutGeoJSONFile::insert (DgLocVector& vec, const string* label,
 }
 
 DgOutLocFile&
-DgOutGeoJSONFile::insert (DgPolygon& poly, const string* label,
+DgOutGeoJSONFile::insert (DgPolygon& poly, const std::string* label,
    const DgLocation* /* cent */,
    const DgDataList* /* dataList */)
 {
@@ -170,8 +170,8 @@ DgOutGeoJSONFile::insert (DgPolygon& poly, const string* label,
    o << "\"type\":\"Polygon\",";
    o << "\"coordinates\":[[";
 
-   vector<DgAddressBase *>& v = poly.addressVec();
-   for(vector<DgAddressBase *>::iterator i = v.begin(); v.end() != i; ++i)
+   std::vector<DgAddressBase *>& v = poly.addressVec();
+   for(std::vector<DgAddressBase *>::iterator i = v.begin(); v.end() != i; ++i)
    {
          o.insert(rf().getVecAddress(*(*i)));
          o << ",";

@@ -56,7 +56,7 @@ class DgHierNdxStringRF : public DgHierNdxRF<DgHierNdxStringCoord> {
       virtual const DgHierNdxStringCoord& undefAddress (void) const
                        { return undefCoord; }
 
-      virtual string add2str (const DgHierNdxStringCoord& add) const
+      virtual std::string add2str (const DgHierNdxStringCoord& add) const
                         { return add.value(); }
 
       // these need to be defined by specializations
@@ -67,7 +67,7 @@ class DgHierNdxStringRF : public DgHierNdxRF<DgHierNdxStringCoord> {
 
    protected:
 
-      DgHierNdxStringRF (const DgHierNdxSystemRFBase& sysIn, int resIn, const string& nameIn)
+      DgHierNdxStringRF (const DgHierNdxSystemRFBase& sysIn, int resIn, const std::string& nameIn)
          : DgHierNdxRF<DgHierNdxStringCoord>(sysIn, resIn, nameIn) { }
 
 };

@@ -81,13 +81,13 @@ class DgDiscRF : public DgRF<A, long long int> {
       const DgRF<B, DB>& backFrame (void) const { return *backFrame_; }
 
       // misc methods from above
-      virtual string dist2str (const long long int& dist) const { return to_string(dist); }
+      virtual std::string dist2str (const long long int& dist) const { return to_string(dist); }
       virtual long double dist2dbl (const long long int& dist) const { return (long double) dist; }
       virtual unsigned long long int dist2int (const long long int& dist) const
                          { return static_cast<unsigned long long int>(dist); }
 
-      virtual operator string (void) const {
-         string s = "*** DgDiscRF " + DgRFBase::name();
+      virtual operator std::string (void) const {
+         std::string s = "*** DgDiscRF " + DgRFBase::name();
          return s;
       }
 
@@ -98,8 +98,8 @@ class DgDiscRF : public DgRF<A, long long int> {
     
       // remind users of the pure virtual functions remaining from above
 
-      virtual string add2str (const A& add) const = 0;
-      virtual string add2str (const A& add, char delimiter) const = 0;
+      virtual std::string add2str (const A& add) const = 0;
+      virtual std::string add2str (const A& add, char delimiter) const = 0;
 
       virtual const char* str2add (A* add, const char* str, char delimiter)
                                                                       const = 0;
@@ -114,7 +114,7 @@ class DgDiscRF : public DgRF<A, long long int> {
    protected:
 
       DgDiscRF (DgRFNetwork& networkIn, const DgRF<B, DB>& backFrameIn,
-                const string& nameIn = "Disc")
+                const std::string& nameIn = "Disc")
         : DgRF<A, long long int> (networkIn, nameIn), backFrame_ (&backFrameIn)
         { new DgQuantConverter(backFrame(), *this);
           new DgInvQuantConverter(*this, backFrame()); }
@@ -129,10 +129,10 @@ class DgDiscRF : public DgRF<A, long long int> {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-template<class A, class B, class DB> ostream& operator<< (ostream& stream,
+template<class A, class B, class DB> std::ostream& operator<< (std::ostream& stream,
           const DgDiscRF<A, B, DB>& g)
 {
-   stream << string(g) << endl;
+   stream << std::string(g) << endl;
    return stream;
 }
 

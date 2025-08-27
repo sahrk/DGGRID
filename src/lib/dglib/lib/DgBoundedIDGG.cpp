@@ -39,8 +39,8 @@ DgBoundedIDGG::DgBoundedIDGG (const DgIDGGBase& IDGGin)
           IDGGin.lastAdd(), IDGGin.undefAddress(), false), IDGG_ (IDGGin),
           bnd2D_ (0)
 {
-//cout << "********** DgBoundedIDGG::DgBoundedIDGG" << endl;
-//cout << " -- idgg().gridStats().nCells(): " << idgg().gridStats().nCells() << endl;
+//cout << "********** DgBoundedIDGG::DgBoundedIDGG" << std::endl;
+//cout << " -- idgg().gridStats().nCells(): " << idgg().gridStats().nCells() << std::endl;
 //cout << "     offsetPerQuad_ = (idgg().gridStats().nCells() - 2) / 10;
 
    // calculate the offsetPerQuad
@@ -90,8 +90,8 @@ DgBoundedIDGG::DgBoundedIDGG (const DgIDGGBase& IDGGin)
    unsigned long long int tmpSize = size();
    if (firstAdd().quadNum() == 0) tmpSize -= 2;
 /*
-cout << "mag: " << idgg().mag() << ", /3: " << idgg().mag() / 3 << ", size: " << size() << ", tmpSize: " << tmpSize << ", tmpSize / 10: " << tmpSize/10 << endl;
-cout  << "quadNum: " << firstAdd().quadNum() << ", offsetPerQuad: " << offsetPerQuad() << endl;
+cout << "mag: " << idgg().mag() << ", /3: " << idgg().mag() / 3 << ", size: " << size() << ", tmpSize: " << tmpSize << ", tmpSize / 10: " << tmpSize/10 << std::endl;
+cout  << "quadNum: " << firstAdd().quadNum() << ", offsetPerQuad: " << offsetPerQuad() << std::endl;
 */
    if ((tmpSize / 10) != offsetPerQuad())
    {
@@ -136,7 +136,7 @@ DgBoundedIDGG::incrementAddress (DgQ2DICoord& add) const
 {
    /* cout << "+++ DgBoundedIDGG::incrementAddress(): add: " << add
         << " add.coord(): " << add.coord()
-        << " bnd2D().lastAdd(): " << bnd2D().lastAdd() << endl; */
+        << " bnd2D().lastAdd(): " << bnd2D().lastAdd() << std::endl; */
 
    if (!validAddress(add)) return add = invalidAdd();
    else if (add == lastAdd() || add == endAdd()) return add = endAdd();
@@ -243,7 +243,7 @@ DgBoundedIDGG::q2dixToQ2di (const DgQ2DICoord& add) const
    DgQ2DICoord last(add);
    long long int numD = bnd2D().numJ();
    long long int numDminusOne = numD - 1;
-   //cout << " q2dixToQ2di: addIn: " << add << " numD: " << numD << endl;
+   //cout << " q2dixToQ2di: addIn: " << add << " numD: " << numD << std::endl;
 
    bool hexGrid = (idgg().gridTopo() == dgg::topo::Hexagon);
 
@@ -292,21 +292,21 @@ DgBoundedIDGG::q2dixToQ2di (const DgQ2DICoord& add) const
 
          if (hexGrid && i == 0 && j == numD)
          {
-//cout << "one" << endl;
+//cout << "one" << std::endl;
             q = 0;
             c = DgIVec2D(0, 0);
             good = true;
          }
          else if (i >= numD)
          {
-//cout << "two" << endl;
+//cout << "two" << std::endl;
             q = C;
             origin = DgIVec2D(-numD, 0);
             offset = DgIVec2D(i, j);
          }
          else if (j >= numD)
          {
-//cout << "three" << endl;
+//cout << "three" << std::endl;
             q = B;
             if (hexGrid) {
                origin = DgIVec2D(-numD, 0);
@@ -318,7 +318,7 @@ DgBoundedIDGG::q2dixToQ2di (const DgQ2DICoord& add) const
          }
          else if (i < 0)
          {
-//cout << "four" << endl;
+//cout << "four" << std::endl;
             q = A;
             if (hexGrid) {
                 origin = DgIVec2D(numD, numD);
@@ -330,7 +330,7 @@ DgBoundedIDGG::q2dixToQ2di (const DgQ2DICoord& add) const
          }
          else if (j < 0)
          {
-//cout << "five" << endl;
+//cout << "five" << std::endl;
             q = D;
             origin = DgIVec2D(0, numD);
             if (hexGrid)
@@ -363,28 +363,28 @@ DgBoundedIDGG::q2dixToQ2di (const DgQ2DICoord& add) const
 
          if (hexGrid && i == numD && j == 0)
          {
-//cout << "six" << endl;
+//cout << "six" << std::endl;
             q = 11;
             c = DgIVec2D(0, 0);
             good = true;
          }
          else if (i < 0)
          {
-//cout << "seven" << endl;
+//cout << "seven" << std::endl;
             q = A;
             origin = DgIVec2D(numD, 0);
             offset = DgIVec2D(i, j);
          }
          else if (j >= numD)
          {
-//cout << "eight" << endl;
+//cout << "eight" << std::endl;
             q = B;
             origin = DgIVec2D(0, -numD);
             offset = DgIVec2D(i, j);
          }
          else if (i >= numD)
          {
-//cout << "nine" << endl;
+//cout << "nine" << std::endl;
             q = C;
             if (hexGrid) {
                 origin = DgIVec2D(0, -numD);
@@ -396,7 +396,7 @@ DgBoundedIDGG::q2dixToQ2di (const DgQ2DICoord& add) const
          }
          else if (j < 0)
          {
-//cout << "ten" << endl;
+//cout << "ten" << std::endl;
             q = D;
             if (hexGrid) {
                origin = DgIVec2D(numD, numD);
@@ -446,7 +446,7 @@ DgBoundedIDGG::q2dixToQ2di (const DgQ2DICoord& add) const
       if (!good)
       {
          c = origin + offset;
-         //cout << " q: " << q << " orig: " << origin << " off: " << offset << " c: " << c << endl;
+         //cout << " q: " << q << " orig: " << origin << " off: " << offset << " c: " << c << std::endl;
       }
 
       result = DgQ2DICoord(q, c);
@@ -463,12 +463,12 @@ DgBoundedIDGG::q2dixToQ2di (const DgQ2DICoord& add) const
 
    } // while !good
 
-   //cout << " result: " << add << " -> " << result << endl;
+   //cout << " result: " << add << " -> " << result << std::endl;
 /*
    if (result == add)
-      cout << " ===>> SAME" << endl;
+      cout << " ===>> SAME" << std::endl;
    else
-      cout << "==>> CHANGE: " << result << endl;
+      cout << "==>> CHANGE: " << result << std::endl;
 */
 
    return result;

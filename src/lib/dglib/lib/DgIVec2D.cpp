@@ -59,7 +59,7 @@ DgIVec2D::fromString (const char* str, char delimiter)
     }
    catch(...)
     {
-      ::report("DgIVec2D::fromString() invalid value in string " + string(tok),
+      ::report("DgIVec2D::fromString() invalid value in string " + std::string(tok),
                DgBase::Fatal);
     }
 

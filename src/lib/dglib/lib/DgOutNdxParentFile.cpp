@@ -31,13 +31,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 ///
-DgOutNdxParentFile::DgOutNdxParentFile (const string& fileName,
+DgOutNdxParentFile::DgOutNdxParentFile (const std::string& fileName,
                         const DgIDGGBase& dgg, 
                         const DgIDGGBase& ndxPrtDgg,
                         const DgRFBase* outRF,
                         const DgRFBase* ndxPrtOutRF,
                         const DgHierNdxSystemRFSBase* hierNdxRFS,
-                        const string& suffix,
+                        const std::string& suffix,
                         DgReportLevel failLevel)
    : DgOutputStream (fileName, suffix, failLevel), dgg_ (dgg), ndxPrtDgg_ (ndxPrtDgg),
 outRF_ (outRF), ndxPrtOutRF_ (ndxPrtOutRF)
@@ -49,10 +49,10 @@ outRF_ (outRF), ndxPrtOutRF_ (ndxPrtOutRF)
 DgOutNdxParentFile&
 DgOutNdxParentFile::insert (const DgLocation& center, DgLocation& parent)
 {
-//cout << "@@@@@ DgOutNdxParentFile::insert:" << endl;
-//cout << " dgg: " << dgg << endl;
-//cout << " center: " << center << endl;
-//cout << " parent: " << parent << endl;
+//cout << "@@@@@ DgOutNdxParentFile::insert:" << std::endl;
+//cout << " dgg: " << dgg << std::endl;
+//cout << " center: " << center << std::endl;
+//cout << " parent: " << parent << std::endl;
 /*
  if (!outRF_) { // indicates seqnum output
     unsigned long long int sn = dgg_.bndRF().seqNum(center);
@@ -85,7 +85,7 @@ DgOutNdxParentFile::insert (const DgLocation& center, DgLocation& parent)
       *this << " " << parent.asString();
    }
 
-   *this << endl;
+   *this << std::endl;
 
    return *this;
 

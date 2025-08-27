@@ -81,13 +81,13 @@ class DgIDGGSBase;
              << ((MAX_Z7_RES - (res)) * Z7_PER_DIGIT_OFFSET)))
 
 ////////////////////////////////////////////////////////////////////////////////
-DgZXSystem::DgZXSystem (const DgIDGGSBase& dggsIn, bool outModeIntIn, const string& nameIn)
+DgZXSystem::DgZXSystem (const DgIDGGSBase& dggsIn, bool outModeIntIn, const std::string& nameIn)
    : DgHierNdxSystemRFS<DgZXRF, DgZXStringRF>(dggsIn, outModeIntIn, nameIn)
 {
     /*
     // all the grids need to be created before we can set the parent/child grids
     // RFs are deallocated by the RFNetwork
-    vector<const DgHierNdxSystemRFBase*> rfGrids(nRes(), nullptr);
+    std::vector<const DgHierNdxSystemRFBase*> rfGrids(nRes(), nullptr);
     for (int r = 0; r < nRes(); r++)
         rfGrids[r] = new DgHierNdxSystemRF<DgZXRF, DgZXStringRF>(*this, r,
                                                                  nameIn + to_string(r));
@@ -106,7 +106,7 @@ DgZXSystem::DgZXSystem (const DgIDGGSBase& dggsIn, bool outModeIntIn, const stri
 DgHierNdxIntCoord
 DgZXSystem::toIntCoord (const DgHierNdxStringCoord& addIn) const
 {
-   string addstr = addIn.valString();
+   std::string addstr = addIn.valString();
     if (addstr.size() - 2 > MAX_Z7_RES) {
      report("DgZXSystem::toIntCoord(): "
         " input resolution exceeds max Z7 resolution of 20", DgBase::Fatal);
@@ -115,7 +115,7 @@ DgZXSystem::toIntCoord (const DgHierNdxStringCoord& addIn) const
    uint64_t z = 0;
 
    // first get the quad number and add to the val
-   string qstr = addstr.substr(0, 2);
+   std::string qstr = addstr.substr(0, 2);
    if (qstr[0] == '0') // leading 0
       qstr = qstr.substr(1, 1);
    int quadNum = std::stoi(qstr);
@@ -127,7 +127,7 @@ DgZXSystem::toIntCoord (const DgHierNdxStringCoord& addIn) const
    int index = 2; // skip the two quad digits
 
    // the rest is the radix string
-   string radStr = addstr.substr(index);
+   std::string radStr = addstr.substr(index);
 
    // now get the digits
    int r = 1;
@@ -155,7 +155,7 @@ DgZXSystem::toStringCoord (const DgHierNdxIntCoord& addIn) const
    uint64_t z = addIn.value();
 
    int quadNum = Z7_GET_QUADNUM(z);
-   string s = dgg::util::to_string(quadNum, 2);
+   std::string s = dgg::util::to_string(quadNum, 2);
 
    for (int r = 1; r <= MAX_Z7_RES; r++) {
       // get the integer digit
@@ -182,8 +182,8 @@ DgZXSystem::setAddNdxParent (const DgResAdd<DgHierNdx>& add,
 {
     // res has already been verified by the caller
     int pRes = add.res() - 1;
-    string addStr = add.address().strNdx().value();
-    string pStr = addStr.substr(0, addStr.size() - 1);
+    std::string addStr = add.address().strNdx().value();
+    std::string pStr = addStr.substr(0, addStr.size() - 1);
     
     // build the parent address
     DgResAdd<DgHierNdx> pAdd;
@@ -197,11 +197,11 @@ DgZXSystem::setAddNdxChildren (const DgResAdd<DgHierNdx>& add,
                                      DgLocVector& children) const
 {
     int chdRes = add.res() + 1;
-    string valStr = add.address().strNdx().value();
+    std::string valStr = add.address().strNdx().value();
      
-     // first get the base cell number
-      string quadStr = valStr.substr(0, 2);
-      if (quadStr[0] == '0') // leading 0
+    // first get the base cell number
+    std::string quadStr = valStr.substr(0, 2);
+    if (quadStr[0] == '0') // leading 0
           quadStr = quadStr.substr(1, 1);
       int quadNum = std::stoi(quadStr);
       if (quadNum < 0 || quadNum > 11) {
@@ -209,7 +209,7 @@ DgZXSystem::setAddNdxChildren (const DgResAdd<DgHierNdx>& add,
               "index has invalid base cell number", DgBase::Fatal);
      }
     
-    string addStr = valStr.substr(2);
+    std::string addStr = valStr.substr(2);
     
     // KEVIN: this should all be done with integers and c_str's
     // assume no skip digit
@@ -221,7 +221,7 @@ DgZXSystem::setAddNdxChildren (const DgResAdd<DgHierNdx>& add,
     }
     
     children.clearAddress();
-    vector<DgAddressBase*>& v = children.addressVec();
+    std::vector<DgAddressBase*>& v = children.addressVec();
     for (int i = 0; i <= 6; i++) {
         // KEVIN pentagon sub-sequence check
         
@@ -230,7 +230,7 @@ DgZXSystem::setAddNdxChildren (const DgResAdd<DgHierNdx>& add,
             continue;
 
         // build the child address
-        string chdStr = valStr + std::to_string(i);
+        std::string chdStr = valStr + std::to_string(i);
         DgResAdd<DgHierNdx> chdAdd;
         initNdxFromString(chdAdd, chdRes, chdStr);
         

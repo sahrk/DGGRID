@@ -36,8 +36,6 @@ class DgIDGGBase;
 class DgZ3Coord;
 class DgZ3StringCoord;
 
-using namespace std;
-
 ////////////////////////////////////////////////////////////////////////////////
 class DgQ2DItoZ3StringConverter :
         public DgConverter<DgQ2DICoord, long long int, DgZ3StringCoord, long long int>
@@ -106,17 +104,17 @@ class DgZ3StringCoord  {
 
       DgZ3StringCoord (void) { }
 
-      DgZ3StringCoord (const string& valStrIn)
+      DgZ3StringCoord (const std::string& valStrIn)
          : valString_ (valStrIn) { }
 
       DgZ3StringCoord (const DgZ3StringCoord& coord)
               { valString_ = coord.valString(); }
 
-      void setValString (const string strIn) { valString_ = strIn; }
+      void setValString (const std::string strIn) { valString_ = strIn; }
 
-      const string& valString (void) const { return valString_; }
+      const std::string& valString (void) const { return valString_; }
 
-      operator string (void) const { return valString(); }
+      operator std::string (void) const { return valString(); }
 
       bool operator== (const DgZ3StringCoord& c) const
           { return valString() == c.valString(); }
@@ -133,14 +131,14 @@ class DgZ3StringCoord  {
 
    private:
 
-      string valString_;
+      std::string valString_;
 
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-inline ostream&
-operator<< (ostream& stream, const DgZ3StringCoord& coord)
-{ return stream << string(coord); }
+inline std::stream&
+operator<< (std::ostream& stream, const DgZ3StringCoord& coord)
+{ return stream << std::string(coord); }
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgZ3StringRF : public DgRF<DgZ3StringCoord, long long int> {
@@ -148,7 +146,7 @@ class DgZ3StringRF : public DgRF<DgZ3StringCoord, long long int> {
    public:
 
       static DgZ3StringRF* makeRF (DgRFNetwork& networkIn,
-               const string& nameIn, int resIn)
+               const std::string& nameIn, int resIn)
          { return new DgZ3StringRF (networkIn, nameIn, resIn); }
 
       int res      (void) const { return res_; }
@@ -158,17 +156,17 @@ class DgZ3StringRF : public DgRF<DgZ3StringCoord, long long int> {
                         const DgZ3StringCoord& add2) const
                        { return 0; }
 
-      virtual string add2str (const DgZ3StringCoord& add) const
-                       { return string(add); }
+      virtual std::string add2str (const DgZ3StringCoord& add) const
+                       { return std::string(add); }
 
-      virtual string add2str (const DgZ3StringCoord& add, char delimiter)
+      virtual std::string add2str (const DgZ3StringCoord& add, char delimiter)
                                                                          const
-                       { return string(add); }
+                       { return std::string(add); }
 
       virtual const char* str2add (DgZ3StringCoord* add, const char* str,
                                    char delimiter) const;
 
-      virtual string dist2str (const long long int& dist) const
+      virtual std::string dist2str (const long long int& dist) const
                        { return dgg::util::to_string(dist); }
 
       virtual long double dist2dbl (const long long int& dist) const
@@ -182,7 +180,7 @@ class DgZ3StringRF : public DgRF<DgZ3StringCoord, long long int> {
 
    protected:
 
-      DgZ3StringRF (DgRFNetwork& networkIn, const string& nameIn,
+      DgZ3StringRF (DgRFNetwork& networkIn, const std::string& nameIn,
                          int resIn)
          : DgRF<DgZ3StringCoord, long long int>(networkIn, nameIn),
            res_ (resIn) { }

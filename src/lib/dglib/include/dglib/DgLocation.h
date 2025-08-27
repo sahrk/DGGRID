@@ -33,8 +33,6 @@
 #include <iostream>
 #include <string>
 
-using namespace std;
-
 class DgDistanceBase;
 class DgDataList;
 class NuCell;
@@ -68,16 +66,16 @@ class DgLocation : public DgLocBase {
                                 bool convert = false) const
                { return rf().distance(*this, loc, convert); }
 
-      virtual string asString (void) const
+      virtual std::string asString (void) const
                { return rf().toString(*this); }
 
-      virtual string asString (char delimiter) const
+      virtual std::string asString (char delimiter) const
                { return rf().toString(*this, delimiter); }
 
-      virtual string asAddressString (void) const
+      virtual std::string asAddressString (void) const
                { return rf().toAddressString(*this); }
 
-      virtual string asAddressString (char delimiter) const
+      virtual std::string asAddressString (char delimiter) const
                { return rf().toAddressString(*this, delimiter); }
 
       virtual const char* fromString (const char* str, char delimiter)
@@ -128,7 +126,7 @@ class DgLocationData : public DgLocation {
 
      ~DgLocationData (void);
 
-      virtual string asString (void) const
+      virtual std::string asString (void) const
                {
                  std::stringstream ss;
                  ss << DgLocation::asString();
@@ -136,7 +134,7 @@ class DgLocationData : public DgLocation {
                  return ss.str();
                }
 
-      virtual string asString (char delimiter) const
+      virtual std::string asString (char delimiter) const
                {
                  std::stringstream ss;
                  ss << DgLocation::asString(delimiter);

@@ -30,14 +30,12 @@
 
 #include <iostream>
 
-using namespace std;
-
 ////////////////////////////////////////////////////////////////////////////////
 class DgRadixString {
 
    public:
 
-      static string digitInterleave (const DgRadixString& s1,
+      static std::string digitInterleave (const DgRadixString& s1,
                                      const DgRadixString& s2,
                                      bool combineDigits = true)
           {
@@ -51,8 +49,8 @@ class DgRadixString {
                        "negative value input", DgBase::Fatal);
              }
 
-             string tmp1 = s1.digits();
-             string tmp2 = s2.digits();
+             std::string tmp1 = s1.digits();
+             std::string tmp2 = s2.digits();
 
              int n1 = (int) tmp1.length();
              int n2 = (int) tmp2.length();
@@ -67,7 +65,7 @@ class DgRadixString {
 
              // now interleave
 
-             string result;
+             std::string result;
              char c1[] = " ";
              char c2[] = " ";
              if (!combineDigits) {
@@ -75,7 +73,7 @@ class DgRadixString {
                    c1[0] = tmp1[i];
                    c2[0] = tmp2[i];
 
-                   result += string(c1) + string(c2);
+                   result += std::string(c1) + std::string(c2);
                 }
              } else {
                 for (unsigned int i = 0; i < tmp1.length(); i++) {
@@ -97,7 +95,7 @@ class DgRadixString {
       DgRadixString (const DgRadixString& obj)
                : base_ (obj.base()), digits_ (obj.digits()) { }
 
-      DgRadixString (unsigned int baseIn, const string& digitsIn)
+      DgRadixString (unsigned int baseIn, const std::string& digitsIn)
                : base_ (baseIn), digits_ (digitsIn) { }
 
       DgRadixString (unsigned int baseIn, int digitsIn, int padWidth = -1)
@@ -131,7 +129,7 @@ class DgRadixString {
 
       unsigned int base (void) const { return base_; }
 
-      const string& digits (void) const { return digits_; }
+      const std::string& digits (void) const { return digits_; }
 
       long long int value (void) const {
 
@@ -153,7 +151,7 @@ class DgRadixString {
 
       void setBase (unsigned int baseIn) { base_ = baseIn; }
 
-      void setDigits (const string& digitsIn) { digits_ = digitsIn; }
+      void setDigits (const std::string& digitsIn) { digits_ = digitsIn; }
 
       // conversion methods
 
@@ -194,17 +192,17 @@ class DgRadixString {
 
       unsigned int base_;
 
-      string digits_;
+      std::string digits_;
 
 }; // class DgRadixString
 
 ////////////////////////////////////////////////////////////////////////////////
-inline ostream&
-operator<< (ostream& stream, const DgRadixString& obj)
+inline std::ostream&
+operator<< (std::ostream& stream, const DgRadixString& obj)
 {
    return stream << "base: " << obj.base() << " val: " << obj.digits();
 
-} // ostream& operator<<
+} // std::ostream& operator<<
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

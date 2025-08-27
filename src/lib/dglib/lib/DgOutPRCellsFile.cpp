@@ -36,7 +36,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutPRCellsFile::DgOutPRCellsFile (const DgRFBase& rfIn,
-        const string& fileNameIn, int precision, DgReportLevel failLevel)
+        const std::string& fileNameIn, int precision, DgReportLevel failLevel)
    : DgOutLocTextFile (fileNameIn, rfIn, true, "cells", precision, failLevel)
 {
    // test for override of vecAddress
@@ -74,7 +74,7 @@ DgOutPRCellsFile::insert (const DgDVec2D& pt)
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutPRCellsFile::insert (DgLocation&, const string*,
+DgOutPRCellsFile::insert (DgLocation&, const std::string*,
                   const DgDataList* /* dataList */)
 //
 // Put the point loc.
@@ -89,7 +89,7 @@ DgOutPRCellsFile::insert (DgLocation&, const string*,
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutPRCellsFile::insert (DgLocVector&, const string*, const DgLocation*,
+DgOutPRCellsFile::insert (DgLocVector&, const std::string*, const DgLocation*,
             const DgDataList*)
 //
 // Put the polyline vec.
@@ -104,7 +104,7 @@ DgOutPRCellsFile::insert (DgLocVector&, const string*, const DgLocation*,
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutPRCellsFile::insert (DgPolygon& poly, const string* label,
+DgOutPRCellsFile::insert (DgPolygon& poly, const std::string* label,
                      const DgLocation* /* cent */,
                   const DgDataList* /* dataList */)
 //
@@ -121,13 +121,13 @@ DgOutPRCellsFile::insert (DgPolygon& poly, const string* label,
      *this << "0";
 
    // output the vertices in reverse order (clockwise winding)
-   const vector<DgAddressBase*>& v = poly.addressVec();
+   const std::vector<DgAddressBase*>& v = poly.addressVec();
    for (int i = 0; i < (int) v.size(); i++)
    {
       this->insert(rf().getVecAddress(*v[i]));
    }
 
-   *this << endl;
+   *this << std::endl;
 
    return *this;
 

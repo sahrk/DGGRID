@@ -39,12 +39,12 @@ template <class TINT, class TSTR> class DgHierNdxSystemRFS :
    protected:
 
      DgHierNdxSystemRFS (const DgIDGGSBase& dggsIn, bool outModeIntIn = true, 
-            const string& nameIn = "HierNdxIDGGS")
+            const std::string& nameIn = "HierNdxIDGGS")
         : DgHierNdxSystemRFSBase(dggsIn, outModeIntIn, nameIn)
      {
          // all the grids need to be created before we can set the parent/child grids
          // RFs are deallocated by the RFNetwork
-         vector<DgHierNdxSystemRFBase*> rfGrids(nRes(), nullptr);
+         std::vector<DgHierNdxSystemRFBase*> rfGrids(nRes(), nullptr);
          for (int r = 0; r < nRes(); r++)
              rfGrids[r] = new DgHierNdxSystemRF<TINT, TSTR>(*this, r,
                                             nameIn + to_string(r));
@@ -68,7 +68,7 @@ template <class TINT, class TSTR> class DgHierNdxSystemRFS :
          ndx.setAddress(newAdd);
      }
    
-     virtual void initNdxFromString (DgResAdd<DgHierNdx>& ndx, int res, const string& val) const {
+     virtual void initNdxFromString (DgResAdd<DgHierNdx>& ndx, int res, const std::string& val) const {
          DgHierNdx newAdd (outModeInt());
          DgHierNdxStringCoord sc(val);
          newAdd.setStrNdx(sc);

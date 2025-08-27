@@ -43,14 +43,14 @@ class DgHexGrid2DS : public DgDiscRFS2D {
       static const DgHexGrid2DS* makeRF (DgRFNetwork& networkIn,
                const DgRF<DgDVec2D, long double>& backFrameIn, int nRes = 1,
                const DgApSeq& apSeq = DgApSeq::defaultApSeq,
-               const string& nameIn = "H2DS")
+               const std::string& nameIn = "H2DS")
          { return new DgHexGrid2DS (networkIn, backFrameIn, nRes, apSeq, nameIn); }
 
       static const DgHexGrid2DS* makeRF (DgRFNetwork& network,
                  const DgRF<DgDVec2D, long double>& backFrame,
                  int nRes = 1, unsigned int aperture = 4,
                  bool isCongruent = true, bool isAligned = false,
-                 const string& name = "H2DS", bool isMixed43 = false,
+                 const std::string& name = "H2DS", bool isMixed43 = false,
                  int numAp4 = 0, bool isSuperfund = false, bool isApSeq = false,
                  const DgApSeq& apSeq = DgApSeq::defaultApSeq)
          { return new DgHexGrid2DS (network, backFrame, nRes, aperture,
@@ -76,13 +76,13 @@ class DgHexGrid2DS : public DgDiscRFS2D {
       DgHexGrid2DS (DgRFNetwork& networkIn,
                const DgRF<DgDVec2D, long double>& backFrameIn, int nRes = 1,
                const DgApSeq& apSeq = DgApSeq::defaultApSeq,
-               const string& nameIn = "H2DS");
+               const std::string& nameIn = "H2DS");
 
       DgHexGrid2DS (DgRFNetwork& network,
                  const DgRF<DgDVec2D, long double>& backFrame,
                  int nRes = 1, unsigned int aperture = 4,
                  bool isCongruent = true, bool isAligned = false,
-                 const string& name = "H2DS", bool isMixed43 = false,
+                 const std::string& name = "H2DS", bool isMixed43 = false,
                  int numAp4 = 0, bool isSuperfund = false, bool isApSeq = false,
                  const DgApSeq& apSeq = DgApSeq::defaultApSeq);
 

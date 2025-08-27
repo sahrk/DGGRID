@@ -29,8 +29,6 @@
 
 #include <string>
 
-using namespace std;
-
 class DgLocList;
 class DgLocVector;
 class DgPolygon;
@@ -44,7 +42,7 @@ class DgInLocFile : public DgBase {
 
    public:
 
-      DgInLocFile (const DgRFBase& rfIn, const string* fileNameIn = nullptr,
+      DgInLocFile (const DgRFBase& rfIn, const std::string* fileNameIn = nullptr,
            bool isPointFileIn = false, DgReportLevel failLevelIn = DgBase::Fatal)
          : DgBase (fileNameIn),
            rf_ (&rfIn), isPointFile_ (isPointFileIn), failLevel_ (failLevelIn)
@@ -52,7 +50,7 @@ class DgInLocFile : public DgBase {
 
       const DgRFBase& rf (void) const { return *rf_; }
 
-      const string& fileName (void) const { return fileName_; }
+      const std::string& fileName (void) const { return fileName_; }
 
       bool isPointFile (void) const { return isPointFile_; }
 
@@ -63,7 +61,7 @@ class DgInLocFile : public DgBase {
 
       // pure virtual methods
 
-      virtual bool open (const string* fileName = NULL,
+      virtual bool open (const std::string* fileName = NULL,
                  DgReportLevel failLevel = DgBase::Fatal) = 0;
 
       virtual void close (void) = 0;
@@ -102,7 +100,7 @@ class DgInLocFile : public DgBase {
 
    protected:
 
-      string fileName_;
+      std::string fileName_;
 
       const DgRFBase* rf_;
 

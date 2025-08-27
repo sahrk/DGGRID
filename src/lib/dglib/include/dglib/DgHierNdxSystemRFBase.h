@@ -140,9 +140,9 @@ class DgHierNdxSystemRFBase
       virtual DgQ2DICoord invQuantify (const DgHierNdx& add) const;
     
       // abstract methods
-      virtual string add2str (const DgHierNdx& add) const;
+      virtual std::string add2str (const DgHierNdx& add) const;
        
-      virtual string add2str (const DgHierNdx& add, char delimiter) const;
+      virtual std::string add2str (const DgHierNdx& add, char delimiter) const;
                           
       virtual const DgHierNdx& undefAddress (void) const;
 
@@ -155,10 +155,10 @@ class DgHierNdxSystemRFBase
    protected:
 
       DgHierNdxSystemRFBase (const DgHierNdxSystemRFSBase& hierNdxRFSIn, int resIn,
-            const string& nameIn = "HierNdxSysRFBase");
+            const std::string& nameIn = "HierNdxSysRFBase");
 
-      int setSystemSet (DgSystemSet& set, vector<DgHierNdxSystemRFBase*>& rfGrids, int res);
-      virtual void initialize (vector<DgHierNdxSystemRFBase*>& rfGrids);
+      int setSystemSet (DgSystemSet& set, std::vector<DgHierNdxSystemRFBase*>& rfGrids, int res);
+      virtual void initialize (std::vector<DgHierNdxSystemRFBase*>& rfGrids);
 
       const DgHierNdxSystemRFSBase& hierNdxRFS_;
       const DgIDGGSBase& dggs_;

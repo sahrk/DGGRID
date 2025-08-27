@@ -30,8 +30,6 @@
 #include <iostream>
 #include <string>
 
-using namespace std;
-
 ////////////////////////////////////////////////////////////////////////////////
 class DgDistanceBase {
 
@@ -41,7 +39,7 @@ class DgDistanceBase {
 
       const DgRFBase& rf (void) const { return rf_; }
 
-      string asString (void) const { return rf().toString(*this); }
+      std::string asString (void) const { return rf().toString(*this); }
 
       long double asDouble (void) const { return rf().toDouble(*this); }
 
@@ -66,7 +64,7 @@ class DgDistanceBase {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-inline ostream& operator<< (ostream& stream, const DgDistanceBase& dist)
+inline std::ostream& operator<< (std::ostream& stream, const DgDistanceBase& dist)
             { return stream << dist.asString(); }
 
 ////////////////////////////////////////////////////////////////////////////////

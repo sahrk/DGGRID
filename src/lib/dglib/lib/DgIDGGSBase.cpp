@@ -34,7 +34,7 @@ const DgIDGGSBase*
 DgIDGGSBase::makeRF (DgRFNetwork& network, const DgGeoSphRF& backFrame,
           const DgGeoCoord& vert0, long double azDegs, unsigned int apertureIn,
           int nResIn, DgGridTopology gridTopo, DgGridMetric gridMetric,
-          const string& name, const string& projTypeIn, bool isApSeqIn, const DgApSeq& apSeqIn,
+          const std::string& name, const std::string& projTypeIn, bool isApSeqIn, const DgApSeq& apSeqIn,
           bool isMixed43In, int numAp4In, bool isSuperfundIn, DgHierNdxSysType hierNdxSysType)
 {
    const DgIDGGSBase* dg0 = NULL;

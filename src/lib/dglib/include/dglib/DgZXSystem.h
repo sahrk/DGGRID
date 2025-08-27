@@ -43,7 +43,7 @@ class DgZXSystem : public DgHierNdxSystemRFS<DgZXRF, DgZXStringRF> {
    protected:
 
      DgZXSystem (const DgIDGGSBase& dggsIn, bool outModeIntIn = true, 
-                 const string& nameIn = "ZXSystem");
+                 const std::string& nameIn = "ZXSystem");
  
      // default methods quantize via string representation; redefine to
      // get different behavior

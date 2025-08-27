@@ -45,7 +45,7 @@ class DgDiscRFS2D : public DgDiscTopoRFS<DgIVec2D, DgDVec2D, long double> {
                    DgGridTopology gridTopo = Hexagon,
                    DgGridMetric gridMetric = D6,
                    bool isCongruent = true, bool isAligned = false,
-                   const string& name = "DiscRFS2D",
+                   const std::string& name = "DiscRFS2D",
                    bool isMixed43 = false, int numAp4 = 0, bool isSuperfund = false,
                    bool isApSeq = false, const DgApSeq& apSeq = DgApSeq::defaultApSeq);
 
@@ -54,7 +54,7 @@ class DgDiscRFS2D : public DgDiscTopoRFS<DgIVec2D, DgDVec2D, long double> {
                    int nRes = 1, DgGridTopology gridTopo = Hexagon,
                    DgGridMetric gridMetric = D6, unsigned int aperture = 4,
                    bool isCongruent = true, bool isAligned = false,
-                   const string& name = "DiscRFS2D")
+                   const std::string& name = "DiscRFS2D")
         : DgDiscTopoRFS<DgIVec2D, DgDVec2D, long double>
               (network, backFrame, nRes, gridTopo, gridMetric, aperture,
                isCongruent, isAligned, name)

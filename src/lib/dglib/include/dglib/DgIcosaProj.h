@@ -30,8 +30,6 @@
 #include <dglib/DgGeoSphRF.h>
 #include <dglib/DgProjTriRF.h>
 
-using namespace std;
-
 ////////////////////////////////////////////////////////////////////////////////
 class DgIcosaProj : public Dg2WayConverter {
 

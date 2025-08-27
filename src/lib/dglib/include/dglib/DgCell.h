@@ -39,7 +39,7 @@ class DgCell : public DgLocBase {
 
       DgCell (void) : region_ (nullptr), dataList_ (nullptr) {}
 
-      DgCell (const DgRFBase& rfIn, const string& labelIn,
+      DgCell (const DgRFBase& rfIn, const std::string& labelIn,
               const DgLocation& nodeIn, DgPolygon* regionIn = nullptr,
               DgDataList* dataListIn = nullptr, bool ownDataIn = true)
          : DgLocBase(rfIn), label_ (labelIn), node_ (nodeIn),
@@ -48,11 +48,11 @@ class DgCell : public DgLocBase {
 
      ~DgCell (void) { delete region_; if (ownData_) delete dataList_; }
 
-      const string&     label  (void) const { return label_; }
-      const DgLocation& node   (void) const { return node_; }
-      const DgPolygon&  region (void) const { return *region_; }
+      const std::string& label  (void) const { return label_; }
+      const DgLocation&  node   (void) const { return node_; }
+      const DgPolygon&   region (void) const { return *region_; }
 
-      string&     label  (void) { return label_; }
+      std::string&       label  (void) { return label_; }
       DgLocation& node   (void) { return node_; }
       DgPolygon&  region (void) { return *region_; }
 
@@ -64,7 +64,7 @@ class DgCell : public DgLocBase {
 
       bool hasRegion (void) const { return (region_ != 0); }
 
-      void setLabel (const string& labelIn) { label_ = labelIn; }
+      void setLabel (const std::string& labelIn) { label_ = labelIn; }
 
       virtual void setNode (const DgLocation& nodeIn)
            { node_ = nodeIn; if (rf_ && node_.rf() != rf()) rf().convert(&node_); }
@@ -102,10 +102,10 @@ class DgCell : public DgLocBase {
       bool operator!= (const DgCell& cell) const
            { return !operator==(cell); }
 
-      virtual string asString (void) const;
-      virtual string asString (char delimiter) const;
-      virtual string asAddressString (void) const;
-      virtual string asAddressString (char delimiter) const;
+      virtual std::string asString (void) const;
+      virtual std::string asString (char delimiter) const;
+      virtual std::string asAddressString (void) const;
+      virtual std::string asAddressString (char delimiter) const;
 
       virtual const char* fromString (const char* str, char delimiter);
 
@@ -121,7 +121,7 @@ class DgCell : public DgLocBase {
 
    private:
 
-      string label_;
+      std::string label_;
       DgLocation node_;
       DgPolygon* region_;
       DgDataList* dataList_;
@@ -131,7 +131,7 @@ class DgCell : public DgLocBase {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-inline ostream& operator<< (ostream& stream, const DgCell& cell)
+inline std::ostream& operator<< (std::ostream& stream, const DgCell& cell)
 {
    stream << "[" << cell.label() << ":" << cell.node();
    if (cell.hasRegion()) stream << ":" << cell.region();

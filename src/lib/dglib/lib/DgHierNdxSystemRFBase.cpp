@@ -74,7 +74,7 @@ DgHierNdx2WayIntToStringConverter::DgHierNdx2WayIntToStringConverter (const DgHi
 
 ////////////////////////////////////////////////////////////////////////////////
 DgHierNdxSystemRFBase::DgHierNdxSystemRFBase (
-         const DgHierNdxSystemRFSBase& hierNdxRFSIn, int resIn, const string& nameIn)
+         const DgHierNdxSystemRFSBase& hierNdxRFSIn, int resIn, const std::string& nameIn)
    : DgDiscRF<DgHierNdx, DgQ2DICoord, long long int>(hierNdxRFSIn.dggs().network(),
               hierNdxRFSIn.dggs()[resIn], nameIn),
      hierNdxRFS_ (hierNdxRFSIn), dggs_ (hierNdxRFSIn.dggs()), res_ (resIn),
@@ -150,7 +150,7 @@ DgHierNdxSystemRFBase::setStringFromIntCoord (DgHierNdx& hn) const
 
 ////////////////////////////////////////////////////////////////////////////////
 int
-DgHierNdxSystemRFBase::setSystemSet (DgSystemSet& set, vector<DgHierNdxSystemRFBase*>& rfGrids, int res)
+DgHierNdxSystemRFBase::setSystemSet (DgSystemSet& set, std::vector<DgHierNdxSystemRFBase*>& rfGrids, int res)
 {
    set.dgg_ = nullptr;
    set.intRF_ = nullptr;
@@ -168,7 +168,7 @@ DgHierNdxSystemRFBase::setSystemSet (DgSystemSet& set, vector<DgHierNdxSystemRFB
 
 ////////////////////////////////////////////////////////////////////////////////
 void
-DgHierNdxSystemRFBase::initialize (vector<DgHierNdxSystemRFBase*>& rfGrids)
+DgHierNdxSystemRFBase::initialize (std::vector<DgHierNdxSystemRFBase*>& rfGrids)
 {
    // current res set in the sub-class constructor
    //setSystemSet(curRes_, res_);
@@ -197,7 +197,7 @@ DgQ2DICoord
 DgHierNdxSystemRFBase::invQuantify (const DgHierNdx& ndx) const
 {
    DgQ2DICoord point(strRF()->invQuantify(ndx.strNdx_));
-    cout << "KEVIN: " << ndx.strNdx_ << " " << point << endl;
+    cout << "KEVIN: " << ndx.strNdx_ << " " << point << std::endl;
    return point;
 }
 

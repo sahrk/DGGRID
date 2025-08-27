@@ -37,7 +37,7 @@
 #include <sstream>
 
 ////////////////////////////////////////////////////////////////////////////////
-DgInLocTextFile::DgInLocTextFile (const DgRFBase& rfIn, const string* fileNameIn,
+DgInLocTextFile::DgInLocTextFile (const DgRFBase& rfIn, const std::string* fileNameIn,
                               DgReportLevel failLevel)
     : DgInLocStreamFile (rfIn, fileNameIn, false, failLevel),
       forcePolyLine_ (false), forceCells_ (false)

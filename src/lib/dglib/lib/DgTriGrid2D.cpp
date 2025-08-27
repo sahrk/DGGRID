@@ -31,7 +31,7 @@
 void
 DgTriGrid2D::setAddVertices (const DgIVec2D& add, DgPolygon& vec) const
 {
-   vector<DgAddressBase*>& v = vec.addressVec();
+   std::vector<DgAddressBase*>& v = vec.addressVec();
 
    // find the center
 
@@ -53,8 +53,8 @@ DgTriGrid2D::setAddVertices (const DgIVec2D& add, DgPolygon& vec) const
    }
 
 /*
-   cout << "triangle: " << add << " " << tmpLoc << endl;
-   cout << vec << endl;
+   cout << "triangle: " << add << " " << tmpLoc << std::endl;
+   cout << vec << std::endl;
 */
 
 } // void DgTriGrid2D::setAddVertices
@@ -63,7 +63,7 @@ DgTriGrid2D::setAddVertices (const DgIVec2D& add, DgPolygon& vec) const
 void
 DgTriGrid2D::setAddNeighbors (const DgIVec2D& add, DgLocVector& vec) const
 {
-   vector<DgAddressBase*>& v = vec.addressVec();
+   std::vector<DgAddressBase*>& v = vec.addressVec();
 
    if (isUp(add))
    {

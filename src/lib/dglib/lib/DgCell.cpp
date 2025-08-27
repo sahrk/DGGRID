@@ -49,7 +49,7 @@ DgCell::convertTo (const DgRFBase& rfIn)
 string
 DgCell::asString (void) const
 {
-   string tmp = "[" + node().asString();
+   std::string tmp = "[" + node().asString();
    if (hasRegion()) tmp += ":" + region().asString();
    tmp += "]";
 
@@ -61,7 +61,7 @@ DgCell::asString (void) const
 string
 DgCell::asString (char delimiter) const
 {
-   string tmp = node().asString(delimiter);
+   std::string tmp = node().asString(delimiter);
    if (hasRegion()) tmp += delimiter + region().asString(delimiter);
 
    return tmp;
@@ -72,7 +72,7 @@ DgCell::asString (char delimiter) const
 string
 DgCell::asAddressString (void) const
 {
-   string tmp = "[" + node().asAddressString();
+   std::string tmp = "[" + node().asAddressString();
    if (hasRegion()) tmp += ":" + region().asAddressString();
    tmp += "]";
 
@@ -84,7 +84,7 @@ DgCell::asAddressString (void) const
 string
 DgCell::asAddressString (char delimiter) const
 {
-   string tmp = node().asAddressString(delimiter);
+   std::string tmp = node().asAddressString(delimiter);
    if (hasRegion()) tmp += delimiter + region().asAddressString(delimiter);
 
    return tmp;

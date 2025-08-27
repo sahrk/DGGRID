@@ -37,7 +37,7 @@
 const DgHexIDGGS*
 DgHexIDGGS::makeRF (DgRFNetwork& network, const DgGeoSphRF& backFrame,
          const DgGeoCoord& vert0, long double azDegs, unsigned int aperture,
-         int nRes, const string& name, const string& projType,
+         int nRes, const std::string& name, const std::string& projType,
          bool isApSeq, const DgApSeq& apSeq,
          bool isMixed43, int numAp4, bool isSuperfund,
          DgHierNdxSysType hierNdxSysType)
@@ -46,8 +46,12 @@ DgHexIDGGS::makeRF (DgRFNetwork& network, const DgGeoSphRF& backFrame,
                                              projType, isApSeq, apSeq, isMixed43, numAp4, isSuperfund, hierNdxSysType);
     
     // create the hierarchical indexing system
-     if (hierNdxSysType != NoHierNdxSysType) {
-         if (hierNdxSysType == ZXSystem) {
+/*
+for reference:
+enum DgHierNdxSysType { ZX, ZOrder, Z3, Z7, InvalidHierNdxSysType };
+*/
+     if (hierNdxSysType != InvalidHierNdxSysType) {
+         if (hierNdxSysType == ZX) {
              if (isApSeq || isMixed43 || aperture != 7) {
                  ::report("DgHexIDGGS::makeRF() invalid hierNdxSysType", DgBase::Fatal);
              }
@@ -63,7 +67,7 @@ DgHexIDGGS::makeRF (DgRFNetwork& network, const DgGeoSphRF& backFrame,
 DgHexIDGGS::DgHexIDGGS (DgRFNetwork& network, const DgGeoSphRF& backFrame,
                   const DgGeoCoord& vert0, long double azDegs,
                   unsigned int aperture, int nRes,
-                  const string& name, const string& projType,
+                  const std::string& name, const std::string& projType,
                   bool isApSeq, const DgApSeq& apSeq,
                   bool isMixed43, int numAp4, bool isSuperfund,
                   const DgHierNdxSysType hierNdxSysType)

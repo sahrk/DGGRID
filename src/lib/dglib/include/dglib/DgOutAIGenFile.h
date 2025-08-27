@@ -39,22 +39,22 @@ class DgOutAIGenFile : public DgOutLocTextFile {
 
    public:
 
-      DgOutAIGenFile (const DgRFBase& rfIn, const string& fileNameIn = "",
+      DgOutAIGenFile (const DgRFBase& rfIn, const std::string& fileNameIn = "",
                    int precision = 7, bool isPointFile = false,
                    DgReportLevel failLevel = DgBase::Fatal);
 
       virtual ~DgOutAIGenFile (void) { if (good()) close(); }
 
-      virtual void close (void) { *this << "END" << endl; ofstream::close(); }
+      virtual void close (void) { *this << "END" << endl; std::ofstream::close(); }
 
-      virtual DgOutLocFile& insert (DgLocation& loc, const string* label = nullptr,
+      virtual DgOutLocFile& insert (DgLocation& loc, const std::string* label = nullptr,
                                 const DgDataList* dataList = nullptr);
 
-      virtual DgOutLocFile& insert (DgLocVector& vec, const string* label = nullptr,
+      virtual DgOutLocFile& insert (DgLocVector& vec, const std::string* label = nullptr,
                                 const DgLocation* cent = nullptr,
                                 const DgDataList* dataList = nullptr);
 
-      virtual DgOutLocFile& insert (DgPolygon& poly, const string* label = nullptr,
+      virtual DgOutLocFile& insert (DgPolygon& poly, const std::string* label = nullptr,
                                 const DgLocation* cent = nullptr,
                                 const DgDataList* dataList = nullptr);
 

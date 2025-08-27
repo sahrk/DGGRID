@@ -50,7 +50,7 @@ template <class A> class DgAddress : public DgAddressBase {
 
    protected:
 
-      virtual ostream& writeTo (ostream& stream) const
+      virtual std::ostream& writeTo (std::ostream& stream) const
                                     { return stream << address_; }
 
    private:

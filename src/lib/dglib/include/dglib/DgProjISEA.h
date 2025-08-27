@@ -42,8 +42,6 @@
 #include <climits>
 #include <iostream>
 
-using namespace std;
-
 ////////////////////////////////////////////////////////////////////////////////
 class DgProjISEAFwd : public DgConverter<DgGeoCoord, long double,
                                         DgProjTriCoord, long double> {

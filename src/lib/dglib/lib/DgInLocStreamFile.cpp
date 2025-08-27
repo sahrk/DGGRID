@@ -27,7 +27,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgInLocStreamFile::DgInLocStreamFile (const DgRFBase& rfIn,
-              const string* fileNameIn, bool isPointFileIn,
+              const std::string* fileNameIn, bool isPointFileIn,
               DgReportLevel failLevel)
          : DgInLocFile (rfIn, fileNameIn, isPointFileIn, failLevel),
            degRF_ (nullptr)
@@ -42,7 +42,7 @@ DgInLocStreamFile::DgInLocStreamFile (const DgRFBase& rfIn,
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 bool
-DgInLocStreamFile::open (const string *fileNameIn, DgReportLevel failLevel)
+DgInLocStreamFile::open (const std::string *fileNameIn, DgReportLevel failLevel)
 //
 // Open fileName as an input file. Report with a report level of failLevel
 // if the open is unsuccessful.

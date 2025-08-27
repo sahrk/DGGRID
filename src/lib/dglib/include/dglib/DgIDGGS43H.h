@@ -38,7 +38,7 @@ class DgIDGGS43H : public DgHexIDGGS {
 
       static const DgIDGGS43H* makeRF (DgRFNetwork& networkIn, const DgGeoSphRF& backFrameIn,
              const DgGeoCoord& vert0, long double azDegs, int nResIn = 1,
-             const string& nameIn = "ISEA43H", const string& projType = "ISEA",
+             const std::string& nameIn = "ISEA43H", const std::string& projType = "ISEA",
              int numAp4 = 0, bool isSuperfund = false)
          { return new DgIDGGS43H(networkIn, backFrameIn, vert0, azDegs, nResIn,
                                              nameIn, projType, numAp4, isSuperfund); }
@@ -53,7 +53,7 @@ class DgIDGGS43H : public DgHexIDGGS {
 
       DgIDGGS43H (DgRFNetwork& networkIn, const DgGeoSphRF& backFrameIn,
              const DgGeoCoord& vert0, long double azDegs, int nResIn = 1,
-             const string& nameIn = "ISEA43H", const string& projType = "ISEA",
+             const std::string& nameIn = "ISEA43H", const std::string& projType = "ISEA",
              int numAp4 = 0, bool isSuperfund = false)
          : DgHexIDGGS (networkIn, backFrameIn, vert0, azDegs, 3, nResIn,
                 nameIn, projType, false, DgApSeq::defaultApSeq, true,

@@ -47,7 +47,7 @@ DgHierNdxIntCoord::valString (void) const {
    char str[maxStrSize];
    snprintf(str, maxStrSize, "%016" PRIx64, value());
 
-   return string(str);
+   return std::string(str);
 }
 
 ////////////////////////////////////////////////////////////////////////////////

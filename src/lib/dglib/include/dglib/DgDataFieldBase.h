@@ -27,8 +27,6 @@
 
 #include <iostream>
 
-using namespace std;
-
 class DgDistanceBase;
 
 // field types
@@ -57,18 +55,18 @@ class DgDataFieldBase {
 
    public:
 
-      DgDataFieldBase (string _name, DgDataType _fieldType = FIELD_DOUBLE)
+      DgDataFieldBase (std::string _name, DgDataType _fieldType = FIELD_DOUBLE)
          : name_ (_name), fieldType_ (_fieldType)
       { }
 
-      string name (void) const { return name_; }
-      void setName (string _name) { name_ = _name; }
+      std::string name (void) const { return name_; }
+      void setName (std::string _name) { name_ = _name; }
 
       DgDataType fieldType (void) const { return fieldType_; }
 
       virtual ~DgDataFieldBase (void);
 
-      virtual string valString (void) const = 0;
+      virtual std::string valString (void) const = 0;
 
       // returns non-zero if conversion not valid
       virtual int toDouble (double& val) const { return 1; }
@@ -82,25 +80,25 @@ class DgDataFieldBase {
 
       DgDataFieldBase (void) {}
 
-      virtual ostream& writeTo (ostream& stream) const {
-         return stream << string(*this);
+      virtual std::ostream& writeTo (std::ostream& stream) const {
+         return stream << std::string(*this);
       }
 
-      virtual operator string (void) const {
+      virtual operator std::string (void) const {
          return name_;
       }
 
    private:
 
-      string name_;
+      std::string name_;
 
       DgDataType fieldType_;
 
-   friend ostream& operator<< (ostream& stream, const DgDataFieldBase& dataField);
+   friend std::ostream& operator<< (std::ostream& stream, const DgDataFieldBase& dataField);
    friend class DgDataList;
 };
 
-inline ostream& operator<< (ostream& stream, const DgDataFieldBase& dataField)
+inline std::ostream& operator<< (std::ostream& stream, const DgDataFieldBase& dataField)
 { return dataField.writeTo(stream); }
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -109,7 +109,7 @@ DgOutGdalFile::init (bool outputPoint, bool outputRegion,
          ::report( "Invalid GDAL file mode.", DgBase::Fatal );
    }
 
-   string baseName = dgg::util::baseName(fileNameOnly_);
+   std::string baseName = dgg::util::baseName(fileNameOnly_);
    _oLayer = _dataset->CreateLayer(baseName.c_str(), NULL, geomType, NULL );
    if (_oLayer == NULL)
       ::report( "Layer creation failed.", DgBase::Fatal );
@@ -166,7 +166,7 @@ DgOutGdalFile::init (bool outputPoint, bool outputRegion,
 
 ////////////////////////////////////////////////////////////////////////////////
 OGRFeature*
-DgOutGdalFile::createFeature (const string& label) const
+DgOutGdalFile::createFeature (const std::string& label) const
 {
    OGRFeature *feature = OGRFeature::CreateFeature(_oLayer->GetLayerDefn());
    if (!feature)
@@ -341,9 +341,9 @@ DgOutGdalFile::createLinearRing (const DgPolygon& poly)
    linearRing = (OGRLinearRing*) OGRGeometryFactory::createGeometry(wkbLinearRing);
 
    // fill linearRing with points
-   const vector<DgAddressBase *>& v = poly.addressVec();
+   const std::vector<DgAddressBase *>& v = poly.addressVec();
    const DgRFBase& rf = poly.rf();
-   for (vector<DgAddressBase *>::const_iterator i = v.begin(); v.end() != i; ++i) {
+   for (std::vector<DgAddressBase *>::const_iterator i = v.begin(); v.end() != i; ++i) {
      DgDVec2D pt = rf.getVecAddress(*(*i));
      linearRing->addPoint(pt.x(), pt.y());
    }
@@ -405,7 +405,7 @@ DgOutGdalFile::addFeature (OGRFeature *feature) {
 
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutGdalFile::insert (DgLocation& loc, const string* label,
+DgOutGdalFile::insert (DgLocation& loc, const std::string* label,
                   const DgDataList* dataList)
 {
    if (_mode != Point)
@@ -432,7 +432,7 @@ DgOutGdalFile::insert (DgLocation& loc, const string* label,
 
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutGdalFile::insert (DgLocVector&, const string*, const DgLocation*,
+DgOutGdalFile::insert (DgLocVector&, const std::string*, const DgLocation*,
                   const DgDataList*)
 {
    ::report( "polyline output not supported for GDAL file output", DgBase::Fatal );
@@ -441,7 +441,7 @@ DgOutGdalFile::insert (DgLocVector&, const string*, const DgLocation*,
 
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutGdalFile::insert (DgPolygon& poly, const string* label,
+DgOutGdalFile::insert (DgPolygon& poly, const std::string* label,
                   const DgLocation* /* cent */,
                   const DgDataList* dataList)
 {

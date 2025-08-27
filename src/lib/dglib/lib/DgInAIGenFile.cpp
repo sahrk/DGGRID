@@ -35,7 +35,7 @@
 const static int maxLine = 256;
 
 ////////////////////////////////////////////////////////////////////////////////
-static void fixSciNotation (char* string)
+static void fixSciNotation (char* std::string)
 //
 // convert 'D' to 'E' scientific notation
 //
@@ -46,7 +46,7 @@ static void fixSciNotation (char* string)
 } // void fixSciNotation
 
 ////////////////////////////////////////////////////////////////////////////////
-DgInAIGenFile::DgInAIGenFile (const DgRFBase& rfIn, const string* fileNameIn,
+DgInAIGenFile::DgInAIGenFile (const DgRFBase& rfIn, const std::string* fileNameIn,
                         DgReportLevel failLevel)
    : DgInLocStreamFile (rfIn, fileNameIn, false, failLevel),
      forcePolyLine_ (false), forceCells_ (false)
@@ -77,7 +77,7 @@ DgInAIGenFile::extract (DgLocVector& vec)
    getline(nextLine, maxLine);
 
    // check to see if we're at EOF
-   if (string(nextLine) == string("END")) {
+   if (std::string(nextLine) == std::string("END")) {
       // force feof()
       while (!eof()) getline(nextLine, maxLine);
       return *this;
@@ -89,7 +89,7 @@ DgInAIGenFile::extract (DgLocVector& vec)
       getline(nextLine, maxLine);
 
       // check for end-of-polyline
-      if (string(nextLine) == string("END")) break;
+      if (std::string(nextLine) == std::string("END")) break;
 
       fixSciNotation(nextLine);
 
@@ -100,7 +100,7 @@ DgInAIGenFile::extract (DgLocVector& vec)
       vec.addressVec().push_back(add); // polyline should delete when done
    }
 
-   //cout << "HERE: " << poly << endl;
+   //cout << "HERE: " << poly << std::endl;
 
    return *this;
 
@@ -123,20 +123,20 @@ DgInAIGenFile::extract (DgPolygon& poly)
    getline(nextLine, maxLine);
 
    // check to see if we're at EOF
-   if (string(nextLine) == string("END")) {
+   if (std::string(nextLine) == std::string("END")) {
       // force feof()
       while (!eof()) getline(nextLine, maxLine);
       return *this;
    }
 
    long double x, y;
-   vector<DgAddressBase*>& v = poly.addressVec();
+   std::vector<DgAddressBase*>& v = poly.addressVec();
    while (!eof()) {
       getline(nextLine, maxLine);
 
       // check for end-of-polygon
       // delete the duplicate first/last vertex
-      if (string(nextLine) == string("END")) {
+      if (std::string(nextLine) == std::string("END")) {
          delete v.back();
          v.back() = NULL;
          v.pop_back();
@@ -156,7 +156,7 @@ DgInAIGenFile::extract (DgPolygon& poly)
       poly.addressVec().push_back(add); // polygon should delete when done
    }
 
-   //cout << "HERE: " << poly << endl;
+   //cout << "HERE: " << poly << std::endl;
 
    return *this;
 

@@ -35,7 +35,7 @@
 #define OBLIQ  3
 
 ////////////////////////////////////////////////////////////////////////////////
-DgProjGnomonicRF::DgProjGnomonicRF(DgRFNetwork& networkIn, const string& nameIn,
+DgProjGnomonicRF::DgProjGnomonicRF(DgRFNetwork& networkIn, const std::string& nameIn,
        const DgGeoCoord& proj0In, long double x0In, long double y0In, long double k0In,
        long double to_meterIn, long double fr_meterIn)
    : DgGeoProjRF (networkIn, nameIn, proj0In, x0In, y0In, k0In,
@@ -58,7 +58,7 @@ DgDVec2D
 DgProjGnomonicRF::projForward (const DgGeoCoord& addIn,
                                const DgEllipsoidRF&) const
 {
-   //cout << "gnom projForward: " << *this << " coord: " << addIn << endl;
+   //cout << "gnom projForward: " << *this << " coord: " << addIn << std::endl;
 
    DgDVec2D xy(DgDVec2D::undefDgDVec2D);
 
@@ -86,8 +86,8 @@ DgProjGnomonicRF::projForward (const DgGeoCoord& addIn,
    if (xy.y() <= EPS10)
    {
       ::report(string("DgProjGnomonicRF::projForward() point out of range\n") +
-           string("proj0: ") + string(proj0()) +
-           string("\nprojecting point: ") + string(addIn), DgBase::Fatal);
+           std::string("proj0: ") + std::string(proj0()) +
+           std::string("\nprojecting point: ") + std::string(addIn), DgBase::Fatal);
    }
 
    xy.setY(1.0L / xy.y());
@@ -108,7 +108,7 @@ DgProjGnomonicRF::projForward (const DgGeoCoord& addIn,
       break;
    }
 
-   //cout << "     => " << xy << endl;
+   //cout << "     => " << xy << std::endl;
 
    return (xy);
 

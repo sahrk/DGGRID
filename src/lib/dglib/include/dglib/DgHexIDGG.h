@@ -44,7 +44,7 @@ class DgHexIDGG : public DgIDGG {
    public:
 
       DgHexIDGG (const DgHexIDGGS& dggs, unsigned int aperture = 4,
-              int res = 0, const string& name = "HexIDGG",
+              int res = 0, const std::string& name = "HexIDGG",
               unsigned int precision = DEFAULT_PRECISION);
 
       DgHexIDGG (const DgHexIDGG& grd);

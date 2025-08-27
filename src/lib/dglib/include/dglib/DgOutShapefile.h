@@ -43,7 +43,7 @@ class DgOutShapefile : public DgOutLocFile {
 
    public:
 
-      DgOutShapefile (const DgGeoSphDegRF& rfIn, const string& fileNameIn = "",
+      DgOutShapefile (const DgGeoSphDegRF& rfIn, const std::string& fileNameIn = "",
             int precision = 6, bool isPointFile = false,
             int shapefileIdLen = 11, DgReportLevel failLevel = DgBase::Fatal);
 
@@ -53,7 +53,7 @@ class DgOutShapefile : public DgOutLocFile {
 
       int idLen (void) { return idLen_; }
 
-      bool open (const string& fileName,
+      bool open (const std::string& fileName,
                  DgReportLevel failLevel = DgBase::Fatal);
 
       virtual void close (void)
@@ -64,14 +64,14 @@ class DgOutShapefile : public DgOutLocFile {
 
       bool good (void) { return dbFile_ && shpFile_; }
 
-      virtual DgOutLocFile& insert (DgLocation& loc, const string* label = nullptr,
+      virtual DgOutLocFile& insert (DgLocation& loc, const std::string* label = nullptr,
                                 const DgDataList* dataList = nullptr);
 
-      virtual DgOutLocFile& insert (DgLocVector& vec, const string* label = nullptr,
+      virtual DgOutLocFile& insert (DgLocVector& vec, const std::string* label = nullptr,
                                 const DgLocation* cent = nullptr,
                                 const DgDataList* dataList = nullptr);
 
-      virtual DgOutLocFile& insert (DgPolygon& poly, const string* label = nullptr,
+      virtual DgOutLocFile& insert (DgPolygon& poly, const std::string* label = nullptr,
                                 const DgLocation* cent = nullptr,
                                 const DgDataList* dataList = nullptr);
 
@@ -81,9 +81,9 @@ class DgOutShapefile : public DgOutLocFile {
 
       const DgGeoSphRF& geoRF (void) const { return geoRF_; }
 
-      int    defIntAttribute (void) const { return defIntAttribute_; }
-      double defDblAttribute (void) const { return defDblAttribute_; }
-      string defStrAttribute (void) const { return defStrAttribute_; }
+      int         defIntAttribute (void) const { return defIntAttribute_; }
+      double      defDblAttribute (void) const { return defDblAttribute_; }
+      std::string defStrAttribute (void) const { return defStrAttribute_; }
 
       void setDefIntAttribute (int val)    { defIntAttribute_ = val; }
       void setDefDblAttribute (double val) { defDblAttribute_ = val; }
@@ -96,8 +96,8 @@ class DgOutShapefile : public DgOutLocFile {
       DBFHandle dbFile_;
       SHPHandle shpFile_;
 
-      string dbFileName_;
-      string shpFileName_;
+      std::string dbFileName_;
+      std::string shpFileName_;
 
       int recNum_;
       int numDigits_;
@@ -107,13 +107,13 @@ class DgOutShapefile : public DgOutLocFile {
       // default attribute values
       int defIntAttribute_;
       long double defDblAttribute_;
-      string defStrAttribute_;
+      std::string defStrAttribute_;
 
       set<DgDBFfield> curFields_; // non-null fields for current cell being written
 
       virtual DgOutLocFile& insert (const DgDVec2D& pt);
 
-      void writeDbf (const string& id);
+      void writeDbf (const std::string& id);
 };
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -43,7 +43,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-DgIDGG::DgIDGG (const DgIDGGSBase* dggs, unsigned int aperture, int res, const string& name,
+DgIDGG::DgIDGG (const DgIDGGSBase* dggs, unsigned int aperture, int res, const std::string& name,
        DgGridTopology gridTopoIn, DgGridMetric gridMetric, unsigned int precision,
        bool isMixed43, int numAp4, bool isSuperfund, int sfRes, bool isApSeq,
        const DgApSeq& apSeq)
@@ -80,8 +80,8 @@ DgIDGG::initialize (void)
 
    // verify parameter validity
 
-   string apErrStr = string("DgIDGG::initialize(): invalid aperture " +
-            dgg::util::to_string(aperture()) + string(" for grid topo ") +
+   std::string apErrStr = std::string("DgIDGG::initialize(): invalid aperture " +
+            dgg::util::to_string(aperture()) + std::string(" for grid topo ") +
             to_string(gridTopo()));
 
    if (gridTopo() == Hexagon) {

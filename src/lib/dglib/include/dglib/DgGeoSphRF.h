@@ -37,9 +37,9 @@ class DgGeoSphRF : public DgEllipsoidRF {
    public:
 
       enum DgLonWrapMode { Wrap, UnwrapWest, UnwrapEast, InvalidLonWrapMode };
-      static const string lonWrapModeStrings[];
+      static const std::string lonWrapModeStrings[];
 
-      static const DgGeoSphRF* makeRF (DgRFNetwork& networkIn, const string& nameIn = "GeodeticSph",
+      static const DgGeoSphRF* makeRF (DgRFNetwork& networkIn, const std::string& nameIn = "GeodeticSph",
                   long double earthRadiusKMin = DEFAULT_RADIUS_KM)
          { return new DgGeoSphRF (networkIn, nameIn, earthRadiusKMin); }
 
@@ -93,7 +93,7 @@ class DgGeoSphRF : public DgEllipsoidRF {
 
    protected:
 
-      DgGeoSphRF (DgRFNetwork& networkIn, const string& nameIn = "GeodeticSph",
+      DgGeoSphRF (DgRFNetwork& networkIn, const std::string& nameIn = "GeodeticSph",
                   long double earthRadiusKMin = DEFAULT_RADIUS_KM)
          : DgEllipsoidRF (networkIn, nameIn, earthRadiusKMin * 1000L,
                 earthRadiusKMin * 1000L)
@@ -124,7 +124,7 @@ class DgGeoSphDegRF : public DgContCartRF {
    public:
 
       static const DgGeoSphDegRF* makeRF(const DgGeoSphRF& geoRFin,
-                     const string& nameIn = "GeodeticSphDeg")
+                     const std::string& nameIn = "GeodeticSphDeg")
          { return new DgGeoSphDegRF(geoRFin, nameIn); }
 
       const DgGeoSphRF& geoRF (void) const { return geoRF_; }
@@ -132,7 +132,7 @@ class DgGeoSphDegRF : public DgContCartRF {
    protected:
 
       DgGeoSphDegRF (const DgGeoSphRF& geoRFin,
-                     const string& nameIn = "GeodeticSphDeg");
+                     const std::string& nameIn = "GeodeticSphDeg");
 
       const DgGeoSphRF& geoRF_;
 };

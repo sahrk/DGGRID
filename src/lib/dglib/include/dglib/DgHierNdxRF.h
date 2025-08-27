@@ -33,8 +33,6 @@
 #include <dglib/DgIDGG.h>
 #include <dglib/DgHierNdxSystemRFBase.h>
 
-using namespace std;
-
 ////////////////////////////////////////////////////////////////////////////////
 template <class T> class DgHierNdxCoord  {
 
@@ -77,8 +75,8 @@ template <class T> class DgHierNdxCoord  {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-template <class T> inline ostream&
-operator<< (ostream& stream, const DgHierNdxCoord<T>& coord)
+template <class T> inline std::ostream&
+operator<< (std::ostream& stream, const DgHierNdxCoord<T>& coord)
 { return stream << std::string(coord); }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -101,7 +99,7 @@ template <class C> class DgHierNdxRF :
       int aperture (void) const { return sys_.aperture(); }
 
       // indexes don't typically use delimiters
-      virtual string add2str (const C& add, char delimiter) const
+      virtual std::string add2str (const C& add, char delimiter) const
                        { return add2str(add); }
 
       //virtual const C& undefAddress (void) const { return undefCoord; }
@@ -113,14 +111,14 @@ template <class C> class DgHierNdxRF :
                 { return undefAddress(); }
       virtual DgQ2DICoord invQuantify (const C& add) const
                 { return DgQ2DICoord::undefDgQ2DICoord; }
-      virtual string add2str (const C& add) const { return dgg::util::to_string(add); }
+      virtual std::string add2str (const C& add) const { return dgg::util::to_string(add); }
       virtual const char* str2add (C* c, const char* str, char delimiter) const
                       { return str; }
 
       // these should use the associated dgg
       virtual long long int dist (const C& add1, const C& add2) const
                        { return 0; }
-      virtual string dist2str (const long long int& dist) const
+      virtual std::string dist2str (const long long int& dist) const
                        { return dgg::util::to_string(dist); }
       virtual long double dist2dbl (const long long int& dist) const
                        { return dist; }
@@ -131,12 +129,12 @@ template <class C> class DgHierNdxRF :
 
    protected:
 
-      DgHierNdxRF<C> (const DgHierNdxSystemRFBase& sysIn, int resIn, const string& nameIn)
+      DgHierNdxRF<C> (const DgHierNdxSystemRFBase& sysIn, int resIn, const std::string& nameIn)
          : DgDiscRF<C, DgQ2DICoord, long long int>(sysIn.dggs().network(),
                        sysIn.dggs().idggBase(resIn), nameIn),
            sys_ (sysIn) { }
 /*
-      void initSystem (const DgIDGGS& dggsIn, int resIn, const string& nameIn)
+      void initSystem (const DgIDGGS& dggsIn, int resIn, const std::string& nameIn)
          {
            sys_ = new DgHierNdxSystemRF(dggsIn, resIn, nameIn + "Sys");
          }

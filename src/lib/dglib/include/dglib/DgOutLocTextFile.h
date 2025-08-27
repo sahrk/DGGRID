@@ -32,8 +32,6 @@
 #include <fstream>
 #include <string>
 
-using namespace std;
-
 ////////////////////////////////////////////////////////////////////////////////
 class DgOutLocTextFile : public DgOutputStream, public DgOutLocFile {
 
@@ -45,7 +43,7 @@ class DgOutLocTextFile : public DgOutputStream, public DgOutLocFile {
       const char *formatStr() const { return formatStr_.c_str(); }
 
       // direct the DgOutLocFile abstract methods to the DgOutputStream ones
-      virtual bool open (const string& fileName,
+      virtual bool open (const std::string& fileName,
                 DgReportLevel failLevel = DgBase::Fatal)
               { return DgOutputStream::open(fileName, failLevel); }
 
@@ -54,9 +52,9 @@ class DgOutLocTextFile : public DgOutputStream, public DgOutLocFile {
 
    protected:
 
-      DgOutLocTextFile (const string& fileName, const DgRFBase& rf,
+      DgOutLocTextFile (const std::string& fileName, const DgRFBase& rf,
                         bool isPointFile = false,
-                        const string& suffix = string(""),
+                        const std::string& suffix = std::string(""),
 			int precision = 7,
                         DgReportLevel failLevel = DgBase::Fatal);
 
@@ -70,18 +68,18 @@ class DgOutLocTextFile : public DgOutputStream, public DgOutLocFile {
 };
 
 inline DgOutLocTextFile& operator<< (DgOutLocTextFile& file, const char* str)
-              { ostream& o = file; o << str; return file; }
+              { std::ostream& o = file; o << str; return file; }
 
-inline DgOutLocTextFile& operator<< (DgOutLocTextFile& file, const string& str)
-              { ostream& o = file; o << str; return file; }
+inline DgOutLocTextFile& operator<< (DgOutLocTextFile& file, const std::string& str)
+              { std::ostream& o = file; o << str; return file; }
 
 inline DgOutLocTextFile& operator<< (DgOutLocTextFile& file, long double val)
-              { ostream& o = file; o << val; return file; }
+              { std::ostream& o = file; o << val; return file; }
 
 inline DgOutLocTextFile& operator<< (DgOutLocTextFile& file, float val)
-              { ostream& o = file; o << val; return file; }
+              { std::ostream& o = file; o << val; return file; }
 
 inline DgOutLocTextFile& operator<< (DgOutLocTextFile& file, int val)
-              { ostream& o = file; o << val; return file; }
+              { std::ostream& o = file; o << val; return file; }
 
 #endif

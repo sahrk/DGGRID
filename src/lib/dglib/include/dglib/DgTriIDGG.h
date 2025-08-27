@@ -41,7 +41,7 @@ class DgTriIDGG : public DgIDGGBase {
    public:
 
       DgTriIDGG (const DgIDGGS4T& dggs, unsigned int aperture = 4,
-              int res = 0, const string& name = "TriIDGG",
+              int res = 0, const std::string& name = "TriIDGG",
               unsigned int precision = DEFAULT_PRECISION);
 
       DgTriIDGG (const DgTriIDGG& grd);

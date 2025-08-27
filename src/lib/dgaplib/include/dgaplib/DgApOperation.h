@@ -100,7 +100,7 @@ struct DgApOperation {
    }
 
    // the sub-operations
-   vector<DgApSubOperation*> subops;
+   std::vector<DgApSubOperation*> subops;
 };
 
 ////////////////////////////////////////////////////////////////////////////////

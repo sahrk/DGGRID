@@ -100,23 +100,23 @@ DgQ2DItoZ3StringConverter::DgQ2DItoZ3StringConverter
 DgZ3StringCoord
 DgQ2DItoZ3StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
 {
-   string qstr = dgg::util::to_string(addIn.quadNum(), 2);
-   string addstr = qstr;
+   std::string qstr = dgg::util::to_string(addIn.quadNum(), 2);
+   std::string addstr = qstr;
 
 /*
    if (IDGG().dggs()->aperture() == 3) {
-      dgcout << "Class " << ((IDGG().isClassI()) ? "I" : "II") << endl;
+      dgcout << "Class " << ((IDGG().isClassI()) ? "I" : "II") << std::endl;
    }
 */
    if (effRes_ > 0) {
-//dgcout << "** addIn " << addIn << endl;
+//dgcout << "** addIn " << addIn << std::endl;
       DgRadixString rs1(effRadix_, (int) addIn.coord().i(), effRes_);
       DgRadixString rs2(effRadix_, (int) addIn.coord().j(), effRes_);
-//dgcout << "rs1 " << rs1 << endl;
-//dgcout << "rs2 " << rs2 << endl;
+//dgcout << "rs1 " << rs1 << std::endl;
+//dgcout << "rs2 " << rs2 << std::endl;
 
-      string digits1 = rs1.digits();
-      string digits2 = rs2.digits();
+      std::string digits1 = rs1.digits();
+      std::string digits2 = rs2.digits();
 
       int n1 = (int) digits1.length();
       int n2 = (int) digits2.length();
@@ -132,7 +132,7 @@ DgQ2DItoZ3StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
 
       // table of Z3 digits corresponding to the
       // class I (i,j) coordinates
-      static const string z3digits[3][3] = {
+      static const std::string z3digits[3][3] = {
        // j = 0     1     2
            {"00", "22", "21"}, // i == 0
            {"01", "02", "20"}, // i == 1
@@ -151,7 +151,7 @@ DgQ2DItoZ3StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
 
    DgZ3StringCoord zorder;
    zorder.setValString(addstr);
-//dgcout << "zorder " << zorder << endl;
+//dgcout << "zorder " << zorder << std::endl;
 
    return zorder;
 
@@ -197,10 +197,10 @@ DgZ3StringToQ2DIConverter::DgZ3StringToQ2DIConverter
 DgQ2DICoord
 DgZ3StringToQ2DIConverter::convertTypedAddress (const DgZ3StringCoord& addIn) const
 {
-   string addstr = addIn.valString();
+   std::string addstr = addIn.valString();
 
    // first get the quad number
-   string qstr = addstr.substr(0, 2);
+   std::string qstr = addstr.substr(0, 2);
    if (qstr[0] == '0') // leading 0
       qstr = qstr.substr(1, 1);
    int quadNum = std::stoi(qstr);
@@ -212,21 +212,21 @@ DgZ3StringToQ2DIConverter::convertTypedAddress (const DgZ3StringCoord& addIn) co
    int index = 2; // skip the two quad digits
 
    // the rest is the Z3 digit string
-   string z3str = addstr.substr(index);
+   std::string z3str = addstr.substr(index);
 
 //dgcout << "z3str in: " << z3str;
 
    // adjust if Class II (odd res)
    if (z3str.length() % 2)
       z3str += "0";
-//dgcout << " adjusted: " << z3str << endl;
+//dgcout << " adjusted: " << z3str << std::endl;
 
    // build the digit string for i and j from the two-digit
    // z3 codes
-   string radStr1 = "";
-   string radStr2 = "";
+   std::string radStr1 = "";
+   std::string radStr2 = "";
    for (int i = 0; i < z3str.length(); i += 2) {
-      string z3code = z3str.substr(i, 2);
+      std::string z3code = z3str.substr(i, 2);
       if (z3code == "00") {
          radStr1 += "0";
          radStr2 += "0";
@@ -256,16 +256,16 @@ DgZ3StringToQ2DIConverter::convertTypedAddress (const DgZ3StringCoord& addIn) co
          radStr2 += "2";
       }
 //      dgcout << "z3code: " << z3code << " radStr1: " << radStr1
-//             << " radStr2: " << radStr2 << endl;
+//             << " radStr2: " << radStr2 << std::endl;
    }
 
    DgRadixString rad1(effRadix_, radStr1);
    DgRadixString rad2(effRadix_, radStr2);
 
-//   dgcout << "qstr: " << qstr << " rad1: " << rad1 << " rad2: " << rad2 << endl;
+//   dgcout << "qstr: " << qstr << " rad1: " << rad1 << " rad2: " << rad2 << std::endl;
 
    DgQ2DICoord q2di(quadNum, DgIVec2D(rad1.value(), rad2.value()));
-   //dgcout << "q2di: " << q2di << endl;
+   //dgcout << "q2di: " << q2di << std::endl;
 
    return q2di;
 

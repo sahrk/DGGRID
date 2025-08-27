@@ -68,7 +68,7 @@ template<class A, class B, class DB> class DgBoundedRF
       virtual const DgRF<B, DB>& backFrame (void) const
                      { return discRF().backFrame(); }
 
-      virtual string dist2str (const long long int& dist) const
+      virtual std::string dist2str (const long long int& dist) const
                      { return discRF().dist2str(dist); }
 
       virtual long double dist2dbl (const long long int& dist) const

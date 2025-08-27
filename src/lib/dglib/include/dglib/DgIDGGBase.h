@@ -54,7 +54,7 @@ class DgIDGGBase : public DgDiscTopoRF<DgQ2DICoord, DgGeoCoord, long double> {
    public:
 
       static const DgIDGGBase* makeRF (const DgIDGGSBase* dggs, const DgGeoSphRF& geoRFIn,
-                  unsigned int apertureIn, int resIn, const string& nameIn = "IDGG",
+                  unsigned int apertureIn, int resIn, const std::string& nameIn = "IDGG",
                   DgGridTopology gridTopo = Hexagon, DgGridMetric gridMetric = D6,
                   unsigned int precisionIn = DEFAULT_PRECISION)
          { return new DgIDGGBase (dggs, geoRFIn, apertureIn, resIn, nameIn,
@@ -67,7 +67,7 @@ class DgIDGGBase : public DgDiscTopoRF<DgQ2DICoord, DgGeoCoord, long double> {
       const DgGeoSphRF&  geoRF      (void) const;
       const DgGeoCoord&  vert0      (void) const;
       long double        azDegs     (void) const;
-      const string&      projType   (void) const;
+      const std::string& projType   (void) const;
       DgGridTopology     gridTopo   (void) const;
       DgGridMetric       gridMetric (void) const;
 
@@ -123,10 +123,10 @@ class DgIDGGBase : public DgDiscTopoRF<DgQ2DICoord, DgGeoCoord, long double> {
         { precision_ = precisionIn;
           gridStats_.setPrecision(precision()); }
 
-      virtual string add2str (const DgQ2DICoord& add) const
-                 { return string(add); }
+      virtual std::string add2str (const DgQ2DICoord& add) const
+                 { return std::string(add); }
 
-      virtual string add2str (const DgQ2DICoord& add, char delimiter) const
+      virtual std::string add2str (const DgQ2DICoord& add, char delimiter) const
         { return dgg::util::to_string(add.quadNum()) + delimiter +
                  dgg::util::to_string(add.coord().i()) + delimiter +
                  dgg::util::to_string(add.coord().j()); }
@@ -179,7 +179,7 @@ class DgIDGGBase : public DgDiscTopoRF<DgQ2DICoord, DgGeoCoord, long double> {
    protected:
 
       DgIDGGBase (const DgIDGGSBase* dggs, const DgGeoSphRF& geoRFIn,
-                  unsigned int apertureIn, int resIn, const string& nameIn = "IDGG",
+                  unsigned int apertureIn, int resIn, const std::string& nameIn = "IDGG",
                   DgGridTopology gridTopo = Hexagon, DgGridMetric gridMetric = D6,
                   unsigned int precisionIn = DEFAULT_PRECISION);
 
@@ -244,12 +244,12 @@ class DgIDGGBase : public DgDiscTopoRF<DgQ2DICoord, DgGeoCoord, long double> {
    friend class DgQ2DDtoIConverter;
    friend class DgBoundedIDGG;
 
-   friend ostream& operator<< (ostream& stream, const DgIDGGBase& dgg);
+   friend std::ostream& operator<< (std::ostream& stream, const DgIDGGBase& dgg);
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-inline ostream&
-operator<< (ostream& stream, const DgIDGGBase& dgg)
+inline std::ostream&
+operator<< (std::ostream& stream, const DgIDGGBase& dgg)
 {
    stream << "geoRF: " << dgg.geoRF();
    stream << "\nvert0: " << dgg.vert0();

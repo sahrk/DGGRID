@@ -34,8 +34,6 @@
 #include <fstream>
 #include <string>
 
-using namespace std;
-
 class DgIDGGBase;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -43,16 +41,16 @@ class DgOutNeighborsFile : public DgOutputStream {
 
    public:
 
-      DgOutNeighborsFile (const string& fileName,
+      DgOutNeighborsFile (const std::string& fileName,
                         const DgIDGGBase& dgg,
                         const DgRFBase* outRF = NULL,
-                        const string& suffix = string("nbr"),
+                        const std::string& suffix = std::string("nbr"),
                         DgReportLevel failLevel = DgBase::Fatal);
 
       virtual DgOutNeighborsFile& insert (const DgLocation& center,
                                           DgLocVector& vec);
 
-      virtual bool open (const string& fileName,
+      virtual bool open (const std::string& fileName,
                          DgReportLevel failLevel = DgBase::Fatal)
               { return DgOutputStream::open(fileName, failLevel); }
 
@@ -65,21 +63,21 @@ class DgOutNeighborsFile : public DgOutputStream {
 };
 
 inline DgOutNeighborsFile& operator<< (DgOutNeighborsFile& file, const char* str)
-              { ostream& o = file; o << str; return file; }
+              { std::ostream& o = file; o << str; return file; }
 
-inline DgOutNeighborsFile& operator<< (DgOutNeighborsFile& file, const string& str)
-              { ostream& o = file; o << str; return file; }
+inline DgOutNeighborsFile& operator<< (DgOutNeighborsFile& file, const std::string& str)
+              { std::ostream& o = file; o << str; return file; }
 
 inline DgOutNeighborsFile& operator<< (DgOutNeighborsFile& file, long double val)
-              { ostream& o = file; o << val; return file; }
+              { std::ostream& o = file; o << val; return file; }
 
 inline DgOutNeighborsFile& operator<< (DgOutNeighborsFile& file, float val)
-              { ostream& o = file; o << val; return file; }
+              { std::ostream& o = file; o << val; return file; }
 
 inline DgOutNeighborsFile& operator<< (DgOutNeighborsFile& file, int val)
-              { ostream& o = file; o << val; return file; }
+              { std::ostream& o = file; o << val; return file; }
 
 inline DgOutNeighborsFile& operator<< (DgOutNeighborsFile& file, unsigned long long val)
-              { ostream& o = file; o << val; return file; }
+              { std::ostream& o = file; o << val; return file; }
 
 #endif

@@ -34,7 +34,7 @@ class DgInAIGenFile : public DgInLocStreamFile {
 
    public:
 
-      DgInAIGenFile (const DgRFBase& rfIn, const string* fileNameIn = NULL,
+      DgInAIGenFile (const DgRFBase& rfIn, const std::string* fileNameIn = NULL,
                         DgReportLevel failLevel = DgBase::Fatal);
 
       bool forcePolyLine (void) const { return forcePolyLine_; }

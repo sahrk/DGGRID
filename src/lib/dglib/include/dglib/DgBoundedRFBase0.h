@@ -69,9 +69,9 @@ class DgBoundedRFBase0 {
                      const DgLocation& loc2, bool convert = true) const
                  { return (seqNum(loc1, convert) < seqNum(loc2, convert)); }
 
-      virtual operator string (void) const
+      virtual operator std::string (void) const
       {
-         string s = "=== DgBoundedRFBase0: size: " + dgg::util::to_string(size());
+         std::string s = "=== DgBoundedRFBase0: size: " + dgg::util::to_string(size());
          s += " zeroBased: " + dgg::util::to_string(zeroBased());
          s += "\n   -- first: " + first().asString();
          s += "\n   -- last: " + last().asString();
@@ -83,7 +83,7 @@ class DgBoundedRFBase0 {
 
       // provide a generic interface to the discrete grid functionality
 
-      virtual string dist2str (const long long int& dist) const = 0;
+      virtual std::string dist2str (const long long int& dist) const = 0;
       virtual long double dist2dbl (const long long int& dist) const = 0;
 
       virtual unsigned long long int dist2int (const long long int& dist) const = 0;
@@ -134,7 +134,7 @@ class DgBoundedRFBase0 {
 
 ////////////////////////////////////////////////////////////////////////////////
 template<class B, class DB> inline
-ostream& operator<< (ostream& stream, const DgBoundedRFBase0& rfIn)
+std::ostream& operator<< (std::ostream& stream, const DgBoundedRFBase0& rfIn)
 { return stream << "Bnd-" << rfIn.rf(); }
 
 ////////////////////////////////////////////////////////////////////////////////

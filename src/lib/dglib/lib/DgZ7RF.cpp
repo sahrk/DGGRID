@@ -126,9 +126,9 @@ DgZ7Coord::valString (void) const
    char str[maxStrSize];
    snprintf(str, maxStrSize, "%016" PRIx64, value_);
 
-   return string(str);
+   return std::string(str);
 
-} // const string& DgZ7RF::valString
+} // const std::string& DgZ7RF::valString
 
 ////////////////////////////////////////////////////////////////////////////////
 DgZ7StringtoZ7Converter::DgZ7StringtoZ7Converter
@@ -170,11 +170,11 @@ DgZ7StringtoZ7Converter::convertTypedAddress (const DgZ7StringCoord& addIn) cons
 
    //printf("DgZ7StringtoZ7Converter::convertTypedAddress()\n");
 
-   string addstr = addIn.valString();
+   std::string addstr = addIn.valString();
    uint64_t z = 0;
 
    // first get the quad number and add to the val
-   string qstr = addstr.substr(0, 2);
+   std::string qstr = addstr.substr(0, 2);
    if (qstr[0] == '0') // leading 0
       qstr = qstr.substr(1, 1);
    int quadNum = std::stoi(qstr);
@@ -183,7 +183,7 @@ DgZ7StringtoZ7Converter::convertTypedAddress (const DgZ7StringCoord& addIn) cons
    int index = 2; // skip the two quad digits
 
    // the rest is the radix string
-   string radStr = addstr.substr(index);
+   std::string radStr = addstr.substr(index);
 
    // now get the digits
    int r = 1;
@@ -247,7 +247,7 @@ DgZ7ToZ7StringConverter::convertTypedAddress (const DgZ7Coord& addIn) const
    uint64_t z = addIn.value();
 
    int quadNum = Z7_GET_QUADNUM(z);
-   string s = dgg::util::to_string(quadNum, 2);
+   std::string s = dgg::util::to_string(quadNum, 2);
 
    for (int r = 1; r <= res_; r++) {
       // get the integer digit

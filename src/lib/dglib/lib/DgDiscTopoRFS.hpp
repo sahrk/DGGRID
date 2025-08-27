@@ -48,7 +48,7 @@ DgDiscTopoRFS<A, B, DB>::str2add (DgResAdd<A>* add, const char* str,
    if (sscanf(tok, "%d", &res) != 1)
    {
       ::report("DgDiscTopoRFS<A, B, DB>::str2add() invalid res string " +
-               string(tok), DgBase::Fatal);
+               std::string(tok), DgBase::Fatal);
    }
 
    // now get the address

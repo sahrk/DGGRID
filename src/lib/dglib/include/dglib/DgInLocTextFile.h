@@ -37,7 +37,7 @@ class DgInLocTextFile : public DgInLocStreamFile
 public:
 
     DgInLocTextFile (const DgRFBase& rfIn,
-                     const string* fileNameIn = nullptr,
+                     const std::string* fileNameIn = nullptr,
                      DgReportLevel failLevel = DgBase::Fatal);
 
    ~DgInLocTextFile (void);

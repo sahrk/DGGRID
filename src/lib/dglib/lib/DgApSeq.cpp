@@ -31,6 +31,6 @@
 const int DgAperture::defaultAperture = 4;
 
 const DgApSeq DgApSeq::defaultApSeq;
-const string DgApSeq::defaultEmptyApSeqStr = "EMPTY_APSEQ";
+const std::string DgApSeq::defaultEmptyApSeqStr = "EMPTY_APSEQ";
 
 ////////////////////////////////////////////////////////////////////////////////

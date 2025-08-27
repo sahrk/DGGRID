@@ -35,14 +35,14 @@ void
 DgHexC1Grid2D::setAddVertices (const DgIVec2D& add, DgPolygon& vec) const
 {
 
-   vector<DgAddressBase*>& v = vec.addressVec();
+   std::vector<DgAddressBase*>& v = vec.addressVec();
 
    // find the center
 
 #if DGDEBUG
 dgcout << setprecision(20) << "^^^^^^^^^^^^^^^^^\nDgHexC1Grid2D::setAddVertices"
-       << endl;
-dgcout << "^^ input: " << add << endl;
+       << std::endl;
+dgcout << "^^ input: " << add << std::endl;
 dgcout.flush();
 #endif
 
@@ -65,7 +65,7 @@ dgcout.flush();
 void
 DgHexC1Grid2D::setAddNeighbors (const DgIVec2D& add, DgLocVector& vec) const
 {
-   vector<DgAddressBase*>& v = vec.addressVec();
+   std::vector<DgAddressBase*>& v = vec.addressVec();
 
    // ccw starting at (1, 0)
    v.push_back(new DgAddress<DgIVec2D>(DgIVec2D(add.i() + 1,     add.j())));
@@ -81,7 +81,7 @@ DgHexC1Grid2D::setAddNeighbors (const DgIVec2D& add, DgLocVector& vec) const
 void
 DgHexC1Grid2D::setAddNeighborsBdry2 (const DgIVec2D& add, DgLocVector& vec) const
 {
-   vector<DgAddressBase*>& v = vec.addressVec();
+   std::vector<DgAddressBase*>& v = vec.addressVec();
 
    // ccw starting at (1, 0)
    v.push_back(new DgAddress<DgIVec2D>(DgIVec2D(add.i() + 2, add.j() + 1)));

@@ -27,8 +27,6 @@
 
 #include <vector>
 
-using namespace std;
-
 #include <dglib/DgAddress.h>
 #include <dglib/DgConverterBase.h>
 #include <dglib/DgRF.h>

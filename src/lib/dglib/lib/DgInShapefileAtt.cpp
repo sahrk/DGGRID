@@ -34,7 +34,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 DgInShapefileAtt::DgInShapefileAtt (const DgGeoSphRF& geoRFIn,
-            const string* fileNameIn, DgReportLevel failLevelIn)
+            const std::string* fileNameIn, DgReportLevel failLevelIn)
    : DgInShapefile (geoRFIn, fileNameIn, failLevelIn),
       dbfFile_ (NULL), numFields_ (0)
 {
@@ -47,7 +47,7 @@ DgInShapefileAtt::DgInShapefileAtt (const DgGeoSphRF& geoRFIn,
 
 ////////////////////////////////////////////////////////////////////////////////
 bool
-DgInShapefileAtt::open (const string* fileNameIn, DgReportLevel failLevelIn)
+DgInShapefileAtt::open (const std::string* fileNameIn, DgReportLevel failLevelIn)
 {
    if (!DgInShapefile::open(fileNameIn, failLevelIn))
       return false;

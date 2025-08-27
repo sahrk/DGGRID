@@ -32,8 +32,6 @@
 #include <fstream>
 #include <string>
 
-using namespace std;
-
 class DgLocList;
 class DgLocVector;
 class DgPolygon;
@@ -48,10 +46,10 @@ class DgInShapefile : public DgInLocFile {
    public:
 
       DgInShapefile (const DgGeoSphRF& geoRFIn,
-                     const string* fileNameIn = NULL,
+                     const std::string* fileNameIn = NULL,
                      DgReportLevel failLevel = DgBase::Fatal);
 
-      virtual bool open (const string* fileName = NULL,
+      virtual bool open (const std::string* fileName = NULL,
                  DgReportLevel failLevel = DgBase::Fatal);
 
       virtual void close (void);

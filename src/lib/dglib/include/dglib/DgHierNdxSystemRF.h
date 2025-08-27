@@ -38,8 +38,6 @@ class DgHierNdxRFInt;
 class DgHierNdxSystemRFSBase;
 template <typename TINT, typename TSTR> class DgHierNdxSystemRFS;
 
-using namespace std;
-
 ////////////////////////////////////////////////////////////////////////////////
 template <class TINT, class TSTR> class DgHierNdxSystemRF : 
                    public DgHierNdxSystemRFBase {
@@ -57,7 +55,7 @@ template <class TINT, class TSTR> class DgHierNdxSystemRF :
 
       DgHierNdxSystemRF<TINT, TSTR> (
             const DgHierNdxSystemRFS<TINT, TSTR>& hierNdxRFSIn, 
-            int resIn = 0, const string& nameIn = "DgHierNdxSystemRF")
+            int resIn = 0, const std::string& nameIn = "DgHierNdxSystemRF")
          : DgHierNdxSystemRFBase(hierNdxRFSIn, resIn, nameIn)
       {
          if (resIn < 0 || resIn >= hierNdxRFS_.nRes()) return;

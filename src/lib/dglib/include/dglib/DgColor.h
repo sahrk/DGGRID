@@ -128,7 +128,7 @@ inline bool operator== (const DgColor& color1, const DgColor& color2)
 inline bool operator!= (const DgColor& color1, const DgColor& color2)
              { return !(color1 == color2); }
 
-inline ostream& operator<< (ostream& stream, const DgColor& color)
+inline std::ostream& operator<< (std::ostream& stream, const DgColor& color)
              { return stream << color.name(); }
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -33,7 +33,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-DgOutPtsText::DgOutPtsText (const DgRFBase& rfIn, const string& fileNameIn,
+DgOutPtsText::DgOutPtsText (const DgRFBase& rfIn, const std::string& fileNameIn,
                           int precision, DgReportLevel failLevel)
    : DgOutLocTextFile (fileNameIn, rfIn, true, "txt", precision, failLevel)
 {
@@ -71,7 +71,7 @@ DgOutPtsText::insert (const DgDVec2D& pt)
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutPtsText::insert (DgLocation& loc, const string* label,
+DgOutPtsText::insert (DgLocation& loc, const std::string* label,
                   const DgDataList* /* dataList */)
 //
 // Put the point loc.
@@ -94,7 +94,7 @@ DgOutPtsText::insert (DgLocation& loc, const string* label,
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutPtsText::insert (DgLocVector&, const string*, const DgLocation*,
+DgOutPtsText::insert (DgLocVector&, const std::string*, const DgLocation*,
                   const DgDataList*)
 //
 // Put the polyline vec.
@@ -109,7 +109,7 @@ DgOutPtsText::insert (DgLocVector&, const string*, const DgLocation*,
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutPtsText::insert (DgPolygon&, const string*, const DgLocation*,
+DgOutPtsText::insert (DgPolygon&, const std::string*, const DgLocation*,
                   const DgDataList*)
 //
 // Put the polygon poly.

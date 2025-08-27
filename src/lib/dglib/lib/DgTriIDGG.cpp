@@ -38,7 +38,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgTriIDGG::DgTriIDGG (const DgIDGGS4T& dggs, unsigned int aperture,
-              int res, const string& name, unsigned int precision)
+              int res, const std::string& name, unsigned int precision)
    : DgIDGGBase (&dggs, dggs.geoRF(), aperture, res, name, Triangle, D3, precision),
 	   scaleFac_ (1.0L)
 {
@@ -71,9 +71,9 @@ DgTriIDGG::initialize (void)
 {
    // verify parameter validity
 
-   string apErrStr = string("DgTriIDGG::initialize(): invalid aperture " +
+   std::string apErrStr = std::string("DgTriIDGG::initialize(): invalid aperture " +
                          dgg::util::to_string(aperture()) +
-                         string(" for grid topo ") + to_string(gridTopo()));
+                         std::string(" for grid topo ") + to_string(gridTopo()));
 
    if (gridTopo() != Triangle) {
       report("DgTriIDGG::initialize(): invalid grid topo " + to_string(gridTopo()),
@@ -104,8 +104,8 @@ DgTriIDGG::initialize (void)
    // set-up local network to scale so that quad (and consequently tri) edge
    // length is 1.0
    ccFrame_ = DgContCartRF::makeRF(locNet_, name() + "CC1");
-   grid2DS_ = DgTriGrid2DS::makeRF(locNet_, ccFrame(), res() + 1, 4, true, false, name() + string("H2DS"));
-   //cout << "== NEW GRID2DS:" << endl;
+   grid2DS_ = DgTriGrid2DS::makeRF(locNet_, ccFrame(), res() + 1, 4, true, false, name() + std::string("H2DS"));
+   //cout << "== NEW GRID2DS:" << std::endl;
    //cout << *grid2DS_;
 
    if (res() == 0)
@@ -117,7 +117,7 @@ DgTriIDGG::initialize (void)
       maxD_ = factor+0.000001 - 1.0L;
 
       //cout << res() << " " << aperture();
-      //cout << " f: " << factor << " maxD: " << maxD_ << endl;
+      //cout << " f: " << factor << " maxD: " << maxD_ << std::endl;
    }
 
    maxI_ = maxD();

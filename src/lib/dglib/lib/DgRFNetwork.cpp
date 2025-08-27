@@ -89,7 +89,7 @@ DgRFNetwork::getConverter (const DgRFBase& fromFrame,
       if (!fromFrame.connectTo() || !toFrame.connectFrom())
       {
          report("DgRFNetwork::getConverter() frames not connected: " +
-                 fromFrame.name() + string(" -> ") + toFrame.name(),
+                 fromFrame.name() + std::string(" -> ") + toFrame.name(),
                 DgBase::Fatal);
          return 0;
       }

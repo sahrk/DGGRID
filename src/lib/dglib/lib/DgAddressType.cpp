@@ -31,7 +31,7 @@ using namespace std;
 namespace dgg { namespace addtype {
 
 ////////////////////////////////////////////////////////////////////////////////
-DgAddressType stringToAddressType (const string& str) {
+DgAddressType stringToAddressType (const std::string& str) {
    for (int i = 0; i < InvalidAddressType; i++)
       if (str == addTypeStrings[i]) return static_cast<DgAddressType>(i);
 
@@ -39,13 +39,13 @@ DgAddressType stringToAddressType (const string& str) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-const string& to_string (DgAddressType t) {
+const std::string& to_string (DgAddressType t) {
    if (t <= InvalidAddressType) return addTypeStrings[t];
    return addTypeStrings[InvalidAddressType];
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-DgHierNdxSysType stringToHierNdxSysType (const string& str) {
+DgHierNdxSysType stringToHierNdxSysType (const std::string& str) {
    for (int i = 0; i < static_cast<int>(DgHierNdxSysType::InvalidHierNdxSysType); i++)
       if (str == hierNdxSysTypeStrings[i]) return static_cast<DgHierNdxSysType>(i);
 
@@ -53,13 +53,13 @@ DgHierNdxSysType stringToHierNdxSysType (const string& str) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-const string& to_string (DgHierNdxSysType t) {
+const std::string& to_string (DgHierNdxSysType t) {
    if (t <= DgHierNdxSysType::InvalidHierNdxSysType) return hierNdxSysTypeStrings[static_cast<int>(t)];
    return hierNdxSysTypeStrings[static_cast<int>(DgHierNdxSysType::InvalidHierNdxSysType)];
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-DgHierNdxFormType stringToHierNdxFormType (const string& str) {
+DgHierNdxFormType stringToHierNdxFormType (const std::string& str) {
    for (int i = 0; i < InvalidHierNdxFormType; i++)
       if (str == hierNdxFormTypeStrings[i]) return static_cast<DgHierNdxFormType>(i);
 
@@ -67,7 +67,7 @@ DgHierNdxFormType stringToHierNdxFormType (const string& str) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-const string& to_string (DgHierNdxFormType t) {
+const std::string& to_string (DgHierNdxFormType t) {
    if (t <= InvalidHierNdxFormType) return hierNdxFormTypeStrings[t];
    return hierNdxFormTypeStrings[InvalidHierNdxFormType];
 }

@@ -47,9 +47,9 @@ class DgHierNdxSystemRFSBase :
       const DgIDGGSBase& dggs (void) const { return dggs_; }
       const DgIDGGBase& dgg (int res) const;
  
-      virtual operator string (void) const
+      virtual operator std::string (void) const
       {
-         string s = "*** DgHierNdxSystemRFSBase";
+         std::string s = "*** DgHierNdxSystemRFSBase";
          return s;
       }
 
@@ -83,7 +83,7 @@ class DgHierNdxSystemRFSBase :
    protected:
 
      DgHierNdxSystemRFSBase (const DgIDGGSBase& dggsIn, bool outModeIntIn = true,
-            const string& nameIn = "HierNdxSystemRFS");
+            const std::string& nameIn = "HierNdxSystemRFS");
                   
      // from above
      virtual const DgResAdd<DgHierNdx>& undefAddress (void) const;

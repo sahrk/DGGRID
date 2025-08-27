@@ -68,16 +68,16 @@ class DgBoundedRF2D : public DgBoundedRF<DgIVec2D, DgDVec2D, long double> {
 
       virtual DgIVec2D addFromSeqNum (unsigned long long int sNum) const;
 
-      virtual operator string (void) const
+      virtual operator std::string (void) const
       {
-         string s = "=== DgBoundedRF2D: " + DgBoundedRF::operator string();
-         s += "\n lowerLeft: " + string(lowerLeft());
-         s += "\n upperRight: " + string(upperRight());
+         std::string s = "=== DgBoundedRF2D: " + DgBoundedRF::operator std::string();
+         s += "\n lowerLeft: " + std::string(lowerLeft());
+         s += "\n upperRight: " + std::string(upperRight());
          s += "\n numI: " + dgg::util::to_string(numI());
          s += "\n numJ: " + dgg::util::to_string(numJ());
-         s += "\n firstAdd: " + string(firstAdd());
-         s += "\n lastAdd: " + string(lastAdd());
-         s += "\n endAdd: " + string(endAdd());
+         s += "\n firstAdd: " + std::string(firstAdd());
+         s += "\n lastAdd: " + std::string(lastAdd());
+         s += "\n endAdd: " + std::string(endAdd());
 
          return s;
       }

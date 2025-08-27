@@ -41,24 +41,24 @@ class DgOutPRPtsFile : public DgOutLocTextFile {
 
    public:
 
-      DgOutPRPtsFile (const DgRFBase& rfIn, const string& fileNameIn = "",
+      DgOutPRPtsFile (const DgRFBase& rfIn, const std::string& fileNameIn = "",
                    int precision = 7, DgReportLevel failLevel = DgBase::Fatal);
 
       virtual ~DgOutPRPtsFile (void) { if (good()) close(); }
 
-      virtual void close (void) { ofstream::close(); }
+      virtual void close (void) { std::ofstream::close(); }
 
-      DgOutLocFile& insert (DgLocation& loc, const string& type,
-                       const string* label = NULL);
+      DgOutLocFile& insert (DgLocation& loc, const std::string& type,
+                       const std::string* label = NULL);
 
-      virtual DgOutLocFile& insert (DgLocation& loc, const string* label = nullptr,
+      virtual DgOutLocFile& insert (DgLocation& loc, const std::string* label = nullptr,
                                 const DgDataList* dataList = nullptr);
 
-      virtual DgOutLocFile& insert (DgLocVector& vec, const string* label = nullptr,
+      virtual DgOutLocFile& insert (DgLocVector& vec, const std::string* label = nullptr,
                                 const DgLocation* cent = nullptr,
                                 const DgDataList* dataList = nullptr);
 
-      virtual DgOutLocFile& insert (DgPolygon& poly, const string* label = nullptr,
+      virtual DgOutLocFile& insert (DgPolygon& poly, const std::string* label = nullptr,
                                 const DgLocation* cent = nullptr,
                                 const DgDataList* dataList = nullptr);
 

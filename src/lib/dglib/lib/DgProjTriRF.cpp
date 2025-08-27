@@ -44,15 +44,15 @@ ostream& operator<< (ostream& str, const DgSphIcosa& dgsi)
    const SphIcosa& si = dgsi.sphIcosa_;
 
    DgGeoCoord tmp(si.pt);
-   str << "vert0: " << tmp << endl;
-   str << "az0: " << si.azimuth * 180.0 / M_PI << endl;
+   str << "vert0: " << tmp << std::endl;
+   str << "az0: " << si.azimuth * 180.0 / M_PI << std::endl;
 
    str << "vertices:\n";
    str << "{\n";
    for (int i = 0; i < 12; i++)
    {
       DgGeoCoord tmp(si.icoverts[i]);
-      str << "  " << i << ": " << tmp << endl;
+      str << "  " << i << ": " << tmp << std::endl;
    }
    str << "}\n";
 
@@ -66,7 +66,7 @@ ostream& operator<< (ostream& str, const DgSphIcosa& dgsi)
          DgGeoCoord tmp(si.icotri[i][j]);
          str << " " << tmp;
       }
-      str << endl;
+      str << std::endl;
    }
    str << "}\n";
 
@@ -313,7 +313,7 @@ DgProjTriRF::str2add (DgProjTriCoord* add, const char* str, char delimiter)
    if (sscanf(tok, "%d", &t) != 1)
    {
       ::report("DgProjTriRF::fromString() invalid value in string " +
-               string(tok), DgBase::Fatal);
+               std::string(tok), DgBase::Fatal);
    }
 
    const char* tmp = &(str[strlen(tok) + 1]);

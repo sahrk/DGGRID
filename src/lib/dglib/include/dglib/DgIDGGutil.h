@@ -53,8 +53,6 @@ class DgPolygon;
 class DgBoundedIDGG;
 class DgIDGGBase;
 
-using namespace std;
-
 ////////////////////////////////////////////////////////////////////////////////
 //
 //   Coordinate consisting of vertex number and (i, j) coordinates.
@@ -75,13 +73,13 @@ class DgQ2DICoord  {
       void setVertNum (int quadNumIn)           { quadNum_ = quadNumIn; }
       void setCoord   (const DgIVec2D& coordIn) { coord_ = coordIn; }
 
-      operator string (void) const
+      operator std::string (void) const
 /*
-         { return string("quadNum: " + dgg::util::to_string(quadNum()) +
-                      ", coord: " + string(coord())); }
+         { return std::string("quadNum: " + dgg::util::to_string(quadNum()) +
+                      ", coord: " + std::string(coord())); }
 */
-         { return string("q" + dgg::util::to_string(quadNum(),2) +
-                      ":" + string(coord())); }
+         { return std::string("q" + dgg::util::to_string(quadNum(),2) +
+                      ":" + std::string(coord())); }
 
       bool operator== (const DgQ2DICoord& qc) const
           { return quadNum() == qc.quadNum() && coord() == qc.coord(); }
@@ -108,9 +106,9 @@ class DgQ2DICoord  {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-inline ostream&
-operator<< (ostream& stream, const DgQ2DICoord& coord)
-{ return stream << string(coord); }
+inline std::ostream&
+operator<< (std::ostream& stream, const DgQ2DICoord& coord)
+{ return stream << std::string(coord); }
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -133,9 +131,9 @@ class DgQ2DDCoord  {
       void setVertNum (int quadNumIn)           { quadNum_ = quadNumIn; }
       void setCoord   (const DgDVec2D& coordIn) { coord_ = coordIn; }
 
-      operator string (void) const
-          { return string("quadNum: " + dgg::util::to_string(quadNum()) + ", coord: "
-                          + string(coord())); }
+      operator std::string (void) const
+          { return std::string("quadNum: " + dgg::util::to_string(quadNum()) + ", coord: "
+                          + std::string(coord())); }
 
       bool operator== (const DgQ2DDCoord& qc) const
           { return quadNum() == qc.quadNum() && coord() == qc.coord(); }
@@ -162,26 +160,26 @@ class DgQ2DDCoord  {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-inline ostream&
-operator<< (ostream& stream, const DgQ2DDCoord& coord)
-{ return stream << string(coord); }
+inline std::ostream&
+operator<< (std::ostream& stream, const DgQ2DDCoord& coord)
+{ return stream << std::string(coord); }
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgQ2DDRF : public DgRF<DgQ2DDCoord, long double> {
 
    public:
 
-      static const DgQ2DDRF* makeRF (DgRFNetwork& networkIn, const string& nameIn = "Q2DDRF")
+      static const DgQ2DDRF* makeRF (DgRFNetwork& networkIn, const std::string& nameIn = "Q2DDRF")
          { return new DgQ2DDRF(networkIn, nameIn); }
 
       virtual long double dist (const DgQ2DDCoord& add1,
                            const DgQ2DDCoord& add2) const
                        { return add1.coord().distance(add2.coord()); }
 
-      virtual string add2str (const DgQ2DDCoord& add) const
-                       { return string(add); }
+      virtual std::string add2str (const DgQ2DDCoord& add) const
+                       { return std::string(add); }
 
-      virtual string add2str (const DgQ2DDCoord& add, char delimiter) const
+      virtual std::string add2str (const DgQ2DDCoord& add, char delimiter) const
         { return dgg::util::to_string(add.quadNum()) + delimiter +
                     dgg::util::to_string(add.coord().x(), formatStr()) + delimiter +
                     dgg::util::to_string(add.coord().y(), formatStr()); }
@@ -189,7 +187,7 @@ class DgQ2DDRF : public DgRF<DgQ2DDCoord, long double> {
       virtual const char* str2add (DgQ2DDCoord* add, const char* str,
                                    char delimiter) const;
 
-      virtual string dist2str (const long double& dist) const
+      virtual std::string dist2str (const long double& dist) const
                        { return dgg::util::to_string(dist, formatStr()); }
 
       virtual long double dist2dbl (const long double& dist) const
@@ -203,7 +201,7 @@ class DgQ2DDRF : public DgRF<DgQ2DDCoord, long double> {
 
    protected:
 
-      DgQ2DDRF (DgRFNetwork& networkIn, const string& nameIn)
+      DgQ2DDRF (DgRFNetwork& networkIn, const std::string& nameIn)
          : DgRF<DgQ2DDCoord, long double>(networkIn, nameIn) { }
 
 };
@@ -264,12 +262,12 @@ class DgVertTriVals {
       void setTrans   (const DgDVec2D& transIn) { trans_ = transIn; }
       void setRot60   (int rot60In) { rot60_ = rot60In; }
 
-      operator string (void) const
-          { string keeper; if (keep()) keeper = "true"; else keeper = "false";
-            return string("keep: " + keeper + ", triNum: " + dgg::util::to_string(triNum())
+      operator std::string (void) const
+          { std::string keeper; if (keep()) keeper = "true"; else keeper = "false";
+            return std::string("keep: " + keeper + ", triNum: " + dgg::util::to_string(triNum())
                       + ", quadNum: " + dgg::util::to_string(quadNum()) +
            ", subTri: " + dgg::util::to_string(subTri()) + ", rot60: " + dgg::util::to_string(rot60()) +
-           ", trans: " + string(trans())); }
+           ", trans: " + std::string(trans())); }
 
    private:
 
@@ -283,9 +281,9 @@ class DgVertTriVals {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-inline ostream&
-operator<< (ostream& str, const DgVertTriVals& coord)
-{ return str << string(coord); }
+inline std::ostream&
+operator<< (std::ostream& str, const DgVertTriVals& coord)
+{ return str << std::string(coord); }
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgVertex2DDCoord {
@@ -308,12 +306,12 @@ class DgVertex2DDCoord {
       void setKeep    (bool keepIn) { keep_ = keepIn; }
       void setCoord   (const DgDVec2D& coordIn) { coord_ = coordIn; }
 
-      operator string (void) const
-          { string keeper; if (keep()) keeper = "true"; else keeper = "false";
-            return string("keep: " + keeper + ", triNum: " +
+      operator std::string (void) const
+          { std::string keeper; if (keep()) keeper = "true"; else keeper = "false";
+            return std::string("keep: " + keeper + ", triNum: " +
                        dgg::util::to_string(triNum()) + ", vertNum: " +
                        dgg::util::to_string(vertNum()) + ", coord: "
-                       + string(coord())); }
+                       + std::string(coord())); }
 
       bool operator== (const DgVertex2DDCoord& c) const
           { return keep() == c.keep() && triNum() == c.triNum() &&
@@ -329,9 +327,9 @@ class DgVertex2DDCoord {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-inline ostream&
-operator<< (ostream& str, const DgVertex2DDCoord& coord)
-{ return str << string(coord); }
+inline std::ostream&
+operator<< (std::ostream& str, const DgVertex2DDCoord& coord)
+{ return str << std::string(coord); }
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgVertex2DDRF : public DgRF<DgVertex2DDCoord, long double> {
@@ -339,7 +337,7 @@ class DgVertex2DDRF : public DgRF<DgVertex2DDCoord, long double> {
    public:
 
       static const DgVertex2DDRF* makeRF (DgRFNetwork& networkIn,
-                const string& nameIn = "DgVertex2DDRF")
+                const std::string& nameIn = "DgVertex2DDRF")
          { return new DgVertex2DDRF(networkIn, nameIn); }
 
       //virtual DgLocVector& convert (DgLocVector& vec) const;
@@ -347,10 +345,10 @@ class DgVertex2DDRF : public DgRF<DgVertex2DDCoord, long double> {
       virtual long double dist (const DgVertex2DDCoord&, const DgVertex2DDCoord&) const
                 { return M_ZERO; }
 
-      virtual string add2str (const DgVertex2DDCoord& add) const
-                       { return string(add); }
+      virtual std::string add2str (const DgVertex2DDCoord& add) const
+                       { return std::string(add); }
 
-      virtual string add2str (const DgVertex2DDCoord& add, char delimiter) const
+      virtual std::string add2str (const DgVertex2DDCoord& add, char delimiter) const
           { return dgg::util::to_string(add.vertNum()) + delimiter +
                    dgg::util::to_string(add.triNum()) + delimiter +
                    ((add.keep()) ? "keep" : "nokeep") + delimiter +
@@ -363,7 +361,7 @@ class DgVertex2DDRF : public DgRF<DgVertex2DDCoord, long double> {
       virtual const DgVertex2DDCoord& undefAddress (void) const
                 { static DgVertex2DDCoord undef(false, -1, -1); return undef; }
 
-      virtual string dist2str (const long double& dist) const
+      virtual std::string dist2str (const long double& dist) const
                        { return dgg::util::to_string(dist, formatStr()); }
 
       virtual long double dist2dbl (const long double& dist) const
@@ -380,7 +378,7 @@ class DgVertex2DDRF : public DgRF<DgVertex2DDCoord, long double> {
 
    protected:
 
-      DgVertex2DDRF (DgRFNetwork& networkIn, const string& nameIn)
+      DgVertex2DDRF (DgRFNetwork& networkIn, const std::string& nameIn)
          : DgRF<DgVertex2DDCoord, long double> (networkIn, nameIn) { }
 
    private:
@@ -495,7 +493,7 @@ class DgPlaneTriRF : public DgContCartRF {
 
    public:
 
-      static DgPlaneTriRF* makeRF (DgRFNetwork& networkIn, const string& nameIn = "PlaneTri",
+      static DgPlaneTriRF* makeRF (DgRFNetwork& networkIn, const std::string& nameIn = "PlaneTri",
                     const DgIcosaMap& icosaMapIn = DgIcosaMap::defIcosaMap)
       { return new DgPlaneTriRF(networkIn, nameIn, icosaMapIn); }
 
@@ -503,7 +501,7 @@ class DgPlaneTriRF : public DgContCartRF {
 
    protected:
 
-      DgPlaneTriRF (DgRFNetwork& networkIn, const string& nameIn = "PlaneTri",
+      DgPlaneTriRF (DgRFNetwork& networkIn, const std::string& nameIn = "PlaneTri",
                     const DgIcosaMap& icosaMapIn = DgIcosaMap::defIcosaMap)
          : DgContCartRF(networkIn, nameIn), icosaMap_ (icosaMapIn) { }
 
@@ -611,8 +609,8 @@ class DgGridStats {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-inline ostream&
-operator<< (ostream& stream, const DgGridStats& gs)
+inline std::ostream&
+operator<< (std::ostream& stream, const DgGridStats& gs)
 {
   unsigned int prec = gs.precision();
 

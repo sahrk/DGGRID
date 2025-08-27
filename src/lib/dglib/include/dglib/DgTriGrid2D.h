@@ -43,7 +43,7 @@ class DgTriGrid2D : public DgDiscRF2D {
 
       static const DgTriGrid2D* makeRF (DgRFNetwork& networkIn,
                    const DgRF<DgDVec2D, long double>& ccFrameIn,
-                   const string& nameIn = "TriC12D")
+                   const std::string& nameIn = "TriC12D")
          { return new DgTriGrid2D (networkIn, ccFrameIn, nameIn); }
 
       DgTriGrid2D& operator= (const DgTriGrid2D& grd)
@@ -57,7 +57,7 @@ class DgTriGrid2D : public DgDiscRF2D {
 
       DgTriGrid2D (DgRFNetwork& networkIn,
                    const DgRF<DgDVec2D, long double>& ccFrameIn,
-                   const string& nameIn = "TriC12D")
+                   const std::string& nameIn = "TriC12D")
          : DgDiscRF2D (networkIn, ccFrameIn, nameIn, Triangle, D3, M_SQRT3,
                1.0L, M_SQRT3_2, 3.0L) { }
 

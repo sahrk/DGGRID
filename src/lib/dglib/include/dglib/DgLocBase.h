@@ -28,8 +28,6 @@
 #include <iostream>
 #include <string>
 
-using namespace std;
-
 class DgRFBase;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -43,13 +41,13 @@ class DgLocBase {
 
       virtual int cardinality (void) const { return 1; } // default
 
-      virtual string asString (void) const = 0;
+      virtual std::string asString (void) const = 0;
 
-      virtual string asString (char delimiter) const = 0;
+      virtual std::string asString (char delimiter) const = 0;
 
-      virtual string asAddressString (void) const = 0;
+      virtual std::string asAddressString (void) const = 0;
 
-      virtual string asAddressString (char delimiter) const = 0;
+      virtual std::string asAddressString (char delimiter) const = 0;
 
       virtual const char* fromString (const char* str, char delimiter) = 0;
 
@@ -72,7 +70,7 @@ class DgLocBase {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-inline ostream& operator<< (ostream& stream, const DgLocBase& loc)
+inline std::ostream& operator<< (std::ostream& stream, const DgLocBase& loc)
             { return stream << loc.asString(); }
 
 ////////////////////////////////////////////////////////////////////////////////

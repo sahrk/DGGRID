@@ -51,9 +51,9 @@ class DgBoundedHexC3RF2D : public DgBoundedRF2D {
 
       virtual DgIVec2D addFromSeqNum (unsigned long long int sNum) const;
 
-      virtual operator string (void) const
+      virtual operator std::string (void) const
       {
-         string s = "=== DgBoundedHexC3RF2D: " + DgBoundedRF2D::operator string();
+         std::string s = "=== DgBoundedHexC3RF2D: " + DgBoundedRF2D::operator std::string();
          return s;
       }
 };

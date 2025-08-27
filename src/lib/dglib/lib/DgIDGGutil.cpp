@@ -218,7 +218,7 @@ DgQ2DDRF::str2add (DgQ2DDCoord* add, const char* str, char delimiter) const
    int q;
    if (sscanf(tok, "%d", &q) != 1)
    {
-      ::report("DgQ2DDRF::fromString() invalid value in string " + string(tok),
+      ::report("DgQ2DDRF::fromString() invalid value in string " + std::string(tok),
                DgBase::Fatal);
    }
 
@@ -252,7 +252,7 @@ DgVertex2DDRF::str2add (DgVertex2DDCoord* add, const char* str, char delimiter) 
    if (sscanf(tok, "%d", &vNum) != 1)
    {
       ::report("DgVertex2DDCoord::fromString() invalid value in string " +
-               string(tok), DgBase::Fatal);
+               std::string(tok), DgBase::Fatal);
    }
 
    // get the triNum
@@ -262,7 +262,7 @@ DgVertex2DDRF::str2add (DgVertex2DDCoord* add, const char* str, char delimiter) 
    if (sscanf(tok, "%d", &tNum) != 1)
    {
       ::report("DgVertex2DDCoord::fromString() invalid value in string " +
-               string(tok), DgBase::Fatal);
+               std::string(tok), DgBase::Fatal);
    }
 
    // get the keeper
@@ -278,7 +278,7 @@ DgVertex2DDRF::str2add (DgVertex2DDCoord* add, const char* str, char delimiter) 
    else
    {
       ::report("DgVertex2DDCoord::fromString() invalid value in string " +
-               string(tok), DgBase::Fatal);
+               std::string(tok), DgBase::Fatal);
    }
 
    const char* tmp = &(str[(tok - tmpStr) + strlen(tok) + 1]);
@@ -314,15 +314,15 @@ DgQ2DDtoIConverter::convertTypedAddress (const DgQ2DDCoord& addIn) const
    DgLocation* loc = IDGG().ccFrame().makeLocation(addIn.coord());
 
 #if DGDEBUG
-dgcout << "\nDgQ2DDtoIConverter::convertTypedAddress loc: " << *loc << endl;
+dgcout << "\nDgQ2DDtoIConverter::convertTypedAddress loc: " << *loc << std::endl;
 #endif
 
     IDGG().grid2D().convert(loc);
 
-//dgcout << "XX " << addIn << " " << *loc << endl;
+//dgcout << "XX " << addIn << " " << *loc << std::endl;
 
 #if DGDEBUG
-dgcout << " ---> A. " << *loc << endl;
+dgcout << " ---> A. " << *loc << std::endl;
 #endif
 
    DgIVec2D coord = *IDGG().grid2D().getAddress(*loc);
@@ -331,7 +331,7 @@ dgcout << " ---> A. " << *loc << endl;
    int quadNum = addIn.quadNum();
 
 #if DGDEBUG
-dgcout << " ---> B. " << coord << endl;
+dgcout << " ---> B. " << coord << std::endl;
 #endif
 
     long long int maxI = IDGG().maxI();
@@ -360,8 +360,8 @@ dgcout << " ---> B. " << coord << endl;
     long long int minBottomJ = (IDGG().aperture() == 7) ? -2 : 0;
 
 #if DGDEBUG
-    cout << maxI << " " << maxJ << " " << topEdgeI << " " << topEdgeJ << endl;
-    cout << minBottomI << " " << minBottomJ << " " << maxTopOverageI << " " << maxTopOverageJ << endl;
+    cout << maxI << " " << maxJ << " " << topEdgeI << " " << topEdgeJ << std::endl;
+    cout << minBottomI << " " << minBottomJ << " " << maxTopOverageI << " " << maxTopOverageJ << std::endl;
 #endif
 
    // if out of range check for possible round-off error
@@ -400,11 +400,11 @@ dgcout << " ---> B. " << coord << endl;
       // are we good?
       if (underI || underJ || overI || overJ)
          report("DgQ2DDtoIConverter::convertTypedAddress(): "
-                "coordinate out of range: " + to_string(quadNum) + " " + (string) coord, DgBase::Fatal);
+                "coordinate out of range: " + to_string(quadNum) + " " + (std::string) coord, DgBase::Fatal);
    }
 
 #if DGDEBUG
-dgcout << " ---> C. " << coord << endl;
+dgcout << " ---> C. " << coord << std::endl;
 #endif
    // we'll reuse the booleans above set to based on the actual quad i,j ranges
    underI = coord.i() < 0;
@@ -432,7 +432,7 @@ dgcout << " ---> C. " << coord << endl;
             }
         } else if (numOver > 1) {
             report("DgQ2DDtoIConverter::convertTypedAddress(): "
-                   "coordinate has multiple overages: " + to_string(quadNum) + " " + (string) coord, DgBase::Fatal);
+                   "coordinate has multiple overages: " + to_string(quadNum) + " " + (std::string) coord, DgBase::Fatal);
         } else if (underI) {
 #if DGDEBUG
             cout << "UNDER I: " << !ec.isType0() << " " << quadNum << " " << coord.i() << " " << coord.j();
@@ -492,11 +492,11 @@ dgcout << " ---> C. " << coord << endl;
 
 #if DGDEBUG
     if (underI || underJ || overI || overJ)
-        cout << " -> " << quadNum << " " << coord.i() << " " << coord.j() << endl;
+        cout << " -> " << quadNum << " " << coord.i() << " " << coord.j() << std::endl;
 #endif
 
 #if DGDEBUG
-dgcout << " ---> D. " << coord << endl;
+dgcout << " ---> D. " << coord << std::endl;
 #endif
 
     // reset the overage conditions
@@ -508,7 +508,7 @@ dgcout << " ---> D. " << coord << endl;
     // are we good?
     if (underI || underJ || overI || overJ)
        report("DgQ2DDtoIConverter::convertTypedAddress(): "
-           "final coordinate out of range: " + to_string(quadNum) + " " + (string) coord, DgBase::Fatal);
+           "final coordinate out of range: " + to_string(quadNum) + " " + (std::string) coord, DgBase::Fatal);
 
    DgQ2DICoord result(quadNum, coord);
 

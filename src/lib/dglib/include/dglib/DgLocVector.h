@@ -31,8 +31,6 @@
 #include <string>
 #include <vector>
 
-using namespace std;
-
 class DgAddressBase;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -74,22 +72,22 @@ class DgLocVector : public DgLocBase {
 
       void push_back (const DgLocation& loc, bool conv = true);
 
-      vector<DgAddressBase*>& addressVec (void) { return vec_; }
+      std::vector<DgAddressBase*>& addressVec (void) { return vec_; }
 
-      const vector<DgAddressBase*>& addressVec (void) const { return vec_; }
+      const std::vector<DgAddressBase*>& addressVec (void) const { return vec_; }
 
       const DgLocation& tmpLoc (void) const { return tmpLoc_; }
 
-      virtual string asString (void) const
+      virtual std::string asString (void) const
                { return rf().toString(*this); }
 
-      virtual string asString (char delimiter) const
+      virtual std::string asString (char delimiter) const
                { return rf().toString(*this, delimiter); }
 
-      virtual string asAddressString (void) const
+      virtual std::string asAddressString (void) const
                { return rf().toAddressString(*this); }
 
-      virtual string asAddressString (char delimiter) const
+      virtual std::string asAddressString (char delimiter) const
                { return rf().toAddressString(*this, delimiter); }
 
       virtual const char* fromString (const char* str, char delimiter);
@@ -106,7 +104,7 @@ class DgLocVector : public DgLocBase {
 
    private:
 
-      vector<DgAddressBase*> vec_;
+      std::vector<DgAddressBase*> vec_;
 
    template<class A, class D> friend class DgRF;
    friend class DgRFBase;
@@ -121,16 +119,16 @@ class DgLocVector : public DgLocBase {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-inline ostream& operator<< (ostream& stream, const DgLocVector& vec)
+inline std::ostream& operator<< (std::ostream& stream, const DgLocVector& vec)
 {
    stream << vec.rf().name() << " {\n";
 
    for (int i = 0; i < vec.size(); i++) stream << vec[i] << "\n";
    //for (int i = vec.size() - 1; i >= 0; i--) stream << vec[i] << "\n";
 
-   return stream << "}" << endl;
+   return stream << "}" << std::endl;
 
-} // inline ostream& operator<<
+} // inline std::ostream& operator<<
 
 ////////////////////////////////////////////////////////////////////////////////
 inline DgLocVector&

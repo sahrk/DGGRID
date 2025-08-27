@@ -30,8 +30,8 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-DgOutNeighborsFile::DgOutNeighborsFile (const string& fileName,
-         const DgIDGGBase& dgg, const DgRFBase* outRF, const string& suffix,
+DgOutNeighborsFile::DgOutNeighborsFile (const std::string& fileName,
+         const DgIDGGBase& dgg, const DgRFBase* outRF, const std::string& suffix,
          DgReportLevel failLevel)
    : DgOutputStream (fileName, suffix, failLevel), dgg_ (dgg), outRF_ (outRF)
 {
@@ -56,7 +56,7 @@ DgOutNeighborsFile::insert (const DgLocation& center, DgLocVector& vec)
          *this << " " << vec[i].asString(' ');
    }
 
-   *this << endl;
+   *this << std::endl;
 
    return *this;
 

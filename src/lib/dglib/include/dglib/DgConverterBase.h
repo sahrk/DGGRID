@@ -27,8 +27,6 @@
 
 #include <vector>
 
-using namespace std;
-
 #include <dglib/DgLocation.h>
 #include <dglib/DgRFBase.h>
 
@@ -41,9 +39,9 @@ class DgConverterBase {
       static bool isTraceOn (void) { return isTraceOn_; }
       static bool setTraceOn (bool traceOnIn)
                      { isTraceOn_ = traceOnIn; return isTraceOn(); }
-      static void setTraceStream (ostream& stream = dgcout)
+      static void setTraceStream (std::ostream& stream = dgcout)
                            { traceStream_ = &stream; }
-      static ostream& traceStream (void) { return *traceStream_; }
+      static std::ostream& traceStream (void) { return *traceStream_; }
 
       virtual DgLocation* convert (DgLocation* loc) const; // convert in place
 
@@ -68,7 +66,7 @@ class DgConverterBase {
                               (const DgAddressBase& addIn) const = 0;
 
       static bool isTraceOn_;
-      static ostream* traceStream_;
+      static std::ostream* traceStream_;
 
       DgRFBase* fromFrame_;
       DgRFBase* toFrame_;
@@ -80,7 +78,7 @@ class DgConverterBase {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-inline ostream& operator<< (ostream& stream, const DgConverterBase& con)
+inline std::ostream& operator<< (std::ostream& stream, const DgConverterBase& con)
             { return stream << "{" << con.fromFrame().name()
                             << "->" << con.toFrame().name() << "}"; }
 

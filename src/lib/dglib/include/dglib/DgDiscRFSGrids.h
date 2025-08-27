@@ -55,9 +55,9 @@ template<class A> class DgResAdd {
 
       void setRes (int res) { res_ = res; }
 
-      operator string (void) const
-                { return  string("[") + dgg::util::to_string((int) res()) + ", " +
-                          string(address()) + string("]"); }
+      operator std::string (void) const
+                { return std::string("[") + dgg::util::to_string((int) res()) + ", " +
+                         std::string(address()) + std::string("]"); }
 
       DgResAdd<A>& operator= (const DgResAdd<A>& add)
                 {
@@ -89,12 +89,12 @@ template<class A> class DgResAdd {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-template<class A> ostream& operator<< (ostream& stream, const DgResAdd<A>& add)
+template<class A> std::ostream& operator<< (std::ostream& stream, const DgResAdd<A>& add)
 {
-   stream << string(add);
+   stream << std::string(add);
    return stream;
 
-} // ostream& operator<<
+} // std::ostream& operator<<
 
 ////////////////////////////////////////////////////////////////////////////////
 template<class A, class B, class BG, class DB> class DgDiscRFSGridsBase {
@@ -108,12 +108,12 @@ template<class A, class B, class BG, class DB> class DgDiscRFSGridsBase {
 
       int nRes (void) const { return nRes_; }
 
-      virtual operator string (void) const
+      virtual operator std::string (void) const
       {
-         string s = "*** DgDiscRFSGridsBase\nnRes: " + dgg::util::to_string(nRes()) + "\n";
+         std::string s = "*** DgDiscRFSGridsBase\nnRes: " + dgg::util::to_string(nRes()) + "\n";
          for (int i = 0; i < nRes(); i++)
             s += " >>> " + dgg::util::to_string(i) + ": " +
-                   string(discRF(i)) + "\n";
+                   std::string(discRF(i)) + "\n";
 
          return s;
       }
@@ -191,10 +191,10 @@ template<template <class, class, class> class DRF, class A, class B, class DB, c
 
       virtual ~DgDiscRFSGrids (void) { delete grids_; }
 /*
-      virtual string add2str (const DgResAdd<A>& add) const
-                                              { return string(add); }
+      virtual std::string add2str (const DgResAdd<A>& add) const
+                                              { return std::string(add); }
 
-      virtual string add2str (const DgResAdd<A>& add, char delimiter) const
+      virtual std::string add2str (const DgResAdd<A>& add, char delimiter) const
                   { return dgg::util::to_string(add.res()) + delimiter +
                         grids()[add.res()]->add2str(add.address(), delimiter); }
 
@@ -213,7 +213,7 @@ template<template <class, class, class> class DRF, class A, class B, class DB, c
                 this->nRes_ = rf.nRes();
                 delete grids_; // the DgRFNetwork will delete the grids themselves
 
-                grids_ = new vector<const DRF<A, BG, DB>*>(rf.nRes());
+                grids_ = new std::vector<const DRF<A, BG, DB>*>(rf.nRes());
                 for (int i = 0; i < rf.nRes(); i++)
                 {
                    // KLUDGE: don't know real type of each grid so can't
@@ -226,7 +226,7 @@ template<template <class, class, class> class DRF, class A, class B, class DB, c
             return *this;
          }
 
-      const vector<const DRF<A, BG, DB>*>& grids (void) const { return *grids_; }
+      const std::vector<const DRF<A, BG, DB>*>& grids (void) const { return *grids_; }
 
       // no bounds checking
       const DRF<A, BG, DB>& operator[] (int res) const
@@ -241,14 +241,14 @@ template<template <class, class, class> class DRF, class A, class B, class DB, c
       DgDiscRFSGrids (const DgRF<B, DB>& backFrameIn, int nResIn)
          : DgDiscRFSGridsBase<A, B, BG, DB>(backFrameIn, nResIn), grids_ (nullptr)
         {
-          this->grids_ = new vector<const DRF<A, BG, DB>*>(this->nRes(), nullptr);
+          this->grids_ = new std::vector<const DRF<A, BG, DB>*>(this->nRes(), nullptr);
         }
 
       DgDiscRFSGrids (const DgDiscRFSGrids<DRF, A, B, DB, BG>& rf) // uses dubious operator=
         //: DgDiscRF<DgResAdd<A>, B, DB> (rf)
         { *this = rf; }
 
-      vector<const DRF<A, BG, DB>*>& gridsMutable (void) const { return *grids_; }
+      std::vector<const DRF<A, BG, DB>*>& gridsMutable (void) const { return *grids_; }
 
     /*
       virtual DgResAdd<A> quantifyRFS (const B& point) const
@@ -277,7 +277,7 @@ template<template <class, class, class> class DRF, class A, class B, class DB, c
      */
 
       // state data
-      vector<const DRF<A, BG, DB>*>* grids_;
+      std::vector<const DRF<A, BG, DB>*>* grids_;
 };
 
 ////////////////////////////////////////////////////////////////////////////////

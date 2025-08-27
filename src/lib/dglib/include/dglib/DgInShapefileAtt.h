@@ -32,8 +32,6 @@
 #include <set>
 #include <string>
 
-using namespace std;
-
 class DgLocList;
 class DgLocVector;
 class DgPolygon;
@@ -46,13 +44,13 @@ class DgDBFfield {
 
    public:
 
-      DgDBFfield (const string& fieldNameIn, DBFFieldType typeIn,
+      DgDBFfield (const std::string& fieldNameIn, DBFFieldType typeIn,
                  int fieldNumIn, int widthIn, int precisionIn)
          : fieldName_(fieldNameIn), type_(typeIn), fieldNum_(fieldNumIn),
            width_(widthIn), precision_(precisionIn)
       { }
 
-      const string& fieldName (void) const { return fieldName_; }
+      const std::string& fieldName (void) const { return fieldName_; }
       DBFFieldType  type      (void) const { return type_; }
       int           fieldNum  (void) const { return fieldNum_; }
       int           width     (void) const { return width_; }
@@ -65,11 +63,11 @@ class DgDBFfield {
       friend bool operator>  (const DgDBFfield& f1, const DgDBFfield& f2);
       friend bool operator>= (const DgDBFfield& f1, const DgDBFfield& f2);
 
-      friend ostream& operator<< (ostream& stream, const DgDBFfield& pt);
+      friend std::ostream& operator<< (std::ostream& stream, const DgDBFfield& pt);
 
    protected:
 
-      string fieldName_;
+      std::string fieldName_;
       DBFFieldType type_;
       int fieldNum_;
       int width_;
@@ -82,10 +80,10 @@ class DgInShapefileAtt : public DgInShapefile {
    public:
 
       DgInShapefileAtt (const DgGeoSphRF& geoRFIn,
-                     const string* fileNameIn = NULL,
+                     const std::string* fileNameIn = NULL,
                      DgReportLevel failLevel = DgBase::Fatal);
 
-      virtual bool open (const string* fileName = NULL,
+      virtual bool open (const std::string* fileName = NULL,
                  DgReportLevel failLevel = DgBase::Fatal);
 
       virtual void close (void);
@@ -157,8 +155,8 @@ operator<= (const DgDBFfield& f1, const DgDBFfield& f2)
 } // bool operator<=
 
 ////////////////////////////////////////////////////////////////////////////////
-inline ostream&
-operator<< (ostream& stream, const DgDBFfield& f)
+inline std::ostream&
+operator<< (std::ostream& stream, const DgDBFfield& f)
 {
    stream << "field: " << f.fieldName();
 
@@ -175,7 +173,7 @@ operator<< (ostream& stream, const DgDBFfield& f)
    return stream << " type: " << type << " #" << f.fieldNum()
                  << " (" << f.width() << "/" << f.precision() << ")";
 
-} // ostream& operator<<
+} // std::ostream& operator<<
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

@@ -61,7 +61,7 @@ template<class A, class B, class DB> class DgDiscTopoRFS
                 isCongruent_ = rf.isCongruent();
                 isAligned_ = rf.isAligned();
 
-                this->grids_ = new vector<const DgDiscTopoRF<A, B, DB>*>(rf.nRes(), nullptr);
+                this->grids_ = new std::vector<const DgDiscTopoRF<A, B, DB>*>(rf.nRes(), nullptr);
                 for (int i = 0; i < rf.nRes(); i++)
                 {
                    // KLUDGE: don't know real type of each grid so can't
@@ -75,10 +75,10 @@ template<class A, class B, class DB> class DgDiscTopoRFS
 
       // abstract functions from DgDiscRF
       // these functions are the same as in DgDiscRFS
-      virtual string add2str (const DgResAdd<A>& add) const
-                         { return string(add); }
+      virtual std::string add2str (const DgResAdd<A>& add) const
+                         { return std::string(add); }
 
-      virtual string add2str (const DgResAdd<A>& add, char delimiter) const
+      virtual std::string add2str (const DgResAdd<A>& add, char delimiter) const
                            { return dgg::util::to_string(add.res()) + delimiter +
                                (*(this->grids_))[add.res()]->add2str(add.address(), delimiter); }
 
@@ -308,14 +308,14 @@ template<class A, class B, class DB> class DgDiscTopoRFS
                  int nResIn, dgg::topo::DgGridTopology gridTopo = dgg::topo::Hexagon,
                  dgg::topo::DgGridMetric gridMetric = dgg::topo::D6,
                  unsigned int aperture = 3, bool isCongruent = true,
-                 bool isAligned = false, const string& name = "DiscS")
+                 bool isAligned = false, const std::string& name = "DiscS")
         : DgDiscTopoRF<DgResAdd<A>, B, DB> (network, backFrame, name),
           DgDiscRFSGrids<DgDiscTopoRF, A, B, DB, B> (backFrame, nResIn),
                //DgDiscRFSGrids<DgDiscTopoRF, A, B, DB> (backFrame, nResIn),
                gridTopo_ (gridTopo), gridMetric_ (gridMetric), aperture_ (aperture),
                isCongruent_ (isCongruent), isAligned_ (isAligned)
         {
-          //this->grids_ = new vector<const DgDiscTopoRF<A, B, DB>*>(nRes, nullptr);
+          //this->grids_ = new std::vector<const DgDiscTopoRF<A, B, DB>*>(nRes, nullptr);
           if (!this->isAligned() && !this->isCongruent()) {
              report("DgDiscRFS::DgDiscRFS() grid system must be either "
                     "congruent, aligned, or both", DgBase::Fatal);

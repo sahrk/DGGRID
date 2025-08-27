@@ -45,7 +45,7 @@ class DgInGdalFile : public DgInLocStreamFile
 {
 public:
 
-    DgInGdalFile (const DgRFBase& rfIn, const string* fileNameIn = NULL,
+    DgInGdalFile (const DgRFBase& rfIn, const std::string* fileNameIn = NULL,
                    DgReportLevel failLevel = DgBase::Fatal);
 
    ~DgInGdalFile (void);

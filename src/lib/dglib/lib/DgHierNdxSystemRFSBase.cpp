@@ -33,12 +33,12 @@ DgHierNdxSystemRFSBase::undefCoord(DgHierNdx::undefCoord, -1);
 
 ////////////////////////////////////////////////////////////////////////////////
 DgHierNdxSystemRFSBase::DgHierNdxSystemRFSBase (const DgIDGGSBase& dggsIn, 
-         bool outModeIntIn, const string& nameIn)
+         bool outModeIntIn, const std::string& nameIn)
    : DgDiscRFS<DgHierNdx, DgQ2DICoord, long long int>
                          (dggsIn.network(), dggsIn, dggsIn.nRes(), nameIn),
      dggs_ (dggsIn), outModeInt_ (outModeIntIn)
 { 
-   //grids_ = new vector<const DgHierNdxSystemRFBase*>(nRes_, nullptr);
+   //grids_ = new std::vector<const DgHierNdxSystemRFBase*>(nRes_, nullptr);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -166,7 +166,7 @@ DgHierNdxSystemRFSBase::setNdxChildren (const DgResAdd<DgHierNdx>& add,
      setAddNdxChildren(add, chld);
   }
 //KEVIN
-    cout << add << ": " << chld << endl;
+    cout << add << ": " << chld << std::endl;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

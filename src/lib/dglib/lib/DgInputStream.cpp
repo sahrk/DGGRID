@@ -27,11 +27,11 @@
 
 #include <dglib/DgInputStream.h>
 
-string DgInputStream::defaultDirectory_;
+std::string DgInputStream::defaultDirectory_;
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-DgInputStream::DgInputStream (const string& fileNameIn, const string& suffixIn,
+DgInputStream::DgInputStream (const std::string& fileNameIn, const std::string& suffixIn,
                               DgReportLevel failLevel)
    : DgBase ("DgInputStream:" + fileNameIn), suffix_ (suffixIn)
 {
@@ -46,7 +46,7 @@ DgInputStream::DgInputStream (const string& fileNameIn, const string& suffixIn,
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 bool
-DgInputStream::open (string fileNameIn, DgReportLevel failLevel)
+DgInputStream::open (std::string fileNameIn, DgReportLevel failLevel)
 //
 // Open fileName as an input file. Report with a report level of failLevel
 // if the open is unsuccessful.
@@ -60,7 +60,7 @@ DgInputStream::open (string fileNameIn, DgReportLevel failLevel)
 
    // get all the possible name variations
 
-   string names[4];
+   std::string names[4];
 
    names[0] = fileNameIn;
    names[1] = fileNameIn + "." + suffix_;

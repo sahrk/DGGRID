@@ -57,7 +57,7 @@ template<class B, class DB> class DgBoundedRFBase : public DgBoundedRFBase0 {
 
       virtual DgLocation* locFromSeqNum (unsigned long long int sNum) const = 0;
 
-      virtual string dist2str (const long long int& dist) const = 0;
+      virtual std::string dist2str (const long long int& dist) const = 0;
       virtual long double dist2dbl (const long long int& dist) const = 0;
 
       virtual unsigned long long int dist2int (const long long int& dist) const = 0;

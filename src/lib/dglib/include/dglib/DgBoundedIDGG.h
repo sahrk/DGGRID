@@ -34,8 +34,6 @@
 #include <dglib/DgIDGGBase.h>
 #include <dglib/DgIDGGutil.h>
 
-using namespace std;
-
 ////////////////////////////////////////////////////////////////////////////////
 class DgBoundedIDGG : public DgBoundedRF<DgQ2DICoord, DgGeoCoord, long double> {
 
@@ -62,11 +60,11 @@ class DgBoundedIDGG : public DgBoundedRF<DgQ2DICoord, DgGeoCoord, long double> {
 
       virtual DgQ2DICoord q2dixToQ2di (const DgQ2DICoord& add) const;
 
-      virtual operator string (void) const
+      virtual operator std::string (void) const
         {
-           string s = "=== DgBoundedIDGG: " + DgBoundedRF::operator string();
+           std::string s = "=== DgBoundedIDGG: " + DgBoundedRF::operator std::string();
            s += "\n offsetPerQuad: " + dgg::util::to_string(offsetPerQuad());
-           s += "\n BND2D: " + string(*bnd2D_);
+           s += "\n BND2D: " + std::string(*bnd2D_);
 
            return s;
         }

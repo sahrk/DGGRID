@@ -41,7 +41,6 @@ add_library(dglib
    lib/DgHierNdxStringRF.cpp
    lib/DgHierNdxSystemRFBase.cpp
    lib/DgHierNdxSystemRFSBase.cpp
-   lib/DgHierNdxSysType.cpp
    lib/DgIcosaMap.cpp
    lib/DgIDGG.cpp
    lib/DgIDGGBase.cpp
@@ -170,7 +169,6 @@ add_library(dglib
    include/dglib/DgHierNdxSystemRFBase.h
    include/dglib/DgHierNdxSystemRFS.h
    include/dglib/DgHierNdxSystemRFSBase.h
-   include/dglib/DgHierNdxSysType.h
    include/dglib/DgIcosaMap.h
    include/dglib/DgIcosaProj.h
    include/dglib/DgIDGG.h

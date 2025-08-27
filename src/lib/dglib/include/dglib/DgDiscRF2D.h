@@ -44,7 +44,7 @@ class DgDiscRF2D : public DgDiscTopoRF<DgIVec2D, DgDVec2D, long double> {
 /* TODO: necessary?
       static const DgDiscRF2D* makeRF (DgRFNetwork& networkIn,
           const DgRF<DgDVec2D, long double>& ccFrameIn,
-          const string& nameIn = "DiscRF2D",
+          const std::string& nameIn = "DiscRF2D",
           dgg::topo::DgGridTopology gridTopoIn = dgg::topo::Hexagon,
           dgg::topo::DgGridMetric gridMetricIn = dgg::topo::D6,
           long double eIn = 1.0L, long double rIn = 1.0L,
@@ -55,9 +55,9 @@ class DgDiscRF2D : public DgDiscTopoRF<DgIVec2D, DgDVec2D, long double> {
          }
 */
 
-      virtual string add2str (const DgIVec2D& add) const { return string(add); }
+      virtual std::string add2str (const DgIVec2D& add) const { return std::string(add); }
 
-      virtual string add2str (const DgIVec2D& add, char delimiter) const
+      virtual std::string add2str (const DgIVec2D& add, char delimiter) const
                { return dgg::util::to_string(add.i()) + delimiter + dgg::util::to_string(add.j()); }
 
       virtual const char* str2add (DgIVec2D* add, const char* str,
@@ -88,7 +88,7 @@ class DgDiscRF2D : public DgDiscTopoRF<DgIVec2D, DgDVec2D, long double> {
 
       DgDiscRF2D (DgRFNetwork& networkIn,
           const DgRF<DgDVec2D, long double>& ccFrameIn,
-          const string& nameIn = "DiscRF2D",
+          const std::string& nameIn = "DiscRF2D",
           dgg::topo::DgGridTopology gridTopoIn = dgg::topo::Hexagon,
           dgg::topo::DgGridMetric gridMetricIn = dgg::topo::D6,
           long double eIn = 1.0L, long double rIn = 1.0L,

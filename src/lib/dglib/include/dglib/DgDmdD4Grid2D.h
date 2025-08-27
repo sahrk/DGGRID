@@ -43,7 +43,7 @@ class DgDmdD4Grid2D : public DgDiscRF2D {
 
       static const DgDmdD4Grid2D* makeRF (DgRFNetwork& networkIn,
                      const DgRF<DgDVec2D, long double>& contCartFrameIn,
-                     const string& nameIn = "Dmd2D")
+                     const std::string& nameIn = "Dmd2D")
          { return new DgDmdD4Grid2D (networkIn, contCartFrameIn, nameIn); }
 
       DgDmdD4Grid2D& operator= (const DgDmdD4Grid2D& grd)
@@ -59,7 +59,7 @@ class DgDmdD4Grid2D : public DgDiscRF2D {
 
       DgDmdD4Grid2D (DgRFNetwork& networkIn,
                      const DgRF<DgDVec2D, long double>& contCartFrameIn,
-                     const string& nameIn = "Dmd2D")
+                     const std::string& nameIn = "Dmd2D")
          : DgDiscRF2D (networkIn, contCartFrameIn, nameIn, Diamond, D4,
                  1.0L, 1.0L, M_SQRT3_2, 1.0L)
            { r_ = c(); }

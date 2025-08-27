@@ -32,10 +32,10 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-DgOutChildrenFile::DgOutChildrenFile (const string& fileName,
+DgOutChildrenFile::DgOutChildrenFile (const std::string& fileName,
                     const DgIDGGBase& dgg, const DgIDGGBase& chdDgg,
                     const DgRFBase* outRF, const DgRFBase* chdOutRF,
-                    const string& suffix, DgReportLevel failLevel)
+                    const std::string& suffix, DgReportLevel failLevel)
    : DgOutputStream (fileName, suffix, failLevel), dgg_ (dgg), chdDgg_ (chdDgg),
                      outRF_ (outRF), chdOutRF_ (chdOutRF)
 {
@@ -46,10 +46,10 @@ DgOutChildrenFile::DgOutChildrenFile (const string& fileName,
 DgOutChildrenFile&
 DgOutChildrenFile::insert (const DgLocation& center, DgLocVector& vec)
 {
-//cout << "@@@@@ DgOutChildrenFile::insert:" << endl;
-//cout << " dgg: " << dgg << endl;
-//cout << " center: " << center << endl;
-//cout << " vec: " << vec << endl;
+//cout << "@@@@@ DgOutChildrenFile::insert:" << std::endl;
+//cout << " dgg: " << dgg << std::endl;
+//cout << " center: " << center << std::endl;
+//cout << " vec: " << vec << std::endl;
 
    if (!outRF_) { // indicates seqnum output
       unsigned long long int sn = dgg_.bndRF().seqNum(center);
@@ -68,7 +68,7 @@ DgOutChildrenFile::insert (const DgLocation& center, DgLocVector& vec)
          *this << " " << vec[i].asString(' ');
    }
 
-   *this << endl;
+   *this << std::endl;
 
    return *this;
 

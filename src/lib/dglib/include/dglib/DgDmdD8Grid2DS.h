@@ -40,7 +40,7 @@ class DgDmdD8Grid2DS : public DgDiscRFS2D {
                  const DgRF<DgDVec2D, long double>& backFrameIn,
                  int nRes = 1, unsigned int apertureIn = 4,
                  bool isCongruentIn = true, bool isAlignedIn = false,
-                 const string& nameIn = "8D4")
+                 const std::string& nameIn = "8D4")
          { return new DgDmdD8Grid2DS (networkIn, backFrameIn, nRes, apertureIn,
                  isCongruentIn, isAlignedIn, nameIn); }
 
@@ -56,7 +56,7 @@ class DgDmdD8Grid2DS : public DgDiscRFS2D {
                  const DgRF<DgDVec2D, long double>& backFrameIn,
                  int nRes = 1, unsigned int apertureIn = 4,
                  bool isCongruentIn = true, bool isAlignedIn = false,
-                 const string& nameIn = "8D4");
+                 const std::string& nameIn = "8D4");
 
       DgDmdD8Grid2DS (const DgDmdD8Grid2DS& rf);
 

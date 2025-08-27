@@ -97,9 +97,9 @@ class DgHierNdx {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-inline ostream&
-operator<< (ostream& stream, const DgHierNdx& ndx)
-{ return stream << string(ndx); }
+inline std::ostream&
+operator<< (std::ostream& stream, const DgHierNdx& ndx)
+{ return stream << std::string(ndx); }
 
 ////////////////////////////////////////////////////////////////////////////////
 #endif

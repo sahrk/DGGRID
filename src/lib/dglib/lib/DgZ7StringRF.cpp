@@ -223,8 +223,8 @@ DgQ2DItoZ7StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
 
    // dgcout << " "; // KEVIN
 
-    string bcstr = dgg::util::to_string(baseCell, 2);
-    string addstr = bcstr;
+    std::string bcstr = dgg::util::to_string(baseCell, 2);
+    std::string addstr = bcstr;
     DgIVec3D::Direction skipDigit = ((baseCell < 6) ? DgIVec3D::PENTAGON_SKIPPED_DIGIT_TYPE1 : DgIVec3D::PENTAGON_SKIPPED_DIGIT_TYPE2);
     int skipRotate = false;
     int firstNonZero = false;
@@ -248,9 +248,9 @@ DgQ2DItoZ7StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
 
     DgZ7StringCoord z7str;
     z7str.setValString(addstr);
-//dgcout << z7str << endl; // KEVIN
-    //dgcout << "KEVIN addIn: " << addIn << " baseijk: " << baseCellIjk << " z7str: " << z7str << endl;
-    //dgcout << z7str << " " << addIn << endl;
+//dgcout << z7str << std::endl; // KEVIN
+    //dgcout << "KEVIN addIn: " << addIn << " baseijk: " << baseCellIjk << " z7str: " << z7str << std::endl;
+    //dgcout << z7str << " " << addIn << std::endl;
 
     return z7str;
 
@@ -299,9 +299,9 @@ DgZ7StringToQ2DIConverter::convertTypedAddress (const DgZ7StringCoord& addIn) co
 {
    //printf("DgZ7StringToQ2DIConverter::convertTypedAddress\n");
 
-   string addstr = addIn.valString();
+   std::string addstr = addIn.valString();
    // first get the base cell number
-   string bstr = addstr.substr(0, 2);
+   std::string bstr = addstr.substr(0, 2);
    if (bstr[0] == '0') // leading 0
       bstr = bstr.substr(1, 1);
    int bcNum = std::stoi(bstr);
@@ -312,7 +312,7 @@ DgZ7StringToQ2DIConverter::convertTypedAddress (const DgZ7StringCoord& addIn) co
 
    // the rest is the Z7 digit string
    int index = 2; // skip the two base cell digits
-   string z7str = addstr.substr(index);
+   std::string z7str = addstr.substr(index);
     int res = (int) z7str.length();
     if (res != res_) {
         report("DgZ7StringToQ2DIConverter::convertTypedAddress(): "
@@ -492,7 +492,7 @@ DgZ7StringToQ2DIConverter::convertTypedAddress (const DgZ7StringCoord& addIn) co
     }
 
    DgQ2DICoord q2di(quadNum, ij);
-   //dgcout << addIn << " " << q2di << endl; // KEVIN
+   //dgcout << addIn << " " << q2di << std::endl; // KEVIN
 
    return q2di;
 

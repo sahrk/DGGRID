@@ -121,7 +121,7 @@ DgRF<A, D>::getAddress (const DgLocation& loc) const
 {
    if (loc.rf() != *this)
    {
-      dgcerr << "ABORTING *this: " << *this << " loc: " << loc << endl;
+      dgcerr << "ABORTING *this: " << *this << " loc: " << loc << std::endl;
       report("DgRF<A, D>::getAddress() location not from this rf",
              DgBase::Fatal);
       return 0;
@@ -149,7 +149,7 @@ DgRF<A, D>::forceAddress (DgLocation* loc, const A& addIn) const {
 
 ////////////////////////////////////////////////////////////////////////////////
 template<class A, class D> void
-DgRF<A, D>::buildLocVector (DgLocVector* vec, const vector<A*> inVec) const
+DgRF<A, D>::buildLocVector (DgLocVector* vec, const std::vector<A*> inVec) const
 {
    vec->clearAddress();
    vec->resize(inVec.size());
@@ -244,10 +244,10 @@ DgRF<A, D>::getDistance (const DgDistanceBase& dist) const
 } // D DgRF<A, D>::getDistance
 
 ////////////////////////////////////////////////////////////////////////////////
-template <class A, class D> string
+template <class A, class D> std::string
 DgRF<A, D>::toString (const DgLocation& loc) const
 {
-   string str;
+   std::string str;
 
    if (loc.rf() != *this)
    {
@@ -270,13 +270,13 @@ DgRF<A, D>::toString (const DgLocation& loc) const
 
    return str;
 
-} // string DgRF<A, D>::toString
+} // std::string DgRF<A, D>::toString
 
 ////////////////////////////////////////////////////////////////////////////////
-template <class A, class D> string
+template <class A, class D> std::string
 DgRF<A, D>::toString (const DgLocation& loc, char delimiter) const
 {
-   string str;
+   std::string str;
 
    if (loc.rf() != *this)
    {
@@ -297,7 +297,7 @@ DgRF<A, D>::toString (const DgLocation& loc, char delimiter) const
 
    return str;
 
-} // string DgRF<A, D>::toString
+} // std::string DgRF<A, D>::toString
 
 ////////////////////////////////////////////////////////////////////////////////
 template <class A, class D> const char*
@@ -307,7 +307,7 @@ DgRF<A, D>::fromString (DgLocation& loc, const char* str, char delimiter) const
    const char* tmp = str2add(&add, str, delimiter);
    if (add == undefAddress())
    {
-      ::report("DgRF<A, D>::fromString() invalid address string " + string(str),
+      ::report("DgRF<A, D>::fromString() invalid address string " + std::string(str),
                DgBase::Fatal);
    }
 
@@ -320,10 +320,10 @@ DgRF<A, D>::fromString (DgLocation& loc, const char* str, char delimiter) const
 } // const char* DgRF<A, D>::fromString
 
 ////////////////////////////////////////////////////////////////////////////////
-template <class A, class D> string
+template <class A, class D> std::string
 DgRF<A, D>::toString (const DgLocVector& locVec) const
 {
-   string str;
+   std::string str;
 
    if (locVec.rf() != *this)
    {
@@ -333,7 +333,7 @@ DgRF<A, D>::toString (const DgLocVector& locVec) const
    }
 
    str = name() + "{\n";
-   const vector<DgAddressBase*>& v = locVec.addressVec();
+   const std::vector<DgAddressBase*>& v = locVec.addressVec();
    for (unsigned int i = 0; i < v.size(); i++)
    {
       const A& add = (static_cast<const DgAddress<A>*>(v[i]))->address();
@@ -343,13 +343,13 @@ DgRF<A, D>::toString (const DgLocVector& locVec) const
 
    return str;
 
-} // string DgRF<A, D>::toString
+} // std::string DgRF<A, D>::toString
 
 ////////////////////////////////////////////////////////////////////////////////
-template <class A, class D> string
+template <class A, class D> std::string
 DgRF<A, D>::toString (const DgLocVector& locVec, char delimiter) const
 {
-   string str;
+   std::string str;
 
    if (locVec.rf() != *this)
    {
@@ -358,7 +358,7 @@ DgRF<A, D>::toString (const DgLocVector& locVec, char delimiter) const
       return str;
    }
 
-   const vector<DgAddressBase*>& v = locVec.addressVec();
+   const std::vector<DgAddressBase*>& v = locVec.addressVec();
    for (unsigned int i = 0; i < v.size(); i++)
    {
       const A& add = (static_cast<const DgAddress<A>*>(v[i]))->address();
@@ -367,13 +367,13 @@ DgRF<A, D>::toString (const DgLocVector& locVec, char delimiter) const
 
    return str;
 
-} // string DgRF<A, D>::toString
+} // std::string DgRF<A, D>::toString
 
 ////////////////////////////////////////////////////////////////////////////////
-template <class A, class D> string
+template <class A, class D> std::string
 DgRF<A, D>::toAddressString (const DgLocation& loc) const
 {
-   string str;
+   std::string str;
 
    if (loc.rf() != *this)
    {
@@ -394,13 +394,13 @@ DgRF<A, D>::toAddressString (const DgLocation& loc) const
 
    return str;
 
-} // string DgRF<A, D>::toAddressString
+} // std::string DgRF<A, D>::toAddressString
 
 ////////////////////////////////////////////////////////////////////////////////
-template <class A, class D> string
+template <class A, class D> std::string
 DgRF<A, D>::toAddressString (const DgLocation& loc, char delimiter) const
 {
-   string str;
+   std::string str;
 
    if (loc.rf() != *this)
    {
@@ -421,13 +421,13 @@ DgRF<A, D>::toAddressString (const DgLocation& loc, char delimiter) const
 
    return str;
 
-} // string DgRF<A, D>::toAddressString
+} // std::string DgRF<A, D>::toAddressString
 
 ////////////////////////////////////////////////////////////////////////////////
-template <class A, class D> string
+template <class A, class D> std::string
 DgRF<A, D>::toAddressString (const DgLocVector& locVec) const
 {
-   string str;
+   std::string str;
 
    if (locVec.rf() != *this)
    {
@@ -437,7 +437,7 @@ DgRF<A, D>::toAddressString (const DgLocVector& locVec) const
    }
 
    str = "{\n";
-   const vector<DgAddressBase*>& v = locVec.addressVec();
+   const std::vector<DgAddressBase*>& v = locVec.addressVec();
    for (unsigned int i = 0; i < v.size(); i++)
    {
       const A& add = (static_cast<const DgAddress<A>*>(v[i]))->address();
@@ -447,13 +447,13 @@ DgRF<A, D>::toAddressString (const DgLocVector& locVec) const
 
    return str;
 
-} // string DgRF<A, D>::toAddressString
+} // std::string DgRF<A, D>::toAddressString
 
 ////////////////////////////////////////////////////////////////////////////////
-template <class A, class D> string
+template <class A, class D> std::string
 DgRF<A, D>::toAddressString (const DgLocVector& locVec, char delimiter) const
 {
-   string str;
+   std::string str;
 
    if (locVec.rf() != *this)
    {
@@ -462,7 +462,7 @@ DgRF<A, D>::toAddressString (const DgLocVector& locVec, char delimiter) const
       return str;
    }
 
-   const vector<DgAddressBase*>& v = locVec.addressVec();
+   const std::vector<DgAddressBase*>& v = locVec.addressVec();
    for (unsigned int i = 0; i < v.size(); i++)
    {
       const A& add = (static_cast<const DgAddress<A>*>(v[i]))->address();
@@ -471,13 +471,13 @@ DgRF<A, D>::toAddressString (const DgLocVector& locVec, char delimiter) const
 
    return str;
 
-} // string DgRF<A, D>::toAddressString
+} // std::string DgRF<A, D>::toAddressString
 
 ////////////////////////////////////////////////////////////////////////////////
-template <class A, class D> string
+template <class A, class D> std::string
 DgRF<A, D>::toString (const DgDistanceBase& dist) const
 {
-   string str;
+   std::string str;
 
    if (dist.rf() != *this)
    {
@@ -491,7 +491,7 @@ DgRF<A, D>::toString (const DgDistanceBase& dist) const
 
    return str;
 
-} // string DgRF<A, D>::toString
+} // std::string DgRF<A, D>::toString
 
 ////////////////////////////////////////////////////////////////////////////////
 template <class A, class D> long double

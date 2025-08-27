@@ -38,7 +38,7 @@ class DgIDGGS3H : public DgHexIDGGS {
 
       static const DgIDGGS3H* makeRF (DgRFNetwork& networkIn, const DgGeoSphRF& backFrameIn,
                const DgGeoCoord& vert0, long double azDegs, int nResIn = 1,
-               const string& nameIn = "ISEA3H", const string& projType = "ISEA")
+               const std::string& nameIn = "ISEA3H", const std::string& projType = "ISEA")
          { return new DgIDGGS3H(networkIn, backFrameIn, vert0, azDegs, nResIn, nameIn, projType); }
 
      ~DgIDGGS3H (void);
@@ -51,7 +51,7 @@ class DgIDGGS3H : public DgHexIDGGS {
 
       DgIDGGS3H (DgRFNetwork& networkIn, const DgGeoSphRF& backFrameIn,
                const DgGeoCoord& vert0, long double azDegs, int nResIn = 1,
-               const string& nameIn = "ISEA3H", const string& projType = "ISEA")
+               const std::string& nameIn = "ISEA3H", const std::string& projType = "ISEA")
          : DgHexIDGGS (networkIn, backFrameIn, vert0, azDegs, 3, nResIn,
                 nameIn, projType)
            { frequency_ = sqrtl(aperture()); }

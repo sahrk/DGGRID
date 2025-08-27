@@ -175,8 +175,8 @@ DgZXStringRF::quantify (const DgQ2DICoord& addIn) const
         }
     }
 
-    string bcstr = dgg::util::to_string(baseCell, 2);
-    string addstr = bcstr;
+    std::string bcstr = dgg::util::to_string(baseCell, 2);
+    std::string addstr = bcstr;
     DgIVec3D::Direction skipDigit = ((baseCell < 6) ? DgIVec3D::PENTAGON_SKIPPED_DIGIT_TYPE1 : DgIVec3D::PENTAGON_SKIPPED_DIGIT_TYPE2);
     int skipRotate = false;
     int firstNonZero = false;
@@ -210,10 +210,10 @@ DgZXStringRF::invQuantify (const DgHierNdxStringCoord& addIn) const
 {
    //printf("DgZ7StringToQ2DIConverter::convertTypedAddress\n");
 
-   string addstr = addIn.valString();
+   std::string addstr = addIn.valString();
 
    // first get the base cell number
-   string bstr = addstr.substr(0, 2);
+   std::string bstr = addstr.substr(0, 2);
    if (bstr[0] == '0') // leading 0
       bstr = bstr.substr(1, 1);
    int bcNum = std::stoi(bstr);
@@ -394,7 +394,7 @@ DgZXStringRF::invQuantify (const DgHierNdxStringCoord& addIn) const
     }
 
    DgQ2DICoord q2di(quadNum, ij);
-   //dgcout << addIn << " " << q2di << endl;
+   //dgcout << addIn << " " << q2di << std::endl;
 
    return q2di;
 

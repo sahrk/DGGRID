@@ -36,8 +36,6 @@ class DgZOrderStringCoord;
 class DgIDGGBase;
 class DgZOrderCoord;
 
-using namespace std;
-
 ////////////////////////////////////////////////////////////////////////////////
 class DgZOrderStringtoZOrderConverter :
         public DgConverter<DgZOrderStringCoord, long long int, DgZOrderCoord, long long int>
@@ -107,9 +105,9 @@ class DgZOrderCoord  {
 
       uint64_t value (void) const { return value_; }
 
-      operator string (void) const { return valString(); }
+      operator std::string (void) const { return valString(); }
 
-      string valString (void) const;
+      std::string valString (void) const;
 
       bool operator== (const DgZOrderCoord& c) const
           { return value() == c.value(); }
@@ -130,16 +128,16 @@ class DgZOrderCoord  {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-inline ostream&
-operator<< (ostream& stream, const DgZOrderCoord& coord)
-{ return stream << string(coord); }
+inline std::ostream&
+operator<< (std::ostream& stream, const DgZOrderCoord& coord)
+{ return stream << std::string(coord); }
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgZOrderRF : public DgRF<DgZOrderCoord, long long int> {
 
    public:
 
-      static DgZOrderRF* makeRF (DgRFNetwork& networkIn, const string& nameIn,
+      static DgZOrderRF* makeRF (DgRFNetwork& networkIn, const std::string& nameIn,
                                   int resIn, int apertureIn)
          { return new DgZOrderRF (networkIn, nameIn, resIn, apertureIn); }
 
@@ -150,17 +148,17 @@ class DgZOrderRF : public DgRF<DgZOrderCoord, long long int> {
                         const DgZOrderCoord& add2) const
                        { return 0; }
 
-      virtual string add2str (const DgZOrderCoord& add) const
-                       { return string(add); }
+      virtual std::string add2str (const DgZOrderCoord& add) const
+                       { return std::string(add); }
 
-      virtual string add2str (const DgZOrderCoord& add, char delimiter)
+      virtual std::string add2str (const DgZOrderCoord& add, char delimiter)
                                                                          const
-                       { return string(add); }
+                       { return std::string(add); }
 
       virtual const char* str2add (DgZOrderCoord* add, const char* str,
                                    char delimiter) const;
 
-      virtual string dist2str (const long long int& dist) const
+      virtual std::string dist2str (const long long int& dist) const
                        { return dgg::util::to_string(dist); }
 
       virtual long double dist2dbl (const long long int& dist) const
@@ -174,7 +172,7 @@ class DgZOrderRF : public DgRF<DgZOrderCoord, long long int> {
 
    protected:
 
-      DgZOrderRF (DgRFNetwork& networkIn, const string& nameIn,
+      DgZOrderRF (DgRFNetwork& networkIn, const std::string& nameIn,
                     int resIn, int apertureIn)
          : DgRF<DgZOrderCoord, long long int>(networkIn, nameIn),
            res_ (resIn), aperture_ (apertureIn) { }

@@ -29,14 +29,12 @@
 
 #include <iostream>
 
-using namespace std;
-
 ////////////////////////////////////////////////////////////////////////////////
 class DgSeriesConverter : public DgConverterBase {
 
    public:
 
-      DgSeriesConverter (const vector<const DgConverterBase*>& series,
+      DgSeriesConverter (const std::vector<const DgConverterBase*>& series,
                          bool userGenerated = false);
 
       DgSeriesConverter (const DgRFBase& fromFrame,
@@ -58,7 +56,7 @@ class DgSeriesConverter : public DgConverterBase {
 
    private:
 
-      vector<const DgConverterBase*> series_;
+      std::vector<const DgConverterBase*> series_;
 
       virtual DgAddressBase* createConvertedAddress
                               (const DgAddressBase& addIn) const;
@@ -66,7 +64,7 @@ class DgSeriesConverter : public DgConverterBase {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-ostream& operator<< (ostream& stream, const DgSeriesConverter& con);
+std::ostream& operator<< (std::ostream& stream, const DgSeriesConverter& con);
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

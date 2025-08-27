@@ -34,14 +34,14 @@
 #include <dglib/DgHexC3Grid2D.h>
 #include <dglib/DgHexGrid2DS.h>
 
-static const string& emptyStr = "";
+static const std::string& emptyStr = "";
 
 using namespace dgg::topo;
 
 ////////////////////////////////////////////////////////////////////////////////
 DgHexGrid2DS::DgHexGrid2DS (DgRFNetwork& networkIn,
                const DgRF<DgDVec2D, long double>& backFrameIn, int nResIn,
-               const DgApSeq& apSeqIn, const string& nameIn)
+               const DgApSeq& apSeqIn, const std::string& nameIn)
         : DgDiscRFS2D (networkIn, backFrameIn, nResIn, Hexagon, D6, 4,
                        //apSeqIn.getAperture(apSeqIn.lastRes()).aperture(),
                        0, 1, nameIn),
@@ -55,18 +55,18 @@ DgHexGrid2DS::DgHexGrid2DS (DgRFNetwork& networkIn,
 
    long double fac = M_ONE;
 
-   //cout << "*** CREATING AFFINE CONVERTERS:" << endl;
+   //cout << "*** CREATING AFFINE CONVERTERS:" << std::endl;
 
    bool isClassI = true;
    bool isClassIII = false;
    int ap = 4;
    for (int r = 0; r < nRes(); r++)
    {
-      string newName = name() + "_" + dgg::util::to_string(r);
+      std::string newName = name() + "_" + dgg::util::to_string(r);
 
-      //cout << "  r: " + dgg::util::to_string(r) + " grid: " + newName << " fac: " << fac << endl;
+      //cout << "  r: " + dgg::util::to_string(r) + " grid: " + newName << " fac: " << fac << std::endl;
 
-      const DgContCartRF* ccRF = DgContCartRF::makeRF(network(), newName + string("bf"));
+      const DgContCartRF* ccRF = DgContCartRF::makeRF(network(), newName + std::string("bf"));
 
       // this creates the forward and inverse converters, which are memory
       // managed by the DgRFNetwork. but 2Way converters  are not themselves
@@ -100,9 +100,9 @@ DgHexGrid2DS::DgHexGrid2DS (DgRFNetwork& networkIn,
          isClassIII = !isClassIII;
       }
 
-//cout << "i: " << i << " fac: " << fac << endl;
+//cout << "i: " << i << " fac: " << fac << std::endl;
    }
-//cout << "** final fac: " << fac << endl;
+//cout << "** final fac: " << fac << std::endl;
 
 } // DgHexGrid2DS::DgHexGrid2DS
 
@@ -111,7 +111,7 @@ DgHexGrid2DS::DgHexGrid2DS (DgRFNetwork& networkIn,
 DgHexGrid2DS::DgHexGrid2DS (DgRFNetwork& networkIn,
                const DgRF<DgDVec2D, long double>& backFrameIn, int nResIn,
                unsigned int apertureIn, bool isCongruentIn, bool isAlignedIn,
-               const string& nameIn, bool isMixed43In, int numAp4In,
+               const std::string& nameIn, bool isMixed43In, int numAp4In,
                bool isSuperfundIn, bool isApSeqIn, const DgApSeq& apSeqIn)
         : DgDiscRFS2D (networkIn, backFrameIn, nResIn, Hexagon, D6, apertureIn, 
               isCongruentIn, isAlignedIn, nameIn),
@@ -119,7 +119,7 @@ DgHexGrid2DS::DgHexGrid2DS (DgRFNetwork& networkIn,
           isMixed43_ (isMixed43In), numAp4_ (numAp4In), isSuperfund_ (isSuperfundIn),
           isApSeq_ (isApSeqIn)
 {
-cerr << "KEVIN: DEPRECATED DgHexGrid2DS" << endl;
+cerr << "KEVIN: DEPRECATED DgHexGrid2DS" << std::endl;
    if (isApSeq())
       report("DgHexGrid2DS::DgHexGrid2DS() isApSeq should be false in this constructor",
        DgBase::Fatal);
@@ -153,11 +153,11 @@ cerr << "KEVIN: DEPRECATED DgHexGrid2DS" << endl;
 
    for (int i = 0; i < nRes(); i++)
    {
-      string newName = name() + "_" + dgg::util::to_string(i);
+      std::string newName = name() + "_" + dgg::util::to_string(i);
 
-      //cout << newName << " " << fac << ' ' << trans << endl;
+      //cout << newName << " " << fac << ' ' << trans << std::endl;
 
-      const DgContCartRF* ccRF = DgContCartRF::makeRF(network(), newName + string("bf"));
+      const DgContCartRF* ccRF = DgContCartRF::makeRF(network(), newName + std::string("bf"));
 
       Dg2WayContAffineConverter(backFrame(), *ccRF, (long double) fac, M_ZERO,
                                     DgDVec2D(M_ZERO, M_ZERO));
@@ -191,9 +191,9 @@ cerr << "KEVIN: DEPRECATED DgHexGrid2DS" << endl;
       }
       else
          fac *= frequency;
-//cout << "i: " << i << " fac: " << fac << endl;
+//cout << "i: " << i << " fac: " << fac << std::endl;
    }
-//cout << "** final fac: " << fac << endl;
+//cout << "** final fac: " << fac << std::endl;
 
 } // DgHexGrid2DS::DgHexGrid2DS
 

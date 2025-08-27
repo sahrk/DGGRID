@@ -116,36 +116,36 @@ DgQ2DItoZOrderStringConverter::DgQ2DItoZOrderStringConverter
 DgZOrderStringCoord
 DgQ2DItoZOrderStringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
 {
-   string qstr = dgg::util::to_string(addIn.quadNum(), 2);
-   string addstr = qstr;
+   std::string qstr = dgg::util::to_string(addIn.quadNum(), 2);
+   std::string addstr = qstr;
 
    if (effRes_ > 0) {
-//dgcout << "** addIn " << addIn << endl;
+//dgcout << "** addIn " << addIn << std::endl;
    DgRadixString rs1(effRadix_, (int) addIn.coord().i(), effRes_);
    DgRadixString rs2(effRadix_, (int) addIn.coord().j(), effRes_);
 
-//dgcout << "rs1 " << rs1 << endl;
-//dgcout << "rs2 " << rs2 << endl;
+//dgcout << "rs1 " << rs1 << std::endl;
+//dgcout << "rs2 " << rs2 << std::endl;
 
 /*
    if (IDGG().aperture() == 3) {
-      dgcout << "Class " << ((IDGG().isClassI()) ? "I" : "II") << endl;
+      dgcout << "Class " << ((IDGG().isClassI()) ? "I" : "II") << std::endl;
    }
 */
    addstr = addstr +
      DgRadixString::digitInterleave(rs1, rs2, !((IDGG().aperture() == 3)));
 
-//dgcout << "addstr " << addstr << endl;
+//dgcout << "addstr " << addstr << std::endl;
    // trim last digit if Class II
    if (IDGG().aperture() == 3 && !IDGG().isClassI() && addstr.length()) {
       addstr.pop_back();
    }
-//dgcout << "trimmed " << addstr << endl;
+//dgcout << "trimmed " << addstr << std::endl;
    }
 
    DgZOrderStringCoord zorder;
    zorder.setValString(addstr);
-//dgcout << "zorder " << zorder << endl;
+//dgcout << "zorder " << zorder << std::endl;
 
    return zorder;
 
@@ -196,11 +196,11 @@ DgZOrderStringToQ2DIConverter::DgZOrderStringToQ2DIConverter
 DgQ2DICoord
 DgZOrderStringToQ2DIConverter::convertTypedAddress (const DgZOrderStringCoord& addIn) const
 {
-//dgcout << " -> " << addIn << endl;
-   string addstr = addIn.valString();
+//dgcout << " -> " << addIn << std::endl;
+   std::string addstr = addIn.valString();
 
    // first get the quad number
-   string qstr = addstr.substr(0, 2);
+   std::string qstr = addstr.substr(0, 2);
    if (qstr[0] == '0') // leading 0
       qstr = qstr.substr(1, 1);
    int quadNum = std::stoi(qstr);
@@ -208,11 +208,11 @@ DgZOrderStringToQ2DIConverter::convertTypedAddress (const DgZOrderStringCoord& a
    int index = 2; // skip the two quad digits
 
    // the rest is the radix string
-   string radStr = addstr.substr(index);
+   std::string radStr = addstr.substr(index);
 
    // split out the interleaved digits
-   string radStr1 = "";
-   string radStr2 = "";
+   std::string radStr1 = "";
+   std::string radStr2 = "";
 
    if (IDGG().aperture() == 3) {
       bool isIdigit = true; // first char is an i digit
@@ -229,7 +229,7 @@ DgZOrderStringToQ2DIConverter::convertTypedAddress (const DgZOrderStringCoord& a
 
       if (!IDGG().isClassI()) {
          // add the last j digit based on the last i digit
-         string jDigits[] = { "0", "2", "1" };
+         std::string jDigits[] = { "0", "2", "1" };
          radStr2 += jDigits[lastIdigit];
       }
 
@@ -251,10 +251,10 @@ DgZOrderStringToQ2DIConverter::convertTypedAddress (const DgZOrderStringCoord& a
    DgRadixString rad1(effRadix_, radStr1);
    DgRadixString rad2(effRadix_, radStr2);
 
-   //dgcout << "qstr: " << qstr << " rad1: " << rad1 << " rad2: " << rad2 << endl;
+   //dgcout << "qstr: " << qstr << " rad1: " << rad1 << " rad2: " << rad2 << std::endl;
 
    DgQ2DICoord q2di(quadNum, DgIVec2D(rad1.value(), rad2.value()));
-   //dgcout << "q2di: " << q2di << endl;
+   //dgcout << "q2di: " << q2di << std::endl;
 
    return q2di;
 

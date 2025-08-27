@@ -32,8 +32,8 @@
 #include <dglib/DgEllipsoidRF.h>
 #include <dglib/DgApSeq.h>
 #include <dglib/DgGridTopo.h>
-#include <dglib/DgHierNdxSysType.h>
-using namespace dgg::hiersystype;
+#include <dglib/DgAddressType.h>
+using namespace dgg::addtype;
 
 #include <cmath>
 
@@ -51,11 +51,11 @@ class DgIDGGSBase : public DgDiscTopoRFS<DgQ2DICoord, DgGeoCoord, long double> {
                long double azDegs, unsigned int aperture = 4, int nRes = 1,
                DgGridTopology gridTopo = Hexagon,
                DgGridMetric gridMetric = D6,
-               const string& name = "IDGGS", const string& projType = "ISEA",
+               const std::string& name = "IDGGS", const std::string& projType = "ISEA",
                bool isApSeq = false, const DgApSeq& apSeq = DgApSeq::defaultApSeq,
                bool isMixed43 = false, int numAp4 = 0,
                bool isSuperfund = false,
-               const DgHierNdxSysType hierNdxSysType = dgg::hiersystype::InvalidHierNdxSysType);
+               const DgHierNdxSysType hierNdxSysType = InvalidHierNdxSysType);
 
       // copy constructor and operator= not implemented
 
@@ -67,11 +67,11 @@ class DgIDGGSBase : public DgDiscTopoRFS<DgQ2DICoord, DgGeoCoord, long double> {
       const DgIDGGBase& idggBase (int res) const
              { return static_cast<const DgIDGGBase&>(operator[](res)); }
 
-      const DgGeoSphRF& geoRF       (void) const { return geoRF_; }
-      const DgGeoCoord& vert0       (void) const { return vert0_; }
-      long double       azDegs      (void) const { return azDegs_; }
-      bool              isPure      (void) const { return isPure_; }
-      const string&     projType    (void) const { return projType_; }
+      const DgGeoSphRF&  geoRF       (void) const { return geoRF_; }
+      const DgGeoCoord&  vert0       (void) const { return vert0_; }
+      long double        azDegs      (void) const { return azDegs_; }
+      bool               isPure      (void) const { return isPure_; }
+      const std::string& projType    (void) const { return projType_; }
     
       const DgHierNdxSystemRFSBase* hierNdxSystem (void) const { return hierNdxSystem_; }
 /*
@@ -88,8 +88,8 @@ class DgIDGGSBase : public DgDiscTopoRFS<DgQ2DICoord, DgGeoCoord, long double> {
                DgGridTopology gridTopo = Hexagon,
                DgGridMetric gridMetric = D6,
                unsigned int aperture = 4,
-               const string& name = "IDGGS",
-               const string& projType = "ISEA",
+               const std::string& name = "IDGGS",
+               const std::string& projType = "ISEA",
                bool isPure = true)
         : DgDiscTopoRFS<DgQ2DICoord, DgGeoCoord, long double> (network, backFrame,
                   nRes, gridTopo, gridMetric, aperture, true, false, name),
@@ -121,15 +121,15 @@ class DgIDGGSBase : public DgDiscTopoRFS<DgQ2DICoord, DgGeoCoord, long double> {
 /*
       DgGridTopology gridTopo_;
 */
-      string projType_;
+      std::string projType_;
 
       bool isPure_;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-inline ostream& operator<< (ostream& stream, const DgIDGGSBase& dggs)
+inline std::ostream& operator<< (std::ostream& stream, const DgIDGGSBase& dggs)
 {
-   stream << string("** DgIDGGSBase: ") <<
+   stream << std::string("** DgIDGGSBase: ") <<
          (const DgDiscTopoRFS<DgQ2DICoord, DgGeoCoord, long double>&) dggs << endl;
    stream << "geoRF: " << dggs.geoRF();
    stream << "\nvert0: " << dggs.vert0();

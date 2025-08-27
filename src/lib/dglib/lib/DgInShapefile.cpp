@@ -35,7 +35,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 DgInShapefile::DgInShapefile (const DgGeoSphRF& geoRFIn,
-                   const string* fileNameIn, DgReportLevel failLevelIn)
+                   const std::string* fileNameIn, DgReportLevel failLevelIn)
    : DgInLocFile (geoRFIn, fileNameIn, false, failLevelIn),
      geoRF_ (geoRFIn), shpFile_ (NULL), numEntities_ (0), nextRecNum_ (0),
      curShpObj_ (NULL), curRecNum_ (0), curPart_ (0), nextPart_ (0),
@@ -50,7 +50,7 @@ DgInShapefile::DgInShapefile (const DgGeoSphRF& geoRFIn,
 
 ////////////////////////////////////////////////////////////////////////////////
 bool
-DgInShapefile::open (const string* fileNameIn, DgReportLevel failLevelIn)
+DgInShapefile::open (const std::string* fileNameIn, DgReportLevel failLevelIn)
 {
    if (fileNameIn)
       fileName_ = *fileNameIn;

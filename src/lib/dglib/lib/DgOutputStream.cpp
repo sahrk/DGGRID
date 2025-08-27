@@ -18,7 +18,7 @@
 *******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
-// DgOutputStream.C: DgOutputStream class implementation
+// DgOutputStream.cpp: DgOutputStream class implementation
 //
 //   This class provides wrappers around some basic output stream functionality
 //   to increase ease of use.
@@ -29,7 +29,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-DgOutputStream::DgOutputStream (const string& fileName, const string& suffix,
+DgOutputStream::DgOutputStream (const std::string& fileName, const std::string& suffix,
                                 DgReportLevel failLevel)
    : DgBase ("DgOutputStream:" + fileName), suffix_ (suffix)
 {
@@ -44,7 +44,7 @@ DgOutputStream::DgOutputStream (const string& fileName, const string& suffix,
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 bool
-DgOutputStream::open (string fileName, DgReportLevel failLevel)
+DgOutputStream::open (std::string fileName, DgReportLevel failLevel)
 //
 // Open fileName as an output file. Report with a report level of failLevel
 // if the open is unsuccessful.
@@ -59,10 +59,10 @@ DgOutputStream::open (string fileName, DgReportLevel failLevel)
    // get all the possible name variations
 
    fileName_
-      = (suffix() == string("")) ? fileName :
-                                     fileName + string(".") + suffix();
+      = (suffix() == std::string("")) ? fileName :
+                                     fileName + std::string(".") + suffix();
 
-   ofstream::open(fileName_.c_str(), ios::out);
+    std::ofstream::open(fileName_.c_str(), std::ios::out);
    if (!good())
    {
       report("DgOutputStream::open() unable to open file " + fileName_,

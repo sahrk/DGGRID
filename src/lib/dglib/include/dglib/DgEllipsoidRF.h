@@ -33,8 +33,6 @@
 #include <dglib/DgGeoDatumRF.h>
 //#include <dglib/DgDataList.h>
 
-using namespace std;
-
 typedef struct GeoCoord {
 
    long double lat;
@@ -86,7 +84,7 @@ class DgGeoCoord : public DgDVec2D {
       DgGeoCoord& operator= (const DgDVec2D& coord)
            { DgDVec2D::operator=(coord); return *this; }
 
-      operator string (void) const
+      operator std::string (void) const
            { return "(" + dgg::util::to_string(lonDegs()) + ", " +
 		   dgg::util::to_string(latDegs()) + ")"; }
 
@@ -118,12 +116,12 @@ class DgGeoCoord : public DgDVec2D {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-inline ostream&
-operator<< (ostream& stream, const DgGeoCoord& pt)
+inline std::ostream&
+operator<< (std::ostream& stream, const DgGeoCoord& pt)
 {
-   return stream << string(pt);
+   return stream << std::string(pt);
 
-} // ostream& operator<<
+} // std::ostream& operator<<
 
 /*
 ////////////////////////////////////////////////////////////////////////////////
@@ -154,14 +152,14 @@ class DgGeoCoordData : public DgGeoCoord {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-inline ostream&
-operator<< (ostream& stream, const DgGeoCoordData& pt)
+inline std::ostream&
+operator<< (std::ostream& stream, const DgGeoCoordData& pt)
 {
-   stream << string(pt);
+   stream << std::string(pt);
    if (pt.dataList()) stream << ":" << *pt.dataList();
    return stream << endl;
 
-} // ostream& operator<<
+} // std::ostream& operator<<
 */
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -278,17 +276,17 @@ class DgEllipsoidRF : public DgGeoDatumRF<DgGeoCoord, long double> {
       virtual long double dist (const DgGeoCoord&, const DgGeoCoord&) const
          { return 1.0L; }
 
-      virtual string add2str (const DgGeoCoord& add) const
-                       { return string(add); }
+      virtual std::string add2str (const DgGeoCoord& add) const
+                       { return std::string(add); }
 
-      virtual string add2str (const DgGeoCoord& add, char delimiter) const
+      virtual std::string add2str (const DgGeoCoord& add, char delimiter) const
                 { return dgg::util::to_string(add.lonDegs(), formatStr()) + delimiter +
                          dgg::util::to_string(add.latDegs(), formatStr()); }
 
       virtual const char* str2add (DgGeoCoord* add, const char* str,
                                    char delimiter) const;
 
-      virtual string dist2str (const long double& dist) const
+      virtual std::string dist2str (const long double& dist) const
                        { return dgg::util::to_string(dist, formatStr()); }
 
       virtual long double dist2dbl (const long double& dist) const
@@ -299,13 +297,13 @@ class DgEllipsoidRF : public DgGeoDatumRF<DgGeoCoord, long double> {
 
    protected:
 
-      DgEllipsoidRF (DgRFNetwork& networkIn, const string& nameIn)
+      DgEllipsoidRF (DgRFNetwork& networkIn, const std::string& nameIn)
                : DgGeoDatumRF<DgGeoCoord, long double> (networkIn, nameIn),
                  a_ (-1.0L), b_ (-1.0L), f_ (-1.0L), e_ (-1.0L), es_ (-1.0L),
                  as_ (-1.0L), bs_ (-1.0L), ra_ (-1.0L), one_es_ (-1.0L),
                  rone_es_ (-1.0L) { }
 
-      DgEllipsoidRF (DgRFNetwork& networkIn, const string& nameIn,
+      DgEllipsoidRF (DgRFNetwork& networkIn, const std::string& nameIn,
                    const DgEllipsoidRF& ell)
                : DgGeoDatumRF<DgGeoCoord, long double> (networkIn, nameIn),
                  a_ (ell.a()), b_ (ell.b()), f_ (ell.f()),
@@ -314,7 +312,7 @@ class DgEllipsoidRF : public DgGeoDatumRF<DgGeoCoord, long double> {
                  rone_es_ (ell.rone_es())
            { undefLoc_ = makeLocation(undefAddress()); }
 
-      DgEllipsoidRF (DgRFNetwork& networkIn, const string& nameIn,
+      DgEllipsoidRF (DgRFNetwork& networkIn, const std::string& nameIn,
                    long double aIn, long double bIn)
                : DgGeoDatumRF<DgGeoCoord, long double> (networkIn, nameIn),
                  a_ (aIn), b_ (bIn)
@@ -356,13 +354,13 @@ class DgEllipsoidRF : public DgGeoDatumRF<DgGeoCoord, long double> {
 }; // class DgEllipsoidRF
 
 ////////////////////////////////////////////////////////////////////////////////
-inline ostream&
-operator<< (ostream& stream, const DgEllipsoidRF& ell)
+inline std::ostream&
+operator<< (std::ostream& stream, const DgEllipsoidRF& ell)
 {
    return stream << "a: " << ell.a() << " " << "b: " << ell.b() << " "
                  << "f: " << ell.f() << " " << "e: " << ell.e();
 
-} // ostream& operator<<
+} // std::ostream& operator<<
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

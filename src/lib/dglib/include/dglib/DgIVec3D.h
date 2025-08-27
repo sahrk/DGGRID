@@ -114,8 +114,8 @@ typedef enum {
       inline DgIVec3D& scale (long double iScaleFactor, long double jScaleFactor,
                  long double kScaleFactor);
 
-      inline operator string (void) const;
-      inline operator DgIVec2D  (void) const;
+      inline operator std::string (void) const;
+      inline operator DgIVec2D    (void) const;
 
       inline DgIVec3D& operator=  (const DgIVec3D& pt);
       inline DgIVec3D& operator=  (const DgIVec2D& pt);
@@ -156,7 +156,7 @@ typedef enum {
       friend bool operator>  (const DgIVec3D& pt1, const DgIVec3D& pt2);
       friend bool operator>= (const DgIVec3D& pt1, const DgIVec3D& pt2);
 
-      friend ostream& operator<< (ostream& stream, const DgIVec3D& pt);
+      friend std::ostream& operator<< (std::ostream& stream, const DgIVec3D& pt);
 
    private:
 
@@ -197,13 +197,13 @@ inline DgIVec3D::operator DgIVec2D (void) const
 } // DgIVec3D::operator DgIVec2D
 
 ////////////////////////////////////////////////////////////////////////////////
-inline DgIVec3D::operator string (void) const
+inline DgIVec3D::operator std::string (void) const
 {
    return "(" + dgg::util::to_string(i_) + ", "
               + dgg::util::to_string(j_) + ", "
               + dgg::util::to_string(k_) + ")";
 
-} // DgIVec3D::operator string
+} // DgIVec3D::operator std::string
 
 ////////////////////////////////////////////////////////////////////////////////
 inline DgIVec3D&
@@ -358,12 +358,12 @@ operator- (const DgIVec3D& pt1, const DgIVec3D& pt2)
 } // bool operator-
 
 ////////////////////////////////////////////////////////////////////////////////
-inline ostream&
-operator<< (ostream& stream, const DgIVec3D& pt)
+inline std::ostream&
+operator<< (std::ostream& stream, const DgIVec3D& pt)
 {
-   return stream << string(pt);
+   return stream << std::string(pt);
 
-} // ostream& operator<<
+} // std::ostream& operator<<
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

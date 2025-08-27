@@ -66,7 +66,7 @@ DgDVec2D::fromString (const char* str, char delimiter)
    long double xIn;
    if (sscanf(tok, "%LF", &xIn) != 1)
    {
-      ::report("DgDVec2D::fromString() invalid value in string " + string(tok),
+      ::report("DgDVec2D::fromString() invalid value in string " + std::string(tok),
                DgBase::Fatal);
    }
 
@@ -76,7 +76,7 @@ DgDVec2D::fromString (const char* str, char delimiter)
    long double yIn;
    if (sscanf(tok, "%LF", &yIn) != 1)
    {
-      ::report("DgDVec2D::fromString() invalid value in string " + string(tok),
+      ::report("DgDVec2D::fromString() invalid value in string " + std::string(tok),
                DgBase::Fatal);
    }
 

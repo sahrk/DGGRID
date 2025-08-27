@@ -29,8 +29,6 @@
 
 #include <string>
 
-using namespace std;
-
 class DgLocList;
 class DgLocVector;
 class DgPolygon;
@@ -48,27 +46,27 @@ class DgOutLocFile : public DgBase {
 
       enum DgOutGdalFileMode { Polygon, Point, Collection, InvalidMode };
 
-      const static string defaultKMLColor;
+      const static std::string defaultKMLColor;
       const static int    defaultKMLWidth;
-      const static string defaultKMLName;
-      const static string defaultKMLDescription;
+      const static std::string defaultKMLName;
+      const static std::string defaultKMLDescription;
 
       virtual ~DgOutLocFile (void);
 
       // factory method
-      static DgOutLocFile* makeOutLocFile (const string& type,
-               const string& fileName, const string& gdalDriver, const DgRFBase& rf,
+      static DgOutLocFile* makeOutLocFile (const std::string& type,
+               const std::string& fileName, const std::string& gdalDriver, const DgRFBase& rf,
                bool isPointFile = false, int precision = 7, DgOutGdalFileMode mode = Polygon,
-               int shapefileIdLen = 11, const string& kmlColor = defaultKMLColor,
+               int shapefileIdLen = 11, const std::string& kmlColor = defaultKMLColor,
                int kmlWidth = defaultKMLWidth,
-               const string& kmlName = defaultKMLName, const string& kmlDesc = defaultKMLDescription,
+               const std::string& kmlName = defaultKMLName, const std::string& kmlDesc = defaultKMLDescription,
                DgReportLevel failLevelIn = DgBase::Fatal);
 
-      const string& fileName (void) { return fileName_; }
+      const std::string& fileName (void) { return fileName_; }
 
       DgReportLevel failLevel (void) { return failLevel_; }
 
-      virtual bool open (const string& fileName,
+      virtual bool open (const std::string& fileName,
                 DgReportLevel failLevel = DgBase::Fatal) = 0;
 
       virtual void close (void) = 0;
@@ -103,20 +101,20 @@ class DgOutLocFile : public DgBase {
 
       // abstract virtual methods
       virtual DgOutLocFile& insert (DgLocation& loc,
-                                const string* label = nullptr,
+                                const std::string* label = nullptr,
                                 const DgDataList* dataList = nullptr) = 0;
 
-      virtual DgOutLocFile& insert (DgLocVector& vec, const string* label = nullptr,
+      virtual DgOutLocFile& insert (DgLocVector& vec, const std::string* label = nullptr,
                                 const DgLocation* cent = nullptr,
                                 const DgDataList* dataList = nullptr) = 0;
 
-      virtual DgOutLocFile& insert (DgPolygon& poly, const string* label = nullptr,
+      virtual DgOutLocFile& insert (DgPolygon& poly, const std::string* label = nullptr,
                                 const DgLocation* cent = nullptr,
                                 const DgDataList* dataList = nullptr) = 0;
 
    protected:
 
-      DgOutLocFile (const string& fileName,
+      DgOutLocFile (const std::string& fileName,
                const DgRFBase& rf, bool isPointFile = false,
                DgReportLevel failLevelIn = DgBase::Fatal)
          : DgBase ("DgOutLocFile:" + fileName),
@@ -126,7 +124,7 @@ class DgOutLocFile : public DgBase {
 
       const DgRFBase* rf_;
 
-      string fileName_;
+      std::string fileName_;
       bool   isPointFile_;
 
       DgReportLevel failLevel_;
@@ -134,7 +132,7 @@ class DgOutLocFile : public DgBase {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-//inline ostream& operator<< (ostream& output, const DgOutLocFile& f)
+//inline std::ostream& operator<< (std::ostream& output, const DgOutLocFile& f)
               //{ return output << f.name(); }
 
 inline DgOutLocFile& operator<< (DgOutLocFile& output, DgLocList& list)

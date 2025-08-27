@@ -137,10 +137,10 @@ DgLocList::operator== (const DgLocList& list) const
 */
 
 ////////////////////////////////////////////////////////////////////////////////
-string
+std::string
 DgLocList::asString (void) const
 {
-   string str;
+   std::string str;
    str = "[[\n";
    list<DgLocBase*>::const_iterator it;
    for (it = begin(); it != end(); it++) str += (*it)->asString();
@@ -151,10 +151,10 @@ DgLocList::asString (void) const
 } // DgLocList::asString
 
 ////////////////////////////////////////////////////////////////////////////////
-string
+std::string
 DgLocList::asString (char delimiter) const
 {
-   string str;
+   std::string str;
    list<DgLocBase*>::const_iterator it;
    for (it = begin(); it != end(); it++) str += (*it)->asString(delimiter);
 
@@ -183,10 +183,10 @@ DgLocList::fromString (const char* str, char delimiter)
 } // DgLocList::fromString
 
 ////////////////////////////////////////////////////////////////////////////////
-string
+std::string
 DgLocList::asAddressString (void) const
 {
-   string str;
+   std::string str;
    str = "[[\n";
 
    list<DgLocBase*>::const_iterator it;
@@ -199,10 +199,10 @@ DgLocList::asAddressString (void) const
 } // DgLocList::asAddressString
 
 ////////////////////////////////////////////////////////////////////////////////
-string
+std::string
 DgLocList::asAddressString (char delimiter) const
 {
-   string str;
+   std::string str;
 
    list<DgLocBase*>::const_iterator it;
    for (it = begin(); it != end(); it++)

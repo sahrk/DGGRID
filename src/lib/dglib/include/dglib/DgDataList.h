@@ -40,7 +40,7 @@ class DgDataList {
 
       virtual ~DgDataList (void);
 
-      vector<DgDataFieldBase*>& list (void) { return list_; }
+      std::vector<DgDataFieldBase*>& list (void) { return list_; }
 
       void clearList (void);
 
@@ -51,7 +51,7 @@ class DgDataList {
              }
       }
 
-      DgDataFieldBase* getFieldByName (const string& fldName) {
+      DgDataFieldBase* getFieldByName (const std::string& fldName) {
                 auto it = map_.find(fldName);
                 return ((it == map_.end()) ? nullptr : it->second);
       }
@@ -63,7 +63,7 @@ class DgDataList {
 
    protected:
 
-      virtual ostream& writeTo (ostream& stream) const {
+      virtual std::ostream& writeTo (std::ostream& stream) const {
 
          bool first = true;
          stream << "{";
@@ -82,14 +82,14 @@ class DgDataList {
 
    private:
 
-      vector<DgDataFieldBase*> list_;
-      unordered_map<string, DgDataFieldBase*> map_;
+      std::vector<DgDataFieldBase*> list_;
+      std::unordered_map<std::string, DgDataFieldBase*> map_;
 
-   friend ostream& operator<< (ostream& stream, const DgDataList& dataField);
+   friend std::ostream& operator<< (std::ostream& stream, const DgDataList& dataField);
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-inline ostream& operator<< (ostream& stream, const DgDataList& dataList)
+inline std::ostream& operator<< (std::ostream& stream, const DgDataList& dataList)
 {
    return dataList.writeTo(stream);
 }

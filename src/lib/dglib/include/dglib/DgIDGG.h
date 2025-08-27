@@ -55,7 +55,7 @@ class DgIDGG : public DgIDGGBase {
 
       DgIDGG (const DgIDGGSBase* dggs,
               unsigned int apertureIn, int resIn,
-              const string& nameIn = "IDGG",
+              const std::string& nameIn = "IDGG",
               DgGridTopology gridTopoIn = Hexagon,
               DgGridMetric gridMetricIn = D6,
               unsigned int precisionIn = DEFAULT_PRECISION,
@@ -70,9 +70,9 @@ class DgIDGG : public DgIDGGBase {
       virtual const DgGeoCoord&  vert0  (void) const { return vert0_; }
       virtual long double        azDegs (void) const { return azDegs_; }
 
-      virtual DgGridTopology   (void) const { return gridTopo_; }
-      virtual DgGridMetric     (void) const { return gridMetric_; }
-      virtual const string& projType (void) const { return projType_; }
+      virtual DgGridTopology              (void) const { return gridTopo_; }
+      virtual DgGridMetric                (void) const { return gridMetric_; }
+      virtual const std::string& projType (void) const { return projType_; }
 */
 
       bool               isApSeq     (void) const { return isApSeq_; }
@@ -96,7 +96,7 @@ class DgIDGG : public DgIDGGBase {
       long double azDegs_;
       DgGridTopology gridTopo_;
       DgGridMetric gridMetric_;
-      string projType_;
+      std::string projType_;
 */
 
       bool isApSeq_;

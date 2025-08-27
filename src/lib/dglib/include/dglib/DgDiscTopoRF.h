@@ -150,15 +150,15 @@ class DgDiscTopoRF : public DgDiscRF<A, B, DB> {
 
       virtual void setAddNeighborsBdry2 (const A&, DgLocVector&) const { }
 
-      virtual operator string (void) const {
-         string s = "*** DgDiscRF " + DgRFBase::name();
+      virtual operator std::string (void) const {
+         std::string s = "*** DgDiscRF " + DgRFBase::name();
          return s;
       }
 
       // remind users of the pure virtual functions remaining from above
 
-      virtual string add2str (const A& add) const = 0;
-      virtual string add2str (const A& add, char delimiter) const = 0;
+      virtual std::string add2str (const A& add) const = 0;
+      virtual std::string add2str (const A& add, char delimiter) const = 0;
 
       virtual long long int dist (const A& add1, const A& add2) const = 0;
 
@@ -178,7 +178,7 @@ class DgDiscTopoRF : public DgDiscRF<A, B, DB> {
    protected:
 
       DgDiscTopoRF (DgRFNetwork& networkIn, const DgRF<B, DB>& backFrameIn,
-                const string& nameIn = "DiscTopo",
+                const std::string& nameIn = "DiscTopo",
                 DgGridTopology gridTopoIn = Hexagon,
                 DgGridMetric gridMetricIn = D6,
                 long double eIn = 1.0L,
