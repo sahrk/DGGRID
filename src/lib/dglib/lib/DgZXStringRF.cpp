@@ -224,7 +224,7 @@ DgZXStringRF::invQuantify (const DgHierNdxStringCoord& addIn) const
 
    // the rest is the Z7 digit string
    int index = 2; // skip the two base cell digits
-   string z7str = addstr.substr(index);
+    std::string z7str = addstr.substr(index);
     int res = (int) z7str.length();
     if (res != this->res()) {
         report("DgZ7StringToQ2DIConverter::convertTypedAddress(): "

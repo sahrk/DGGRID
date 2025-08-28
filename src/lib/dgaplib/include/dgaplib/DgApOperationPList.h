@@ -31,7 +31,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 struct DgApOperationPList : public DgApOperation {
 
-   DgApOperationPList (const string& _inFileName)
+   DgApOperationPList (const std::string& _inFileName)
       : DgApOperation (), inFileName (_inFileName) { }
 
    virtual int initialize (bool force = false) {
@@ -55,7 +55,7 @@ struct DgApOperationPList : public DgApOperation {
       return result;
    }
 
-   string inFileName;
+   std::string inFileName;
    DgApParamList pList;
 };
 

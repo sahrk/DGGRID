@@ -57,7 +57,7 @@ DgApParamList::clearList (void)
 
 ////////////////////////////////////////////////////////////////////////////////
 void
-DgApParamList::loadParams (const string& fileName, bool fail)
+DgApParamList::loadParams (const std::string& fileName, bool fail)
 {
    ifstream metaFile;
    metaFile.open(fileName.c_str(), ios::in);
@@ -95,14 +95,14 @@ DgApParamList::loadParams (const string& fileName, bool fail)
 
 ////////////////////////////////////////////////////////////////////////////////
 void
-DgApParamList::setParam (const string& nameIn, const string& strValIn, bool fail)
+DgApParamList::setParam (const std::string& nameIn, const std::string& strValIn, bool fail)
 {
-   if (toLower(strValIn) == string("invalid")) return;
+   if (toLower(strValIn) == std::string("invalid")) return;
 
    DgApAssoc* existing = getParam(nameIn, false);
    if (!existing) { // if not fail then just skip
       if (fail)
-         report(string("DgApParamList::setParam() unknown parameter ")
+         report(std::string("DgApParamList::setParam() unknown parameter ")
              + nameIn, DgBase::Fatal);
    } else { // already exists
 
@@ -110,8 +110,8 @@ DgApParamList::setParam (const string& nameIn, const string& strValIn, bool fail
       existing->setIsDefault(false);
       existing->setIsUserSet(true);
       if (!existing->validate()) {
-         report(string("Invalid parameter data in parameter:\n") +
-            existing->asString() + string("\n") +
+         report(std::string("Invalid parameter data in parameter:\n") +
+            existing->asString() + std::string("\n") +
             existing->validationErrMsg(), DgBase::Fatal);
       }
    }
@@ -120,13 +120,13 @@ DgApParamList::setParam (const string& nameIn, const string& strValIn, bool fail
 
 ////////////////////////////////////////////////////////////////////////////////
 void
-DgApParamList::setPresetParam (const string& nameIn, const string& strValIn)
+DgApParamList::setPresetParam (const std::string& nameIn, const std::string& strValIn)
 {
-   if (toLower(strValIn) == string("invalid")) return;
+   if (toLower(strValIn) == std::string("invalid")) return;
 
    DgApAssoc* existing = getParam(nameIn, false);
    if (!existing) {
-      report(string("DgApParamList::setPresetParam() unknown parameter ")
+      report(std::string("DgApParamList::setPresetParam() unknown parameter ")
              + nameIn, DgBase::Fatal);
    } else { // already exists
       // only change value if it was not set explicitly by the user
@@ -134,8 +134,8 @@ DgApParamList::setPresetParam (const string& nameIn, const string& strValIn)
          existing->setValStr(strValIn);
          existing->setIsDefault(false);
          if (!existing->validate()) {
-            report(string("Invalid parameter data in parameter:\n") +
-               existing->asString() + string("\n") +
+            report(std::string("Invalid parameter data in parameter:\n") +
+               existing->asString() + std::string("\n") +
                existing->validationErrMsg(), DgBase::Fatal);
          }
       }
@@ -156,9 +156,9 @@ DgApParamList::insertParam (DgApAssoc* param) // does not make a copy
       parameters.push_back(param);
    } else { // already exists
 
-      report(string("replacing parameter: ") + existing->asString()
-        + string("\nwith parameter: ") + param->asString() +
-        string("\n"), DgBase::Info);
+      report(std::string("replacing parameter: ") + existing->asString()
+        + std::string("\nwith parameter: ") + param->asString() +
+        std::string("\n"), DgBase::Info);
 
       *existing = *param;
    }
@@ -167,9 +167,9 @@ DgApParamList::insertParam (DgApAssoc* param) // does not make a copy
 
 ////////////////////////////////////////////////////////////////////////////////
 DgApAssoc*
-DgApParamList::getParam (const string& nameIn, bool setToIsApplicable) const
+DgApParamList::getParam (const std::string& nameIn, bool setToIsApplicable) const
 {
-   string lower = toLower(nameIn);
+   std::string lower = toLower(nameIn);
 
    for (unsigned int i = 0; i < parameters.size(); i++) {
       if (parameters[i]->name() == lower) {
