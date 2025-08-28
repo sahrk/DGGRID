@@ -87,14 +87,14 @@ DgHierNdxSystemRFBase::DgHierNdxSystemRFBase (
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-string
+std::string
 DgHierNdxSystemRFBase::add2str (const DgHierNdx& add) const
 {
     return std::string(add);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-string
+std::string
 DgHierNdxSystemRFBase::add2str (const DgHierNdx& add, char delimiter) const
 {
     return std::string(add);
@@ -197,7 +197,7 @@ DgQ2DICoord
 DgHierNdxSystemRFBase::invQuantify (const DgHierNdx& ndx) const
 {
    DgQ2DICoord point(strRF()->invQuantify(ndx.strNdx_));
-    cout << "KEVIN: " << ndx.strNdx_ << " " << point << std::endl;
+   std::cout << "KEVIN: " << ndx.strNdx_ << " " << point << std::endl;
    return point;
 }
 

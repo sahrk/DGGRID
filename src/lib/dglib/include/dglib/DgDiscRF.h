@@ -81,7 +81,7 @@ class DgDiscRF : public DgRF<A, long long int> {
       const DgRF<B, DB>& backFrame (void) const { return *backFrame_; }
 
       // misc methods from above
-      virtual std::string dist2str (const long long int& dist) const { return to_string(dist); }
+      virtual std::string dist2str (const long long int& dist) const { return dgg::util::to_string(dist); }
       virtual long double dist2dbl (const long long int& dist) const { return (long double) dist; }
       virtual unsigned long long int dist2int (const long long int& dist) const
                          { return static_cast<unsigned long long int>(dist); }
@@ -132,7 +132,7 @@ class DgDiscRF : public DgRF<A, long long int> {
 template<class A, class B, class DB> std::ostream& operator<< (std::ostream& stream,
           const DgDiscRF<A, B, DB>& g)
 {
-   stream << std::string(g) << endl;
+   stream << std::string(g) << std::endl;
    return stream;
 }
 

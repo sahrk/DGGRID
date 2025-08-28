@@ -136,7 +136,7 @@ class DgZ3StringCoord  {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-inline std::stream&
+inline std::ostream&
 operator<< (std::ostream& stream, const DgZ3StringCoord& coord)
 { return stream << std::string(coord); }
 

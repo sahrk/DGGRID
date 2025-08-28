@@ -70,7 +70,7 @@ DgInputStream::open (std::string fileNameIn, DgReportLevel failLevel)
    int i;
    for (i = 0; i < 4; i++)
    {
-      ifstream::open(names[i].c_str(), ios::in);
+      std::ifstream::open(names[i].c_str(), std::ios::in);
       if (good())
       {
          fileName_ = names[i];

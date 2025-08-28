@@ -24,8 +24,6 @@
 
 #include <list>
 
-using namespace std;
-
 #include <dglib/DgBase.h>
 #include <dglib/DgRFBase.h>
 #include <dglib/DgLocBase.h>
@@ -184,8 +182,8 @@ DgRFBase::buildLocation (DgAddressBase* addIn) const
 } // DgLocation* DgRFBase::buildLocation
 
 ////////////////////////////////////////////////////////////////////////////////
-ostream&
-DgRFBase::traceToGround (ostream& stream) const
+std::ostream&
+DgRFBase::traceToGround (std::ostream& stream) const
 {
    stream << "tracing " << name() << " {";
 
@@ -216,7 +214,7 @@ DgRFBase::traceToGround (ostream& stream) const
 
    // now go back from ground
 
-   list<const DgRFBase*> rev;
+   std::list<const DgRFBase*> rev;
    const DgRFBase* from = connectFrom();
    while (true)
    {
@@ -232,7 +230,7 @@ DgRFBase::traceToGround (ostream& stream) const
       from = from->connectFrom();
    }
 
-   list<const DgRFBase*>::iterator it = rev.begin();
+   std::list<const DgRFBase*>::iterator it = rev.begin();
    for (; it != rev.end(); it++) stream << "  => " << (*it)->name() << "\n";
 
    return stream << " => " << name() << " }" << std::endl;
@@ -240,7 +238,7 @@ DgRFBase::traceToGround (ostream& stream) const
 } // void DgRFBase::traceToGround
 
 ////////////////////////////////////////////////////////////////////////////////
-string
+std::string
 DgRFBase::toString (const DgLocBase& lb) const
 {
    return lb.asString();
@@ -248,7 +246,7 @@ DgRFBase::toString (const DgLocBase& lb) const
 } // string DgRFBase::toString
 
 ////////////////////////////////////////////////////////////////////////////////
-string
+std::string
 DgRFBase::toAddressString (const DgLocBase& lb) const
 {
    return lb.asAddressString();
@@ -256,7 +254,7 @@ DgRFBase::toAddressString (const DgLocBase& lb) const
 } // string DgRFBase::toAddressString
 
 ////////////////////////////////////////////////////////////////////////////////
-string
+std::string
 DgRFBase::toString (const DgLocBase& lb, char delimiter) const
 {
    return lb.asString(delimiter);
@@ -264,7 +262,7 @@ DgRFBase::toString (const DgLocBase& lb, char delimiter) const
 } // string DgRFBase::toString
 
 ////////////////////////////////////////////////////////////////////////////////
-string
+std::string
 DgRFBase::toAddressString (const DgLocBase& lb, char delimiter) const
 {
    return lb.asAddressString(delimiter);

@@ -44,7 +44,7 @@ DgLocList::destroy (void)
 {
    if (isOwner())
    {
-      list<DgLocBase*>::iterator it;
+      std::list<DgLocBase*>::iterator it;
       for (it = begin(); it != end(); it++)
       {
          (*it)->clearAddress();
@@ -61,7 +61,7 @@ DgLocList::destroy (void)
 void
 DgLocList::clearAddress (void)
 {
-   list<DgLocBase*>::iterator it;
+   std::list<DgLocBase*>::iterator it;
    for (it = begin(); it != end(); it++)
    {
       (*it)->clearAddress();
@@ -82,7 +82,7 @@ DgLocList::thin (float dMin, bool clear)
 //
 ////////////////////////////////////////////////////////////////////////////////
 {
-   list<DgLocBase*>::iterator it;
+   std::list<DgLocBase*>::iterator it;
    for (it = begin(); it != end(); it++)
    {
       (*it)->thin(dMin, clear);
@@ -103,7 +103,7 @@ DgLocList::cardinality (void) const
 ////////////////////////////////////////////////////////////////////////////////
 {
    int card = 0;
-   list<DgLocBase*>::const_iterator it;
+   std::list<DgLocBase*>::const_iterator it;
    for (it = begin(); it != end(); it++) card += (*it)->cardinality();
 
    return card;
@@ -142,7 +142,7 @@ DgLocList::asString (void) const
 {
    std::string str;
    str = "[[\n";
-   list<DgLocBase*>::const_iterator it;
+   std::list<DgLocBase*>::const_iterator it;
    for (it = begin(); it != end(); it++) str += (*it)->asString();
    str += "]]\n";
 
@@ -155,7 +155,7 @@ std::string
 DgLocList::asString (char delimiter) const
 {
    std::string str;
-   list<DgLocBase*>::const_iterator it;
+   std::list<DgLocBase*>::const_iterator it;
    for (it = begin(); it != end(); it++) str += (*it)->asString(delimiter);
 
    return str;
@@ -189,7 +189,7 @@ DgLocList::asAddressString (void) const
    std::string str;
    str = "[[\n";
 
-   list<DgLocBase*>::const_iterator it;
+   std::list<DgLocBase*>::const_iterator it;
    for (it = begin(); it != end(); it++)
     str += (*it)->asAddressString();
 
@@ -204,7 +204,7 @@ DgLocList::asAddressString (char delimiter) const
 {
    std::string str;
 
-   list<DgLocBase*>::const_iterator it;
+   std::list<DgLocBase*>::const_iterator it;
    for (it = begin(); it != end(); it++)
       str += (*it)->asAddressString(delimiter);
 
@@ -218,7 +218,7 @@ DgLocList::convertTo (const DgRFBase& rfIn)
    if (!rf_ || rf() != rfIn)
    {
       rf_ = &rfIn;
-      list<DgLocBase*>::iterator it;
+      std::list<DgLocBase*>::iterator it;
       for (it = begin(); it != end(); it++) (*it)->convertTo(rfIn);
    }
 
@@ -229,13 +229,13 @@ void
 DgLocList::push_back (DgLocBase* loc)
 {
    rf().convert(loc);
-   list<DgLocBase*>::push_back(loc);
+   std::list<DgLocBase*>::push_back(loc);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-ostream&
-operator<< (ostream& stream, const DgLocList& list)
+std::ostream&
+operator<< (std::ostream& stream, const DgLocList& list)
 {
    //stream << "[[\n";
    DgLocList::const_iterator it;
@@ -244,6 +244,6 @@ operator<< (ostream& stream, const DgLocList& list)
 
    return stream;
 
-} // ostream& operator<<
+} // std::ostream& operator<<
 
 ////////////////////////////////////////////////////////////////////////////////

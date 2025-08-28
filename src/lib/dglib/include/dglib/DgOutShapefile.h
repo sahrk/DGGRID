@@ -75,9 +75,9 @@ class DgOutShapefile : public DgOutLocFile {
                                 const DgLocation* cent = nullptr,
                                 const DgDataList* dataList = nullptr);
 
-      void addFields (const set<DgDBFfield>& fields);
+      void addFields (const std::set<DgDBFfield>& fields);
 
-      void setCurFields (const set<DgDBFfield>& fields) { curFields_ = fields; }
+      void setCurFields (const std::set<DgDBFfield>& fields) { curFields_ = fields; }
 
       const DgGeoSphRF& geoRF (void) const { return geoRF_; }
 
@@ -87,7 +87,7 @@ class DgOutShapefile : public DgOutLocFile {
 
       void setDefIntAttribute (int val)    { defIntAttribute_ = val; }
       void setDefDblAttribute (double val) { defDblAttribute_ = val; }
-      void setDefStrAttribute (string val) { defStrAttribute_ = val; }
+      void setDefStrAttribute (std::string val) { defStrAttribute_ = val; }
 
    protected:
 
@@ -109,7 +109,7 @@ class DgOutShapefile : public DgOutLocFile {
       long double defDblAttribute_;
       std::string defStrAttribute_;
 
-      set<DgDBFfield> curFields_; // non-null fields for current cell being written
+      std::set<DgDBFfield> curFields_; // non-null fields for current cell being written
 
       virtual DgOutLocFile& insert (const DgDVec2D& pt);
 

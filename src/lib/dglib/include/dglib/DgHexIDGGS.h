@@ -93,12 +93,12 @@ class DgHexIDGGS : public DgIDGGS {
 inline std::ostream&
 operator<< (std::ostream& stream, const DgHexIDGGS& dggs)
 {
-   stream << ">>> DgHexIDGGS: " << (const DgIDGGSBase&) dggs << endl;
-   stream << "ApSeq: " << dggs.apSeq() << endl;
+   stream << ">>> DgHexIDGGS: " << (const DgIDGGSBase&) dggs << std::endl;
+   stream << "ApSeq: " << dggs.apSeq() << std::endl;
    for (int r = 0; r < dggs.nRes(); r++)
    {
-      stream << ">>>>> res " << r << ": '" << endl;
-      stream << dggs.hexIdgg(r) << endl;
+      stream << ">>>>> res " << r << ": '" << std::endl;
+      stream << dggs.hexIdgg(r) << std::endl;
    }
 
    return stream;

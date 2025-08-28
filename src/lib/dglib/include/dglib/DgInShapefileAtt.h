@@ -88,11 +88,11 @@ class DgInShapefileAtt : public DgInShapefile {
 
       virtual void close (void);
 
-      const set<DgDBFfield>& fields (void) const { return fields_; }
+      const std::set<DgDBFfield>& fields (void) const { return fields_; }
 
       int numFields (void) const { return numFields_; }
 
-      const set<DgDBFfield>& curObjFields (void) const
+      const std::set<DgDBFfield>& curObjFields (void) const
                                              { return curObjFields_; }
 
    protected:
@@ -101,8 +101,8 @@ class DgInShapefileAtt : public DgInShapefile {
 
       DBFHandle dbfFile_;
       int numFields_;
-      set<DgDBFfield> fields_;
-      set<DgDBFfield> curObjFields_; // non-null fields in the curShpObj_
+      std::set<DgDBFfield> fields_;
+      std::set<DgDBFfield> curObjFields_; // non-null fields in the curShpObj_
 };
 
 ////////////////////////////////////////////////////////////////////////////////

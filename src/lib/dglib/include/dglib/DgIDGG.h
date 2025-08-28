@@ -47,7 +47,7 @@ class DgIDGG : public DgIDGGBase {
    public:
 
 /*
-      static bool isDiamondTopo (string gridTopo) {
+      static bool isDiamondTopo (std::string gridTopo) {
          return (gridTopo == "DIAMOND" || gridTopo == "DIAMOND4D4"
                   || gridTopo == "DIAMOND4D8");
       }

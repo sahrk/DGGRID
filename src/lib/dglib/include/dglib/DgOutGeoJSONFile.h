@@ -70,7 +70,7 @@ class DgOutGeoJSONFile : public DgOutLocTextFile
 
       virtual void setFormatStr(void)
       {
-          ostringstream os;
+          std::ostringstream os;
           os << "[%#." << getPrecision() << "LF,"
              << "%#." << getPrecision() << "LF]";
              //<< "%#." << getPrecision() << "LF,0.0]";  // with altitude

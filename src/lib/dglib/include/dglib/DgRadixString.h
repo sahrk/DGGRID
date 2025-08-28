@@ -140,7 +140,7 @@ class DgRadixString {
 
             int d = digits()[index] - '0'; // convert digit to int
             val += d * exponent;
-//dgcout << " ==== d: " << d << " exp: " << exponent << " val: " << val << endl;
+//dgcout << " ==== d: " << d << " exp: " << exponent << " val: " << val << std::endl;
             exponent *= base();
          }
 

@@ -56,7 +56,7 @@ DgInLocStreamFile::open (const std::string *fileNameIn, DgReportLevel failLevel)
    if (fileNameIn)
       fileName_ = *fileNameIn;
 
-   ifstream::open(fileName_.c_str(), ios::in);
+   std::ifstream::open(fileName_.c_str(), std::ios::in);
    if (good()) {
       debug("DgInLocStreamFile::open() opened file " + fileName_);
       return true;

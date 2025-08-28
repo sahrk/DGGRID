@@ -46,10 +46,10 @@ DgOutNdxChildrenFile::DgOutNdxChildrenFile (const std::string& fileName,
 DgOutNdxChildrenFile&
 DgOutNdxChildrenFile::insert (const DgLocation& center, DgLocVector& vec)
 {
-//cout << "@@@@@ DgOutNdxChildrenFile::insert:" << std::endl;
-//cout << " dgg: " << dgg << std::endl;
-//cout << " center: " << center << std::endl;
-//cout << " vec: " << vec << std::endl;
+//std::cout << "@@@@@ DgOutNdxChildrenFile::insert:" << std::endl;
+//std::cout << " dgg: " << dgg << std::endl;
+//std::cout << " center: " << center << std::endl;
+//std::cout << " vec: " << vec << std::endl;
 
    if (!outRF_) { // indicates seqnum output
       unsigned long long int sn = dgg_.bndRF().seqNum(center);
@@ -66,7 +66,7 @@ DgOutNdxChildrenFile::insert (const DgLocation& center, DgLocVector& vec)
       ndxChdOutRF_->convert(&vec);
        for (int i = 0; i < vec.size(); i++) {
            *this << " " << vec[i].asString(' ');
-           cout << "KEVIN: " << i << " " << vec[i].asString(' ') << std::endl;
+           std::cout << "KEVIN: " << i << " " << vec[i].asString(' ') << std::endl;
        }
    }
 

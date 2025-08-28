@@ -152,7 +152,7 @@ class DgIDGGBase : public DgDiscTopoRF<DgQ2DICoord, DgGeoCoord, long double> {
 
       virtual long long int dist (const DgQ2DICoord&, const DgQ2DICoord&) const
            {
-              report(string("DgIDGGBase::dist() this method has not been defined "
+              report(std::string("DgIDGGBase::dist() this method has not been defined "
                      "for DgIDGGBase ") + this->name(), DgBase::Fatal);
 
 	      return M_ZERO;
@@ -281,7 +281,7 @@ operator<< (std::ostream& stream, const DgIDGGBase& dgg)
    stream << "\nfirstAdd: " << dgg.firstAdd_;
    stream << "\nlastAdd: " << dgg.lastAdd_;
 
-   stream << "\nprecision: " << dgg.precision_ << endl;
+   stream << "\nprecision: " << dgg.precision_ << std::endl;
 
    return stream;
 }

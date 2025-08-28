@@ -118,7 +118,7 @@ DgZ3RF::str2add (DgZ3Coord* add, const char* str,
 } // const char* DgZ3RF::str2add
 
 ////////////////////////////////////////////////////////////////////////////////
-string
+std::string
 DgZ3Coord::valString (void) const
 {
    const int maxStrSize = 17; // max 16 digits plus 1 for the null terminator

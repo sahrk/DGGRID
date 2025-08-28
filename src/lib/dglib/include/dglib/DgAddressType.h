@@ -26,8 +26,11 @@
 #define DGADDRESSTYPE_H
 
 #include <iostream>
+#include <dglib/DgUtil.h>
 
 namespace dgg { namespace addtype {
+
+using namespace dgg::util;
 
 enum DgAddressType { Geo, Plane, ProjTri, Q2DD, Q2DI, SeqNum, Vertex2DD, HierNdx,
     // remaining types deprecated in 8.4, gone in 9.0

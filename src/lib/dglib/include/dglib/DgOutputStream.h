@@ -28,13 +28,13 @@
 #ifndef DGOUTPUTSTREAM_H
 #define DGOUTPUTSTREAM_H
 
-#include <dglib/DgBase.h>
-
 #ifdef std
 #  error "Bug: `std` is a macro before including <fstream>"
 #endif
 #include <fstream>
 #include <string>
+
+#include <dglib/DgBase.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgOutputStream : public std::ofstream, public DgBase {

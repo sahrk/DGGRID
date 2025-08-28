@@ -157,7 +157,7 @@ operator<< (std::ostream& stream, const DgGeoCoordData& pt)
 {
    stream << std::string(pt);
    if (pt.dataList()) stream << ":" << *pt.dataList();
-   return stream << endl;
+   return stream << std::endl;
 
 } // std::ostream& operator<<
 */

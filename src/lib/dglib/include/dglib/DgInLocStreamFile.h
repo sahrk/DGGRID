@@ -40,7 +40,7 @@ class DgCell;
 class DgRFBase;
 
 ////////////////////////////////////////////////////////////////////////////////
-class DgInLocStreamFile : public ifstream, public DgInLocFile {
+class DgInLocStreamFile : public std::ifstream, public DgInLocFile {
 
    public:
 
@@ -54,7 +54,7 @@ class DgInLocStreamFile : public ifstream, public DgInLocFile {
       virtual bool open (const std::string* fileName = NULL,
                  DgReportLevel failLevel = DgBase::Fatal);
 
-      virtual void close (void) { ifstream::close(); }
+      virtual void close (void) { std::ifstream::close(); }
 
       virtual bool isEOF (void) { return eof(); }
 

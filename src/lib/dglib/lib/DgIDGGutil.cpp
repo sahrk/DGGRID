@@ -360,8 +360,8 @@ dgcout << " ---> B. " << coord << std::endl;
     long long int minBottomJ = (IDGG().aperture() == 7) ? -2 : 0;
 
 #if DGDEBUG
-    cout << maxI << " " << maxJ << " " << topEdgeI << " " << topEdgeJ << std::endl;
-    cout << minBottomI << " " << minBottomJ << " " << maxTopOverageI << " " << maxTopOverageJ << std::endl;
+    std::cout << maxI << " " << maxJ << " " << topEdgeI << " " << topEdgeJ << std::endl;
+    std::cout << minBottomI << " " << minBottomJ << " " << maxTopOverageI << " " << maxTopOverageJ << std::endl;
 #endif
 
    // if out of range check for possible round-off error
@@ -400,7 +400,7 @@ dgcout << " ---> B. " << coord << std::endl;
       // are we good?
       if (underI || underJ || overI || overJ)
          report("DgQ2DDtoIConverter::convertTypedAddress(): "
-                "coordinate out of range: " + to_string(quadNum) + " " + (std::string) coord, DgBase::Fatal);
+                "coordinate out of range: " + std::to_string(quadNum) + " " + (std::string) coord, DgBase::Fatal);
    }
 
 #if DGDEBUG
@@ -420,7 +420,7 @@ dgcout << " ---> C. " << coord << std::endl;
         // special case first
         if (overI && overJ) {
 #if DGDEBUG
-            cout << "BOTH OVER: " << !ec.isType0() << " " << quadNum << " " << coord.i() << " " << coord.j();
+            std::cout << "BOTH OVER: " << !ec.isType0() << " " << quadNum << " " << coord.i() << " " << coord.j();
 #endif
             // must be upper right corner
             if (ec.isType0()) {
@@ -432,10 +432,10 @@ dgcout << " ---> C. " << coord << std::endl;
             }
         } else if (numOver > 1) {
             report("DgQ2DDtoIConverter::convertTypedAddress(): "
-                   "coordinate has multiple overages: " + to_string(quadNum) + " " + (std::string) coord, DgBase::Fatal);
+                   "coordinate has multiple overages: " + std::to_string(quadNum) + " " + (std::string) coord, DgBase::Fatal);
         } else if (underI) {
 #if DGDEBUG
-            cout << "UNDER I: " << !ec.isType0() << " " << quadNum << " " << coord.i() << " " << coord.j();
+            std::cout << "UNDER I: " << !ec.isType0() << " " << quadNum << " " << coord.i() << " " << coord.j();
 #endif
             quadNum = ec.leftQuad();
             if (ec.isType0()) {
@@ -445,7 +445,7 @@ dgcout << " ---> C. " << coord << std::endl;
             }
         } else if (underJ) {
 #if DGDEBUG
-            cout << "UNDER J: " << !ec.isType0() << " " << quadNum << " " << coord.i() << " " << coord.j();
+            std::cout << "UNDER J: " << !ec.isType0() << " " << quadNum << " " << coord.i() << " " << coord.j();
 #endif
             quadNum = ec.downQuad();
             if (ec.isType0()) {
@@ -455,7 +455,7 @@ dgcout << " ---> C. " << coord << std::endl;
             }
         } else if (overI) {
 #if DGDEBUG
-            cout << "OVER I: " << !ec.isType0() << " " << quadNum << " " << coord.i() << " " << coord.j();
+            std::cout << "OVER I: " << !ec.isType0() << " " << quadNum << " " << coord.i() << " " << coord.j();
 #endif
             if (ec.isType0()) {
                 quadNum = ec.rightQuad();
@@ -472,7 +472,7 @@ dgcout << " ---> C. " << coord << std::endl;
             }
         } else if (overJ) {
 #if DGDEBUG
-            cout << "OVER J: " << !ec.isType0() << " " << quadNum << " " << coord.i() << " " << coord.j();
+            std::cout << "OVER J: " << !ec.isType0() << " " << quadNum << " " << coord.i() << " " << coord.j();
 #endif
             if (ec.isType0()) {
                 if (coord.i() == 0) {
@@ -492,7 +492,7 @@ dgcout << " ---> C. " << coord << std::endl;
 
 #if DGDEBUG
     if (underI || underJ || overI || overJ)
-        cout << " -> " << quadNum << " " << coord.i() << " " << coord.j() << std::endl;
+        std::cout << " -> " << quadNum << " " << coord.i() << " " << coord.j() << std::endl;
 #endif
 
 #if DGDEBUG
@@ -508,7 +508,7 @@ dgcout << " ---> D. " << coord << std::endl;
     // are we good?
     if (underI || underJ || overI || overJ)
        report("DgQ2DDtoIConverter::convertTypedAddress(): "
-           "final coordinate out of range: " + to_string(quadNum) + " " + (std::string) coord, DgBase::Fatal);
+           "final coordinate out of range: " + std::to_string(quadNum) + " " + (std::string) coord, DgBase::Fatal);
 
    DgQ2DICoord result(quadNum, coord);
 

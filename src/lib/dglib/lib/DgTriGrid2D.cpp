@@ -53,8 +53,8 @@ DgTriGrid2D::setAddVertices (const DgIVec2D& add, DgPolygon& vec) const
    }
 
 /*
-   cout << "triangle: " << add << " " << tmpLoc << std::endl;
-   cout << vec << std::endl;
+   std::cout << "triangle: " << add << " " << tmpLoc << std::endl;
+   std::cout << vec << std::endl;
 */
 
 } // void DgTriGrid2D::setAddVertices

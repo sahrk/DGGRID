@@ -87,7 +87,7 @@ inline std::ostream& operator<< (std::ostream& stream, const DgPolygon& poly)
       stream << "]\n";
    }
 
-   return stream << "}" << endl;
+   return stream << "}" << std::endl;
 
 } // inline std::ostream& operator<<
 

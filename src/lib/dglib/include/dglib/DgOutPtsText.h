@@ -63,7 +63,7 @@ class DgOutPtsText : public DgOutLocTextFile {
 
       virtual void setFormatStr(void)
       {
-          ostringstream os;
+          std::ostringstream os;
           os << "%#." << getPrecision() << "LF,"
              << "%#." << getPrecision() << "LF\n";
 

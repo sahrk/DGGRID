@@ -136,7 +136,7 @@ inline std::ostream& operator<< (std::ostream& stream, const DgCell& cell)
    stream << "[" << cell.label() << ":" << cell.node();
    if (cell.hasRegion()) stream << ":" << cell.region();
    if (cell.dataList()) stream << ":" << *cell.dataList();
-   return stream << "]" << endl;
+   return stream << "]" << std::endl;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

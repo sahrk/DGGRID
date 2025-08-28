@@ -44,7 +44,7 @@ class DgOutRandPtsText : public DgOutLocTextFile {
 
       virtual ~DgOutRandPtsText (void) { if (good()) close(); }
 
-      virtual void close (void) { *this << "END" << endl; std::ofstream::close(); }
+      virtual void close (void) { *this << "END" << std::endl; std::ofstream::close(); }
 
       virtual DgOutLocFile& insert (DgLocation& loc, const std::string* label = nullptr,
                                 const DgDataList* dataList = nullptr);
@@ -63,7 +63,7 @@ class DgOutRandPtsText : public DgOutLocTextFile {
 
       virtual void setFormatStr(void)
       {
-          ostringstream os;
+          std::ostringstream os;
           os << "%#." << getPrecision() << "LF, "
              << "%#." << getPrecision() << "LF\n";
 

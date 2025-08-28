@@ -83,10 +83,10 @@ DgBoundedRFS2D::DgBoundedRFS2D (const DgDiscRFS2D& rf,
                 DgIVec2D(totTicks * numI - 1, totTicks * numJ - 1));
 
 /*
-         cout << "grid " << i << std::endl;
+         std::cout << "grid " << i << std::endl;
          for (DgIVec2D c = (*grids_)[i]->lowerLeft();
               c != (*grids_)[i]->invalidAdd();
-              c = (*grids_)[i]->incrementAddress(c)) cout << c << std::endl;
+              c = (*grids_)[i]->incrementAddress(c)) std::cout << c << std::endl;
 */
 
          totTicks *= sqrtApp;

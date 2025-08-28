@@ -47,7 +47,7 @@ template <class TINT, class TSTR> class DgHierNdxSystemRFS :
          std::vector<DgHierNdxSystemRFBase*> rfGrids(nRes(), nullptr);
          for (int r = 0; r < nRes(); r++)
              rfGrids[r] = new DgHierNdxSystemRF<TINT, TSTR>(*this, r,
-                                            nameIn + to_string(r));
+                                            nameIn + dgg::util::to_string(r));
          
          // initializ
          for (int r = 0; r < nRes(); r++)

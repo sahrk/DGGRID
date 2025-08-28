@@ -25,8 +25,6 @@
 #include <list>
 #include <vector>
 
-using namespace std;
-
 #include <dglib/DgBase.h>
 #include <dglib/DgString.h>
 #include <dglib/DgSeriesConverter.h>
@@ -43,7 +41,7 @@ DgSeriesConverter::DgSeriesConverter
    {
       if (series[i]->toFrame() != series[i+1]->fromFrame())
       {
-         report(string("DgSeriesConverter::DgSeriesConverter() mismatch in "
+         report(std::string("DgSeriesConverter::DgSeriesConverter() mismatch in "
            "toFrame/fromFrame: ") + series[i]->toFrame().name() + std::string("/")
            + series[i+1]->fromFrame().name(), DgBase::Fatal);
       }
@@ -126,7 +124,7 @@ DgSeriesConverter::DgSeriesConverter (const DgRFBase& fromFrame,
 
    // now build in reverse the series from the ground to the fromFrame
 
-   list<const DgRFBase*> rev;
+   std::list<const DgRFBase*> rev;
    const DgRFBase* ground = from;
    from = &toFrame;
    while (true)
@@ -173,7 +171,7 @@ DgSeriesConverter::DgSeriesConverter (const DgRFBase& fromFrame,
 
    // now build the converter series from the ground to the toFrame
 
-   list<const DgRFBase*>::iterator it = rev.begin();
+   std::list<const DgRFBase*>::iterator it = rev.begin();
    it++;
    const DgRFBase* to;
    for (; it != rev.end(); it++)
@@ -270,7 +268,7 @@ DgSeriesConverter::converter (int ndx) const
 } // const DgConverterBase* DgSeriesConverter::converter
 
 ////////////////////////////////////////////////////////////////////////////////
-ostream& operator<< (ostream& stream, const DgSeriesConverter& con)
+std::ostream& operator<< (std::ostream& stream, const DgSeriesConverter& con)
 {
    stream << "{\n";
    for (int i = 0; i < con.size(); i++)
@@ -279,7 +277,7 @@ ostream& operator<< (ostream& stream, const DgSeriesConverter& con)
    }
    return stream << "}" << std::endl;
 
-} // ostream& operator<<
+} // std::ostream& operator<<
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

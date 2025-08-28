@@ -112,7 +112,7 @@ DgOutLocFile::insert (DgLocList& dlist)
 //
 ////////////////////////////////////////////////////////////////////////////////
 {
-   list<DgLocBase*>::iterator it;
+   std::list<DgLocBase*>::iterator it;
    for (it = dlist.begin(); it != dlist.end(); it++) {
       if (DgLocList* d = dynamic_cast<DgLocList*>(*it)) {
          this->insert(*d);

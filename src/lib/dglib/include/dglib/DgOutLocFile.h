@@ -111,7 +111,6 @@ class DgOutLocFile : public DgBase {
       virtual DgOutLocFile& insert (DgPolygon& poly, const std::string* label = nullptr,
                                 const DgLocation* cent = nullptr,
                                 const DgDataList* dataList = nullptr) = 0;
-
    protected:
 
       DgOutLocFile (const std::string& fileName,
@@ -154,4 +153,3 @@ inline DgOutLocFile& operator<< (DgOutLocFile& output, DgCell& cell)
 ////////////////////////////////////////////////////////////////////////////////
 
 #endif
-**

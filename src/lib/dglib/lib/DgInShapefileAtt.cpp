@@ -106,7 +106,7 @@ DgInShapefileAtt::getNextEntity (void)
 
    curObjFields_.clear();
 
-   for (set<DgDBFfield>::iterator it = fields_.begin(); it != fields_.end(); it++)
+   for (std::set<DgDBFfield>::iterator it = fields_.begin(); it != fields_.end(); it++)
    {
       if (!DBFIsAttributeNULL(dbfFile_, curRecNum_, it->fieldNum()))
          curObjFields_.insert(*it);

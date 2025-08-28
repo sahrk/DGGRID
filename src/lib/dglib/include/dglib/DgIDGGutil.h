@@ -621,7 +621,7 @@ operator<< (std::ostream& stream, const DgGridStats& gs)
   stream << " average hex cell area: "
          << dgg::util::addCommas(gs.cellAreaKM(), prec) << " km^2\n";
   stream << " characteristic length scale: "
-         << dgg::util::addCommas(gs.cls(), prec) << " km" << endl;
+         << dgg::util::addCommas(gs.cls(), prec) << " km" << std::endl;
 
   return stream;
 }

@@ -166,7 +166,7 @@ DgHierNdxSystemRFSBase::setNdxChildren (const DgResAdd<DgHierNdx>& add,
      setAddNdxChildren(add, chld);
   }
 //KEVIN
-    cout << add << ": " << chld << std::endl;
+    std::cout << add << ": " << chld << std::endl;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

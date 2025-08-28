@@ -107,7 +107,7 @@ DgOutShapefile::open (const std::string& fileName, DgReportLevel failLevel)
    // create the projection file
    std::string prjFileName = fileName + ".prj";
    ofstream prjFile;
-   prjFile.open(prjFileName.c_str(), ios::out);
+   prjFile.open(prjFileName.c_str(), std::ios::out);
    if (!prjFile.good())
       report("DgOutShapefile::open() unable to open file " + prjFileName,
              failLevel);
@@ -149,7 +149,7 @@ DgOutShapefile::open (const std::string& fileName, DgReportLevel failLevel)
 
 ////////////////////////////////////////////////////////////////////////////////
 void
-DgOutShapefile::addFields (const set<DgDBFfield>& fields)
+DgOutShapefile::addFields (const std::set<DgDBFfield>& fields)
 {
    if (DBFGetRecordCount(dbFile_) > 0)
       report("cannot add fields to Shapefile after records have been added.",
@@ -157,7 +157,7 @@ DgOutShapefile::addFields (const set<DgDBFfield>& fields)
 
 //cout << "Adding fields: " << std::endl;
 
-   for (set<DgDBFfield>::iterator it = fields.begin();
+   for (std::set<DgDBFfield>::iterator it = fields.begin();
            it != fields.end(); it++)
    {
       if (DBFAddField(dbFile_, it->fieldName().c_str(), it->type(),
@@ -219,7 +219,7 @@ DgOutShapefile::writeDbf (const std::string& id)
                 dbFileName_, failLevel());
 
       // now write default values to the fields that are present
-      for (set<DgDBFfield>::iterator it = curFields_.begin();
+      for (std::set<DgDBFfield>::iterator it = curFields_.begin();
            it != curFields_.end(); it++)
       {
          int fNum = DBFGetFieldIndex(dbFile_, it->fieldName().c_str());

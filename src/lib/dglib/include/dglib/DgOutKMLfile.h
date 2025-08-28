@@ -80,7 +80,7 @@ class DgOutKMLfile : public DgOutLocTextFile
 
       virtual void setFormatStr(void)
       {
-          ostringstream os;
+          std::ostringstream os;
           os << "%#." << getPrecision() << "LF,"
              << "%#." << getPrecision() << "LF\n";
              //<< "%#." << getPrecision() << "LF,0.0\n"; // with altitude
@@ -101,7 +101,7 @@ class DgOutKMLfile : public DgOutLocTextFile
 
       /* take a string that contains a colour in RRGGBB format, and convert this
          to the BBGGRR format used by KML */
-      std::string RGBtoBGR(string colour)
+      std::string RGBtoBGR(std::string colour)
       {
 	     return colour.substr(4,2) + colour.substr(2,2) + colour.substr(0,2);
       }

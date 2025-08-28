@@ -85,7 +85,7 @@ DgProjGnomonicRF::projForward (const DgGeoCoord& addIn,
 
    if (xy.y() <= EPS10)
    {
-      ::report(string("DgProjGnomonicRF::projForward() point out of range\n") +
+      ::report(std::string("DgProjGnomonicRF::projForward() point out of range\n") +
            std::string("proj0: ") + std::string(proj0()) +
            std::string("\nprojecting point: ") + std::string(addIn), DgBase::Fatal);
    }

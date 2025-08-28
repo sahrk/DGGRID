@@ -34,7 +34,7 @@
 #include <string>
 
 ////////////////////////////////////////////////////////////////////////////////
-class DgInputStream : public ifstream, public DgBase {
+class DgInputStream : public std::ifstream, public DgBase {
 
    public:
 

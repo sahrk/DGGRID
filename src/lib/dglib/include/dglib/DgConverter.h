@@ -60,7 +60,7 @@ public DgConverterBase {
                 //new DgAddress<ATo>(convertTypedAddress(addFrom));
                 new DgAddress<ATo>(convertTypedAddress(
                 static_cast<const DgAddress<AFrom>&>(addIn).address()));
-            dgcout << " " << addFrom.address() << "->" << addTo->address() << endl;
+            dgcout << " " << addFrom.address() << "->" << addTo->address() << std::endl;
             return addTo;
           }
 #else

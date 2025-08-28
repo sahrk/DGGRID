@@ -35,7 +35,7 @@
 const static int maxLine = 256;
 
 ////////////////////////////////////////////////////////////////////////////////
-static void fixSciNotation (char* std::string)
+static void fixSciNotation (char* string)
 //
 // convert 'D' to 'E' scientific notation
 //
@@ -93,7 +93,7 @@ DgInAIGenFile::extract (DgLocVector& vec)
 
       fixSciNotation(nextLine);
 
-      istringstream iss(nextLine);
+      std::istringstream iss(nextLine);
       iss >> x >> y;
 
       DgAddressBase* add = rf().vecAddress(DgGeoCoord(x, y));
@@ -149,7 +149,7 @@ DgInAIGenFile::extract (DgPolygon& poly)
       }
       fixSciNotation(nextLine);
 
-      istringstream iss(nextLine);
+      std::istringstream iss(nextLine);
       iss >> x >> y;
 
       DgAddressBase* add = rf().vecAddress(DgGeoCoord(x, y));
@@ -184,7 +184,7 @@ DgInAIGenFile::extract (DgCell& cell)
    getline(nextLine, maxLine);
    fixSciNotation(nextLine);
 
-   istringstream iss(nextLine);
+   std::istringstream iss(nextLine);
 
    iss >> id;
    cell.setLabel(dgg::util::to_string(id));
@@ -201,7 +201,7 @@ DgInAIGenFile::extract (DgCell& cell)
       while (!eof())
       {
          getline(nextLine, maxLine);
-         if (string(nextLine) == string("END"))
+         if (std::string(nextLine) == std::string("END"))
          {
             poly->addressVec().erase(poly->addressVec().end() - 1);
 
@@ -209,7 +209,7 @@ DgInAIGenFile::extract (DgCell& cell)
          }
          fixSciNotation(nextLine);
 
-         istringstream iss(nextLine);
+         std::istringstream iss(nextLine);
          iss >> x >> y;
 
          DgAddressBase* add = rf().vecAddress(DgDVec2D(x, y));
@@ -251,7 +251,7 @@ DgInAIGenFile::extract (DgLocList& list)
 
    fixSciNotation(nextLine);
 
-   istringstream iss(nextLine);
+   std::istringstream iss(nextLine);
 
    iss >> tmp;
 
@@ -360,7 +360,7 @@ DgInAIGenFile::extract (DgLocation& loc)
 
    getline(nextLine, maxLine);
    fixSciNotation(nextLine);
-   istringstream iss(nextLine);
+   std::istringstream iss(nextLine);
    iss >> id >> x >> y;
 
    // set the values

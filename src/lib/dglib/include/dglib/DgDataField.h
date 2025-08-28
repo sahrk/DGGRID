@@ -36,7 +36,7 @@ template <typename T> class DgDataField : public DgDataFieldBase {
    public:
 
       DgDataField (void) {}
-      DgDataField (string _name, DgDataType _type, T _value)
+      DgDataField (std::string _name, DgDataType _type, T _value)
          : DgDataFieldBase (_name, _type), value_ (_value)
       { }
 
@@ -69,7 +69,7 @@ class DgDataField<long int> : public DgDataFieldBase {
    public:
 
       DgDataField (void) {}
-      DgDataField (string _name, DgDataType _type, long int _value)
+      DgDataField (std::string _name, DgDataType _type, long int _value)
          : DgDataFieldBase (_name, _type), value_ (_value)
       { }
 
@@ -103,7 +103,7 @@ class DgDataFieldDouble : public DgDataField<double> {
 
    public:
 
-      DgDataFieldDouble (string _name, double _value = 0.0,
+      DgDataFieldDouble (std::string _name, double _value = 0.0,
                 std::string _fmtStr = "%#.6LF")
          : DgDataField<double> (_name, FIELD_DOUBLE, _value),
            fmtStr (_fmtStr)
@@ -127,7 +127,7 @@ class DgDataFieldInt : public DgDataField<int> {
 
    public:
 
-      DgDataFieldInt (string _name, int _value = 0)
+      DgDataFieldInt (std::string _name, int _value = 0)
          : DgDataField<int> (_name, FIELD_INT, _value)
       { }
 
@@ -146,7 +146,7 @@ class DgDataFieldInt64 : public DgDataField<int64_t> {
 
    public:
 
-      DgDataFieldInt64 (string _name, int64_t _value = 0)
+      DgDataFieldInt64 (std::string _name, int64_t _value = 0)
          : DgDataField<int64_t> (_name, FIELD_INT64, _value)
       { }
 

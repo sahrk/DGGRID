@@ -46,7 +46,7 @@ DgCell::convertTo (const DgRFBase& rfIn)
 } // DgCell::convertTo
 
 ////////////////////////////////////////////////////////////////////////////////
-string
+std::string
 DgCell::asString (void) const
 {
    std::string tmp = "[" + node().asString();
@@ -58,7 +58,7 @@ DgCell::asString (void) const
 } // DgCell::asString
 
 ////////////////////////////////////////////////////////////////////////////////
-string
+std::string
 DgCell::asString (char delimiter) const
 {
    std::string tmp = node().asString(delimiter);
@@ -69,7 +69,7 @@ DgCell::asString (char delimiter) const
 } // DgCell::asString
 
 ////////////////////////////////////////////////////////////////////////////////
-string
+std::string
 DgCell::asAddressString (void) const
 {
    std::string tmp = "[" + node().asAddressString();
@@ -81,7 +81,7 @@ DgCell::asAddressString (void) const
 } // DgCell::asAddressString
 
 ////////////////////////////////////////////////////////////////////////////////
-string
+std::string
 DgCell::asAddressString (char delimiter) const
 {
    std::string tmp = node().asAddressString(delimiter);

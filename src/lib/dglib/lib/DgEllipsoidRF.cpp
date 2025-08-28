@@ -132,7 +132,7 @@ DgGeoCoord::geoTriArea (const DgGeoCoord& g1, const DgGeoCoord& g2,
    long double E = bigA + bigB + bigC - M_PI;
 
 /*
-   cout << "geoTriArea: " << g1 << " " << g2 << " " << g3 << std::endl
+   std::cout << "geoTriArea: " << g1 << " " << g2 << " " << g3 << std::endl
         << " a: " << a
         << " b: " << b
         << " c: " << c << std::endl

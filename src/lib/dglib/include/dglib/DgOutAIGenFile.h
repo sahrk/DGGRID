@@ -25,9 +25,10 @@
 #ifndef DGOUTAIGENFILE_H
 #define DGOUTAIGENFILE_H
 
-#include <dglib/DgOutLocTextFile.h>
-
 #include <cstdio>
+#include <sstream>
+
+#include <dglib/DgOutLocTextFile.h>
 
 class DgDVec2D;
 class DgPolygon;
@@ -45,7 +46,7 @@ class DgOutAIGenFile : public DgOutLocTextFile {
 
       virtual ~DgOutAIGenFile (void) { if (good()) close(); }
 
-      virtual void close (void) { *this << "END" << endl; std::ofstream::close(); }
+      virtual void close (void) { *this << "END" << std::endl; std::ofstream::close(); }
 
       virtual DgOutLocFile& insert (DgLocation& loc, const std::string* label = nullptr,
                                 const DgDataList* dataList = nullptr);
@@ -58,12 +59,11 @@ class DgOutAIGenFile : public DgOutLocTextFile {
                                 const DgLocation* cent = nullptr,
                                 const DgDataList* dataList = nullptr);
 
-
    protected:
 
       virtual void setFormatStr(void)
       {
-          ostringstream os;
+          std::ostringstream os;
           os << "%#." << getPrecision() << "LF"
              << " %#." << getPrecision() << "LF"
              << '\n';

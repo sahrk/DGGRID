@@ -64,7 +64,7 @@ class DgBase {
 
    private:
 
-    static const std::string defaultName;
+      static const std::string defaultName;
       static DgReportLevel minReportLevel_;
 
    public:
@@ -131,7 +131,7 @@ DgBase::debug (const std::string&) const // unused parameter
 {
 
 #if DGDEBUG
-   dgcout << "DEBUG: [" << instanceName_ << "] " << message << endl;
+   dgcout << "DEBUG: [" << instanceName_ << "] " << message << std::endl;
 #endif
 
 } // void DgBase::debug

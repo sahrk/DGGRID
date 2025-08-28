@@ -109,7 +109,7 @@ DgZOrderRF::str2add (DgZOrderCoord* add, const char* str,
 } // const char* DgZOrderRF::str2add
 
 ////////////////////////////////////////////////////////////////////////////////
-string
+std::string
 DgZOrderCoord::valString (void) const
 {
    const int maxStrSize = 17; // max 16 digits plus 1 for the null terminator

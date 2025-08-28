@@ -119,7 +119,7 @@ DgZ7RF::str2add (DgZ7Coord* add, const char* str, char delimiter) const
 } // const char* DgZ7RF::str2add
 
 ////////////////////////////////////////////////////////////////////////////////
-string
+std::string
 DgZ7Coord::valString (void) const
 {
    const int maxStrSize = 17; // max 16 digits plus 1 for the null terminator

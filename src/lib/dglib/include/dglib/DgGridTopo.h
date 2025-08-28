@@ -29,6 +29,8 @@
 
 #include <iostream>
 
+#include <dglib/DgUtil.h>
+
 namespace dgg { namespace topo {
 
 enum DgGridTopology { Hexagon, Triangle, Square, Diamond, InvalidTopo };

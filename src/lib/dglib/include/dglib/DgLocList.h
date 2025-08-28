@@ -39,7 +39,7 @@
 #include <list>
 
 ////////////////////////////////////////////////////////////////////////////////
-class DgLocList : public DgLocBase, public list<DgLocBase*> {
+class DgLocList : public DgLocBase, public std::list<DgLocBase*> {
 
    public:
 

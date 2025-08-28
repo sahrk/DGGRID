@@ -39,7 +39,7 @@ DgSphIcosa::DgSphIcosa (const DgGeoCoord& vert0, long double azimuthDegs)
 } // DgSphIcosa::DgSphIcosa
 
 ////////////////////////////////////////////////////////////////////////////////
-ostream& operator<< (ostream& str, const DgSphIcosa& dgsi)
+std::ostream& operator<< (std::ostream& str, const DgSphIcosa& dgsi)
 {
    const SphIcosa& si = dgsi.sphIcosa_;
 
@@ -72,7 +72,7 @@ ostream& operator<< (ostream& str, const DgSphIcosa& dgsi)
 
    return str;
 
-} // ostream& operator<<
+} // std::ostream& operator<<
 
 ////////////////////////////////////////////////////////////////////////////////
 GeoCoord coordtrans(const GeoCoord& newNPold, const GeoCoord& ptold,

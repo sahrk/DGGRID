@@ -130,7 +130,7 @@ class DgIDGGSBase : public DgDiscTopoRFS<DgQ2DICoord, DgGeoCoord, long double> {
 inline std::ostream& operator<< (std::ostream& stream, const DgIDGGSBase& dggs)
 {
    stream << std::string("** DgIDGGSBase: ") <<
-         (const DgDiscTopoRFS<DgQ2DICoord, DgGeoCoord, long double>&) dggs << endl;
+         (const DgDiscTopoRFS<DgQ2DICoord, DgGeoCoord, long double>&) dggs << std::endl;
    stream << "geoRF: " << dggs.geoRF();
    stream << "\nvert0: " << dggs.vert0();
    stream << "\nazDegs: " << dggs.azDegs();
