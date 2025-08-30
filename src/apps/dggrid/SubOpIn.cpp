@@ -235,7 +235,7 @@ SubOpIn::setupOp (void)
       // KEVIN: this should no longer be reachable in v9
       ::report(
          "input_address_type values of ZORDER, ZORDER_STRING, Z3, Z3_STRING, Z7, and "
-         "Z7_STRING are deprecated and will go away in version 9.0. Instead set "
+         "Z7_STRING went away in DGGRID version 9.0. Instead, set "
          "input_address_type to HIERNDX, new parameter input_hier_ndx_system to the "
          "desired system ZORDER, Z3, or Z7 (Z3 is the default), and new parameter "
          "input_hier_ndx_form to the specific input format INT64 or DIGIT_STRING "
@@ -243,9 +243,9 @@ SubOpIn::setupOp (void)
       DgBase::Warning);
    }
 
-    if (inAddType == dgg::addtype::Z3) {
-        ::report("the default padding digit for Z3 INT64 indexes will switch "
-                 "from 0 to 3 starting with DGGRID version 9.0.\n"
+    if (inAddType == dgg::addtype::HierNdx && inHierNdxSysType == dgg::addtype::Z3) {
+        ::report("in DGGRID version 9.0 the default padding digit for Z3 INT64 indexes has switched "
+                 "from 0 to 3.\n"
                  "Set parameter z3_invalid_digit if you want a different digit used.",
                  DgBase::Warning);
     }
