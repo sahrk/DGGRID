@@ -34,15 +34,15 @@
 
 // child sets for each type of descendant in 4*[33r]*
 // does NOT handle 4 -> 3r (and 3r -> 3r?) transition
-const string DgHexSF::all = "AAAAAAA7";
-const string DgHexSF::cs4 = "A1A3B5B7";
-const string DgHexSF::cs3A = "A123F5D7";
-const string DgHexSF::cs3B = "E123C5B7";
-const string DgHexSF::cs3rA = "A123B5B7"; const string DgHexSF::cs3rB = "A123BA67";
-const string DgHexSF::cs3rC = "BA234B67";
-const string DgHexSF::cs3rD = "BA2A4567";
-const string DgHexSF::cs3rE = "B1BA4567";
-const string DgHexSF::cs3rF = "A1A345B7";
+const std::string DgHexSF::all = "AAAAAAA7";
+const std::string DgHexSF::cs4 = "A1A3B5B7";
+const std::string DgHexSF::cs3A = "A123F5D7";
+const std::string DgHexSF::cs3B = "E123C5B7";
+const std::string DgHexSF::cs3rA = "A123B5B7"; const std::string DgHexSF::cs3rB = "A123BA67";
+const std::string DgHexSF::cs3rC = "BA234B67";
+const std::string DgHexSF::cs3rD = "BA2A4567";
+const std::string DgHexSF::cs3rE = "B1BA4567";
+const std::string DgHexSF::cs3rF = "A1A345B7";
 
 ////////////////////////////////////////////////////////////////////////////////
 unsigned long long int
@@ -55,7 +55,7 @@ DgHexSF::visitMe (const DgIDGGSBase& dggs, const DgIDGGBase& dgg,
    else
       coord2d = (DgIVec2D) downAp3r().ijkCoord();
 
-//cout << "Visiting: " << coord2d << endl;
+//dgcout << "Visiting: " << coord2d << std::endl;
 
    bool accepted = false;
    op().outOp.nCellsTested++;
@@ -67,13 +67,13 @@ DgHexSF::visitMe (const DgIDGGSBase& dggs, const DgIDGGBase& dgg,
       // first check if the cell is in the overage set
       if (!ed->overageSet.empty())
       {
-         set<DgIVec2D>::iterator it = ed->overageSet.find(coord2d);
+         std::set<DgIVec2D>::iterator it = ed->overageSet.find(coord2d);
          if (it != ed->overageSet.end()) // found coord2d
          {
             accepted = true;
             ed->overageSet.erase(it);
             if (op().mainOp.megaVerbose)
-               dgcout << "found OVERAGE coord " << coord2d << endl;
+               dgcout << "found OVERAGE coord " << coord2d << std::endl;
          }
       }
 
@@ -85,12 +85,12 @@ DgHexSF::visitMe (const DgIDGGSBase& dggs, const DgIDGGBase& dgg,
    {
       op().outOp.nCellsAccepted++;
 /*
-cout << "accepted: " << quadNum_ << " " << coord2d
-     << " " << superFundIndex() << endl;
+dgcout << "accepted: " << quadNum_ << " " << coord2d
+     << " " << superFundIndex() << std::endl;
 */
       DgLocation* addLoc = dgg.makeLocation(DgQ2DICoord(quadNum_, coord2d));
 
-      string label = superFundIndex();
+      std::string label = superFundIndex();
       op().outOp.outputCellAdd2D(*addLoc, &label);
 
       delete addLoc;
@@ -99,7 +99,7 @@ cout << "accepted: " << quadNum_ << " " << coord2d
    genOp().outputStatus();
 
    if (op().mainOp.megaVerbose)
-      dgcout << coord2d << " " << ciNdx_ << " " << sfNdx_ << endl;
+      dgcout << coord2d << " " << ciNdx_ << " " << sfNdx_ << std::endl;
 
    return 1;
 
@@ -112,8 +112,8 @@ DgHexSF::depthFirstTraversal (const DgIDGGSBase& dggs,
        DgEvalData* ed)
 {
 /*
-cout << "depthFirstTrav res: " << res_
-     <<  " ijk: " << ijkCoord() << endl;
+dgcout << "depthFirstTrav res: " << res_
+     <<  " ijk: " << ijkCoord() << std::endl;
 */
 
    if (res_ == dgg.res())
@@ -210,15 +210,15 @@ cout << "depthFirstTrav res: " << res_
          }
 
 /*
-         cout << "QUAD: " << quadNum_ << " TILE: " << ijkCoord()
-              << ((useTile) ? " USED" : " SKIPPED") << endl;
+         dgcout << "QUAD: " << quadNum_ << " TILE: " << ijkCoord()
+              << ((useTile) ? " USED" : " SKIPPED") << std::endl;
 */
 
          if (!useTile) return 0;
       }
 
       ///// process each child
-      string cs; // child set
+      std::string cs; // child set
       if (aperture == 4)
       {
          cs = cs4;
@@ -386,8 +386,8 @@ DgHexSF::dirFromCenter (int digit)
          k += 0;
          break;
       default:
-         ::report(string("ERROR: invalid digit ") + dgg::util::to_string(digit)
-            + string(" in HexHier.dirFromCenter()."), DgBase::Fatal);
+         ::report(std::string("ERROR: invalid digit ") + dgg::util::to_string(digit)
+            + std::string(" in HexHier.dirFromCenter()."), DgBase::Fatal);
    }
 
    return DgHexSF(genOp_, i, j, k, res_);

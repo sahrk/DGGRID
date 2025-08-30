@@ -72,7 +72,7 @@ struct DgClippingPoly {
 
 #ifdef USE_GDAL
       // the holes for gdal containment
-      vector<DgClippingHole> holes;
+      std::vector<DgClippingHole> holes;
 #endif
 
 };
@@ -85,18 +85,18 @@ class DgQuadClipRegion {
       DgQuadClipRegion (void)
            : isQuadUsed_ (false), gnomProj_ (0),
 	     overI_ (false), overJ_ (false),
-             minx_ (numeric_limits<long double>::max()),
-             miny_ (numeric_limits<long double>::max()),
-	     maxx_ (numeric_limits<long double>::min()),
-             maxy_ (numeric_limits<long double>::min()) { }
+    minx_ (std::numeric_limits<long double>::max()),
+    miny_ (std::numeric_limits<long double>::max()),
+    maxx_ (std::numeric_limits<long double>::min()),
+    maxy_ (std::numeric_limits<long double>::min()) { }
 
      ~DgQuadClipRegion (void) { }
 
-      vector<DgClippingPoly>& clpPolys (void) { return clpPolys_; }
-      vector < set<DgDBFfield> >& polyFields (void) { return polyFields_; }
+      std::vector<DgClippingPoly>& clpPolys (void) { return clpPolys_; }
+      std::vector < std::set<DgDBFfield> >& polyFields (void) { return polyFields_; }
 
-      set<DgIVec2D>& points (void) { return points_; }
-      map<DgIVec2D, set<DgDBFfield> >& ptFields (void) { return ptFields_; }
+      std::set<DgIVec2D>& points (void) { return points_; }
+      std::map<DgIVec2D, std::set<DgDBFfield> >& ptFields (void) { return ptFields_; }
 
       int quadNum (void) const { return quadNum_; }
       void setQuadNum (int q) { quadNum_ = q; }
@@ -140,14 +140,14 @@ class DgQuadClipRegion {
 
       bool isQuadUsed_; // does input intersect this quad?
 
-      vector<DgClippingPoly> clpPolys_; // clipper region intersection with
+      std::vector<DgClippingPoly> clpPolys_; // clipper region intersection with
                                // quad with holes in quad Snyder space
 
-      vector < set<DgDBFfield> > polyFields_; // shapefile attribute fields
+      std::vector< std::set<DgDBFfield> > polyFields_; // shapefile attribute fields
 
-      set<DgIVec2D> points_; // points that fall on this quad
+      std::set<DgIVec2D> points_; // points that fall on this quad
 
-      map<DgIVec2D, set<DgDBFfield> > ptFields_; // shapefile attribute fields
+      std::map<DgIVec2D, std::set<DgDBFfield> > ptFields_; // shapefile attribute fields
 
       const DgProjGnomonicRF* gnomProj_; // gnomonic proj centered on this quad
 
@@ -176,16 +176,16 @@ class DgEvalData {
       const DgContCartRF& cc1;
       const DgDiscRF2D& grid;
       DgQuadClipRegion& clipRegion;
-      set<DgIVec2D>& overageSet;
-      map<DgIVec2D, set<DgDBFfield> > overageFields;
+      std::set<DgIVec2D>& overageSet;
+      std::map<DgIVec2D, std::set<DgDBFfield> > overageFields;
       const DgContCartRF& deg;
       const DgIVec2D& lLeft;
       const DgIVec2D& uRight;
 
       DgEvalData (const DgIDGGBase& dggIn,
                const DgContCartRF& cc1In, const DgDiscRF2D& gridIn,
-               DgQuadClipRegion& clipRegionIn, set<DgIVec2D>& overageSetIn,
-               map<DgIVec2D, set<DgDBFfield> >& overageFieldsIn,
+               DgQuadClipRegion& clipRegionIn, std::set<DgIVec2D>& overageSetIn,
+               std::map<DgIVec2D, std::set<DgDBFfield> >& overageFieldsIn,
                const DgContCartRF& degIn, const DgIVec2D& lLeftIn,
                const DgIVec2D& uRightIn)
       : dgg (dggIn), cc1 (cc1In), grid (gridIn),
@@ -217,8 +217,8 @@ struct SubOpGen : public SubOpBasicMulti {
    void processOneClipPoly (DgPolygon& polyIn, const DgIDGGBase& dgg,
              DgQuadClipRegion clipRegions[], DgInShapefileAtt* pAttributeFile);
    void createClipRegions (const DgIDGGBase& dgg,
-             DgQuadClipRegion clipRegions[], set<DgIVec2D> overageSet[],
-             map<DgIVec2D, set<DgDBFfield> > overageFields[]);
+             DgQuadClipRegion clipRegions[], std::set<DgIVec2D> overageSet[],
+             std::map<DgIVec2D, std::set<DgDBFfield> > overageFields[]);
 
    // the parameters
    bool wholeEarth;       // generate entire grid?
@@ -231,9 +231,9 @@ struct SubOpGen : public SubOpBasicMulti {
    bool clipAIGen;        // clip using AIGen files (or Shapefiles)
    bool clipGDAL;         // clip using GDAL files
    bool clipShape;        // clip using Shapefiles
-   vector<string> regionFiles;
+   std::vector<std::string> regionFiles;
    int clipCellRes;       // resolution of the clipping cell indexes
-   string clipCellsStr;   // input line of coarse clipping cells
+   std::string clipCellsStr;   // input line of coarse clipping cells
    int nClipCellDensify;  // number of points-per-edge of densification for clipping cells
    //bool clipRandPts;      // clip randpts to polys
    long double nudge;     // adjustment for quad intersection consistency

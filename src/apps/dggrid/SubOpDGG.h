@@ -33,7 +33,7 @@
 #include <dglib/DgAddressType.h>
 #include <dglib/DgOutLocFile.h>
 
-using namespace dgg::hiersystype;
+using namespace dgg::addtype;
 
 #include "SubOpBasic.h"
 
@@ -88,11 +88,11 @@ struct SubOpDGG : public SubOpBasic {
    const DgGeoSphDegRF* _pPrtDeg;
 
    // the parameters
-   string dggsType;              // preset DGGS type
+   std::string dggsType;              // preset DGGS type
    dgg::topo::DgGridTopology gridTopo;      // Diamond/Hexagon/Triangle
    dgg::topo::DgGridMetric   gridMetric;    // D4/D8
    int aperture;      // aperture
-   string projType;   // projection type
+   std::string projType;   // projection type
    int res;           // resolution (may be adjusted)
    int actualRes;     // original, actual resolution
    bool placeRandom;  // random grid placement?
@@ -106,8 +106,8 @@ struct SubOpDGG : public SubOpBasic {
    DgGeoCoord vert0;  // placement vert
    long double azimuthDegs; // orientation azimuth
    long double earthRadius; // earth radius in km
-   string datum;            // datum used to determine the earthRadius
-   string apertureType; // "PURE", "MIXED43", "SUPERFUND", or "SEQUENCE"
+   std::string datum;            // datum used to determine the earthRadius
+   std::string apertureType; // "PURE", "MIXED43", "SUPERFUND", or "SEQUENCE"
    bool   isMixed43;       // are we using mixed43 aperture?
    int numAp4;          // # of leading ap 4 resolutions in a mixed grid
    bool   isSuperfund;

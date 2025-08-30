@@ -342,7 +342,7 @@ GeoCoord fullerInvOneTri(const IcosaGridPt pt, long double R, long double* pAzim
       if (hi == lastHi) {
          report("DgProjFullerInv::fullerInvOneTri(): "
           "ERROR: fullerInvOneTri: iterative step failed.\n"
-          "loss of precision: " + to_string(fabsl(hi) - PRECISION));
+          "loss of precision: " + std::to_string(fabsl(hi) - PRECISION));
          break;
       }
       lastHi = hi;

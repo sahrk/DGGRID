@@ -40,23 +40,23 @@ SubOpMain::SubOpMain (OpBasic& op, bool _activate)
 int
 SubOpMain::initializeOp (void)
 {
-   vector<string*> choices;
+   std::vector<std::string*> choices;
 
    // dggrid_operation <GENERATE_GRID | GENERATE_GRID_FROM_POINTS |
    //     BIN_POINT_VALS | BIN_POINT_PRESENCE | TRANSFORM_POINTS | OUTPUT_STATS>
-   choices.push_back(new string("GENERATE_GRID"));
-   choices.push_back(new string("GENERATE_GRID_FROM_POINTS"));
-   choices.push_back(new string("BIN_POINT_VALS"));
-   choices.push_back(new string("BIN_POINT_PRESENCE"));
-   choices.push_back(new string("TRANSFORM_POINTS"));
-   choices.push_back(new string("OUTPUT_STATS"));
+   choices.push_back(new std::string("GENERATE_GRID"));
+   choices.push_back(new std::string("GENERATE_GRID_FROM_POINTS"));
+   choices.push_back(new std::string("BIN_POINT_VALS"));
+   choices.push_back(new std::string("BIN_POINT_PRESENCE"));
+   choices.push_back(new std::string("TRANSFORM_POINTS"));
+   choices.push_back(new std::string("OUTPUT_STATS"));
    pList().insertParam(new DgStringChoiceParam("dggrid_operation", "GENERATE_GRID",
                &choices));
    dgg::util::release(choices);
 
    // rng_type <RAND | MOTHER>
-   choices.push_back(new string("RAND"));
-   choices.push_back(new string("MOTHER"));
+   choices.push_back(new std::string("RAND"));
+   choices.push_back(new std::string("MOTHER"));
    pList().insertParam(new DgStringChoiceParam("rng_type", "RAND", &choices));
    dgg::util::release(choices);
 
@@ -87,7 +87,7 @@ SubOpMain::setupOp (void)
 
    getParamValue(pList(), "dggrid_operation", operation, false);
 
-   string dummy;
+   std::string dummy;
    getParamValue(pList(), "rng_type", dummy, false);
 
    if (dummy == "MOTHER") useMother = true;

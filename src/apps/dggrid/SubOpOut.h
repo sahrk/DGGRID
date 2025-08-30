@@ -62,8 +62,8 @@ struct SubOpOut : public SubOpBasic {
    virtual int executeOp (void);
 
    // helper methods
-   void genRandPts (const DgQ2DICoord& add2D, const string& label);
-   void outputCellAdd2D (const DgLocation& add2D, const string* labelIn = nullptr,
+   void genRandPts (const DgQ2DICoord& add2D, const std::string& label);
+   void outputCellAdd2D (const DgLocation& add2D, const std::string* labelIn = nullptr,
                DgDataList* dataList = nullptr);
 
    void resetFiles (void);
@@ -91,49 +91,49 @@ struct SubOpOut : public SubOpBasic {
 
    DgRunningStats runStats;
 
-   string dataOutType;
-   string dataOutFileNameBase;
-   string dataOutFileName;
+   std::string dataOutType;
+   std::string dataOutFileNameBase;
+   std::string dataOutFileName;
 
-   string cellOutType;
-   string gdalCellDriver;
-   string pointOutType;
-   string gdalPointDriver;
-   string randPtsOutType;
-   string gdalCollectDriver;
+   std::string cellOutType;
+   std::string gdalCellDriver;
+   std::string pointOutType;
+   std::string gdalPointDriver;
+   std::string randPtsOutType;
+   std::string gdalCollectDriver;
 
-   string neighborsOutType;
-   string childrenOutType;
-   string ndxParentOutType;
-   string ndxChildrenOutType;
-   string neighborsOutFileNameBase;
-   string neighborsOutFileName;
-   string childrenOutFileNameBase;
-   string childrenOutFileName;
-   string ndxParentOutFileNameBase;
-   string ndxParentOutFileName;
-   string ndxChildrenOutFileNameBase;
-   string ndxChildrenOutFileName;
+   std::string neighborsOutType;
+   std::string childrenOutType;
+   std::string ndxParentOutType;
+   std::string ndxChildrenOutType;
+   std::string neighborsOutFileNameBase;
+   std::string neighborsOutFileName;
+   std::string childrenOutFileNameBase;
+   std::string childrenOutFileName;
+   std::string ndxParentOutFileNameBase;
+   std::string ndxParentOutFileName;
+   std::string ndxChildrenOutFileNameBase;
+   std::string ndxChildrenOutFileName;
 
-   string cellOutFileNameBase;
-   string cellOutFileName;
-   string ptOutFileNameBase;
-   string ptOutFileName;
-   string collectOutFileNameBase;
-   string collectOutFileName;
-   string randPtsOutFileNameBase;
-   string randPtsOutFileName;
-   string metaOutFileNameBase;
-   string metaOutFileName;
+   std::string cellOutFileNameBase;
+   std::string cellOutFileName;
+   std::string ptOutFileNameBase;
+   std::string ptOutFileName;
+   std::string collectOutFileNameBase;
+   std::string collectOutFileName;
+   std::string randPtsOutFileNameBase;
+   std::string randPtsOutFileName;
+   std::string metaOutFileNameBase;
+   std::string metaOutFileName;
 
-   int    shapefileIdLen;  // global_id string field length
+   int    shapefileIdLen;  // global_id std::string field length
 
-   string kmlColor;
+   std::string kmlColor;
    int    kmlWidth;
-   string kmlName;
-   string kmlDescription;
+   std::string kmlName;
+   std::string kmlDescription;
 
-   ofstream* dataOut;    // text output with no geometry
+   std::ofstream* dataOut;    // text output with no geometry
    DgOutLocFile *cellOut, *ptOut, *collectOut, *randPtsOut;
    DgOutShapefile *cellOutShp, *ptOutShp;
    DgOutPRCellsFile *prCellOut;
@@ -155,13 +155,13 @@ struct SubOpOut : public SubOpBasic {
 
    int shapefileDefaultInt;
    long double shapefileDefaultDouble;
-   string shapefileDefaultString;
+   std::string shapefileDefaultString;
 
-   vector<string> attributeFiles;
+   std::vector<std::string> attributeFiles;
    bool outCellAttributes; // true if cell output file is a shapefile
    bool outPointAttributes; // true if point output file is a shapefile
-   set<DgDBFfield> allFields; // union of all input file attribute fields
-   set<DgDBFfield> curFields; // union of all intersected fields for the
+   std::set<DgDBFfield> allFields; // union of all input file attribute fields
+   std::set<DgDBFfield> curFields; // union of all intersected fields for the
                               // current cell
 };
 

@@ -22,6 +22,6 @@ if(GDAL_FOUND)
   target_compile_definitions(dggrid PRIVATE USE_GDAL)
 endif()
 
-# If GDAL isn't present than ${GDAL_LIBRARIES} gives an empty string
+# If GDAL isn't present than ${GDAL_LIBRARIES} gives an empty std::string
 target_link_libraries(dggrid PRIVATE dglib dgaplib shapelib ${GDAL_LIBRARIES})
 target_compile_features(dggrid PRIVATE cxx_std_11)

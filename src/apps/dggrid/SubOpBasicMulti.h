@@ -44,9 +44,9 @@ struct SubOpBasicMulti : public SubOpBasic {
 
    // methods to support lightweight text input/output
    // default loops over the data fields in the list
-   virtual string dataToOutStr (DgDataList* data);
-   //virtual DgCell* inStrToPointCell (const string& inStr) const;
-   virtual DgLocationData* inStrToPointLoc (const string& inStr) const;
+   virtual std::string dataToOutStr (DgDataList* data);
+   //virtual DgCell* inStrToPointCell (const std::string& inStr) const;
+   virtual DgLocationData* inStrToPointLoc (const std::string& inStr) const;
 
 };
 

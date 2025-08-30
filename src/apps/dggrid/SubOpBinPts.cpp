@@ -37,8 +37,6 @@
 #include "OpBasic.h"
 #include "SubOpBinPts.h"
 
-using namespace std;
-
 ////////////////////////////////////////////////////////////////////////////////
 // values for a single cell
 
@@ -86,7 +84,7 @@ SubOpBinPts::SubOpBinPts (OpBasic& _op, bool _activate)
 ////////////////////////////////////////////////////////////////////////////////
 int
 SubOpBinPts::presVecToString (const bool* presVec, int allClasses,
-                  string& vecStr) const
+                  std::string& vecStr) const
 {
    int numClasses = 0;
    vecStr = "";
@@ -135,7 +133,7 @@ SubOpBinPts::outputCell(const DgLocation& loc, const Val& val) const
       }
 
       if (op.mainOp.operation == "BIN_POINT_PRESENCE") {
-         string vecStr;
+         std::string vecStr;
          int numClasses = (int) presVecToString(val.presVec, op.inOp.inputFiles.size(), vecStr);
          if (outputNumClasses) {
             DgDataFieldInt* fld =
@@ -157,19 +155,19 @@ SubOpBinPts::outputCell(const DgLocation& loc, const Val& val) const
 int
 SubOpBinPts::initializeOp (void) {
 
-   vector<string*> choices;
+   std::vector<std::string*> choices;
 
 /* not yet used
    // bin_method <ARITHMETIC_MEAN>
-   choices.push_back(new string("ARITHMETIC_MEAN"));
+   choices.push_back(new std::string("ARITHMETIC_MEAN"));
    pList().insertParam(new DgStringChoiceParam("bin_method", "ARITHMETIC_MEAN",
                                        &choices));
    dgg::util::release(choices);
 */
 
    // bin_coverage <GLOBAL | PARTIAL>
-   choices.push_back(new string("GLOBAL"));
-   choices.push_back(new string("PARTIAL"));
+   choices.push_back(new std::string("GLOBAL"));
+   choices.push_back(new std::string("PARTIAL"));
    pList().insertParam(new DgStringChoiceParam("bin_coverage", "GLOBAL", &choices));
    dgg::util::release(choices);
 
@@ -209,8 +207,8 @@ SubOpBinPts::initializeOp (void) {
 
 
    // cell_output_control <OUTPUT_ALL | OUTPUT_OCCUPIED>
-   choices.push_back(new string("OUTPUT_ALL"));
-   choices.push_back(new string("OUTPUT_OCCUPIED"));
+   choices.push_back(new std::string("OUTPUT_ALL"));
+   choices.push_back(new std::string("OUTPUT_OCCUPIED"));
    pList().insertParam(new DgStringChoiceParam("cell_output_control", "OUTPUT_ALL",
                                        &choices));
    dgg::util::release(choices);
@@ -224,7 +222,7 @@ int
 SubOpBinPts::setupOp (void) {
 
    /////// fill state variables from the parameter list //////////
-   string dummy;
+   std::string dummy;
 
 /* not yet used
    getParamValue(plist, "bin_method", dummy, false);
@@ -264,7 +262,7 @@ SubOpBinPts::setupOp (void) {
    getParamValue(pList(), "cell_output_control", dummy, false);
    outputAllCells = (dummy == "OUTPUT_ALL");
 
-   // setup the value output format string
+   // setup the value output format std::string
    valFmtStr = "%#." + dgg::util::to_string(op.mainOp.precision) + "LF";
 
    return 0;
@@ -281,15 +279,15 @@ SubOpBinPts::cleanupOp (void) {
 
 ////////////////////////////////////////////////////////////////////////////////
 DgLocationData*
-SubOpBinPts::inStrToPointLoc (const string& inStr) const {
+SubOpBinPts::inStrToPointLoc (const std::string& inStr) const {
 
    DgLocationData* loc = SubOpBasicMulti::inStrToPointLoc(inStr);
 
    // handle an input value
    if (useValInput) {
 
-      // all fields in the DataList are strings; replace with appropriate types
-      // first field is the value field, stored as a string in text input
+      // all fields in the DataList are std::strings; replace with appropriate types
+      // first field is the value field, stored as a std::string in text input
       // other fields are ignored
       const DgDataFieldString* valField =
            dynamic_cast<const DgDataFieldString*>(loc->dataList()->list()[0]);
@@ -305,7 +303,7 @@ SubOpBinPts::inStrToPointLoc (const string& inStr) const {
 
    return loc;
 
-} // DgLocationData* inStrToPointLoc(const string& inStr) const
+} // DgLocationData* inStrToPointLoc(const std::string& inStr) const
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -342,9 +340,9 @@ SubOpBinPts::binPtsGlobal (void) {
 
    // now process the points in each input file
    if (useValInput)
-      dgcout << "binning point values..." << endl;
+      dgcout << "binning point values..." << std::endl;
    else
-      dgcout << "binning points..." << endl;
+      dgcout << "binning points..." << std::endl;
 
    while (1) {
 
@@ -443,7 +441,7 @@ SubOpBinPts::binPtsPartial (void)
 
    // now make a first pass through the input files and determine what
    // cells are represented
-   dgcout << "determing quad bounds..." << endl;
+   dgcout << "determing quad bounds..." << std::endl;
    while (1) {
 
       DgLocationData* loc = op.inOp.getNextLoc();
@@ -485,16 +483,16 @@ SubOpBinPts::binPtsPartial (void)
 
    // now process the points in each input file
    if (useValInput)
-      dgcout << "binning point values..." << endl;
+      dgcout << "binning point values..." << std::endl;
    else
-      dgcout << "binning points..." << endl;
+      dgcout << "binning points..." << std::endl;
 
    op.inOp.resetInFile(); // start again with first input file
    while (1) {
 
       DgLocationData* loc = op.inOp.getNextLoc();
       if (!loc) break; // reached EOF on last input file
-//cout << *loc << endl;
+//cout << *loc << std::endl;
 
       dgg.convert(loc);
       int q = dgg.getAddress(*loc)->quadNum();
@@ -634,15 +632,15 @@ SubOpBinPts::executeOp (void)
    op.inOp.inFormatStr = tmpStr;
 
    const DgIDGGBase& dgg = op.dggOp.dgg();
-   dgcout << "Res " << dgg.outputRes() << " " << dgg.gridStats() << endl;
+   dgcout << "Res " << dgg.outputRes() << " " << dgg.gridStats() << std::endl;
 
    if (wholeEarth) binPtsGlobal();
    else binPtsPartial();
 
    int numFiles = op.inOp.fileNum;
    dgcout << "\nprocessed " << numFiles << " input file"
-          << ((numFiles > 1) ? "s." : ".") << endl;
-   dgcout << "** binning complete **" << endl;
+          << ((numFiles > 1) ? "s." : ".") << std::endl;
+   dgcout << "** binning complete **" << std::endl;
 
    return 0;
 

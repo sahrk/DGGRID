@@ -46,24 +46,24 @@ struct SubOpBinPts : public SubOpBasicMulti {
    // the parameters
    bool wholeEarth;
    bool outputAllCells;   // or only occupied ones?
-   string inValFieldName; // name of input field to take the average of
-   string valFmtStr;      // how format values for string output
+   std::string inValFieldName; // name of input field to take the average of
+   std::string valFmtStr;      // how format values for std::string output
    bool useValInput;      // input has a value field
 
    bool outputCount;      // output count of points-in-cell?
-   string outputCountFldName;
+   std::string outputCountFldName;
 
    bool outputTotal;      // output total of all values
-   string outputTotalFldName;
+   std::string outputTotalFldName;
 
    bool outputMean;       // output a mean field
-   string outputMeanFldName;
+   std::string outputMeanFldName;
 
    bool outputPresVec;    // output presence/absence bit vector
-   string outputPresVecFldName;
+   std::string outputPresVecFldName;
 
    bool outputNumClasses;    // output number of true's in the presence/absence vector
-   string outputNumClassesFldName;
+   std::string outputNumClassesFldName;
 
    bool outputMeanDefault;
    bool outputPresVecDefault;
@@ -71,11 +71,11 @@ struct SubOpBinPts : public SubOpBasicMulti {
    protected:
 
       // helper methods
-      virtual DgLocationData* inStrToPointLoc (const string& inStr) const;
+      virtual DgLocationData* inStrToPointLoc (const std::string& inStr) const;
       virtual double getVal (DgLocationData& loc) const;
       void initVal (Val& val, bool allocPresVec) const;
       int presVecToString (const bool* presVec, int allClasses,
-                  string& vecStr) const;
+                  std::string& vecStr) const;
 
       void binPtsGlobal (void);
       void binPtsPartial (void);

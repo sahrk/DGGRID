@@ -59,8 +59,8 @@ DgApParamList::clearList (void)
 void
 DgApParamList::loadParams (const std::string& fileName, bool fail)
 {
-   ifstream metaFile;
-   metaFile.open(fileName.c_str(), ios::in);
+   std::ifstream metaFile;
+   metaFile.open(fileName.c_str(), std::ios::in);
    if (!metaFile.good()) {
       report("DgApParamList::loadParams() unable to open file " + fileName,
              DgBase::Fatal);

@@ -41,7 +41,7 @@ struct SubOpBasicMulti;
 ////////////////////////////////////////////////////////////////////////////////
 struct OpBasic : public DgApOperationPList {
 
-   OpBasic (const string& inFileName);
+   OpBasic (const std::string& inFileName);
 
    virtual int initialize (bool force = false);
    virtual int cleanup    (bool force = false);

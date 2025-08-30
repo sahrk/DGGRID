@@ -1141,7 +1141,7 @@ bool ClipperBase::AddPath(const Path &pg, PolyType PolyTyp, bool Closed)
   //4. Finally, add edge bounds to LocalMinima list ...
 
   //Totally flat paths must be handled differently when adding them
-  //to LocalMinima list to avoid endless loops etc ...
+  //to LocalMinima list to avoid std::endless loops etc ...
   if (IsFlat) 
   {
     if (Closed) 
@@ -1172,7 +1172,7 @@ bool ClipperBase::AddPath(const Path &pg, PolyType PolyTyp, bool Closed)
   bool leftBoundIsForward;
   TEdge* EMin = 0;
 
-  //workaround to avoid an endless loop in the while loop below when
+  //workaround to avoid an std::endless loop in the while loop below when
   //open paths have matching start and end points ...
   if (E->Prev->Bot == E->Prev->Top) E = E->Next;
 

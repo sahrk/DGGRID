@@ -71,12 +71,8 @@
 */
 #include "DgHexSF.h"
 
-//using namespace dgg::topo;
-
 #include "OpBasic.h"
 #include "SubOpGen.h"
-
-using namespace std;
 
 ////////////////////////////////////////////////////////////////////////////////
 void
@@ -86,11 +82,11 @@ SubOpGen::outputStatus (bool force)
              (op.mainOp.updateFreq && (op.outOp.nCellsTested % op.mainOp.updateFreq == 0)))) {
       if (wholeEarth)
          dgcout << "* generated " << dgg::util::addCommas(op.outOp.nCellsAccepted)
-              << " cells" << endl;
+              << " cells" << std::endl;
       else {
          dgcout << "accepted " << dgg::util::addCommas(op.outOp.nCellsAccepted)
               << " cells / ";
-         dgcout << dgg::util::addCommas(op.outOp.nCellsTested) << " tested" << endl;
+         dgcout << dgg::util::addCommas(op.outOp.nCellsTested) << " tested" << std::endl;
       }
    }
 
@@ -109,12 +105,12 @@ SubOpGen::evalCell (const DgIDGGBase& dgg, const DgContCartRF& cc1,
    op.outOp.nCellsTested++;
 
    if (op.mainOp.megaVerbose)
-      dgcout << "Testing #" << op.outOp.nCellsTested << ": " << add2D << endl;
+      dgcout << "Testing #" << op.outOp.nCellsTested << ": " << add2D << std::endl;
 
    bool accepted = false;
 
    // start by checking the points
-   set<DgIVec2D>::iterator it = clipRegion.points().find(add2D);
+   std::set<DgIVec2D>::iterator it = clipRegion.points().find(add2D);
    if (it != clipRegion.points().end()) {
 
       accepted = true;
@@ -123,10 +119,10 @@ SubOpGen::evalCell (const DgIDGGBase& dgg, const DgContCartRF& cc1,
       if (op.outOp.buildShapeFileAttributes) {
 
          // add the fields for this point
-         map<DgIVec2D, set<DgDBFfield> >::iterator itFields =
+         std::map<DgIVec2D, std::set<DgDBFfield> >::iterator itFields =
                            clipRegion.ptFields().find(add2D);
-         const set<DgDBFfield>& fields = itFields->second;
-         for (set<DgDBFfield>::iterator it = fields.begin();
+         const std::set<DgDBFfield>& fields = itFields->second;
+         for (std::set<DgDBFfield>::iterator it = fields.begin();
                 it != fields.end(); it++)
             op.outOp.curFields.insert(*it);
 
@@ -237,8 +233,8 @@ SubOpGen::evalCell (const DgIDGGBase& dgg, const DgContCartRF& cc1,
               failure  = false;
               if (op.outOp.buildShapeFileAttributes) {
                  // add the fields for this polygon
-                 const set<DgDBFfield>& fields = clipRegion.polyFields()[i];
-                 for (set<DgDBFfield>::iterator it = fields.begin();
+                 const std::set<DgDBFfield>& fields = clipRegion.polyFields()[i];
+                 for (std::set<DgDBFfield>::iterator it = fields.begin();
                           it != fields.end(); it++)
                    op.outOp.curFields.insert(*it);
               } else { // only need one intersection
@@ -274,7 +270,7 @@ SubOpGen::evalCell (DgEvalData* data, DgIVec2D& add2D)
 
    if (!data->overageSet.empty())
    {
-      set<DgIVec2D>::iterator it = data->overageSet.find(add2D);
+      std::set<DgIVec2D>::iterator it = data->overageSet.find(add2D);
       if (it != data->overageSet.end()) // found add2D
       {
          accepted = true;
@@ -285,10 +281,10 @@ SubOpGen::evalCell (DgEvalData* data, DgIVec2D& add2D)
          {
             // add the fields for this polygon
 
-            map<DgIVec2D, set<DgDBFfield> >::iterator itFields =
+            std::map<DgIVec2D, std::set<DgDBFfield> >::iterator itFields =
                               data->overageFields.find(add2D);
-            const set<DgDBFfield>& fields = itFields->second;
-            for (set<DgDBFfield>::iterator it = fields.begin();
+            const std::set<DgDBFfield>& fields = itFields->second;
+            for (std::set<DgDBFfield>::iterator it = fields.begin();
                    it != fields.end(); it++)
                op.outOp.curFields.insert(*it);
 
@@ -353,7 +349,7 @@ SubOpGen::executeOp (void)
 
       // convert any incoming addresses to seqnums
       // use a set to ensure each cell is printed only once
-      set<unsigned long int> seqnums;
+      std::set<unsigned long int> seqnums;
 
       // read-in the sequence numbers
       for (const auto &regionfile: regionFiles) {
@@ -369,7 +365,7 @@ SubOpGen::executeOp (void)
             unsigned long int sNum = 0;
             if (seqToPoly) {
               if (sscanf(buff, "%lu", &sNum) != 1)
-                 ::report("genGrid(): invalid SEQNUM " + string(buff), DgBase::Fatal);
+                 ::report("genGrid(): invalid SEQNUM " + std::string(buff), DgBase::Fatal);
             } else { // must be indexToPoly
                // parse the address
                DgLocation* tmpLoc = NULL;
@@ -388,7 +384,7 @@ SubOpGen::executeOp (void)
       }
 
       // generate the cells
-      for (set<unsigned long int>::iterator i=seqnums.begin();i!=seqnums.end();i++) {
+      for (std::set<unsigned long int>::iterator i=seqnums.begin();i!=seqnums.end();i++) {
 
         DgLocation* loc = static_cast<const DgIDGG&>(dgg).bndRF().locFromSeqNum(*i);
         if (!dgg.bndRF().validLocation(*loc)){
@@ -407,7 +403,7 @@ SubOpGen::executeOp (void)
    } else if (pointClip) {
       op.outOp.nCellsAccepted = 0;
 
-      set<DgQ2DICoord> cells; // To ensure each cell is printed only output once
+      std::set<DgQ2DICoord> cells; // To ensure each cell is printed only output once
 
       // read-in and bin the points
       for (unsigned long fc = 0; fc < regionFiles.size(); fc++) {
@@ -419,11 +415,11 @@ SubOpGen::executeOp (void)
          regionFile.close();
          delete pRegionFile;
 
-         if (op.mainOp.megaVerbose) dgcout << "input: " << points << endl;
+         if (op.mainOp.megaVerbose) dgcout << "input: " << points << std::endl;
 
          dgg.convert(&points);
 
-         if (op.mainOp.megaVerbose) dgcout << " -> " << points << endl;
+         if (op.mainOp.megaVerbose) dgcout << " -> " << points << std::endl;
 
          list<DgLocBase*>::const_iterator it;
          for (it = points.begin(); it != points.end(); it++) {
@@ -433,7 +429,7 @@ SubOpGen::executeOp (void)
       }
 
       // generate the cells
-      for(set<DgQ2DICoord>::iterator i=cells.begin(); i!=cells.end(); i++){
+      for(std::set<DgQ2DICoord>::iterator i=cells.begin(); i!=cells.end(); i++){
         DgLocation* loc = dgg.makeLocation(*i);
 
         op.outOp.nCellsTested++;
@@ -505,8 +501,8 @@ SubOpGen::executeOp (void)
 #endif
 
       DgQuadClipRegion clipRegions[12]; // clip regions for each quad
-      set<DgIVec2D> overageSet[12];     // overage sets
-      map<DgIVec2D, set<DgDBFfield> > overageFields[12]; // associated fields
+      std::set<DgIVec2D> overageSet[12];     // overage sets
+      std::map<DgIVec2D, std::set<DgDBFfield> > overageFields[12]; // associated fields
 
       try {
          createClipRegions(dgg, clipRegions, overageSet, overageFields);
@@ -534,17 +530,17 @@ SubOpGen::executeOp (void)
       {
          if (overageSet[q].empty() && !clipRegions[q].isQuadUsed())
          {
-            dgcout << string("* No intersections in quad ")
-                 << dgg::util::to_string(q) << "." << endl;
+            dgcout << std::string("* No intersections in quad ")
+                 << dgg::util::to_string(q) << "." << std::endl;
             continue;
          }
 
-         dgcout << string("* Testing quad ") << dgg::util::to_string(q)
-              << "... " << endl;
+         dgcout << std::string("* Testing quad ") << dgg::util::to_string(q)
+              << "... " << std::endl;
 
          if (op.mainOp.megaVerbose)
             dgcout << "Generating: " << q << " " << clipRegions[q].offset()
-                 << " " << clipRegions[q].upperRight() << endl;
+                 << " " << clipRegions[q].upperRight() << std::endl;
 
          DgIVec2D lLeft;
          DgIVec2D uRight;
@@ -580,12 +576,12 @@ SubOpGen::executeOp (void)
                {
                   if (clipRegions[q].isQuadUsed())
                   {
-                     set<DgIVec2D>::iterator it = overageSet[q].find(tCoord);
+                     std::set<DgIVec2D>::iterator it = overageSet[q].find(tCoord);
                      if (it != overageSet[q].end()) // found tCoord
                      {
                         accepted = true;
                         overageSet[q].erase(it);
-                        if (op.mainOp.megaVerbose) dgcout << "found OVERAGE coord " << coord << endl;
+                        if (op.mainOp.megaVerbose) dgcout << "found OVERAGE coord " << coord << std::endl;
 
                         tCoord -= lLeft;
                         tCoord = b1.incrementAddress(tCoord);
@@ -596,13 +592,13 @@ SubOpGen::executeOp (void)
                      }
                      else
                      {
-                        set<DgIVec2D>::iterator it = overageSet[q].begin();
+                        std::set<DgIVec2D>::iterator it = overageSet[q].begin();
                         if (*it < tCoord)
                         {
                            accepted = true;
                            coord = *it;
                            overageSet[q].erase(it);
-                           if (op.mainOp.megaVerbose) dgcout << "processing OVERAGE " << coord << endl;
+                           if (op.mainOp.megaVerbose) dgcout << "processing OVERAGE " << coord << std::endl;
                         }
                         else
                         {
@@ -617,11 +613,11 @@ SubOpGen::executeOp (void)
                   }
                   else
                   {
-                     set<DgIVec2D>::iterator it = overageSet[q].begin();
+                     std::set<DgIVec2D>::iterator it = overageSet[q].begin();
                      coord = *it;
                      overageSet[q].erase(it);
                      accepted = true;
-                     if (op.mainOp.megaVerbose) dgcout << "processing OVERAGE " << coord << endl;
+                     if (op.mainOp.megaVerbose) dgcout << "processing OVERAGE " << coord << std::endl;
                   }
                }
                else if (clipRegions[q].isQuadUsed())
@@ -639,8 +635,8 @@ SubOpGen::executeOp (void)
                // much cleaner)
 
                if (op.mainOp.megaVerbose) {
-                  dgcout << "# testing coord: " << coord << endl;
-                  //dgcout << "DGG: " << dgg << endl;
+                  dgcout << "# testing coord: " << coord << std::endl;
+                  //dgcout << "DGG: " << dgg << std::endl;
                }
 /* this gets checked in evalCell
                 if (op.dggOp.gridTopo == Hexagon && !dgg.isClassI()) {
@@ -660,7 +656,7 @@ SubOpGen::executeOp (void)
                // if we're here we have a good one
 
                op.outOp.nCellsAccepted++;
-               //cout << "XX " << q << " " << coord << endl;
+               //cout << "XX " << q << " " << coord << std::endl;
 
                DgLocation* addLoc = dgg.makeLocation(DgQ2DICoord(q, coord));
                op.outOp.outputCellAdd2D(*addLoc);
@@ -671,19 +667,19 @@ SubOpGen::executeOp (void)
             }
          } // else !dp.isSuperfund
 
-         dgcout << "...quad " << q << " complete." << endl;
+         dgcout << "...quad " << q << " complete." << std::endl;
       }
 
    } // end if wholeEarth else
 
-   dgcout << "\n** grid generation complete **" << endl;
+   dgcout << "\n** grid generation complete **" << std::endl;
    outputStatus(true);
    if (!wholeEarth && !seqToPoly && !indexToPoly)
       dgcout << "acceptance rate is " <<
           100.0 * (long double) op.outOp.nCellsAccepted / (long double) op.outOp.nCellsTested <<
-          "%" << endl;
+          "%" << std::endl;
 
-   dgcout << endl;
+   dgcout << std::endl;
 
    return 0;
 
@@ -699,9 +695,9 @@ SubOpGen::intersectPolyWithQuad (const DgPolygon& v, DgQuadClipRegion& clipRegio
 {
    //// create a local copy and project to gnomonic
    DgPolygon polyVec(v);
-   if (op.mainOp.megaVerbose) dgcout << "input polyVec(v): " << polyVec << endl;
+   if (op.mainOp.megaVerbose) dgcout << "input polyVec(v): " << polyVec << std::endl;
    clipRegion.gnomProj().convert(polyVec);
-   if (op.mainOp.megaVerbose) dgcout << " -> input: " << polyVec << endl;
+   if (op.mainOp.megaVerbose) dgcout << " -> input: " << polyVec << std::endl;
 
    //// now create a clipper poly version
    ClipperLib::Paths clpPoly(1);
@@ -709,7 +705,7 @@ SubOpGen::intersectPolyWithQuad (const DgPolygon& v, DgQuadClipRegion& clipRegio
    for (int i = 0; i < polyVec.size(); i++) {
       const DgDVec2D& p0 = *clipRegion.gnomProj().getAddress(polyVec[i]);
 
-      if (op.mainOp.megaVerbose) dgcout << "clipper: \n" << " i: " << i << " " << p0 << endl;
+      if (op.mainOp.megaVerbose) dgcout << "clipper: \n" << " i: " << i << " " << p0 << std::endl;
 
       clpPoly[0] <<
            ClipperLib::IntPoint(clipperFactor * p0.x(), clipperFactor * p0.y());
@@ -733,24 +729,24 @@ void
 SubOpGen::processOneClipPoly (DgPolygon& polyIn, const DgIDGGBase& dgg,
              DgQuadClipRegion clipRegions[], DgInShapefileAtt* pAttributeFile)
 {
-   if (op.mainOp.megaVerbose) dgcout << "processOneClipPoly input: " << polyIn << endl;
+   if (op.mainOp.megaVerbose) dgcout << "processOneClipPoly input: " << polyIn << std::endl;
    dgg.geoRF().convert(polyIn);
-   if (op.mainOp.megaVerbose) dgcout << "-> geoRF: " << polyIn << endl;
+   if (op.mainOp.megaVerbose) dgcout << "-> geoRF: " << polyIn << std::endl;
 
    if (geoDens > 0.000000000001)
       DgGeoSphRF::densify(polyIn, geoDens);
 
-   if (op.mainOp.megaVerbose) dgcout << "densified: " << polyIn << endl;
+   if (op.mainOp.megaVerbose) dgcout << "densified: " << polyIn << std::endl;
 
    // create a copy to test for intersected quads
 
    DgPolygon quadVec(polyIn);
 
-   if (op.mainOp.megaVerbose) dgcout << "quadVec(polyIn): " << quadVec << endl;
+   if (op.mainOp.megaVerbose) dgcout << "quadVec(polyIn): " << quadVec << std::endl;
 
    dgg.q2ddRF().convert(quadVec);
 
-   if (op.mainOp.megaVerbose) dgcout << "->: " << quadVec << endl;
+   if (op.mainOp.megaVerbose) dgcout << "->: " << quadVec << std::endl;
 
    // set up to track which quads are intersected
    bool quadInt[12]; // which quads are intersected?
@@ -777,9 +773,9 @@ SubOpGen::processOneClipPoly (DgPolygon& polyIn, const DgIDGGBase& dgg,
 
                dgcerr << "ERROR: polygon intersects quad #"
                  << dgg::util::to_string(q) << " but a vertex of that polygon is "
-                 << "more than 90' from the quad center." << endl;
-               dgcerr << "polygon is: " << endl;
-               dgcerr << polyIn << endl;
+                 << "more than 90' from the quad center." << std::endl;
+               dgcerr << "polygon is: " << std::endl;
+               dgcerr << polyIn << std::endl;
                report("break-up polygon or reorient grid",
                        DgBase::Fatal);
                allGood = false;
@@ -789,7 +785,7 @@ SubOpGen::processOneClipPoly (DgPolygon& polyIn, const DgIDGGBase& dgg,
          }
 
          if (allGood)
-            if (op.mainOp.megaVerbose) dgcout << "intersects quad " << q << endl;
+            if (op.mainOp.megaVerbose) dgcout << "intersects quad " << q << std::endl;
       }
    }
 
@@ -823,27 +819,27 @@ SubOpGen::processOneClipPoly (DgPolygon& polyIn, const DgIDGGBase& dgg,
    //int nQuadsInt = 0;
    for (int q = 1; q < 11; q++) {
 
-      if (op.mainOp.megaVerbose) dgcout << "intersecting with quads..." << endl;
+      if (op.mainOp.megaVerbose) dgcout << "intersecting with quads..." << std::endl;
 
       if (!quadInt[q]) continue;
 
-      if (op.mainOp.megaVerbose) dgcout << "INTERSECTING quad " << q << endl;
+      if (op.mainOp.megaVerbose) dgcout << "INTERSECTING quad " << q << std::endl;
 
-      if (op.mainOp.megaVerbose) dgcout << "input: " << polyIn << endl;
+      if (op.mainOp.megaVerbose) dgcout << "input: " << polyIn << std::endl;
 
       ClipperLib::Paths* solution =
                 intersectPolyWithQuad (polyIn, clipRegions[q]);
 
       if (solution->size() == 0) {
          if (op.mainOp.megaVerbose)
-            dgcout << "no intersection in quad " << q << endl;
+            dgcout << "no intersection in quad " << q << std::endl;
 
          continue;
       }
 
       // if we're here we have intersection(s)
       if (op.mainOp.megaVerbose)
-         dgcout << solution->size() << " intersections FOUND in quad " << q << endl;
+         dgcout << solution->size() << " intersections FOUND in quad " << q << std::endl;
 
       //nQuadsInt++;
       clipRegions[q].setIsQuadUsed(true);
@@ -862,15 +858,15 @@ SubOpGen::processOneClipPoly (DgPolygon& polyIn, const DgIDGGBase& dgg,
             delete tloc;
          }
 
-         if (op.mainOp.megaVerbose) dgcout << "locv: " << locv << endl;
+         if (op.mainOp.megaVerbose) dgcout << "locv: " << locv << std::endl;
 
          dgg.geoRF().convert(locv);
 
-         if (op.mainOp.megaVerbose) dgcout << "->" << locv << endl;
+         if (op.mainOp.megaVerbose) dgcout << "->" << locv << std::endl;
 
          dgg.q2ddRF().convert(locv);
 
-         if (op.mainOp.megaVerbose) dgcout << "->" << locv << endl;
+         if (op.mainOp.megaVerbose) dgcout << "->" << locv << std::endl;
 
          // add the intersection to our clipper list
 
@@ -951,7 +947,7 @@ printf("ogrPoly:\n%s\n", clpStr);
 
          //// add the attributes for this polygon
          if (op.outOp.buildShapeFileAttributes) {
-            const set<DgDBFfield>& fields = pAttributeFile->curObjFields();
+            const std::set<DgDBFfield>& fields = pAttributeFile->curObjFields();
             clipRegions[q].polyFields().push_back(fields);
          }
 
@@ -1001,10 +997,10 @@ printf("ogrPoly:\n%s\n", clpStr);
 //////////////////////////////////////////////////////////////////////////////
 void
 SubOpGen::createClipRegions (const DgIDGGBase& dgg,
-             DgQuadClipRegion clipRegions[], set<DgIVec2D> overageSet[],
-             map<DgIVec2D, set<DgDBFfield> > overageFields[])
+             DgQuadClipRegion clipRegions[], std::set<DgIVec2D> overageSet[],
+             std::map<DgIVec2D, std::set<DgDBFfield> > overageFields[])
 {
-   dgcout << "\n* building clipping regions..." << endl;
+   dgcout << "\n* building clipping regions..." << std::endl;
 
    // initialize the i,j bounds
    for (int q = 1; q < 11; q++) {
@@ -1016,7 +1012,7 @@ SubOpGen::createClipRegions (const DgIDGGBase& dgg,
    // create the gnomonic quad boundaries to clip against
 
    if (op.mainOp.megaVerbose)
-      dgcout << "creating gnomonic quad boundaries..." << endl;
+      dgcout << "creating gnomonic quad boundaries..." << std::endl;
 
    //// find center for gnomonic; use a dummy diamond
 
@@ -1042,7 +1038,7 @@ SubOpGen::createClipRegions (const DgIDGGBase& dgg,
    dmd0.setVertices(DgIVec2D(0, 0), verts);
    ccRF.convert(verts);
 
-   if (op.mainOp.megaVerbose) dgcout << "verts:\n" << verts << endl;
+   if (op.mainOp.megaVerbose) dgcout << "verts:\n" << verts << std::endl;
 
    // lower left
 
@@ -1076,11 +1072,11 @@ SubOpGen::createClipRegions (const DgIDGGBase& dgg,
    verts.setLoc(3, *tloc);
    delete tloc;
 
-   if (op.mainOp.megaVerbose) dgcout << "(nudge) ->" << verts << endl;
+   if (op.mainOp.megaVerbose) dgcout << "(nudge) ->" << verts << std::endl;
 
    for (int q = 1; q < 11; q++) {
 
-      if (op.mainOp.megaVerbose) dgcout << "quad " << q << endl;
+      if (op.mainOp.megaVerbose) dgcout << "quad " << q << std::endl;
 
       // find gnomonic projection center for this quad
 
@@ -1091,10 +1087,10 @@ SubOpGen::createClipRegions (const DgIDGGBase& dgg,
 
       dgg.geoRF().convert(tloc);
 
-      if (op.mainOp.megaVerbose) dgcout << " -> " << *tloc << endl;
+      if (op.mainOp.megaVerbose) dgcout << " -> " << *tloc << std::endl;
 
       clipRegions[q].setGnomProj(DgProjGnomonicRF::makeRF(dgg.network(),
-           string("gnom") + dgg::util::to_string(q, 2),
+           std::string("gnom") + dgg::util::to_string(q, 2),
            *dgg.geoRF().getAddress(*tloc)));
 
       delete tloc;
@@ -1115,17 +1111,17 @@ SubOpGen::createClipRegions (const DgIDGGBase& dgg,
       }
 
       if (op.mainOp.megaVerbose)
-	  dgcout << v0 << endl;
+	  dgcout << v0 << std::endl;
 
       dgg.geoRF().convert(v0);
 
       if (op.mainOp.megaVerbose)
-	  dgcout << " -> " << v0 << endl;
+	  dgcout << " -> " << v0 << std::endl;
 
       clipRegions[q].gnomProj().convert(v0);
 
       if (op.mainOp.megaVerbose)
-	  dgcout << " -> " << v0 << endl;
+	  dgcout << " -> " << v0 << std::endl;
 
       // finally store the boundary as a clipper polygon
       ClipperLib::Path contour;
@@ -1154,12 +1150,12 @@ SubOpGen::createClipRegions (const DgIDGGBase& dgg,
                      new DgInShapefileAtt(dgg.geoRF(), &regionFiles[fc]);
 
                // add any new fields to the global list
-               const set<DgDBFfield>& fields = pAttributeFile->fields();
-               for (set<DgDBFfield>::iterator it = fields.begin();
+               const std::set<DgDBFfield>& fields = pAttributeFile->fields();
+               for (std::set<DgDBFfield>::iterator it = fields.begin();
                     it != fields.end(); it++) {
                   if (it->fieldName() == "global_id") continue;
 
-                  set<DgDBFfield>::iterator cur = op.outOp.allFields.find(*it);
+                  std::set<DgDBFfield>::iterator cur = op.outOp.allFields.find(*it);
                   if (cur == op.outOp.allFields.end()) // new field
                      op.outOp.allFields.insert(*it);
                   else if (cur->type() != it->type())
@@ -1199,7 +1195,7 @@ SubOpGen::createClipRegions (const DgIDGGBase& dgg,
                regionFile >> v;
                if (regionFile.isEOF()) break;
 
-               if (op.mainOp.megaVerbose) dgcout << "input: " << v << endl;
+               if (op.mainOp.megaVerbose) dgcout << "input: " << v << std::endl;
 
                dgg.convert(&v);
                for (int i = 0; i < v.size(); i++) {
@@ -1213,10 +1209,10 @@ SubOpGen::createClipRegions (const DgIDGGBase& dgg,
 
                   //// add the attributes for this point
                   if (op.outOp.buildShapeFileAttributes) {
-                     const set<DgDBFfield>& fields =
+                     const std::set<DgDBFfield>& fields =
                            pAttributeFile->curObjFields();
                      clipRegions[q].ptFields().insert(
-                           pair<DgIVec2D, set<DgDBFfield> >(coord, fields));
+                           std::pair<DgIVec2D, std::set<DgDBFfield> >(coord, fields));
                   }
 
                   //// update the i,j bounds for this quad
@@ -1261,14 +1257,14 @@ SubOpGen::createClipRegions (const DgIDGGBase& dgg,
       const DgIDGGBase& clipDgg = dgg.dggs()->idggBase(clipCellRes);
 
       // parse the input clipping cells
-      vector<string> clipCellAddressStrs;
+      std::vector<std::string> clipCellAddressStrs;
       dgg::util::ssplit(clipCellsStr, clipCellAddressStrs);
 
-//cout << "INRF: " << *op.inOp.pInRF << endl;
-//cout << "CLIPDGG: " << clipDgg << endl;
+//cout << "INRF: " << *op.inOp.pInRF << std::endl;
+//cout << "CLIPDGG: " << clipDgg << std::endl;
       // the coarse clipping cells
       // use a set to avoid duplicates
-      set<unsigned long int> clipSeqNums;
+      std::set<unsigned long int> clipSeqNums;
       // parse the clip cell sequence numbers
       for (const auto &seqStr: clipCellAddressStrs) {
 
@@ -1276,7 +1272,7 @@ SubOpGen::createClipRegions (const DgIDGGBase& dgg,
          if (op.inOp.inSeqNum) {
             if (sscanf(seqStr.c_str(), "%lu", &sNum) != 1)
                ::report("gridgen(): invalid cell sequence number in clip_cell_addresses" +
-                         string(seqStr), DgBase::Fatal);
+                         std::string(seqStr), DgBase::Fatal);
          } else { // must be indexToPoly
             // parse the address
             DgLocation* tmpLoc = NULL;
@@ -1289,15 +1285,15 @@ SubOpGen::createClipRegions (const DgIDGGBase& dgg,
          }
 
          clipSeqNums.insert(sNum);
-//cout << " sNum: " << sNum << endl;
+//cout << " sNum: " << sNum << std::endl;
       }
 
       // add the cell boundaries to the clip regions
-      for (set<unsigned long int>::iterator i = clipSeqNums.begin();
+      for (std::set<unsigned long int>::iterator i = clipSeqNums.begin();
              i != clipSeqNums.end(); i++){
 
         DgLocation* loc = static_cast<const DgIDGG&>(clipDgg).bndRF().locFromSeqNum(*i);
-//cout << " clip seq num " << *i << " " << *loc << endl;
+//cout << " clip seq num " << *i << " " << *loc << std::endl;
         if (!clipDgg.bndRF().validLocation(*loc)) {
           dgcerr << "genGrid(): invalid clipping cell res: " << clipCellRes
                     << " address: " << (*i)<< std::endl;
@@ -1325,7 +1321,7 @@ SubOpGen::createClipRegions (const DgIDGGBase& dgg,
       if (op.mainOp.megaVerbose) {
          dgcout << "POLY FINAL: ";
          dgcout << "q: " << q << " " << clipRegions[q].offset()
-                   << " " << clipRegions[q].upperRight() << endl;
+                   << " " << clipRegions[q].upperRight() << std::endl;
       }
 
       // create a buffer zone if applicable
@@ -1366,7 +1362,7 @@ SubOpGen::createClipRegions (const DgIDGGBase& dgg,
          if (op.mainOp.megaVerbose) {
             dgcout << "AFTER ADJUSTMENT: ";
             dgcout << "q: " << q << " " << clipRegions[q].offset()
-                << " " << clipRegions[q].upperRight() << endl;
+                << " " << clipRegions[q].upperRight() << std::endl;
          }
       }
    }
@@ -1387,7 +1383,7 @@ SubOpGen::createClipRegions (const DgIDGGBase& dgg,
          if (!clipRegions[q].isQuadUsed()) continue;
 
          if (op.mainOp.verbosity > 0)
-            dgcout << "Checking OVERAGE quad " << q << endl;
+            dgcout << "Checking OVERAGE quad " << q << std::endl;
 
          // check for over J
 
@@ -1399,7 +1395,7 @@ SubOpGen::createClipRegions (const DgIDGGBase& dgg,
 
             if (op.mainOp.megaVerbose)
                dgcout << "OVERJ in quad " << q << "-" << lLeft <<
-                    " " << uRight << endl;
+                    " " << uRight << std::endl;
 
             DgIVec2D tCoord = lLeft;
             while (true) {
@@ -1454,11 +1450,11 @@ SubOpGen::createClipRegions (const DgIDGGBase& dgg,
                overageSet[newQ].insert(newC);
                if (op.outOp.buildShapeFileAttributes)
                   overageFields[newQ].insert(
-                    pair<DgIVec2D, set<DgDBFfield> >(newC, op.outOp.curFields));
+                    std::pair<DgIVec2D, std::set<DgDBFfield> >(newC, op.outOp.curFields));
 
                if (op.mainOp.megaVerbose)
                   dgcout << "PUSH OVERAGE: " << q << ": " << coord <<
-                       " -> " << newQ << ": " << newC << endl;
+                       " -> " << newQ << ": " << newC << std::endl;
 
                if (tCoord == uRight) break;
                tCoord.setI(tCoord.i() + 1);
@@ -1477,7 +1473,7 @@ SubOpGen::createClipRegions (const DgIDGGBase& dgg,
                uRight = DgIVec2D(uRight.i(), dgg.maxJ() + 1);
 
             if (op.mainOp.megaVerbose)
-               dgcout << "OVERI in quad " << q << "-" << lLeft << " " << uRight << endl;
+               dgcout << "OVERI in quad " << q << "-" << lLeft << " " << uRight << std::endl;
 
             DgBoundedRF2D b1(grid, lLeft, uRight);
             for (DgIVec2D tCoord = b1.lowerLeft(); tCoord != b1.invalidAdd();
@@ -1528,11 +1524,11 @@ SubOpGen::createClipRegions (const DgIDGGBase& dgg,
                overageSet[newQ].insert(newC);
                if (op.outOp.buildShapeFileAttributes)
                   overageFields[newQ].insert(
-                    pair<DgIVec2D, set<DgDBFfield> >(newC, op.outOp.curFields));
+                    std::pair<DgIVec2D, std::set<DgDBFfield> >(newC, op.outOp.curFields));
 
                if (op.mainOp.megaVerbose)
                   dgcout << "ADD OVERAGE: " << q << ": " << coord <<
-                          " -> " << newQ << ": " << newC << endl;
+                          " -> " << newQ << ": " << newC << std::endl;
             }
          }
       }

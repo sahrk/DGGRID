@@ -72,12 +72,8 @@
 */
 #include "DgHexSF.h"
 
-//using namespace dgg::topo;
-
 #include "OpBasic.h"
 #include "SubOpGen.h"
-
-using namespace std;
 
 ////////////////////////////////////////////////////////////////////////////////
 SubOpGen::SubOpGen (OpBasic& op, bool _activate)
@@ -100,7 +96,7 @@ SubOpGen::SubOpGen (OpBasic& op, bool _activate)
 int
 SubOpGen::initializeOp (void)
 {
-   vector<string*> choices;
+   std::vector<std::string*> choices;
 
 #ifdef USE_GDAL
    // clip_using_holes <TRUE | FALSE>
@@ -112,17 +108,17 @@ SubOpGen::initializeOp (void)
 
    // clip_subset_type <WHOLE_EARTH | AIGEN | SHAPEFILE | GDAL | SEQNUMS | ADDRESSES |
    //                    COARSE_CELLS | INPUT_ADDRESS_TYPE >
-   choices.push_back(new string("WHOLE_EARTH"));
-   choices.push_back(new string("AIGEN"));
-   choices.push_back(new string("SHAPEFILE"));
+   choices.push_back(new std::string("WHOLE_EARTH"));
+   choices.push_back(new std::string("AIGEN"));
+   choices.push_back(new std::string("SHAPEFILE"));
 #ifdef USE_GDAL
-   choices.push_back(new string("GDAL"));
+   choices.push_back(new std::string("GDAL"));
 #endif
-   choices.push_back(new string("SEQNUMS"));
-   choices.push_back(new string("ADDRESSES"));
-   choices.push_back(new string("POINTS"));
-   choices.push_back(new string("COARSE_CELLS"));
-   choices.push_back(new string("INPUT_ADDRESS_TYPE"));
+   choices.push_back(new std::string("SEQNUMS"));
+   choices.push_back(new std::string("ADDRESSES"));
+   choices.push_back(new std::string("POINTS"));
+   choices.push_back(new std::string("COARSE_CELLS"));
+   choices.push_back(new std::string("INPUT_ADDRESS_TYPE"));
    pList().insertParam(new DgStringChoiceParam("clip_subset_type", "WHOLE_EARTH",
                &choices));
    dgg::util::release(choices);
@@ -140,7 +136,7 @@ SubOpGen::initializeOp (void)
    pList().insertParam(new DgStringParam("clip_region_files", "test.gen"));
 
    // clip_type <POLY_INTERSECT>
-   choices.push_back(new string("POLY_INTERSECT"));
+   choices.push_back(new std::string("POLY_INTERSECT"));
    pList().insertParam(new DgStringChoiceParam("clip_type", "POLY_INTERSECT",
                &choices));
    dgg::util::release(choices);
@@ -158,7 +154,7 @@ SubOpGen::setupOp (void)
 {
    /////// fill state variables from the parameter list //////////
 
-   string dummy;
+   std::string dummy;
    getParamValue(pList(), "clip_subset_type", dummy, false);
    wholeEarth = false;
    useGDAL = false;
@@ -205,7 +201,7 @@ SubOpGen::setupOp (void)
 
    //// region file names
 
-   string regFileStr;
+   std::string regFileStr;
    getParamValue(pList(), "clip_region_files", regFileStr, false);
 
    dgg::util::ssplit(regFileStr, regionFiles);

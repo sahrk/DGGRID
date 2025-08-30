@@ -37,7 +37,7 @@ struct SubOpMain : public SubOpBasic {
       SubOpMain (OpBasic& op, bool activate = true);
 
       // the parameters
-      string operation;  // operation for dggrid to perform
+      std::string operation;  // operation for dggrid to perform
       int precision;     // number of output digits to right of decimal point
       int verbosity;     // debugging info verbosity
       bool megaVerbose;

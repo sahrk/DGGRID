@@ -106,7 +106,7 @@ DgOutShapefile::open (const std::string& fileName, DgReportLevel failLevel)
 
    // create the projection file
    std::string prjFileName = fileName + ".prj";
-   ofstream prjFile;
+   std::ofstream prjFile;
    prjFile.open(prjFileName.c_str(), std::ios::out);
    if (!prjFile.good())
       report("DgOutShapefile::open() unable to open file " + prjFileName,
@@ -138,7 +138,7 @@ DgOutShapefile::open (const std::string& fileName, DgReportLevel failLevel)
 
    prjFile << "GEOGCS[\"" << datumName;
    prjFile << "\",DATUM[\"D_unknown\",SPHEROID[\"" << datumName << "\",";
-   prjFile << std::fixed << setprecision(precision) << earthRadiusM;
+    prjFile << std::fixed << std::setprecision(precision) << earthRadiusM;
    prjFile << ",0]],PRIMEM[\"Greenwich\",0],";
    prjFile << "UNIT[\"Degree\",0.017453292519943295]]\n";
    prjFile.close();

@@ -36,7 +36,7 @@ using namespace dgg::addtype;
 
 ////////////////////////////////////////////////////////////////////////////////
 // by default only main and DGG operations are active
-OpBasic::OpBasic (const string& inFileName)
+OpBasic::OpBasic (const std::string& inFileName)
       : DgApOperationPList (inFileName),
         mainOp (*this, true), dggOp (*this, true), inOp (*this, true),
         outOp (*this, true), primarySubOp (nullptr)
@@ -51,11 +51,11 @@ OpBasic::initialize (bool force)
    mainOp.initializeOp();
    pList.loadParams(inFileName, false);
    mainOp.setupOp();
-   string opName = mainOp.operation;
+   std::string opName = mainOp.operation;
    mainOp.reset();
    pList.clearList();
 
-   //cout << "operation: " << opName << endl;
+   //cout << "operation: " << opName << std::endl;
 
    if (opName == "GENERATE_GRID")
       primarySubOp = new SubOpGen(*this);
@@ -70,7 +70,7 @@ OpBasic::initialize (bool force)
    else if (opName == "TRANSFORM_POINTS")
       primarySubOp = new SubOpTransform(*this);
    else
-      report(string("invalid operation ") + mainOp.operation, DgBase::Fatal);
+      report(std::string("invalid operation ") + mainOp.operation, DgBase::Fatal);
 
    // now reset the plist using the correct primary sub operation
    return DgApOperationPList::initialize();

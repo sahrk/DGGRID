@@ -33,44 +33,44 @@ SubOpStats::executeOp (void) {
 
    dgcout << "Earth Radius: "
         << dgg::util::addCommas(op.dggOp.geoRF().earthRadiusKM(), op.mainOp.precision)
-        << "\n" << endl;
+        << "\n" << std::endl;
 
-   string resS = "Res";
-   string nCellsS = "# Cells";
-   string areaS = "Area (km^2)";
-   string spcS = "Spacing (km)";
-   string clsS = "CLS (km)";
+   std::string resS = "Res";
+   std::string nCellsS = "# Cells";
+   std::string areaS = "Area (km^2)";
+   std::string spcS = "Spacing (km)";
+   std::string clsS = "CLS (km)";
 
    const DgGridStats& gs0 = op.dggOp.dggs().idggBase(0).gridStats();
    const DgGridStats& gsR = op.dggOp.dggs().idggBase(numRes - 1).gridStats();
    int resWidth =  (int) resS.length();
-   int nCellsWidth = max((int) dgg::util::addCommas(gsR.nCells()).length(),
+   int nCellsWidth = std::max((int) dgg::util::addCommas(gsR.nCells()).length(),
                          (int) nCellsS.length()) + 1;
-   int areaWidth = max((int) dgg::util::addCommas(gs0.cellAreaKM(),
+   int areaWidth = std::max((int) dgg::util::addCommas(gs0.cellAreaKM(),
                          op.mainOp.precision).length(),  (int) areaS.length()) + 1;
-//   int spcWidth = max((int) dgg::util::addCommas(gs0.cellDistKM(),
+//   int spcWidth = std::max((int) dgg::util::addCommas(gs0.cellDistKM(),
 //                         op.mainOp.precision).length(), spcS.length()) + 1;
-   int clsWidth = max((int) dgg::util::addCommas(gs0.cls(),
+   int clsWidth = std::max((int) dgg::util::addCommas(gs0.cls(),
                          op.mainOp.precision).length(), (int) clsS.length()) + 1;
 
-   dgcout << setw(resWidth) << resS
-        << setw(nCellsWidth) << nCellsS
-        << setw(areaWidth) << areaS
- //       << setw(spcWidth) << spcS
-        << setw(clsWidth) << clsS << endl;
+   dgcout << std::setw(resWidth) << resS
+        << std::setw(nCellsWidth) << nCellsS
+        << std::setw(areaWidth) << areaS
+ //       << std::setw(spcWidth) << spcS
+        << std::setw(clsWidth) << clsS << std::endl;
 
    for (int r = 0; r < numRes; r++) {
       if (op.dggOp.dggs().idggBase(r).outputRes() >= 0) { // in case invalid sf res
 
          const DgGridStats& gs = op.dggOp.dggs().idggBase(r).gridStats();
-         dgcout << setw(resWidth)  << op.dggOp.dggs().idggBase(r).outputRes()
-           << setw(nCellsWidth) << dgg::util::addCommas(gs.nCells())
-           << setw(areaWidth) << dgg::util::addCommas(gs.cellAreaKM(),
+         dgcout << std::setw(resWidth)  << op.dggOp.dggs().idggBase(r).outputRes()
+           << std::setw(nCellsWidth) << dgg::util::addCommas(gs.nCells())
+           << std::setw(areaWidth) << dgg::util::addCommas(gs.cellAreaKM(),
                                                 op.mainOp.precision)
 //           << setw(spcWidth) << dgg::util::addCommas(gs.cellDistKM(),
 //                                                op.mainOp.precision)
-           << setw(clsWidth) << dgg::util::addCommas(gs.cls(),
-                                                op.mainOp.precision) << endl;
+           << std::setw(clsWidth) << dgg::util::addCommas(gs.cls(),
+                                                op.mainOp.precision) << std::endl;
       }
    }
 

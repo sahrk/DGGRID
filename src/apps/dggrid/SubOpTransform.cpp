@@ -37,8 +37,6 @@
 #include "OpBasic.h"
 #include "SubOpTransform.h"
 
-using namespace std;
-
 ////////////////////////////////////////////////////////////////////////////////
 SubOpTransform::SubOpTransform (OpBasic& _op, bool _activate)
    : SubOpBasicMulti (_op, _activate)
@@ -57,7 +55,7 @@ SubOpTransform::SubOpTransform (OpBasic& _op, bool _activate)
 int
 SubOpTransform::initializeOp (void) {
 
-   vector<string*> choices;
+   std::vector<std::string*> choices;
    return 0;
 
 } // int SubOpTransform::initializeOp
@@ -67,7 +65,7 @@ int
 SubOpTransform::setupOp (void) {
 
    /////// fill state variables from the parameter list //////////
-   string dummy;
+   std::string dummy;
 
    return 0;
 
@@ -92,15 +90,15 @@ SubOpTransform::executeOp (void) {
    }
 
    const DgIDGGBase& dgg = op.dggOp.dgg();
-   dgcout << "Res " << dgg.outputRes() << " " << dgg.gridStats() << endl;
-   dgcout << "\ntransforming values..." << endl;
+   dgcout << "Res " << dgg.outputRes() << " " << dgg.gridStats() << std::endl;
+   dgcout << "\ntransforming values..." << std::endl;
 
    while (true) {
 
       DgLocationData* loc = op.inOp.getNextLoc();
       if (!loc) break; // reached EOF on last input file
 #if DGDEBUG
-   dgcout << "TRANSFORM BEFORE: " << *loc << endl;
+   dgcout << "TRANSFORM BEFORE: " << *loc << std::endl;
 #endif
 
       //op.outOp.pOutRF->convert(loc);
@@ -109,7 +107,7 @@ SubOpTransform::executeOp (void) {
       op.outOp.outputCellAdd2D(*loc, nullptr, loc->dataList());
 
 #if DGDEBUG
-   dgcout << "TRANSFORM AFTER: " << *loc << endl;
+   dgcout << "TRANSFORM AFTER: " << *loc << std::endl;
 #endif
 
       delete loc;
@@ -117,8 +115,8 @@ SubOpTransform::executeOp (void) {
 
    int numFiles = op.inOp.fileNum;
    dgcout << "\nprocessed " << numFiles << " input file"
-          << ((numFiles > 1) ? "s." : ".") << endl;
-   dgcout << "** transformation complete **" << endl;
+          << ((numFiles > 1) ? "s." : ".") << std::endl;
+   dgcout << "** transformation complete **" << std::endl;
 
    return 0;
 

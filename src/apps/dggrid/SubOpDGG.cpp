@@ -242,62 +242,62 @@ SubOpDGG::addressTypeToRF (DgAddressType type, const DgRFBase** rf,
 int
 SubOpDGG::initializeOp (void)
 {
-   vector<string*> choices;
+   std::vector<std::string*> choices;
 
    // dggs_type <CUSTOM | SUPERFUND | PLANETRISK | IGEO7 |
    //            ISEA3H | ISEA4H | ISEA7H | ISEA43H | ISEA4T | ISEA4D |
    //            FULLER3H | FULLER4H | FULLER7H | FULLER43H | FULLER4T | FULLER4D>
-   choices.push_back(new string("CUSTOM"));
-   choices.push_back(new string("SUPERFUND"));
-   choices.push_back(new string("PLANETRISK"));
-   choices.push_back(new string("IGEO7"));
-   choices.push_back(new string("ISEA3H"));
-   choices.push_back(new string("ISEA4H"));
-   choices.push_back(new string("ISEA7H"));
-   choices.push_back(new string("ISEA43H"));
-   choices.push_back(new string("ISEA4T"));
-   choices.push_back(new string("ISEA4D"));
-   choices.push_back(new string("FULLER3H"));
-   choices.push_back(new string("FULLER4H"));
-   choices.push_back(new string("FULLER7H"));
-   choices.push_back(new string("FULLER43H"));
-   choices.push_back(new string("FULLER4T"));
-   choices.push_back(new string("FULLER4D"));
+   choices.push_back(new std::string("CUSTOM"));
+   choices.push_back(new std::string("SUPERFUND"));
+   choices.push_back(new std::string("PLANETRISK"));
+   choices.push_back(new std::string("IGEO7"));
+   choices.push_back(new std::string("ISEA3H"));
+   choices.push_back(new std::string("ISEA4H"));
+   choices.push_back(new std::string("ISEA7H"));
+   choices.push_back(new std::string("ISEA43H"));
+   choices.push_back(new std::string("ISEA4T"));
+   choices.push_back(new std::string("ISEA4D"));
+   choices.push_back(new std::string("FULLER3H"));
+   choices.push_back(new std::string("FULLER4H"));
+   choices.push_back(new std::string("FULLER7H"));
+   choices.push_back(new std::string("FULLER43H"));
+   choices.push_back(new std::string("FULLER4T"));
+   choices.push_back(new std::string("FULLER4D"));
    pList().insertParam(new DgStringChoiceParam("dggs_type", "CUSTOM", &choices));
    dgg::util::release(choices);
 
    // dggs_base_poly <ICOSAHEDRON>
-   choices.push_back(new string("ICOSAHEDRON"));
+   choices.push_back(new std::string("ICOSAHEDRON"));
    pList().insertParam(new DgStringChoiceParam("dggs_base_poly", "ICOSAHEDRON",
                &choices));
    dgg::util::release(choices);
 
    // dggs_topology <HEXAGON | TRIANGLE | DIAMOND>
-   choices.push_back(new string("HEXAGON"));
-   choices.push_back(new string("TRIANGLE"));
-   choices.push_back(new string("DIAMOND"));
+   choices.push_back(new std::string("HEXAGON"));
+   choices.push_back(new std::string("TRIANGLE"));
+   choices.push_back(new std::string("DIAMOND"));
    pList().insertParam(new DgStringChoiceParam("dggs_topology", "HEXAGON", &choices));
    dgg::util::release(choices);
 
    // dggs_proj <ISEA | FULLER | GNOMONIC>
-   choices.push_back(new string("ISEA"));
-   choices.push_back(new string("FULLER"));
-   //choices.push_back(new string("GNOMONIC"));
+   choices.push_back(new std::string("ISEA"));
+   choices.push_back(new std::string("FULLER"));
+   //choices.push_back(new std::string("GNOMONIC"));
    pList().insertParam(new DgStringChoiceParam("dggs_proj", "ISEA", &choices));
    dgg::util::release(choices);
 
    // dggs_aperture_type <PURE | MIXED43 | SEQUENCE>
-   choices.push_back(new string("PURE"));
-   choices.push_back(new string("MIXED43"));
-   choices.push_back(new string("SEQUENCE"));
+   choices.push_back(new std::string("PURE"));
+   choices.push_back(new std::string("MIXED43"));
+   choices.push_back(new std::string("SEQUENCE"));
    pList().insertParam(new DgStringChoiceParam("dggs_aperture_type", "PURE",
              &choices));
    dgg::util::release(choices);
 
    // dggs_aperture < 3 | 4 | 7 >
-   choices.push_back(new string("3"));
-   choices.push_back(new string("4"));
-   choices.push_back(new string("7"));
+   choices.push_back(new std::string("3"));
+   choices.push_back(new std::string("4"));
+   choices.push_back(new std::string("7"));
    pList().insertParam(new DgStringChoiceParam("dggs_aperture", "4", &choices));
    dgg::util::release(choices);
 
@@ -314,9 +314,9 @@ SubOpDGG::initializeOp (void)
    pList().insertParam(new DgIntParam("dggs_num_aperture_4_res", 0, 0, MAX_DGG_RES));
 
    // proj_datum <WGS84_AUTHALIC_SPHERE WGS84_MEAN_SPHERE CUSTOM_SPHERE>
-   choices.push_back(new string("WGS84_AUTHALIC_SPHERE"));
-   choices.push_back(new string("WGS84_MEAN_SPHERE"));
-   choices.push_back(new string("CUSTOM_SPHERE"));
+   choices.push_back(new std::string("WGS84_AUTHALIC_SPHERE"));
+   choices.push_back(new std::string("WGS84_MEAN_SPHERE"));
+   choices.push_back(new std::string("CUSTOM_SPHERE"));
    pList().insertParam(new DgStringChoiceParam("proj_datum",
                "WGS84_AUTHALIC_SPHERE", &choices));
    dgg::util::release(choices);
@@ -328,9 +328,9 @@ SubOpDGG::initializeOp (void)
    //// specify the position and orientation
 
    // dggs_orient_specify_type <RANDOM | SPECIFIED | REGION_CENTER>
-   choices.push_back(new string("RANDOM"));
-   choices.push_back(new string("SPECIFIED"));
-   choices.push_back(new string("REGION_CENTER"));
+   choices.push_back(new std::string("RANDOM"));
+   choices.push_back(new std::string("SPECIFIED"));
+   choices.push_back(new std::string("REGION_CENTER"));
    pList().insertParam(new DgStringChoiceParam("dggs_orient_specify_type", "SPECIFIED",
                &choices));
    dgg::util::release(choices);
@@ -358,9 +358,9 @@ SubOpDGG::initializeOp (void)
    pList().insertParam(new DgDoubleParam("region_center_lat", 0.0, -90.0, 90.0));
 
    // dggs_res_specify_type <SPECIFIED | CELL_AREA | INTERCELL_DISTANCE>
-   choices.push_back(new string("SPECIFIED"));
-   choices.push_back(new string("CELL_AREA"));
-   choices.push_back(new string("INTERCELL_DISTANCE"));
+   choices.push_back(new std::string("SPECIFIED"));
+   choices.push_back(new std::string("CELL_AREA"));
+   choices.push_back(new std::string("INTERCELL_DISTANCE"));
    pList().insertParam(new DgStringChoiceParam("dggs_res_specify_type", "SPECIFIED",
                &choices));
    dgg::util::release(choices);
@@ -383,16 +383,16 @@ SubOpDGG::initializeOp (void)
    for (int i = 0; ; i++) {
       if (dgg::addtype::hierNdxSysTypeStrings[i] == "INVALID")
          break;
-      choices.push_back(new string(dgg::addtype::hierNdxSysTypeStrings[i]));
+      choices.push_back(new std::string(dgg::addtype::hierNdxSysTypeStrings[i]));
    }
    pList().insertParam(new DgStringChoiceParam("hier_indexing_system_type", "NONE", &choices));
    dgg::util::release(choices);
 
    // z3_invalid_digit < 0 | 1 | 2 | 3 >
-   choices.push_back(new string("0"));
-   choices.push_back(new string("1"));
-   choices.push_back(new string("2"));
-   choices.push_back(new string("3"));
+   choices.push_back(new std::string("0"));
+   choices.push_back(new std::string("1"));
+   choices.push_back(new std::string("2"));
+   choices.push_back(new std::string("3"));
 // default changed to "3" in version 9.0b
    //pList().insertParam(new DgStringChoiceParam("z3_invalid_digit", "0",
    pList().insertParam(new DgStringChoiceParam("z3_invalid_digit", "3",
@@ -410,9 +410,9 @@ SubOpDGG::setupOp (void)
    /////// fill state variables from the parameter list //////////
 
    // setup preset DGGS (if any)
-   string tmp;
+   std::string tmp;
    getParamValue(pList(), "dggs_type", tmp, false);
-   string tmplc = toLower(tmp);
+   std::string tmplc = toLower(tmp);
    if (tmplc != "custom") {
       // these params are common to all presets
       pList().setPresetParam("dggs_base_poly", "ICOSAHEDRON");
@@ -473,10 +473,10 @@ SubOpDGG::setupOp (void)
 
          if (!tmplc.compare(0, 4, "isea")) {
             pList().setPresetParam("dggs_proj", "ISEA");
-            projLen = (int) string("isea").length();
+            projLen = (int) std::string("isea").length();
          } else { // must be FULLER
             pList().setPresetParam("dggs_proj", "FULLER");
-            projLen = (int) string("fuller").length();
+            projLen = (int) std::string("fuller").length();
          }
 
          // get the aperture
@@ -490,14 +490,14 @@ SubOpDGG::setupOp (void)
       }
    }
 
-   string gridTopoStr = "";
+   std::string gridTopoStr = "";
    getParamValue(pList(), "dggs_topology", gridTopoStr, false);
    gridTopo = dgg::topo::stringToGridTopology(gridTopoStr);
 
 /* metric not exposed to user yet; D8 is broken
-   string gridMetricStr = "";
+   std::string gridMetricStr = "";
    getParamValue(pList(), "dggs_metric", gridMetricStr, false);
-   gridMetric = stringToGridMetric(gridMetricStr);
+   gridMetric = std::stringToGridMetric(gridMetricStr);
 */
    switch (gridTopo) {
       case Hexagon:
@@ -524,7 +524,7 @@ SubOpDGG::setupOp (void)
    if (isMixed43)
       getParamValue(pList(), "dggs_num_aperture_4_res", numAp4, false);
    else if (isApSeq) {
-      string tmp;
+      std::string tmp;
       getParamValue(pList(), "dggs_aperture_sequence", tmp, false);
       apSeq = DgApSeq(tmp);
    } else {
@@ -560,10 +560,10 @@ SubOpDGG::setupOp (void)
          ::report("SubOpDGG::setupOp() Superfund grid requires "
              "dggs_num_aperture_4_res of 2", DgBase::Fatal);
 
-      string resType;
+      std::string resType;
       getParamValue(pList(), "dggs_res_specify_type", resType, false);
 
-      if (resType != string("SPECIFIED"))
+      if (resType != std::string("SPECIFIED"))
          ::report("SubOpDGG::setupOp() Superfund grid requires "
              "dggs_res_specify_type of SPECIFIED", DgBase::Fatal);
 
@@ -576,11 +576,11 @@ SubOpDGG::setupOp (void)
       actualRes = res;
    }
 
-   string dummy;
+   std::string dummy;
    getParamValue(pList(), "dggs_orient_specify_type", dummy, false);
-   if (dummy == string("SPECIFIED"))
+   if (dummy == std::string("SPECIFIED"))
       placeRandom = false;
-   else if (dummy == string("REGION_CENTER")) {
+   else if (dummy == std::string("REGION_CENTER")) {
       placeRandom = false;
       orientCenter = true;
    } else {
@@ -634,12 +634,12 @@ SubOpDGG::cleanupOp (void) {
 int
 SubOpDGG::executeOp (void) {
 
-//cout << "YYY " << curGrid << " " << numGrids << " " << lastGrid << endl;
+//cout << "YYY " << curGrid << " " << numGrids << " " << lastGrid << std::endl;
 
    curGrid++;
    if (curGrid == numGrids) lastGrid = true;
 
-//cout << "ZZZ " << curGrid << " " << numGrids << " " << lastGrid << endl;
+//cout << "ZZZ " << curGrid << " " << numGrids << " " << lastGrid << std::endl;
 
    orientGrid();
 
@@ -678,15 +678,15 @@ SubOpDGG::determineRes (void)
 
    // get the parameters
 
-   string resType;
+   std::string resType;
    getParamValue(pList(), "dggs_res_specify_type", resType, false);
 
-   if (resType == string("SPECIFIED")) {
+   if (resType == std::string("SPECIFIED")) {
       getParamValue(pList(), "dggs_res_spec", res, false);
    } else {
       bool area;
       long double value = 0;
-      if (resType == string("CELL_AREA")) {
+      if (resType == std::string("CELL_AREA")) {
          area = true;
          getParamValue(pList(), "dggs_res_specify_area", value, false);
       } else {
@@ -726,7 +726,7 @@ SubOpDGG::determineRes (void)
          last = next;
       }
 
-      dgcout << "** choosing grid resolution: " << res << endl;
+      dgcout << "** choosing grid resolution: " << res << std::endl;
    }
 
    if (res > maxRes) {
@@ -756,9 +756,9 @@ SubOpDGG::orientGrid (void)
       pList().setParam("dggs_vert0_azimuth", dgg::util::to_string(azimuthDegs));
 
       dgcout << "Grid " << curGrid <<
-           " #####################################################" << endl;
-      dgcout << "grid #" << curGrid << " orientation randomized to: " << endl;
-      dgcout << pList() << endl;
+           " #####################################################" << std::endl;
+      dgcout << "grid #" << curGrid << " orientation randomized to: " << std::endl;
+      dgcout << pList() << std::endl;
 
    } else if (orientCenter && curGrid == 1) {
 

@@ -39,27 +39,27 @@ class DgApAssoc {
 
    public:
 
-      DgApAssoc (conststd::string& nameIn)
+      DgApAssoc (const std::string& nameIn)
          : isApplicable_(false), isValid_(false), isDefault_(true),
            isUserSet_(false), isUsed_(false)
          { name_ = toLower(nameIn); }
 
       virtual ~DgApAssoc (void);
 
-      virtualstd::string valToStr (void) const = 0;
+      virtual std::string valToStr (void) const = 0;
 
-      conststd::string& name (void) const { return name_; }
+      const std::string& name (void) const { return name_; }
 
      std::string asString (void) const
            { return name() + " " + (isValid() ? valToStr() :std::string("INVALID"))
                     + " (" +
-                       (!isApplicable() ?std::string("N/A") :
-                         (isDefault() ?std::string("default") :std::string("user set")))
+                       (!isApplicable() ? std::string("N/A") :
+                         (isDefault() ? std::string("default") : std::string("user set")))
                     + ")"; }
 
      std::string validationErrMsg (void) const { return validationErrMsg_; }
 
-      void setValidationErrMsg (conststd::string& valErrMsgIn)
+      void setValidationErrMsg (const std::string& valErrMsgIn)
                { validationErrMsg_ = valErrMsgIn; }
 
       bool isApplicable (void) const { return isApplicable_; }
@@ -82,7 +82,7 @@ class DgApAssoc {
 
       bool setIsUsed (bool isUsedIn) { return (isUsed_ = isUsedIn); }
 
-      virtual void setValStr (conststd::string& valStr) = 0;
+      virtual void setValStr (const std::string& valStr) = 0;
 
       DgApAssoc& operator= (const DgApAssoc& obj)
         {
@@ -99,8 +99,8 @@ class DgApAssoc {
 
    protected:
 
-     std::string name_;
-     std::string validationErrMsg_;
+      std::string name_;
+      std::string validationErrMsg_;
 
       bool isApplicable_;
       bool isValid_;
@@ -110,13 +110,13 @@ class DgApAssoc {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-inline ostream& operator<< (ostream& stream, const DgApAssoc& assoc)
+inline std::ostream& operator<< (std::ostream& stream, const DgApAssoc& assoc)
 {
-   stream << assoc.asString() << endl;
+   stream << assoc.asString() << std::endl;
 
    return stream;
 
-} // inline ostream& operator<<
+} // inline std::ostream& operator<<
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgApParamList {
@@ -127,25 +127,25 @@ class DgApParamList {
 
      ~DgApParamList (void);
 
-      vector<DgApAssoc*> parameters;
+      std::vector<DgApAssoc*> parameters;
 
       void clearList (void);
 
-      void loadParams (conststd::string& fileName, bool fail = true);
+      void loadParams (const std::string& fileName, bool fail = true);
 
-      void setParam (conststd::string& nameIn, conststd::string& strValIn, bool fail = true);
+      void setParam (const std::string& nameIn, const std::string& strValIn, bool fail = true);
 
-      void setPresetParam (conststd::string& nameIn, conststd::string& strValIn);
+      void setPresetParam (const std::string& nameIn, const std::string& strValIn);
 
       void insertParam (DgApAssoc* param); // does not make a copy
 
-      DgApAssoc* getParam (conststd::string& nameIn,
+      DgApAssoc* getParam (const std::string& nameIn,
                          bool setToIsApplicable = true) const;
 
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-inline ostream& operator<< (ostream& stream, const DgApParamList& plist)
+inline std::ostream& operator<< (std::ostream& stream, const DgApParamList& plist)
 {
    for (unsigned int i = 0; i < plist.parameters.size(); i++) {
       if (plist.parameters[i]->isUsed())
@@ -154,29 +154,29 @@ inline ostream& operator<< (ostream& stream, const DgApParamList& plist)
 
    return stream;
 
-} // inline ostream& operator<<
+} // inline std::ostream& operator<<
 
 ////////////////////////////////////////////////////////////////////////////////
 template<class T> class DgParameter : public DgApAssoc {
 
    public:
 
-      DgParameter<T> (conststd::string& nameIn) : DgApAssoc (nameIn) { }
+      DgParameter<T> (const std::string& nameIn) : DgApAssoc (nameIn) { }
 
-      DgParameter<T> (conststd::string& nameIn, const T& valIn, bool validIn = true)
+      DgParameter<T> (const std::string& nameIn, const T& valIn, bool validIn = true)
         : DgApAssoc (nameIn), value_ (valIn) { DgApAssoc::setIsValid(validIn); }
 
       const T& value (void) const { return value_; }
 
       virtual void setValue (const T& value) { value_ = value; validate(); }
 
-      virtual void setValStr (conststd::string& valStr)
+      virtual void setValStr (const std::string& valStr)
         {
            setValue(strToVal(valStr));
         }
 
-      virtualstd::string valToStr (void) const = 0;
-      virtual T strToVal (conststd::string& strVal) const = 0;
+      virtual std::string valToStr (void) const = 0;
+      virtual T strToVal (const std::string& strVal) const = 0;
 
       DgParameter<T>& operator= (const DgParameter<T>& obj)
         {
@@ -212,7 +212,7 @@ template<class T> class DgParameter : public DgApAssoc {
 
 ////////////////////////////////////////////////////////////////////////////////
 template<class T> bool getParamValue (const DgApParamList& plist,
-                                      conststd::string& name, T& var,
+                                      const std::string& name, T& var,
                                       bool dieOnFail = true)
 {
    DgApAssoc* assoc = plist.getParam(name);
@@ -246,23 +246,23 @@ template<class T> bool getParamValue (const DgApParamList& plist,
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-class DgStringParam : public DgParameter<string> {
+class DgStringParam : public DgParameter<std::string> {
 
    public:
 
-      DgStringParam (conststd::string& nameIn)
-         : DgParameter<string> (nameIn), strip_ (false) { }
+      DgStringParam (const std::string& nameIn)
+         : DgParameter<std::string> (nameIn), strip_ (false) { }
 
-      DgStringParam (conststd::string& nameIn, conststd::string& valIn,
+      DgStringParam (const std::string& nameIn, const std::string& valIn,
                      bool validIn = true, bool stripIn = true)
-        : DgParameter<string> (nameIn, valIn, validIn), strip_ (stripIn) { }
+        : DgParameter<std::string> (nameIn, valIn, validIn), strip_ (stripIn) { }
 
-      virtual void setValue (conststd::string& val)
-       { DgParameter<string>::setValue(
+      virtual void setValue (const std::string& val)
+       { DgParameter<std::string>::setValue(
               ((strip_) ? dgg::util::stripQuotes(val) : val)); }
 
-      virtualstd::string valToStr (void) const { return value_; }
-      virtualstd::string strToVal (conststd::string& strVal) const { return strVal; }
+      virtual std::string valToStr (void) const { return value_; }
+      virtual std::string strToVal (const std::string& strVal) const { return strVal; }
 
       private:
          bool strip_;
@@ -273,18 +273,18 @@ class DgBoolParam : public DgParameter<bool> {
 
    public:
 
-      DgBoolParam (conststd::string& nameIn) : DgParameter<bool> (nameIn) { }
+      DgBoolParam (const std::string& nameIn) : DgParameter<bool> (nameIn) { }
 
-      DgBoolParam (conststd::string& nameIn, bool valIn, bool validIn = true)
+      DgBoolParam (const std::string& nameIn, bool valIn, bool validIn = true)
         : DgParameter<bool> (nameIn, valIn, validIn) { }
 
-      virtualstd::string valToStr (void) const
-                        { returnstd::string(value() ? "true" : "false"); }
+      virtual std::string valToStr (void) const
+                        { return std::string(value() ? "true" : "false"); }
 
-      virtual bool strToVal (conststd::string& strVal) const
+      virtual bool strToVal (const std::string& strVal) const
           {
              DgBoolParam* me = const_cast<DgBoolParam*>(this);
-            std::string lower = toLower(strVal);
+             std::string lower = toLower(strVal);
              me->setIsValid(true);
 
              if (lower ==std::string("true")) return true;
@@ -295,7 +295,7 @@ class DgBoolParam : public DgParameter<bool> {
              me->setIsValid(false);
 
              me->setValidationErrMsg(std::string("Value '") + strVal +
-              std::string("' is not one of the allowed values 'true' or 'false'"));
+             std::string("' is not one of the allowed values 'true' or 'false'"));
 
              return false;
           }
@@ -309,13 +309,13 @@ class DgBoundedParam : public DgParameter<T> {
 
    public:
 
-      DgBoundedParam (conststd::string& nameIn) : DgParameter<T> (nameIn) { }
+      DgBoundedParam (const std::string& nameIn) : DgParameter<T> (nameIn) { }
 
-      DgBoundedParam (conststd::string& nameIn, const T& valIn, const T& minIn,
+      DgBoundedParam (const std::string& nameIn, const T& valIn, const T& minIn,
                       const T& maxIn, bool validIn = true)
        : DgParameter<T> (nameIn, valIn, validIn), min_ (minIn), max_ (maxIn) { }
 
-      DgBoundedParam (conststd::string& nameIn, const T& minIn, const T& maxIn)
+      DgBoundedParam (const std::string& nameIn, const T& minIn, const T& maxIn)
           : DgParameter<T> (nameIn), min_ (minIn), max_ (maxIn) { }
 
       virtual bool validate (void)
@@ -358,11 +358,11 @@ class DgIntParam : public DgBoundedParam<int> {
 
    public:
 
-     DgIntParam (conststd::string& nameIn, int minIn = INT_MIN,
+     DgIntParam (const std::string& nameIn, int minIn = INT_MIN,
                  int maxIn = INT_MAX)
           : DgBoundedParam<int> (nameIn, minIn, maxIn) { }
 
-      DgIntParam (conststd::string& nameIn, const int& valIn,
+      DgIntParam (const std::string& nameIn, const int& valIn,
                   const int& minIn = INT_MIN, const int& maxIn = INT_MAX,
                   bool validIn = true)
         : DgBoundedParam<int> (nameIn, valIn, minIn, maxIn, validIn)
@@ -375,8 +375,8 @@ class DgIntParam : public DgBoundedParam<int> {
                   }
                 }
 
-      virtualstd::string valToStr (void) const { return dgg::util::to_string(value_); }
-      virtual int strToVal (conststd::string& strVal) const
+      virtual std::string valToStr (void) const { return dgg::util::to_string(value_); }
+      virtual int strToVal (const std::string& strVal) const
                 {
 			return dgg::util::from_string<int>(strVal);
                 }
@@ -398,12 +398,12 @@ class DgLIntParam : public DgBoundedParam<long long int> {
 
    public:
 
-     DgLIntParam (conststd::string& nameIn,
+     DgLIntParam (const std::string& nameIn,
                   long long int minIn = LLONG_MIN,
                   long long int maxIn = LLONG_MAX)
           : DgBoundedParam<long long int> (nameIn, minIn, maxIn) { }
 
-      DgLIntParam (conststd::string& nameIn, const long long int& valIn,
+      DgLIntParam (const std::string& nameIn, const long long int& valIn,
                   const long long int& minIn = LLONG_MIN,
 		  const long long int& maxIn = LLONG_MAX,
                   bool validIn = true)
@@ -417,8 +417,8 @@ class DgLIntParam : public DgBoundedParam<long long int> {
                   }
                 }
 
-      virtualstd::string valToStr (void) const { return dgg::util::to_string(value_); }
-      virtual long long int strToVal (conststd::string& strVal) const
+      virtual std::string valToStr (void) const { return dgg::util::to_string(value_); }
+      virtual long long int strToVal (const std::string& strVal) const
                 {
 			return dgg::util::from_string<long long int>(strVal);
                 }
@@ -439,11 +439,11 @@ class DgULIntParam : public DgBoundedParam<unsigned long int> {
 
    public:
 
-     DgULIntParam (conststd::string& nameIn, unsigned long int minIn = 0UL,
+     DgULIntParam (const std::string& nameIn, unsigned long int minIn = 0UL,
                  unsigned long int maxIn = ULONG_MAX)
           : DgBoundedParam<unsigned long int> (nameIn, minIn, maxIn) { }
 
-      DgULIntParam (conststd::string& nameIn, const unsigned long int& valIn,
+      DgULIntParam (const std::string& nameIn, const unsigned long int& valIn,
                   const unsigned long int& minIn = 0UL,
                   const unsigned long int& maxIn = ULONG_MAX,
                   bool validIn = true)
@@ -458,8 +458,8 @@ class DgULIntParam : public DgBoundedParam<unsigned long int> {
                   }
                 }
 
-      virtualstd::string valToStr (void) const { return dgg::util::to_string(value_); }
-      virtual unsigned long int strToVal (conststd::string& strVal) const
+      virtual std::string valToStr (void) const { return dgg::util::to_string(value_); }
+      virtual unsigned long int strToVal (const std::string& strVal) const
                       { return dgg::util::from_string<unsigned long int>(strVal); }
 
       virtual bool validate (void)
@@ -478,11 +478,11 @@ class DgUint64Param : public DgBoundedParam<unsigned long long int> {
 
    public:
 
-      DgUint64Param (conststd::string& nameIn, unsigned long long int minIn = 0ULL,
+      DgUint64Param (const std::string& nameIn, unsigned long long int minIn = 0ULL,
                    unsigned long long int maxIn = ULLONG_MAX)
           : DgBoundedParam<unsigned long long int> (nameIn, minIn, maxIn) { }
 
-      DgUint64Param (conststd::string& nameIn, const unsigned long long int& valIn,
+      DgUint64Param (const std::string& nameIn, const unsigned long long int& valIn,
                     const unsigned long long int& minIn = 0ULL,
                     const unsigned long long int& maxIn = ULLONG_MAX,
                     bool validIn = true)
@@ -496,8 +496,8 @@ class DgUint64Param : public DgBoundedParam<unsigned long long int> {
                   }
                 }
 
-      virtualstd::string valToStr (void) const { return dgg::util::to_string(value_); }
-      virtual unsigned long long int strToVal (conststd::string& strVal) const
+      virtual std::string valToStr (void) const { return dgg::util::to_string(value_); }
+      virtual unsigned long long int strToVal (const std::string& strVal) const
                       { return dgg::util::from_string<unsigned long long int>(strVal); }
 
       virtual bool validate (void)
@@ -516,11 +516,11 @@ class DgDoubleParam : public DgBoundedParam<long double> {
 
    public:
 
-      DgDoubleParam (conststd::string& nameIn, long double minIn = LDBL_MIN,
+      DgDoubleParam (const std::string& nameIn, long double minIn = LDBL_MIN,
                      long double maxIn = LDBL_MAX)
           : DgBoundedParam<long double> (nameIn, minIn, maxIn) { }
 
-      DgDoubleParam (conststd::string& nameIn, const long double& valIn,
+      DgDoubleParam (const std::string& nameIn, const long double& valIn,
                      const long double& minIn = LDBL_MIN,
                      const long double& maxIn = LDBL_MAX, bool validIn = true)
           : DgBoundedParam<long double> (nameIn, valIn, minIn, maxIn, validIn)
@@ -533,8 +533,8 @@ class DgDoubleParam : public DgBoundedParam<long double> {
                   }
                 }
 
-      virtualstd::string valToStr (void) const { return dgg::util::to_string(value_); }
-      virtual long double strToVal (conststd::string& strVal) const
+      virtual std::string valToStr (void) const { return dgg::util::to_string(value_); }
+      virtual long double strToVal (const std::string& strVal) const
                       { return dgg::util::from_string<long double>(strVal); }
 
       virtual bool validate (void)
@@ -555,11 +555,11 @@ class DgChoiceParam : public DgParameter<T> {
 
    public:
 
-      DgChoiceParam (conststd::string& nameIn, const vector<T*>* choicesIn = 0)
+      DgChoiceParam (const std::string& nameIn, const std::vector<T*>* choicesIn = 0)
           : DgParameter<T> (nameIn) { if (choicesIn) addChoices(*choicesIn); }
 
-      DgChoiceParam (conststd::string& nameIn, const T& valIn,
-                     const vector<T*>* choicesIn = 0, bool validIn = true)
+      DgChoiceParam (const std::string& nameIn, const T& valIn,
+                     const std::vector<T*>* choicesIn = 0, bool validIn = true)
         : DgParameter<T> (nameIn, valIn, validIn)
       {
           if (choicesIn)
@@ -569,12 +569,12 @@ class DgChoiceParam : public DgParameter<T> {
      ~DgChoiceParam (void)
            { clearChoices(); }
 
-      const vector<T*>& choices (void) const { return choices_; }
+      const std::vector<T*>& choices (void) const { return choices_; }
 
-      void addChoices (const vector<T*>& choicesIn) // makes copy
+      void addChoices (const std::vector<T*>& choicesIn) // makes copy
             {
                for (unsigned int i = 0; i < choicesIn.size(); i++) {
-                  choices_.push_back(newstd::string(*choicesIn[i]));
+                  choices_.push_back(new std::string(*choicesIn[i]));
                }
             }
 
@@ -583,8 +583,8 @@ class DgChoiceParam : public DgParameter<T> {
 		dgg::util::release(choices_);
             }
 
-      virtualstd::string valToStr (void) const = 0;
-      virtual T strToVal (conststd::string& strVal) const = 0;
+      virtual std::string valToStr (void) const = 0;
+      virtual T strToVal (const std::string& strVal) const = 0;
 
       virtual bool validate (void)
                 {
@@ -615,27 +615,27 @@ class DgChoiceParam : public DgParameter<T> {
 
    protected:
 
-      vector<T*> choices_;
+      std::vector<T*> choices_;
 
 }; // class DgChoiceParam
 
 ////////////////////////////////////////////////////////////////////////////////
-class DgStringChoiceParam : public DgChoiceParam<string> {
+class DgStringChoiceParam : public DgChoiceParam<std::string> {
 
    public:
 
-      DgStringChoiceParam (conststd::string& nameIn,
-                           const vector<string*>* choicesIn = 0)
-          : DgChoiceParam<string> (nameIn, choicesIn)
+      DgStringChoiceParam (const std::string& nameIn,
+                           const std::vector<std::string*>* choicesIn = 0)
+          : DgChoiceParam<std::string> (nameIn, choicesIn)
                 {
                    for (unsigned int i = 0; i < choices_.size(); i++) {
                       *choices_[i] = toLower(*choices_[i]);
                    }
                 }
 
-      DgStringChoiceParam (conststd::string& nameIn, conststd::string& valIn,
-                     const vector<string*>* choicesIn = 0, bool validIn = true)
-          : DgChoiceParam<string> (nameIn, valIn, choicesIn, validIn)
+      DgStringChoiceParam (const std::string& nameIn, const std::string& valIn,
+                     const std::vector<std::string*>* choicesIn = 0, bool validIn = true)
+          : DgChoiceParam<std::string> (nameIn, valIn, choicesIn, validIn)
                 {
                    for (unsigned int i = 0; i < choices_.size(); i++) {
                       *choices_[i] = toLower(*choices_[i]);
@@ -649,8 +649,8 @@ class DgStringChoiceParam : public DgChoiceParam<string> {
                    }
                 }
 
-      virtualstd::string valToStr (void) const { return value_; }
-      virtualstd::string strToVal (conststd::string& strVal) const { return strVal; }
+      virtual std::string valToStr (void) const { return value_; }
+      virtual std::string strToVal (const std::string& strVal) const { return strVal; }
 
       virtual bool validate (void)
                 {

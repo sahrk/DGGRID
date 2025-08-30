@@ -44,7 +44,7 @@ struct DgApSubOpPList : public DgApSubOperation {
 ////////////////////////////////////////////////////////////////////////////////
 
 /*
-inline ostream& operator<< (ostream& output, const DgApSubOpPList& f)
+inline std::ostream& operator<< (std::ostream& output, const DgApSubOpPList& f)
    { return output << f.operation(); }
 */
 

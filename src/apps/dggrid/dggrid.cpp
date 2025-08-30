@@ -24,17 +24,15 @@
 
 #include <iostream>
 
-using namespace std;
-
 #include <dglib/DgConstants.h>
 #include <dglib/DgBase.h>
 
 #include "OpBasic.h"
 
 ////////////////////////////////////////////////////////////////////////////////
-void pause (const string& where)
+void pause (const std::string& where)
 {
-   dgcout << "*** execution paused: " << where << endl;
+   dgcout << "*** execution paused: " << where << std::endl;
    dgcout << "*** press ENTER to continue: ";
    scanf("%*c");
 }
@@ -49,7 +47,7 @@ int main (int argc, char* argv[])
 
    // could have up to 2 flags and a metafile
    if (argc < 2 || argc > 4) {
-      DgBase::testArgEqual(argc, argv, 1, string("metaFileName"));
+      DgBase::testArgEqual(argc, argv, 1, std::string("metaFileName"));
    }
 
    // if we're here we have a reasonable # of cla's
@@ -57,7 +55,7 @@ int main (int argc, char* argv[])
    bool hFlag = false;
    bool vFlag = false;
    bool hasMetaFile = false;
-   string metaFileName;
+   std::string metaFileName;
    for (int i = 1; i < argc; i++) {
       // check if it's a flag
       if (*argv[i] == '-') {
@@ -86,47 +84,47 @@ int main (int argc, char* argv[])
             }
          }
       } else if (hasMetaFile) { // metafileName already encountered
-         report(string("invalid command line argument ") + string(argv[i]), DgBase::Fatal);
+         report(std::string("invalid command line argument ") + std::string(argv[i]), DgBase::Fatal);
       } else { // must be the metafileName
          hasMetaFile = true;
-         metaFileName = string(argv[i]);
+         metaFileName = std::string(argv[i]);
       }
 
       if (flagErr) {
-         report(string("invalid command line flag ") + string(argv[i]), DgBase::Fatal);
+         report(std::string("invalid command line flag ") + std::string(argv[i]), DgBase::Fatal);
       }
    }
 
    if (hFlag || (hFlag && vFlag)) { // output is currently redundant
-      dgcout << "DGGRID version " << DGGRID_VERSION << " released " << DGGRID_RELEASE_DATE << endl;
+      dgcout << "DGGRID version " << DGGRID_VERSION << " released " << DGGRID_RELEASE_DATE << std::endl;
 #ifdef USE_GDAL
-      dgcout << "built with GDAL version " << string(GDALVersionInfo("VERSION_NUM")) << endl;
+      dgcout << "built with GDAL version " << std::string(GDALVersionInfo("VERSION_NUM")) << std::endl;
 #else
-      dgcout << "built without GDAL" << endl;;
+      dgcout << "built without GDAL" << std::endl;;
 #endif
-      dgcout << "\nTo use:" << endl;
-      dgcout << endl;
-      dgcout << "dggrid metafileName" << endl;
-      dgcout << endl;
-      dgcout << "dggrid -v" << endl;
-      dgcout << "dggrid -h" << endl;
-      dgcout << endl;
-      dgcout << "From:" << endl;
-      dgcout << "Southern Terra Cognita Laboratory" << endl;
-      dgcout << "website: http://www.discreteglobalgrids.org/" << endl;
-      dgcout << "Kevin Sahr, Director" << endl;
-      dgcout << "http://www.linkedin.com/in/Kevin-Sahr" << endl;
-      dgcout << endl;
-      dgcout << "License: GNU Affero General Public License v3.0" << endl;
-      dgcout << endl;
-      dgcout << "Github development:" << endl;
-      dgcout << "https://github.com/sahrk/DGGRID" << endl;
+      dgcout << "\nTo use:" << std::endl;
+      dgcout << std::endl;
+      dgcout << "dggrid metafileName" << std::endl;
+      dgcout << std::endl;
+      dgcout << "dggrid -v" << std::endl;
+      dgcout << "dggrid -h" << std::endl;
+      dgcout << std::endl;
+      dgcout << "From:" << std::endl;
+      dgcout << "Southern Terra Cognita Laboratory" << std::endl;
+      dgcout << "website: http://www.discreteglobalgrids.org/" << std::endl;
+      dgcout << "Kevin Sahr, Director" << std::endl;
+      dgcout << "http://www.linkedin.com/in/Kevin-Sahr" << std::endl;
+      dgcout << std::endl;
+      dgcout << "License: GNU Affero General Public License v3.0" << std::endl;
+      dgcout << std::endl;
+      dgcout << "Github development:" << std::endl;
+      dgcout << "https://github.com/sahrk/DGGRID" << std::endl;
    } else if (vFlag) {
-      dgcout << "DGGRID version " << DGGRID_VERSION << " released " << DGGRID_RELEASE_DATE << endl;
+      dgcout << "DGGRID version " << DGGRID_VERSION << " released " << DGGRID_RELEASE_DATE << std::endl;
 #ifdef USE_GDAL
-      dgcout << "built with GDAL version " << string(GDALVersionInfo("VERSION_NUM")) << endl;
+      dgcout << "built with GDAL version " << std::string(GDALVersionInfo("VERSION_NUM")) << std::endl;
 #else
-      dgcout << "built without GDAL" << endl;;
+      dgcout << "built without GDAL" << std::endl;;
 #endif
    }
 
@@ -137,14 +135,14 @@ int main (int argc, char* argv[])
 
    dgcout << "** executing DGGRID version " << DGGRID_VERSION;
 #ifdef USE_GDAL
-   dgcout << " with GDAL version " << string(GDALVersionInfo("VERSION_NUM"));
+   dgcout << " with GDAL version " << std::string(GDALVersionInfo("VERSION_NUM"));
 #else
    dgcout << " without GDAL";
 #endif
    dgcout << " **\n";
    dgcout << "type sizes: big int: " << sizeof(long long int) * 8 << " bits / ";
    dgcout << "big double: " << sizeof(long double) * 8 << " bits\n";
-   dgcout << "\n** using meta file " << metaFileName << "..." << endl;
+   dgcout << "\n** using meta file " << metaFileName << "..." << std::endl;
 
    // create the operation object using parameters in the meta file
    OpBasic theOperation(metaFileName);
@@ -152,7 +150,7 @@ int main (int argc, char* argv[])
 
    // echo the parameter list
    dgcout << "* parameter values:\n";
-   dgcout << theOperation.pList << endl;
+   dgcout << theOperation.pList << std::endl;
 
    if (theOperation.mainOp.pauseOnStart)
       pause("parameters loaded");

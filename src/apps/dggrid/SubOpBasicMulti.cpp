@@ -71,7 +71,7 @@ DgLocationData* SubOpBasicMulti::inStrToPointLoc(const std::string& inStr) const
         if (inStr.length() > strlen(buff))
            remainder = buff + strlen(snStr) + 1;
     } else {
-        // Parse location directly from string
+        // Parse location directly from std::string
         loc = new DgLocationData(*op.inOp.pInRF);
         remainder = loc->fromString(buff, op.inOp.inputDelimiter);
     }
@@ -104,7 +104,7 @@ DgLocationData* SubOpBasicMulti::inStrToPointLoc(const std::string& inStr) const
 /*
 ////////////////////////////////////////////////////////////////////////////////
 DgCell*
-SubOpBasicMulti::inStrToPointCell (const string& inStr) const {
+SubOpBasicMulti::inStrToPointCell (const std::string& inStr) const {
 
    // setup for strtok
    char delimStr[2];
@@ -121,7 +121,7 @@ SubOpBasicMulti::inStrToPointCell (const string& inStr) const {
       snStr = strtok(buff, delimStr);
       unsigned long int sNum;
       if (sscanf(snStr, "%lu", &sNum) != 1) {
-         ::report("doTransform(): invalid SEQNUM " + string(snStr),
+         ::report("doTransform(): invalid SEQNUM " + std::string(snStr),
                      DgBase::Fatal);
       }
 
@@ -140,7 +140,7 @@ SubOpBasicMulti::inStrToPointCell (const string& inStr) const {
    DgDataList* data = nullptr;
    if (remainder && strlen(remainder) > 0) {
       data = new DgDataList();
-      string remStr(remainder);
+      std::string remStr(remainder);
       DgDataFieldString* field = new DgDataFieldString("data", remStr);
       data->list().push_back(field);
    }
@@ -162,9 +162,9 @@ SubOpBasicMulti::inStrToPointCell (const string& inStr) const {
 string
 SubOpBasicMulti::dataToOutStr (DgDataList* data) {
 
-   string str;
+   std::string str;
    if (data) {
-      ostringstream os;
+      std::ostringstream os;
       for (auto const& field : data->list())
          os << op.outOp.outputDelimiter << field->valString();
       str = os.str();
@@ -172,7 +172,7 @@ SubOpBasicMulti::dataToOutStr (DgDataList* data) {
 
    return str;
 
-} // string SubOpBasicMulti::dataToOutStr
+} // std::string SubOpBasicMulti::dataToOutStr
 
 ////////////////////////////////////////////////////////////////////////////////
 // override the definition in DgApSubOperation to loop over multiple grids
@@ -205,7 +205,7 @@ SubOpBasicMulti::execute (bool force) {
       if (op.dggOp.numGrids > 1 || op.dggOp.placeRandom) {
          ofstream metaOutFile;
          metaOutFile.open(op.outOp.metaOutFileName.c_str());
-         metaOutFile.setf(ios::fixed, ios::floatfield);
+         metaOutFile.setf(std::ios::fixed, std::ios::floatfield);
          metaOutFile.precision(12);
          metaOutFile << pList();
          metaOutFile.close();

@@ -56,25 +56,25 @@ struct SubOpIn : public SubOpBasic {
 
    // internal helper methods
    DgInLocStreamFile* makeNewInFile (const DgRFBase& rfIn,
-                     const string* fileNameIn = nullptr,
+                     const std::string* fileNameIn = nullptr,
                      DgBase::DgReportLevel failLevel = DgBase::Fatal);
 
    // the parameters
-   vector<string> inputFiles;
+   std::vector<std::string> inputFiles;
    unsigned int fileNum;    // current file if multiple files
    //DgInLocTextFile* inFile;
    DgInLocStreamFile* inFile;
-   string inTextFileName;
+   std::string inTextFileName;
    const DgRFBase* pInRF;   // RF for input addresses
    dgg::addtype::DgAddressType inAddType; // input address form
    bool isPointInput;
-   string pointInputFileType;
-   string gdalDriver;
+   std::string pointInputFileType;
+   std::string gdalDriver;
    bool inSeqNum;           // is the input address sequence numbers?
-   string addFldType;       // FIRST_FIELD, NAMED_FIELD, or GEO_POINT
-   string addFldName;       // used when addFldType is NAMED_FIELD
+   std::string addFldType;       // FIRST_FIELD, NAMED_FIELD, or GEO_POINT
+   std::string addFldName;       // used when addFldType is NAMED_FIELD
    char inputDelimiter;
-   string inFormatStr;
+   std::string inFormatStr;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
