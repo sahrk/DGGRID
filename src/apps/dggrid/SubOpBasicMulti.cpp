@@ -159,7 +159,7 @@ SubOpBasicMulti::inStrToPointCell (const std::string& inStr) const {
 */
 
 ////////////////////////////////////////////////////////////////////////////////
-string
+std::string
 SubOpBasicMulti::dataToOutStr (DgDataList* data) {
 
    std::string str;
@@ -203,7 +203,7 @@ SubOpBasicMulti::execute (bool force) {
       // created by the outOp
 
       if (op.dggOp.numGrids > 1 || op.dggOp.placeRandom) {
-         ofstream metaOutFile;
+         std::ofstream metaOutFile;
          metaOutFile.open(op.outOp.metaOutFileName.c_str());
          metaOutFile.setf(std::ios::fixed, std::ios::floatfield);
          metaOutFile.precision(12);

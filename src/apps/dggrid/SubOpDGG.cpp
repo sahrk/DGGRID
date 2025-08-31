@@ -55,7 +55,7 @@ SubOpDGG::SubOpDGG (OpBasic& op, bool _activate)
      numGrids (1), curGrid (0), lastGrid (false), sampleCount(0), nSamplePts(0),
      azimuthDegs (0.0), datum (""), apertureType (""),
      isMixed43 (false), isSuperfund (false), isApSeq (false), 
-     hierNdxSysType (dgg::hiersystype::InvalidHierNdxSysType)
+     hierNdxSysType (dgg::addtype::InvalidHierNdxSysType)
 {
 }
 
@@ -87,7 +87,7 @@ SubOpDGG::addressTypeToRF (DgAddressType type, const DgRFBase** rf,
       case Geo:
          *rf = &this->deg();
          if (chdRF) *chdRF = &this->chdDeg();
-         if (prtRF) *prtRF = &this->prtDeg();
+         if (prtRF) *prtRF = this->prtDeg();
          break;
 
       case Plane:
@@ -111,7 +111,7 @@ SubOpDGG::addressTypeToRF (DgAddressType type, const DgRFBase** rf,
       case Q2DI:
          *rf = dgg;
          if (chdRF) *chdRF = chdDgg;
-         if (prtRF) *prtRF = prtDgg;
+           if (prtRF) *prtRF = prtDgg;
          break;
 
       case SeqNum:
@@ -133,7 +133,7 @@ SubOpDGG::addressTypeToRF (DgAddressType type, const DgRFBase** rf,
          if (prtRF) *prtRF = &prtDgg->vertexRF();
          break;
 
-      case Z3:
+      case Z3V8:
          if (isApSeq)
             ::report("address_type of Z3 INT64 not supported for dggs_aperture_type of SEQUENCE",
                      DgBase::Fatal);
@@ -169,7 +169,7 @@ SubOpDGG::addressTypeToRF (DgAddressType type, const DgRFBase** rf,
 
          break;
 
-      case Z7:
+      case Z7V8:
          if (isApSeq)
             ::report("address_type of Z7 INT64 not supported for dggs_aperture_type of SEQUENCE",
                      DgBase::Fatal);
@@ -199,7 +199,7 @@ SubOpDGG::addressTypeToRF (DgAddressType type, const DgRFBase** rf,
 
          break;
 
-      case ZOrder:
+      case ZOrderV8:
          if (isApSeq)
             ::report("address_type of ZORDER INT64 not supported for dggs_aperture_type of SEQUENCE",
                      DgBase::Fatal);
@@ -597,9 +597,9 @@ SubOpDGG::setupOp (void)
 
    // hierarchical indexing type
    getParamValue(pList(), "hier_indexing_system_type", dummy, false);
-   hierNdxSysType = dgg::hiersystype::stringToHierNdxSysType(dummy);
-   if (hierNdxSysType != dgg::hiersystype::NoHierNdxSysType) {
-      if (hierNdxSysType == dgg::hiersystype::ZXSystem) {
+   hierNdxSysType = dgg::addtype::stringToHierNdxSysType(dummy);
+   if (hierNdxSysType != dgg::addtype::InvalidHierNdxSysType) {
+      if (hierNdxSysType == dgg::addtype::ZX) {
          if (apertureType != "PURE" || aperture != 7)
             ::report("SubOpDGG::setupOp() hier_indexing_system_type Z7 "
                      "requires a pure aperture 7 DGGS", DgBase::Fatal);

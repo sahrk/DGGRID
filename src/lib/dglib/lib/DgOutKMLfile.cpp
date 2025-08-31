@@ -211,7 +211,7 @@ DgOutKMLfile::insert (DgLocVector& vec, const std::string* label, const DgLocati
    for(std::vector<DgAddressBase *>::iterator i = v.begin(); v.end() != i; ++i)
          o.insert(rf().getVecAddress(*(*i)));
 
-   o << "         </coordinates>\std::n";
+   o << "         </coordinates>\n";
    o << "      </LineString>\n";
    o << "</Placemark>\n";
 

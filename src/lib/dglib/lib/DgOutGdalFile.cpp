@@ -251,15 +251,6 @@ DgOutGdalFile::insert (const DgIDGGBase& dgg, DgCell& cell,
      const DgRFBase* chdOutRF, const DgRFBase* prtOutRF,
      const DgLocVector* neighbors, const DgLocVector* children,
      const DgLocation* ndxParent, const DgLocVector* ndxChildren)
-
-/*
-DgOutGdalFile::insert (const DgIDGGBase& dgg, DgCell& cell,
-           bool outputPoint, bool outputRegion, const DgIDGGBase& chdDgg,
-           const DgIDGGBase& ndxPrtDgg, const DgRFBase* outRF, const DgRFBase* chdOutRF,
-           const DgRFBase* ndxPrtOutRF, const DgRFBase* ndxChdOutRF,
-           const DgLocVector* neighbors, const DgLocVector* children,
-           const DgLocation* ndxParent, const DgLocVector* ndxChildren)
-*/
 {
    if (_mode != Collection)
       ::report("invalid GDAL output file mode encountered.", DgBase::Fatal);
@@ -306,12 +297,12 @@ DgOutGdalFile::insert (const DgIDGGBase& dgg, DgCell& cell,
    if (neighbors)
       createAddressesProperty(dgg, feature, "neighbors", *neighbors, outRF);
 
-   if (ndxParent) {
-      createAddressProperty (ndxPrtDgg, feature, "ndxParent", *ndxParent, ndxPrtOutRF);
+   if (ndxParent && prtDgg) {
+      createAddressProperty (*prtDgg, feature, "ndxParent", *ndxParent, prtOutRF);
    }
 
    if (ndxChildren) {
-      createAddressesProperty (chdDgg, feature, "ndxChildren", *ndxChildren, ndxChdOutRF);
+      createAddressesProperty (chdDgg, feature, "ndxChildren", *ndxChildren, chdOutRF);
    }
 
    addFeature(feature);
