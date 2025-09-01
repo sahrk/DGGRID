@@ -450,7 +450,7 @@ SubOpOut::initializeOp (void)
    //        SEQNUM | VERTEX2DD | HIERNDX >
    // KEVIN: still supports version 8 z* types
     for (int i = 0; ; i++) {
-       if (dgg::addtype::addTypeStrings[i] == "INVALID")
+       if (dgg::addtype::addTypeStrings[i] == "NONE")
           break;
        choices.push_back(new std::string(dgg::addtype::addTypeStrings[i]));
     }
@@ -461,7 +461,7 @@ SubOpOut::initializeOp (void)
     // output_hier_ndx_system < ZORDER | Z3 | Z7 >
     // used if output_address_type is HIERNDX
     for (int i = 0; ; i++) {
-       if (dgg::addtype::hierNdxSysTypeStrings[i] == "INVALID")
+       if (dgg::addtype::hierNdxSysTypeStrings[i] == "NONE")
           break;
        choices.push_back(new std::string(dgg::addtype::hierNdxSysTypeStrings[i]));
     }
@@ -472,7 +472,7 @@ SubOpOut::initializeOp (void)
     // output_hier_ndx_form < INT64 | DIGIT_STRING >
     // used if output_address_type is HIERNDX
     for (int i = 0; ; i++) {
-       if (dgg::addtype::hierNdxFormTypeStrings[i] == "INVALID")
+       if (dgg::addtype::hierNdxFormTypeStrings[i] == "NONE")
           break;
        choices.push_back(new std::string(dgg::addtype::hierNdxFormTypeStrings[i]));
     }

@@ -23,7 +23,8 @@ dggs_vert0_lat 58.2825 (user set)
 dggs_vert0_azimuth 0 (user set)
 dggs_res_specify_type SPECIFIED (user set)
 dggs_res_spec 15 (user set)
-z3_invalid_digit 0 (default)
+hier_indexing_system_type NONE (default)
+z3_invalid_digit 3 (default)
 
 Earth Radius: 6,371.0071809
 

@@ -96,7 +96,7 @@ SubOpIn::initializeOp (void)
    // input_address_type < GEO | PLANE | PROJTRI | Q2DD | Q2DI |
    //        SEQNUM | VERTEX2DD | HIERNDX >
    for (int i = 0; ; i++) {
-      if (dgg::addtype::addTypeStrings[i] == "INVALID")
+      if (dgg::addtype::addTypeStrings[i] == "NONE")
          break;
       choices.push_back(new std::string(dgg::addtype::addTypeStrings[i]));
    }
@@ -109,7 +109,7 @@ SubOpIn::initializeOp (void)
     // input_hier_ndx_system < ZORDER | Z3 | Z7 >
     // used if input_address_type is HIERNDX
     for (int i = 0; ; i++) {
-       if (dgg::addtype::hierNdxSysTypeStrings[i] == "INVALID")
+       if (dgg::addtype::hierNdxSysTypeStrings[i] == "NONE")
           break;
        choices.push_back(new std::string(dgg::addtype::hierNdxSysTypeStrings[i]));
     }
@@ -120,7 +120,7 @@ SubOpIn::initializeOp (void)
     // input_hier_ndx_form < INT64 | DIGIT_STRING >
     // used if input_address_type is HIERNDX
     for (int i = 0; ; i++) {
-       if (dgg::addtype::hierNdxFormTypeStrings[i] == "INVALID")
+       if (dgg::addtype::hierNdxFormTypeStrings[i] == "NONE")
           break;
        choices.push_back(new std::string(dgg::addtype::hierNdxFormTypeStrings[i]));
     }

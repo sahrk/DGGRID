@@ -379,11 +379,11 @@ SubOpDGG::initializeOp (void)
    // dggs_res_spec <int> (0 <= v <= MAX_DGG_RES)
    pList().insertParam(new DgIntParam("dggs_res_spec", 9, 0, MAX_DGG_RES));
 
-   // hier_indexing_system_type <ZX_SYSTEM | NONE>
+   // hier_indexing_system_type <ZX | NONE>
    for (int i = 0; ; i++) {
-      if (dgg::addtype::hierNdxSysTypeStrings[i] == "INVALID")
-         break;
-      choices.push_back(new std::string(dgg::addtype::hierNdxSysTypeStrings[i]));
+       choices.push_back(new std::string(dgg::addtype::hierNdxSysTypeStrings[i]));
+       if (dgg::addtype::hierNdxSysTypeStrings[i] == "NONE")
+          break;
    }
    pList().insertParam(new DgStringChoiceParam("hier_indexing_system_type", "NONE", &choices));
    dgg::util::release(choices);

@@ -42,17 +42,17 @@ static const std::string addTypeStrings[] = { "GEO", "PLANE", "PROJTRI", "Q2DD",
     "Q2DI", "SEQNUM", "VERTEX2DD", "HIERNDX",
     // remaining types deprecated in 8.4, gone in 9.0
     "ZORDER", "ZORDER_STRING", "Z3", "Z3_STRING", "Z7", "Z7_STRING",
-    "INVALID"
+    "NONE"
 };
 
 enum DgHierNdxSysType { ZX, ZOrder, Z3, Z7, InvalidHierNdxSysType };
 static const std::string hierNdxSysTypeStrings[] = {
-    "ZX", "ZORDER", "Z3", "Z7", "INVALID"
+    "ZX", "ZORDER", "Z3", "Z7", "NONE"
 };
 
 enum DgHierNdxFormType { Int64, DigitString, InvalidHierNdxFormType };
 static const std::string hierNdxFormTypeStrings[] = {
-    "INT64", "DIGIT_STRING", "INVALID"
+    "INT64", "DIGIT_STRING", "NONE"
 };
 
 DgAddressType stringToAddressType (const std::string& str);
