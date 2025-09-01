@@ -379,7 +379,7 @@ SubOpDGG::initializeOp (void)
    // dggs_res_spec <int> (0 <= v <= MAX_DGG_RES)
    pList().insertParam(new DgIntParam("dggs_res_spec", 9, 0, MAX_DGG_RES));
 
-   // hier_indexing_system_type <ZX | NONE>
+   // hier_indexing_system_type <ZX | ZORDER | Z3 | Z7 | NONE>
    for (int i = 0; ; i++) {
        choices.push_back(new std::string(dgg::addtype::hierNdxSysTypeStrings[i]));
        if (dgg::addtype::hierNdxSysTypeStrings[i] == "NONE")
@@ -601,9 +601,13 @@ SubOpDGG::setupOp (void)
    if (hierNdxSysType != dgg::addtype::InvalidHierNdxSysType) {
       if (hierNdxSysType == dgg::addtype::ZX) {
          if (apertureType != "PURE" || aperture != 7)
-            ::report("SubOpDGG::setupOp() hier_indexing_system_type Z7 "
+            ::report("SubOpDGG::setupOp() hier_indexing_system_type ZX "
                      "requires a pure aperture 7 DGGS", DgBase::Fatal);
-      } else {
+      } else if (hierNdxSysType == dgg::addtype::Z7) {
+          if (apertureType != "PURE" || aperture != 7)
+             ::report("SubOpDGG::setupOp() hier_indexing_system_type Z7 "
+                      "requires a pure aperture 7 DGGS", DgBase::Fatal);
+       } else {
          ::report("SubOpDGG::setupOp() invalid hier_indexing_system_type", DgBase::Fatal);
       }
    } 
