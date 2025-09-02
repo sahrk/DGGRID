@@ -105,7 +105,7 @@ const char*
 DgHierNdxSystemRFBase::str2add (DgHierNdx* ndx, const char* str, char delimiter) const
 {
   const char* newS = str;
-  if (outModeInt()) {
+  if (extModeInt()) {
      DgHierNdxIntCoord intNdx;     
      newS = intRF()->str2add(&intNdx, str, delimiter);
      ndx->setIntNdx(intNdx);
@@ -129,9 +129,9 @@ DgHierNdxSystemRFBase::undefAddress (void) const
 
 ////////////////////////////////////////////////////////////////////////////////
 bool 
-DgHierNdxSystemRFBase::outModeInt (void) const
+DgHierNdxSystemRFBase::extModeInt (void) const
 {
-   return hierNdxRFS().outModeInt(); 
+   return hierNdxRFS().extModeInt(); 
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -182,7 +182,7 @@ DgHierNdxSystemRFBase::initialize (std::vector<DgHierNdxSystemRFBase*>& rfGrids)
 DgHierNdx
 DgHierNdxSystemRFBase::quantify (const DgQ2DICoord& point) const
 {
-   DgHierNdx ndx(outModeInt());
+   DgHierNdx ndx(extModeInt());
       
    ndx.strNdx_ = strRF()->quantify(point);
    setIntFromStringCoord(ndx);

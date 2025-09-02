@@ -31,9 +31,9 @@ const DgHierNdx
 DgHierNdx::undefCoord(DgHierNdxIntRF::undefCoord, DgHierNdxStringRF::undefCoord, true);
 
 ////////////////////////////////////////////////////////////////////////////////
-DgHierNdx::DgHierNdx (bool outModeIntIn)
+DgHierNdx::DgHierNdx (bool extModeIntIn)
    : intNdx_ (undefCoord.intNdx()), strNdx_(undefCoord.strNdx()), 
-                   outModeInt_ (outModeIntIn)
+                   extModeInt_ (extModeIntIn)
 {
 }
 
@@ -41,7 +41,7 @@ DgHierNdx::DgHierNdx (bool outModeIntIn)
 std::string
 DgHierNdx::valString (void) const 
 { 
-  if (outModeInt()) 
+  if (extModeInt()) 
      return intNdx_.valString();
   else
      return strNdx_.valString();

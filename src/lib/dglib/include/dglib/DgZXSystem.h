@@ -34,15 +34,14 @@ class DgZXSystem : public DgHierNdxSystemRFS<DgZXRF, DgZXStringRF> {
 
    public:
 
-      static DgZXSystem* makeSystem (const DgIDGGS& dggsIn, bool outModeIntIn = true,
-                             const std::string& nameIn = "ZXSystem")
-      {
-          return new DgZXSystem (dggsIn, outModeIntIn, nameIn);
+      static DgZXSystem* makeSystem (const DgIDGGS& dggsIn, bool extModeIntIn = true,
+                             const std::string& nameIn = "ZXSystem") {
+          return new DgZXSystem (dggsIn, extModeIntIn, nameIn);
       }
  
    protected:
 
-     DgZXSystem (const DgIDGGSBase& dggsIn, bool outModeIntIn = true, 
+     DgZXSystem (const DgIDGGSBase& dggsIn, bool extModeIntIn = true, 
                  const std::string& nameIn = "ZXSystem");
  
      // default methods quantize via string representation; redefine to

@@ -115,7 +115,7 @@ class DgHierNdxSystemRFBase
 
       const DgIDGGSBase& dggs (void) const { return dggs_; }
 
-      bool outModeInt (void) const;
+      bool extModeInt (void) const;
 
       int res      (void) const { return res_; }
       int aperture (void) const { return aperture_; }

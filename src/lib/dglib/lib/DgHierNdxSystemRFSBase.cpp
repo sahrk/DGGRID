@@ -26,18 +26,36 @@
 #include <dglib/DgHierNdxRF.h>
 #include <dglib/DgDiscRFSGrids.h>
 #include <dglib/DgHierNdx.h>
+#include <dglib/DgZXSystem.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 const DgResAdd<DgHierNdx>
 DgHierNdxSystemRFSBase::undefCoord(DgHierNdx::undefCoord, -1);
 
 ////////////////////////////////////////////////////////////////////////////////
+DgHierNdxSystemRFSBase*
+DgHierNdxSystemRFSBase::makeSystem (const DgIDGGS& dggsIn, 
+               DgHierNdxSysType sysType, DgHierNdxFormType form,
+               const std::string& nameIn) 
+{
+   bool extModeInt = (form == Int64);
+   DgHierNdxSystemRFSBase* sys = nullptr;
+   switch (sysType) {
+      case Z7:
+      case ZX:
+         sys = DgZXSystem::makeSystem(dggsIn, extModeInt, "Z7");
+         break;
+   }
+   return sys;
+}
+
+////////////////////////////////////////////////////////////////////////////////
 DgHierNdxSystemRFSBase::DgHierNdxSystemRFSBase (const DgIDGGSBase& dggsIn, 
-         bool outModeIntIn, const std::string& nameIn)
+         bool extModeIntIn, const std::string& nameIn)
    : DgDiscRFS<DgHierNdx, DgQ2DICoord, long long int>
                          (dggsIn.network(), dggsIn, dggsIn.nRes(), nameIn),
-     dggs_ (dggsIn), outModeInt_ (outModeIntIn)
-{ 
+     dggs_ (dggsIn), extModeInt_ (extModeIntIn)
+{
    //grids_ = new std::vector<const DgHierNdxSystemRFBase*>(nRes_, nullptr);
 }
 

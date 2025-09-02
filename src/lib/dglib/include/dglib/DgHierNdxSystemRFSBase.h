@@ -28,6 +28,7 @@
 #include <vector>
 #include <dglib/DgDiscRFS.h>
 #include <dglib/DgHierNdx.h>
+#include <dglib/DgAddressType.h>
 
 class DgHierNdxSystemRFBase;
 class DgQ2DICoord;
@@ -39,6 +40,10 @@ class DgHierNdxSystemRFSBase :
               public DgDiscRFS<DgHierNdx, DgQ2DICoord, long long int> {
 
    public:
+
+      static DgHierNdxSystemRFSBase* makeSystem (const DgIDGGS& dggsIn, 
+               DgHierNdxSysType sysType = Z3, DgHierNdxFormType form = Int64,
+               const std::string& nameIn = "Z3");
 
       static const DgResAdd<DgHierNdx> undefCoord;
                   
@@ -54,9 +59,9 @@ class DgHierNdxSystemRFSBase :
       }
 
       // externally an Int or Str form?
-      bool outModeInt (void) const { return outModeInt_; }
-      void setOutModeInt (bool outModeIntIn = true)
-               { outModeInt_ = outModeIntIn; }
+      bool extModeInt (void) const { return extModeInt_; }
+      void setOutModeInt (bool extModeIntIn = true)
+               { extModeInt_ = extModeIntIn; }
 
       // indexing parent
       // only the DgLocation version performs checking on the input
@@ -82,7 +87,7 @@ class DgHierNdxSystemRFSBase :
 
    protected:
 
-     DgHierNdxSystemRFSBase (const DgIDGGSBase& dggsIn, bool outModeIntIn = true,
+     DgHierNdxSystemRFSBase (const DgIDGGSBase& dggsIn, bool extModeIntIn = true,
             const std::string& nameIn = "HierNdxSystemRFS");
                   
      // from above
@@ -105,7 +110,7 @@ class DgHierNdxSystemRFSBase :
 
      // state data
      const DgIDGGSBase& dggs_;
-     bool outModeInt_;
+     bool extModeInt_;
                   
      friend class DgHierNdxSystemRFBase;
 };

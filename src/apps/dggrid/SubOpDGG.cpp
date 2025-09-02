@@ -85,6 +85,16 @@ SubOpDGG::addressTypeToRF (DgAddressType type, DgHierNdxSysType hierNdxSys, cons
 
    if (type == HierNdx) {
       ::report("addressTypeToRF(): HierNdx", DgBase::Fatal);
+       /*
+       enum DgHierNdxSysType { ZX, ZOrder, Z3, Z7, InvalidHierNdxSysType };
+       static const std::string hierNdxSysTypeStrings[] = {
+           "ZX", "ZORDER", "Z3", "Z7", "NONE"
+       };*/
+
+       switch (hierNdxSys) {
+           case ZX:
+               break;
+       }
    } else {
       switch (type) {
          case Geo:
@@ -226,7 +236,7 @@ SubOpDGG::addressTypeToRF (DgAddressType type, DgHierNdxSysType hierNdxSys, cons
                         DgBase::Fatal);
             break;
 
-         case HierNdx:
+         case HierNdx: // should be caught above
          case InvalidAddressType:
          default:
             ::report("addressTypeToRF(): invalid address type", DgBase::Fatal);

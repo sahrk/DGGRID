@@ -81,8 +81,8 @@ class DgIDGGSBase;
              << ((MAX_Z7_RES - (res)) * Z7_PER_DIGIT_OFFSET)))
 
 ////////////////////////////////////////////////////////////////////////////////
-DgZXSystem::DgZXSystem (const DgIDGGSBase& dggsIn, bool outModeIntIn, const std::string& nameIn)
-   : DgHierNdxSystemRFS<DgZXRF, DgZXStringRF>(dggsIn, outModeIntIn, nameIn)
+DgZXSystem::DgZXSystem (const DgIDGGSBase& dggsIn, bool extModeIntIn, const std::string& nameIn)
+   : DgHierNdxSystemRFS<DgZXRF, DgZXStringRF>(dggsIn, extModeIntIn, nameIn)
 {
     /*
     // all the grids need to be created before we can set the parent/child grids

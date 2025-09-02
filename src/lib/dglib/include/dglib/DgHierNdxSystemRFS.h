@@ -38,9 +38,9 @@ template <class TINT, class TSTR> class DgHierNdxSystemRFS :
 
    protected:
 
-     DgHierNdxSystemRFS (const DgIDGGSBase& dggsIn, bool outModeIntIn = true, 
+     DgHierNdxSystemRFS (const DgIDGGSBase& dggsIn, bool extModeIntIn = true, 
             const std::string& nameIn = "HierNdxIDGGS")
-        : DgHierNdxSystemRFSBase(dggsIn, outModeIntIn, nameIn)
+        : DgHierNdxSystemRFSBase(dggsIn, extModeIntIn, nameIn)
      {
          // all the grids need to be created before we can set the parent/child grids
          // RFs are deallocated by the RFNetwork
@@ -60,7 +60,7 @@ template <class TINT, class TSTR> class DgHierNdxSystemRFS :
      };
 
      virtual void initNdxFromInt (DgResAdd<DgHierNdx>& ndx, int res, HIERNDX_INT_TYPE val) const {
-         DgHierNdx newAdd (outModeInt());
+         DgHierNdx newAdd (extModeInt());
          DgHierNdxIntCoord ic(val);
          newAdd.setIntNdx(ic);
          this->sysRF(res).setStringFromIntCoord(newAdd);
@@ -69,7 +69,7 @@ template <class TINT, class TSTR> class DgHierNdxSystemRFS :
      }
    
      virtual void initNdxFromString (DgResAdd<DgHierNdx>& ndx, int res, const std::string& val) const {
-         DgHierNdx newAdd (outModeInt());
+         DgHierNdx newAdd (extModeInt());
          DgHierNdxStringCoord sc(val);
          newAdd.setStrNdx(sc);
          this->sysRF(res).setIntFromStringCoord(newAdd);

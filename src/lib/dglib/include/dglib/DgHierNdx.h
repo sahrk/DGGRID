@@ -37,18 +37,18 @@ class DgHierNdx {
       static const DgHierNdx undefCoord;
  
       DgHierNdx (const DgHierNdxIntCoord& intNdxIn, const DgHierNdxStringCoord& strNdxIn,
-                 bool outModeIntIn = true)
-         : intNdx_ (intNdxIn), strNdx_(strNdxIn), outModeInt_ (outModeIntIn)
+                 bool extModeIntIn = true)
+         : intNdx_ (intNdxIn), strNdx_(strNdxIn), extModeInt_ (extModeIntIn)
          { }
     
       DgHierNdx (const DgHierNdx& ndxIn)
-       : intNdx_ (ndxIn.intNdx()), strNdx_(ndxIn.strNdx()), outModeInt_ (ndxIn.outModeInt())
+       : intNdx_ (ndxIn.intNdx()), strNdx_(ndxIn.strNdx()), extModeInt_ (ndxIn.extModeInt())
        { }
 
-      DgHierNdx (bool outModeIntIn = true);
+      DgHierNdx (bool extModeIntIn = true);
     
       // either int or string
-      bool outModeInt (void) const { return outModeInt_; }
+      bool extModeInt (void) const { return extModeInt_; }
     
       const DgHierNdxIntCoord&    intNdx (void) const { return intNdx_; }
       const DgHierNdxStringCoord& strNdx (void) const { return strNdx_; }
@@ -58,7 +58,7 @@ class DgHierNdx {
     
       void setIntFromStringCoord (void);
     
-      void setOutModeInt (bool outModeIntIn) { outModeInt_ = outModeIntIn; }
+      void setOutModeInt (bool extModeIntIn) { extModeInt_ = extModeIntIn; }
 
       virtual const DgHierNdx& undefAddress (void) const { return undefCoord; }
     
@@ -70,7 +70,7 @@ class DgHierNdx {
         {
             return intNdx() == ndx.intNdx() &&
                  strNdx() == ndx.strNdx() &&
-                 outModeInt() == ndx.outModeInt();
+                 extModeInt() == ndx.extModeInt();
         }
 
       bool operator!= (const DgHierNdx& ndx) const
@@ -81,7 +81,7 @@ class DgHierNdx {
            if (ndx != *this) {
                setIntNdx(ndx.intNdx());
                setStrNdx(ndx.strNdx());
-               setOutModeInt(ndx.outModeInt());
+               setOutModeInt(ndx.extModeInt());
            }
            
            return *this;
@@ -91,7 +91,7 @@ class DgHierNdx {
 
       DgHierNdxIntCoord intNdx_;
       DgHierNdxStringCoord strNdx_;
-      bool outModeInt_;
+      bool extModeInt_;
     
     friend class DgHierNdxSystemRFBase;
 };
