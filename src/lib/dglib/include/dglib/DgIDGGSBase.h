@@ -67,6 +67,8 @@ class DgIDGGSBase : public DgDiscTopoRFS<DgQ2DICoord, DgGeoCoord, long double> {
       const DgIDGGBase& idggBase (int res) const
              { return static_cast<const DgIDGGBase&>(operator[](res)); }
 
+      DgHierNdxSysType   heirNdxSysType (void) const { return hierNdxSysType_; }
+    
       const DgGeoSphRF&  geoRF       (void) const { return geoRF_; }
       const DgGeoCoord&  vert0       (void) const { return vert0_; }
       long double        azDegs      (void) const { return azDegs_; }
@@ -84,7 +86,8 @@ class DgIDGGSBase : public DgDiscTopoRFS<DgQ2DICoord, DgGeoCoord, long double> {
       DgIDGGSBase (DgRFNetwork& network,
                const DgGeoSphRF& backFrame,
                const DgGeoCoord& vert0,
-               long double azDegs, int nRes = 1,
+               long double azDegs, DgHierNdxSysType hierNdxSysType = InvalidHierNdxSysType,
+               int nRes = 1,
                DgGridTopology gridTopo = Hexagon,
                DgGridMetric gridMetric = D6,
                unsigned int aperture = 4,
@@ -93,7 +96,7 @@ class DgIDGGSBase : public DgDiscTopoRFS<DgQ2DICoord, DgGeoCoord, long double> {
                bool isPure = true)
         : DgDiscTopoRFS<DgQ2DICoord, DgGeoCoord, long double> (network, backFrame,
                   nRes, gridTopo, gridMetric, aperture, true, false, name),
-          geoRF_ (backFrame), vert0_ (vert0), azDegs_ (azDegs), hierNdxSystem_ (nullptr),
+          geoRF_ (backFrame), vert0_ (vert0), azDegs_ (azDegs), hierNdxSysType_ (hierNdxSysType), hierNdxSystem_ (nullptr),
           projType_ (projType), isPure_ (isPure) { }
 
       // remind sub-classes of the pure virtual functions remaining from above
@@ -116,6 +119,7 @@ class DgIDGGSBase : public DgDiscTopoRFS<DgQ2DICoord, DgGeoCoord, long double> {
 
       DgGeoCoord vert0_;
       long double azDegs_;
+      DgHierNdxSysType hierNdxSysType_;
       DgHierNdxSystemRFSBase* hierNdxSystem_;
 
 /*

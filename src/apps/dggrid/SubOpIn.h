@@ -67,6 +67,8 @@ struct SubOpIn : public SubOpBasic {
    std::string inTextFileName;
    const DgRFBase* pInRF;   // RF for input addresses
    dgg::addtype::DgAddressType inAddType; // input address form
+   dgg::addtype::DgHierNdxSysType inHierNdxSysType;
+   dgg::addtype::DgHierNdxFormType inHierNdxFormType;
    bool isPointInput;
    std::string pointInputFileType;
    std::string gdalDriver;

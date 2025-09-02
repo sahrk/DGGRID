@@ -23,7 +23,7 @@ input_delimiter " "
 # specify the output
 output_file_name outputfiles/z7str.txt
 output_address_type HIERNDX
-output_hier_ndx_system Z7
+output_hier_ndx_system ZX
 output_hier_ndx_form DIGIT_STRING
 
 output_delimiter " "

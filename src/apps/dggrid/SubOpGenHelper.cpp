@@ -330,10 +330,10 @@ SubOpGen::executeOp (void)
                     const DgRFBase** chdRF, const DgRFBase** prtRF, int forceRes)
       */
 
-      op.inOp.inSeqNum = op.dggOp.addressTypeToRF(op.inOp.inAddType, &op.inOp.pInRF, &chdRF, &prtRF, clipCellRes);
+      op.inOp.inSeqNum = op.dggOp.addressTypeToRF(op.inOp.inAddType, op.inOp.inHierNdxSysType, &op.inOp.pInRF, &chdRF, &prtRF, clipCellRes);
 
    } else {
-      op.inOp.inSeqNum = op.dggOp.addressTypeToRF(op.inOp.inAddType, &op.inOp.pInRF, &chdRF, &prtRF);
+      op.inOp.inSeqNum = op.dggOp.addressTypeToRF(op.inOp.inAddType, op.inOp.inHierNdxSysType, &op.inOp.pInRF, &chdRF, &prtRF);
    }
 
    if (!op.inOp.pInRF)

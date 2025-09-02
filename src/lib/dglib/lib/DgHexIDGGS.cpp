@@ -43,22 +43,24 @@ DgHexIDGGS::makeRF (DgRFNetwork& network, const DgGeoSphRF& backFrame,
          DgHierNdxSysType hierNdxSysType)
 {
     DgHexIDGGS* idggs = new DgHexIDGGS(network, backFrame, vert0, azDegs, aperture, nRes, name,
-                                             projType, isApSeq, apSeq, isMixed43, numAp4, isSuperfund, hierNdxSysType);
+               projType, isApSeq, apSeq, isMixed43, numAp4, isSuperfund, hierNdxSysType);
     
     // create the hierarchical indexing system
 /*
 for reference:
 enum DgHierNdxSysType { ZX, ZOrder, Z3, Z7, InvalidHierNdxSysType };
 */
+    /*
      if (hierNdxSysType != InvalidHierNdxSysType) {
-         if (hierNdxSysType == ZX) {
+         if (hierNdxSysType == ZX || hierNdxSysType == Z7) {
              if (isApSeq || isMixed43 || aperture != 7) {
                  ::report("DgHexIDGGS::makeRF() invalid hierNdxSysType", DgBase::Fatal);
              }
-             
+             std::cout << "USING HIERSYS ZX" << std::endl;
              idggs->hierNdxSystem_ = DgZXSystem::makeSystem(*idggs, false, "Z7");
          }
      }
+     */
     
     return idggs;
 }
@@ -116,6 +118,22 @@ DgHexIDGGS::DgHexIDGGS (DgRFNetwork& network, const DgGeoSphRF& backFrame,
 
    for (int r = 0; r < nRes; r++)
        Dg2WayTopoResAddConverter<DgQ2DICoord, DgGeoCoord, long double>(*this, *(grids()[r]), r);
+    
+    
+    // create the hierarchical indexing system
+/*
+for reference:
+enum DgHierNdxSysType { ZX, ZOrder, Z3, Z7, InvalidHierNdxSysType };
+*/
+     if (hierNdxSysType != InvalidHierNdxSysType) {
+         if (hierNdxSysType == ZX || hierNdxSysType == Z7) {
+             if (isApSeq || isMixed43 || aperture != 7) {
+                 ::report("DgHexIDGGS::makeRF() invalid hierNdxSysType", DgBase::Fatal);
+             }
+             std::cout << "USING HIERSYS ZX" << std::endl;
+             hierNdxSystem_ = DgZXSystem::makeSystem(*this, false, "Z7");
+         }
+     }
 /*
    // create the hierarchical indexing system
     if (hierNdxSysType != NoHierNdxSysType) {

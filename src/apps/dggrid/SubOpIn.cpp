@@ -39,7 +39,8 @@ using dgg::addtype::DgHierNdxFormType;
 SubOpIn::SubOpIn (OpBasic& op, bool _activate)
    : SubOpBasic (op, _activate),
      inFile (nullptr), pInRF (nullptr),
-     inAddType (dgg::addtype::InvalidAddressType), isPointInput (false),
+     inAddType (dgg::addtype::InvalidAddressType),
+     inHierNdxSysType(InvalidHierNdxSysType), inHierNdxFormType(Int64), isPointInput (false),
      inSeqNum (false), inputDelimiter (' ')
 {
 }
@@ -109,20 +110,20 @@ SubOpIn::initializeOp (void)
     // input_hier_ndx_system < ZORDER | Z3 | Z7 >
     // used if input_address_type is HIERNDX
     for (int i = 0; ; i++) {
+       choices.push_back(new std::string(dgg::addtype::hierNdxSysTypeStrings[i]));
        if (dgg::addtype::hierNdxSysTypeStrings[i] == "NONE")
           break;
-       choices.push_back(new std::string(dgg::addtype::hierNdxSysTypeStrings[i]));
     }
     def = "Z3";
     pList().insertParam(new DgStringChoiceParam("input_hier_ndx_system", def, &choices));
     dgg::util::release(choices);
 
-    // input_hier_ndx_form < INT64 | DIGIT_STRING >
+    // input_hier_ndx_form < INT64 | DIGIT_STRING | NONE >
     // used if input_address_type is HIERNDX
     for (int i = 0; ; i++) {
+       choices.push_back(new std::string(dgg::addtype::hierNdxFormTypeStrings[i]));
        if (dgg::addtype::hierNdxFormTypeStrings[i] == "NONE")
           break;
-       choices.push_back(new std::string(dgg::addtype::hierNdxFormTypeStrings[i]));
     }
     def = "INT64";
     pList().insertParam(new DgStringChoiceParam("input_hier_ndx_form", def, &choices));
@@ -197,51 +198,41 @@ SubOpIn::setupOp (void)
    inAddType = dgg::addtype::stringToAddressType(dummy);
 
    getParamValue(pList(), "input_hier_ndx_system", dummy, false);
-   DgHierNdxSysType inHierNdxSysType = dgg::addtype::stringToHierNdxSysType(dummy);
+   inHierNdxSysType = dgg::addtype::stringToHierNdxSysType(dummy);
    getParamValue(pList(), "input_hier_ndx_form", dummy, false);
-   DgHierNdxFormType inHierNdxFormType = dgg::addtype::stringToHierNdxFormType(dummy);
+   inHierNdxFormType = dgg::addtype::stringToHierNdxFormType(dummy);
 
-    if (inAddType == dgg::addtype::HierNdx) {
+    if (inAddType == dgg::addtype::DgAddressType::HierNdx) {
        // KEVIN: this will all go away in version 9.0
         if (inHierNdxFormType == dgg::addtype::Int64) {
            switch (inHierNdxSysType) {
                case dgg::addtype::DgHierNdxSysType::Z3:
                    inAddType = dgg::addtype::Z3V8;
                    break;
-               case DgHierNdxSysType::Z7:
-                   inAddType = dgg::addtype::Z7V8;
+               case dgg::addtype::DgHierNdxSysType::Z7:
+                   inAddType = dgg::addtype::DgAddressType::Z7V8;
                    break;
-               case DgHierNdxSysType::ZOrder:
-                   inAddType = dgg::addtype::ZOrderV8;
+               case dgg::addtype::DgHierNdxSysType::ZOrder:
+                   inAddType = dgg::addtype::DgAddressType::ZOrderV8;
                    break;
                default: ;
            }
        } else { // must be DigitString
            switch (inHierNdxSysType) {
-               case DgHierNdxSysType::Z3:
+               case dgg::addtype::DgHierNdxSysType::Z3:
                    inAddType = dgg::addtype::Z3String;
                    break;
-               case DgHierNdxSysType::Z7:
-                   inAddType = dgg::addtype::Z7String;
+               case dgg::addtype::DgHierNdxSysType::Z7:
+                   inAddType = dgg::addtype::DgAddressType::Z7String;
                    break;
-               case DgHierNdxSysType::ZOrder:
+               case dgg::addtype::DgHierNdxSysType::ZOrder:
                    inAddType = dgg::addtype::ZOrderString;
                    break;
                default: ;
            }
        }
 
-    } else if (inAddType > dgg::addtype::HierNdx) { // these are deprecated
-      // KEVIN: this should no longer be reachable in v9
-      ::report(
-         "input_address_type values of ZORDER, ZORDER_STRING, Z3, Z3_STRING, Z7, and "
-         "Z7_STRING went away in DGGRID version 9.0. Instead, set "
-         "input_address_type to HIERNDX, new parameter input_hier_ndx_system to the "
-         "desired system ZORDER, Z3, or Z7 (Z3 is the default), and new parameter "
-         "input_hier_ndx_form to the specific input format INT64 or DIGIT_STRING "
-         "(default is INT64).",
-      DgBase::Warning);
-   }
+    }
 
     if (inAddType == dgg::addtype::HierNdx && inHierNdxSysType == dgg::addtype::Z3) {
         ::report("in DGGRID version 9.0 the default padding digit for Z3 INT64 indexes has switched "
@@ -387,8 +378,7 @@ SubOpIn::executeOp (void) {
     if (inSeqNum) {
         pInRF = &dgg;
     } else if (!op.dggOp.isSuperfund) { // use input address type
-
-      inSeqNum = op.dggOp.addressTypeToRF(inAddType, &pInRF);
+      inSeqNum = op.dggOp.addressTypeToRF(inAddType, inHierNdxSysType, &pInRF);
       if (!pInRF)
          ::report("SubOpIn::executeOp(): invalid input RF", DgBase::Fatal);
    }

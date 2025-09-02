@@ -414,6 +414,8 @@ SubOpOut::SubOpOut (OpBasic& op, bool _activate)
    : SubOpBasic (op, _activate),
      pOutRF (0), pChdOutRF (0), pPrtOutRF (0),
      outAddType (dgg::addtype::InvalidAddressType),
+     outHierNdxSysType (dgg::addtype::InvalidHierNdxSysType),
+     outHierNdxFormType(dgg::addtype::Int64),
      outSeqNum (false), outputDelimiter (' '), nDensify (1),
      lonWrapMode (DgGeoSphRF::Wrap), unwrapPts (true),
      doRandPts (true), ptsRand (0), nRandPts (0),
@@ -663,13 +665,13 @@ SubOpOut::setupOp (void)
    outAddType = dgg::addtype::stringToAddressType(dummy);
 
    getParamValue(pList(), "output_hier_ndx_system", dummy, false);
-   DgHierNdxSysType inHierNdxSysType = dgg::addtype::stringToHierNdxSysType(dummy);
+   outHierNdxSysType = dgg::addtype::stringToHierNdxSysType(dummy);
    getParamValue(pList(), "output_hier_ndx_form", dummy, false);
-   DgHierNdxFormType inHierNdxFormType = dgg::addtype::stringToHierNdxFormType(dummy);
-    if (outAddType == dgg::addtype::HierNdx) {
+   outHierNdxFormType = dgg::addtype::stringToHierNdxFormType(dummy);
+   if (outAddType == dgg::addtype::HierNdx) {
        // KEVIN: this will all go away in version 9.0
-        if (inHierNdxFormType == dgg::addtype::Int64) {
-           switch (inHierNdxSysType) {
+        if (outHierNdxFormType == dgg::addtype::Int64) {
+           switch (outHierNdxSysType) {
                case DgHierNdxSysType::Z3:
                    outAddType = dgg::addtype::Z3V8;
                    break;
@@ -682,7 +684,7 @@ SubOpOut::setupOp (void)
                default: ;
            }
        } else { // must be DigitString
-           switch (inHierNdxSysType) {
+           switch (outHierNdxSysType) {
                case DgHierNdxSysType::Z3:
                    outAddType = dgg::addtype::Z3String;
                    break;
@@ -696,16 +698,7 @@ SubOpOut::setupOp (void)
            }
        }
 
-    } else if (outAddType > dgg::addtype::HierNdx) { // these are deprecated
-      ::report(
-         "output_address_type values of ZORDER, ZORDER_STRING, Z3, Z3_STRING, Z7, and "
-         "Z7_STRING are deprecated and will go away in version 9.0. Instead set "
-         "output_address_type to HIERNDX, new parameter output_hier_ndx_system to the "
-         "desired system ZORDER, Z3, or Z7 (Z3 is the default), and new parameter "
-         "output_hier_ndx_form to the specific output format INT64 or DIGIT_STRING "
-         "(default is INT64).",
-      DgBase::Warning);
-   }
+    }
 
     if (outAddType == dgg::addtype::Z3V8) {
         ::report("the default padding digit for Z3 INT64 indexes will switch "
@@ -941,7 +934,7 @@ SubOpOut::executeOp (void) {
       pOutRF = &dgg;
    else if (!op.dggOp.isSuperfund) { // use input address type
 
-      outSeqNum = op.dggOp.addressTypeToRF(outAddType, &pOutRF, &pChdOutRF, &pPrtOutRF);
+      outSeqNum = op.dggOp.addressTypeToRF(outAddType, outHierNdxSysType, &pOutRF, &pChdOutRF, &pPrtOutRF);
       if (!pOutRF)
          ::report("SubOpOut::executeOp(): invalid output RF", DgBase::Fatal);
    }
