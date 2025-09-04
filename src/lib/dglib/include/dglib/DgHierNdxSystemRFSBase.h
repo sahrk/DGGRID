@@ -41,7 +41,7 @@ class DgHierNdxSystemRFSBase :
 
    public:
 
-      static DgHierNdxSystemRFSBase* makeSystem (const DgIDGGS& dggsIn, 
+      static DgHierNdxSystemRFSBase* makeSystem (const DgIDGGSBase& dggsIn,
                DgHierNdxSysType sysType = Z3, DgHierNdxFormType form = Int64,
                const std::string& nameIn = "Z3");
 

@@ -325,15 +325,11 @@ SubOpGen::executeOp (void)
    if (cellClip && op.inOp.inAddType != dgg::addtype::SeqNum) {
       if (clipCellRes < 0 || clipCellRes > op.dggOp.actualRes)
          ::report("genGrid(): invalid clipCellRes", DgBase::Fatal);
-     /*  bool
-       SubOpDGG::addressTypeToRF (DgAddressType type, const DgRFBase** rf,
-                    const DgRFBase** chdRF, const DgRFBase** prtRF, int forceRes)
-      */
-
-      op.inOp.inSeqNum = op.dggOp.addressTypeToRF(op.inOp.inAddType, op.inOp.inHierNdxSysType, &op.inOp.pInRF, &chdRF, &prtRF, clipCellRes);
+       
+      op.inOp.inSeqNum = op.dggOp.addressTypeToRF(op.inOp.inAddType, op.inOp.inHierNdxSysType, op.inOp.inHierNdxFormType, &op.inOp.pInRF, &chdRF, &prtRF, &op.inOp.hierNdxSystem, clipCellRes);
 
    } else {
-      op.inOp.inSeqNum = op.dggOp.addressTypeToRF(op.inOp.inAddType, op.inOp.inHierNdxSysType, &op.inOp.pInRF, &chdRF, &prtRF);
+      op.inOp.inSeqNum = op.dggOp.addressTypeToRF(op.inOp.inAddType, op.inOp.inHierNdxSysType, op.inOp.inHierNdxFormType, &op.inOp.pInRF, &chdRF, &prtRF, &op.inOp.hierNdxSystem);
    }
 
    if (!op.inOp.pInRF)

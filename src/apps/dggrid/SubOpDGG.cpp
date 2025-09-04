@@ -36,6 +36,7 @@
 #include <dglib/DgZ3StringRF.h>
 #include <dglib/DgZ7RF.h>
 #include <dglib/DgZ7StringRF.h>
+#include <dglib/DgHierNdxSystemRFSBase.h>
 
 #include "OpBasic.h"
 #include "SubOpDGG.h"
@@ -63,8 +64,8 @@ SubOpDGG::SubOpDGG (OpBasic& op, bool _activate)
 // choose a reference frame based on address type
 // returns whether or not seq nums are used
 bool
-SubOpDGG::addressTypeToRF (DgAddressType type, DgHierNdxSysType hierNdxSys, const DgRFBase** rf,
-             const DgRFBase** chdRF, const DgRFBase** prtRF, int forceRes)
+SubOpDGG::addressTypeToRF (DgAddressType type, DgHierNdxSysType hierNdxSysType, DgHierNdxFormType hierNdxForm,
+             const DgRFBase** rf, const DgRFBase** chdRF, const DgRFBase** prtRF, const DgHierNdxSystemRFSBase** hierNdxSys, int forceRes)
 {
    const DgIDGGBase* dgg = &this->dgg();
    const DgIDGGBase* chdDgg = &this->chdDgg();
@@ -79,50 +80,50 @@ SubOpDGG::addressTypeToRF (DgAddressType type, DgHierNdxSysType hierNdxSys, cons
    }
 
    bool seqNum = false;
-   *rf = nullptr;
+   if (rf) *rf = nullptr;
    if (chdRF) *chdRF = nullptr;
    if (prtRF) *prtRF = nullptr;
+   if (hierNdxSys) *hierNdxSys = nullptr;
 
    if (type == HierNdx) {
-      ::report("addressTypeToRF(): HierNdx", DgBase::Fatal);
-       /*
-       enum DgHierNdxSysType { ZX, ZOrder, Z3, Z7, InvalidHierNdxSysType };
-       static const std::string hierNdxSysTypeStrings[] = {
-           "ZX", "ZORDER", "Z3", "Z7", "NONE"
-       };*/
-
-       switch (hierNdxSys) {
-           case ZX:
-               break;
-       }
+       if (hierNdxSys) {
+          *hierNdxSys = DgHierNdxSystemRFSBase::makeSystem(dggs(), hierNdxSysType, hierNdxForm);
+          if (*hierNdxSys) {
+             int r = (forceRes >= 0) ? forceRes : dgg->res();
+             if (rf) *rf = &(*hierNdxSys)->sysRF(r);
+             if (chdRF) *chdRF = &(*hierNdxSys)->sysRF(r + 1);
+             if (prtRF && r > 0)
+                *prtRF = &(*hierNdxSys)->sysRF(r - 1);
+          }
+      }
    } else {
       switch (type) {
          case Geo:
-            *rf = &this->deg();
+            if (rf) *rf = &this->deg();
             if (chdRF) *chdRF = &this->chdDeg();
             if (prtRF) *prtRF = this->prtDeg();
             break;
    
          case Plane:
-            *rf = &dgg->planeRF();
+            if (rf) *rf = &dgg->planeRF();
             if (chdRF) *chdRF = &chdDgg->planeRF();
             if (prtRF) *prtRF = &prtDgg->planeRF();
             break;
    
          case ProjTri:
-            *rf = &dgg->projTriRF();
+            if (rf) *rf = &dgg->projTriRF();
             if (chdRF) *chdRF = &chdDgg->projTriRF();
             if (prtRF) *prtRF = &prtDgg->projTriRF();
             break;
    
          case Q2DD:
-            *rf = &dgg->q2ddRF();
+            if (rf) *rf = &dgg->q2ddRF();
             if (chdRF) *chdRF = &chdDgg->q2ddRF();
             if (prtRF) *prtRF = &prtDgg->q2ddRF();
             break;
    
          case Q2DI:
-            *rf = dgg;
+            if (rf) *rf = dgg;
             if (chdRF) *chdRF = chdDgg;
               if (prtRF) *prtRF = prtDgg;
             break;
@@ -135,13 +136,13 @@ SubOpDGG::addressTypeToRF (DgAddressType type, DgHierNdxSysType hierNdxSys, cons
    */
    
             seqNum = true;
-            *rf = dgg;
+            if (rf) *rf = dgg;
             if (chdRF) *chdRF = chdDgg;
             if (prtRF) *prtRF = prtDgg;
             break;
    
          case Vertex2DD:
-            *rf = &dgg->vertexRF();
+            if (rf) *rf = &dgg->vertexRF();
             if (chdRF) *chdRF = &chdDgg->vertexRF();
             if (prtRF) *prtRF = &prtDgg->vertexRF();
             break;
@@ -152,7 +153,7 @@ SubOpDGG::addressTypeToRF (DgAddressType type, DgHierNdxSysType hierNdxSys, cons
                         DgBase::Fatal);
    
             if (dgg->z3RF()) {
-               *rf = dgg->z3RF();
+               if (rf) *rf = dgg->z3RF();
                if (chdRF) *chdRF = chdDgg->z3RF();
                if (prtRF) *prtRF = prtDgg->z3RF();
    
@@ -172,7 +173,7 @@ SubOpDGG::addressTypeToRF (DgAddressType type, DgHierNdxSysType hierNdxSys, cons
                         DgBase::Fatal);
    
             if (dgg->z3StrRF()) {
-               *rf = dgg->z3StrRF();
+               if (rf) *rf = dgg->z3StrRF();
                if (chdRF) *chdRF = chdDgg->z3StrRF();
                if (prtRF) *prtRF = prtDgg->z3StrRF();
             } else
@@ -186,7 +187,7 @@ SubOpDGG::addressTypeToRF (DgAddressType type, DgHierNdxSysType hierNdxSys, cons
                         DgBase::Fatal);
    
             if (dgg->z7RF()) {
-               *rf = dgg->z7RF();
+               if (rf) *rf = dgg->z7RF();
             if (chdRF) *chdRF = chdDgg->z7RF();
             if (prtRF) *prtRF = prtDgg->z7RF();
             } else
@@ -200,7 +201,7 @@ SubOpDGG::addressTypeToRF (DgAddressType type, DgHierNdxSysType hierNdxSys, cons
                         DgBase::Fatal);
    
             if (dgg->z7StrRF()) {
-               *rf = dgg->z7StrRF();
+               if (rf) *rf = dgg->z7StrRF();
                if (chdRF) *chdRF = chdDgg->z7StrRF();
                if (prtRF) *prtRF = prtDgg->z7StrRF();
             } else
@@ -214,7 +215,7 @@ SubOpDGG::addressTypeToRF (DgAddressType type, DgHierNdxSysType hierNdxSys, cons
                         DgBase::Fatal);
    
             if (dgg->zorderRF()) {
-               *rf = dgg->zorderRF();
+               if (rf) *rf = dgg->zorderRF();
                if (chdRF) *chdRF = chdDgg->zorderRF();
                if (prtRF) *prtRF = prtDgg->zorderRF();
             } else
@@ -228,11 +229,11 @@ SubOpDGG::addressTypeToRF (DgAddressType type, DgHierNdxSysType hierNdxSys, cons
                         DgBase::Fatal);
    
                if (dgg->zorderStrRF()) {
-                  *rf = dgg->zorderStrRF();
-               if (chdRF) *chdRF = chdDgg->zorderStrRF();
-               if (prtRF) *prtRF = prtDgg->zorderStrRF();
-            } else
-               ::report("address_type of ZORDER DIGIT_STRING only supported for aperture 3 or 4",
+                  if (rf) *rf = dgg->zorderStrRF();
+                  if (chdRF) *chdRF = chdDgg->zorderStrRF();
+                  if (prtRF) *prtRF = prtDgg->zorderStrRF();
+               } else
+                  ::report("address_type of ZORDER DIGIT_STRING only supported for aperture 3 or 4",
                         DgBase::Fatal);
             break;
 

@@ -413,6 +413,7 @@ SubOpOut::outputCellAdd2D (const DgLocation& add2D, const std::string* labelIn,
 SubOpOut::SubOpOut (OpBasic& op, bool _activate)
    : SubOpBasic (op, _activate),
      pOutRF (0), pChdOutRF (0), pPrtOutRF (0),
+     outHierNdxSys (0),
      outAddType (dgg::addtype::InvalidAddressType),
      outHierNdxSysType (dgg::addtype::InvalidHierNdxSysType),
      outHierNdxFormType(dgg::addtype::Int64),
@@ -934,7 +935,7 @@ SubOpOut::executeOp (void) {
       pOutRF = &dgg;
    else if (!op.dggOp.isSuperfund) { // use input address type
 
-      outSeqNum = op.dggOp.addressTypeToRF(outAddType, outHierNdxSysType, &pOutRF, &pChdOutRF, &pPrtOutRF);
+      outSeqNum = op.dggOp.addressTypeToRF(outAddType, outHierNdxSysType, outHierNdxFormType, &pOutRF, &pChdOutRF, &pPrtOutRF, &outHierNdxSys);
       if (!pOutRF)
          ::report("SubOpOut::executeOp(): invalid output RF", DgBase::Fatal);
    }

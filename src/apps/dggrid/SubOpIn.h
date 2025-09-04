@@ -69,6 +69,8 @@ struct SubOpIn : public SubOpBasic {
    dgg::addtype::DgAddressType inAddType; // input address form
    dgg::addtype::DgHierNdxSysType inHierNdxSysType;
    dgg::addtype::DgHierNdxFormType inHierNdxFormType;
+   const DgHierNdxSystemRFSBase* hierNdxSystem;
+   
    bool isPointInput;
    std::string pointInputFileType;
    std::string gdalDriver;

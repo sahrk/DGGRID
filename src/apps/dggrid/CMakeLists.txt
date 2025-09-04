@@ -16,6 +16,18 @@ add_executable(dggrid
    SubOpTransform.cpp
    clipper.cpp
    dggrid.cpp
+   DgHexSF.h
+   OpBasic.h
+   SubOpBasic.h
+   SubOpBasicMulti.h
+   SubOpBinPts.h
+   SubOpDGG.h
+   SubOpGen.h
+   SubOpIn.h
+   SubOpMain.h
+   SubOpOut.h
+   SubOpStats.h
+   SubOpTransform.h
 )
 
 if(GDAL_FOUND)

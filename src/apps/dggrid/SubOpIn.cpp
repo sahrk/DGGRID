@@ -378,12 +378,12 @@ SubOpIn::executeOp (void) {
     if (inSeqNum) {
         pInRF = &dgg;
     } else if (!op.dggOp.isSuperfund) { // use input address type
-      inSeqNum = op.dggOp.addressTypeToRF(inAddType, inHierNdxSysType, &pInRF);
+      inSeqNum = op.dggOp.addressTypeToRF(inAddType, inHierNdxSysType, inHierNdxFormType, &pInRF);
       if (!pInRF)
          ::report("SubOpIn::executeOp(): invalid input RF", DgBase::Fatal);
    }
 
-    if (op.dggOp.isApSeq && inSeqNum)
+   if (op.dggOp.isApSeq && inSeqNum)
         ::report("SubOpIn::executeOp(): sequence number input not supported for aperture sequence DGGS", DgBase::Fatal);
 
    // open first file

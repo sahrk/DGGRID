@@ -72,6 +72,7 @@ struct SubOpOut : public SubOpBasic {
    const DgRFBase* pOutRF;     // RF for output addresses
    const DgRFBase* pChdOutRF;  // RF for output addresses at child resolution
    const DgRFBase* pPrtOutRF;  // RF for output addresses at parent resolution
+   const DgHierNdxSystemRFSBase* outHierNdxSys;
    dgg::addtype::DgAddressType outAddType; // output address form
    dgg::addtype::DgHierNdxSysType outHierNdxSysType;
    dgg::addtype::DgHierNdxFormType outHierNdxFormType;

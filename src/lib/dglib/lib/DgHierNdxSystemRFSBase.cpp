@@ -34,18 +34,31 @@ DgHierNdxSystemRFSBase::undefCoord(DgHierNdx::undefCoord, -1);
 
 ////////////////////////////////////////////////////////////////////////////////
 DgHierNdxSystemRFSBase*
-DgHierNdxSystemRFSBase::makeSystem (const DgIDGGS& dggsIn, 
+DgHierNdxSystemRFSBase::makeSystem (const DgIDGGSBase& dggsIn,
                DgHierNdxSysType sysType, DgHierNdxFormType form,
                const std::string& nameIn) 
 {
-   bool extModeInt = (form == Int64);
    DgHierNdxSystemRFSBase* sys = nullptr;
+    
+   // do some checks
+   if (sysType == InvalidHierNdxSysType || form == InvalidHierNdxFormType) {
+        ::report("DgHierNdxSystemRFSBase::makeSystem() invalid sytem type or form", DgBase::Fatal);
+        return sys;
+   }
+
+   bool extModeInt = (form == Int64);
    switch (sysType) {
       case Z7:
       case ZX:
-         sys = DgZXSystem::makeSystem(dggsIn, extModeInt, "Z7");
+         if (!dggsIn.isPure() || dggsIn.aperture() != 7) {
+            ::report("DgHexIDGGS::makeRF() Z7 only available for pure aperture 7 grids", DgBase::Fatal);
+         }
+         std::cout << "USING HIERSYS ZX" << std::endl;
+         //sys = DgHierNdxSystemRFSBase::makeSystem(dggsIn, sysType, extModeInt, false);
+         sys = DgZXSystem::makeSystem(dggsIn, extModeInt, "ZX");
          break;
    }
+    
    return sys;
 }
 

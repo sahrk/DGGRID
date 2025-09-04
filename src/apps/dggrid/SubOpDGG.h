@@ -61,8 +61,9 @@ struct SubOpDGG : public SubOpBasic {
 
    // set rf and chdRF based on type
    // return if seq num
-   bool addressTypeToRF (dgg::addtype::DgAddressType type, dgg::addtype::DgHierNdxSysType hierNdxSys, 
-      const DgRFBase** rf, const DgRFBase** chdRF = nullptr, const DgRFBase** prtRF = nullptr, int forceRes = -1);
+   bool addressTypeToRF (dgg::addtype::DgAddressType type, dgg::addtype::DgHierNdxSysType hierNdxSysType,
+      dgg::addtype:: DgHierNdxFormType hierNdxForm, const DgRFBase** rf, const DgRFBase** chdRF = nullptr,
+      const DgRFBase** prtRF = nullptr, const DgHierNdxSystemRFSBase** hierNdxSys = nullptr, int forceRes = -1);
 
    // DgApSubOperation virtual methods that use the pList
    virtual int initializeOp (void);

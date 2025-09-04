@@ -44,24 +44,7 @@ DgHexIDGGS::makeRF (DgRFNetwork& network, const DgGeoSphRF& backFrame,
 {
     DgHexIDGGS* idggs = new DgHexIDGGS(network, backFrame, vert0, azDegs, aperture, nRes, name,
                projType, isApSeq, apSeq, isMixed43, numAp4, isSuperfund, hierNdxSysType);
-    
-    // create the hierarchical indexing system
-/*
-for reference:
-enum DgHierNdxSysType { ZX, ZOrder, Z3, Z7, InvalidHierNdxSysType };
-*/
-    /*
-     if (hierNdxSysType != InvalidHierNdxSysType) {
-         if (hierNdxSysType == ZX || hierNdxSysType == Z7) {
-             if (isApSeq || isMixed43 || aperture != 7) {
-                 ::report("DgHexIDGGS::makeRF() invalid hierNdxSysType", DgBase::Fatal);
-             }
-             std::cout << "USING HIERSYS ZX" << std::endl;
-             idggs->hierNdxSystem_ = DgZXSystem::makeSystem(*idggs, false, "Z7");
-         }
-     }
-     */
-    
+        
     return idggs;
 }
 
@@ -121,31 +104,10 @@ DgHexIDGGS::DgHexIDGGS (DgRFNetwork& network, const DgGeoSphRF& backFrame,
     
     
     // create the hierarchical indexing system
-/*
-for reference:
-enum DgHierNdxSysType { ZX, ZOrder, Z3, Z7, InvalidHierNdxSysType };
-*/
      if (hierNdxSysType != InvalidHierNdxSysType) {
-         if (hierNdxSysType == ZX || hierNdxSysType == Z7) {
-             if (isApSeq || isMixed43 || aperture != 7) {
-                 ::report("DgHexIDGGS::makeRF() invalid hierNdxSysType", DgBase::Fatal);
-             }
-             std::cout << "USING HIERSYS ZX" << std::endl;
-             hierNdxSystem_ = DgZXSystem::makeSystem(*this, false, "Z7");
-         }
+        std::cout << "USING HIERSYS" << std::endl;
+        hierNdxSystem_ = DgHierNdxSystemRFSBase::makeSystem(*this, hierNdxSysType, Int64);
      }
-/*
-   // create the hierarchical indexing system
-    if (hierNdxSysType != NoHierNdxSysType) {
-        if (hierNdxSysType == ZXSystem) {
-            if (isApSeq || isMixed43 || aperture != 7) {
-                ::report("DgHexIDGGS::DgHexIDGGS() invalid hierNdxSysType", DgBase::Fatal);
-            }
-            
-            hierNdxSystem_ = DgZXSystem::makeSystem(*this, true, "Z7");
-        }
-    }
- */
        
 } // DgHexIDGGS::DgHexIDGGS
 

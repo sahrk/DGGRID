@@ -34,7 +34,7 @@ class DgZXSystem : public DgHierNdxSystemRFS<DgZXRF, DgZXStringRF> {
 
    public:
 
-      static DgZXSystem* makeSystem (const DgIDGGS& dggsIn, bool extModeIntIn = true,
+      static DgZXSystem* makeSystem (const DgIDGGSBase& dggsIn, bool extModeIntIn = true,
                              const std::string& nameIn = "ZXSystem") {
           return new DgZXSystem (dggsIn, extModeIntIn, nameIn);
       }
