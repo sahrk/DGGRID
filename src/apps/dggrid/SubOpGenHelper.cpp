@@ -322,14 +322,13 @@ SubOpGen::executeOp (void)
    // this should be moved as much as possible to SubOpIn
    const DgRFBase* chdRF = nullptr;
    const DgRFBase* prtRF = nullptr;
-   if (cellClip && op.inOp.inAddType != dgg::addtype::SeqNum) {
+   if (coarseCellClip) {
       if (clipCellRes < 0 || clipCellRes > op.dggOp.actualRes)
          ::report("genGrid(): invalid clipCellRes", DgBase::Fatal);
        
       op.inOp.inSeqNum = op.dggOp.addressTypeToRF(op.inOp.inAddType, op.inOp.inHierNdxSysType, op.inOp.inHierNdxFormType, &op.inOp.pInRF, &chdRF, &prtRF, &op.inOp.hierNdxSystem, clipCellRes);
-
    } else {
-      op.inOp.inSeqNum = op.dggOp.addressTypeToRF(op.inOp.inAddType, op.inOp.inHierNdxSysType, op.inOp.inHierNdxFormType, &op.inOp.pInRF, &chdRF, &prtRF, &op.inOp.hierNdxSystem);
+       op.inOp.inSeqNum = op.dggOp.addressTypeToRF(op.inOp.inAddType, op.inOp.inHierNdxSysType, op.inOp.inHierNdxFormType, &op.inOp.pInRF, &chdRF, &prtRF, &op.inOp.hierNdxSystem);
    }
 
    if (!op.inOp.pInRF)
@@ -344,7 +343,7 @@ SubOpGen::executeOp (void)
    delimStr[1] = '\0';
    const int maxLine = 1000;
    char buff[maxLine];
-   if (seqToPoly || indexToPoly) {
+   if (addressClip) {
       op.outOp.nCellsAccepted = 0;
       op.outOp.nCellsTested = 0;
 
@@ -364,10 +363,10 @@ SubOpGen::executeOp (void)
             if (fin.eof()) break;
 
             unsigned long int sNum = 0;
-            if (seqToPoly) {
+            if (op.inOp.inAddType == SeqNum) {
               if (sscanf(buff, "%lu", &sNum) != 1)
                  ::report("genGrid(): invalid SEQNUM " + std::string(buff), DgBase::Fatal);
-            } else { // must be indexToPoly
+            } else { // must be some index
                // parse the address
                DgLocation* tmpLoc = NULL;
                tmpLoc = new DgLocation(*op.inOp.pInRF);
@@ -675,7 +674,7 @@ SubOpGen::executeOp (void)
 
    dgcout << "\n** grid generation complete **" << std::endl;
    outputStatus(true);
-   if (!wholeEarth && !seqToPoly && !indexToPoly)
+   if (!wholeEarth && !addressClip)
       dgcout << "acceptance rate is " <<
           100.0 * (long double) op.outOp.nCellsAccepted / (long double) op.outOp.nCellsTested <<
           "%" << std::endl;
@@ -1240,7 +1239,7 @@ SubOpGen::createClipRegions (const DgIDGGBase& dgg,
          regionFile.close();
          delete pRegionFile;
       }
-   } else if (cellClip) {
+   } else if (coarseCellClip) {
 
       // check for valid state
       if (dgg.gridTopo() != dgg::topo::Hexagon)

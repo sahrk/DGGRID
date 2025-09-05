@@ -223,16 +223,18 @@ struct SubOpGen : public SubOpBasicMulti {
    // the parameters
    bool wholeEarth;       // generate entire grid?
    bool regionClip;       // whether user wants to generate using regions
-   bool seqToPoly;        // whether user wants polys from seqnum
-   bool indexToPoly;      // whether user wants polys from any index type
+   //bool seqToPoly;        // whether user wants polys from seqnum
+   //bool indexToPoly;      // whether user wants polys from any index type
    bool pointClip;        // whether user wants to generate using points
-   bool cellClip;         // whether user wants to generate using coarse cells
+   bool coarseCellClip;   // whether user wants to generate using coarse cells
+   bool addressClip;      // generate specified cells?
    bool useGDAL;          // use GDAL for either input or output
    bool clipAIGen;        // clip using AIGen files (or Shapefiles)
    bool clipGDAL;         // clip using GDAL files
    bool clipShape;        // clip using Shapefiles
    std::vector<std::string> regionFiles;
    int clipCellRes;       // resolution of the clipping cell indexes
+   //bool clipCellFiles;   // are clip cells input from files?
    std::string clipCellsStr;   // input line of coarse clipping cells
    int nClipCellDensify;  // number of points-per-edge of densification for clipping cells
    //bool clipRandPts;      // clip randpts to polys

@@ -78,9 +78,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 SubOpGen::SubOpGen (OpBasic& op, bool _activate)
    : SubOpBasicMulti (op, _activate),
-     wholeEarth (false), regionClip (false), seqToPoly(false),
-     indexToPoly (false), pointClip (false),
-     cellClip (false), useGDAL (false),
+     wholeEarth (false), regionClip (false),
+     //seqToPoly(false), indexToPoly (false),
+     pointClip (false),
+     coarseCellClip (false), addressClip (false), useGDAL (false),
      clipAIGen (false), clipGDAL(false), clipShape(false), clipCellRes (0),
      nClipCellDensify (1), nudge (0.001), doPointInPoly (true),
      doPolyIntersect (false)
@@ -106,19 +107,22 @@ SubOpGen::initializeOp (void)
    // geodetic_densify <long double: decimal degrees> (v >= 0.0)
    pList().insertParam(new DgDoubleParam("geodetic_densify", 0.0, 0.0, 360.0));
 
+/* v8
    // clip_subset_type <WHOLE_EARTH | AIGEN | SHAPEFILE | GDAL | SEQNUMS | ADDRESSES |
    //                    COARSE_CELLS | INPUT_ADDRESS_TYPE >
+*/
+   // clip_subset_type <WHOLE_EARTH | AIGEN | SHAPEFILE | GDAL |
+   //                   ADDRESSES | COARSE_CELLS >
+   // KEVIN: | COARSE_CELL_FILES >
    choices.push_back(new std::string("WHOLE_EARTH"));
    choices.push_back(new std::string("AIGEN"));
    choices.push_back(new std::string("SHAPEFILE"));
 #ifdef USE_GDAL
    choices.push_back(new std::string("GDAL"));
 #endif
-   choices.push_back(new std::string("SEQNUMS"));
    choices.push_back(new std::string("ADDRESSES"));
-   choices.push_back(new std::string("POINTS"));
    choices.push_back(new std::string("COARSE_CELLS"));
-   choices.push_back(new std::string("INPUT_ADDRESS_TYPE"));
+   //choices.push_back(new std::string("COARSE_CELL_FILES"));
    pList().insertParam(new DgStringChoiceParam("clip_subset_type", "WHOLE_EARTH",
                &choices));
    dgg::util::release(choices);
@@ -160,8 +164,11 @@ SubOpGen::setupOp (void)
    useGDAL = false;
    clipAIGen = false;
    clipGDAL = false;
-   seqToPoly = false;
-   indexToPoly = false;
+   coarseCellClip = false;
+   addressClip = false;
+   //clipCellFiles = false;
+   //seqToPoly = false;
+   //indexToPoly = false;
    if (dummy == "WHOLE_EARTH")
       wholeEarth = true;
    else if (dummy == "AIGEN"){
@@ -177,6 +184,7 @@ SubOpGen::setupOp (void)
       useGDAL = true;
       clipGDAL  = true;
 #endif
+/*
    } else if (dummy == "SEQNUMS") {
       if (op.dggOp.isApSeq)
          ::report("clip_subset_type of SEQNUMS not supported for dggs_aperture_type of SEQUENCE",
@@ -185,13 +193,13 @@ SubOpGen::setupOp (void)
       seqToPoly = true;
    } else if (dummy == "POINTS") {
       pointClip = true;
-   } else if (dummy == "COARSE_CELLS") {
-      cellClip = true;
-   } else if (dummy == "INPUT_ADDRESS_TYPE") {
-      if (op.inOp.inAddType == dgg::addtype::SeqNum)
-         seqToPoly = true;
-      else
-         indexToPoly = true;
+*/
+   } else if (dummy == "ADDRESSES") {
+      addressClip = true;
+   } else if (dummy == "COARSE_CELLS") { // KEVIN: || dummy == "COARSE_CELL_FILES") {
+      coarseCellClip = true;
+      //if (dummy == "COARSE_CELL_FILES")
+      //clipCellFiles = true;
    } else
       ::report("Unrecognised value for 'clip_subset_type'", DgBase::Fatal);
 

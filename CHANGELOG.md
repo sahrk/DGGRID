@@ -14,15 +14,20 @@ indexing_children_output_file_name (default ndxChld)
 indexing_parent_output_type (default NONE)
 indexing_parent_output_file_name (default ndxPrt)
 
+Cleaned up the modes in clip_subset_type. Changed mode ?? to ADDRESSES. Eliminated mode SEQNUMS, which can be accomplished using ADDRESSES with input_address_type of SEQNUM.
+
+, IND..., and SEQNUMS were eliminated, though there functionality is avaliable through modes COARSE_CELLS and COARSE_CELL_FILES, or using operation TRANSFORM.
+
+POINT_FILES uses clip_region_files
+
 A clip_subset_type of SEQNUMS means that The cells to use for coarse clipping can be read-in from one or more text files containing
 SEQNUMS the cells are read in from one or more file(s) containing seqnums
 
-
+The address type of the specified coarse cells is as specified by...
 COARSE_CELLS the cells are listed on the line
 clip_cell_addresses.
-COARSE_CELLS_FILES the parameter clip_region_files contains the names of one or more text files containing clipping cell addresses (one address per line).
-The address type of the specified coarse cells is as specified by...
-
+NOT IN THIS VERSION:
+COARSE_CELL_FILES the parameter clip_region_files contains the names of one or more text files containing clipping cell addresses (one address per line).
 
 add clip_cell_res to docs?
 
