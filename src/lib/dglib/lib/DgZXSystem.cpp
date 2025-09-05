@@ -161,7 +161,7 @@ DgZXSystem::toStringCoord (const DgHierNdxIntCoord& addIn) const
       // get the integer digit
       char d = Z7_GET_INDEX_DIGIT(z, r);
       if (d == DgIVec3D::INVALID_DIGIT)
-         continue;
+         break;
 
       // convert to char
       d += '0';

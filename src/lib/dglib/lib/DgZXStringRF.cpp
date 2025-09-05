@@ -218,7 +218,7 @@ DgZXStringRF::invQuantify (const DgHierNdxStringCoord& addIn) const
       bstr = bstr.substr(1, 1);
    int bcNum = std::stoi(bstr);
     if (bcNum < 0 || bcNum > 11) {
-        report("DgZ7StringToQ2DIConverter::convertTypedAddress(): "
+        report("DgZXStringRF::invQuantify(): "
            "index has invalid base cell number", DgBase::Fatal);
      }
 
@@ -227,7 +227,7 @@ DgZXStringRF::invQuantify (const DgHierNdxStringCoord& addIn) const
     std::string z7str = addstr.substr(index);
     int res = (int) z7str.length();
     if (res != this->res()) {
-        report("DgZ7StringToQ2DIConverter::convertTypedAddress(): "
+        report("DgZXStringRF::invQuantify(): "
            "index does not match DGG resolution", DgBase::Fatal);
      }
 

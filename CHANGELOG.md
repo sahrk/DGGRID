@@ -14,6 +14,18 @@ indexing_children_output_file_name (default ndxChld)
 indexing_parent_output_type (default NONE)
 indexing_parent_output_file_name (default ndxPrt)
 
+A clip_subset_type of SEQNUMS means that The cells to use for coarse clipping can be read-in from one or more text files containing
+SEQNUMS the cells are read in from one or more file(s) containing seqnums
+
+
+COARSE_CELLS the cells are listed on the line
+clip_cell_addresses.
+COARSE_CELLS_FILES the parameter clip_region_files contains the names of one or more text files containing clipping cell addresses (one address per line).
+The address type of the specified coarse cells is as specified by...
+
+
+add clip_cell_res to docs?
+
 /* added in 8.41
 input_hier_ndx_form < INT64 | DIGIT_STRING >
 input_hier_ndx_system < ZORDER | Z3 | Z7 >
