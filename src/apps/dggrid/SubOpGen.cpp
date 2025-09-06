@@ -81,8 +81,9 @@ SubOpGen::SubOpGen (OpBasic& op, bool _activate)
      wholeEarth (false), regionClip (false),
      //seqToPoly(false), indexToPoly (false),
      pointClip (false),
-     coarseCellClip (false), addressClip (false), useGDAL (false),
+     coarseCellClip (false), addressGen (false), useGDAL (false),
      clipAIGen (false), clipGDAL(false), clipShape(false), clipCellRes (0),
+     addressFiles(false),
      nClipCellDensify (1), nudge (0.001), doPointInPoly (true),
      doPolyIntersect (false)
 {
@@ -111,16 +112,17 @@ SubOpGen::initializeOp (void)
    // clip_subset_type <WHOLE_EARTH | AIGEN | SHAPEFILE | GDAL | SEQNUMS | ADDRESSES |
    //                    COARSE_CELLS | INPUT_ADDRESS_TYPE >
 */
+   // KEVIN: currently no ADDRESSES or COARSE_CELL_FILES
    // clip_subset_type <WHOLE_EARTH | AIGEN | SHAPEFILE | GDAL |
-   //                   ADDRESSES | COARSE_CELLS >
-   // KEVIN: | COARSE_CELL_FILES >
+   //                   ADDRESSES | ADDRESS_FILES | COARSE_CELLS | COARSE_CELL_FILES >
    choices.push_back(new std::string("WHOLE_EARTH"));
    choices.push_back(new std::string("AIGEN"));
    choices.push_back(new std::string("SHAPEFILE"));
 #ifdef USE_GDAL
    choices.push_back(new std::string("GDAL"));
 #endif
-   choices.push_back(new std::string("ADDRESSES"));
+   //choices.push_back(new std::string("ADDRESSES"));
+   choices.push_back(new std::string("ADDRESS_FILES"));
    choices.push_back(new std::string("COARSE_CELLS"));
    //choices.push_back(new std::string("COARSE_CELL_FILES"));
    pList().insertParam(new DgStringChoiceParam("clip_subset_type", "WHOLE_EARTH",
@@ -165,7 +167,8 @@ SubOpGen::setupOp (void)
    clipAIGen = false;
    clipGDAL = false;
    coarseCellClip = false;
-   addressClip = false;
+   addressGen = false;
+   addressFiles = false;
    //clipCellFiles = false;
    //seqToPoly = false;
    //indexToPoly = false;
@@ -194,12 +197,16 @@ SubOpGen::setupOp (void)
    } else if (dummy == "POINTS") {
       pointClip = true;
 */
-   } else if (dummy == "ADDRESSES") {
-      addressClip = true;
-   } else if (dummy == "COARSE_CELLS") { // KEVIN: || dummy == "COARSE_CELL_FILES") {
+//KEVIN: currently no ADDRESSES (on line in metafile)
+   } else if (dummy == "ADDRESSES" || dummy == "ADDRESS_FILES") {
+      addressGen = true;
+      if (dummy == "ADDRESS_FILES")
+          addressFiles = true;
+//KEVIN: currently no COARSE_CELL_FILES
+   } else if (dummy == "COARSE_CELLS" || dummy == "COARSE_CELL_FILES") {
       coarseCellClip = true;
-      //if (dummy == "COARSE_CELL_FILES")
-      //clipCellFiles = true;
+      if (dummy == "COARSE_CELL_FILES")
+         addressFiles = true;
    } else
       ::report("Unrecognised value for 'clip_subset_type'", DgBase::Fatal);
 

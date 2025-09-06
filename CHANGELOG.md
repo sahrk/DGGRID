@@ -14,6 +14,7 @@ indexing_children_output_file_name (default ndxChld)
 indexing_parent_output_type (default NONE)
 indexing_parent_output_file_name (default ndxPrt)
 
+ADDRESS_FILES -> like ADDRESSES but in files.
 Cleaned up the modes in clip_subset_type. Changed mode ?? to ADDRESSES. Eliminated mode SEQNUMS, which can be accomplished using ADDRESSES with input_address_type of SEQNUM.
 
 , IND..., and SEQNUMS were eliminated, though there functionality is avaliable through modes COARSE_CELLS and COARSE_CELL_FILES, or using operation TRANSFORM.

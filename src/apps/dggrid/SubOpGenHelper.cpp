@@ -322,14 +322,18 @@ SubOpGen::executeOp (void)
    // this should be moved as much as possible to SubOpIn
    const DgRFBase* chdRF = nullptr;
    const DgRFBase* prtRF = nullptr;
-   if (coarseCellClip) {
-      if (clipCellRes < 0 || clipCellRes > op.dggOp.actualRes)
-         ::report("genGrid(): invalid clipCellRes", DgBase::Fatal);
-       
-      op.inOp.inSeqNum = op.dggOp.addressTypeToRF(op.inOp.inAddType, op.inOp.inHierNdxSysType, op.inOp.inHierNdxFormType, &op.inOp.pInRF, &chdRF, &prtRF, &op.inOp.hierNdxSystem, clipCellRes);
+   int clipRes = -1; // will use dggOp res
+    if (coarseCellClip) {
+        clipRes = clipCellRes;
+        if (clipRes < 0 || clipRes > op.dggOp.actualRes)
+            ::report("genGrid(): invalid clipCellRes", DgBase::Fatal);
+    }
+      op.inOp.inSeqNum = op.dggOp.addressTypeToRF(op.inOp.inAddType, op.inOp.inHierNdxSysType, op.inOp.inHierNdxFormType, &op.inOp.pInRF, &chdRF, &prtRF, &op.inOp.hierNdxSystem, clipRes);
+ /*
    } else {
        op.inOp.inSeqNum = op.dggOp.addressTypeToRF(op.inOp.inAddType, op.inOp.inHierNdxSysType, op.inOp.inHierNdxFormType, &op.inOp.pInRF, &chdRF, &prtRF, &op.inOp.hierNdxSystem);
    }
+  */
 
    if (!op.inOp.pInRF)
       ::report("genGrid(): invalid input RF", DgBase::Fatal);
@@ -343,61 +347,73 @@ SubOpGen::executeOp (void)
    delimStr[1] = '\0';
    const int maxLine = 1000;
    char buff[maxLine];
-   if (addressClip) {
+
+   // convert any incoming addresses to seqnums
+   // use a set to ensure each cell is printed only once
+   // KEVIN currently only works for addresses in files, so not for coarse cells
+   // KEVIN: coarse cell only on parameter line
+   std::set<unsigned long int> seqnums;
+   //if (addressGen || coarseCellClip) {
+   if (addressGen) {
+        
       op.outOp.nCellsAccepted = 0;
       op.outOp.nCellsTested = 0;
-
-      // convert any incoming addresses to seqnums
-      // use a set to ensure each cell is printed only once
-      std::set<unsigned long int> seqnums;
-
-      // read-in the sequence numbers
-      for (const auto &regionfile: regionFiles) {
-         DgInputStream fin(regionfile.c_str(), "", DgBase::Fatal);
-
-         while (1) {
-            op.outOp.nCellsTested++;
-
-            // get the next line
-            fin.getline(buff, maxLine);
-            if (fin.eof()) break;
-
-            unsigned long int sNum = 0;
-            if (op.inOp.inAddType == SeqNum) {
-              if (sscanf(buff, "%lu", &sNum) != 1)
-                 ::report("genGrid(): invalid SEQNUM " + std::string(buff), DgBase::Fatal);
-            } else { // must be some index
-               // parse the address
-               DgLocation* tmpLoc = NULL;
-               tmpLoc = new DgLocation(*op.inOp.pInRF);
-               tmpLoc->fromString(buff, op.inOp.inputDelimiter);
-               dgg.convert(tmpLoc);
-
-               sNum = static_cast<const DgIDGGBase&>(dgg).bndRF().seqNum(*tmpLoc);
-               delete tmpLoc;
+        
+      // read from files or the parameter line
+      if (addressFiles) {
+            
+         // read-in the sequence numbers from files
+         for (const auto &regionfile: regionFiles) {
+            DgInputStream fin(regionfile.c_str(), "", DgBase::Fatal);
+                
+            while (1) {
+               op.outOp.nCellsTested++;
+                    
+               // get the next line
+               fin.getline(buff, maxLine);
+               if (fin.eof()) break;
+                    
+               unsigned long int sNum = 0;
+               if (op.inOp.inAddType == SeqNum) {
+                  if (sscanf(buff, "%lu", &sNum) != 1) 
+                     ::report("genGrid(): invalid SEQNUM " + std::string(buff), DgBase::Fatal); 
+                  } else { // must be some index
+                     // parse the address
+                     DgLocation* tmpLoc = NULL;
+                     tmpLoc = new DgLocation(*op.inOp.pInRF);
+                     tmpLoc->fromString(buff, op.inOp.inputDelimiter);
+                     dgg.convert(tmpLoc);
+                            
+                     sNum = static_cast<const DgIDGGBase&>(dgg).bndRF().seqNum(*tmpLoc);
+                     delete tmpLoc;
+                  }
+                    
+                  seqnums.insert(sNum);
             }
-
-            seqnums.insert(sNum);
+                
+            fin.close();
          }
-
-         fin.close();
+      } else {
+         // handling the indices on the parameter line would go here
       }
-
-      // generate the cells
+   }
+        
+   // generate the cells
+   if (addressGen) {
       for (std::set<unsigned long int>::iterator i=seqnums.begin();i!=seqnums.end();i++) {
-
-        DgLocation* loc = static_cast<const DgIDGG&>(dgg).bndRF().locFromSeqNum(*i);
-        if (!dgg.bndRF().validLocation(*loc)){
-          dgcerr<<"genGrid(): SEQNUM " << (*i)<< " is not a valid location"<<std::endl;
-          ::report("genGrid(): Invalid SEQNUM found.", DgBase::Fatal);
-        }
-
-        op.outOp.nCellsAccepted++;
-        outputStatus();
-
-        op.outOp.outputCellAdd2D(*loc);
-
-        delete loc;
+                
+         DgLocation* loc = static_cast<const DgIDGG&>(dgg).bndRF().locFromSeqNum(*i);
+         if (!dgg.bndRF().validLocation(*loc)) {
+                    dgcerr<<"genGrid(): SEQNUM " << (*i)<< " is not a valid location"<<std::endl;
+                    ::report("genGrid(): Invalid SEQNUM found.", DgBase::Fatal);
+         }
+                
+         op.outOp.nCellsAccepted++;
+         outputStatus();
+                
+         op.outOp.outputCellAdd2D(*loc);
+                
+         delete loc;
       }
 /*
    } else if (pointClip) {
@@ -674,7 +690,7 @@ SubOpGen::executeOp (void)
 
    dgcout << "\n** grid generation complete **" << std::endl;
    outputStatus(true);
-   if (!wholeEarth && !addressClip)
+   if (!wholeEarth && !addressGen)
       dgcout << "acceptance rate is " <<
           100.0 * (long double) op.outOp.nCellsAccepted / (long double) op.outOp.nCellsTested <<
           "%" << std::endl;

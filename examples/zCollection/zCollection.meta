@@ -13,7 +13,8 @@ dggs_type ISEA3H
 dggs_res_spec 2
 
 # control grid generation
-clip_subset_type SEQNUMS
+clip_subset_type ADDRESSES
+input_address_type SEQNUM
 clip_region_files inputfiles/seqnums.txt
 longitude_wrap_mode UNWRAP_EAST
 unwrap_points TRUE
