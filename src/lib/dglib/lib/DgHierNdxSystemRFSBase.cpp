@@ -53,7 +53,7 @@ DgHierNdxSystemRFSBase::makeSystem (const DgIDGGSBase& dggsIn,
          if (!dggsIn.isPure() || dggsIn.aperture() != 7) {
             ::report("DgHexIDGGS::makeRF() Z7 only available for pure aperture 7 grids", DgBase::Fatal);
          }
-         std::cout << "USING HIERSYS ZX" << std::endl;
+         //std::cout << "USING HIERSYS ZX" << std::endl;
          //sys = DgHierNdxSystemRFSBase::makeSystem(dggsIn, sysType, extModeInt, false);
          sys = DgZXSystem::makeSystem(dggsIn, extModeInt, "ZX");
          break;

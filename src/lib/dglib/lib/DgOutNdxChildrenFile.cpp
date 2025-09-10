@@ -66,7 +66,7 @@ DgOutNdxChildrenFile::insert (const DgLocation& center, DgLocVector& vec)
       ndxChdOutRF_->convert(&vec);
        for (int i = 0; i < vec.size(); i++) {
            *this << " " << vec[i].asString(' ');
-           std::cout << "KEVIN: " << i << " " << vec[i].asString(' ') << std::endl;
+           // std::cout << "KEVIN: " << i << " " << vec[i].asString(' ') << std::endl;
        }
    }
 
