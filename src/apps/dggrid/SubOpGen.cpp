@@ -121,7 +121,7 @@ SubOpGen::initializeOp (void)
 #ifdef USE_GDAL
    choices.push_back(new std::string("GDAL"));
 #endif
-   /choices.push_back(new std::string("ADDRESSES"));
+   //choices.push_back(new std::string("ADDRESSES"));
    choices.push_back(new std::string("ADDRESS_FILES"));
    choices.push_back(new std::string("COARSE_CELLS"));
    //choices.push_back(new std::string("COARSE_CELL_FILES"));
