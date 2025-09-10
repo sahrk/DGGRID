@@ -121,10 +121,11 @@ SubOpGen::initializeOp (void)
 #ifdef USE_GDAL
    choices.push_back(new std::string("GDAL"));
 #endif
-   //choices.push_back(new std::string("ADDRESSES"));
+   /choices.push_back(new std::string("ADDRESSES"));
    choices.push_back(new std::string("ADDRESS_FILES"));
    choices.push_back(new std::string("COARSE_CELLS"));
    //choices.push_back(new std::string("COARSE_CELL_FILES"));
+   choices.push_back(new std::string("INPUT_ADDRESS_TYPE")); // deprecated
    pList().insertParam(new DgStringChoiceParam("clip_subset_type", "WHOLE_EARTH",
                &choices));
    dgg::util::release(choices);
@@ -162,6 +163,15 @@ SubOpGen::setupOp (void)
 
    std::string dummy;
    getParamValue(pList(), "clip_subset_type", dummy, false);
+
+   // handle deprecated value
+   if (dummy == "INPUT_ADDRESS_TYPE") {
+      dummy = "ADDRESS_FILES";
+      ::report(
+         "clip_subset_type value INPUT_ADDRESS_TYPE has been renamed ADDRESS_FILES "
+         "in version 9.0b. The name INPUT_ADDRESS_TYPE will go away in a future version.", DgBase::Warning);
+   }
+
    wholeEarth = false;
    useGDAL = false;
    clipAIGen = false;
