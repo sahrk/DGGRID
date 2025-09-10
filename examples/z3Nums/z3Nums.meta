@@ -12,13 +12,12 @@ dggrid_operation GENERATE_GRID
 dggs_type ISEA3H
 dggs_res_spec 9
 
-# control grid generation
-clip_subset_type INPUT_ADDRESS_TYPE
+# specify the addresses to generate
+clip_subset_type ADDRESS_FILES
 input_address_type HIERNDX
 input_hier_ndx_system Z3
 input_hier_ndx_form INT64
 z3_invalid_digit 3
-
 clip_region_files inputfiles/z3a.txt inputfiles/z3b.txt
 
 # specify output address information

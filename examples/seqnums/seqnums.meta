@@ -1,7 +1,7 @@
 ################################################################################
 #
 # seqnums.meta - example of a DGGRID metafile that generates kml cells for a 
-#     resolution 5 ISEA7H grid for sequence numbers specified in a text file.
+#     resolution 5 ISEA7H grid for sequence numbers specified in text files.
 #
 # Kevin Sahr, 01/10/24
 #
@@ -14,8 +14,8 @@ dggrid_operation GENERATE_GRID
 dggs_type ISEA7H
 dggs_res_spec 5
 
-# control grid generation
-clip_subset_type ADDRESSES
+# specify the cells to generate
+clip_subset_type ADDRESS_FILES
 input_address_type SEQNUM
 clip_region_files inputfiles/nums1.txt inputfiles/nums2.txt inputfiles/nums3.txt
 

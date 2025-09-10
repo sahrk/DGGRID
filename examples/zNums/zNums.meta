@@ -12,12 +12,11 @@ dggrid_operation GENERATE_GRID
 dggs_type ISEA3H
 dggs_res_spec 4
 
-# control grid generation
-clip_subset_type INPUT_ADDRESS_TYPE
+# specify the addresses to generate
+clip_subset_type ADDRESS_FILES
 input_address_type HIERNDX
 input_hier_ndx_system ZORDER
 input_hier_ndx_form INT64
-
 clip_region_files inputfiles/zorder1.txt inputfiles/zorder2.txt
 
 # specify output address information

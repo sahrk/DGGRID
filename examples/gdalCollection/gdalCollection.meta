@@ -1,7 +1,8 @@
 ################################################################################
 #
 # gdalCollection.meta - example of a DGGRID metafile that combines all data for
-#     each cell into a single file.
+#     each cell into a single file. The cells to generate are specified by
+#     SEQNUMs in a text file.
 #
 # Kevin Sahr, 02/08/22
 #
@@ -15,7 +16,7 @@ dggs_type ISEA3H
 dggs_res_spec 2
 
 # control grid generation
-clip_subset_type ADDRESSES
+clip_subset_type ADDRESS_FILES
 input_address_type SEQNUM
 clip_region_files inputfiles/seqnums.txt
 longitude_wrap_mode UNWRAP_EAST
