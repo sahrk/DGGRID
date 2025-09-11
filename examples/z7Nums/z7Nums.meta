@@ -14,14 +14,14 @@ dggs_res_spec 4
 # specify the addresses to generate
 clip_subset_type ADDRESS_FILES
 input_address_type HIERNDX
-input_hier_ndx_system ZX
+input_hier_ndx_system Z7
 input_hier_ndx_form INT64
 clip_region_files inputfiles/z7a.txt inputfiles/z7b.txt
 
 # specify output address information
 output_cell_label_type OUTPUT_ADDRESS_TYPE
 output_address_type HIERNDX
-output_hier_ndx_system ZX
+output_hier_ndx_system Z7
 output_hier_ndx_form DIGIT_STRING
 
 # specify the output

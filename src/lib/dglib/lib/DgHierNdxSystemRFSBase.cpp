@@ -26,7 +26,7 @@
 #include <dglib/DgHierNdxRF.h>
 #include <dglib/DgDiscRFSGrids.h>
 #include <dglib/DgHierNdx.h>
-#include <dglib/DgZXSystem.h>
+#include <dglib/DgZ7System.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 const DgResAdd<DgHierNdx>
@@ -49,13 +49,12 @@ DgHierNdxSystemRFSBase::makeSystem (const DgIDGGSBase& dggsIn,
    bool extModeInt = (form == Int64);
    switch (sysType) {
       case Z7:
-      case ZX:
          if (!dggsIn.isPure() || dggsIn.aperture() != 7) {
             ::report("DgHexIDGGS::makeRF() Z7 only available for pure aperture 7 grids", DgBase::Fatal);
          }
-         //std::cout << "USING HIERSYS ZX" << std::endl;
+         //std::cout << "USING HIERSYS Z7" << std::endl;
          //sys = DgHierNdxSystemRFSBase::makeSystem(dggsIn, sysType, extModeInt, false);
-         sys = DgZXSystem::makeSystem(dggsIn, extModeInt, "ZX");
+         sys = DgZ7System::makeSystem(dggsIn, extModeInt, "Z7");
          break;
    }
     

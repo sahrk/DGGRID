@@ -31,7 +31,7 @@
 #include <dglib/DgDiscTopoRF.h>
 #include <dglib/DgHexC1Grid2D.h>
 #include <dglib/DgHexC2Grid2D.h>
-#include <dglib/DgZXSystem.h>
+#include <dglib/DgZ7System.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 const DgHexIDGGS*

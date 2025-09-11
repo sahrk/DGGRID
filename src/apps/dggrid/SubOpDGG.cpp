@@ -579,7 +579,7 @@ SubOpDGG::setupOp (void)
    getParamValue(pList(), "hier_indexing_system_type", dummy, false);
    hierNdxSysType = dgg::addtype::stringToHierNdxSysType(dummy);
    if (hierNdxSysType != dgg::addtype::InvalidHierNdxSysType) {
-      if (hierNdxSysType == dgg::addtype::ZX) {
+      if (hierNdxSysType == dgg::addtype::Z7) {
          if (apertureType != "PURE" || aperture != 7)
             ::report("SubOpDGG::setupOp() hier_indexing_system_type ZX "
                      "requires a pure aperture 7 DGGS", DgBase::Fatal);

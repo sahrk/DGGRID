@@ -45,9 +45,9 @@ static const std::string addTypeStrings[] = { "GEO", "PLANE", "PROJTRI", "Q2DD",
     "NONE"
 };
 
-enum DgHierNdxSysType { ZX, ZOrder, Z3, Z7, InvalidHierNdxSysType };
+enum DgHierNdxSysType { Z7, ZOrder, Z3, InvalidHierNdxSysType };
 static const std::string hierNdxSysTypeStrings[] = {
-    "ZX", "ZORDER", "Z3", "Z7", "NONE"
+    "Z7", "ZORDER", "Z3", "NONE"
 };
 
 enum DgHierNdxFormType { Int64, DigitString, InvalidHierNdxFormType };
