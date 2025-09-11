@@ -46,7 +46,6 @@ const char*
 DgZXStringRF::str2add (DgHierNdxStringCoord* add, const char* str,
                                    char delimiter) const
 {
-    //if (!add) add = new DgZ7StringCoord();
     if (!add) return str;
 
     char delimStr[2];
@@ -208,8 +207,6 @@ DgZXStringRF::quantify (const DgQ2DICoord& addIn) const
 DgQ2DICoord 
 DgZXStringRF::invQuantify (const DgHierNdxStringCoord& addIn) const
 {
-   //printf("DgZ7StringToQ2DIConverter::convertTypedAddress\n");
-
    std::string addstr = addIn.valString();
 
    // first get the base cell number

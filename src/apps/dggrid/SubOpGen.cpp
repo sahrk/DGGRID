@@ -67,8 +67,6 @@
 #include <dglib/DgZOrderStringRF.h>
 #include <dglib/DgZ3RF.h>
 #include <dglib/DgZ3StringRF.h>
-#include <dglib/DgZ7RF.h>
-#include <dglib/DgZ7StringRF.h>
 */
 #include "DgHexSF.h"
 

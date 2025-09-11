@@ -102,8 +102,6 @@ add_library(dglib
    lib/DgUtil.cpp
    lib/DgZ3RF.cpp
    lib/DgZ3StringRF.cpp
-   lib/DgZ7RF.cpp
-   lib/DgZ7StringRF.cpp
    lib/DgZOrderRF.cpp
    lib/DgZOrderStringRF.cpp
    lib/DgZXRF.cpp
@@ -241,8 +239,6 @@ add_library(dglib
    include/dglib/DgUtil.h
    include/dglib/DgZ3RF.h
    include/dglib/DgZ3StringRF.h
-   include/dglib/DgZ7RF.h
-   include/dglib/DgZ7StringRF.h
    include/dglib/DgZOrderRF.h
    include/dglib/DgZOrderStringRF.h
    include/dglib/DgZXRF.h

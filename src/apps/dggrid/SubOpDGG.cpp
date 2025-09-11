@@ -34,8 +34,6 @@
 #include <dglib/DgZOrderStringRF.h>
 #include <dglib/DgZ3RF.h>
 #include <dglib/DgZ3StringRF.h>
-#include <dglib/DgZ7RF.h>
-#include <dglib/DgZ7StringRF.h>
 #include <dglib/DgHierNdxSystemRFSBase.h>
 
 #include "OpBasic.h"
@@ -178,34 +176,6 @@ SubOpDGG::addressTypeToRF (DgAddressType type, DgHierNdxSysType hierNdxSysType, 
                if (prtRF) *prtRF = prtDgg->z3StrRF();
             } else
                ::report("address_type of Z3 DIGIT_STRING only supported for aperture 3 hexagon grids",
-                        DgBase::Fatal);
-            break;
-   
-         case Z7V8:
-            if (isApSeq)
-               ::report("address_type of Z7 INT64 not supported for dggs_aperture_type of SEQUENCE",
-                        DgBase::Fatal);
-   
-            if (dgg->z7RF()) {
-               if (rf) *rf = dgg->z7RF();
-            if (chdRF) *chdRF = chdDgg->z7RF();
-            if (prtRF) *prtRF = prtDgg->z7RF();
-            } else
-               ::report("address_type of Z7 INT64 only supported for aperture 7 hexagon grids",
-                        DgBase::Fatal);
-            break;
-   
-         case Z7String:
-            if (isApSeq)
-               ::report("address_type of Z7 DIGIT_STRING not supported for dggs_aperture_type of SEQUENCE",
-                        DgBase::Fatal);
-   
-            if (dgg->z7StrRF()) {
-               if (rf) *rf = dgg->z7StrRF();
-               if (chdRF) *chdRF = chdDgg->z7StrRF();
-               if (prtRF) *prtRF = prtDgg->z7StrRF();
-            } else
-               ::report("address_type of Z7 DIGIT_STRING only supported for aperture 7 hexagon grids",
                         DgBase::Fatal);
             break;
    

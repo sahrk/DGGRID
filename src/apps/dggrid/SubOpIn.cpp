@@ -209,10 +209,7 @@ SubOpIn::setupOp (void)
                case dgg::addtype::DgHierNdxSysType::Z3:
                    inAddType = dgg::addtype::Z3V8;
                    break;
-               case dgg::addtype::DgHierNdxSysType::Z7:
-                   inAddType = dgg::addtype::DgAddressType::Z7V8;
-                   break;
-               case dgg::addtype::DgHierNdxSysType::ZOrder:
+                case dgg::addtype::DgHierNdxSysType::ZOrder:
                    inAddType = dgg::addtype::DgAddressType::ZOrderV8;
                    break;
                default: ;
@@ -221,9 +218,6 @@ SubOpIn::setupOp (void)
            switch (inHierNdxSysType) {
                case dgg::addtype::DgHierNdxSysType::Z3:
                    inAddType = dgg::addtype::Z3String;
-                   break;
-               case dgg::addtype::DgHierNdxSysType::Z7:
-                   inAddType = dgg::addtype::DgAddressType::Z7String;
                    break;
                case dgg::addtype::DgHierNdxSysType::ZOrder:
                    inAddType = dgg::addtype::ZOrderString;

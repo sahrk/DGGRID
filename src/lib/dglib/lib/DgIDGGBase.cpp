@@ -46,8 +46,6 @@
 #include <dglib/DgZOrderStringRF.h>
 #include <dglib/DgZ3RF.h>
 #include <dglib/DgZ3StringRF.h>
-#include <dglib/DgZ7RF.h>
-#include <dglib/DgZ7StringRF.h>
 #include <dglib/DgZXSystem.h>
 #include <dglib/DgHierNdxSystemRFSBase.h>
 
@@ -129,7 +127,7 @@ DgIDGGBase::DgIDGGBase (const DgIDGGSBase* dggs, const DgGeoSphRF& geoRF,
      dggs_ (dggs), sphIcosa_(0), aperture_(aperture), res_(res),
      precision_(precision), grid2D_(0), grid2DS_(0), ccFrame_(0),
      projTriRF_(0), vertexRF_(0), q2ddRF_(0), bndRF_(0), planeRF_(0),
-     zorderRF_ (0), zorderStrRF_ (0), z3RF_ (0), z3StrRF_ (0), z7RF_ (0), z7StrRF_ (0)
+     zorderRF_ (0), zorderStrRF_ (0), z3RF_ (0), z3StrRF_ (0)
 {
    //initialize();
 
@@ -176,17 +174,7 @@ DgIDGGBase::createConverters (void)
    planeRF_ = DgPlaneTriRF::makeRF(network(), name() + std::string("plane"));
 
    if (gridTopo() == Hexagon) {
-       if (dggs()->aperture() == 7) {
-           /*
-           const DgHexIDGGS* hexDggs = dynamic_cast<const DgHexIDGGS*>(dggs());
-           if (!hexDggs) {
-              report("hexagon gridTopo does not match IDGGS", DgBase::Fatal);
-           }
-           z7RF_ = DgZ7RF::makeRF(network(), *hexDggs, name() + std::string("z7"), res());
-            */
-           z7RF_ = DgZ7RF::makeRF(network(), name() + std::string("z7"), res());
-           z7StrRF_ = DgZ7StringRF::makeRF(network(), name() + std::string("z7Str"), res());
-       } else if (aperture() == 4 || aperture() == 3) {
+       if (aperture() == 4 || aperture() == 3) {
          zorderRF_ = DgZOrderRF::makeRF(network(), name() + std::string("zorder"),
                             res(), aperture());
          zorderStrRF_ = DgZOrderStringRF::makeRF(network(), name() + std::string("zorderStr"),
@@ -243,19 +231,6 @@ DgIDGGBase::createConverters (void)
       if (z3RF())
          toZ3 = new Dg2WayZ3ToStringConverter(*z3StrRF(), *z3RF());
    }
-
-    Dg2WayConverter* toZ7Str = NULL;
-    Dg2WayConverter* toZ7 = NULL;
-    if (z7StrRF()) {
-       toZ7Str = new Dg2WayZ7StringConverter(*this, *z7StrRF());
-
-       if (z7RF())
-          toZ7 = new Dg2WayZ7ToStringConverter(*z7StrRF(), *z7RF());
-    }
-    
-    // suppress unused variable error
-    (void)toZ7Str;
-    (void)toZ7;
 
    // create the series converters that will replace the default DgDiscRF
    // converters
