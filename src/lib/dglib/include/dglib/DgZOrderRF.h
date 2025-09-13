@@ -22,164 +22,34 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef DGZORDERRF_H
-#define DGZORDERRF_H
+#ifndef DGZOrderRF_H
+#define DGZOrderRF_H
 
-#include <climits>
-#include <iostream>
+#include <dglib/DgHierNdxIntRF.h>
 
-#include <dglib/DgConverter.h>
-#include <dglib/Dg2WayConverter.h>
-
-class DgZOrderCoord;
-class DgZOrderStringCoord;
-class DgIDGGBase;
-class DgZOrderCoord;
+class DgZOrderSystem;
 
 ////////////////////////////////////////////////////////////////////////////////
-class DgZOrderStringtoZOrderConverter :
-        public DgConverter<DgZOrderStringCoord, long long int, DgZOrderCoord, long long int>
-{
-   public:
-
-      DgZOrderStringtoZOrderConverter (const DgRF<DgZOrderStringCoord, long long int>& from,
-                                   const DgRF<DgZOrderCoord, long long int>& to);
-
-      virtual DgZOrderCoord convertTypedAddress
-                                (const DgZOrderStringCoord& addIn) const;
-
-   private:
-
-      int res_;
-};
-
-////////////////////////////////////////////////////////////////////////////////
-class DgZOrderToZOrderStringConverter :
-        public DgConverter<DgZOrderCoord, long long int, DgZOrderStringCoord, long long int>
-{
-   public:
-
-      DgZOrderToZOrderStringConverter (const DgRF<DgZOrderCoord, long long int>& from,
-                                   const DgRF<DgZOrderStringCoord, long long int>& to);
-
-      virtual DgZOrderStringCoord convertTypedAddress
-                                (const DgZOrderCoord& addIn) const;
-
-   private:
-
-      int res_;
-};
-
-////////////////////////////////////////////////////////////////////////////////
-class Dg2WayZOrderToStringConverter : public Dg2WayConverter {
+class DgZOrderRF : public DgHierNdxIntRF {
 
    public:
 
-      Dg2WayZOrderToStringConverter (
-               const DgRF<DgZOrderStringCoord, long long int>& fromFrame,
-               const DgRF<DgZOrderCoord, long long int>& toFrame)
-         : Dg2WayConverter (*(new DgZOrderStringtoZOrderConverter(fromFrame, toFrame)),
-                            *(new DgZOrderToZOrderStringConverter(toFrame, fromFrame)))
-                                             {}
-};
+      static const DgHierNdxIntCoord undefZOrderIntCoord;
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//   Coordinate consisting of a string containing quad number, (aperture 3 hex
-//        level indicator), and digit-interleaved radix string
-//
-class DgZOrderCoord  {
+      // abstract method from above
+      virtual const char* str2add (DgHierNdxIntCoord* c, const char* str,
+                   char delimiter) const;
 
-   public:
-
-      static const DgZOrderCoord undefDgZOrderCoord;
-
-      DgZOrderCoord (void) : value_ (0) { }
-
-      DgZOrderCoord (uint64_t valIn) : value_ (valIn) { }
-
-      DgZOrderCoord (const DgZOrderCoord& coord)
-              { value_ = coord.value(); }
-
-      void setValue (uint64_t value) { value_ = value; }
-
-      uint64_t value (void) const { return value_; }
-
-      operator std::string (void) const { return valString(); }
-
-      std::string valString (void) const;
-
-      bool operator== (const DgZOrderCoord& c) const
-          { return value() == c.value(); }
-
-      bool operator!= (const DgZOrderCoord& c) const
-          { return !(*this == c); }
-
-      DgZOrderCoord& operator= (const DgZOrderCoord& add)
-          {
-             if (add != *this) setValue(add.value());
-
-             return *this;
-          }
-
-   private:
-
-      uint64_t value_;
-};
-
-////////////////////////////////////////////////////////////////////////////////
-inline std::ostream&
-operator<< (std::ostream& stream, const DgZOrderCoord& coord)
-{ return stream << std::string(coord); }
-
-////////////////////////////////////////////////////////////////////////////////
-class DgZOrderRF : public DgRF<DgZOrderCoord, long long int> {
-
-   public:
-
-      static DgZOrderRF* makeRF (DgRFNetwork& networkIn, const std::string& nameIn,
-                                  int resIn, int apertureIn)
-         { return new DgZOrderRF (networkIn, nameIn, resIn, apertureIn); }
-
-      int res      (void) const { return res_; }
-      int aperture (void) const { return aperture_; }
-
-      virtual long long int dist (const DgZOrderCoord& add1,
-                        const DgZOrderCoord& add2) const
-                       { return 0; }
-
-      virtual std::string add2str (const DgZOrderCoord& add) const
-                       { return std::string(add); }
-
-      virtual std::string add2str (const DgZOrderCoord& add, char delimiter)
-                                                                         const
-                       { return std::string(add); }
-
-      virtual const char* str2add (DgZOrderCoord* add, const char* str,
-                                   char delimiter) const;
-
-      virtual std::string dist2str (const long long int& dist) const
-                       { return dgg::util::to_string(dist); }
-
-      virtual long double dist2dbl (const long long int& dist) const
-                       { return dist; }
-
-      virtual unsigned long long int dist2int (const long long int& dist) const
-                       { return dist; }
-
-      virtual const DgZOrderCoord& undefAddress (void) const
-                            { return DgZOrderCoord::undefDgZOrderCoord; }
+      // these have dummy definitions from the superclass
+      virtual DgHierNdxIntCoord quantify (const DgQ2DICoord& point) const;
+      virtual DgQ2DICoord invQuantify (const DgHierNdxIntCoord& add) const;
 
    protected:
 
-      DgZOrderRF (DgRFNetwork& networkIn, const std::string& nameIn,
-                    int resIn, int apertureIn)
-         : DgRF<DgZOrderCoord, long long int>(networkIn, nameIn),
-           res_ (resIn), aperture_ (apertureIn) { }
+    DgZOrderRF (const DgHierNdxSystemRFBase& sysIn, int resIn, const std::string& nameIn);
 
-      int res_;
-      int aperture_;
-
+    friend DgZOrderSystem;
+    template<class TINT, class TSTR> friend class DgHierNdxSystemRF;
 };
 
 ////////////////////////////////////////////////////////////////////////////////

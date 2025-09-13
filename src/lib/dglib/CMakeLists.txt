@@ -102,11 +102,13 @@ add_library(dglib
    lib/DgUtil.cpp
    lib/DgZ3RF.cpp
    lib/DgZ3StringRF.cpp
-   lib/DgZOrderRF.cpp
-   lib/DgZOrderStringRF.cpp
+   lib/DgZ3System.cpp
    lib/DgZ7RF.cpp
    lib/DgZ7StringRF.cpp
    lib/DgZ7System.cpp
+   lib/DgZOrderRF.cpp
+   lib/DgZOrderStringRF.cpp
+   lib/DgZOrderSystem.cpp
    include/dglib/Dg2WayConverter.h
    include/dglib/DgAddress.h
    include/dglib/DgAddressBase.h
@@ -239,11 +241,13 @@ add_library(dglib
    include/dglib/DgUtil.h
    include/dglib/DgZ3RF.h
    include/dglib/DgZ3StringRF.h
-   include/dglib/DgZOrderRF.h
-   include/dglib/DgZOrderStringRF.h
+   include/dglib/DgZ3System.h
    include/dglib/DgZ7RF.h
    include/dglib/DgZ7StringRF.h
    include/dglib/DgZ7System.h
+   include/dglib/DgZOrderRF.h
+   include/dglib/DgZOrderStringRF.h
+   include/dglib/DgZOrderSystem.h
 )
 
 if(GDAL_FOUND)

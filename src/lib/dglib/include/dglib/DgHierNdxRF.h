@@ -97,6 +97,8 @@ template <class C> class DgHierNdxRF :
 
       int res      (void) const { return sys_.res(); }
       int aperture (void) const { return sys_.aperture(); }
+      int effRes   (void) const { return effRes_; }
+      int effRadix (void) const { return effRadix_; }
 
       // indexes don't typically use delimiters
       virtual std::string add2str (const C& add, char delimiter) const
@@ -140,6 +142,8 @@ template <class C> class DgHierNdxRF :
          }
 */
       const DgHierNdxSystemRFBase& sys_;
+      int effRes_;
+      int effRadix_;
 //      bool ownSysMemory;
 };
 

@@ -22,171 +22,34 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef DGZORDERSTRINGRF_H
-#define DGZORDERSTRINGRF_H
+#ifndef DGZOrderSTRINGRF_H
+#define DGZOrderSTRINGRF_H
 
 #include <climits>
 #include <iostream>
 
-#include <dglib/DgConverter.h>
-#include <dglib/Dg2WayConverter.h>
+#include <dglib/DgHierNdxStringRF.h>
 
-class DgQ2DICoord;
-class DgIDGGBase;
-class DgZOrderCoord;
-class DgZOrderStringCoord;
+class DgZOrderSystem;
 
 ////////////////////////////////////////////////////////////////////////////////
-class DgQ2DItoZOrderStringConverter :
-        public DgConverter<DgQ2DICoord, long long int, DgZOrderStringCoord, long long int>
-{
+class DgZOrderStringRF : public DgHierNdxStringRF {
+
    public:
 
-      DgQ2DItoZOrderStringConverter (const DgRF<DgQ2DICoord, long long int>& from,
-                                   const DgRF<DgZOrderStringCoord, long long int>& to);
-
-      const DgIDGGBase& IDGG (void) const { return *pIDGG_; }
-
-      virtual DgZOrderStringCoord convertTypedAddress
-                                (const DgQ2DICoord& addIn) const;
+      // abstract method from above
+      // these have dummy definitions from the superclass
+      virtual DgHierNdxStringCoord quantify (const DgQ2DICoord& point) const;
+      virtual DgQ2DICoord invQuantify (const DgHierNdxStringCoord& add) const;
 
    protected:
 
-      const DgIDGGBase* pIDGG_;
-      int effRes_;
-      int effRadix_;
+    DgZOrderStringRF (const DgHierNdxSystemRFBase& sysIn, int resIn, const std::string& nameIn);
+    
+    unsigned long long int unitScaleClassIres_;
 
-};
-
-////////////////////////////////////////////////////////////////////////////////
-class DgZOrderStringToQ2DIConverter :
-        public DgConverter<DgZOrderStringCoord, long long int, DgQ2DICoord, long long int>
-{
-   public:
-
-      DgZOrderStringToQ2DIConverter (const DgRF<DgZOrderStringCoord, long long int>& from,
-                                   const DgRF<DgQ2DICoord, long long int>& to);
-
-      const DgIDGGBase& IDGG (void) const { return *pIDGG_; }
-
-      virtual DgQ2DICoord convertTypedAddress
-                                (const DgZOrderStringCoord& addIn) const;
-
-   protected:
-
-      const DgIDGGBase* pIDGG_;
-      int effRes_;
-      int effRadix_;
-
-};
-
-////////////////////////////////////////////////////////////////////////////////
-class Dg2WayZOrderStringConverter : public Dg2WayConverter {
-
-   public:
-
-      Dg2WayZOrderStringConverter (const DgRF<DgQ2DICoord, long long int>& fromFrame,
-              const DgRF<DgZOrderStringCoord, long long int>& toFrame)
-         : Dg2WayConverter (*(new DgQ2DItoZOrderStringConverter(fromFrame, toFrame)),
-              *(new DgZOrderStringToQ2DIConverter(toFrame, fromFrame))) {}
-};
-
-////////////////////////////////////////////////////////////////////////////////
-//
-//   Coordinate consisting of a string containing quad number, (aperture 3 hex
-//        level indicator), and digit-interleaved radix string
-//
-class DgZOrderStringCoord  {
-
-   public:
-
-      static const DgZOrderStringCoord undefDgZOrderStringCoord;
-
-      DgZOrderStringCoord (void) { }
-
-      DgZOrderStringCoord (const std::string& valStrIn)
-         : valString_ (valStrIn) { }
-
-      DgZOrderStringCoord (const DgZOrderStringCoord& coord)
-              { valString_ = coord.valString(); }
-
-      void setValString (const std::string strIn) { valString_ = strIn; }
-
-      const std::string& valString (void) const { return valString_; }
-
-      operator std::string (void) const { return valString(); }
-
-      bool operator== (const DgZOrderStringCoord& c) const
-          { return valString() == c.valString(); }
-
-      bool operator!= (const DgZOrderStringCoord& c) const
-          { return !(*this == c); }
-
-      DgZOrderStringCoord& operator= (const DgZOrderStringCoord& add)
-          {
-             if (add != *this) setValString(add.valString());
-
-             return *this;
-          }
-
-   private:
-
-      std::string valString_;
-
-};
-
-////////////////////////////////////////////////////////////////////////////////
-inline std::ostream&
-operator<< (std::ostream& stream, const DgZOrderStringCoord& coord)
-{ return stream << std::string(coord); }
-
-////////////////////////////////////////////////////////////////////////////////
-class DgZOrderStringRF : public DgRF<DgZOrderStringCoord, long long int> {
-
-   public:
-
-      static DgZOrderStringRF* makeRF (DgRFNetwork& networkIn,
-               const std::string& nameIn, int resIn, int apertureIn)
-         { return new DgZOrderStringRF (networkIn, nameIn, resIn, apertureIn); }
-
-      int res      (void) const { return res_; }
-      int aperture (void) const { return aperture_; }
-
-      virtual long long int dist (const DgZOrderStringCoord& add1,
-                        const DgZOrderStringCoord& add2) const
-                       { return 0; }
-
-      virtual std::string add2str (const DgZOrderStringCoord& add) const
-                       { return std::string(add); }
-
-      virtual std::string add2str (const DgZOrderStringCoord& add, char delimiter)
-                                                                         const
-                       { return std::string(add); }
-
-      virtual const char* str2add (DgZOrderStringCoord* add, const char* str,
-                                   char delimiter) const;
-
-      virtual std::string dist2str (const long long int& dist) const
-                       { return dgg::util::to_string(dist); }
-
-      virtual long double dist2dbl (const long long int& dist) const
-                       { return dist; }
-
-      virtual unsigned long long int dist2int (const long long int& dist) const
-                       { return dist; }
-
-      virtual const DgZOrderStringCoord& undefAddress (void) const
-                       { return DgZOrderStringCoord::undefDgZOrderStringCoord; }
-
-   protected:
-
-      DgZOrderStringRF (DgRFNetwork& networkIn, const std::string& nameIn,
-                         int resIn, int apertureIn)
-         : DgRF<DgZOrderStringCoord, long long int>(networkIn, nameIn),
-           res_ (resIn), aperture_ (apertureIn) { }
-
-      int res_;
-      int aperture_;
+    friend DgZOrderSystem;
+    template<class TINT, class TSTR> friend class DgHierNdxSystemRF;
 
 };
 

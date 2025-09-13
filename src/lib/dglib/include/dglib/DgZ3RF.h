@@ -25,162 +25,31 @@
 #ifndef DGZ3RF_H
 #define DGZ3RF_H
 
-#include <climits>
-#include <iostream>
+#include <dglib/DgHierNdxIntRF.h>
 
-#include <dglib/DgConverter.h>
-#include <dglib/Dg2WayConverter.h>
-
-class DgZ3Coord;
-class DgZ3StringCoord;
-class DgIDGGBase;
-class DgZ3Coord;
+class DgZ3System;
 
 ////////////////////////////////////////////////////////////////////////////////
-class DgZ3StringtoZ3Converter :
-        public DgConverter<DgZ3StringCoord, long long int, DgZ3Coord, long long int>
-{
-   public:
-
-      DgZ3StringtoZ3Converter (const DgRF<DgZ3StringCoord, long long int>& from,
-                                   const DgRF<DgZ3Coord, long long int>& to);
-
-      virtual DgZ3Coord convertTypedAddress
-                                (const DgZ3StringCoord& addIn) const;
-
-   private:
-
-      int res_;
-};
-
-////////////////////////////////////////////////////////////////////////////////
-class DgZ3ToZ3StringConverter :
-        public DgConverter<DgZ3Coord, long long int, DgZ3StringCoord, long long int>
-{
-   public:
-
-      DgZ3ToZ3StringConverter (const DgRF<DgZ3Coord, long long int>& from,
-                                   const DgRF<DgZ3StringCoord, long long int>& to);
-
-      virtual DgZ3StringCoord convertTypedAddress
-                                (const DgZ3Coord& addIn) const;
-
-   private:
-
-      int res_;
-};
-
-////////////////////////////////////////////////////////////////////////////////
-class Dg2WayZ3ToStringConverter : public Dg2WayConverter {
+class DgZ3RF : public DgHierNdxIntRF {
 
    public:
 
-      Dg2WayZ3ToStringConverter (
-               const DgRF<DgZ3StringCoord, long long int>& fromFrame,
-               const DgRF<DgZ3Coord, long long int>& toFrame)
-         : Dg2WayConverter (*(new DgZ3StringtoZ3Converter(fromFrame, toFrame)),
-                            *(new DgZ3ToZ3StringConverter(toFrame, fromFrame)))
-                                             {}
-};
+      static const DgHierNdxIntCoord undefZ3IntCoord;
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//   Coordinate consisting of a string containing quad number, (aperture 3 hex
-//        level indicator), and digit-interleaved radix string
-//
-class DgZ3Coord  {
+      // abstract method from above
+      virtual const char* str2add (DgHierNdxIntCoord* c, const char* str,
+                   char delimiter) const;
 
-   public:
-
-      static const DgZ3Coord undefDgZ3Coord;
-
-      DgZ3Coord (void) : value_ (0) { }
-
-      DgZ3Coord (uint64_t valIn) : value_ (valIn) { }
-
-      DgZ3Coord (const DgZ3Coord& coord)
-              { value_ = coord.value(); }
-
-      void setValue (uint64_t value) { value_ = value; }
-
-      uint64_t value (void) const { return value_; }
-
-      operator std::string (void) const { return valString(); }
-
-      std::string valString (void) const;
-
-      bool operator== (const DgZ3Coord& c) const
-          { return value() == c.value(); }
-
-      bool operator!= (const DgZ3Coord& c) const
-          { return !(*this == c); }
-
-      DgZ3Coord& operator= (const DgZ3Coord& add)
-          {
-             if (add != *this) setValue(add.value());
-
-             return *this;
-          }
-
-   private:
-
-      uint64_t value_;
-};
-
-////////////////////////////////////////////////////////////////////////////////
-inline std::ostream&
-operator<< (std::ostream& stream, const DgZ3Coord& coord)
-{ return stream << std::string(coord); }
-
-////////////////////////////////////////////////////////////////////////////////
-class DgZ3RF : public DgRF<DgZ3Coord, long long int> {
-
-   public:
-
-      static int defaultInvalidDigit;
-
-      static DgZ3RF* makeRF (DgRFNetwork& networkIn, const std::string& nameIn,
-                       int resIn, int invalidDigitIn = defaultInvalidDigit)
-         { return new DgZ3RF (networkIn, nameIn, resIn, invalidDigitIn); }
-
-      int res          (void) const { return res_; }
-      int aperture     (void) const { return 3; }
-      int invalidDigit (void) const { return invalidDigit_; }
-
-      virtual long long int dist (const DgZ3Coord& add1,
-                        const DgZ3Coord& add2) const
-                       { return 0; }
-
-      virtual std::string add2str (const DgZ3Coord& add) const
-                       { return std::string(add); }
-
-      virtual std::string add2str (const DgZ3Coord& add, char delimiter)
-                                                                         const
-                       { return std::string(add); }
-
-      virtual const char* str2add (DgZ3Coord* add, const char* str,
-                                   char delimiter) const;
-
-      virtual std::string dist2str (const long long int& dist) const
-                       { return dgg::util::to_string(dist); }
-
-      virtual long double dist2dbl (const long long int& dist) const
-                       { return dist; }
-
-      virtual unsigned long long int dist2int (const long long int& dist) const
-                       { return dist; }
-
-      virtual const DgZ3Coord& undefAddress (void) const
-                            { return DgZ3Coord::undefDgZ3Coord; }
+      // these have dummy definitions from the superclass
+      virtual DgHierNdxIntCoord quantify (const DgQ2DICoord& point) const;
+      virtual DgQ2DICoord invQuantify (const DgHierNdxIntCoord& add) const;
 
    protected:
 
-      DgZ3RF (DgRFNetwork& networkIn, const std::string& nameIn,
-              int resIn, int invalidDigitIn = 3);
+    DgZ3RF (const DgHierNdxSystemRFBase& sysIn, int resIn, const std::string& nameIn);
 
-      int res_;
-      int invalidDigit_;
-
+    friend DgZ3System;
+    template<class TINT, class TSTR> friend class DgHierNdxSystemRF;
 };
 
 ////////////////////////////////////////////////////////////////////////////////

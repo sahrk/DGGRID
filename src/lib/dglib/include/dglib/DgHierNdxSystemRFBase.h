@@ -120,7 +120,7 @@ class DgHierNdxSystemRFBase
       int res      (void) const { return res_; }
       int aperture (void) const { return aperture_; }
       
-      const DgIDGGBase*            dgg   (void) const { return curRes_.dgg_; }
+      const DgIDGGBase*        dgg   (void) const { return curRes_.dgg_; }
       const DgHierNdxIntRF*    intRF (void) const { return curRes_.intRF_; }
       const DgHierNdxStringRF* strRF (void) const { return curRes_.strRF_; }
 

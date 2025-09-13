@@ -78,8 +78,9 @@ DgHierNdxSystemRFBase::DgHierNdxSystemRFBase (
    : DgDiscRF<DgHierNdx, DgQ2DICoord, long long int>(hierNdxRFSIn.dggs().network(),
               hierNdxRFSIn.dggs()[resIn], nameIn),
      hierNdxRFS_ (hierNdxRFSIn), dggs_ (hierNdxRFSIn.dggs()), res_ (resIn),
-     aperture_ (hierNdxRFSIn.dggs().aperture()), pRes_ {nullptr, nullptr, nullptr},
-     curRes_ {nullptr, nullptr, nullptr}, chRes_ {nullptr, nullptr, nullptr}
+     aperture_ (hierNdxRFSIn.dggs().aperture()),
+     pRes_ {nullptr, nullptr, nullptr}, curRes_ {nullptr, nullptr, nullptr}, 
+     chRes_ {nullptr, nullptr, nullptr}
 {
    // sub-classes need to assign appropriate RF's to curRes_
    // RFS has to call initialize to set up the parent and child systems 

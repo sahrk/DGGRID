@@ -34,6 +34,7 @@
 #include <dglib/DgZOrderStringRF.h>
 #include <dglib/DgZ3RF.h>
 #include <dglib/DgZ3StringRF.h>
+#include <dglib/DgZ3System.h>
 #include <dglib/DgHierNdxSystemRFSBase.h>
 
 #include "OpBasic.h"
@@ -145,68 +146,6 @@ SubOpDGG::addressTypeToRF (DgAddressType type, DgHierNdxSysType hierNdxSysType, 
             if (prtRF) *prtRF = &prtDgg->vertexRF();
             break;
    
-         case Z3V8:
-            if (isApSeq)
-               ::report("address_type of Z3 INT64 not supported for dggs_aperture_type of SEQUENCE",
-                        DgBase::Fatal);
-   
-            if (dgg->z3RF()) {
-               if (rf) *rf = dgg->z3RF();
-               if (chdRF) *chdRF = chdDgg->z3RF();
-               if (prtRF) *prtRF = prtDgg->z3RF();
-   
-               if (z3invalidDigit != 3) {
-                  ::report("default padding digit for Z3 INT64 indexes have switched "
-                           "from 0 to 3 starting with DGGRID version 9.0b.\n"
-                           "Set parameter z3_invalid_digit if you want a different digit used.", DgBase::Warning);
-               }
-            } else
-               ::report("address_type of Z3 INT64 only supported for aperture 3 hexagon grids",
-                        DgBase::Fatal);
-            break;
-   
-         case Z3String:
-            if (isApSeq)
-               ::report("address_type of Z3 DIGIT_STRING not supported for dggs_aperture_type of SEQUENCE",
-                        DgBase::Fatal);
-   
-            if (dgg->z3StrRF()) {
-               if (rf) *rf = dgg->z3StrRF();
-               if (chdRF) *chdRF = chdDgg->z3StrRF();
-               if (prtRF) *prtRF = prtDgg->z3StrRF();
-            } else
-               ::report("address_type of Z3 DIGIT_STRING only supported for aperture 3 hexagon grids",
-                        DgBase::Fatal);
-            break;
-   
-         case ZOrderV8:
-            if (isApSeq)
-               ::report("address_type of ZORDER INT64 not supported for dggs_aperture_type of SEQUENCE",
-                        DgBase::Fatal);
-   
-            if (dgg->zorderRF()) {
-               if (rf) *rf = dgg->zorderRF();
-               if (chdRF) *chdRF = chdDgg->zorderRF();
-               if (prtRF) *prtRF = prtDgg->zorderRF();
-            } else
-               ::report("address_type of ZORDER INT64 only supported for aperture 3 or 4",
-                        DgBase::Fatal);
-            break;
-   
-         case ZOrderString:
-            if (isApSeq)
-               ::report("address_type of ZORDER DIGIT_STRING not supported for dggs_aperture_type of SEQUENCE",
-                        DgBase::Fatal);
-   
-               if (dgg->zorderStrRF()) {
-                  if (rf) *rf = dgg->zorderStrRF();
-                  if (chdRF) *chdRF = chdDgg->zorderStrRF();
-                  if (prtRF) *prtRF = prtDgg->zorderStrRF();
-               } else
-                  ::report("address_type of ZORDER DIGIT_STRING only supported for aperture 3 or 4",
-                        DgBase::Fatal);
-            break;
-
          case HierNdx: // should be caught above
          case InvalidAddressType:
          default:
@@ -596,7 +535,7 @@ SubOpDGG::setupOp (void)
    // this is used by all Z3 values, whether input, output, or hier system
    getParamValue(pList(), "z3_invalid_digit", tmp, false);
    z3invalidDigit = dgg::util::from_string<int>(tmp);
-   DgZ3RF::defaultInvalidDigit = z3invalidDigit;
+   DgZ3System::defaultInvalidDigit = z3invalidDigit;
 
    curGrid = 0;
    lastGrid = false;

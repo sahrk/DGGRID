@@ -32,5 +32,28 @@ DgHierNdxStringCoord::DgHierNdxStringCoord (void)
 { }
 
 ////////////////////////////////////////////////////////////////////////////////
+const char*
+DgHierNdxStringRF::str2add (DgHierNdxStringCoord* add, const char* str,
+                                   char delimiter) const
+{
+    if (!add) return str;
+
+    char delimStr[2];
+    delimStr[0] = delimiter;
+    delimStr[1] = '\0';
+
+    char* tmpStr = new char[strlen(str) + 1];
+    strcpy(tmpStr, str);
+    char* tok = strtok(tmpStr, delimStr);
+
+    add->setValue(tok);
+
+    unsigned long offset = strlen(tok) + 1;
+    delete[] tmpStr;
+
+    if (offset >= strlen(str)) return 0;
+    else return &str[offset];
+
+} // const char* DgHierNdxStringRF::str2add
 ////////////////////////////////////////////////////////////////////////////////
 

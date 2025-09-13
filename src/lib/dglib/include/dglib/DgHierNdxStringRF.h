@@ -59,8 +59,9 @@ class DgHierNdxStringRF : public DgHierNdxRF<DgHierNdxStringCoord> {
       virtual std::string add2str (const DgHierNdxStringCoord& add) const
                         { return add.value(); }
 
+      virtual const char* str2add (DgHierNdxStringCoord* c, const char* str, char delimiter) const;
+    
       // these need to be defined by specializations
-      //virtual const char* str2add (DgHierNdxStringCoord* c, const char* str, char delimiter) const
       // they have dummy definitions from the superclass
       //virtual DgHierNdxStringCoord quantify (const DgQ2DICoord& point) const
       //virtual DgQ2DICoord invQuantify (const DgHierNdxStringCoord& add) const
