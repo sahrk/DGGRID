@@ -111,6 +111,7 @@ void ssplit(const char *& src, std::vector<std::string>& dest, const char *delim
 void ssplit(const std::string& src, std::vector<std::string>& dest, const char *delim = " ");
 std::string stripQuotes (const std::string& str, char quote = '"');
 std::string baseName (const std::string& path);
+std::string toUpper (const std::string& str);
 
 }} // namespace dgg::util
 

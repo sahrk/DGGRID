@@ -231,6 +231,7 @@ SubOpBinPts::setupOp (void) {
 */
 
    getParamValue(pList(), "bin_coverage", dummy, false);
+   dummy = dgg::util::toUpper(dummy);
    wholeEarth = (dummy == "GLOBAL"); // alternative is PARTIAL
 
    getParamValue(pList(), "output_count", outputCount, false);
@@ -262,6 +263,7 @@ SubOpBinPts::setupOp (void) {
 
    // cell_output_control
    getParamValue(pList(), "cell_output_control", dummy, false);
+   dummy = dgg::util::toUpper(dummy);
    outputAllCells = (dummy == "OUTPUT_ALL");
 
    // setup the value output format string

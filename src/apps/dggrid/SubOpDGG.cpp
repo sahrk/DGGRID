@@ -549,6 +549,7 @@ SubOpDGG::setupOp (void)
 
    string dummy;
    getParamValue(pList(), "dggs_orient_specify_type", dummy, false);
+   dummy = dgg::util::toUpper(dummy);
    if (dummy == string("SPECIFIED"))
       placeRandom = false;
    else if (dummy == string("REGION_CENTER")) {

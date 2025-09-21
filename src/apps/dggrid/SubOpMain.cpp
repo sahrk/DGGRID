@@ -89,6 +89,7 @@ SubOpMain::setupOp (void)
 
    string dummy;
    getParamValue(pList(), "rng_type", dummy, false);
+   dummy = dgg::util::toUpper(dummy);
 
    if (dummy == "MOTHER") useMother = true;
    else useMother = false;

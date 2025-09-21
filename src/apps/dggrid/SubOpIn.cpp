@@ -193,11 +193,14 @@ SubOpIn::setupOp (void)
    // input address type
    string dummy;
    getParamValue(pList(), "input_address_type", dummy, false);
+   dummy = dgg::util::toUpper(dummy);
    inAddType = dgg::addtype::stringToAddressType(dummy);
 
    getParamValue(pList(), "input_hier_ndx_system", dummy, false);
+   dummy = dgg::util::toUpper(dummy);
    DgHierNdxSysType inHierNdxSysType = dgg::addtype::stringToHierNdxSysType(dummy);
    getParamValue(pList(), "input_hier_ndx_form", dummy, false);
+   dummy = dgg::util::toUpper(dummy);
    DgHierNdxFormType inHierNdxFormType = dgg::addtype::stringToHierNdxFormType(dummy);
 
     if (inAddType == dgg::addtype::HierNdx) {

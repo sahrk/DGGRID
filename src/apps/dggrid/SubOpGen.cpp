@@ -160,6 +160,7 @@ SubOpGen::setupOp (void)
 
    string dummy;
    getParamValue(pList(), "clip_subset_type", dummy, false);
+   dummy = dgg::util::toUpper(dummy);
    wholeEarth = false;
    useGDAL = false;
    clipAIGen = false;
@@ -217,6 +218,7 @@ SubOpGen::setupOp (void)
    //getParamValue(pList(), "quad_bndry_nudge", nudge, false);
 
    getParamValue(pList(), "clip_type", dummy, false);
+   dummy = dgg::util::toUpper(dummy);
    if (dummy == "POLY_INTERSECT") {
       doPolyIntersect = true;
       doPointInPoly = false;
