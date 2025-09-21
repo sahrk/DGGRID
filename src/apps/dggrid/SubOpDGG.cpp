@@ -497,6 +497,7 @@ SubOpDGG::setupOp (void)
 
    std::string dummy;
    getParamValue(pList(), "dggs_orient_specify_type", dummy, false);
+   dummy = dgg::util::toUpper(dummy);
    if (dummy == std::string("SPECIFIED"))
       placeRandom = false;
    else if (dummy == std::string("REGION_CENTER")) {
@@ -516,6 +517,7 @@ SubOpDGG::setupOp (void)
 
    // hierarchical indexing type
    getParamValue(pList(), "hier_indexing_system_type", dummy, false);
+   dummy = dgg::util::toUpper(dummy);
    hierNdxSysType = dgg::addtype::stringToHierNdxSysType(dummy);
    if (hierNdxSysType != dgg::addtype::InvalidHierNdxSysType) {
       if (hierNdxSysType == dgg::addtype::Z7) {

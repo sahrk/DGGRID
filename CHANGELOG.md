@@ -39,6 +39,11 @@ output_hier_ndx_form < INT64 | DIGIT_STRING >
 output_hier_ndx_system < ZORDER | Z3 | Z7 >
 */
 
+## [8.42] - 2025-09-21
+### Fixed
+- put quotes around name field values in geojson output files
+- correctly handle lower case string parameter values
+
 ## [8.41] - 2025-05-31
 ### Changed
 - updated manual to this version

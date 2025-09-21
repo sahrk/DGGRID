@@ -663,11 +663,14 @@ SubOpOut::setupOp (void)
 
    // output address type
    getParamValue(pList(), "output_address_type", dummy, false);
+   dummy = dgg::util::toUpper(dummy);
    outAddType = dgg::addtype::stringToAddressType(dummy);
 
    getParamValue(pList(), "output_hier_ndx_system", dummy, false);
+   dummy = dgg::util::toUpper(dummy);
    outHierNdxSysType = dgg::addtype::stringToHierNdxSysType(dummy);
    getParamValue(pList(), "output_hier_ndx_form", dummy, false);
+   dummy = dgg::util::toUpper(dummy);
    outHierNdxFormType = dgg::addtype::stringToHierNdxFormType(dummy);
    if (outAddType == dgg::addtype::HierNdx) {
        // KEVIN: this will all go away in version 9.0
@@ -715,6 +718,7 @@ SubOpOut::setupOp (void)
    getParamValue(pList(), "densification", nDensify, false);
 
    getParamValue(pList(), "longitude_wrap_mode", dummy, false);
+   dummy = dgg::util::toUpper(dummy);
    lonWrapMode = DgGeoSphRF::Wrap;
    if (dummy == "WRAP") {
       lonWrapMode = DgGeoSphRF::Wrap;
@@ -819,6 +823,7 @@ SubOpOut::setupOp (void)
    getParamValue(pList(), "build_shapefile_attributes", buildShapeFileAttributes, false);
 ///// alternate stuff
 >       getParamValue(pList(), "build_shapefile_attributes_source", dummy, false);
+>       dummy = dgg::util::toUpper(dummy);
 >       if (dummy == std::string("CLIP_FILES"))
 >       {
 >          buildShapeFileAttributes = true;
