@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 All changes are by Kevin Sahr, unless otherwise noted.
 
+## [8.42] - 2025-09-21
+### Fixed
+- put quotes around name field values in geojson output files
+
 ## [8.41] - 2025-05-31
 ### Changed
 - updated manual to this version
