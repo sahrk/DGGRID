@@ -5,7 +5,7 @@ All changes are by Kevin Sahr, unless otherwise noted.
 
 ## [8.42] - 2025-09-21
 ### Fixed
-- put quotes around name field values in geojson output files
+- put quotes around name field values in non-gdal geojson output files
 - correctly handle lower case string parameter values
 
 ## [8.41] - 2025-05-31
