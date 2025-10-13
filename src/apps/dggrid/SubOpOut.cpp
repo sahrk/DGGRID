@@ -672,6 +672,7 @@ SubOpOut::setupOp (void)
    getParamValue(pList(), "output_hier_ndx_form", dummy, false);
    dummy = dgg::util::toUpper(dummy);
    outHierNdxFormType = dgg::addtype::stringToHierNdxFormType(dummy);
+    /*
    if (outAddType == dgg::addtype::HierNdx) {
        // KEVIN: this will all go away in version 9.0
         if (outHierNdxFormType == dgg::addtype::Int64) {
@@ -697,9 +698,10 @@ SubOpOut::setupOp (void)
        }
 
     }
-
-    if (outAddType == dgg::addtype::Z3V8) {
-        ::report("the default padding digit for Z3 INT64 indexes will switch "
+     */
+    
+    if (outAddType == dgg::addtype::HierNdx && outHierNdxSysType == dgg::addtype::Z3) {
+        ::report("the default padding digit for Z3 indexes will switch "
                  "from 0 to 3 starting with DGGRID version 9.0.\n"
                  "Set parameter z3_invalid_digit if you want a different digit used.",
                  DgBase::Warning);

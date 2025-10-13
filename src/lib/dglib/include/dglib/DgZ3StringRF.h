@@ -38,8 +38,8 @@ class DgZ3StringRF : public DgHierNdxStringRF {
    public:
 
       // abstract method from above
-      virtual const char* str2add (DgHierNdxStringCoord* add, const char* str,
-                                   char delimiter) const;
+      // virtual const char* str2add (DgHierNdxStringCoord* add, const char* str,
+      //                            char delimiter) const;
 
       // these have dummy definitions from the superclass
       virtual DgHierNdxStringCoord quantify (const DgQ2DICoord& point) const;

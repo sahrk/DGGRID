@@ -42,11 +42,6 @@
 #include <dglib/DgRadixString.h>
 #include <dglib/DgSeriesConverter.h>
 #include <dglib/DgTriGrid2DS.h>
-#include <dglib/DgZOrderRF.h>
-#include <dglib/DgZOrderStringRF.h>
-#include <dglib/DgZ3RF.h>
-#include <dglib/DgZ3StringRF.h>
-#include <dglib/DgZ7System.h>
 #include <dglib/DgHierNdxSystemRFSBase.h>
 
 ////////////////////////////////////////////////////////////////////////////////

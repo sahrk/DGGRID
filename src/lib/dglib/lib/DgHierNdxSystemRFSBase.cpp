@@ -26,7 +26,9 @@
 #include <dglib/DgHierNdxRF.h>
 #include <dglib/DgDiscRFSGrids.h>
 #include <dglib/DgHierNdx.h>
+#include <dglib/DgZ3System.h>
 #include <dglib/DgZ7System.h>
+#include <dglib/DgZOrderSystem.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 const DgResAdd<DgHierNdx>
@@ -56,6 +58,21 @@ DgHierNdxSystemRFSBase::makeSystem (const DgIDGGSBase& dggsIn,
          //sys = DgHierNdxSystemRFSBase::makeSystem(dggsIn, sysType, extModeInt, false);
          sys = DgZ7System::makeSystem(dggsIn, extModeInt, "Z7");
          break;
+       case dgg::addtype::ZOrder:
+         if (!dggsIn.isPure() || !(dggsIn.aperture() == 3 || dggsIn.aperture() == 4)) {
+            ::report("DgHexIDGGS::makeRF() ZOrder only available for pure aperture 3 or 4 grids", DgBase::Fatal);
+         }
+         sys = DgZOrderSystem::makeSystem(dggsIn, extModeInt, "ZOrder");
+         break;
+       case dgg::addtype::Z3:
+         if (!dggsIn.isPure() || dggsIn.aperture() != 3) {
+            ::report("DgHexIDGGS::makeRF() Z3 only available for pure aperture 3 grids", DgBase::Fatal);
+         }
+         sys = DgZ3System::makeSystem(dggsIn, extModeInt, "Z3");
+         break;
+       case dgg::addtype::InvalidHierNdxSysType:
+           // shouldn't be possible
+           break;
    }
     
    return sys;

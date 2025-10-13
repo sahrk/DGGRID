@@ -31,12 +31,12 @@
 #include <dglib/DgIDGGutil.h>
 
 class DgIDGGSBase;
-class DgZ3RF;
-class DgZ3StringRF;
-class DgZ7System;
-class DgZOrderRF;
-class DgZOrderStringRF;
-class DgHierNdxSystemRFSBase;
+//class DgZ3RF;
+//class DgZ3StringRF;
+//class DgZ7System;
+//class DgZOrderRF;
+//class DgZOrderStringRF;
+//class DgHierNdxSystemRFSBase;
 
 using namespace dgg::topo;
 
