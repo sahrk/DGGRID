@@ -54,7 +54,7 @@ DgZ3RF::str2add (DgHierNdxIntCoord* add, const char* str, char delimiter) const
 
     // convert to a unit64_t
     uint64_t val = 0;
-    if (!sscanf(tok, "%" PRIx64, &val))
+    if (!tok || !sscanf(tok, "%" PRIx64, &val))
        report("DgZ3RF::str2add(): invalid Z3 index", DgBase::Fatal);
 
     if (!add) add = new DgHierNdxIntCoord();

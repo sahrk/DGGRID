@@ -6,6 +6,7 @@ All changes are by Kevin Sahr, unless otherwise noted.
 ## [9.0b] - 2025-XX-XX
 ### Fixed
 - removed unicode characters from comments in clipper.cpp to suppress warnings
+- crashes on some forms of invalid address input
 ### Added 
 - new parameters (see user documentation):
 hier_indexing_system_type (default NONE)

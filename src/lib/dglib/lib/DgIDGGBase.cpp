@@ -92,10 +92,10 @@ DgIDGGBase::str2add (DgQ2DICoord* add, const char* str, char delimiter) const
    if (!tok || strlen(tok) == 0)
       ::report("DgQ2DIRF::fromString() invalid input ", DgBase::Fatal);
 
-   int q;
-   if (sscanf(tok, "%d", &q) != 1) {
+   int q = -1;
+   if (!tok || sscanf(tok, "%d", &q) != 1) {
       ::report("DgQ2DIRF::fromString() invalid value in string " +
-               std::string(tok), DgBase::Fatal);
+               ((tok) ? std::string(tok) : std::string("\"\"")), DgBase::Fatal);
    }
 
    const char* tmp = &(str[strlen(tok) + 1]);

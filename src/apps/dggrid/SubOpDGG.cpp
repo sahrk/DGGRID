@@ -64,7 +64,8 @@ SubOpDGG::SubOpDGG (OpBasic& op, bool _activate)
 // returns whether or not seq nums are used
 bool
 SubOpDGG::addressTypeToRF (DgAddressType type, DgHierNdxSysType hierNdxSysType, DgHierNdxFormType hierNdxForm,
-             const DgRFBase** rf, const DgRFBase** chdRF, const DgRFBase** prtRF, const DgHierNdxSystemRFSBase** hierNdxSys, int forceRes)
+             const DgRFBase** rf, const DgHierNdxSystemRFSBase** hierNdxSysOut, const DgRFBase** chdRF, const DgRFBase** prtRF,
+             int forceRes)
 {
    const DgIDGGBase* dgg = &this->dgg();
    const DgIDGGBase* chdDgg = &this->chdDgg();
@@ -82,19 +83,20 @@ SubOpDGG::addressTypeToRF (DgAddressType type, DgHierNdxSysType hierNdxSysType, 
    if (rf) *rf = nullptr;
    if (chdRF) *chdRF = nullptr;
    if (prtRF) *prtRF = nullptr;
-   if (hierNdxSys) *hierNdxSys = nullptr;
+   if (hierNdxSysOut) *hierNdxSysOut = nullptr;
 
    if (type == HierNdx) {
+       DgHierNdxSystemRFSBase* hierNdxSys = DgHierNdxSystemRFSBase::makeSystem(dggs(), hierNdxSysType, hierNdxForm);
+       if (hierNdxSysOut) // caller wants the hier ndx system
+           *hierNdxSysOut = hierNdxSys;
+       
        if (hierNdxSys) {
-          *hierNdxSys = DgHierNdxSystemRFSBase::makeSystem(dggs(), hierNdxSysType, hierNdxForm);
-          if (*hierNdxSys) {
-             int r = (forceRes >= 0) ? forceRes : dgg->res();
-             if (rf) *rf = &(*hierNdxSys)->sysRF(r);
-             if (chdRF) *chdRF = &(*hierNdxSys)->sysRF(r + 1);
-             if (prtRF && r > 0)
-                *prtRF = &(*hierNdxSys)->sysRF(r - 1);
-          }
-      }
+          int r = (forceRes >= 0) ? forceRes : dgg->res();
+          if (rf) *rf = &hierNdxSys->sysRF(r);
+          if (chdRF) *chdRF = &hierNdxSys->sysRF(r + 1);
+          if (prtRF && r > 0)
+                *prtRF = &hierNdxSys->sysRF(r - 1);
+       }
    } else {
       switch (type) {
          case Geo:

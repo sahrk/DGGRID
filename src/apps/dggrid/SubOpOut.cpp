@@ -935,8 +935,7 @@ SubOpOut::executeOp (void) {
    if (outSeqNum || useEnumLbl)
       pOutRF = &dgg;
    else if (!op.dggOp.isSuperfund) { // use input address type
-
-      outSeqNum = op.dggOp.addressTypeToRF(outAddType, outHierNdxSysType, outHierNdxFormType, &pOutRF, &pChdOutRF, &pPrtOutRF, &outHierNdxSys);
+      outSeqNum = op.dggOp.addressTypeToRF(outAddType, outHierNdxSysType, outHierNdxFormType, &pOutRF, &outHierNdxSys, &pChdOutRF, &pPrtOutRF);
       if (!pOutRF)
          ::report("SubOpOut::executeOp(): invalid output RF", DgBase::Fatal);
    }
