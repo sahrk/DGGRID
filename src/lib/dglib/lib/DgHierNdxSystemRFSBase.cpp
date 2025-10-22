@@ -50,16 +50,14 @@ DgHierNdxSystemRFSBase::makeSystem (const DgIDGGSBase& dggsIn,
 
    bool extModeInt = (form == Int64);
    switch (sysType) {
-      case Z7:
+      case dgg::addtype::Z7:
          if (!dggsIn.isPure() || dggsIn.aperture() != 7) {
             ::report("DgHexIDGGS::makeRF() Z7 only available for pure aperture 7 grids", DgBase::Fatal);
          }
-         //std::cout << "USING HIERSYS Z7" << std::endl;
-         //sys = DgHierNdxSystemRFSBase::makeSystem(dggsIn, sysType, extModeInt, false);
          sys = DgZ7System::makeSystem(dggsIn, extModeInt, "Z7");
          break;
        case dgg::addtype::ZOrder:
-         if (!dggsIn.isPure() || !(dggsIn.aperture() == 3 || dggsIn.aperture() == 4)) {
+         if (!dggsIn.isPure() || (dggsIn.aperture() != 3 && dggsIn.aperture() != 4)) {
             ::report("DgHexIDGGS::makeRF() ZOrder only available for pure aperture 3 or 4 grids", DgBase::Fatal);
          }
          sys = DgZOrderSystem::makeSystem(dggsIn, extModeInt, "ZOrder");
@@ -71,8 +69,8 @@ DgHierNdxSystemRFSBase::makeSystem (const DgIDGGSBase& dggsIn,
          sys = DgZ3System::makeSystem(dggsIn, extModeInt, "Z3");
          break;
        case dgg::addtype::InvalidHierNdxSysType:
-           // shouldn't be possible
-           break;
+         ::report("DgHexIDGGS::makeRF() invalid hierarchical system type", DgBase::Fatal);
+         break;
    }
     
    return sys;

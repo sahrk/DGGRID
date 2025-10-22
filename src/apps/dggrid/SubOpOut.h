@@ -44,6 +44,8 @@ class DgOutPRCellsFile;
 class DgOutPRPtsFile;
 class DgOutNeighborsFile;
 class DgOutChildrenFile;
+class DgOutNdxChildrenFile;
+class DgOutNdxParentFile;
 class DgRandom;
 class DgDataList;
 
@@ -142,6 +144,8 @@ struct SubOpOut : public SubOpBasic {
    DgOutPRCellsFile *prCellOut;
    DgOutNeighborsFile *nbrOut;
    DgOutChildrenFile *chdOut;
+   DgOutNdxChildrenFile *ndxChdOut;
+   DgOutNdxParentFile *ndxPrtOut;
 
    bool concatPtOut;
    char formatStr[50];

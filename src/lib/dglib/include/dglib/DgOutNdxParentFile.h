@@ -31,7 +31,6 @@
 #include <dglib/DgOutLocFile.h>
 #include <dglib/DgOutputStream.h>
 #include <dglib/DgUtil.h>
-#include <dglib/DgHierNdxSystemRFSBase.h>
 
 class DgIDGGBase;
 
@@ -45,7 +44,6 @@ class DgOutNdxParentFile : public DgOutputStream {
                         const DgIDGGBase& ndxPrtDgg,
                         const DgRFBase* outRF = NULL,
                         const DgRFBase* ndxPrtOutRF = NULL,
-                        const DgHierNdxSystemRFSBase* hierNdxRFS = NULL,
                         const std::string& suffix = std::string("ndxPrt"),
                         DgReportLevel failLevel = DgBase::Fatal);
 
@@ -58,7 +56,6 @@ class DgOutNdxParentFile : public DgOutputStream {
       const DgIDGGBase& ndxPrtDgg_; // indexing parent res dgg
       const DgRFBase* outRF_;    // primary res output RF (NULL indicates seqNum)
       const DgRFBase* ndxPrtOutRF_; // indexing parent res output RF
-      //const DgHierNdxSystemRFSBase* hierNdxRFS_; // defines the indexing operators
 };
 
 inline DgOutNdxParentFile& operator<< (DgOutNdxParentFile& file, const char* str)

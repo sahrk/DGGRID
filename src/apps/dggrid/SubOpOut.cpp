@@ -45,6 +45,8 @@
 #include <dglib/DgOutPRCellsFile.h>
 #include <dglib/DgOutNeighborsFile.h>
 #include <dglib/DgOutChildrenFile.h>
+#include <dglib/DgOutNdxChildrenFile.h>
+#include <dglib/DgOutNdxParentFile.h>
 #include <dglib/DgHexIDGG.h>
 #include <dglib/DgHexIDGGS.h>
 #include <dglib/DgIDGGBase.h>
@@ -423,6 +425,7 @@ SubOpOut::SubOpOut (OpBasic& op, bool _activate)
      nCellsTested(0), nCellsAccepted (0),
      dataOut (0), cellOut (0), ptOut (0), collectOut (0), randPtsOut (0),
      cellOutShp (0), ptOutShp (0), prCellOut (0), nbrOut (0), chdOut (0),
+     ndxChdOut(0), ndxPrtOut(0),
      concatPtOut (true), useEnumLbl (false),
      nOutputFile (0), nCellsOutputToFile (0)
 { }
@@ -605,8 +608,6 @@ SubOpOut::initializeOp (void)
    pList().insertParam(new DgStringParam("kml_description",
                DgOutLocFile::defaultKMLDescription));
 
-   ///// PlanetRisk output formats /////
-
    // neighbor_output_type <NONE | TEXT | GEOJSON_COLLECTION>
    choices.push_back(new std::string("NONE"));
    choices.push_back(new std::string("TEXT"));
@@ -628,6 +629,28 @@ SubOpOut::initializeOp (void)
 
    // children_output_file_name <outputFileName>
    pList().insertParam(new DgStringParam("children_output_file_name", "chld"));
+
+    // indexing_children_output_type <NONE | TEXT | GDAL_COLLECTION>
+    choices.push_back(new std::string("NONE"));
+    choices.push_back(new std::string("TEXT"));
+    choices.push_back(new std::string("GDAL_COLLECTION"));
+    pList().insertParam(new DgStringChoiceParam("indexing_children_output_type", "NONE",
+                &choices));
+    dgg::util::release(choices);
+
+    // indexing_children_output_file_name <outputFileName>
+    pList().insertParam(new DgStringParam("indexing_children_output_file_name", "ndxChld"));
+
+    // indexing_parent_output_type <NONE | TEXT | GDAL_COLLECTION>
+    choices.push_back(new std::string("NONE"));
+    choices.push_back(new std::string("TEXT"));
+    choices.push_back(new std::string("GDAL_COLLECTION"));
+    pList().insertParam(new DgStringChoiceParam("indexing_parent_output_type", "NONE",
+                &choices));
+    dgg::util::release(choices);
+
+    // indexing_parent_output_file_name <outputFileName>
+    pList().insertParam(new DgStringParam("indexing_parent_output_file_name", "ndxPrt"));
 
    ///// additional random points parameters /////
 
@@ -748,11 +771,17 @@ SubOpOut::setupOp (void)
    getParamValue(pList(), "randpts_output_type", randPtsOutType, "NONE");
    getParamValue(pList(), "neighbor_output_type", neighborsOutType, "NONE");
    getParamValue(pList(), "children_output_type", childrenOutType, "NONE");
-
+   getParamValue(pList(), "indexing_children_output_type", ndxChildrenOutType, "NONE");
+   getParamValue(pList(), "indexing_parent_output_type", ndxParentOutType, "NONE");
+    
    getParamValue(pList(), "neighbor_output_file_name", neighborsOutFileNameBase,
                    false);
    getParamValue(pList(), "children_output_file_name", childrenOutFileNameBase,
                    false);
+    getParamValue(pList(), "indexing_children_output_file_name", ndxChildrenOutFileNameBase,
+                    false);
+    getParamValue(pList(), "indexing_parent_output_file_name", ndxParentOutFileNameBase,
+                    false);
 
    getParamValue(pList(), "output_file_name", dataOutFileNameBase, false);
    getParamValue(pList(), "cell_output_file_name", cellOutFileNameBase,
@@ -886,6 +915,8 @@ SubOpOut::resetFiles (void) {
    metaOutFileName = metaOutFileNameBase;
    neighborsOutFileName = neighborsOutFileNameBase;
    childrenOutFileName = childrenOutFileNameBase;
+   ndxChildrenOutFileName = ndxChildrenOutFileNameBase;
+   ndxParentOutFileName = ndxParentOutFileNameBase;
 
    // Flush and close any input files we may have used:
    delete dataOut; dataOut = NULL;
@@ -896,6 +927,8 @@ SubOpOut::resetFiles (void) {
    delete prCellOut; prCellOut = NULL;
    delete nbrOut; nbrOut = NULL;
    delete chdOut; chdOut = NULL;
+   delete ndxChdOut; ndxChdOut = NULL;
+   delete ndxPrtOut; ndxPrtOut = NULL;
 
    cellOutShp = NULL; // this is a ptr to cellOut so don't delete
    ptOutShp = NULL; // this is a ptr to ptOut so don't delete
@@ -1034,7 +1067,6 @@ SubOpOut::executeOp (void) {
 
    ///// children/neighbor output files /////
    if (neighborsOutType == "TEXT") {
-
       if (op.dggOp.gridTopo == Triangle)
          ::report("Neighbors not implemented for Triangle grids", DgBase::Fatal);
 
@@ -1046,6 +1078,23 @@ SubOpOut::executeOp (void) {
       chdOut = new DgOutChildrenFile(childrenOutFileName, dgg, op.dggOp.chdDgg(),
                ((outSeqNum || useEnumLbl) ? NULL : pOutRF), pChdOutRF, "chd");
    }
+
+    if (ndxChildrenOutType == "TEXT") {
+       ndxChdOut = new DgOutNdxChildrenFile(ndxChildrenOutFileName, dgg, op.dggOp.chdDgg(),
+                ((outSeqNum || useEnumLbl) ? NULL : pOutRF), pChdOutRF, "ndxChd");
+    }
+
+    if (ndxParentOutType != "NONE") {
+        ndxPrtOut = nullptr;
+        if (!op.dggOp.prtDgg())
+            ::report("resolution 0 cells do not have parents.", DgBase::Warning);
+        else {
+            if (ndxParentOutType == "TEXT") {
+                ndxPrtOut = new DgOutNdxParentFile(ndxParentOutFileName, dgg, *op.dggOp.prtDgg(),
+                        ((outSeqNum || useEnumLbl) ? NULL : pOutRF), pPrtOutRF, "ndxPrt");
+            }
+        }
+    }
 
    return 0;
 
