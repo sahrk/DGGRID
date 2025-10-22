@@ -391,7 +391,6 @@ SubOpOut::outputCellAdd2D (const DgLocation& add2D, const std::string* labelIn,
 */
    }
 
-
    if (collectOut) {
       collectOut->insert(dgg, cell,
             (pointOutType == "GDAL_COLLECTION"),
@@ -605,8 +604,6 @@ SubOpOut::initializeOp (void)
    pList().insertParam(new DgStringParam("kml_description",
                DgOutLocFile::defaultKMLDescription));
 
-   ///// PlanetRisk output formats /////
-
    // neighbor_output_type <NONE | TEXT | GEOJSON_COLLECTION>
    choices.push_back(new std::string("NONE"));
    choices.push_back(new std::string("TEXT"));
@@ -628,6 +625,30 @@ SubOpOut::initializeOp (void)
 
    // children_output_file_name <outputFileName>
    pList().insertParam(new DgStringParam("children_output_file_name", "chld"));
+
+   // indexing_children_output_type <NONE | TEXT | GDAL_COLLECTION>
+   choices.push_back(new std::string("NONE"));
+   choices.push_back(new std::string("TEXT"));
+   choices.push_back(new std::string("GDAL_COLLECTION"));
+   pList().insertParam(new DgStringChoiceParam("indexing_children_output_type", "NONE",
+               &choices));
+   dgg::util::release(choices);
+
+   // indexing_children_output_file_name <outputFileName>
+   pList().insertParam(new DgStringParam("indexing_children_output_file_name", "ndxChld"));
+
+   // indexing_parent_output_type <NONE | TEXT | GDAL_COLLECTION>
+   choices.push_back(new std::string("NONE"));
+   choices.push_back(new std::string("TEXT"));
+   choices.push_back(new std::string("GDAL_COLLECTION"));
+   pList().insertParam(new DgStringChoiceParam("indexing_parent_output_type", "NONE",
+               &choices));
+   dgg::util::release(choices);
+
+   // indexing_parent_output_file_name <outputFileName>
+   pList().insertParam(new DgStringParam("indexing_parent_output_file_name", "ndxPrt"));
+
+
 
    ///// additional random points parameters /////
 
@@ -742,10 +763,16 @@ SubOpOut::setupOp (void)
    getParamValue(pList(), "randpts_output_type", randPtsOutType, "NONE");
    getParamValue(pList(), "neighbor_output_type", neighborsOutType, "NONE");
    getParamValue(pList(), "children_output_type", childrenOutType, "NONE");
+   getParamValue(pList(), "indexing_children_output_type", ndxChildrenOutType, "NONE");
+   getParamValue(pList(), "indexing_parent_output_type", ndxParentOutType, "NONE");
 
    getParamValue(pList(), "neighbor_output_file_name", neighborsOutFileNameBase,
                    false);
    getParamValue(pList(), "children_output_file_name", childrenOutFileNameBase,
+                   false);
+   getParamValue(pList(), "indexing_children_output_file_name", ndxChildrenOutFileNameBase,
+                   false);
+   getParamValue(pList(), "indexing_parent_output_file_name", ndxParentOutFileNameBase,
                    false);
 
    getParamValue(pList(), "output_file_name", dataOutFileNameBase, false);
@@ -879,6 +906,8 @@ SubOpOut::resetFiles (void) {
    metaOutFileName = metaOutFileNameBase;
    neighborsOutFileName = neighborsOutFileNameBase;
    childrenOutFileName = childrenOutFileNameBase;
+   ndxChildrenOutFileName = ndxChildrenOutFileNameBase;
+   ndxParentOutFileName = ndxParentOutFileNameBase;
 
    // Flush and close any input files we may have used:
    delete dataOut; dataOut = NULL;
@@ -889,6 +918,8 @@ SubOpOut::resetFiles (void) {
    delete prCellOut; prCellOut = NULL;
    delete nbrOut; nbrOut = NULL;
    delete chdOut; chdOut = NULL;
+   delete ndxChdOut; ndxChdOut = NULL;
+   delete ndxPrtOut; ndxPrtOut = NULL;
 
    cellOutShp = NULL; // this is a ptr to cellOut so don't delete
    ptOutShp = NULL; // this is a ptr to ptOut so don't delete

@@ -16,14 +16,14 @@ dggs_type ISEA7H
 dggs_res_spec 9
 
 # specify bin controls
-input_file_name inputfiles/seqNum.txt
-input_address_type SEQNUM
+input_file_name inputfiles/z7.txt
+output_address_type HIERNDX
+output_hier_ndx_system Z7
+output_hier_ndx_form INT64
 input_delimiter " "
 
 # specify the output
-output_file_name outputfiles/z7str.txt
-output_address_type HIERNDX
-output_hier_ndx_system Z7
-output_hier_ndx_form DIGIT_STRING
+output_file_name outputfiles/seqNum.txt
+output_address_type SEQNUM
 
 output_delimiter " "
