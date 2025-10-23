@@ -630,27 +630,27 @@ SubOpOut::initializeOp (void)
    // children_output_file_name <outputFileName>
    pList().insertParam(new DgStringParam("children_output_file_name", "chld"));
 
-    // indexing_children_output_type <NONE | TEXT | GDAL_COLLECTION>
-    choices.push_back(new std::string("NONE"));
-    choices.push_back(new std::string("TEXT"));
-    choices.push_back(new std::string("GDAL_COLLECTION"));
-    pList().insertParam(new DgStringChoiceParam("indexing_children_output_type", "NONE",
-                &choices));
-    dgg::util::release(choices);
+   // indexing_children_output_type <NONE | TEXT | GDAL_COLLECTION>
+   choices.push_back(new std::string("NONE"));
+   choices.push_back(new std::string("TEXT"));
+   choices.push_back(new std::string("GDAL_COLLECTION"));
+   pList().insertParam(new DgStringChoiceParam("indexing_children_output_type", "NONE",
+               &choices));
+   dgg::util::release(choices);
 
-    // indexing_children_output_file_name <outputFileName>
-    pList().insertParam(new DgStringParam("indexing_children_output_file_name", "ndxChld"));
+   // indexing_children_output_file_name <outputFileName>
+   pList().insertParam(new DgStringParam("indexing_children_output_file_name", "ndxChld"));
 
-    // indexing_parent_output_type <NONE | TEXT | GDAL_COLLECTION>
-    choices.push_back(new std::string("NONE"));
-    choices.push_back(new std::string("TEXT"));
-    choices.push_back(new std::string("GDAL_COLLECTION"));
-    pList().insertParam(new DgStringChoiceParam("indexing_parent_output_type", "NONE",
-                &choices));
-    dgg::util::release(choices);
+   // indexing_parent_output_type <NONE | TEXT | GDAL_COLLECTION>
+   choices.push_back(new std::string("NONE"));
+   choices.push_back(new std::string("TEXT"));
+   choices.push_back(new std::string("GDAL_COLLECTION"));
+   pList().insertParam(new DgStringChoiceParam("indexing_parent_output_type", "NONE",
+               &choices));
+   dgg::util::release(choices);
 
-    // indexing_parent_output_file_name <outputFileName>
-    pList().insertParam(new DgStringParam("indexing_parent_output_file_name", "ndxPrt"));
+   // indexing_parent_output_file_name <outputFileName>
+   pList().insertParam(new DgStringParam("indexing_parent_output_file_name", "ndxPrt"));
 
    ///// additional random points parameters /////
 
@@ -778,9 +778,9 @@ SubOpOut::setupOp (void)
                    false);
    getParamValue(pList(), "children_output_file_name", childrenOutFileNameBase,
                    false);
-    getParamValue(pList(), "indexing_children_output_file_name", ndxChildrenOutFileNameBase,
+   getParamValue(pList(), "indexing_children_output_file_name", ndxChildrenOutFileNameBase,
                     false);
-    getParamValue(pList(), "indexing_parent_output_file_name", ndxParentOutFileNameBase,
+   getParamValue(pList(), "indexing_parent_output_file_name", ndxParentOutFileNameBase,
                     false);
 
    getParamValue(pList(), "output_file_name", dataOutFileNameBase, false);
