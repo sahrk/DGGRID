@@ -20,8 +20,6 @@
 //
 // DgOutNdxChildrenFile.cpp: DgOutNdxChildrenFile class implementation
 //
-// Version 7.0 - Kevin Sahr, 12/14/14
-//
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <dglib/DgOutNdxChildrenFile.h>

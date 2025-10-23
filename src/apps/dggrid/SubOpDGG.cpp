@@ -524,12 +524,16 @@ SubOpDGG::setupOp (void)
    if (hierNdxSysType != dgg::addtype::InvalidHierNdxSysType) {
       if (hierNdxSysType == dgg::addtype::Z7) {
          if (apertureType != "PURE" || aperture != 7)
-            ::report("SubOpDGG::setupOp() hier_indexing_system_type ZX "
+            ::report("hier_indexing_system_type Z7 "
                      "requires a pure aperture 7 DGGS", DgBase::Fatal);
-      } else if (hierNdxSysType == dgg::addtype::Z7) {
-          if (apertureType != "PURE" || aperture != 7)
-             ::report("SubOpDGG::setupOp() hier_indexing_system_type Z7 "
-                      "requires a pure aperture 7 DGGS", DgBase::Fatal);
+      } else if (hierNdxSysType == dgg::addtype::Z3) {
+          if (apertureType != "PURE" || aperture != 3)
+              ::report("hier_indexing_system_type Z3 "
+                       "requires a pure aperture 3 DGGS", DgBase::Fatal);
+      } else if (hierNdxSysType == dgg::addtype::ZOrder) {
+          if (apertureType != "PURE" || (aperture != 3 && aperture != 4))
+              ::report("hier_indexing_system_type ZOrder "
+                       "requires a pure aperture 3 or 4 DGGS", DgBase::Fatal);
        } else {
          ::report("SubOpDGG::setupOp() invalid hier_indexing_system_type", DgBase::Fatal);
       }
