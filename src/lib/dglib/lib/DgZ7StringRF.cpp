@@ -42,35 +42,10 @@ DgZ7StringRF::DgZ7StringRF (const DgHierNdxSystemRFBase& sysIn, int resIn,
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-const char*
-DgZ7StringRF::str2add (DgHierNdxStringCoord* add, const char* str,
-                                   char delimiter) const
-{
-    if (!add) return str;
-
-    char delimStr[2];
-    delimStr[0] = delimiter;
-    delimStr[1] = '\0';
-
-    char* tmpStr = new char[strlen(str) + 1];
-    strcpy(tmpStr, str);
-    char* tok = strtok(tmpStr, delimStr);
-
-    add->setValue(tok);
-
-    unsigned long offset = strlen(tok) + 1;
-    delete[] tmpStr;
-
-    if (offset >= strlen(str)) return 0;
-    else return &str[offset];
-
-} // const char* DgZ7StringRF::str2add
-
-////////////////////////////////////////////////////////////////////////////////
 DgHierNdxStringCoord
 DgZ7StringRF::quantify (const DgQ2DICoord& addIn) const
 {
-    // we need to find the correct base cell for this H3 index;
+    // we need to find the correct base cell for this index;
     // start with the passed in quad and resolution res ijk coordinates
     // in that quad's coordinate system
     DgIVec3D ijk = addIn.coord();

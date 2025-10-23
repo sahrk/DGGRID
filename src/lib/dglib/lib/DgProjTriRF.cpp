@@ -307,13 +307,12 @@ DgProjTriRF::str2add (DgProjTriCoord* add, const char* str, char delimiter)
    strcpy(tmpStr, str);
 
    // get the triNum
-
    char* tok = strtok(tmpStr, delimStr);
-   int t;
-   if (sscanf(tok, "%d", &t) != 1)
+   int t = -1;
+   if (!tok || sscanf(tok, "%d", &t) != 1)
    {
       ::report("DgProjTriRF::fromString() invalid value in string " +
-               std::string(tok), DgBase::Fatal);
+               ((tok) ? std::string(tok) : std::string("\"\"")), DgBase::Fatal);
    }
 
    const char* tmp = &(str[strlen(tok) + 1]);

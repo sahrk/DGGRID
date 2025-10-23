@@ -45,6 +45,8 @@
 #include <dglib/DgOutPRCellsFile.h>
 #include <dglib/DgOutNeighborsFile.h>
 #include <dglib/DgOutChildrenFile.h>
+#include <dglib/DgOutNdxChildrenFile.h>
+#include <dglib/DgOutNdxParentFile.h>
 #include <dglib/DgHexIDGG.h>
 #include <dglib/DgHexIDGGS.h>
 #include <dglib/DgIDGGBase.h>
@@ -422,6 +424,7 @@ SubOpOut::SubOpOut (OpBasic& op, bool _activate)
      nCellsTested(0), nCellsAccepted (0),
      dataOut (0), cellOut (0), ptOut (0), collectOut (0), randPtsOut (0),
      cellOutShp (0), ptOutShp (0), prCellOut (0), nbrOut (0), chdOut (0),
+     ndxChdOut(0), ndxPrtOut(0),
      concatPtOut (true), useEnumLbl (false),
      nOutputFile (0), nCellsOutputToFile (0)
 { }
@@ -648,8 +651,6 @@ SubOpOut::initializeOp (void)
    // indexing_parent_output_file_name <outputFileName>
    pList().insertParam(new DgStringParam("indexing_parent_output_file_name", "ndxPrt"));
 
-
-
    ///// additional random points parameters /////
 
    // randpts_concatenate_output <TRUE | FALSE>
@@ -684,12 +685,16 @@ SubOpOut::setupOp (void)
 
    // output address type
    getParamValue(pList(), "output_address_type", dummy, false);
+   dummy = dgg::util::toUpper(dummy);
    outAddType = dgg::addtype::stringToAddressType(dummy);
 
    getParamValue(pList(), "output_hier_ndx_system", dummy, false);
+   dummy = dgg::util::toUpper(dummy);
    outHierNdxSysType = dgg::addtype::stringToHierNdxSysType(dummy);
    getParamValue(pList(), "output_hier_ndx_form", dummy, false);
+   dummy = dgg::util::toUpper(dummy);
    outHierNdxFormType = dgg::addtype::stringToHierNdxFormType(dummy);
+    /*
    if (outAddType == dgg::addtype::HierNdx) {
        // KEVIN: this will all go away in version 9.0
         if (outHierNdxFormType == dgg::addtype::Int64) {
@@ -715,9 +720,10 @@ SubOpOut::setupOp (void)
        }
 
     }
-
-    if (outAddType == dgg::addtype::Z3V8) {
-        ::report("the default padding digit for Z3 INT64 indexes will switch "
+     */
+    
+    if (outAddType == dgg::addtype::HierNdx && outHierNdxSysType == dgg::addtype::Z3) {
+        ::report("the default padding digit for Z3 indexes will switch "
                  "from 0 to 3 starting with DGGRID version 9.0.\n"
                  "Set parameter z3_invalid_digit if you want a different digit used.",
                  DgBase::Warning);
@@ -736,6 +742,7 @@ SubOpOut::setupOp (void)
    getParamValue(pList(), "densification", nDensify, false);
 
    getParamValue(pList(), "longitude_wrap_mode", dummy, false);
+   dummy = dgg::util::toUpper(dummy);
    lonWrapMode = DgGeoSphRF::Wrap;
    if (dummy == "WRAP") {
       lonWrapMode = DgGeoSphRF::Wrap;
@@ -765,7 +772,6 @@ SubOpOut::setupOp (void)
    getParamValue(pList(), "children_output_type", childrenOutType, "NONE");
    getParamValue(pList(), "indexing_children_output_type", ndxChildrenOutType, "NONE");
    getParamValue(pList(), "indexing_parent_output_type", ndxParentOutType, "NONE");
-
    getParamValue(pList(), "neighbor_output_file_name", neighborsOutFileNameBase,
                    false);
    getParamValue(pList(), "children_output_file_name", childrenOutFileNameBase,
@@ -846,6 +852,7 @@ SubOpOut::setupOp (void)
    getParamValue(pList(), "build_shapefile_attributes", buildShapeFileAttributes, false);
 ///// alternate stuff
 >       getParamValue(pList(), "build_shapefile_attributes_source", dummy, false);
+>       dummy = dgg::util::toUpper(dummy);
 >       if (dummy == std::string("CLIP_FILES"))
 >       {
 >          buildShapeFileAttributes = true;
@@ -959,8 +966,7 @@ SubOpOut::executeOp (void) {
    if (outSeqNum || useEnumLbl)
       pOutRF = &dgg;
    else if (!op.dggOp.isSuperfund) { // use input address type
-
-      outSeqNum = op.dggOp.addressTypeToRF(outAddType, outHierNdxSysType, outHierNdxFormType, &pOutRF, &pChdOutRF, &pPrtOutRF, &outHierNdxSys);
+      outSeqNum = op.dggOp.addressTypeToRF(outAddType, outHierNdxSysType, outHierNdxFormType, &pOutRF, &outHierNdxSys, &pChdOutRF, &pPrtOutRF);
       if (!pOutRF)
          ::report("SubOpOut::executeOp(): invalid output RF", DgBase::Fatal);
    }
@@ -1059,7 +1065,6 @@ SubOpOut::executeOp (void) {
 
    ///// children/neighbor output files /////
    if (neighborsOutType == "TEXT") {
-
       if (op.dggOp.gridTopo == Triangle)
          ::report("Neighbors not implemented for Triangle grids", DgBase::Fatal);
 
@@ -1071,6 +1076,23 @@ SubOpOut::executeOp (void) {
       chdOut = new DgOutChildrenFile(childrenOutFileName, dgg, op.dggOp.chdDgg(),
                ((outSeqNum || useEnumLbl) ? NULL : pOutRF), pChdOutRF, "chd");
    }
+
+    if (ndxChildrenOutType == "TEXT") {
+       ndxChdOut = new DgOutNdxChildrenFile(ndxChildrenOutFileName, dgg, op.dggOp.chdDgg(),
+                ((outSeqNum || useEnumLbl) ? NULL : pOutRF), pChdOutRF, "ndxChd");
+    }
+
+    if (ndxParentOutType != "NONE") {
+        ndxPrtOut = nullptr;
+        if (!op.dggOp.prtDgg())
+            ::report("resolution 0 cells do not have parents.", DgBase::Warning);
+        else {
+            if (ndxParentOutType == "TEXT") {
+                ndxPrtOut = new DgOutNdxParentFile(ndxParentOutFileName, dgg, *op.dggOp.prtDgg(),
+                        ((outSeqNum || useEnumLbl) ? NULL : pOutRF), pPrtOutRF, "ndxPrt");
+            }
+        }
+    }
 
    return 0;
 

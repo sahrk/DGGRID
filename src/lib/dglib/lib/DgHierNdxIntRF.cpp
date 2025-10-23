@@ -66,7 +66,7 @@ DgHierNdxIntRF::str2add (DgHierNdxIntCoord* c, const char* str,
 
    // convert to a unit64_t
    uint64_t val = 0;
-   if (!sscanf(tok, "%" PRIx64, &val))
+   if (!tok || !sscanf(tok, "%" PRIx64, &val))
       report("DgHierNdxIntRF::str2add(): invalid index", DgBase::Fatal);
 
    if (!c) c = new DgHierNdxIntCoord();

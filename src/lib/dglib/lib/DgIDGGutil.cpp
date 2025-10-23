@@ -215,10 +215,10 @@ DgQ2DDRF::str2add (DgQ2DDCoord* add, const char* str, char delimiter) const
    // get the quadNum
 
    char* tok = strtok(tmpStr, delimStr);
-   int q;
-   if (sscanf(tok, "%d", &q) != 1)
+   int q = -1;
+   if (!tok || sscanf(tok, "%d", &q) != 1)
    {
-      ::report("DgQ2DDRF::fromString() invalid value in string " + std::string(tok),
+      ::report("DgQ2DDRF::fromString() invalid value in string " + ((tok) ? std::string(tok) : std::string("\"\"")),
                DgBase::Fatal);
    }
 
@@ -248,21 +248,21 @@ DgVertex2DDRF::str2add (DgVertex2DDCoord* add, const char* str, char delimiter) 
    // get the vertNum
 
    char* tok = strtok(tmpStr, delimStr);
-   int vNum;
-   if (sscanf(tok, "%d", &vNum) != 1)
+   int vNum = -1;
+   if (!tok || sscanf(tok, "%d", &vNum) != 1)
    {
       ::report("DgVertex2DDCoord::fromString() invalid value in string " +
-               std::string(tok), DgBase::Fatal);
+               ((tok) ? std::string(tok) : std::string("\"\"")), DgBase::Fatal);
    }
 
    // get the triNum
 
    tok = strtok(NULL, delimStr);
-   int tNum;
-   if (sscanf(tok, "%d", &tNum) != 1)
+   int tNum = -1;
+   if (!tok || sscanf(tok, "%d", &tNum) != 1)
    {
       ::report("DgVertex2DDCoord::fromString() invalid value in string " +
-               std::string(tok), DgBase::Fatal);
+               ((tok) ? std::string(tok) : std::string("\"\"")), DgBase::Fatal);
    }
 
    // get the keeper

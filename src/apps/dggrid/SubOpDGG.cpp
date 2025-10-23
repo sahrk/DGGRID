@@ -34,6 +34,7 @@
 #include <dglib/DgZOrderStringRF.h>
 #include <dglib/DgZ3RF.h>
 #include <dglib/DgZ3StringRF.h>
+#include <dglib/DgZ3System.h>
 #include <dglib/DgHierNdxSystemRFSBase.h>
 
 #include "OpBasic.h"
@@ -63,7 +64,8 @@ SubOpDGG::SubOpDGG (OpBasic& op, bool _activate)
 // returns whether or not seq nums are used
 bool
 SubOpDGG::addressTypeToRF (DgAddressType type, DgHierNdxSysType hierNdxSysType, DgHierNdxFormType hierNdxForm,
-             const DgRFBase** rf, const DgRFBase** chdRF, const DgRFBase** prtRF, const DgHierNdxSystemRFSBase** hierNdxSys, int forceRes)
+             const DgRFBase** rf, const DgHierNdxSystemRFSBase** hierNdxSysOut, const DgRFBase** chdRF, const DgRFBase** prtRF,
+             int forceRes)
 {
    const DgIDGGBase* dgg = &this->dgg();
    const DgIDGGBase* chdDgg = &this->chdDgg();
@@ -81,19 +83,20 @@ SubOpDGG::addressTypeToRF (DgAddressType type, DgHierNdxSysType hierNdxSysType, 
    if (rf) *rf = nullptr;
    if (chdRF) *chdRF = nullptr;
    if (prtRF) *prtRF = nullptr;
-   if (hierNdxSys) *hierNdxSys = nullptr;
+   if (hierNdxSysOut) *hierNdxSysOut = nullptr;
 
    if (type == HierNdx) {
+       DgHierNdxSystemRFSBase* hierNdxSys = DgHierNdxSystemRFSBase::makeSystem(dggs(), hierNdxSysType, hierNdxForm);
+       if (hierNdxSysOut) // caller wants the hier ndx system
+           *hierNdxSysOut = hierNdxSys;
+       
        if (hierNdxSys) {
-          *hierNdxSys = DgHierNdxSystemRFSBase::makeSystem(dggs(), hierNdxSysType, hierNdxForm);
-          if (*hierNdxSys) {
-             int r = (forceRes >= 0) ? forceRes : dgg->res();
-             if (rf) *rf = &(*hierNdxSys)->sysRF(r);
-             if (chdRF) *chdRF = &(*hierNdxSys)->sysRF(r + 1);
-             if (prtRF && r > 0)
-                *prtRF = &(*hierNdxSys)->sysRF(r - 1);
-          }
-      }
+          int r = (forceRes >= 0) ? forceRes : dgg->res();
+          if (rf) *rf = &hierNdxSys->sysRF(r);
+          if (chdRF) *chdRF = &hierNdxSys->sysRF(r + 1);
+          if (prtRF && r > 0)
+                *prtRF = &hierNdxSys->sysRF(r - 1);
+       }
    } else {
       switch (type) {
          case Geo:
@@ -145,68 +148,6 @@ SubOpDGG::addressTypeToRF (DgAddressType type, DgHierNdxSysType hierNdxSysType, 
             if (prtRF) *prtRF = &prtDgg->vertexRF();
             break;
    
-         case Z3V8:
-            if (isApSeq)
-               ::report("address_type of Z3 INT64 not supported for dggs_aperture_type of SEQUENCE",
-                        DgBase::Fatal);
-   
-            if (dgg->z3RF()) {
-               if (rf) *rf = dgg->z3RF();
-               if (chdRF) *chdRF = chdDgg->z3RF();
-               if (prtRF) *prtRF = prtDgg->z3RF();
-   
-               if (z3invalidDigit != 3) {
-                  ::report("default padding digit for Z3 INT64 indexes have switched "
-                           "from 0 to 3 starting with DGGRID version 9.0b.\n"
-                           "Set parameter z3_invalid_digit if you want a different digit used.", DgBase::Warning);
-               }
-            } else
-               ::report("address_type of Z3 INT64 only supported for aperture 3 hexagon grids",
-                        DgBase::Fatal);
-            break;
-   
-         case Z3String:
-            if (isApSeq)
-               ::report("address_type of Z3 DIGIT_STRING not supported for dggs_aperture_type of SEQUENCE",
-                        DgBase::Fatal);
-   
-            if (dgg->z3StrRF()) {
-               if (rf) *rf = dgg->z3StrRF();
-               if (chdRF) *chdRF = chdDgg->z3StrRF();
-               if (prtRF) *prtRF = prtDgg->z3StrRF();
-            } else
-               ::report("address_type of Z3 DIGIT_STRING only supported for aperture 3 hexagon grids",
-                        DgBase::Fatal);
-            break;
-   
-         case ZOrderV8:
-            if (isApSeq)
-               ::report("address_type of ZORDER INT64 not supported for dggs_aperture_type of SEQUENCE",
-                        DgBase::Fatal);
-   
-            if (dgg->zorderRF()) {
-               if (rf) *rf = dgg->zorderRF();
-               if (chdRF) *chdRF = chdDgg->zorderRF();
-               if (prtRF) *prtRF = prtDgg->zorderRF();
-            } else
-               ::report("address_type of ZORDER INT64 only supported for aperture 3 or 4",
-                        DgBase::Fatal);
-            break;
-   
-         case ZOrderString:
-            if (isApSeq)
-               ::report("address_type of ZORDER DIGIT_STRING not supported for dggs_aperture_type of SEQUENCE",
-                        DgBase::Fatal);
-   
-               if (dgg->zorderStrRF()) {
-                  if (rf) *rf = dgg->zorderStrRF();
-                  if (chdRF) *chdRF = chdDgg->zorderStrRF();
-                  if (prtRF) *prtRF = prtDgg->zorderStrRF();
-               } else
-                  ::report("address_type of ZORDER DIGIT_STRING only supported for aperture 3 or 4",
-                        DgBase::Fatal);
-            break;
-
          case HierNdx: // should be caught above
          case InvalidAddressType:
          default:
@@ -558,6 +499,7 @@ SubOpDGG::setupOp (void)
 
    std::string dummy;
    getParamValue(pList(), "dggs_orient_specify_type", dummy, false);
+   dummy = dgg::util::toUpper(dummy);
    if (dummy == std::string("SPECIFIED"))
       placeRandom = false;
    else if (dummy == std::string("REGION_CENTER")) {
@@ -577,16 +519,21 @@ SubOpDGG::setupOp (void)
 
    // hierarchical indexing type
    getParamValue(pList(), "hier_indexing_system_type", dummy, false);
+   dummy = dgg::util::toUpper(dummy);
    hierNdxSysType = dgg::addtype::stringToHierNdxSysType(dummy);
    if (hierNdxSysType != dgg::addtype::InvalidHierNdxSysType) {
       if (hierNdxSysType == dgg::addtype::Z7) {
          if (apertureType != "PURE" || aperture != 7)
-            ::report("SubOpDGG::setupOp() hier_indexing_system_type ZX "
+            ::report("hier_indexing_system_type Z7 "
                      "requires a pure aperture 7 DGGS", DgBase::Fatal);
-      } else if (hierNdxSysType == dgg::addtype::Z7) {
-          if (apertureType != "PURE" || aperture != 7)
-             ::report("SubOpDGG::setupOp() hier_indexing_system_type Z7 "
-                      "requires a pure aperture 7 DGGS", DgBase::Fatal);
+      } else if (hierNdxSysType == dgg::addtype::Z3) {
+          if (apertureType != "PURE" || aperture != 3)
+              ::report("hier_indexing_system_type Z3 "
+                       "requires a pure aperture 3 DGGS", DgBase::Fatal);
+      } else if (hierNdxSysType == dgg::addtype::ZOrder) {
+          if (apertureType != "PURE" || (aperture != 3 && aperture != 4))
+              ::report("hier_indexing_system_type ZOrder "
+                       "requires a pure aperture 3 or 4 DGGS", DgBase::Fatal);
        } else {
          ::report("SubOpDGG::setupOp() invalid hier_indexing_system_type", DgBase::Fatal);
       }
@@ -596,7 +543,7 @@ SubOpDGG::setupOp (void)
    // this is used by all Z3 values, whether input, output, or hier system
    getParamValue(pList(), "z3_invalid_digit", tmp, false);
    z3invalidDigit = dgg::util::from_string<int>(tmp);
-   DgZ3RF::defaultInvalidDigit = z3invalidDigit;
+   DgZ3System::defaultInvalidDigit = z3invalidDigit;
 
    curGrid = 0;
    lastGrid = false;

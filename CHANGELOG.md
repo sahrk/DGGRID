@@ -6,6 +6,7 @@ All changes are by Kevin Sahr, unless otherwise noted.
 ## [9.0b] - 2025-XX-XX
 ### Fixed
 - removed unicode characters from comments in clipper.cpp to suppress warnings
+- crashes on some forms of invalid address input
 ### Added 
 - new parameters (see user documentation):
 hier_indexing_system_type (default NONE)
@@ -38,6 +39,11 @@ input_hier_ndx_system < ZORDER | Z3 | Z7 >
 output_hier_ndx_form < INT64 | DIGIT_STRING >
 output_hier_ndx_system < ZORDER | Z3 | Z7 >
 */
+
+## [8.42] - 2025-09-21
+### Fixed
+- put quotes around name field values in non-gdal geojson output files
+- correctly handle lower case string parameter values
 
 ## [8.41] - 2025-05-31
 ### Changed

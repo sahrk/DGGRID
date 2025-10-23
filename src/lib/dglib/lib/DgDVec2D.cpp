@@ -63,20 +63,19 @@ DgDVec2D::fromString (const char* str, char delimiter)
    // get the x
 
    tok = strtok(tmpStr, delimStr);
-   long double xIn;
-   if (sscanf(tok, "%LF", &xIn) != 1)
+   long double xIn = 0.0;
+   if (!tok || sscanf(tok, "%LF", &xIn) != 1)
    {
-      ::report("DgDVec2D::fromString() invalid value in string " + std::string(tok),
+       ::report("DgDVec2D::fromString() invalid value in string " + ((tok) ? std::string(tok) : std::string("\"\"")),
                DgBase::Fatal);
    }
 
    // get the y
-
    tok = strtok(NULL, delimStr);
-   long double yIn;
-   if (sscanf(tok, "%LF", &yIn) != 1)
+   long double yIn = 0.0;
+   if (!tok || sscanf(tok, "%LF", &yIn) != 1)
    {
-      ::report("DgDVec2D::fromString() invalid value in string " + std::string(tok),
+      ::report("DgDVec2D::fromString() invalid value in string " + ((tok) ? std::string(tok) : std::string("\"\"")),
                DgBase::Fatal);
    }
 
