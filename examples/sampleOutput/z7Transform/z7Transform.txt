@@ -1,4 +1,4 @@
-** executing DGGRID version 9.0b with GDAL version 3100300 **
+** executing DGGRID version 9.0b with GDAL version 3110300 **
 type sizes: big int: 64 bits / big double: 128 bits
 
 ** using meta file z7Transform.meta...
@@ -26,17 +26,17 @@ dggs_res_spec 9 (user set)
 hier_indexing_system_type NONE (default)
 z3_invalid_digit 3 (default)
 input_files vals.txt (default)
-input_file_name inputfiles/seqNum.txt (user set)
+input_file_name inputfiles/z7.txt (user set)
 point_input_file_type TEXT (default)
-input_address_type SEQNUM (user set)
+input_address_type GEO (default)
 input_hier_ndx_system Z3 (default)
 input_hier_ndx_form INT64 (default)
 input_delimiter " " (user set)
-output_file_name outputfiles/z7str.txt (user set)
+output_file_name outputfiles/seqNum.txt (user set)
 output_file_type TEXT (default)
-output_address_type HIERNDX (user set)
+output_address_type SEQNUM (user set)
 output_hier_ndx_system Z7 (user set)
-output_hier_ndx_form DIGIT_STRING (user set)
+output_hier_ndx_form INT64 (user set)
 output_delimiter " " (user set)
 densification 0 (default)
 longitude_wrap_mode WRAP (default)
@@ -62,6 +62,10 @@ neighbor_output_type NONE (default)
 neighbor_output_file_name nbr (default)
 children_output_type NONE (default)
 children_output_file_name chld (default)
+indexing_children_output_type NONE (default)
+indexing_children_output_file_name ndxChld (default)
+indexing_parent_output_type NONE (default)
+indexing_parent_output_file_name ndxPrt (default)
 max_cells_per_output_file 0 (default)
 output_first_seqnum 1 (default)
 output_last_seqnum 18446744073709551615 (default)
@@ -74,6 +78,4 @@ Res 9 DGG Statistics (calculated in projection space):
 
 
 transforming values...
-
-processed 1 input file.
-** transformation complete **
+FATAL ERROR: DgDVec2D::fromString() invalid value in string ""

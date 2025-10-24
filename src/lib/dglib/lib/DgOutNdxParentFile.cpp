@@ -81,7 +81,7 @@ DgOutNdxParentFile::insert (const DgLocation& center, DgLocation& parent)
       outRF_->convert(&tmpLoc);
       *this << tmpLoc.asString(' ');
       ndxPrtOutRF_->convert(&parent);
-      *this << " " << parent.asString();
+      *this << " " << parent.asString(' ');
    }
 
    *this << std::endl;

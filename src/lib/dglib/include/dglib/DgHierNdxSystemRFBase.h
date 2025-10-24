@@ -124,11 +124,11 @@ class DgHierNdxSystemRFBase
       const DgHierNdxIntRF*    intRF (void) const { return curRes_.intRF_; }
       const DgHierNdxStringRF* strRF (void) const { return curRes_.strRF_; }
 
-      const DgIDGGBase*            pDgg   (void) const { return pRes_.dgg_; }
+      const DgIDGGBase*        pDgg   (void) const { return pRes_.dgg_; }
       const DgHierNdxIntRF*    pIntRF (void) const { return pRes_.intRF_; }
       const DgHierNdxStringRF* pStrRF (void) const { return pRes_.strRF_; }
       
-      const DgIDGGBase*            chDgg   (void) const { return chRes_.dgg_; }
+      const DgIDGGBase*        chDgg   (void) const { return chRes_.dgg_; }
       const DgHierNdxIntRF*    chIntRF (void) const { return chRes_.intRF_; }
       const DgHierNdxStringRF* chStrRF (void) const { return chRes_.strRF_; }
 

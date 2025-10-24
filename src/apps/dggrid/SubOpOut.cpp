@@ -64,6 +64,7 @@
 #include <dglib/DgDmdD4Grid2DS.h>
 #include <dglib/DgTriGrid2D.h>
 #include <dglib/DgOutRandPtsText.h>
+#include <dglib/DgHierNdxSystemRFSBase.h>
 #include "DgHexSF.h"
 
 #include "OpBasic.h"
@@ -368,29 +369,36 @@ SubOpOut::outputCellAdd2D (const DgLocation& add2D, const std::string* labelIn,
    }
 
    // indexing parent
-   DgLocation* ndxParent = nullptr;
+   const DgHierNdxSystemRFSBase* hierNdxSystem = op.dggOp.dggs().hierNdxSystem();
+   DgLocation ndxParent;
    if (ndxParentOutType != "NONE") {
-;
-/*
-      op.dggOp.dggs().setAllChildren(q2diR, children);
+      if (!hierNdxSystem) {
+          ::report("indexing parents require a hierarchical indexing system.", DgBase::Fatal);
+      }
 
-      if (chdOut)
-         chdOut->insert(add2D, children);
-*/
+      hierNdxSystem->setNdxParent(q2diR, ndxParent);
+
+      if (ndxPrtOut)
+         ndxPrtOut->insert(add2D, ndxParent);
    }
 
+/*
+        const DgHierNdxSystemRFBase& hierRF = hierNdxSystem->sysRF(dgg.res());
+        hierRF.setAllChildren(q2diR, children);
+  */
 
    // indexing children
-   DgLocVector* ndxChildren = nullptr;
+   // reuse variables from the spatial children above
+   DgLocVector ndxChildren;
    if (ndxChildrenOutType != "NONE") {
-;
-/*
+       if (!hierNdxSystem) {
+           ::report("indexing parents require a hierarchical indexing system.", DgBase::Fatal);
+       }
 
-      op.dggOp.dggs().setAllChildren(q2diR, children);
+       hierNdxSystem->setNdxChildren(q2diR, ndxChildren);
 
-      if (chdOut)
-         chdOut->insert(add2D, children);
-*/
+       if (ndxChdOut)
+           ndxChdOut->insert(add2D, ndxChildren);
    }
 
    if (collectOut) {
@@ -403,8 +411,8 @@ SubOpOut::outputCellAdd2D (const DgLocation& add2D, const std::string* labelIn,
             ((outSeqNum || useEnumLbl) ? NULL : pPrtOutRF),
             ((neighborsOutType == "GDAL_COLLECTION") ? &neighbors : nullptr),
             ((childrenOutType == "GDAL_COLLECTION") ? &children : nullptr),
-            ((ndxParentOutType == "GDAL_COLLECTION") ? ndxParent : nullptr),
-            ((ndxChildrenOutType == "GDAL_COLLECTION") ? ndxChildren : nullptr));
+            ((ndxParentOutType == "GDAL_COLLECTION") ? &ndxParent : nullptr),
+            ((ndxChildrenOutType == "GDAL_COLLECTION") ? &ndxChildren : nullptr));
    }
 
 } // void SubOpOut::outputCell

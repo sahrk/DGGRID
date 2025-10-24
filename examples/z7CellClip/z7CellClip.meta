@@ -12,6 +12,7 @@ dggrid_operation GENERATE_GRID
 # specify the DGG
 dggs_type ISEA7H
 dggs_res_spec 5
+hier_indexing_system_type Z7
 
 # control the generation
 clip_subset_type COARSE_CELLS
@@ -19,8 +20,9 @@ input_address_type HIERNDX
 input_hier_ndx_system Z7
 input_hier_ndx_form INT64
 
+# first cell address is a pentagon
 clip_cell_res 3
-clip_cell_addresses 0aefffffffffffff 016fffffffffffff 002fffffffffffff 1037ffffffffffff
+clip_cell_addresses 0007ffffffffffff 0aefffffffffffff 016fffffffffffff 002fffffffffffff 1037ffffffffffff
 
 clip_cell_densification 1
 geodetic_densify 0.0
@@ -30,11 +32,17 @@ geodetic_densify 0.0
 output_cell_label_type OUTPUT_ADDRESS_TYPE
 output_address_type HIERNDX
 output_hier_ndx_system Z7
-output_hier_ndx_form INT64
+output_hier_ndx_form DIGIT_STRING
 
 cell_output_type KML
 cell_output_file_name outputfiles/cells
 point_output_type KML
 point_output_file_name outputfiles/points
+
+indexing_children_output_type TEXT
+indexing_children_output_file_name outputfiles/hierChildren
+indexing_parent_output_type TEXT
+indexing_parent_output_file_name outputfiles/hierParent
+
 densification 0
 precision 6
