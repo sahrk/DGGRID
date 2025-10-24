@@ -105,7 +105,6 @@ DgHexIDGGS::DgHexIDGGS (DgRFNetwork& network, const DgGeoSphRF& backFrame,
     
     // create the hierarchical indexing system
      if (hierNdxSysType != InvalidHierNdxSysType) {
-        std::cout << "USING HIERSYS" << std::endl;
         hierNdxSystem_ = DgHierNdxSystemRFSBase::makeSystem(*this, hierNdxSysType, Int64);
      }
        
