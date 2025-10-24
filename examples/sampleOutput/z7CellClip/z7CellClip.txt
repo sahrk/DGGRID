@@ -79,7 +79,6 @@ clip_region_files test.gen (default)
 clip_type POLY_INTERSECT (default)
 clipper_scale_factor 1000000 (default)
 
-USING HIERSYS
 
 * building clipping regions...
 

@@ -79,7 +79,6 @@ clip_region_files inputfiles/seqnums.txt (user set)
 clip_type POLY_INTERSECT (default)
 clipper_scale_factor 1000000 (default)
 
-USING HIERSYS
 
 ** grid generation complete **
 accepted 4 cells / 5 tested
