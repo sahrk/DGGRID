@@ -41,11 +41,6 @@ add clip_cell_res to docs?
 
 ## [8.42] - 2025-09-21
 ### Fixed
-- put quotes around name field values in non-gdal geojson output files
-- correctly handle lower case string parameter values
-
-## [8.42] - 2025-09-21
-### Fixed
 - put quotes around name field values in geojson output files
 - correctly handle lower case string parameter values
 
