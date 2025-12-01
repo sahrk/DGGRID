@@ -27,6 +27,7 @@
 #include <cfloat>
 #include <string.h>
 
+#include <dglib/DgZ7RF.h>
 #include <dglib/DgZ7StringRF.h>
 #include <dglib/DgIDGGBase.h>
 #include <dglib/DgIDGGSBase.h>
@@ -61,31 +62,31 @@ DgZ7StringRF::str2add (DgZ7StringCoord* add, const char* str,
 } // const char* DgZ7StringRF::str2add
 
 ////////////////////////////////////////////////////////////////////////////////
-DgQ2DItoZ7StringConverter::DgQ2DItoZ7StringConverter
+DgQ2DItoZ7Converter::DgQ2DItoZ7Converter
                 (const DgRF<DgQ2DICoord, long long int>& from,
-                 const DgRF<DgZ7StringCoord, long long int>& to)
-        : DgConverter<DgQ2DICoord, long long int, DgZ7StringCoord, long long int> (from, to),
+                 const DgRF<DgZ7Coord, long long int>& to)
+        : DgConverter<DgQ2DICoord, long long int, DgZ7Coord, long long int> (from, to),
           pIDGG_ (NULL), effRes_ (0), effRadix_ (0)
 {
    pIDGG_ = dynamic_cast<const DgIDGGBase*>(&fromFrame());
    if (!pIDGG_) {
-      report("DgQ2DItoZ7StringConverter::DgQ2DItoZ7StringConverter(): "
+      report("DgQ2DItoZ7Converter::DgQ2DItoZ7Converter(): "
          " fromFrame not of type DgIDGGBase", DgBase::Fatal);
    }
 
-   const DgZ7StringRF* zRF = dynamic_cast<const DgZ7StringRF*>(&toFrame());
+   const DgZ7RF* zRF = dynamic_cast<const DgZ7RF*>(&toFrame());
    if (!zRF) {
-      report("DgQ2DItoZ7StringConverter::DgQ2DItoZ7StringConverter(): "
-         " toFrame not of type DgZ7StringRF", DgBase::Fatal);
+      report("DgQ2DItoZ7Converter::DgQ2DItoZ7Converter(): "
+         " toFrame not of type DgZ7RF", DgBase::Fatal);
    }
 
    if (IDGG().dggs()->aperture() != zRF->aperture() || IDGG().res() != zRF->res()) {
-       report("DgQ2DItoZ7StringConverter::DgQ2DItoZ7StringConverter(): "
+       report("DgQ2DItoZ7Converter::DgQ2DItoZ7Converter(): "
          "fromFrame and toFrame apertures or resolutions do not match", DgBase::Fatal);
    }
 
    if (IDGG().gridTopo() != Hexagon || IDGG().dggs()->aperture() != 7) {
-      report("DgQ2DItoZ7StringConverter::DgQ2DItoZ7StringConverter(): "
+      report("DgQ2DItoZ7Converter::DgQ2DItoZ7Converter(): "
          "only implemented for aperture 7 hexagon grids", DgBase::Fatal);
    }
 
@@ -94,13 +95,13 @@ DgQ2DItoZ7StringConverter::DgQ2DItoZ7StringConverter
    // effRes_ is the number of Class I resolutions
    effRes_ = (IDGG().res() + 1) / 2;
 
-} // DgQ2DItoZ7StringConverter::DgQ2DItoZ7StringConverter
+} // DgQ2DItoZ7Converter::DgQ2DItoZ7Converter
 
 ////////////////////////////////////////////////////////////////////////////////
-DgZ7StringCoord
-DgQ2DItoZ7StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
+DgZ7Coord
+DgQ2DItoZ7Converter::convertTypedAddress (const DgQ2DICoord& addIn) const
 {
-   //printf("DgQ2DItoZ7StringConverter::convertTypedAddress\n");
+   //printf("DgQ2DItoZ7Converter::convertTypedAddress\n");
 /*
    // check for res 0/base cell
     if (res == 0) {
@@ -223,8 +224,7 @@ DgQ2DItoZ7StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
 
    // dgcout << " "; // KEVIN
 
-    string bcstr = dgg::util::to_string(baseCell, 2);
-    string addstr = bcstr;
+    uint64_t z7index = (uint64_t)baseCell << 60; // shift to top bits
     DgIVec3D::Direction skipDigit = ((baseCell < 6) ? DgIVec3D::PENTAGON_SKIPPED_DIGIT_TYPE1 : DgIVec3D::PENTAGON_SKIPPED_DIGIT_TYPE2);
     int skipRotate = false;
     int firstNonZero = false;
@@ -239,49 +239,52 @@ DgQ2DItoZ7StringConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
         if (skipRotate) {
             d = DgIVec3D::rotate60ccw(d);
         }
-
-        addstr = addstr + to_string((int) d);
+        auto shift = 3 * (20 - r);
+        z7index |= (uint64_t)d << shift;
     }
+
+    for (int r = res + 1; r <= 20; r++)
+        z7index |= (uint64_t)0x7 << (3 * (20 - r));
 
     free(digits);
     digits = NULL;
 
-    DgZ7StringCoord z7str;
-    z7str.setValString(addstr);
+    DgZ7Coord z7;
+    z7.setValue(z7index);
 //dgcout << z7str << endl; // KEVIN
     //dgcout << "KEVIN addIn: " << addIn << " baseijk: " << baseCellIjk << " z7str: " << z7str << endl;
     //dgcout << z7str << " " << addIn << endl;
 
-    return z7str;
+    return z7;
 
-} // DgZ7StringCoord DgQ2DItoZ7StringConverter::convertTypedAddress
+} // DgZ7StringCoord DgQ2DItoZ7Converter::convertTypedAddress
 
 ////////////////////////////////////////////////////////////////////////////////
-DgZ7StringToQ2DIConverter::DgZ7StringToQ2DIConverter
-                (const DgRF<DgZ7StringCoord, long long int>& from,
+DgZ7ToQ2DIConverter::DgZ7ToQ2DIConverter
+                (const DgRF<DgZ7Coord, long long int>& from,
                  const DgRF<DgQ2DICoord, long long int>& to)
-        : DgConverter<DgZ7StringCoord, long long int, DgQ2DICoord, long long int> (from, to),
+        : DgConverter<DgZ7Coord, long long int, DgQ2DICoord, long long int> (from, to),
           pIDGG_ (NULL), res_ (0), numClassI_ (0), unitScaleClassIres_ (0)
 {
    pIDGG_ = dynamic_cast<const DgIDGGBase*>(&toFrame());
    if (!pIDGG_) {
-      report("DgZ7StringToQ2DIConverter::DgZ7StringToQ2DIConverter(): "
+      report("DgZ7ToQ2DIConverter::DgZ7ToQ2DIConverter(): "
          " toFrame not of type DgIDGGBase", DgBase::Fatal);
    }
 
-   const DgZ7StringRF* zRF = dynamic_cast<const DgZ7StringRF*>(&fromFrame());
+   const DgZ7RF* zRF = dynamic_cast<const DgZ7RF*>(&fromFrame());
    if (!zRF) {
-      report("DgQ2DItoZ7StringConverter::DgQ2DItoZ7StringConverter(): "
-         " fromFrame not of type DgZ7StringRF", DgBase::Fatal);
+      report("DgQ2DItoZ7Converter::DgQ2DItoZ7Converter(): "
+         " fromFrame not of type DgZ7RF", DgBase::Fatal);
    }
 
    if (IDGG().dggs()->aperture() != zRF->aperture() || IDGG().res() != zRF->res()) {
-      report("DgQ2DItoZ7StringConverter::DgQ2DItoZ7StringConverter(): "
+      report("DgQ2DItoZ7Converter::DgQ2DItoZ7Converter(): "
          " fromFrame and toFrame apertures or resolutions do not match", DgBase::Fatal);
    }
 
    if (IDGG().gridTopo() != Hexagon || IDGG().dggs()->aperture() != 7) {
-      report("DgZ7StringToQ2DIConverter::DgZ7StringToQ2DIConverter(): "
+      report("DgZ7ToQ2DIConverter::DgZ7ToQ2DIConverter(): "
          "only implemented for aperture 3 hexagon grids", DgBase::Fatal);
    }
 
@@ -295,27 +298,31 @@ DgZ7StringToQ2DIConverter::DgZ7StringToQ2DIConverter
 
 ////////////////////////////////////////////////////////////////////////////////
 DgQ2DICoord
-DgZ7StringToQ2DIConverter::convertTypedAddress (const DgZ7StringCoord& addIn) const
+DgZ7ToQ2DIConverter::convertTypedAddress (const DgZ7Coord& addIn) const
 {
-   //printf("DgZ7StringToQ2DIConverter::convertTypedAddress\n");
+   //printf("DgZ7ToQ2DIConverter::convertTypedAddress\n");
 
-   string addstr = addIn.valString();
-   // first get the base cell number
-   string bstr = addstr.substr(0, 2);
-   if (bstr[0] == '0') // leading 0
-      bstr = bstr.substr(1, 1);
-   int bcNum = std::stoi(bstr);
+   uint64_t z7index = addIn.value();
+
+   // extract the z7 digits
+    uint8_t digits[21] = {};
+    int res = 20;
+    for (int r = 20; r > 0; --r) {
+        digits[r] = z7index & 0x7;
+        if (digits[r] == 0x7)
+            --res;
+        z7index >>= 3;
+    }
+    int bcNum = digits[0] = z7index & 0xF; // base cell number
+
     if (bcNum < 0 || bcNum > 11) {
-        report("DgZ7StringToQ2DIConverter::convertTypedAddress(): "
+        report("DgZ7ToQ2DIConverter::convertTypedAddress(): "
            "index has invalid base cell number", DgBase::Fatal);
-     }
+    }
 
-   // the rest is the Z7 digit string
-   int index = 2; // skip the two base cell digits
-   string z7str = addstr.substr(index);
-    int res = (int) z7str.length();
+   // first get the base cell number
     if (res != res_) {
-        report("DgZ7StringToQ2DIConverter::convertTypedAddress(): "
+        report("DgZ7ToQ2DIConverter::convertTypedAddress(): "
            "index does not match DGG resolution", DgBase::Fatal);
      }
 
@@ -325,13 +332,13 @@ DgZ7StringToQ2DIConverter::convertTypedAddress (const DgZ7StringCoord& addIn) co
 
    // adjust if Class III (odd res)
     if (res % 2) {
-        z7str += "0";
+        digits[res + 1] = 0;
         res++;
     }
 
    DgIVec3D ijk = { 0, 0, 0 };
-   for (int r = 0; r < res; r++) {
-       if ((r + 1) % 2) { // first res is 1, not 0
+   for (int r = 1; r <= res; r++) {
+       if (r % 2) {
            // Class III == rotate ccw
            ijk.downAp7();
        } else {
@@ -339,7 +346,7 @@ DgZ7StringToQ2DIConverter::convertTypedAddress (const DgZ7StringCoord& addIn) co
            ijk.downAp7r();
        }
 
-       ijk.neighbor((DgIVec3D::Direction) (z7str.c_str()[r] - '0'));
+       ijk.neighbor((DgIVec3D::Direction) digits[r]);
    }
 
    DgIVec2D ij = DgIVec2D(ijk);
@@ -496,7 +503,7 @@ DgZ7StringToQ2DIConverter::convertTypedAddress (const DgZ7StringCoord& addIn) co
 
    return q2di;
 
-} // DgQ2DICoord DgZ7StringToQ2DIConverter::convertTypedAddress
+} // DgQ2DICoord DgZ7ToQ2DIConverter::convertTypedAddress
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

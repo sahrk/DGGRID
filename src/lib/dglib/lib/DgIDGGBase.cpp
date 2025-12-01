@@ -236,11 +236,11 @@ DgIDGGBase::createConverters (void)
 
     Dg2WayConverter* toZ7Str = NULL;
     Dg2WayConverter* toZ7 = NULL;
-    if (z7StrRF()) {
-       toZ7Str = new Dg2WayZ7StringConverter(*this, *z7StrRF());
+    if (z7RF()) {
+       toZ7 = new Dg2WayZ7Converter(*this, *z7RF());
 
-       if (z7RF())
-          toZ7 = new Dg2WayZ7ToStringConverter(*z7StrRF(), *z7RF());
+       if (z7StrRF())
+          toZ7Str = new Dg2WayZ7ToStringConverter(*z7StrRF(), *z7RF());
     }
 
     // suppress unused variable error

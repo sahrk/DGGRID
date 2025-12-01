@@ -39,17 +39,17 @@ class DgZ7StringCoord;
 using namespace std;
 
 ////////////////////////////////////////////////////////////////////////////////
-class DgQ2DItoZ7StringConverter :
-        public DgConverter<DgQ2DICoord, long long int, DgZ7StringCoord, long long int>
+class DgQ2DItoZ7Converter :
+        public DgConverter<DgQ2DICoord, long long int, DgZ7Coord, long long int>
 {
    public:
 
-      DgQ2DItoZ7StringConverter (const DgRF<DgQ2DICoord, long long int>& from,
-                                   const DgRF<DgZ7StringCoord, long long int>& to);
+      DgQ2DItoZ7Converter (const DgRF<DgQ2DICoord, long long int>& from,
+                                   const DgRF<DgZ7Coord, long long int>& to);
 
       const DgIDGGBase& IDGG (void) const { return *pIDGG_; }
 
-      virtual DgZ7StringCoord convertTypedAddress
+      virtual DgZ7Coord convertTypedAddress
                                 (const DgQ2DICoord& addIn) const;
 
    protected:
@@ -61,18 +61,18 @@ class DgQ2DItoZ7StringConverter :
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-class DgZ7StringToQ2DIConverter :
-        public DgConverter<DgZ7StringCoord, long long int, DgQ2DICoord, long long int>
+class DgZ7ToQ2DIConverter :
+        public DgConverter<DgZ7Coord, long long int, DgQ2DICoord, long long int>
 {
    public:
 
-      DgZ7StringToQ2DIConverter (const DgRF<DgZ7StringCoord, long long int>& from,
+      DgZ7ToQ2DIConverter (const DgRF<DgZ7Coord, long long int>& from,
                                    const DgRF<DgQ2DICoord, long long int>& to);
 
       const DgIDGGBase& IDGG (void) const { return *pIDGG_; }
 
       virtual DgQ2DICoord convertTypedAddress
-                                (const DgZ7StringCoord& addIn) const;
+                                (const DgZ7Coord& addIn) const;
 
    protected:
 
@@ -83,14 +83,14 @@ class DgZ7StringToQ2DIConverter :
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-class Dg2WayZ7StringConverter : public Dg2WayConverter {
+class Dg2WayZ7Converter : public Dg2WayConverter {
 
    public:
 
-      Dg2WayZ7StringConverter (const DgRF<DgQ2DICoord, long long int>& fromFrame,
-              const DgRF<DgZ7StringCoord, long long int>& toFrame)
-         : Dg2WayConverter (*(new DgQ2DItoZ7StringConverter(fromFrame, toFrame)),
-              *(new DgZ7StringToQ2DIConverter(toFrame, fromFrame))) {}
+      Dg2WayZ7Converter (const DgRF<DgQ2DICoord, long long int>& fromFrame,
+              const DgRF<DgZ7Coord, long long int>& toFrame)
+         : Dg2WayConverter (*(new DgQ2DItoZ7Converter(fromFrame, toFrame)),
+              *(new DgZ7ToQ2DIConverter(toFrame, fromFrame))) {}
 };
 
 ////////////////////////////////////////////////////////////////////////////////
