@@ -40,6 +40,10 @@ output_hier_ndx_form < INT64 | DIGIT_STRING >
 output_hier_ndx_system < ZORDER | Z3 | Z7 >
 */
 
+## [8.43] - 2025-12-01
+### Fixed
+- correctly handle preset DGGS's when operation has no input or output
+
 ## [8.42] - 2025-09-21
 ### Fixed
 - put quotes around name field values in non-gdal geojson output files
