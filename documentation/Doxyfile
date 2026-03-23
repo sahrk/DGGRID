@@ -1,0 +1,36 @@
+# Doxyfile for ReadTheDocs / Breathe integration
+#
+# This file is separate from src/Doxyfile (the CMake-based upstream build).
+# It is intentionally standalone with relative paths and produces only XML
+# output for consumption by Breathe/Sphinx. HTML generation is disabled.
+
+PROJECT_NAME           = DGGRID
+PROJECT_NUMBER         = 8.423
+PROJECT_BRIEF          = "Discrete Global Grid System software"
+
+# Input: the core libraries (relative to this file's directory)
+INPUT                  = src/lib
+RECURSIVE              = YES
+FILE_PATTERNS          = *.h *.hpp *.cpp
+
+# XML output for Breathe/Sphinx, HTML for GitHub Pages
+GENERATE_HTML          = YES
+GENERATE_LATEX         = NO
+GENERATE_XML           = YES
+OUTPUT_DIRECTORY       = documentation/build/doxygen
+XML_OUTPUT             = xml
+HTML_OUTPUT            = html
+
+# Class and collaboration diagrams via Graphviz
+HAVE_DOT               = YES
+CLASS_GRAPH            = YES
+COLLABORATION_GRAPH    = YES
+INCLUDE_GRAPH          = YES
+CALLER_GRAPH           = NO
+DOT_IMAGE_FORMAT       = svg
+INTERACTIVE_SVG        = YES
+
+# Suppress noise
+QUIET                  = YES
+WARNINGS               = YES
+WARN_IF_UNDOCUMENTED   = NO

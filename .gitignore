@@ -64,3 +64,6 @@ documentation/source/_build
 
 .idea/
 cmake-build-debug/
+.venv/
+documentation/build/
+__pycache__/
