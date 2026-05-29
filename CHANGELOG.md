@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 All changes are by Kevin Sahr, unless otherwise noted.
 
+## [9.01b] - 2026-05-28
+### Changed
+- new initializer_list syntax to simplify insertParam method calls
+
 ## [9.0b] - 2026-04-02
 ### Changed
 - re-architected the discrete RF hierarchy to allow grids with an explicitly discrete back frame (cell geometry specification RF).
