@@ -254,7 +254,7 @@ SubOpDGG::initializeOp (void)
 
    // hier_indexing_system_type <ZORDER | Z3 | Z7 | NONE>
    pList().insertParam("hier_indexing_system_type", "NONE",
-                       dgg::addtype::hierNdxSysTypeChoices());
+                       {"Z7", "ZORDER", "Z3", "NONE"});
 
    // z3_invalid_digit < 0 | 1 | 2 | 3 >
    // default changed to "3" in version 9.0b
