@@ -49,8 +49,6 @@ SubOpIn::SubOpIn (OpBasic& op, bool _activate)
 int
 SubOpIn::initializeOp (void)
 {
-   std::vector<std::string*> choices;
-
    // input_files <fileName1 fileName2 ... fileNameN>
    pList().insertParam(new DgStringParam("input_files", "vals.txt"));
 
@@ -65,12 +63,10 @@ SubOpIn::initializeOp (void)
       choices.push_back(new std::string("FIRST_FIELD"));
       choices.push_back(new std::string("NAMED_FIELD"));
 */
-      choices.push_back(new std::string("GEO_POINT")); // determines the index from the input point geometry
-                                               // note this differs from having a geo point in a (text)
-                                               // field (that is the intent when fully implemented)
-      pList().insertParam(new DgStringChoiceParam("input_address_field_type", "GEO_POINT",
-                  &choices));
-      dgg::util::release(choices);
+      // determines the index from the input point geometry
+      // note this differs from having a geo point in a (text)
+      // field (that is the intent when fully implemented)
+      pList().insertParam("input_address_field_type", "GEO_POINT", {"GEO_POINT"});
 /*
       // input_address_field_name <fieldName>
       // used when input_address_field_type is NAMED_FIELD
@@ -78,14 +74,14 @@ SubOpIn::initializeOp (void)
    }
 */
    // point_input_file_type <NONE | TEXT | GDAL>
-   choices.push_back(new std::string("NONE"));
+   {
+      std::vector<std::string> ch = {"NONE", "TEXT"};
 #ifdef USE_GDAL
-   choices.push_back(new std::string("GDAL"));
+      ch.push_back("GDAL");
 #endif
-   choices.push_back(new std::string("TEXT"));
-   std::string def = ((op.mainOp.operation == "GENERATE_GRID") ? "NONE" : "TEXT");
-   pList().insertParam(new DgStringChoiceParam("point_input_file_type", def, &choices));
-   dgg::util::release(choices);
+      std::string def = ((op.mainOp.operation == "GENERATE_GRID") ? "NONE" : "TEXT");
+      pList().insertParam("point_input_file_type", def, ch);
+   }
 
 /*
 #ifdef USE_GDAL
@@ -96,38 +92,19 @@ SubOpIn::initializeOp (void)
 
    // input_address_type < GEO | PLANE | PROJTRI | Q2DD | Q2DI |
    //        SEQNUM | VERTEX2DD | HIERNDX >
-   for (int i = 0; ; i++) {
-      if (dgg::addtype::addTypeStrings[i] == "NONE")
-         break;
-      choices.push_back(new std::string(dgg::addtype::addTypeStrings[i]));
-   }
-
    // KEVIN?? def = ((op.mainOp.operation != "TRANSFORM_POINTS") ? "GEO" : "SEQNUM");
-   def = "GEO";
-   pList().insertParam(new DgStringChoiceParam("input_address_type", def, &choices));
-   dgg::util::release(choices);
+   pList().insertParam("input_address_type", "GEO",
+                       dgg::addtype::addressTypeChoices());
 
     // input_hier_ndx_system < ZORDER | Z3 | Z7 >
     // used if input_address_type is HIERNDX
-    for (int i = 0; ; i++) {
-       choices.push_back(new std::string(dgg::addtype::hierNdxSysTypeStrings[i]));
-       if (dgg::addtype::hierNdxSysTypeStrings[i] == "NONE")
-          break;
-    }
-    def = "Z3";
-    pList().insertParam(new DgStringChoiceParam("input_hier_ndx_system", def, &choices));
-    dgg::util::release(choices);
+   pList().insertParam("input_hier_ndx_system", "Z3",
+                       {"Z7", "ZORDER", "Z3", "NONE"});
 
     // input_hier_ndx_form < INT64 | DIGIT_STRING | NONE >
     // used if input_address_type is HIERNDX
-    for (int i = 0; ; i++) {
-       choices.push_back(new std::string(dgg::addtype::hierNdxFormTypeStrings[i]));
-       if (dgg::addtype::hierNdxFormTypeStrings[i] == "NONE")
-          break;
-    }
-    def = "INT64";
-    pList().insertParam(new DgStringChoiceParam("input_hier_ndx_form", def, &choices));
-    dgg::util::release(choices);
+   pList().insertParam("input_hier_ndx_form", "INT64",
+                       {"INT64", "DIGIT_STRING", "NONE"});
 
    // input_delimiter <v is any character in long double quotes>
    pList().insertParam(new DgStringParam("input_delimiter", "\" \"", true ,false));
