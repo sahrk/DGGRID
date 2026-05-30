@@ -31,6 +31,7 @@
 
 #include <cfloat>
 #include <climits>
+#include <initializer_list>
 #include <string>
 #include <vector>
 
@@ -139,6 +140,16 @@ class DgApParamList {
                  bool failSilent = false);
 
       void insertParam (DgApAssoc* param); // does not make a copy
+
+      /// Convenience overload for the common DgStringChoiceParam case.
+      void insertParam (const std::string& name,
+                        const std::string& defaultValue,
+                        std::initializer_list<std::string> choices);
+
+      /// Convenience overload accepting std::vector<std::string>.
+      void insertParam (const std::string& name,
+                        const std::string& defaultValue,
+                        const std::vector<std::string>& choices);
 
       DgApAssoc* getParam (const std::string& nameIn,
                          bool setToIsApplicable = true) const;
@@ -567,6 +578,20 @@ class DgChoiceParam : public DgParameter<T> {
            addChoices(*choicesIn);
       }
 
+      DgChoiceParam (const std::string& nameIn, std::initializer_list<T> choicesIn)
+          : DgParameter<T> (nameIn) { addChoices(choicesIn); }
+
+      DgChoiceParam (const std::string& nameIn, const T& valIn,
+                     std::initializer_list<T> choicesIn, bool validIn = true)
+        : DgParameter<T> (nameIn, valIn, validIn) { addChoices(choicesIn); }
+
+      DgChoiceParam (const std::string& nameIn, const std::vector<T>& choicesIn)
+          : DgParameter<T> (nameIn) { addChoices(choicesIn); }
+
+      DgChoiceParam (const std::string& nameIn, const T& valIn,
+                     const std::vector<T>& choicesIn, bool validIn = true)
+        : DgParameter<T> (nameIn, valIn, validIn) { addChoices(choicesIn); }
+
      ~DgChoiceParam (void)
            { clearChoices(); }
 
@@ -575,7 +600,21 @@ class DgChoiceParam : public DgParameter<T> {
       void addChoices (const std::vector<T*>& choicesIn) // makes copy
             {
                for (unsigned int i = 0; i < choicesIn.size(); i++) {
-                  choices_.push_back(new std::string(*choicesIn[i]));
+                  choices_.push_back(new T(*choicesIn[i]));
+               }
+            }
+
+      void addChoices (std::initializer_list<T> choicesIn)
+            {
+               for (const auto& c : choicesIn) {
+                  choices_.push_back(new T(c));
+               }
+            }
+
+      void addChoices (const std::vector<T>& choicesIn) // makes copy
+            {
+               for (const auto& c : choicesIn) {
+                  choices_.push_back(new T(c));
                }
             }
 
@@ -628,19 +667,13 @@ class DgStringChoiceParam : public DgChoiceParam<std::string> {
       DgStringChoiceParam (const std::string& nameIn,
                            const std::vector<std::string*>* choicesIn = 0)
           : DgChoiceParam<std::string> (nameIn, choicesIn)
-                {
-                   for (unsigned int i = 0; i < choices_.size(); i++) {
-                      *choices_[i] = toLower(*choices_[i]);
-                   }
-                }
+                { lowerChoices(); }
 
       DgStringChoiceParam (const std::string& nameIn, const std::string& valIn,
                      const std::vector<std::string*>* choicesIn = 0, bool validIn = true)
           : DgChoiceParam<std::string> (nameIn, valIn, choicesIn, validIn)
                 {
-                   for (unsigned int i = 0; i < choices_.size(); i++) {
-                      *choices_[i] = toLower(*choices_[i]);
-                   }
+                   lowerChoices();
 
                    if (!validate()) {
                      report(
@@ -649,6 +682,54 @@ class DgStringChoiceParam : public DgChoiceParam<std::string> {
                         validationErrMsg(), DgBase::Fatal);
                    }
                 }
+
+      DgStringChoiceParam (const std::string& nameIn,
+                           std::initializer_list<std::string> choicesIn)
+          : DgChoiceParam<std::string> (nameIn, choicesIn)
+                { lowerChoices(); }
+
+      DgStringChoiceParam (const std::string& nameIn, const std::string& valIn,
+                           std::initializer_list<std::string> choicesIn,
+                           bool validIn = true)
+          : DgChoiceParam<std::string> (nameIn, valIn, choicesIn, validIn)
+                {
+                   lowerChoices();
+
+                   if (!validate()) {
+                     report(
+                       std::string("Invalid initialization data for parameter:\n")
+                        + name() + " " + valToStr() +std::string("\n") +
+                        validationErrMsg(), DgBase::Fatal);
+                   }
+                }
+
+      DgStringChoiceParam (const std::string& nameIn,
+                           const std::vector<std::string>& choicesIn)
+          : DgChoiceParam<std::string> (nameIn, choicesIn)
+                { lowerChoices(); }
+
+      DgStringChoiceParam (const std::string& nameIn, const std::string& valIn,
+                           const std::vector<std::string>& choicesIn,
+                           bool validIn = true)
+          : DgChoiceParam<std::string> (nameIn, valIn, choicesIn, validIn)
+                {
+                   lowerChoices();
+
+                   if (!validate()) {
+                     report(
+                       std::string("Invalid initialization data for parameter:\n")
+                        + name() + " " + valToStr() +std::string("\n") +
+                        validationErrMsg(), DgBase::Fatal);
+                   }
+                }
+
+   private:
+      void lowerChoices()
+            {
+               for (unsigned int i = 0; i < choices_.size(); i++) {
+                  *choices_[i] = toLower(*choices_[i]);
+               }
+            }
 
       virtual std::string valToStr (void) const { return value_; }
       virtual std::string strToVal (const std::string& strVal) const { return strVal; }
@@ -672,6 +753,22 @@ class DgStringChoiceParam : public DgChoiceParam<std::string> {
                    return this->setIsValid(false);
                 }
 };
+
+////////////////////////////////////////////////////////////////////////////////
+// Definition of convenience overload (must come after DgStringChoiceParam is defined)
+inline void DgApParamList::insertParam (const std::string& name,
+                                        const std::string& defaultValue,
+                                        std::initializer_list<std::string> choices)
+{
+   insertParam(new DgStringChoiceParam(name, defaultValue, choices));
+}
+
+inline void DgApParamList::insertParam (const std::string& name,
+                                        const std::string& defaultValue,
+                                        const std::vector<std::string>& choices)
+{
+   insertParam(new DgStringChoiceParam(name, defaultValue, choices));
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

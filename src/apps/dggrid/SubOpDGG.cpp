@@ -163,64 +163,28 @@ SubOpDGG::addressTypeToRF (DgAddressType type, DgHierNdxSysType hierNdxSysType, 
 int
 SubOpDGG::initializeOp (void)
 {
-   std::vector<std::string*> choices;
-
    // dggs_type <CUSTOM | SUPERFUND | PLANETRISK | IGEO7 |
    //            ISEA3H | ISEA4H | ISEA7H | ISEA43H | ISEA4T | ISEA4D |
    //            FULLER3H | FULLER4H | FULLER7H | FULLER43H | FULLER4T | FULLER4D>
-   choices.push_back(new std::string("CUSTOM"));
-   choices.push_back(new std::string("SUPERFUND"));
-   choices.push_back(new std::string("PLANETRISK"));
-   choices.push_back(new std::string("IGEO7"));
-   choices.push_back(new std::string("ISEA3H"));
-   choices.push_back(new std::string("ISEA4H"));
-   choices.push_back(new std::string("ISEA7H"));
-   choices.push_back(new std::string("ISEA43H"));
-   choices.push_back(new std::string("ISEA4T"));
-   choices.push_back(new std::string("ISEA4D"));
-   choices.push_back(new std::string("FULLER3H"));
-   choices.push_back(new std::string("FULLER4H"));
-   choices.push_back(new std::string("FULLER7H"));
-   choices.push_back(new std::string("FULLER43H"));
-   choices.push_back(new std::string("FULLER4T"));
-   choices.push_back(new std::string("FULLER4D"));
-   pList().insertParam(new DgStringChoiceParam("dggs_type", "CUSTOM", &choices));
-   dgg::util::release(choices);
+   pList().insertParam("dggs_type", "CUSTOM",
+       {"CUSTOM", "SUPERFUND", "PLANETRISK", "IGEO7",
+        "ISEA3H", "ISEA4H", "ISEA7H", "ISEA43H", "ISEA4T", "ISEA4D",
+        "FULLER3H", "FULLER4H", "FULLER7H", "FULLER43H", "FULLER4T", "FULLER4D"});
 
    // dggs_base_poly <ICOSAHEDRON>
-   choices.push_back(new std::string("ICOSAHEDRON"));
-   pList().insertParam(new DgStringChoiceParam("dggs_base_poly", "ICOSAHEDRON",
-               &choices));
-   dgg::util::release(choices);
+   pList().insertParam("dggs_base_poly", "ICOSAHEDRON", {"ICOSAHEDRON"});
 
    // dggs_topology <HEXAGON | TRIANGLE | DIAMOND>
-   choices.push_back(new std::string("HEXAGON"));
-   choices.push_back(new std::string("TRIANGLE"));
-   choices.push_back(new std::string("DIAMOND"));
-   pList().insertParam(new DgStringChoiceParam("dggs_topology", "HEXAGON", &choices));
-   dgg::util::release(choices);
+   pList().insertParam("dggs_topology", "HEXAGON", {"HEXAGON", "TRIANGLE", "DIAMOND"});
 
    // dggs_proj <ISEA | FULLER | GNOMONIC>
-   choices.push_back(new std::string("ISEA"));
-   choices.push_back(new std::string("FULLER"));
-   //choices.push_back(new std::string("GNOMONIC"));
-   pList().insertParam(new DgStringChoiceParam("dggs_proj", "ISEA", &choices));
-   dgg::util::release(choices);
+   pList().insertParam("dggs_proj", "ISEA", {"ISEA", "FULLER" /*, "GNOMONIC"*/ });
 
    // dggs_aperture_type <PURE | MIXED43 | SEQUENCE>
-   choices.push_back(new std::string("PURE"));
-   choices.push_back(new std::string("MIXED43"));
-   choices.push_back(new std::string("SEQUENCE"));
-   pList().insertParam(new DgStringChoiceParam("dggs_aperture_type", "PURE",
-             &choices));
-   dgg::util::release(choices);
+   pList().insertParam("dggs_aperture_type", "PURE", {"PURE", "MIXED43", "SEQUENCE"});
 
    // dggs_aperture < 3 | 4 | 7 >
-   choices.push_back(new std::string("3"));
-   choices.push_back(new std::string("4"));
-   choices.push_back(new std::string("7"));
-   pList().insertParam(new DgStringChoiceParam("dggs_aperture", "4", &choices));
-   dgg::util::release(choices);
+   pList().insertParam("dggs_aperture", "4", {"3", "4", "7"});
 
    // dggs_aperture_sequence < apertureSequence >
    pList().insertParam(new DgStringParam("dggs_aperture_sequence",
@@ -235,12 +199,8 @@ SubOpDGG::initializeOp (void)
    pList().insertParam(new DgIntParam("dggs_num_aperture_4_res", 0, 0, MAX_DGG_RES));
 
    // proj_datum <WGS84_AUTHALIC_SPHERE WGS84_MEAN_SPHERE CUSTOM_SPHERE>
-   choices.push_back(new std::string("WGS84_AUTHALIC_SPHERE"));
-   choices.push_back(new std::string("WGS84_MEAN_SPHERE"));
-   choices.push_back(new std::string("CUSTOM_SPHERE"));
-   pList().insertParam(new DgStringChoiceParam("proj_datum",
-               "WGS84_AUTHALIC_SPHERE", &choices));
-   dgg::util::release(choices);
+   pList().insertParam("proj_datum", "WGS84_AUTHALIC_SPHERE",
+                       {"WGS84_AUTHALIC_SPHERE", "WGS84_MEAN_SPHERE", "CUSTOM_SPHERE"});
 
    // proj_datum_radius <long double: km> (1.0 <= v <= 10000.0)
    pList().insertParam(new DgDoubleParam("proj_datum_radius", DEFAULT_RADIUS_KM,
@@ -249,12 +209,8 @@ SubOpDGG::initializeOp (void)
    //// specify the position and orientation
 
    // dggs_orient_specify_type <RANDOM | SPECIFIED | REGION_CENTER>
-   choices.push_back(new std::string("RANDOM"));
-   choices.push_back(new std::string("SPECIFIED"));
-   choices.push_back(new std::string("REGION_CENTER"));
-   pList().insertParam(new DgStringChoiceParam("dggs_orient_specify_type", "SPECIFIED",
-               &choices));
-   dgg::util::release(choices);
+   pList().insertParam("dggs_orient_specify_type", "SPECIFIED",
+                       {"RANDOM", "SPECIFIED", "REGION_CENTER"});
 
    // dggs_num_placements <int> (v >= 1)
    pList().insertParam(new DgIntParam("dggs_num_placements", 1, 1, INT_MAX, true));
@@ -279,12 +235,8 @@ SubOpDGG::initializeOp (void)
    pList().insertParam(new DgDoubleParam("region_center_lat", 0.0, -90.0, 90.0));
 
    // dggs_res_specify_type <SPECIFIED | CELL_AREA | INTERCELL_DISTANCE>
-   choices.push_back(new std::string("SPECIFIED"));
-   choices.push_back(new std::string("CELL_AREA"));
-   choices.push_back(new std::string("INTERCELL_DISTANCE"));
-   pList().insertParam(new DgStringChoiceParam("dggs_res_specify_type", "SPECIFIED",
-               &choices));
-   dgg::util::release(choices);
+   pList().insertParam("dggs_res_specify_type", "SPECIFIED",
+                       {"SPECIFIED", "CELL_AREA", "INTERCELL_DISTANCE"});
 
    // dggs_res_specify_area <long double: km^2> (v > 0.0)
    pList().insertParam(new DgDoubleParam("dggs_res_specify_area", 100.0,
@@ -301,24 +253,12 @@ SubOpDGG::initializeOp (void)
    pList().insertParam(new DgIntParam("dggs_res_spec", 9, 0, MAX_DGG_RES));
 
    // hier_indexing_system_type <ZORDER | Z3 | Z7 | NONE>
-   for (int i = 0; ; i++) {
-       choices.push_back(new std::string(dgg::addtype::hierNdxSysTypeStrings[i]));
-       if (dgg::addtype::hierNdxSysTypeStrings[i] == "NONE")
-          break;
-   }
-   pList().insertParam(new DgStringChoiceParam("hier_indexing_system_type", "NONE", &choices));
-   dgg::util::release(choices);
+   pList().insertParam("hier_indexing_system_type", "NONE",
+                       dgg::addtype::hierNdxSysTypeChoices());
 
    // z3_invalid_digit < 0 | 1 | 2 | 3 >
-   choices.push_back(new std::string("0"));
-   choices.push_back(new std::string("1"));
-   choices.push_back(new std::string("2"));
-   choices.push_back(new std::string("3"));
-// default changed to "3" in version 9.0b
-   //pList().insertParam(new DgStringChoiceParam("z3_invalid_digit", "0",
-   pList().insertParam(new DgStringChoiceParam("z3_invalid_digit", "3",
-             &choices));
-   dgg::util::release(choices);
+   // default changed to "3" in version 9.0b
+   pList().insertParam("z3_invalid_digit", "3", {"0", "1", "2", "3"});
 
    return 0;
 

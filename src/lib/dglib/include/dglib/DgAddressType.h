@@ -51,6 +51,33 @@ static const std::string hierNdxFormTypeStrings[] = {
     "INT64", "DIGIT_STRING", "NONE"
 };
 
+/// Return the valid choices for address types (excludes the "NONE" sentinel).
+inline std::vector<std::string> addressTypeChoices()
+{
+    std::vector<std::string> v;
+    for (int i = 0; addTypeStrings[i] != "NONE"; ++i)
+        v.push_back(addTypeStrings[i]);
+    return v;
+}
+
+/// Return the valid choices for hierarchical index systems (excludes "NONE").
+inline std::vector<std::string> hierNdxSysTypeChoices()
+{
+    std::vector<std::string> v;
+    for (int i = 0; hierNdxSysTypeStrings[i] != "NONE"; ++i)
+        v.push_back(hierNdxSysTypeStrings[i]);
+    return v;
+}
+
+/// Return the valid choices for hierarchical index forms (excludes "NONE").
+inline std::vector<std::string> hierNdxFormTypeChoices()
+{
+    std::vector<std::string> v;
+    for (int i = 0; hierNdxFormTypeStrings[i] != "NONE"; ++i)
+        v.push_back(hierNdxFormTypeStrings[i]);
+    return v;
+}
+
 DgAddressType stringToAddressType (const std::string& str);
 const std::string& to_string (DgAddressType t);
 

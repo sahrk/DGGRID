@@ -155,21 +155,13 @@ SubOpBinPts::outputCell(const DgLocation& loc, const Val& val) const
 int
 SubOpBinPts::initializeOp (void) {
 
-   std::vector<std::string*> choices;
-
 /* not yet used
    // bin_method <ARITHMETIC_MEAN>
-   choices.push_back(new std::string("ARITHMETIC_MEAN"));
-   pList().insertParam(new DgStringChoiceParam("bin_method", "ARITHMETIC_MEAN",
-                                       &choices));
-   dgg::util::release(choices);
+   pList().insertParam("bin_method", "ARITHMETIC_MEAN", {"ARITHMETIC_MEAN"});
 */
 
    // bin_coverage <GLOBAL | PARTIAL>
-   choices.push_back(new std::string("GLOBAL"));
-   choices.push_back(new std::string("PARTIAL"));
-   pList().insertParam(new DgStringChoiceParam("bin_coverage", "GLOBAL", &choices));
-   dgg::util::release(choices);
+   pList().insertParam("bin_coverage", "GLOBAL", {"GLOBAL", "PARTIAL"});
 
    // output_count <TRUE | FALSE>
    pList().insertParam(new DgBoolParam("output_count", false));
@@ -207,11 +199,8 @@ SubOpBinPts::initializeOp (void) {
 
 
    // cell_output_control <OUTPUT_ALL | OUTPUT_OCCUPIED>
-   choices.push_back(new std::string("OUTPUT_ALL"));
-   choices.push_back(new std::string("OUTPUT_OCCUPIED"));
-   pList().insertParam(new DgStringChoiceParam("cell_output_control", "OUTPUT_ALL",
-                                       &choices));
-   dgg::util::release(choices);
+   pList().insertParam("cell_output_control", "OUTPUT_ALL",
+                       {"OUTPUT_ALL", "OUTPUT_OCCUPIED"});
 
    return 0;
 

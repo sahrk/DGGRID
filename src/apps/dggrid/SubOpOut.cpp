@@ -444,57 +444,33 @@ SubOpOut::SubOpOut (OpBasic& op, bool _activate)
 int
 SubOpOut::initializeOp (void)
 {
-   std::vector<std::string*> choices;
    std::string def;
 
    // output_file_name <fileName>
    pList().insertParam(new DgStringParam("output_file_name", "valsout.txt"));
 
    // output_file_type <NONE | TEXT >
-   choices.push_back(new std::string("NONE"));
-   choices.push_back(new std::string("TEXT"));
-
    def = ((op.mainOp.operation == "BIN_POINT_VALS" ||
            op.mainOp.operation == "BIN_POINT_PRESENCE" ||
            op.mainOp.operation == "TRANSFORM_POINTS") ? "TEXT" : "NONE");
    //def = "NONE";
-   pList().insertParam(new DgStringChoiceParam("output_file_type", def,
-               &choices));
-   dgg::util::release(choices);
+   pList().insertParam("output_file_type", def, {"NONE", "TEXT"});
 
    // output_address_type < GEO | PLANE | PROJTRI | Q2DD | Q2DI |
    //        SEQNUM | VERTEX2DD | HIERNDX >
    // KEVIN: still supports version 8 z* types
-    for (int i = 0; ; i++) {
-       if (dgg::addtype::addTypeStrings[i] == "NONE")
-          break;
-       choices.push_back(new std::string(dgg::addtype::addTypeStrings[i]));
-    }
-    pList().insertParam(new DgStringChoiceParam("output_address_type",
-                "SEQNUM", &choices));
-    dgg::util::release(choices);
+   pList().insertParam("output_address_type", "SEQNUM",
+                       dgg::addtype::addressTypeChoices());
 
     // output_hier_ndx_system < ZORDER | Z3 | Z7 >
     // used if output_address_type is HIERNDX
-    for (int i = 0; ; i++) {
-       if (dgg::addtype::hierNdxSysTypeStrings[i] == "NONE")
-          break;
-       choices.push_back(new std::string(dgg::addtype::hierNdxSysTypeStrings[i]));
-    }
-    def = "Z3";
-    pList().insertParam(new DgStringChoiceParam("output_hier_ndx_system", def, &choices));
-    dgg::util::release(choices);
+    pList().insertParam("output_hier_ndx_system", "Z3",
+                        dgg::addtype::hierNdxSysTypeChoices());
 
     // output_hier_ndx_form < INT64 | DIGIT_STRING >
     // used if output_address_type is HIERNDX
-    for (int i = 0; ; i++) {
-       if (dgg::addtype::hierNdxFormTypeStrings[i] == "NONE")
-          break;
-       choices.push_back(new std::string(dgg::addtype::hierNdxFormTypeStrings[i]));
-    }
-    def = "INT64";
-    pList().insertParam(new DgStringChoiceParam("output_hier_ndx_form", def, &choices));
-    dgg::util::release(choices);
+    pList().insertParam("output_hier_ndx_form", "INT64",
+                        dgg::addtype::hierNdxFormTypeChoices());
 
     // output_delimiter <v is any character in double quotes>
     pList().insertParam(new DgStringParam("output_delimiter", "\" \"", true, false));
@@ -503,73 +479,51 @@ SubOpOut::initializeOp (void)
     pList().insertParam(new DgIntParam("densification", 0, 0, 500));
 
    // longitude_wrap_mode < WRAP | UNWRAP_WEST | UNWRAP_EAST >
-   choices.push_back(new std::string("WRAP"));
-   choices.push_back(new std::string("UNWRAP_WEST"));
-   choices.push_back(new std::string("UNWRAP_EAST"));
-   pList().insertParam(new DgStringChoiceParam("longitude_wrap_mode", "WRAP",
-               &choices));
-   dgg::util::release(choices);
+   pList().insertParam("longitude_wrap_mode", "WRAP",
+                       {"WRAP", "UNWRAP_WEST", "UNWRAP_EAST"});
 
    // unwrap_points <TRUE | FALSE> (true indicates unwrap center point
    //        longitude to match the cell boundary, false allow to wrap)
    pList().insertParam(new DgBoolParam("unwrap_points", true));
 
    // output_cell_label_type <GLOBAL_SEQUENCE | ENUMERATION | SUPERFUND | OUTPUT_ADDRESS_TYPE >
-   choices.push_back(new std::string("GLOBAL_SEQUENCE"));
-   choices.push_back(new std::string("ENUMERATION"));
-   choices.push_back(new std::string("SUPERFUND"));
-   choices.push_back(new std::string("OUTPUT_ADDRESS_TYPE"));
-
-   std::string outLblDef("GLOBAL_SEQUENCE");
-   if (op.mainOp.operation == "TRANSFORM_POINTS")
-      outLblDef = "OUTPUT_ADDRESS_TYPE";
-   pList().insertParam(new DgStringChoiceParam("output_cell_label_type", outLblDef,
-               &choices));
-   dgg::util::release(choices);
+   {
+      std::string outLblDef("GLOBAL_SEQUENCE");
+      if (op.mainOp.operation == "TRANSFORM_POINTS")
+         outLblDef = "OUTPUT_ADDRESS_TYPE";
+      pList().insertParam("output_cell_label_type", outLblDef,
+          {"GLOBAL_SEQUENCE", "ENUMERATION", "SUPERFUND", "OUTPUT_ADDRESS_TYPE"});
+   }
 
    ////// output parameters //////
 
    // cell_output_type <NONE | AIGEN | GDAL | KML | GEOJSON | SHAPEFILE | GDAL_COLLECTION>
-   choices.push_back(new std::string("NONE"));
-   choices.push_back(new std::string("AIGEN"));
+   {
+      std::vector<std::string> ch = {"NONE", "AIGEN", "KML", "GEOJSON", "SHAPEFILE", "GDAL_COLLECTION"};
 #ifdef USE_GDAL
-   choices.push_back(new std::string("GDAL"));
+      ch.insert(ch.begin() + 2, "GDAL");
 #endif
-   choices.push_back(new std::string("KML"));
-   choices.push_back(new std::string("GEOJSON"));
-   choices.push_back(new std::string("SHAPEFILE"));
-   choices.push_back(new std::string("GDAL_COLLECTION"));
-   //choices.push_back(new std::string("TEXT"));
-   def = ((op.mainOp.operation == "GENERATE_GRID") ? "AIGEN" : "NONE");
-   pList().insertParam(new DgStringChoiceParam("cell_output_type", def, &choices));
-   dgg::util::release(choices);
+      def = ((op.mainOp.operation == "GENERATE_GRID") ? "AIGEN" : "NONE");
+      pList().insertParam("cell_output_type", def, ch);
+   }
 
    // point_output_type <NONE | AIGEN | GDAL | KML | GEOJSON | SHAPEFILE | TEXT | GDAL_COLLECTION>
-   choices.push_back(new std::string("NONE"));
-   choices.push_back(new std::string("AIGEN"));
+   {
+      std::vector<std::string> ch = {"NONE", "AIGEN", "KML", "GEOJSON", "SHAPEFILE", "TEXT", "GDAL_COLLECTION"};
 #ifdef USE_GDAL
-   choices.push_back(new std::string("GDAL"));
+      ch.insert(ch.begin() + 2, "GDAL");
 #endif
-   choices.push_back(new std::string("KML"));
-   choices.push_back(new std::string("GEOJSON"));
-   choices.push_back(new std::string("SHAPEFILE"));
-   choices.push_back(new std::string("TEXT"));
-   choices.push_back(new std::string("GDAL_COLLECTION"));
-   pList().insertParam(new DgStringChoiceParam("point_output_type", "NONE", &choices));
-   dgg::util::release(choices);
+      pList().insertParam("point_output_type", "NONE", ch);
+   }
 
    // randpts_output_type <NONE | AIGEN | GDAL | KML | GEOJSON | SHAPEFILE | TEXT>
-   choices.push_back(new std::string("NONE"));
-   choices.push_back(new std::string("AIGEN"));
+   {
+      std::vector<std::string> ch = {"NONE", "AIGEN", "KML", "SHAPEFILE", "GEOJSON", "TEXT"};
 #ifdef USE_GDAL
-   choices.push_back(new std::string("GDAL"));
+      ch.insert(ch.begin() + 2, "GDAL");
 #endif
-   choices.push_back(new std::string("KML"));
-   choices.push_back(new std::string("SHAPEFILE"));
-   choices.push_back(new std::string("GEOJSON"));
-   choices.push_back(new std::string("TEXT"));
-   pList().insertParam(new DgStringChoiceParam("randpts_output_type", "NONE", &choices));
-   dgg::util::release(choices);
+      pList().insertParam("randpts_output_type", "NONE", ch);
+   }
 
 #ifdef USE_GDAL
    // cell_output_gdal_format <gdal driver type>
@@ -580,7 +534,6 @@ SubOpOut::initializeOp (void)
 
    // collection_output_gdal_format <gdal driver type>
    pList().insertParam(new DgStringParam("collection_output_gdal_format", "GeoJSON"));
-
 #endif
 
    // cell_output_file_name <outputFileName>
@@ -618,46 +571,30 @@ SubOpOut::initializeOp (void)
    pList().insertParam(new DgStringParam("kml_description",
                DgOutLocFile::defaultKMLDescription));
 
-   // neighbor_output_type <NONE | TEXT | GEOJSON_COLLECTION>
-   choices.push_back(new std::string("NONE"));
-   choices.push_back(new std::string("TEXT"));
-   choices.push_back(new std::string("GDAL_COLLECTION"));
-   pList().insertParam(new DgStringChoiceParam("neighbor_output_type", "NONE",
-               &choices));
-   dgg::util::release(choices);
+   // neighbor_output_type <NONE | TEXT | GDAL_COLLECTION>
+   pList().insertParam("neighbor_output_type", "NONE",
+                       {"NONE", "TEXT", "GDAL_COLLECTION"});
 
    // neighbor_output_file_name <outputFileName>
    pList().insertParam(new DgStringParam("neighbor_output_file_name", "nbr"));
 
    // children_output_type <NONE | TEXT | GDAL_COLLECTION>
-   choices.push_back(new std::string("NONE"));
-   choices.push_back(new std::string("TEXT"));
-   choices.push_back(new std::string("GDAL_COLLECTION"));
-   pList().insertParam(new DgStringChoiceParam("children_output_type", "NONE",
-               &choices));
-   dgg::util::release(choices);
+   pList().insertParam("children_output_type", "NONE",
+                       {"NONE", "TEXT", "GDAL_COLLECTION"});
 
    // children_output_file_name <outputFileName>
    pList().insertParam(new DgStringParam("children_output_file_name", "chld"));
 
    // indexing_children_output_type <NONE | TEXT | GDAL_COLLECTION>
-   choices.push_back(new std::string("NONE"));
-   choices.push_back(new std::string("TEXT"));
-   choices.push_back(new std::string("GDAL_COLLECTION"));
-   pList().insertParam(new DgStringChoiceParam("indexing_children_output_type", "NONE",
-               &choices));
-   dgg::util::release(choices);
+   pList().insertParam("indexing_children_output_type", "NONE",
+                       {"NONE", "TEXT", "GDAL_COLLECTION"});
 
    // indexing_children_output_file_name <outputFileName>
    pList().insertParam(new DgStringParam("indexing_children_output_file_name", "ndxChld"));
 
    // indexing_parent_output_type <NONE | TEXT | GDAL_COLLECTION>
-   choices.push_back(new std::string("NONE"));
-   choices.push_back(new std::string("TEXT"));
-   choices.push_back(new std::string("GDAL_COLLECTION"));
-   pList().insertParam(new DgStringChoiceParam("indexing_parent_output_type", "NONE",
-               &choices));
-   dgg::util::release(choices);
+   pList().insertParam("indexing_parent_output_type", "NONE",
+                       {"NONE", "TEXT", "GDAL_COLLECTION"});
 
    // indexing_parent_output_file_name <outputFileName>
    pList().insertParam(new DgStringParam("indexing_parent_output_file_name", "ndxPrt"));
