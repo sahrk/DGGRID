@@ -98,8 +98,8 @@ SubOpIn::initializeOp (void)
 
     // input_hier_ndx_system < ZORDER | Z3 | Z7 >
     // used if input_address_type is HIERNDX
-    pList().insertParam("input_hier_ndx_system", "Z3",
-                        dgg::addtype::hierNdxSysTypeChoices());
+   pList().insertParam("input_hier_ndx_system", "Z3",
+                       {"Z7", "ZORDER", "Z3", "NONE"});
 
     // input_hier_ndx_form < INT64 | DIGIT_STRING | NONE >
     // used if input_address_type is HIERNDX
