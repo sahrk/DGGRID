@@ -103,8 +103,8 @@ SubOpIn::initializeOp (void)
 
     // input_hier_ndx_form < INT64 | DIGIT_STRING | NONE >
     // used if input_address_type is HIERNDX
-    pList().insertParam("input_hier_ndx_form", "INT64",
-                        dgg::addtype::hierNdxFormTypeChoices());
+   pList().insertParam("input_hier_ndx_form", "INT64",
+                       {"INT64", "DIGIT_STRING", "NONE"});
 
    // input_delimiter <v is any character in long double quotes>
    pList().insertParam(new DgStringParam("input_delimiter", "\" \"", true ,false));
