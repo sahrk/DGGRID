@@ -33,9 +33,6 @@
 #include <dglib/DgHierNdxIntRF.h>
 
 ////////////////////////////////////////////////////////////////////////////////
-const DgHierNdxIntCoord DgHierNdxIntRF::undefCoord(UINT64_MAX);
-
-////////////////////////////////////////////////////////////////////////////////
 DgHierNdxIntCoord::DgHierNdxIntCoord (void)
   : DgHierNdxCoord<HIERNDX_INT_TYPE>(DgHierNdxIntRF::undefCoord.value())
 { }

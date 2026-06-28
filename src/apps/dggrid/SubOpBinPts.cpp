@@ -406,9 +406,11 @@ SubOpBinPts::initVal (Val& val, bool allocPresVec) const {
    val.mean = 0.0;
 
    int nClasses = (int) op.inOp.inputFiles.size();
-   if (allocPresVec)
+   if (allocPresVec) {
       val.presVec = new bool[nClasses];
-   else
+      for (int i = 0; i < nClasses; i++)
+         val.presVec[i] = false;
+   } else
       val.presVec = nullptr;
 
 } // void SubOpBinPts::initVal

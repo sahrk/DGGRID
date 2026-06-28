@@ -31,10 +31,6 @@
 #include <dglib/DgZOrderSystem.h>
 
 ////////////////////////////////////////////////////////////////////////////////
-const DgResAdd<DgHierNdx>
-DgHierNdxSystemRFSBase::undefCoord(DgHierNdx::undefCoord, -1);
-
-////////////////////////////////////////////////////////////////////////////////
 DgHierNdxSystemRFSBase*
 DgHierNdxSystemRFSBase::makeSystem (const DgIDGGSBase& dggsIn,
                DgHierNdxSysType sysType, DgHierNdxFormType form,

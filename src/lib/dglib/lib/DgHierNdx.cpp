@@ -24,11 +24,21 @@
 #include <dglib/DgHierNdx.h>
 #include <dglib/DgHierNdxIntRF.h>
 #include <dglib/DgHierNdxStringRF.h>
-#include <dglib/DgHierNdxStringRF.h>
+#include <dglib/DgHierNdxSystemRFSBase.h>
+#include <dglib/DgDiscRFSGrids.h>
 
 ////////////////////////////////////////////////////////////////////////////////
+// Define static undef coords in dependency order within this translation unit
+// to avoid static initialization order fiasco across object files.
+const DgHierNdxIntCoord DgHierNdxIntRF::undefCoord(UINT64_MAX);
+
+const DgHierNdxStringCoord DgHierNdxStringRF::undefCoord("99");
+
 const DgHierNdx
 DgHierNdx::undefCoord(DgHierNdxIntRF::undefCoord, DgHierNdxStringRF::undefCoord, true);
+
+const DgResAdd<DgHierNdx>
+DgHierNdxSystemRFSBase::undefCoord(DgHierNdx::undefCoord, -1);
 
 ////////////////////////////////////////////////////////////////////////////////
 DgHierNdx::DgHierNdx (bool extModeIntIn)
