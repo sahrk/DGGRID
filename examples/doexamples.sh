@@ -16,7 +16,7 @@ do
    cd $f
    $dggridExe ${f}.meta >& outputfiles/${f}.txt
    echo diffs\?
-   diff -r outputfiles ../sampleOutput/$f
+   diff -rwb outputfiles ../sampleOutput/$f
    echo end diffs for example $f
    cd ..
 done

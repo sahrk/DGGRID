@@ -1,4 +1,4 @@
-** executing DGGRID version 9.0b with GDAL version 3120100 **
+** executing DGGRID version 9.0b with GDAL version 3130100 **
 type sizes: big int: 64 bits / big double: 128 bits
 
 ** using meta file planetRiskClipHiRes.meta...
