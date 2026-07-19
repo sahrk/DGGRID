@@ -107,26 +107,27 @@ SubOpDGG::addressTypeToRF (DgAddressType type, DgHierNdxSysType hierNdxSysType, 
 
          case Plane:
             if (rf) *rf = &dgg->planeRF();
-            if (chdRF) *chdRF = &chdDgg->planeRF();
-            if (prtRF) *prtRF = &prtDgg->planeRF();
+            if (chdRF) *chdRF = chdDgg ? &chdDgg->planeRF() : nullptr;
+            // prtDgg is null at resolution 0 (no parent)
+            if (prtRF) *prtRF = prtDgg ? &prtDgg->planeRF() : nullptr;
             break;
 
          case ProjTri:
             if (rf) *rf = &dgg->projTriRF();
-            if (chdRF) *chdRF = &chdDgg->projTriRF();
-            if (prtRF) *prtRF = &prtDgg->projTriRF();
+            if (chdRF) *chdRF = chdDgg ? &chdDgg->projTriRF() : nullptr;
+            if (prtRF) *prtRF = prtDgg ? &prtDgg->projTriRF() : nullptr;
             break;
 
          case Q2DD:
             if (rf) *rf = &dgg->q2ddRF();
-            if (chdRF) *chdRF = &chdDgg->q2ddRF();
-            if (prtRF) *prtRF = &prtDgg->q2ddRF();
+            if (chdRF) *chdRF = chdDgg ? &chdDgg->q2ddRF() : nullptr;
+            if (prtRF) *prtRF = prtDgg ? &prtDgg->q2ddRF() : nullptr;
             break;
 
          case Q2DI:
             if (rf) *rf = dgg;
             if (chdRF) *chdRF = chdDgg;
-              if (prtRF) *prtRF = prtDgg;
+            if (prtRF) *prtRF = prtDgg;
             break;
 
          case SeqNum:
@@ -144,8 +145,8 @@ SubOpDGG::addressTypeToRF (DgAddressType type, DgHierNdxSysType hierNdxSysType, 
 
          case Vertex2DD:
             if (rf) *rf = &dgg->vertexRF();
-            if (chdRF) *chdRF = &chdDgg->vertexRF();
-            if (prtRF) *prtRF = &prtDgg->vertexRF();
+            if (chdRF) *chdRF = chdDgg ? &chdDgg->vertexRF() : nullptr;
+            if (prtRF) *prtRF = prtDgg ? &prtDgg->vertexRF() : nullptr;
             break;
 
          case HierNdx: // should be caught above
@@ -525,14 +526,16 @@ SubOpDGG::executeOp (void) {
    // child dgg
    _pChdDgg = &dggs().idggBase(actualRes + 1);
 
-   // parent dgg (for hierarchical indexing)
+   // parent dgg (for hierarchical indexing); null at resolution 0
    _pPrtDgg = ((actualRes > 0) ? &dggs().idggBase(actualRes - 1) : nullptr);
 
    // set-up to convert to degrees
    _pDeg = DgGeoSphDegRF::makeRF(geoRF(), _pGeoRF->name() + "Deg");
    _pChdDeg = DgGeoSphDegRF::makeRF(_pChdDgg->geoRF(), _pChdDgg->geoRF().name() + "Deg");
    if (_pPrtDgg)
-       _pPrtDeg = DgGeoSphDegRF::makeRF(_pPrtDgg->geoRF(), _pPrtDgg->geoRF().name() + "Deg");
+      _pPrtDeg = DgGeoSphDegRF::makeRF(_pPrtDgg->geoRF(), _pPrtDgg->geoRF().name() + "Deg");
+   else
+      _pPrtDeg = nullptr;
 
    return 0;
 

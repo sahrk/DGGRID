@@ -79,14 +79,14 @@ struct SubOpDGG : public SubOpBasic {
 
    // the created DGG
    DgRFNetwork          _net0;
-   const DgGeoSphRF*    _pGeoRF;
-   const DgIDGGSBase*   _pDGGS;
-   const DgIDGGBase*    _pDGG;
-   const DgGeoSphDegRF* _pDeg;
-   const DgIDGGBase*    _pChdDgg;   // child res dgg
-   const DgGeoSphDegRF* _pChdDeg;
-   const DgIDGGBase*    _pPrtDgg;   // indexing parent res dgg
-   const DgGeoSphDegRF* _pPrtDeg;
+   const DgGeoSphRF*    _pGeoRF  = nullptr;
+   const DgIDGGSBase*   _pDGGS   = nullptr;
+   const DgIDGGBase*    _pDGG    = nullptr;
+   const DgGeoSphDegRF* _pDeg    = nullptr;
+   const DgIDGGBase*    _pChdDgg = nullptr;   // child res dgg
+   const DgGeoSphDegRF* _pChdDeg = nullptr;
+   const DgIDGGBase*    _pPrtDgg = nullptr;   // indexing parent res dgg (null at res 0)
+   const DgGeoSphDegRF* _pPrtDeg = nullptr;   // null when _pPrtDgg is null
 
    // the parameters
    std::string dggsType;              // preset DGGS type
