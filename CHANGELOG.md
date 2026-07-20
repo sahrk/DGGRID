@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 All changes are by Kevin Sahr, unless otherwise noted.
 
+## [9.03b] - 2026-07-19
+### Fixed
+- insufficent null pointer guards for some addressing types
+
 ## [9.02b] - 2026-06-28
 ### Fixed
 - memory and static variable initialization errors exposed by gcc 15 on Ryzen
