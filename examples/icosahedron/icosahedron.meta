@@ -1,7 +1,8 @@
 ################################################################################
 #
 # icosahedron.meta - example of a DGGRID metafile that generates a spherical
-#     icosahedron (a resolution 0 triangle grid) in KML format. 
+#     icosahedron (a resolution 0 triangle grid) with canoncial ISEA
+#     orientation in KML format. 
 #
 # Kevin Sahr, 10/23/14
 #
