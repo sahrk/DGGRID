@@ -1,0 +1,40 @@
+################################################################################
+#
+# dymaxionIcosa.meta - example of a DGGRID metafile that generates a spherical
+#     icosahedron (a resolution 0 triangle grid) with the Dymaxion orientation
+#     in KML format. 
+#
+# Kevin Sahr, 08/27/26
+#
+################################################################################
+
+# specify the operation
+dggrid_operation GENERATE_GRID
+
+# specify the DGG
+dggs_type ISEA4T
+dggs_res_spec 0
+
+# Dymaxion (Fuller) orientation: vertex 0 in the Atlantic off Liberia,
+# with azimuth toward the adjacent vertex near Norway (Gray 1995).
+# Default ISEA/Terra Cognita orientation is 11.25, 58.28252559, 0.0.
+dggs_orient_specify_type SPECIFIED
+dggs_vert0_lon -5.24539058
+dggs_vert0_lat 2.300882
+dggs_vert0_azimuth 7.46658
+
+# control the generation
+clip_subset_type WHOLE_EARTH
+geodetic_densify 0.0
+
+# specify the output
+cell_output_type KML
+cell_output_file_name outputfiles/dymaxIcosa
+point_output_type KML
+point_output_file_name outputfiles/dymaxIcosaPts
+kml_default_color ffff0000
+kml_default_width 6
+kml_name Dymaxion Spherical Icosahedron
+kml_description www.discreteglobalgrids.org
+kml_default_width 6
+densification 0
