@@ -20,7 +20,9 @@ dggs_res_spec 0
 # Default ISEA/Terra Cognita orientation is 11.25, 58.28252559, 0.0.
 dggs_orient_specify_type SPECIFIED
 dggs_vert0_lon -5.24539058
-dggs_vert0_lat 2.300882
+#dggs_vert0_lat 2.300882
+# reverse engineer the authalic
+dggs_vert0_lat 2.0
 dggs_vert0_azimuth 7.46658
 
 # control the generation
