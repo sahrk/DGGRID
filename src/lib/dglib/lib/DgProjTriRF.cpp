@@ -82,35 +82,51 @@ GeoCoord coordtrans(const GeoCoord& newNPold, const GeoCoord& ptold,
    Pole in new coordinate system, and the great circle connect the original
    and new North Pole as the lon0 longitude in new coordinate system, given
    any point in orginal coordinate system, this function return the new
-   coordinates. */
+   coordinates.
+
+   With D = ptold.lon - newNPold.lon and theta the distance from the new pole:
+
+      sin(theta) sin(lam) = cos(lat) sin(D)
+      sin(theta) cos(lam) = sin(lat) cos(latNP) - cos(lat) sin(latNP) cos(D)
+      cos(theta)          = sin(lat) sin(latNP) + cos(lat) cos(latNP) cos(D)
+
+   and the new longitude is lon0 - lam. Both angles are computed with atan2l,
+   which is accurate everywhere; the previous acosl forms lost half the
+   digits (sqrt(epsilon)) when lam or theta was near 0 or pi, e.g. for the
+   icosahedron vertices on the lon0 and lon0 + 180 meridians. The sign rule
+   of the acosl form (lon0 - |lam| for D in [0, pi), lon0 + |lam| otherwise)
+   is the sign of sin(D), which atan2l applies directly. */
 
  {
-  long double cosptnewlat, cosptnewlon;
   GeoCoord ptnew;
 
-  cosptnewlat = sinl(newNPold.lat)*sinl(ptold.lat) +
-                cosl(newNPold.lat)*cosl(ptold.lat)*cosl(newNPold.lon-ptold.lon);
-  if (cosptnewlat>1.0L) cosptnewlat=1.0L;
-  if (cosptnewlat<-1.0L) cosptnewlat=-1.0L;
-  ptnew.lat = acosl(cosptnewlat);
-  if (fabsl(ptnew.lat-0.) < PRECISION*100000)
-      ptnew.lon=0.;
-  else if (fabsl(ptnew.lat-M_PI) < PRECISION*100000)
+  const long double sinLat = sinl(ptold.lat);
+  const long double cosLat = cosl(ptold.lat);
+  const long double sinLatNP = sinl(newNPold.lat);
+  const long double cosLatNP = cosl(newNPold.lat);
+  const long double D = ptold.lon - newNPold.lon;
+  const long double cosD = cosl(D);
+
+  const long double sn = cosLat * sinl(D);                 // sin(theta) sin(lam)
+  const long double cs = sinLat * cosLatNP - cosLat * sinLatNP * cosD;
+                                                           // sin(theta) cos(lam)
+  const long double ct = sinLat * sinLatNP + cosLat * cosLatNP * cosD;
+                                                           // cos(theta)
+  const long double st = hypotl(sn, cs);                   // sin(theta)
+
+  // new latitude = pi/2 - theta
+  ptnew.lat = atan2l(ct, st);
+
+  // at (or within PRECISION*100000 of) either pole of the new system the
+  // longitude is set to 0, as before
+  if (st < PRECISION*100000)
       ptnew.lon=0.;
   else
    {
-    cosptnewlon = (sinl(ptold.lat)*cosl(newNPold.lat) - cosl(ptold.lat)*
-                  sinl(newNPold.lat)*cosl(newNPold.lon-ptold.lon))/sinl(ptnew.lat);
-    if (cosptnewlon>1.0L) cosptnewlon=1.0L;
-    if (cosptnewlon<-1.0L) cosptnewlon=-1.0L;
-    ptnew.lon = acosl(cosptnewlon);
-    if ((ptold.lon-newNPold.lon)>=0 && (ptold.lon-newNPold.lon) < M_PI)
-      ptnew.lon=-ptnew.lon+lon0;
-    else ptnew.lon=ptnew.lon+lon0;
+    ptnew.lon = lon0 - atan2l(sn, cs);
     if (ptnew.lon>M_PI) ptnew.lon -= 2*M_PI;
     if (ptnew.lon<-M_PI) ptnew.lon += 2*M_PI;
    }
-  ptnew.lat = M_PI/2-ptnew.lat;
   return ptnew;
  }
 

@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 All changes are by Kevin Sahr, unless otherwise noted.
 
+## [Unreleased]
+### Fixed
+- DgSphIcosa coordtrans() computed the rotated longitude and colatitude with acosl, which loses half the digits (~1e-8 rad) when the angle is near 0 or pi, as it is for icosahedron vertices 1, 8 and 11 in the default orientation. It now uses atan2l. With the current constants the example output changes by at most 5.7e-13 degrees (one last-digit flip at 5 decimals in multipleOrientations).
+
 ## [9.03b] - 2026-07-19
 ### Fixed
 - insufficent null pointer guards for some addressing types
