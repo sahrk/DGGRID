@@ -168,8 +168,10 @@ Vec2D sllxy (const GeoCoord& geoVect, SphIcosa& sphico, int nTri)
 
    if (azh < 0.0) azh = azh + 2.0 * M_PI;
    azh0 = azh;
-   if ((azh >= 120.0 * M_PI_180) && (azh <= 240.0 * M_PI_180)) azh -= 120.0 * M_PI_180;
-   if (azh > 240.0 * M_PI_180) azh -= 240.0 * M_PI_180;
+   // reduce to the sector [0, 120) deg; the intervals must match the ones used
+   // below to rotate back ([120, 240) and [240, 360))
+   if ((azh >= 120.0 * M_PI_180) && (azh < 240.0 * M_PI_180)) azh -= 120.0 * M_PI_180;
+   if (azh >= 240.0 * M_PI_180) azh -= 240.0 * M_PI_180;
 
    cosAzh = cosl(azh);
    sinAzh = sinl(azh);
@@ -260,8 +262,10 @@ GeoCoord snyderInv (const IcosaGridPt& icosaPt, SphIcosa& sphicosa)
 
     if (azh1<0.0L) azh1=azh1+2*M_PI;
     azh0=azh1;
-    if ((azh1>120.0L*M_PI_180) && (azh1<=240.0L*M_PI_180)) azh1=azh1-120.0L*M_PI_180;
-    if (azh1>240.0L*M_PI_180) azh1=azh1-240.0L*M_PI_180;
+    // reduce to the sector [0, 120) deg; the intervals must match the ones
+    // used below to rotate back ([120, 240) and [240, 360))
+    if ((azh1>=120.0L*M_PI_180) && (azh1<240.0L*M_PI_180)) azh1=azh1-120.0L*M_PI_180;
+    if (azh1>=240.0L*M_PI_180) azh1=azh1-240.0L*M_PI_180;
 
     azh=azh1;
 
