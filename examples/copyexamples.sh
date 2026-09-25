@@ -5,13 +5,19 @@
 #
 # Kevin Sahr, 10/20/14
 #
+# usage: copyexamples.sh [destinationDir]
+#   destinationDir defaults to sampleOutput; <destinationDir>/<example>
+#   is created if it is missing.
+#
 
+destDir=${1:-sampleOutput}
 examples=( `cat examples.lst` )
 
 for f in ${examples[@]}
 do
    echo \*\* copy example $f
-   rm -f sampleOutput/${f}/*
-   cp -r ${f}/outputfiles/* sampleOutput/${f}
-   touch sampleOutput/${f}/.keep
+   mkdir -p "${destDir}/${f}"
+   rm -rf "${destDir}/${f}"/*
+   cp -r ${f}/outputfiles/* "${destDir}/${f}"
+   touch "${destDir}/${f}/.keep"
 done
