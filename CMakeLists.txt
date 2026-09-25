@@ -5,6 +5,14 @@ project (dggrid
   LANGUAGES C CXX
 )
 
+# Default to an optimized build when no build type is given (single-config
+# generators only; an explicit -DCMAKE_BUILD_TYPE=... still wins, and
+# multi-config generators such as Xcode and MSVC are unaffected).
+if(NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type" FORCE)
+  message(STATUS "No build type specified; defaulting to Release")
+endif()
+
 find_package(Doxygen)
 
 #Adds aggressive warnings to all compilation
