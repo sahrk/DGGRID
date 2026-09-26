@@ -1,0 +1,35 @@
+################################################################################
+#
+# ivea7hGen.meta - example of a DGGRID metafile that generates a
+#     resolution 3 IVEA aperture 7 hexagon grid for the whole earth. Cell
+#     output is in KML format and point output in GeoJSON format.
+#
+#     IVEA is the Icosahedral Vertex-oriented great-circle Equal Area
+#     projection (van Leeuwen & Strebe 2006). Resolution 3 of an aperture 7
+#     grid is a Class III grid, with cells that straddle the icosahedron
+#     edges; under IVEA they are mapped exactly on both sides of the edge.
+#
+# Kevin Sahr, 09/25/26
+#
+################################################################################
+
+# specify the operation
+dggrid_operation GENERATE_GRID
+
+# specify the DGG
+dggs_type IVEA7H
+dggs_res_spec 3
+
+# control the generation
+clip_subset_type WHOLE_EARTH
+geodetic_densify 0.0
+
+# specify the output
+cell_output_type KML
+cell_output_file_name outputfiles/ivea7h3
+point_output_type GEOJSON
+point_output_file_name outputfiles/ivea7h3p
+kml_default_width 2
+kml_default_color ff0000ff
+densification 3
+precision 6
