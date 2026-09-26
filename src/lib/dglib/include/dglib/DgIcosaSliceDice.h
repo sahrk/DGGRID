@@ -112,12 +112,14 @@ class DgIcosaSliceDice {
       static constexpr long double clampTol = 1.0e-12L;
 
       /**
-       * The face-level inverse rule. DGGRID inverts planar points that lie
+       * The face-level inverse rule. Planar points can reach the inverse
        * outside their face triangle: cell vertices near a face edge at the
-       * rounding level, and the vertices (and densified edge points) of
-       * class III aperture 7 cells that straddle a face edge, up to about
-       * a cell radius outside the face (0.012 of an edge at 7H res 3),
-       * which are expressed in the frame of the cell centre's face. Such a
+       * rounding level, and points given directly in PROJTRI or PLANE
+       * coordinates. (Before DgQ2DDtoVertex2DDConverter re-expressed points
+       * past a quad's far edge in the neighbouring quad, this also included
+       * the vertices of class III aperture 7 cells that straddle a face
+       * edge, up to 0.014 of an edge outside at 7H res 3; the rule is kept
+       * as a safety net.) Such a
        * point is carried across the most-violated edge by the
        * net-unfolding similarity into the neighbouring face, and inverted
        * there, repeated up to maxFaceCrossings times (status Clamped). This

@@ -628,19 +628,78 @@ DgQ2DDtoVertex2DDConverter::compute_subtriangle
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+// A point past one of a quad's two far edges (the edges opposite the quad's
+// origin vertex) is re-expressed in the Q2DD frame of the quad across that
+// edge. The six subtriangles around the origin vertex tested below do not
+// cover those points, so without this they stay on the owning quad's face,
+// outside its triangle. This happens to vertices of Class III cells that
+// straddle a far edge.
+//
+// The quad is the rhombus spanned by e1 = (1, 0) and e2 = (-1/2, sin 60),
+// so a Q2DD point is a*e1 + b*e2 with b = y / sin60 and a = x + b/2; the far
+// edges are a == 1 and b == 1. The remapping is the continuous form of the
+// overI/overJ branches in DgQ2DDtoIConverter::convertTypedAddress (there in
+// cell units with topEdge = 1 quad edge here), so the point is unchanged on
+// the sphere. Points past both far edges (at the far corner vertex) are left
+// as they are; no cell of this quad reaches there.
+static void
+q2ddFarEdgeRemap (int& quadNum, DgDVec2D& coord)
+{
+   if (quadNum < 1 || quadNum > 10) return;
+
+   // real overshoot is a fraction of a cell; this only rejects round-off on
+   // an edge
+   const long double tol = 1.0E-12L;
+   long double b = coord.y() / M_SIN60;
+   long double a = coord.x() + b / 2.0L;
+   bool overA = a > 1.0L + tol;
+   bool overB = b > 1.0L + tol;
+   if (overA == overB) return;
+
+   const DgQuadEdgeCells& ec = DgIDGGBase::edgeTable(quadNum);
+   long double newA, newB;
+   if (overA) {
+      quadNum = ec.rightQuad();
+      if (ec.isType0()) {         // (i - T, j)
+         newA = a - 1.0L;
+         newB = b;
+      } else {                    // ((T - j) + (i - T), i - T)
+         newA = a - b;
+         newB = a - 1.0L;
+      }
+   } else { // overB
+      quadNum = ec.upQuad();
+      if (ec.isType0()) {         // (j - T, (T - i) + (j - T))
+         newA = b - 1.0L;
+         newB = b - a;
+      } else {                    // (i, j - T)
+         newA = a;
+         newB = b - 1.0L;
+      }
+   }
+
+   coord = DgDVec2D(newA - newB / 2.0L, newB * M_SIN60);
+
+} // static void q2ddFarEdgeRemap
+
+////////////////////////////////////////////////////////////////////////////////
 DgVertex2DDCoord
 DgQ2DDtoVertex2DDConverter::convertTypedAddress (const DgQ2DDCoord& addIn) const
 {
-   int subTri = compute_subtriangle(addIn.coord().x(), addIn.coord().y());
+   int quadNum = addIn.quadNum();
+   DgDVec2D coord(addIn.coord());
+   q2ddFarEdgeRemap(quadNum, coord);
 
-   const DgVertTriVals& st = DgVertex2DDRF::vertTable(addIn.quadNum(), subTri);
+   int subTri = compute_subtriangle(coord.x(), coord.y());
+
+   const DgVertTriVals& st = DgVertex2DDRF::vertTable(quadNum, subTri);
 
    DgVertex2DDCoord newCoord(st.keep());
    if (newCoord.keep())
    {
-      newCoord.setVertNum(addIn.quadNum());
+      newCoord.setVertNum(quadNum);
       newCoord.setTriNum(subTri);
-      newCoord.setCoord(addIn.coord());
+      newCoord.setCoord(coord);
    }
    else
    {
