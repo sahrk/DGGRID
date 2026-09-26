@@ -150,7 +150,7 @@ As described in \[Sahr et al., 2003\], a DGG system can be specified by a set of
 3. The transformation between each face and the corresponding spherical surface.
 4. The resolution (or degree of recursive partitioning).
 
-The current version of **DGGRID** supports DGGs that use either the Icosahedral Snyder Equal Area (ISEA) projection \[Snyder, 1992\] or the icosahedral projection of R. Buckminster Fuller \[1975\] (as developed analytically by Robert Gray \[1995\] and John Crider \[2008\]). **DGGRID** can generate grids with cells that are triangles, diamonds, or hexagons. Grids with a triangle or diamond topology must use an aperture of 4, while hexagon grids can use an aperture of 3, 4, 7, or an arbitrary mixed sequence of those apertures. **DGGRID** also supports specifically designed "preset" DGGs, including the mixed aperture hexagonal grids the US EPA **Superfund_500m** DGG (see **Appendix E**), and the PlanetRisk DGG (see **Appendix F**).
+The current version of **DGGRID** supports DGGs that use the Icosahedral Snyder Equal Area (ISEA) projection \[Snyder, 1992\], the Icosahedral Vertex-oriented great-circle Equal Area (IVEA) projection \[van Leeuwen and Strebe, 2006\], or the icosahedral projection of R. Buckminster Fuller \[1975\] (as developed analytically by Robert Gray \[1995\] and John Crider \[2008\]). **DGGRID** can generate grids with cells that are triangles, diamonds, or hexagons. Grids with a triangle or diamond topology must use an aperture of 4, while hexagon grids can use an aperture of 3, 4, 7, or an arbitrary mixed sequence of those apertures. **DGGRID** also supports specifically designed "preset" DGGs, including the mixed aperture hexagonal grids the US EPA **Superfund_500m** DGG (see **Appendix E**), and the PlanetRisk DGG (see **Appendix F**).
 
 Detailed information about the parameters that specify each of the DGG design choices are given below, along with a discussion on specifying the spherical earth radius.
 
@@ -167,6 +167,12 @@ Detailed information about the parameters that specify each of the DGG design ch
 - `ISEA4H` - ISEA projection with hexagon cells and an aperture of 4
 - `ISEA7H` - ISEA projection with hexagon cells and an aperture of 7
 - `ISEA43H` - ISEA projection with hexagon cells and a mixed sequence of aperture 4 resolutions followed by aperture 3 resolutions
+- `IVEA4T` - IVEA projection with triangle cells and an aperture of 4
+- `IVEA4D` - IVEA projection with diamond cells and an aperture of 4
+- `IVEA3H` - IVEA projection with hexagon cells and an aperture of 3
+- `IVEA4H` - IVEA projection with hexagon cells and an aperture of 4
+- `IVEA7H` - IVEA projection with hexagon cells and an aperture of 7
+- `IVEA43H` - IVEA projection with hexagon cells and a mixed sequence of aperture 4 resolutions followed by aperture 3 resolutions
 - `FULLER4T` - FULLER projection with triangle cells and an aperture of 4
 - `FULLER4D` - FULLER projection with diamond cells and an aperture of 4
 - `FULLER3H` - FULLER projection with hexagon cells and an aperture of 3
@@ -210,7 +216,9 @@ If a MIXED43 aperture type is specified then the parameter dggs_aperture is igno
 
 If a SEQUENCE aperture type is specified then the parameter dggs_aperture is ignored. Instead, the aperture sequence for the DGGS must be specified as a string of 3's, 4's, and/or 7's in the **string** parameter dggs_aperture_sequence (default "333333333333").
 
-**3. Specifying the projection:** The regular polygon boundaries and points associated with DGG cells are initially created on the planar faces of an icosahedron; they must then be inversely projected to the sphere. The desired projection to use for this is specified by the **choice** parameter dggs_proj. The valid values are ISEA, which specifies the Icosahedral Snyder Equal Area projection \[Snyder, 1992\], or FULLER, which specifies the icosahedral Dymaxion projection of R. Buckminster Fuller \[1975\] (as developed analytically by Robert Gray \[1995\] and John Crider \[2008\]). The ISEA projection creates equal area cells on the sphere at the expense of relatively high shape distortion, while the Fuller projection strikes a balance between area and shape distortion. See Gregory et al. \[2008\] for a more detailed discussion of these trade-offs.
+**3. Specifying the projection:** The regular polygon boundaries and points associated with DGG cells are initially created on the planar faces of an icosahedron; they must then be inversely projected to the sphere. The desired projection to use for this is specified by the **choice** parameter dggs_proj. The valid values are ISEA, which specifies the Icosahedral Snyder Equal Area projection \[Snyder, 1992\], IVEA, which specifies the Icosahedral Vertex-oriented great-circle Equal Area projection \[van Leeuwen and Strebe, 2006\], or FULLER, which specifies the icosahedral Dymaxion projection of R. Buckminster Fuller \[1975\] (as developed analytically by Robert Gray \[1995\] and John Crider \[2008\]). The ISEA and IVEA projections create equal area cells on the sphere at the expense of relatively high shape distortion, while the Fuller projection strikes a balance between area and shape distortion. See Gregory et al. \[2008\] for a more detailed discussion of these trade-offs.
+
+ISEA and IVEA are two members of one family of equal area polyhedral projections. Each face of the icosahedron is divided into six right triangles, each with one corner at a face vertex, one at the midpoint of an adjacent edge, and one at the face center; over the 20 faces these are the 120 triangles of the icosahedral symmetry group. Each spherical triangle is mapped onto the corresponding planar triangle by the "slice-and-dice" construction of van Leeuwen and Strebe \[2006\], which preserves area and maps every great circle through one chosen corner, the radial vertex, to a straight line. ISEA uses the face center as the radial vertex \[Snyder, 1992\]; IVEA uses the icosahedron vertex, so that great circles through the icosahedron vertices (including the icosahedron edges and the face medians through the vertices) are straight lines on the icosahedron faces. For a given triangle and radial vertex the map is unique. **DGGRID** evaluates IVEA with the vector form of the equations given by Recht \[2021\], in long double precision. IVEA grids have the same planar cell geometry, cell addresses, neighbors, children and hierarchical indices as the ISEA grids with the same parameters; only the geographic coordinates differ. IVEA uses the same default icosahedron orientation as ISEA (see Section 1 above). IVEA matches the `ivea` projection of PROJ and the IVEA projection of DGGAL on the sphere. As with ISEA, the projection is spherical; geographic coordinates are on a sphere with the radius given by the datum parameters below.
 
 **4. Specifying the resolution:** The desired DGG resolution can be specified using one of three methods chosen using the **choice** parameter dggs_res_specify_type with one of the following values:
 
@@ -431,14 +439,14 @@ The **integer** parameter precision (default 7) specifies the number of digits t
 | **dggs_orient_output_file_name** *(string)* | Name of file for output of multiple DGGS placement parameter values | any | "grid.meta" | | dggs_num_placements > 1 |
 | **dggs_orient_rand_seed** *(integer)* | Seed for orientation random number generator | 0 ≤ v | 77316727 | | dggs_orient_specify_type is RANDOM |
 | **dggs_orient_specify_type** *(choice)* | How is the DGG orientation specified? | RANDOM, SPECIFIED, REGION_CENTER | SPECIFIED | | |
-| **dggs_proj** *(choice)* | Projection used by the DGGS | ISEA, FULLER | ISEA | | |
+| **dggs_proj** *(choice)* | Projection used by the DGGS | ISEA, IVEA, FULLER | ISEA | | |
 | **dggs_res_spec** *(integer)* | Specified DGG resolution | 0 ≤ v ≤ 35 | 9 | If dggs_type is SUPERFUND then 0 ≤ v ≤ 9; if dggs_aperture_type is SEQUENCE then 0 ≤ v ≤ n, where n is the length of dggs_aperture_sequence | dggs_res_specify_type is SPECIFIED |
 | **dggs_res_specify_area** *(double)* | Desired cell area | 1.0 ≤ v | 100 | | dggs_res_specify_type is CELL_AREA |
 | **dggs_res_specify_intercell_distance** *(double)* | Desired intercell distance (measured on the plane) | 1.0 ≤ v | 100 | | dggs_res_specify_type is INTERCELL_DISTANCE |
 | **dggs_res_specify_rnd_down** *(boolean)* | Should the desired cell area or intercell distance be rounded down (or up) to the nearest DGGS resolution? | TRUE, FALSE | 1 | | dggs_res_specify_type is CELL_AREA or INTERCELL_DISTANCE |
 | **dggs_res_specify_type** *(choice)* | How is the DGGS resolution specified? | SPECIFIED, CELL_AREA, INTERCELL_DISTANCE | SPECIFIED | | |
 | **dggs_topology** *(choice)* | Desired cell shape | HEXAGON, TRIANGLE, DIAMOND | HEXAGON | | |
-| **dggs_type** *(choice)* | Specify a preset DGG type | CUSTOM, SUPERFUND, PLANETRISK, ISEA3H, ISEA4H, ISEA7H, ISEA43H, ISEA4T, ISEA4D, FULLER3H, FULLER4H, FULLER7H, FULLER43H, FULLER4T, FULLER4D | CUSTOM | See Appendix **B** for preset parameter value details | |
+| **dggs_type** *(choice)* | Specify a preset DGG type | CUSTOM, SUPERFUND, PLANETRISK, ISEA3H, ISEA4H, ISEA7H, ISEA43H, ISEA4T, ISEA4D, IVEA3H, IVEA4H, IVEA7H, IVEA43H, IVEA4T, IVEA4D, FULLER3H, FULLER4H, FULLER7H, FULLER43H, FULLER4T, FULLER4D | CUSTOM | See Appendix **B** for preset parameter value details | |
 | **dggs_vert0_azimuth** *(double)* | Azimuth from icosahedron vertex 0 to vertex 1 (degrees) | 0.0 ≤ v ≤ 360.0 | 0 | | dggs_orient_specify_type is SPECIFIED |
 | **dggs_vert0_lat** *(double)* | Latitude of icosahedron vertex 0 (degrees) | -90.0 ≤ v ≤ 90.0 | 58.282525588538995 (atan φ) | | dggs_orient_specify_type is SPECIFIED |
 | **dggs_vert0_lon** *(double)* | Longitude of icosahedron vertex 0 (degrees) | -180.0 ≤ v ≤ 180.0 | 11.25 | | dggs_orient_specify_type is SPECIFIED |
@@ -528,6 +536,12 @@ The table below gives the values of other parameters that are set by each preset
 | **ISEA43H**   | HEXAGON           | ISEA          | 9                 | MIXED43                | N/A               | 0                           | N/A                         |
 | **ISEA4T**    | TRIANGLE          | ISEA          | 9                 | PURE                   | 4                 | N/A                         | N/A                         |
 | **ISEA4D**    | DIAMOND           | ISEA          | 9                 | PURE                   | 4                 | N/A                         | N/A                         |
+| **IVEA3H**    | HEXAGON           | IVEA          | 9                 | PURE                   | 3                 | N/A                         | N/A                         |
+| **IVEA4H**    | HEXAGON           | IVEA          | 9                 | PURE                   | 4                 | N/A                         | N/A                         |
+| **IVEA7H**    | HEXAGON           | IVEA          | 9                 | PURE                   | 7                 | N/A                         | N/A                         |
+| **IVEA43H**   | HEXAGON           | IVEA          | 9                 | MIXED43                | N/A               | 0                           | N/A                         |
+| **IVEA4T**    | TRIANGLE          | IVEA          | 9                 | PURE                   | 4                 | N/A                         | N/A                         |
+| **IVEA4D**    | DIAMOND           | IVEA          | 9                 | PURE                   | 4                 | N/A                         | N/A                         |
 | **FULLER3H**  | HEXAGON           | FULLER        | 9                 | PURE                   | 3                 | N/A                         | N/A                         |
 | **FULLER4H**  | HEXAGON           | FULLER        | 9                 | PURE                   | 4                 | N/A                         | N/A                         |
 | **FULLER7H**  | HEXAGON           | FULLER        | 9                 | PURE                   | 7                 | N/A                         | N/A                         |
@@ -1054,6 +1068,8 @@ Kanth, K. V. R. and A. K. Singh. 1999. Optimal dynamic range searching in non-re
 
 Kimerling AJ, Sahr K, White D, Song L. 1999. Comparing geometrical properties of discrete global grids. *Cartography and Geographic Information Science* 26(4):271-287.
 
+Recht BRS. 2021. Snyder equal-area projection, in vector form. https://brsr.github.io/2021/08/31/snyder-equal-area.html
+
 Sahr K, White D, Kimerling AJ. 2003. Geodesic discrete global grid systems. *Cartography and Geographic Information Science* 30(2):121-134.
 
 Sahr K. 2008. Location coding on icosahedral aperture 3 hexagon discrete global grids. *Computers, Environment and Urban Systems* 32(3):174-187.
@@ -1063,5 +1079,7 @@ Sahr, K. 2011. Hexagonal discrete global grid systems for geospatial computing. 
 Sahr, K. 2019. Central Place Indexing: Hierarchical Linear Indexing Systems for Mixed-Aperture Hexagonal Discrete Global Grid Systems. *Cartographica: The International Journal for Geographic Information and Geovisualization*, 54(1):16-29.
 
 Snyder, J. P. 1992. An equal-area map projection for polyhedral globes. *Cartographica* 29(1): 10-21.
+
+van Leeuwen D, Strebe D. 2006. A "slice-and-dice" approach to area equivalence in polyhedral map projections. *Cartography and Geographic Information Science* 33(4):269-286. doi:10.1559/152304006779500687.
 
 White D, Kimerling AJ, Overton WS. 1992. Cartographic and geometric components of a global sampling design for environmental monitoring. *Cartography and Geographic Information Systems* 19(1):5-22.
