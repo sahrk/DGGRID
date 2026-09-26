@@ -29,11 +29,13 @@
 #include <dglib/DgContCartRF.h>
 #include <dglib/DgDVec2D.h>
 #include <dglib/DgEllipsoidRF.h>
+#include <dglib/DgIcosaSliceDice.h>
 #include <dglib/DgIVec2D.h>
 #include <dglib/DgUtil.h>
 
 #include <climits>
 #include <iostream>
+#include <memory>
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgSphIcosa {
@@ -52,9 +54,19 @@ class DgSphIcosa {
 
       int whichIcosaTri (const GeoCoord& pt);
 
+      /**
+       * The slice-and-dice kernel and 120 fundamental-triangle tables of
+       * this icosahedron for radial vertex rv (IVEA uses Vertex). Built on
+       * first use and shared by every projection on this icosahedron.
+       */
+      const DgIcosaSliceDice& sliceDice (DgIcosaSliceDice::RadialVertex rv);
+
    private:
 
       SphIcosa sphIcosa_;
+
+      // lazily built slice-and-dice tables, indexed by RadialVertex
+      std::unique_ptr<DgIcosaSliceDice> sliceDice_[3];
 
       friend std::ostream& operator<< (std::ostream& stream, const DgSphIcosa& dgsi);
 };

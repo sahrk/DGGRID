@@ -39,6 +39,17 @@ DgSphIcosa::DgSphIcosa (const DgGeoCoord& vert0, long double azimuthDegs)
 } // DgSphIcosa::DgSphIcosa
 
 ////////////////////////////////////////////////////////////////////////////////
+const DgIcosaSliceDice&
+DgSphIcosa::sliceDice (DgIcosaSliceDice::RadialVertex rv)
+{
+   std::unique_ptr<DgIcosaSliceDice>& sd = sliceDice_[(int) rv];
+   if (!sd) sd.reset(new DgIcosaSliceDice(rv, sphIcosa_));
+
+   return *sd;
+
+} // const DgIcosaSliceDice& DgSphIcosa::sliceDice
+
+////////////////////////////////////////////////////////////////////////////////
 std::ostream& operator<< (std::ostream& str, const DgSphIcosa& dgsi)
 {
    const SphIcosa& si = dgsi.sphIcosa_;

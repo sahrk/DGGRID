@@ -25,8 +25,12 @@
 #include <cmath>
 #include <climits>
 
-#include <dglib/DgProjISEA.h> // SKELETON: for snyderFwd/snyderInv
+#include <dglib/DgIcosaSliceDice.h>
 #include <dglib/DgProjIVEA.h>
+
+// the IVEA radial vertex: the icosahedron vertex of each (V, M, C) triangle
+static const DgIcosaSliceDice::RadialVertex ivRadial =
+                                       DgIcosaSliceDice::RadialVertex::Vertex;
 
 ////////////////////////////////////////////////////////////////////////////////
 DgProjIVEAInv::DgProjIVEAInv (const DgRF<DgProjTriCoord, long double>& from,
@@ -48,24 +52,21 @@ DgProjIVEAInv::DgProjIVEAInv (const DgRF<DgProjTriCoord, long double>& from,
 DgGeoCoord
 DgProjIVEAInv::convertTypedAddress (const DgProjTriCoord& addIn) const
 {
-//cout << "***DgProjIVEAInv: DgProjTriCoord: " << addIn << std::endl;
-   IcosaGridPt gridpt;
-   gridpt.pt.x = addIn.coord().x();
-   gridpt.pt.y = addIn.coord().y();
-   gridpt.triangle = addIn.triNum();
+   const DgIcosaSliceDice& sd = projTriRF().sphIcosa().sliceDice(ivRadial);
 
-//cout << "    gridpt.triangle .x .y: " << gridpt.triangle << ", " <<
-//      gridpt.pt.x << ", " << gridpt.pt.y << std::endl;
+   GeoCoord ll;
+   Vec2D xy;
+   xy.x = addIn.coord().x();
+   xy.y = addIn.coord().y();
+   if (sd.inverse(addIn.triNum(), xy, ll) == DgIcosaSliceDice::Status::Fail)
+   {
+      report("DgProjIVEAInv::convertTypedAddress(): unable to invert point " +
+             std::string(addIn), DgBase::Fatal);
+   }
 
-   // SKELETON: delegates to ISEA; replaced in Phase 6
-   GeoCoord ll = snyderInv(gridpt, projTriRF().sphIcosa().sphIcosa());
-
-//cout << " ll.lon, ll.lat: " << ll.lon << ", " <<
-//ll.lat << std::endl;
    DgGeoCoord geoPt(ll.lon, ll.lat);
    geoPt.normalize();
 
-//cout << "    geoPt: " << geoPt << std::endl;
    return geoPt;
 
 } // DgGeoCoord DgProjIVEAInv::convertTypedAddress
@@ -89,24 +90,21 @@ DgProjIVEAFwd::DgProjIVEAFwd (const DgRF<DgGeoCoord, long double>& from,
 DgProjTriCoord
 DgProjIVEAFwd::convertTypedAddress (const DgGeoCoord& addIn) const
 {
+   const DgIcosaSliceDice& sd = projTriRF().sphIcosa().sliceDice(ivRadial);
 
-//cout << "***DgProjIVEAFwd: geoPt: " << addIn << std::endl;
    GeoCoord ll;
-
    ll.lon = addIn.lon();
    ll.lat = addIn.lat();
 
-//cout << "   ll.lon, ll.lat: " << ll.lon << ", " << ll.lat << std::endl;
+   int face;
+   Vec2D xy;
+   if (sd.forward(ll, face, xy) == DgIcosaSliceDice::Status::Fail)
+   {
+      report("DgProjIVEAFwd::convertTypedAddress(): unable to project point " +
+             std::string(addIn), DgBase::Fatal);
+   }
 
-   // SKELETON: delegates to ISEA; replaced in Phase 6
-   IcosaGridPt gridpt = snyderFwd(ll, projTriRF().sphIcosa());
-//cout << "    gridpt.triangle .x .y: " << gridpt.triangle << ", " <<
-//gridpt.pt.x << ", " << gridpt.pt.y << std::endl;
-
-//cout << "DgProjTriCoord: " << DgProjTriCoord(gridpt.triangle,
-//                               DgDVec2D(gridpt.pt.x, gridpt.pt.y)) << std::endl;
-
-   return DgProjTriCoord(gridpt.triangle, DgDVec2D(gridpt.pt.x, gridpt.pt.y));
+   return DgProjTriCoord(face, DgDVec2D(xy.x, xy.y));
 
 } // DgProjTriCoord DgProjIVEAFwd::convertTypedAddress
 

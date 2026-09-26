@@ -20,9 +20,13 @@
 //
 // DgProjIVEA.h: DgProjIVEA class definitions
 //
-// IVEA (Icosahedral Vertex-oriented great circle Equal Area, "slice-and-dice")
-// projection. SKELETON: currently delegates to the ISEA (Snyder) functions;
-// the IVEA kernel replaces it in Phase 6
+// IVEA (Icosahedral Vertex-oriented great-circle Equal Area) projection: the
+// slice-and-dice construction of van Leeuwen & Strebe (2006,
+// doi:10.1559/152304006779500687) applied to the 120 fundamental (V, M, C)
+// triangles of the icosahedron, with the icosahedron vertex V as the radial
+// vertex. It is equal area, and great circles through the icosahedron
+// vertices map to straight lines. The kernel is DgIcosaSliceDice; ISEA
+// (DgProjISEA) is the same construction with the face centre radial.
 //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -47,6 +51,7 @@
 #include <iostream>
 
 ////////////////////////////////////////////////////////////////////////////////
+/// IVEA forward: geographic (radians, unit sphere) -> ProjTri (face, x, y).
 class DgProjIVEAFwd : public DgConverter<DgGeoCoord, long double,
                                         DgProjTriCoord, long double> {
 
@@ -67,6 +72,7 @@ class DgProjIVEAFwd : public DgConverter<DgGeoCoord, long double,
 };
 
 ////////////////////////////////////////////////////////////////////////////////
+/// IVEA inverse: ProjTri (face, x, y) -> geographic (radians, unit sphere).
 class DgProjIVEAInv : public DgConverter<DgProjTriCoord, long double,
                                            DgGeoCoord, long double> {
 
@@ -87,6 +93,7 @@ class DgProjIVEAInv : public DgConverter<DgProjTriCoord, long double,
 };
 
 ////////////////////////////////////////////////////////////////////////////////
+/// The IVEA icosahedral projection (forward and inverse converters).
 class DgProjIVEA : public DgIcosaProj {
 
    public:
