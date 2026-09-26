@@ -45,7 +45,7 @@ int main (int, char**)
 
    // create the ISEA4H grid system with resolutions 0-9; requires a
    // fixed icosahedron vertex and edge azimuth
-   DgGeoCoord vert0(11.25L, 58.28252559L, false); // args: lon, lat, isRadians
+   DgGeoCoord vert0(11.25L, M_ICOSA_VERT0_LAT_DEG, false); // args: lon, lat, isRadians
    long double azimuth = 0.0L;
 
    // all DGGS's must be created using a factory makeRF method

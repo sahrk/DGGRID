@@ -41,7 +41,7 @@ class DgSphIcosa {
    public:
 
       DgSphIcosa (const DgGeoCoord& vert0 =
-                                      DgGeoCoord(11.25L, 58.28252559L, false),
+                                      DgGeoCoord(11.25L, M_ICOSA_VERT0_LAT_DEG, false),
                   long double azimuthDegs = M_ZERO);
 
       SphIcosa& sphIcosa (void) { return sphIcosa_; }
@@ -108,7 +108,7 @@ class DgProjTriRF : public DgRF<DgProjTriCoord, long double> {
 
       static const DgProjTriRF* makeRF (DgRFNetwork& networkIn, const std::string& nameIn = "ProjTriRF",
                    DgSphIcosa* sphIcosaIn = 0)
-                      //DgSphIcosa(DgGeoCoord(11.25L, 58.28252559L, false), M_ZERO))
+                      //DgSphIcosa(DgGeoCoord(11.25L, M_ICOSA_VERT0_LAT_DEG, false), M_ZERO))
          { return new DgProjTriRF(networkIn, nameIn, sphIcosaIn); }
 
       //virtual DgLocVector& convert (DgLocVector& vec) const;
@@ -145,7 +145,7 @@ class DgProjTriRF : public DgRF<DgProjTriCoord, long double> {
 
       DgProjTriRF (DgRFNetwork& networkIn, const std::string& nameIn = "ProjTriRF",
                    DgSphIcosa* sphIcosaIn = 0)
-                      //DgSphIcosa(DgGeoCoord(11.25L, 58.28252559L, false), M_ZERO))
+                      //DgSphIcosa(DgGeoCoord(11.25L, M_ICOSA_VERT0_LAT_DEG, false), M_ZERO))
          : DgRF<DgProjTriCoord, long double> (networkIn, nameIn),
            sphIcosa_ (sphIcosaIn) { }
 

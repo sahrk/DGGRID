@@ -32,7 +32,7 @@ DgSphIcosa::DgSphIcosa (const DgGeoCoord& vert0, long double azimuthDegs)
 {
    sphIcosa_.pt.lon = vert0.lon();
    sphIcosa_.pt.lat = vert0.lat();
-   sphIcosa_.azimuth = azimuthDegs * M_PI/180;
+   sphIcosa_.azimuth = azimuthDegs * M_PI_180;
 
    ico12verts();
 
@@ -45,7 +45,7 @@ std::ostream& operator<< (std::ostream& str, const DgSphIcosa& dgsi)
 
    DgGeoCoord tmp(si.pt);
    str << "vert0: " << tmp << std::endl;
-   str << "az0: " << si.azimuth * 180.0 / M_PI << std::endl;
+   str << "az0: " << si.azimuth * M_180_PI << std::endl;
 
    str << "vertices:\n";
    str << "{\n";
@@ -124,8 +124,8 @@ GeoCoord coordtrans(const GeoCoord& newNPold, const GeoCoord& ptold,
   else
    {
     ptnew.lon = lon0 - atan2l(sn, cs);
-    if (ptnew.lon>M_PI) ptnew.lon -= 2*M_PI;
-    if (ptnew.lon<-M_PI) ptnew.lon += 2*M_PI;
+    if (ptnew.lon>M_PI_L) ptnew.lon -= M_2PI;
+    if (ptnew.lon<-M_PI_L) ptnew.lon += M_2PI;
    }
   return ptnew;
  }
@@ -195,28 +195,29 @@ DgSphIcosa::ico12verts (void)
    newnpold.lon = 0.0;
    for (i = 1; i <= 5; i++)
    {
-     vertsnew[i].lat = 26.565051177 * M_PI / 180.0;
-     vertsnew[i].lon = -sphIcosa().azimuth + 72 * (i - 1) * M_PI / 180.0;
-     if (vertsnew[i].lon > M_PI-PRECISION) vertsnew[i].lon -= 2 * M_PI;
-     if (vertsnew[i].lon < -(M_PI+PRECISION)) vertsnew[i].lon += 2 * M_PI;
-     vertsnew[i+5].lat = -26.565051177 * M_PI / 180;
+     // the upper vertex ring is at latitude atan(1/2) (= 90deg - atan(2))
+     vertsnew[i].lat = M_ATAN_HALF;
+     vertsnew[i].lon = -sphIcosa().azimuth + 72.0L * (i - 1) * M_PI_180;
+     if (vertsnew[i].lon > M_PI_L-PRECISION) vertsnew[i].lon -= M_2PI;
+     if (vertsnew[i].lon < -(M_PI_L+PRECISION)) vertsnew[i].lon += M_2PI;
+     vertsnew[i+5].lat = -M_ATAN_HALF;
      vertsnew[i+5].lon =
-              -sphIcosa().azimuth + (36.0 + 72.0 * (i - 1)) * M_PI / 180.0;
-     if (vertsnew[i + 5].lon > M_PI - PRECISION)
+              -sphIcosa().azimuth + (36.0L + 72.0L * (i - 1)) * M_PI_180;
+     if (vertsnew[i + 5].lon > M_PI_L - PRECISION)
      {
-        vertsnew[i + 5].lon -= 2 * M_PI;
+        vertsnew[i + 5].lon -= M_2PI;
      }
-     if (vertsnew[i+5].lon < -(M_PI+PRECISION)) vertsnew[i+5].lon += 2 * M_PI;
+     if (vertsnew[i+5].lon < -(M_PI_L+PRECISION)) vertsnew[i+5].lon += M_2PI;
    }
-   vertsnew[11].lat = -90.0 * M_PI / 180.0;
-   vertsnew[11].lon = 0.0 * M_PI / 180.0;
+   vertsnew[11].lat = -M_PI_2_L;
+   vertsnew[11].lon = M_ZERO;
    sphIcosa().icoverts[0].lat = sphIcosa().pt.lat;
    sphIcosa().icoverts[0].lon = sphIcosa().pt.lon;
 /***** hardwire for bug test ******/
 
 /*
-vertsnew[0].lat = 90.0 * M_PI / 180.0;
-vertsnew[0].lon = 0.0 * M_PI / 180.0;
+vertsnew[0].lat = M_PI_2_L;
+vertsnew[0].lon = M_ZERO;
 for (i = 0; i < 12; i++)
 {
    sphIcosa().icoverts[i].lat = vertsnew[i].lat;

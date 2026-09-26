@@ -224,7 +224,9 @@ SubOpDGG::initializeOp (void)
    pList().insertParam(new DgDoubleParam("dggs_vert0_lon", 11.25, -180.0, 180.0));
 
    // dggs_vert0_lat <long double: decimal degrees> (-90.0 <= v <= 90.0)
-   pList().insertParam(new DgDoubleParam("dggs_vert0_lat", 58.28252559, -90.0, 90.0));
+   // default atan(phi) puts the north pole on an icosahedron edge midpoint
+   pList().insertParam(new DgDoubleParam("dggs_vert0_lat", M_ICOSA_VERT0_LAT_DEG,
+                                         -90.0, 90.0));
 
    // dggs_vert0_azimuth <long double: decimal degrees> (0.0 <= v < 360.0)
    pList().insertParam(new DgDoubleParam("dggs_vert0_azimuth", 0.0, 0.0, 360.0));
@@ -281,7 +283,9 @@ SubOpDGG::setupOp (void)
       pList().setPresetParam("dggs_orient_specify_type", "SPECIFIED");
       pList().setPresetParam("dggs_num_placements", "1");
       pList().setPresetParam("dggs_vert0_lon", "11.25");
-      pList().setPresetParam("dggs_vert0_lat", "58.28252559");
+      // 21 significant digits round-trip an 80-bit long double
+      pList().setPresetParam("dggs_vert0_lat",
+                    dgg::util::to_string(M_ICOSA_VERT0_LAT_DEG, "%.21Lg"));
       pList().setPresetParam("dggs_vert0_azimuth", "0.0");
       pList().setPresetParam("dggs_res_specify_type", "SPECIFIED");
       pList().setPresetParam("dggs_res_spec", "9");
@@ -402,9 +406,9 @@ SubOpDGG::setupOp (void)
 
    getParamValue(pList(), "proj_datum", datum, false);
    if (datum == "WGS84_AUTHALIC_SPHERE")
-      earthRadius = 6371.007180918475L;
+      earthRadius = WGS84_AUTHALIC_RADIUS_KM;
    else if (datum == "WGS84_MEAN_SPHERE")
-      earthRadius = 6371.0087714L;
+      earthRadius = WGS84_MEAN_RADIUS_KM;
    else // datum must be CUSTOM_SPHERE
       getParamValue(pList(), "proj_datum_radius", earthRadius, false);
 

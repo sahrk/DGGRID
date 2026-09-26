@@ -115,10 +115,10 @@ DgProjISEAFwd::convertTypedAddress (const DgGeoCoord& addIn) const
 */
 ////////////////////////////////////////////////////////////////////////////////
 
-static const long double R1 = 0.9103832815L;
+static const long double R1 = M_ISEA_R1;
 static const long double R1S = R1 * R1;
 
-static const long double DH    = 37.37736814L * M_PI_180;
+static const long double DH    = M_ISEA_G;
 static const long double GH    = 36.0L * M_PI_180;
 static const long double cot30 = 1.0L / tanl(30.0L * M_PI_180);
 static const long double tanDH = tanl(DH);
@@ -126,8 +126,8 @@ static const long double cosDH = cosl(DH);
 static const long double sinGH = sinl(GH);
 static const long double cosGH = cosl(GH);
 
-static const long double originXOff = 0.6022955029L;
-static const long double originYOff = 0.3477354707L;
+static const long double originXOff = M_ISEA_ORIGIN_X_OFF;
+static const long double originYOff = M_ISEA_ORIGIN_Y_OFF;
 static const long double icosaEdge = 2.0L * originXOff;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -166,19 +166,19 @@ Vec2D sllxy (const GeoCoord& geoVect, SphIcosa& sphico, int nTri)
          cent.cosLat * sinLat - cent.sinLat * cosLat * cosl(geoVect.lon -
          cent.pt.lon)) - dazh;
 
-   if (azh < 0.0) azh = azh + 2.0 * M_PI;
+   if (azh < 0.0L) azh = azh + M_2PI;
    azh0 = azh;
    // reduce to the sector [0, 120) deg; the intervals must match the ones used
    // below to rotate back ([120, 240) and [240, 360))
-   if ((azh >= 120.0 * M_PI_180) && (azh < 240.0 * M_PI_180)) azh -= 120.0 * M_PI_180;
-   if (azh >= 240.0 * M_PI_180) azh -= 240.0 * M_PI_180;
+   if ((azh >= 120.0L * M_PI_180) && (azh < 240.0L * M_PI_180)) azh -= 120.0L * M_PI_180;
+   if (azh >= 240.0L * M_PI_180) azh -= 240.0L * M_PI_180;
 
    cosAzh = cosl(azh);
    sinAzh = sinl(azh);
 
    dz = atan2l(tanDH, cosAzh + cot30 * sinAzh);
 
-   if (z > dz + 0.00000005) {
+   if (z > dz + 0.00000005L) {
       dgcout << "1: The point: ";
       printGeoCoord(geoVect);
       dgcout << " is located on another polygon." << std::endl;
@@ -260,7 +260,7 @@ GeoCoord snyderInv (const IcosaGridPt& icosaPt, SphIcosa& sphicosa)
     ph=sqrtl(pt.x*pt.x+pt.y*pt.y);
     azh1=atan2l(pt.x,pt.y);
 
-    if (azh1<0.0L) azh1=azh1+2*M_PI;
+    if (azh1<0.0L) azh1=azh1+M_2PI;
     azh0=azh1;
     // reduce to the sector [0, 120) deg; the intervals must match the ones
     // used below to rotate back ([120, 240) and [240, 360))
@@ -275,43 +275,43 @@ GeoCoord snyderInv (const IcosaGridPt& icosaPt, SphIcosa& sphicosa)
 
        //cout << "agh: " << agh << std::endl;
 
-       dazh=1.0;
+       dazh=1.0L;
        while (fabsl(dazh) > PRECISION)
         {
          h=acosl(sinl(azh)*sinGH*cosDH-cosl(azh)*cosGH);
-         fazh=agh-azh-GH-h+M_PI;
-         flazh=((cosl(azh)*sinGH*cosDH+sinl(azh)*cosGH)/sinl(h))-1.0;
+         fazh=agh-azh-GH-h+M_PI_L;
+         flazh=((cosl(azh)*sinGH*cosDH+sinl(azh)*cosGH)/sinl(h))-1.0L;
          dazh=-fazh/flazh;
          azh=azh+dazh;
-         //cout << "loop: h: " << h << "  fazh: " << fazh*(180.0/M_PI) <<
-         //  "  flazh: " << flazh*(180.0/M_PI) <<
-         //  "  dazh: " << dazh*(180.0/M_PI) <<
-         //  "  azh: " << azh*(180.0/M_PI) << std::endl;
+         //cout << "loop: h: " << h << "  fazh: " << fazh*M_180_PI <<
+         //  "  flazh: " << flazh*M_180_PI <<
+         //  "  dazh: " << dazh*M_180_PI <<
+         //  "  azh: " << azh*M_180_PI << std::endl;
         }
     }
-    else azh = azh1 = 0.0;
+    else azh = azh1 = 0.0L;
 
     dz=atan2l(tanDH,cosl(azh)+cot30*sinl(azh));
     fh=tanDH/(2.0L*(cosl(azh1)+cot30*sinl(azh1))*sinl(dz/2.0L));
-    z=2.0*asinl(ph/(2.0L*R1*fh));
-    if ((azh0>=120*M_PI_180) && (azh0<240.0L*M_PI_180)) azh=azh+120*M_PI_180;
+    z=2.0L*asinl(ph/(2.0L*R1*fh));
+    if ((azh0>=120.0L*M_PI_180) && (azh0<240.0L*M_PI_180)) azh=azh+120.0L*M_PI_180;
     if (azh0>=240.0L*M_PI_180) azh=azh+240.0L*M_PI_180;
 
     // now reposition to the actual triangle
 
     azh += ddazh;
 
-    while (azh <= -M_PI) azh += M_2PI;
-    while (azh > M_PI) azh -= M_2PI;
+    while (azh <= -M_PI_L) azh += M_2PI;
+    while (azh > M_PI_L) azh -= M_2PI;
 
     sinlat=cent.sinLat * cosl(z) + cent.cosLat * sinl(z) * cosl(azh);
     if (sinlat > M_ONE) sinlat = M_ONE;
     if (sinlat < -M_ONE) sinlat = -M_ONE;
     Geovect.lat = asinl(sinlat);
 
-    if (fabsl(fabsl(Geovect.lat) - M_PI_2) < M_EPSILON)
+    if (fabsl(fabsl(Geovect.lat) - M_PI_2_L) < M_EPSILON)
     {
-       Geovect.lat = (Geovect.lat > M_ZERO) ? M_PI_2 : -M_PI_2;
+       Geovect.lat = (Geovect.lat > M_ZERO) ? M_PI_2_L : -M_PI_2_L;
        Geovect.lon = M_ZERO;
     }
     else
@@ -325,8 +325,8 @@ GeoCoord snyderInv (const IcosaGridPt& icosaPt, SphIcosa& sphicosa)
       if (coslon < -M_ONE) coslon =-M_ONE;
       Geovect.lon = cent.pt.lon+asinl(sinlon);
       Geovect.lon = cent.pt.lon+atan2l(sinlon, coslon);
-      if (Geovect.lon <= -M_PI) Geovect.lon += M_2PI;
-      if (Geovect.lon >= M_PI) Geovect.lon -= M_2PI;
+      if (Geovect.lon <= -M_PI_L) Geovect.lon += M_2PI;
+      if (Geovect.lon >= M_PI_L) Geovect.lon -= M_2PI;
     }
   }
   return Geovect;

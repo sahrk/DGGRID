@@ -188,9 +188,11 @@ If dggs_orient_specify_type is set to SPECIFIED the DGG orientation is determine
 
 ```
 dggs_vert0_lon 11.25
-dggs_vert0_lat 58.28252559
+dggs_vert0_lat 58.282525588538995
 dggs_vert0_azimuth 0.0
 ```
+
+The default vertex 0 latitude is atan(φ) = 58.28252558853899...°, where φ = (1 + √5)/2 is the golden ratio. With this latitude and an azimuth of 0.0 the north and south poles fall exactly on the midpoints of icosahedron edges, which makes the grid symmetrical about the equator. (Earlier versions used the rounded value 58.28252559.)
 
 If dggs_orient_specify_type is set to RANDOM the orientation of the DGG is randomly determined. All parameter values (including the randomly generated values for a vertex location and azimuth used to orient the grid) will be output for your information to the file specified by the **string** parameter dggs_orient_output_file_name. Some control over the random specification of the grid orientation is afforded by the **choice** parameter rng_type and the **integer** parameter dggs_orient_rand_seed. The **choice** parameter rng_type indicates which pseudo-random number generator to use. A value of RAND indicates that the C standard library rand/srand functions should be used. A value of MOTHER (the default) indicates that George Marsaglia's "Mother-of-all-RNGs" function should be used. The seed value for **DGGRID** to use to initialize the pseudo-random number sequence can be set using the **integer** parameter dggs_orient_rand_seed.
 
@@ -438,7 +440,7 @@ The **integer** parameter precision (default 7) specifies the number of digits t
 | **dggs_topology** *(choice)* | Desired cell shape | HEXAGON, TRIANGLE, DIAMOND | HEXAGON | | |
 | **dggs_type** *(choice)* | Specify a preset DGG type | CUSTOM, SUPERFUND, PLANETRISK, ISEA3H, ISEA4H, ISEA7H, ISEA43H, ISEA4T, ISEA4D, FULLER3H, FULLER4H, FULLER7H, FULLER43H, FULLER4T, FULLER4D | CUSTOM | See Appendix **B** for preset parameter value details | |
 | **dggs_vert0_azimuth** *(double)* | Azimuth from icosahedron vertex 0 to vertex 1 (degrees) | 0.0 ≤ v ≤ 360.0 | 0 | | dggs_orient_specify_type is SPECIFIED |
-| **dggs_vert0_lat** *(double)* | Latitude of icosahedron vertex 0 (degrees) | -90.0 ≤ v ≤ 90.0 | 58.28252559 | | dggs_orient_specify_type is SPECIFIED |
+| **dggs_vert0_lat** *(double)* | Latitude of icosahedron vertex 0 (degrees) | -90.0 ≤ v ≤ 90.0 | 58.282525588538995 (atan φ) | | dggs_orient_specify_type is SPECIFIED |
 | **dggs_vert0_lon** *(double)* | Longitude of icosahedron vertex 0 (degrees) | -180.0 ≤ v ≤ 180.0 | 11.25 | | dggs_orient_specify_type is SPECIFIED |
 | **geodetic_densify** *(double)* | Maximum degrees of arc for a clipping polygon line segment | 0.0 ≤ v ≤ 360.0 | 0 | 0.0 indicates no densification | dggrid_operation is GENERATE_GRID |
 | **input_address_type** *(choice)* | Cell address form in input file(s) | GEO, Q2DI, SEQNUM, Q2DD, PROJTRI, VERTEX2DD, HIERNDX, *deprecated:* ZORDER, ZORDER_STRING, Z3, Z3_STRING, Z7, Z7_STRING | GEO | See **Appendix C**; SEQNUM is not allowed if dggs_aperture_type is SEQUENCE | dggrid_operation is TRANSFORM_POINTS |
@@ -507,7 +509,7 @@ A preset grid type can be specified using the choice parameter dggs_type. All pr
 dggs_orient_specify_type: SPECIFIED
 dggs_num_placements: 1
 dggs_vert0_lon: 11.25
-dggs_vert0_lat: 58.28252559
+dggs_vert0_lat: 58.282525588538995 (atan φ; see Section 4)
 dggs_vert0_azimuth: 0.0
 dggs_res_specify_type: SPECIFIED
 ```
