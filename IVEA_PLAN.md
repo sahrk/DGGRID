@@ -4,14 +4,6 @@ Status: draft plan, 2026-09-25 (rev 2). Branch: `ivea`.
 Scope for now: the **spherical** projection only. Ellipsoidal ISEA/IVEA will come
 later, built on the authalic-latitude work another agent is doing (see Phase 7).
 
-**Rev 2 changes:**
-- Added Phase 0: example-regression tooling and a baseline for this machine.
-- Added Phase 1A: every geometric constant goes to full precision, as an early step.
-  This resolves former Q1.
-- Added the **standing regression rule R** (§1.1). Every step that touches DGGRID code
-  must run the examples suite and validate its output.
-- The skeleton phase is now Phase 1B.
-
 ---
 
 ## 0. Background and key findings (this shapes the design)
@@ -119,9 +111,11 @@ inside DGGRID itself. RTEA comes almost for free if we ever want it.
   - Unit edge. Vertex `icotri[f][0]` is at the apex (0.5, √3/2). Confirmed:
     vert0 → face 2, (0.500000, 0.866025).
   - The centroid is at (0.5, √3/6).
-  - `icotri[f][1]` → (0,0) and `icotri[f][2]` → (1,0), per my derivation from `sllxy`.
-    Partly confirmed: the north pole projects to face 0 at (0.25, 0.433013), the
-    midpoint of the apex–(0,0) edge. Full confirmation is step 1B.6.
+  - `icotri[f][1]` → (0,0) and `icotri[f][2]` → (1,0), for all 20 faces (step 1B.6).
+  - (V0, V1, V2) wind counter-clockwise seen from outside; the map does not mirror.
+  - Sub-triangle T_k covers planar angle [60k, 60k+60)° clockwise from +y around the
+    centroid: T0 = (V0, M20, C), T1 = (V2, M20, C), T2 = (V2, M12, C),
+    T3 = (V1, M12, C), T4 = (V1, M01, C), T5 = (V0, M01, C).
 - The build uses long double throughout, and precision depends on the platform:
   - **On this arm64 Mac, `long double` == `double`** (53-bit mantissa).
   - On **ai00** (Ubuntu, AMD Ryzen, x86-64), `long double` is 80-bit extended (64-bit
