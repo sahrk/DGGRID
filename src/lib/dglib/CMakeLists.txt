@@ -86,6 +86,7 @@ add_library(dglib
    lib/DgProjFuller.cpp
    lib/DgProjGnomonicRF.cpp
    lib/DgProjISEA.cpp
+   lib/DgProjIVEA.cpp
    lib/DgProjTriRF.cpp
    lib/DgRandom.cpp
    lib/DgRFBase.cpp
@@ -220,6 +221,7 @@ add_library(dglib
    include/dglib/DgProjFuller.h
    include/dglib/DgProjGnomonicRF.h
    include/dglib/DgProjISEA.h
+   include/dglib/DgProjIVEA.h
    include/dglib/DgProjTriRF.h
    include/dglib/DgRadixString.h
    include/dglib/DgRandom.h
