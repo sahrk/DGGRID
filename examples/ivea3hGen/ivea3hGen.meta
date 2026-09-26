@@ -1,0 +1,38 @@
+################################################################################
+#
+# ivea3hGen.meta - example of a DGGRID metafile that generates a
+#     resolution 4 IVEA aperture 3 hexagon grid for the whole earth, with
+#     the cell neighbors and children. Cell and point output is in GeoJSON
+#     format.
+#
+#     IVEA is the Icosahedral Vertex-oriented great-circle Equal Area
+#     projection (van Leeuwen & Strebe 2006). The grid has the same cells,
+#     addresses, neighbors and children as the ISEA3H grid of the same
+#     resolution; only the geographic coordinates differ.
+#
+# Kevin Sahr, 09/25/26
+#
+################################################################################
+
+# specify the operation
+dggrid_operation GENERATE_GRID
+
+# specify the DGG
+dggs_type IVEA3H
+dggs_res_spec 4
+
+# control the generation
+clip_subset_type WHOLE_EARTH
+geodetic_densify 0.0
+
+# specify the output
+cell_output_type GEOJSON
+cell_output_file_name outputfiles/ivea3h4
+point_output_type GEOJSON
+point_output_file_name outputfiles/ivea3h4p
+neighbor_output_type TEXT
+neighbor_output_file_name outputfiles/ivea3h4
+children_output_type TEXT
+children_output_file_name outputfiles/ivea3h4
+densification 3
+precision 7

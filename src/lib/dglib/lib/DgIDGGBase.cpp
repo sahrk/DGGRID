@@ -39,6 +39,7 @@
 #include <dglib/DgHexIDGGS.h>
 #include <dglib/DgProjFuller.h>
 #include <dglib/DgProjISEA.h>
+#include <dglib/DgProjIVEA.h>
 #include <dglib/DgRadixString.h>
 #include <dglib/DgSeriesConverter.h>
 #include <dglib/DgTriGrid2DS.h>
@@ -173,6 +174,8 @@ DgIDGGBase::createConverters (void)
    DgIcosaProj* icosaProj = NULL;
    if (projType() == "ISEA")
       icosaProj = new DgProjISEA(geoRF(), projTriRF());
+   else if (projType() == "IVEA")
+      icosaProj = new DgProjIVEA(geoRF(), projTriRF());
    else if (projType() == "FULLER")
       icosaProj = new DgProjFuller(geoRF(), projTriRF());
    else

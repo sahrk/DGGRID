@@ -32,11 +32,22 @@ DgSphIcosa::DgSphIcosa (const DgGeoCoord& vert0, long double azimuthDegs)
 {
    sphIcosa_.pt.lon = vert0.lon();
    sphIcosa_.pt.lat = vert0.lat();
-   sphIcosa_.azimuth = azimuthDegs * M_PI/180;
+   sphIcosa_.azimuth = azimuthDegs * M_PI_180;
 
    ico12verts();
 
 } // DgSphIcosa::DgSphIcosa
+
+////////////////////////////////////////////////////////////////////////////////
+const DgIcosaSliceDice&
+DgSphIcosa::sliceDice (DgIcosaSliceDice::RadialVertex rv)
+{
+   std::unique_ptr<DgIcosaSliceDice>& sd = sliceDice_[(int) rv];
+   if (!sd) sd.reset(new DgIcosaSliceDice(rv, sphIcosa_));
+
+   return *sd;
+
+} // const DgIcosaSliceDice& DgSphIcosa::sliceDice
 
 ////////////////////////////////////////////////////////////////////////////////
 std::ostream& operator<< (std::ostream& str, const DgSphIcosa& dgsi)
@@ -45,7 +56,7 @@ std::ostream& operator<< (std::ostream& str, const DgSphIcosa& dgsi)
 
    DgGeoCoord tmp(si.pt);
    str << "vert0: " << tmp << std::endl;
-   str << "az0: " << si.azimuth * 180.0 / M_PI << std::endl;
+   str << "az0: " << si.azimuth * M_180_PI << std::endl;
 
    str << "vertices:\n";
    str << "{\n";
@@ -82,35 +93,51 @@ GeoCoord coordtrans(const GeoCoord& newNPold, const GeoCoord& ptold,
    Pole in new coordinate system, and the great circle connect the original
    and new North Pole as the lon0 longitude in new coordinate system, given
    any point in orginal coordinate system, this function return the new
-   coordinates. */
+   coordinates.
+
+   With D = ptold.lon - newNPold.lon and theta the distance from the new pole:
+
+      sin(theta) sin(lam) = cos(lat) sin(D)
+      sin(theta) cos(lam) = sin(lat) cos(latNP) - cos(lat) sin(latNP) cos(D)
+      cos(theta)          = sin(lat) sin(latNP) + cos(lat) cos(latNP) cos(D)
+
+   and the new longitude is lon0 - lam. Both angles are computed with atan2l,
+   which is accurate everywhere; the previous acosl forms lost half the
+   digits (sqrt(epsilon)) when lam or theta was near 0 or pi, e.g. for the
+   icosahedron vertices on the lon0 and lon0 + 180 meridians. The sign rule
+   of the acosl form (lon0 - |lam| for D in [0, pi), lon0 + |lam| otherwise)
+   is the sign of sin(D), which atan2l applies directly. */
 
  {
-  long double cosptnewlat, cosptnewlon;
   GeoCoord ptnew;
 
-  cosptnewlat = sinl(newNPold.lat)*sinl(ptold.lat) +
-                cosl(newNPold.lat)*cosl(ptold.lat)*cosl(newNPold.lon-ptold.lon);
-  if (cosptnewlat>1.0L) cosptnewlat=1.0L;
-  if (cosptnewlat<-1.0L) cosptnewlat=-1.0L;
-  ptnew.lat = acosl(cosptnewlat);
-  if (fabsl(ptnew.lat-0.) < PRECISION*100000)
-      ptnew.lon=0.;
-  else if (fabsl(ptnew.lat-M_PI) < PRECISION*100000)
+  const long double sinLat = sinl(ptold.lat);
+  const long double cosLat = cosl(ptold.lat);
+  const long double sinLatNP = sinl(newNPold.lat);
+  const long double cosLatNP = cosl(newNPold.lat);
+  const long double D = ptold.lon - newNPold.lon;
+  const long double cosD = cosl(D);
+
+  const long double sn = cosLat * sinl(D);                 // sin(theta) sin(lam)
+  const long double cs = sinLat * cosLatNP - cosLat * sinLatNP * cosD;
+                                                           // sin(theta) cos(lam)
+  const long double ct = sinLat * sinLatNP + cosLat * cosLatNP * cosD;
+                                                           // cos(theta)
+  const long double st = hypotl(sn, cs);                   // sin(theta)
+
+  // new latitude = pi/2 - theta
+  ptnew.lat = atan2l(ct, st);
+
+  // at (or within PRECISION*100000 of) either pole of the new system the
+  // longitude is set to 0, as before
+  if (st < PRECISION*100000)
       ptnew.lon=0.;
   else
    {
-    cosptnewlon = (sinl(ptold.lat)*cosl(newNPold.lat) - cosl(ptold.lat)*
-                  sinl(newNPold.lat)*cosl(newNPold.lon-ptold.lon))/sinl(ptnew.lat);
-    if (cosptnewlon>1.0L) cosptnewlon=1.0L;
-    if (cosptnewlon<-1.0L) cosptnewlon=-1.0L;
-    ptnew.lon = acosl(cosptnewlon);
-    if ((ptold.lon-newNPold.lon)>=0 && (ptold.lon-newNPold.lon) < M_PI)
-      ptnew.lon=-ptnew.lon+lon0;
-    else ptnew.lon=ptnew.lon+lon0;
-    if (ptnew.lon>M_PI) ptnew.lon -= 2*M_PI;
-    if (ptnew.lon<-M_PI) ptnew.lon += 2*M_PI;
+    ptnew.lon = lon0 - atan2l(sn, cs);
+    if (ptnew.lon>M_PI_L) ptnew.lon -= M_2PI;
+    if (ptnew.lon<-M_PI_L) ptnew.lon += M_2PI;
    }
-  ptnew.lat = M_PI/2-ptnew.lat;
   return ptnew;
  }
 
@@ -179,28 +206,29 @@ DgSphIcosa::ico12verts (void)
    newnpold.lon = 0.0;
    for (i = 1; i <= 5; i++)
    {
-     vertsnew[i].lat = 26.565051177 * M_PI / 180.0;
-     vertsnew[i].lon = -sphIcosa().azimuth + 72 * (i - 1) * M_PI / 180.0;
-     if (vertsnew[i].lon > M_PI-PRECISION) vertsnew[i].lon -= 2 * M_PI;
-     if (vertsnew[i].lon < -(M_PI+PRECISION)) vertsnew[i].lon += 2 * M_PI;
-     vertsnew[i+5].lat = -26.565051177 * M_PI / 180;
+     // the upper vertex ring is at latitude atan(1/2) (= 90deg - atan(2))
+     vertsnew[i].lat = M_ATAN_HALF;
+     vertsnew[i].lon = -sphIcosa().azimuth + 72.0L * (i - 1) * M_PI_180;
+     if (vertsnew[i].lon > M_PI_L-PRECISION) vertsnew[i].lon -= M_2PI;
+     if (vertsnew[i].lon < -(M_PI_L+PRECISION)) vertsnew[i].lon += M_2PI;
+     vertsnew[i+5].lat = -M_ATAN_HALF;
      vertsnew[i+5].lon =
-              -sphIcosa().azimuth + (36.0 + 72.0 * (i - 1)) * M_PI / 180.0;
-     if (vertsnew[i + 5].lon > M_PI - PRECISION)
+              -sphIcosa().azimuth + (36.0L + 72.0L * (i - 1)) * M_PI_180;
+     if (vertsnew[i + 5].lon > M_PI_L - PRECISION)
      {
-        vertsnew[i + 5].lon -= 2 * M_PI;
+        vertsnew[i + 5].lon -= M_2PI;
      }
-     if (vertsnew[i+5].lon < -(M_PI+PRECISION)) vertsnew[i+5].lon += 2 * M_PI;
+     if (vertsnew[i+5].lon < -(M_PI_L+PRECISION)) vertsnew[i+5].lon += M_2PI;
    }
-   vertsnew[11].lat = -90.0 * M_PI / 180.0;
-   vertsnew[11].lon = 0.0 * M_PI / 180.0;
+   vertsnew[11].lat = -M_PI_2_L;
+   vertsnew[11].lon = M_ZERO;
    sphIcosa().icoverts[0].lat = sphIcosa().pt.lat;
    sphIcosa().icoverts[0].lon = sphIcosa().pt.lon;
 /***** hardwire for bug test ******/
 
 /*
-vertsnew[0].lat = 90.0 * M_PI / 180.0;
-vertsnew[0].lon = 0.0 * M_PI / 180.0;
+vertsnew[0].lat = M_PI_2_L;
+vertsnew[0].lon = M_ZERO;
 for (i = 0; i < 12; i++)
 {
    sphIcosa().icoverts[i].lat = vertsnew[i].lat;

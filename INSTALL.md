@@ -23,9 +23,14 @@ Build the application dggrid by executing:
     cd DGGRID                            # enter the cloned repo
     mkdir build                          # Make a directory to compile into
     cd build                             # Switch into build directory
-    cmake -DCMAKE_BUILD_TYPE=Release ..  # Prepare to compile
+    cmake ..                             # Prepare to compile
     make                                 # Build code.
     make install                         # Optionally install on your machine
+
+If no build type is given, cmake now defaults to an optimized `Release` build
+(`-O3 -DNDEBUG`); passing `-DCMAKE_BUILD_TYPE=...` explicitly still overrides
+this. Multi-configuration generators such as Xcode and Visual Studio select the
+configuration at build time instead.
 
 cmake will automatically detect where libraries are installed on your machine
 and include them appropriately.

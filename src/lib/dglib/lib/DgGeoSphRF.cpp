@@ -36,7 +36,7 @@ long double DgGeoSphRF::icosaEdgeRads_ = M_ATAN2;
 long double DgGeoSphRF::icosaEdgeDegs_ = icosaEdgeRads_ * M_180_PI;
 long double DgGeoSphRF::icosaEdgeKM_ = icosaEdgeRads_ * earthRadiusKM_;
 long double DgGeoSphRF::totalAreaKM_ =
-                      4.0L * M_PI * earthRadiusKM_ * earthRadiusKM_;
+                      4.0L * M_PI_L * earthRadiusKM_ * earthRadiusKM_;
 
 const std::string DgGeoSphRF::lonWrapModeStrings[] =
              { "Wrap", "UnwrapWest", "UnwrapEast", "InvalidLonWrapMode" };

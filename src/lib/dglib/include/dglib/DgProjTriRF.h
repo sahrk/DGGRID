@@ -29,11 +29,13 @@
 #include <dglib/DgContCartRF.h>
 #include <dglib/DgDVec2D.h>
 #include <dglib/DgEllipsoidRF.h>
+#include <dglib/DgIcosaSliceDice.h>
 #include <dglib/DgIVec2D.h>
 #include <dglib/DgUtil.h>
 
 #include <climits>
 #include <iostream>
+#include <memory>
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgSphIcosa {
@@ -41,7 +43,7 @@ class DgSphIcosa {
    public:
 
       DgSphIcosa (const DgGeoCoord& vert0 =
-                                      DgGeoCoord(11.25L, 58.28252559L, false),
+                                      DgGeoCoord(11.25L, M_ICOSA_VERT0_LAT_DEG, false),
                   long double azimuthDegs = M_ZERO);
 
       SphIcosa& sphIcosa (void) { return sphIcosa_; }
@@ -52,9 +54,19 @@ class DgSphIcosa {
 
       int whichIcosaTri (const GeoCoord& pt);
 
+      /**
+       * The slice-and-dice kernel and 120 fundamental-triangle tables of
+       * this icosahedron for radial vertex rv (IVEA uses Vertex). Built on
+       * first use and shared by every projection on this icosahedron.
+       */
+      const DgIcosaSliceDice& sliceDice (DgIcosaSliceDice::RadialVertex rv);
+
    private:
 
       SphIcosa sphIcosa_;
+
+      // lazily built slice-and-dice tables, indexed by RadialVertex
+      std::unique_ptr<DgIcosaSliceDice> sliceDice_[3];
 
       friend std::ostream& operator<< (std::ostream& stream, const DgSphIcosa& dgsi);
 };
@@ -108,7 +120,7 @@ class DgProjTriRF : public DgRF<DgProjTriCoord, long double> {
 
       static const DgProjTriRF* makeRF (DgRFNetwork& networkIn, const std::string& nameIn = "ProjTriRF",
                    DgSphIcosa* sphIcosaIn = 0)
-                      //DgSphIcosa(DgGeoCoord(11.25L, 58.28252559L, false), M_ZERO))
+                      //DgSphIcosa(DgGeoCoord(11.25L, M_ICOSA_VERT0_LAT_DEG, false), M_ZERO))
          { return new DgProjTriRF(networkIn, nameIn, sphIcosaIn); }
 
       //virtual DgLocVector& convert (DgLocVector& vec) const;
@@ -145,7 +157,7 @@ class DgProjTriRF : public DgRF<DgProjTriCoord, long double> {
 
       DgProjTriRF (DgRFNetwork& networkIn, const std::string& nameIn = "ProjTriRF",
                    DgSphIcosa* sphIcosaIn = 0)
-                      //DgSphIcosa(DgGeoCoord(11.25L, 58.28252559L, false), M_ZERO))
+                      //DgSphIcosa(DgGeoCoord(11.25L, M_ICOSA_VERT0_LAT_DEG, false), M_ZERO))
          : DgRF<DgProjTriCoord, long double> (networkIn, nameIn),
            sphIcosa_ (sphIcosaIn) { }
 

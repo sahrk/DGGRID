@@ -44,6 +44,7 @@ add_library(dglib
    lib/DgHierNdxSystemRFBase.cpp
    lib/DgHierNdxSystemRFSBase.cpp
    lib/DgIcosaMap.cpp
+   lib/DgIcosaSliceDice.cpp
    lib/DgIDGG.cpp
    lib/DgIDGGBase.cpp
    lib/DgIDGGS.cpp
@@ -88,6 +89,7 @@ add_library(dglib
    lib/DgProjFuller.cpp
    lib/DgProjGnomonicRF.cpp
    lib/DgProjISEA.cpp
+   lib/DgProjIVEA.cpp
    lib/DgProjTriRF.cpp
    lib/DgRandom.cpp
    lib/DgRFBase.cpp
@@ -176,6 +178,7 @@ add_library(dglib
    include/dglib/DgHierNdxSystemRFSBase.h
    include/dglib/DgIcosaMap.h
    include/dglib/DgIcosaProj.h
+   include/dglib/DgIcosaSliceDice.h
    include/dglib/DgIDGG.h
    include/dglib/DgIDGGBase.h
    include/dglib/DgIDGGS.h
@@ -225,6 +228,7 @@ add_library(dglib
    include/dglib/DgProjFuller.h
    include/dglib/DgProjGnomonicRF.h
    include/dglib/DgProjISEA.h
+   include/dglib/DgProjIVEA.h
    include/dglib/DgProjTriRF.h
    include/dglib/DgRadixString.h
    include/dglib/DgRandom.h

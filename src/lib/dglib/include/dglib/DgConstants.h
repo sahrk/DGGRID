@@ -35,6 +35,9 @@ constexpr long double M_EPSILON =   0.00000000000050000000000000000000000000000L
 constexpr long double M_ZERO =      0.00000000000000000000000000000000000000000L;
 constexpr long double M_ONE =       1.00000000000000000000000000000000000000000L;
 constexpr long double M_HALF =      0.50000000000000000000000000000000000000000L;
+// pi, pi/2 (long double versions of the double-precision M_PI, M_PI_2 macros)
+constexpr long double M_PI_L =      3.14159265358979323846264338327950288419716940L;
+constexpr long double M_PI_2_L =    1.57079632679489661923132169163975144209858470L;
 constexpr long double M_2PI =       6.28318530717958647692528676655900576839433L;
 constexpr long double M_SQRT3 =     1.7320508075688772935274463415058723669428L;
 constexpr long double M_1_SQRT3 =   0.5773502691896257645091487805019574556476L;
@@ -63,10 +66,54 @@ constexpr long double M_AP7_ROT_RADS = 0.333473172251832115336090755351601070065
 // asin(sqrt(3.0 / 28.0))*180.0/pi
 constexpr long double M_AP7_ROT_DEGS = 19.106605350869094394517474740130082234976075229L;
 
+// icosahedron geometry
+//
+// With the icosahedron vertices at the cyclic permutations of (0, +-1, +-phi),
+// phi = (1 + sqrt(5))/2, the edge (0,1,phi)-(0,-1,phi) has its midpoint on the
+// z-axis, so the north pole lies on an edge midpoint and the equator is a
+// mirror plane of the icosahedron. Vertex (0,1,phi) then has latitude
+// atan(phi/1) = atan(phi). This is DGGRID's default vert0 latitude.
+// atan(phi) (radians)
+constexpr long double M_ATAN_PHI =
+                     1.01722196789785136772278896155048292206356087699L;
+// atan(phi) * 180/pi (degrees)
+constexpr long double M_ICOSA_VERT0_LAT_DEG =
+                     58.2825255885389946757860968602266473356021071498L;
+
+// ISEA (Snyder 1992) constants
+//
+// g: the spherical distance from a face centre to a face vertex,
+// g = atan(3 - sqrt(5)) = atan(2/phi^2) (radians; 37.3773681406496956...deg)
+constexpr long double M_ISEA_G =
+                     0.652358139784368185995390631643822574365307919963L;
+// scale constants: the planar face area equals the spherical face area
+// 4 pi R^2 / 20, which gives the planar circumradius r_c = R * k with
+// k = sqrt(4 pi / (15 sqrt(3))). Snyder's rho(vertex) = R' tan g = r_c
+// then gives R'/R = k / tan g = k / (3 - sqrt(5)).
+// R'/R = sqrt(4 pi / (15 sqrt(3))) / (3 - sqrt(5))
+constexpr long double M_ISEA_R1 =
+                     0.910383281509503568223473953373552451373533737718L;
+// half the planar edge = (sqrt(3)/2) * sqrt(4 pi / (15 sqrt(3)))
+constexpr long double M_ISEA_ORIGIN_X_OFF =
+                     0.602295502927627353639379448917445846643753581805L;
+// the planar inradius = (1/2) * sqrt(4 pi / (15 sqrt(3)))
+constexpr long double M_ISEA_ORIGIN_Y_OFF =
+                     0.347735470746966685358527448284139240437236623696L;
+
 // some spherical earth datum radii
-constexpr long double WGS84_MEAN_RADIUS_KM =      6371.0087714L;
+//
+// Derived from the WGS84 defining parameters a = 6378137 m and
+// 1/f = 298.257223563 (b = a (1 - f), e^2 = f (2 - f)).
+//
+// mean radius of the semi-axes R1 = (2a + b)/3; NGA publishes it rounded to
+// 0.1 mm as 6371008.7714 m.
+constexpr long double WGS84_MEAN_RADIUS_KM =
+                     6371.00877141505983252132219987788505226605710370L;
 constexpr long double WGS84_EQUATOR_RADIUS_KM =   6378.137L;
-constexpr long double WGS84_AUTHALIC_RADIUS_KM =  6371.007180918475L;
+// authalic radius (the sphere with the ellipsoid's surface area) a sqrt(q_p/2),
+// with q_p = 1 + ((1 - e^2)/(2e)) ln((1 + e)/(1 - e))
+constexpr long double WGS84_AUTHALIC_RADIUS_KM =
+                     6371.00718091847389797633784573196106269051841063L;
 constexpr long double DEFAULT_RADIUS_KM =         WGS84_AUTHALIC_RADIUS_KM;
 
 // misc

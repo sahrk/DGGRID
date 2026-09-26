@@ -17,7 +17,8 @@ dggs_res_spec 0
 
 # Dymaxion (Fuller) orientation: vertex 0 in the Atlantic off Liberia,
 # with azimuth toward the adjacent vertex near Norway (Gray 1995).
-# Default ISEA/Terra Cognita orientation is 11.25, 58.28252559, 0.0.
+# Default ISEA/Terra Cognita orientation is 11.25, 58.282525588538995
+# (atan(phi): the poles on icosahedron edge midpoints), 0.0.
 dggs_orient_specify_type SPECIFIED
 dggs_vert0_lon -5.24539058
 dggs_vert0_lat 2.300882

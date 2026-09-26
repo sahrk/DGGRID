@@ -37,9 +37,9 @@ class DgWGS84RF : public DgEllipsoidRF {
          { return semiMajorAxisMeters() *
                   (1.0L - 1.0L / inverseFlattening()); }
 
-      // Preserve the historical projection-sphere radius exactly. The
-      // axes-derived value differs by about one nanometer; use that derived
-      // value for mathematical checks, not for changing legacy grid geometry.
+      // Projection-sphere radius for grid geometry. This is the full-precision
+      // WGS 84 authalic radius. DgAuthalic::authalicRadiusKM() evaluates the
+      // same quantity from the defining axes for conversion checks.
       static constexpr long double canonicalAuthalicRadiusKM()
          { return WGS84_AUTHALIC_RADIUS_KM; }
 

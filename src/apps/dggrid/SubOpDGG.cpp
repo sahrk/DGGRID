@@ -194,10 +194,12 @@ SubOpDGG::initializeOp (void)
 {
    // dggs_type <CUSTOM | SUPERFUND | PLANETRISK | IGEO7 |
    //            ISEA3H | ISEA4H | ISEA7H | ISEA43H | ISEA4T | ISEA4D |
+   //            IVEA3H | IVEA4H | IVEA7H | IVEA43H | IVEA4T | IVEA4D |
    //            FULLER3H | FULLER4H | FULLER7H | FULLER43H | FULLER4T | FULLER4D>
    pList().insertParam("dggs_type", "CUSTOM",
        {"CUSTOM", "SUPERFUND", "PLANETRISK", "IGEO7",
         "ISEA3H", "ISEA4H", "ISEA7H", "ISEA43H", "ISEA4T", "ISEA4D",
+        "IVEA3H", "IVEA4H", "IVEA7H", "IVEA43H", "IVEA4T", "IVEA4D",
         "FULLER3H", "FULLER4H", "FULLER7H", "FULLER43H", "FULLER4T", "FULLER4D"});
 
    // dggs_base_poly <ICOSAHEDRON>
@@ -206,8 +208,8 @@ SubOpDGG::initializeOp (void)
    // dggs_topology <HEXAGON | TRIANGLE | DIAMOND>
    pList().insertParam("dggs_topology", "HEXAGON", {"HEXAGON", "TRIANGLE", "DIAMOND"});
 
-   // dggs_proj <ISEA | FULLER | GNOMONIC>
-   pList().insertParam("dggs_proj", "ISEA", {"ISEA", "FULLER" /*, "GNOMONIC"*/ });
+   // dggs_proj <ISEA | IVEA | FULLER>
+   pList().insertParam("dggs_proj", "ISEA", {"ISEA", "IVEA", "FULLER" /*, "GNOMONIC"*/ });
 
    // dggs_aperture_type <PURE | MIXED43 | SEQUENCE>
    pList().insertParam("dggs_aperture_type", "PURE", {"PURE", "MIXED43", "SEQUENCE"});
@@ -256,7 +258,9 @@ SubOpDGG::initializeOp (void)
    pList().insertParam(new DgDoubleParam("dggs_vert0_lon", 11.25, -180.0, 180.0));
 
    // dggs_vert0_lat <long double: decimal degrees> (-90.0 <= v <= 90.0)
-   pList().insertParam(new DgDoubleParam("dggs_vert0_lat", 58.28252559, -90.0, 90.0));
+   // default atan(phi) puts the north pole on an icosahedron edge midpoint
+   pList().insertParam(new DgDoubleParam("dggs_vert0_lat", M_ICOSA_VERT0_LAT_DEG,
+                                         -90.0, 90.0));
 
    // dggs_vert0_azimuth <long double: decimal degrees> (0.0 <= v < 360.0)
    pList().insertParam(new DgDoubleParam("dggs_vert0_azimuth", 0.0, 0.0, 360.0));
@@ -313,7 +317,9 @@ SubOpDGG::setupOp (void)
       pList().setPresetParam("dggs_orient_specify_type", "SPECIFIED");
       pList().setPresetParam("dggs_num_placements", "1");
       pList().setPresetParam("dggs_vert0_lon", "11.25");
-      pList().setPresetParam("dggs_vert0_lat", "58.28252559");
+      // 21 significant digits round-trip an 80-bit long double
+      pList().setPresetParam("dggs_vert0_lat",
+                    dgg::util::to_string(M_ICOSA_VERT0_LAT_DEG, "%.21Lg"));
       pList().setPresetParam("dggs_vert0_azimuth", "0.0");
       pList().setPresetParam("dggs_res_specify_type", "SPECIFIED");
       pList().setPresetParam("dggs_res_spec", "9");
@@ -359,16 +365,23 @@ SubOpDGG::setupOp (void)
                break;
          }
 
-         // get the projection
-         int projLen;
-
-         if (!tmplc.compare(0, 4, "isea")) {
-            pList().setPresetParam("dggs_proj", "ISEA");
-            projLen = (int) std::string("isea").length();
-         } else { // must be FULLER
-            pList().setPresetParam("dggs_proj", "FULLER");
-            projLen = (int) std::string("fuller").length();
+         // get the projection from the preset name prefix
+         static const struct { const char* prefix; const char* proj; }
+            presetProjs[] = { {"isea", "ISEA"}, {"ivea", "IVEA"},
+                              {"fuller", "FULLER"} };
+         int projLen = -1;
+         for (const auto& pp : presetProjs) {
+            const std::string prefix(pp.prefix);
+            if (!tmplc.compare(0, prefix.length(), prefix)) {
+               pList().setPresetParam("dggs_proj", pp.proj);
+               projLen = (int) prefix.length();
+               break;
+            }
          }
+
+         if (projLen < 0)
+            ::report("SubOpDGG::setupOp(): dggs_type " + tmp +
+                     " has no known projection prefix", DgBase::Fatal);
 
          // get the aperture
          tmplc = tmplc.substr(projLen, tmplc.length() - projLen - 1);
@@ -452,7 +465,7 @@ SubOpDGG::setupOp (void)
    if (datum == "WGS84_AUTHALIC_SPHERE")
       earthRadius = DgWGS84RF::canonicalAuthalicRadiusKM();
    else if (datum == "WGS84_MEAN_SPHERE")
-      earthRadius = 6371.0087714L;
+      earthRadius = WGS84_MEAN_RADIUS_KM;
    else // datum must be CUSTOM_SPHERE
       getParamValue(pList(), "proj_datum_radius", earthRadius, false);
 
