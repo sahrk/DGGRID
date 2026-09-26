@@ -36,12 +36,13 @@
 #include <dglib/DgPolygon.h>
 #include <dglib/DgLocation.h>
 #include <dglib/DgCell.h>
-#include <dglib/DgGeoSphRF.h>
+#include <dglib/DgGeoDegRF.h>
+#include <dglib/DgWGS84RF.h>
 #include <dglib/DgIDGGSBase.h>
 #include <dglib/DgBoundedIDGG.h>
 
 ////////////////////////////////////////////////////////////////////////////////
-DgOutGdalFile::DgOutGdalFile (const DgGeoSphDegRF& rf,
+DgOutGdalFile::DgOutGdalFile (const DgGeoDegRF& rf,
                     const std::string& filename, const std::string& gdalDriver,
                     DgOutGdalFileMode mode, int /* precision */, bool isPointFile,
                     DgReportLevel failLevel)
@@ -110,7 +111,18 @@ DgOutGdalFile::init (bool outputPoint, bool outputRegion,
    }
 
    std::string baseName = dgg::util::baseName(fileNameOnly_);
-   _oLayer = _dataset->CreateLayer(baseName.c_str(), NULL, geomType, NULL );
+   OGRSpatialReference wgs84;
+   OGRSpatialReference* layerSRS = NULL;
+   const DgGeoDegRF& degreeRF = static_cast<const DgGeoDegRF&>(rf());
+   if (dynamic_cast<const DgWGS84RF*>(&degreeRF.geoRF())) {
+      if (wgs84.importFromEPSG(4326) != OGRERR_NONE)
+         ::report("Unable to initialize WGS 84 output spatial reference.", DgBase::Fatal);
+#if GDAL_VERSION_NUM >= 3000000
+      wgs84.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+#endif
+      layerSRS = &wgs84;
+   }
+   _oLayer = _dataset->CreateLayer(baseName.c_str(), layerSRS, geomType, NULL );
    if (_oLayer == NULL)
       ::report( "Layer creation failed.", DgBase::Fatal );
 
@@ -459,4 +471,3 @@ DgOutGdalFile::insert (DgPolygon& poly, const std::string* label,
 }
 
 #endif
-

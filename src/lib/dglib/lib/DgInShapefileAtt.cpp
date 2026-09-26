@@ -33,7 +33,7 @@
 #include <dglib/DgContCartRF.h>
 
 ////////////////////////////////////////////////////////////////////////////////
-DgInShapefileAtt::DgInShapefileAtt (const DgGeoSphRF& geoRFIn,
+DgInShapefileAtt::DgInShapefileAtt (const DgEllipsoidRF& geoRFIn,
             const std::string* fileNameIn, DgReportLevel failLevelIn)
    : DgInShapefile (geoRFIn, fileNameIn, failLevelIn),
       dbfFile_ (NULL), numFields_ (0)

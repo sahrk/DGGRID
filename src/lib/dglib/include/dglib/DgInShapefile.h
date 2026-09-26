@@ -38,14 +38,14 @@ class DgPolygon;
 class DgLocation;
 class DgCell;
 class DgRFBase;
-class DgGeoSphRF;
+class DgEllipsoidRF;
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgInShapefile : public DgInLocFile {
 
    public:
 
-      DgInShapefile (const DgGeoSphRF& geoRFIn,
+      DgInShapefile (const DgEllipsoidRF& geoRFIn,
                      const std::string* fileNameIn = NULL,
                      DgReportLevel failLevel = DgBase::Fatal);
 
@@ -66,11 +66,11 @@ class DgInShapefile : public DgInLocFile {
       virtual DgInLocFile& extract (DgPolygon&   poly);
       virtual DgInLocFile& extract (DgLocation&  loc);
 
-      const DgGeoSphRF& geoRF (void) const { return geoRF_; }
+      const DgEllipsoidRF& geoRF (void) const { return geoRF_; }
 
    protected:
 
-      const DgGeoSphRF& geoRF_;
+      const DgEllipsoidRF& geoRF_;
 
       virtual void getNextEntity (void);
 

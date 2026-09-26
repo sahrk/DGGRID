@@ -83,12 +83,6 @@ SubOpTransform::cleanupOp (void) {
 int
 SubOpTransform::executeOp (void) {
 
-   // Transform to GEO doesn't make sense (that would just be the cell point)
-   if (op.outOp.outAddType == dgg::addtype::Geo) {
-      ::report("SubOpTransform::executeOp() output address type must be non-GEO",
-               DgBase::Fatal);
-   }
-
    const DgIDGGBase& dgg = op.dggOp.dgg();
    dgcout << "Res " << dgg.outputRes() << " " << dgg.gridStats() << std::endl;
    dgcout << "\ntransforming values..." << std::endl;
@@ -124,4 +118,3 @@ SubOpTransform::executeOp (void) {
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-

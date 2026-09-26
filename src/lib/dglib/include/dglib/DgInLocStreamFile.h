@@ -30,7 +30,7 @@
 #include <fstream>
 #include <string>
 
-class DgGeoSphDegRF;
+class DgGeoDegRF;
 class DgLocList;
 class DgLocVector;
 class DgPolygon;
@@ -60,7 +60,7 @@ class DgInLocStreamFile : public std::ifstream, public DgInLocFile {
 
    protected:
 
-      const DgGeoSphDegRF* degRF_;
+      const DgGeoDegRF* degRF_;
 };
 
 inline DgInLocFile& operator>> (DgInLocStreamFile& input, DgLocList& list)

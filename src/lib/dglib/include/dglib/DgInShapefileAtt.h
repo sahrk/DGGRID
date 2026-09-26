@@ -79,7 +79,7 @@ class DgInShapefileAtt : public DgInShapefile {
 
    public:
 
-      DgInShapefileAtt (const DgGeoSphRF& geoRFIn,
+      DgInShapefileAtt (const DgEllipsoidRF& geoRFIn,
                      const std::string* fileNameIn = NULL,
                      DgReportLevel failLevel = DgBase::Fatal);
 

@@ -31,10 +31,10 @@
 #include <dglib/DgLocation.h>
 #include <dglib/DgCell.h>
 #include <dglib/DgContCartRF.h>
-#include <dglib/DgGeoSphRF.h>
+#include <dglib/DgEllipsoidRF.h>
 
 ////////////////////////////////////////////////////////////////////////////////
-DgInShapefile::DgInShapefile (const DgGeoSphRF& geoRFIn,
+DgInShapefile::DgInShapefile (const DgEllipsoidRF& geoRFIn,
                    const std::string* fileNameIn, DgReportLevel failLevelIn)
    : DgInLocFile (geoRFIn, fileNameIn, false, failLevelIn),
      geoRF_ (geoRFIn), shpFile_ (NULL), numEntities_ (0), nextRecNum_ (0),

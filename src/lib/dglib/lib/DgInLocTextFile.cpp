@@ -30,7 +30,7 @@
 #include <dglib/DgCell.h>
 #include <dglib/DgContCartRF.h>
 #include <dglib/DgEllipsoidRF.h>
-#include <dglib/DgGeoSphRF.h>
+#include <dglib/DgGeoDegRF.h>
 #include <dglib/DgDataList.h>
 #include <dglib/DgDataField.h>
 
@@ -43,7 +43,7 @@ DgInLocTextFile::DgInLocTextFile (const DgRFBase& rfIn, const std::string* fileN
       forcePolyLine_ (false), forceCells_ (false)
 {
    // create lat/lon rf (may be NULL)
-   degRF_ = dynamic_cast<const DgGeoSphDegRF*>(&rfIn);
+   degRF_ = dynamic_cast<const DgGeoDegRF*>(&rfIn);
 
 } // DgInLocTextFile::DgInLocTextFile
 

@@ -28,7 +28,7 @@
 #ifndef DGGEOSPHRF_H
 #define DGGEOSPHRF_H
 
-#include <dglib/DgContCartRF.h>
+#include <dglib/DgGeoDegRF.h>
 #include <dglib/DgEllipsoidRF.h>
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -119,7 +119,7 @@ class DgGeoSphRF : public DgEllipsoidRF {
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-class DgGeoSphDegRF : public DgContCartRF {
+class DgGeoSphDegRF : public DgGeoDegRF {
 
    public:
 
@@ -127,14 +127,14 @@ class DgGeoSphDegRF : public DgContCartRF {
                      const std::string& nameIn = "GeodeticSphDeg")
          { return new DgGeoSphDegRF(geoRFin, nameIn); }
 
-      const DgGeoSphRF& geoRF (void) const { return geoRF_; }
+      const DgGeoSphRF& geoRF (void) const
+         { return static_cast<const DgGeoSphRF&>(DgGeoDegRF::geoRF()); }
 
    protected:
 
       DgGeoSphDegRF (const DgGeoSphRF& geoRFin,
                      const std::string& nameIn = "GeodeticSphDeg");
 
-      const DgGeoSphRF& geoRF_;
 };
 
 #endif

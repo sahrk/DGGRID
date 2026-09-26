@@ -2,6 +2,7 @@ cmake_minimum_required (VERSION 3.20)
 
 add_library(dglib
    lib/DgAddressBase.cpp
+   lib/DgAuthalicConverter.cpp
    lib/DgAddressType.cpp
    lib/DgApSeq.cpp
    lib/DgBase.cpp
@@ -28,6 +29,7 @@ add_library(dglib
    lib/DgDVec2D.cpp
    lib/DgDVec3D.cpp
    lib/DgEllipsoidRF.cpp
+   lib/DgGeoDegRF.cpp
    lib/DgGeoSphRF.cpp
    lib/DgGridTopo.cpp
    lib/DgHexC1Grid2D.cpp
@@ -108,8 +110,10 @@ add_library(dglib
    lib/DgZ7System.cpp
    lib/DgZOrderRF.cpp
    lib/DgZOrderStringRF.cpp
+   lib/DgWGS84RF.cpp
    lib/DgZOrderSystem.cpp
    include/dglib/Dg2WayConverter.h
+   include/dglib/DgAuthalicConverter.h
    include/dglib/DgAddress.h
    include/dglib/DgAddressBase.h
    include/dglib/DgAddressType.h
@@ -150,6 +154,7 @@ add_library(dglib
    include/dglib/DgDVec2D.h
    include/dglib/DgDVec3D.h
    include/dglib/DgEllipsoidRF.h
+   include/dglib/DgGeoDegRF.h
    include/dglib/DgGeoDatumRF.h
    include/dglib/DgGeoProjConverter.h
    include/dglib/DgGeoProjRF.h
@@ -248,6 +253,7 @@ add_library(dglib
    include/dglib/DgZOrderRF.h
    include/dglib/DgZOrderStringRF.h
    include/dglib/DgZOrderSystem.h
+   include/dglib/DgWGS84RF.h
 )
 
 if(GDAL_FOUND)

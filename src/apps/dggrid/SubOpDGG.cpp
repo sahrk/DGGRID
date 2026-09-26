@@ -36,12 +36,27 @@
 #include <dglib/DgZ3StringRF.h>
 #include <dglib/DgZ3System.h>
 #include <dglib/DgHierNdxSystemRFSBase.h>
+#include <dglib/DgAuthalicConverter.h>
+
+#include <iomanip>
+#include <limits>
+#include <sstream>
 
 #include "OpBasic.h"
 #include "SubOpDGG.h"
 
 using namespace dgg::topo;
 using namespace dgg::addtype;
+
+namespace {
+std::string coordinateString(long double coordinate)
+{
+   std::ostringstream text;
+   text << std::setprecision(std::numeric_limits<long double>::max_digits10)
+        << coordinate;
+   return text.str();
+}
+}
 
 const int SubOpDGG::MAX_DGG_RES = 35;
 
@@ -65,7 +80,7 @@ SubOpDGG::SubOpDGG (OpBasic& op, bool _activate)
 bool
 SubOpDGG::addressTypeToRF (DgAddressType type, DgHierNdxSysType hierNdxSysType, DgHierNdxFormType hierNdxForm,
              const DgRFBase** rf, const DgHierNdxSystemRFSBase** hierNdxSysOut, const DgRFBase** chdRF, const DgRFBase** prtRF,
-             int forceRes)
+             int forceRes, GeographicBoundary boundary)
 {
    const DgIDGGBase* dgg = &this->dgg();
    const DgIDGGBase* chdDgg = &this->chdDgg();
@@ -100,10 +115,23 @@ SubOpDGG::addressTypeToRF (DgAddressType type, DgHierNdxSysType hierNdxSysType, 
    } else {
       switch (type) {
          case Geo:
-            if (rf) *rf = &this->deg();
-            if (chdRF) *chdRF = &this->chdDeg();
-            if (prtRF) *prtRF = this->prtDeg();
+         {
+            // A geographic frame is resolution independent. Preserve the
+            // existing child/parent spherical adapters for legacy callers.
+            const bool useWGS84 = boundary == GeographicBoundary::Input
+                                  ? inputWGS84() : outputWGS84();
+            const DgRFBase& geographicRF = boundary == GeographicBoundary::Input
+                                           ? static_cast<const DgRFBase&>(inputDeg())
+                                           : static_cast<const DgRFBase&>(outputDeg());
+            if (rf) *rf = &geographicRF;
+            if (chdRF) *chdRF = useWGS84
+                 ? &geographicRF : static_cast<const DgRFBase*>(&chdDeg());
+            if (prtRF) *prtRF = !prtDgg ? nullptr
+                 : useWGS84
+                    ? &geographicRF
+                    : static_cast<const DgRFBase*>(prtDeg());
             break;
+         }
 
          case Plane:
             if (rf) *rf = &dgg->planeRF();
@@ -202,6 +230,10 @@ SubOpDGG::initializeOp (void)
    // proj_datum <WGS84_AUTHALIC_SPHERE WGS84_MEAN_SPHERE CUSTOM_SPHERE>
    pList().insertParam("proj_datum", "WGS84_AUTHALIC_SPHERE",
                        {"WGS84_AUTHALIC_SPHERE", "WGS84_MEAN_SPHERE", "CUSTOM_SPHERE"});
+
+   // Interpretation of geographic coordinates at the two application boundaries.
+   pList().insertParam("input_geographic_mode", "SPHERE", {"SPHERE", "WGS84"});
+   pList().insertParam("output_geographic_mode", "SPHERE", {"SPHERE", "WGS84"});
 
    // proj_datum_radius <long double: km> (1.0 <= v <= 10000.0)
    pList().insertParam(new DgDoubleParam("proj_datum_radius", DEFAULT_RADIUS_KM,
@@ -395,14 +427,30 @@ SubOpDGG::setupOp (void)
    getParamValue(pList(), "dggs_proj", projType, false);
    getParamValue(pList(), "dggs_vert0_azimuth", azimuthDegs, false);
 
+   std::string geographicMode;
+   getParamValue(pList(), "input_geographic_mode", geographicMode, false);
+   inputGeographicMode = geographicMode == "WGS84" ? GeographicMode::WGS84 : GeographicMode::Sphere;
+   getParamValue(pList(), "output_geographic_mode", geographicMode, false);
+   outputGeographicMode = geographicMode == "WGS84" ? GeographicMode::WGS84 : GeographicMode::Sphere;
+
+   getParamValue(pList(), "proj_datum", datum, false);
+   if ((inputWGS84() || outputWGS84()) && datum != "WGS84_AUTHALIC_SPHERE")
+      ::report("input_geographic_mode/output_geographic_mode WGS84 requires "
+               "proj_datum WGS84_AUTHALIC_SPHERE", DgBase::Fatal);
+
    long double lon0, lat0;
    getParamValue(pList(), "dggs_vert0_lon", lon0, false);
    getParamValue(pList(), "dggs_vert0_lat", lat0, false);
+   // A partially specified pair uses the other parameter's current default or
+   // preset, then the complete pair is interpreted in the selected input model.
+   // Built-in and preset placement is already spherical and stays untouched.
+   if (inputWGS84() && (pList().getParam("dggs_vert0_lon", false)->isUserSet() ||
+                        pList().getParam("dggs_vert0_lat", false)->isUserSet()))
+      lat0 = DgAuthalic::geodeticToAuthalicLatitude(lat0 * M_PI_180) * M_180_PI;
    vert0 = DgGeoCoord(lon0, lat0, false);
 
-   getParamValue(pList(), "proj_datum", datum, false);
    if (datum == "WGS84_AUTHALIC_SPHERE")
-      earthRadius = 6371.007180918475L;
+      earthRadius = DgWGS84RF::canonicalAuthalicRadiusKM();
    else if (datum == "WGS84_MEAN_SPHERE")
       earthRadius = 6371.0087714L;
    else // datum must be CUSTOM_SPHERE
@@ -510,11 +558,15 @@ SubOpDGG::executeOp (void) {
 
 //cout << "ZZZ " << curGrid << " " << numGrids << " " << lastGrid << std::endl;
 
-   orientGrid();
-
    if (curGrid == 1) {
       _pGeoRF = DgGeoSphRF::makeRF(net0(), datum, earthRadius);
+      if (inputWGS84() || outputWGS84()) {
+         _pWGS84RF = DgWGS84RF::makeRF(net0());
+         Dg2WayAuthalicConverter(*_pWGS84RF, *_pGeoRF);
+      }
    }
+
+   orientGrid();
 
    _pDGGS  = DgIDGGSBase::makeRF(net0(), geoRF(), vert0,
              azimuthDegs, aperture, actualRes+2, gridTopo,
@@ -531,6 +583,8 @@ SubOpDGG::executeOp (void) {
 
    // set-up to convert to degrees
    _pDeg = DgGeoSphDegRF::makeRF(geoRF(), _pGeoRF->name() + "Deg");
+   if (_pWGS84RF && !_pWGS84Deg)
+      _pWGS84Deg = DgGeoDegRF::makeRF(*_pWGS84RF, "WGS84Deg");
    _pChdDeg = DgGeoSphDegRF::makeRF(_pChdDgg->geoRF(), _pChdDgg->geoRF().name() + "Deg");
    if (_pPrtDgg)
       _pPrtDeg = DgGeoSphDegRF::makeRF(_pPrtDgg->geoRF(), _pPrtDgg->geoRF().name() + "Deg");
@@ -622,9 +676,15 @@ SubOpDGG::orientGrid (void)
       // set the paramlist to match so we can print it back out
       pList().setParam("dggs_orient_specify_type", "SPECIFIED");
       pList().setParam("dggs_num_placements", dgg::util::to_string(1));
-      pList().setParam("dggs_vert0_lon", dgg::util::to_string(vert0.lonDegs()));
-      pList().setParam("dggs_vert0_lat", dgg::util::to_string(vert0.latDegs()));
-      pList().setParam("dggs_vert0_azimuth", dgg::util::to_string(azimuthDegs));
+      pList().setParam("dggs_vert0_lon", coordinateString(vert0.lonDegs()));
+      const long double printedLat = outputWGS84()
+          ? DgAuthalic::authalicToGeodeticLatitude(vert0.lat()) * M_180_PI
+          : vert0.latDegs();
+      pList().setParam("dggs_vert0_lat", coordinateString(printedLat));
+      // The generated placement is expressed in the output geographic model.
+      // Make a generated metafile replay that same placement as input.
+      pList().setParam("input_geographic_mode", outputWGS84() ? "WGS84" : "SPHERE");
+      pList().setParam("dggs_vert0_azimuth", coordinateString(azimuthDegs));
 
       dgcout << "Grid " << curGrid <<
            " #####################################################" << std::endl;
@@ -639,6 +699,8 @@ SubOpDGG::orientGrid (void)
       long double lonc = 0.0, latc = 0.0;
       getParamValue(pList(), "region_center_lon", lonc, false);
       getParamValue(pList(), "region_center_lat", latc, false);
+      if (inputWGS84())
+         latc = DgAuthalic::geodeticToAuthalicLatitude(latc * M_PI_180) * M_180_PI;
 
       const DgProjGnomonicRF& gnomc =
             *(DgProjGnomonicRF::makeRF(netc, "cgnom", DgGeoCoord(lonc, latc, false)));

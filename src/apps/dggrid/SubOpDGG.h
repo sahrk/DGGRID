@@ -29,6 +29,8 @@
 #include <dglib/DgGridTopo.h>
 #include <dglib/DgEllipsoidRF.h>
 #include <dglib/DgGeoSphRF.h>
+#include <dglib/DgGeoDegRF.h>
+#include <dglib/DgWGS84RF.h>
 #include <dglib/DgIDGGSBase.h>
 #include <dglib/DgAddressType.h>
 #include <dglib/DgOutLocFile.h>
@@ -43,6 +45,9 @@ struct OpBasic;
 ////////////////////////////////////////////////////////////////////////////////
 struct SubOpDGG : public SubOpBasic {
 
+   enum class GeographicMode { Sphere, WGS84 };
+   enum class GeographicBoundary { Input, Output };
+
    static const int MAX_DGG_RES;
 
    SubOpDGG (OpBasic& op, bool activate = true);
@@ -53,6 +58,18 @@ struct SubOpDGG : public SubOpBasic {
    const DgIDGGSBase&   dggs   (void) { return *_pDGGS; }
    const DgIDGGBase&    dgg    (void) { return *_pDGG; }
    const DgGeoSphDegRF& deg    (void) { return *_pDeg; }
+   // Geographic boundary frames. The grid and its projection always use geoRF().
+   // Input and output modes are independent; callers must select the direction.
+   const DgGeoDegRF& inputDeg (void) const
+      { return inputGeographicMode == GeographicMode::WGS84 ? *_pWGS84Deg : *_pDeg; }
+   const DgGeoDegRF& outputDeg (void) const
+      { return outputGeographicMode == GeographicMode::WGS84 ? *_pWGS84Deg : *_pDeg; }
+   const DgEllipsoidRF& inputGeoRF (void) const
+      { return inputGeographicMode == GeographicMode::WGS84 ? static_cast<const DgEllipsoidRF&>(*_pWGS84RF) : static_cast<const DgEllipsoidRF&>(*_pGeoRF); }
+   const DgEllipsoidRF& outputGeoRF (void) const
+      { return outputGeographicMode == GeographicMode::WGS84 ? static_cast<const DgEllipsoidRF&>(*_pWGS84RF) : static_cast<const DgEllipsoidRF&>(*_pGeoRF); }
+   bool inputWGS84 (void) const { return inputGeographicMode == GeographicMode::WGS84; }
+   bool outputWGS84 (void) const { return outputGeographicMode == GeographicMode::WGS84; }
    const DgIDGGBase&    chdDgg (void) { return *_pChdDgg; }
    const DgGeoSphDegRF& chdDeg (void) { return *_pChdDeg; }
    // note the indexing children use the same DGG as the spatial children
@@ -63,7 +80,8 @@ struct SubOpDGG : public SubOpBasic {
    // return if seq num
    bool addressTypeToRF (dgg::addtype::DgAddressType type, dgg::addtype::DgHierNdxSysType hierNdxSysType,
       dgg::addtype:: DgHierNdxFormType hierNdxForm, const DgRFBase** rf, const DgHierNdxSystemRFSBase** hierNdxSys = nullptr,
-      const DgRFBase** chdRF = nullptr, const DgRFBase** prtRF = nullptr, int forceRes = -1);
+      const DgRFBase** chdRF = nullptr, const DgRFBase** prtRF = nullptr, int forceRes = -1,
+      GeographicBoundary boundary = GeographicBoundary::Input);
 
    // DgApSubOperation virtual methods that use the pList
    virtual int initializeOp (void);
@@ -80,6 +98,8 @@ struct SubOpDGG : public SubOpBasic {
    // the created DGG
    DgRFNetwork          _net0;
    const DgGeoSphRF*    _pGeoRF  = nullptr;
+   const DgWGS84RF*     _pWGS84RF = nullptr;
+   const DgGeoDegRF*    _pWGS84Deg = nullptr;
    const DgIDGGSBase*   _pDGGS   = nullptr;
    const DgIDGGBase*    _pDGG    = nullptr;
    const DgGeoSphDegRF* _pDeg    = nullptr;
@@ -108,6 +128,8 @@ struct SubOpDGG : public SubOpBasic {
    long double azimuthDegs; // orientation azimuth
    long double earthRadius; // earth radius in km
    std::string datum;            // datum used to determine the earthRadius
+   GeographicMode inputGeographicMode = GeographicMode::Sphere;
+   GeographicMode outputGeographicMode = GeographicMode::Sphere;
    std::string apertureType; // "PURE", "MIXED43", "SUPERFUND", or "SEQUENCE"
    bool   isMixed43;       // are we using mixed43 aperture?
    int numAp4;          // # of leading ap 4 resolutions in a mixed grid

@@ -38,7 +38,7 @@
 #include <dglib/DgOutPtsText.h>
 #include <dglib/DgOutPRCellsFile.h>
 #include <dglib/DgOutPRPtsFile.h>
-#include <dglib/DgGeoSphRF.h>
+#include <dglib/DgGeoDegRF.h>
 #include <dglib/DgIDGGBase.h>
 
 const std::string DgOutLocFile::defaultKMLColor = "ffffffff";
@@ -77,7 +77,7 @@ DgOutLocFile::makeOutLocFile (const std::string& type, const std::string& fileNa
       file = new DgOutPtsText(rf, fileName, precision, failLevelIn);
    else // must be KML, GEOJSON, SHAPEFILE, or GDAL
    {
-      const DgGeoSphDegRF* geoRF = dynamic_cast<const DgGeoSphDegRF*>(&rf);
+      const DgGeoDegRF* geoRF = dynamic_cast<const DgGeoDegRF*>(&rf);
       if (geoRF == NULL)
          ::report("DgOutLocFile::makeOutLoc(): invalid RF type", failLevelIn);
 
@@ -153,5 +153,4 @@ DgOutLocFile::insert (DgCell& cell)
    return *this;
 
 } // DgOutLocFile& DgOutLocFile::insert
-
 

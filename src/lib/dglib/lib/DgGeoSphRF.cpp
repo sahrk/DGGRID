@@ -248,8 +248,4 @@ DgGeoSphRF::travelGC (const DgGeoCoord& p0, long double distance, long double az
 
 ////////////////////////////////////////////////////////////////////////////////
 DgGeoSphDegRF::DgGeoSphDegRF (const DgGeoSphRF& geoRFin, const std::string& nameIn)
-         : DgContCartRF (geoRFin.network(), nameIn), geoRF_ (geoRFin)
-{
-   DgDegRadConverter (geoRFin, *this);
-}
-
+         : DgGeoDegRF (geoRFin, nameIn) { }

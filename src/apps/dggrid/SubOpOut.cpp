@@ -81,7 +81,7 @@ void
 SubOpOut::genRandPts (const DgQ2DICoord& add2D, const std::string& label)
 {
    const DgIDGGBase& dgg = op.dggOp.dgg();
-   const DgContCartRF& deg = op.dggOp.deg();
+   const DgGeoDegRF& deg = op.dggOp.outputDeg();
    const DgDiscRF2D& grid = dgg.grid2D();
    const DgRF<DgDVec2D, long double>& ccRF = grid.backFrame();
    int q = add2D.quadNum();
@@ -211,10 +211,6 @@ SubOpOut::genRandPts (const DgQ2DICoord& add2D, const std::string& label)
    // convert
 
    if (op.mainOp.megaVerbose) dgcout << "rpts: " << rpts << newline;
-
-   dgg.geoRF().convert(rpts);
-
-   if (op.mainOp.megaVerbose) dgcout << "-> " << rpts << newline;
 
    deg.convert(rpts);
 
@@ -915,7 +911,7 @@ SubOpOut::executeOp (void) {
    if (outSeqNum || useEnumLbl)
       pOutRF = &dgg;
    else if (!op.dggOp.isSuperfund) { // use input address type
-      outSeqNum = op.dggOp.addressTypeToRF(outAddType, outHierNdxSysType, outHierNdxFormType, &pOutRF, &outHierNdxSys, &pChdOutRF, &pPrtOutRF);
+      outSeqNum = op.dggOp.addressTypeToRF(outAddType, outHierNdxSysType, outHierNdxFormType, &pOutRF, &outHierNdxSys, &pChdOutRF, &pPrtOutRF, -1, SubOpDGG::GeographicBoundary::Output);
       if (!pOutRF)
          ::report("SubOpOut::executeOp(): invalid output RF", DgBase::Fatal);
    }
@@ -963,16 +959,16 @@ SubOpOut::executeOp (void) {
 
    if (makeCollectFile) {
       collectOut = DgOutLocFile::makeOutLocFile("GDAL_COLLECTION",
-             collectOutFileName, gdalCollectDriver, op.dggOp.deg(), false,
+             collectOutFileName, gdalCollectDriver, op.dggOp.outputDeg(), false,
              op.mainOp.precision, DgOutLocFile::Collection, shapefileIdLen,
              kmlColor, kmlWidth, kmlName, kmlDescription);
    }
 
    if (cellOutType == "TEXT") {
-      prCellOut = new DgOutPRCellsFile(op.dggOp.deg(), cellOutFileName, op.mainOp.precision);
+      prCellOut = new DgOutPRCellsFile(op.dggOp.outputDeg(), cellOutFileName, op.mainOp.precision);
    } else if (cellOutType != "GDAL_COLLECTION") {
       cellOut = DgOutLocFile::makeOutLocFile(cellOutType, cellOutFileName,
-                   gdalCellDriver, op.dggOp.deg(), false, op.mainOp.precision,
+                   gdalCellDriver, op.dggOp.outputDeg(), false, op.mainOp.precision,
                    DgOutLocFile::Polygon, shapefileIdLen,
                    kmlColor, kmlWidth, kmlName, kmlDescription);
 
@@ -986,7 +982,7 @@ SubOpOut::executeOp (void) {
 
    if (pointOutType != "GDAL_COLLECTION") {
       ptOut = DgOutLocFile::makeOutLocFile(pointOutType,
-           ptOutFileName, gdalPointDriver, op.dggOp.deg(), true, op.mainOp.precision,
+           ptOutFileName, gdalPointDriver, op.dggOp.outputDeg(), true, op.mainOp.precision,
            DgOutLocFile::Point, shapefileIdLen,
            kmlColor, kmlWidth, kmlName, kmlDescription);
 
@@ -1001,11 +997,11 @@ SubOpOut::executeOp (void) {
 
          if (op.dggOp.curGrid == 1 || !concatPtOut) {
          if (!randPtsOutType.compare("TEXT"))
-            randPtsOut = new DgOutRandPtsText(op.dggOp.deg(), randPtsOutFileName,
+            randPtsOut = new DgOutRandPtsText(op.dggOp.outputDeg(), randPtsOutFileName,
                       op.mainOp.precision);
          else
             randPtsOut = DgOutLocFile::makeOutLocFile(randPtsOutType,
-                      randPtsOutFileName, gdalPointDriver, op.dggOp.deg(), true, op.mainOp.precision,
+                      randPtsOutFileName, gdalPointDriver, op.dggOp.outputDeg(), true, op.mainOp.precision,
                       DgOutLocFile::Point, shapefileIdLen,
                       kmlColor, kmlWidth, kmlName, kmlDescription);
          }

@@ -25,7 +25,7 @@
 #ifndef DGOUTSHAPEFILE_H
 #define DGOUTSHAPEFILE_H
 
-#include <dglib/DgGeoSphRF.h>
+#include <dglib/DgGeoDegRF.h>
 #include <dglib/DgInShapefileAtt.h>
 #include <dglib/DgOutLocFile.h>
 
@@ -43,7 +43,7 @@ class DgOutShapefile : public DgOutLocFile {
 
    public:
 
-      DgOutShapefile (const DgGeoSphDegRF& rfIn, const std::string& fileNameIn = "",
+      DgOutShapefile (const DgGeoDegRF& rfIn, const std::string& fileNameIn = "",
             int precision = 6, bool isPointFile = false,
             int shapefileIdLen = 11, DgReportLevel failLevel = DgBase::Fatal);
 
@@ -79,7 +79,7 @@ class DgOutShapefile : public DgOutLocFile {
 
       void setCurFields (const std::set<DgDBFfield>& fields) { curFields_ = fields; }
 
-      const DgGeoSphRF& geoRF (void) const { return geoRF_; }
+      const DgEllipsoidRF& geoRF (void) const { return geoRF_; }
 
       int         defIntAttribute (void) const { return defIntAttribute_; }
       double      defDblAttribute (void) const { return defDblAttribute_; }
@@ -91,7 +91,7 @@ class DgOutShapefile : public DgOutLocFile {
 
    protected:
 
-      const DgGeoSphRF& geoRF_;
+      const DgEllipsoidRF& geoRF_;
 
       DBFHandle dbFile_;
       SHPHandle shpFile_;

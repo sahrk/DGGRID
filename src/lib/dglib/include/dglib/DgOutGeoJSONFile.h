@@ -37,7 +37,7 @@
 
 class DgDVec2D;
 class DgPolygon;
-class DgGeoSphDegRF;
+class DgGeoDegRF;
 
 class DgOutGeoJSONFile : public DgOutLocTextFile
 {
@@ -45,7 +45,7 @@ class DgOutGeoJSONFile : public DgOutLocTextFile
 
    public:
 
-      DgOutGeoJSONFile(const DgGeoSphDegRF& rf,
+      DgOutGeoJSONFile(const DgGeoDegRF& rf,
          const std::string& filename = "", int precision = 7,
          bool isPointFile = false, DgReportLevel failLevel = DgBase::Fatal);
 

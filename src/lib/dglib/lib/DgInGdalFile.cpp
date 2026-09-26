@@ -39,7 +39,7 @@
 #include <dglib/DgCell.h>
 #include <dglib/DgContCartRF.h>
 #include <dglib/DgEllipsoidRF.h>
-#include <dglib/DgGeoSphRF.h>
+#include <dglib/DgGeoDegRF.h>
 #include <dglib/DgDataList.h>
 #include <dglib/DgDataField.h>
 
@@ -54,7 +54,7 @@ DgInGdalFile::DgInGdalFile (const DgRFBase& rfIn, const std::string* fileNameIn,
       insideMultiPoly_ (false), multiPolyIndex_ (0), numMultiPolyGeometries_ (0)
 {
    // the rf needs to be lat/lon
-   degRF_ = dynamic_cast<const DgGeoSphDegRF*>(&rfIn);
+   degRF_ = dynamic_cast<const DgGeoDegRF*>(&rfIn);
    if (!degRF_) {
       report("DgInGdalFile::DgInGdalFile(): RF " + rfIn.name() +
              " is not longitude/latitude", DgBase::Fatal);

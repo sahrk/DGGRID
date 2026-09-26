@@ -25,6 +25,9 @@
 #include <string>
 #include <algorithm>
 #include <fstream>
+#include <iomanip>
+#include <limits>
+#include <sstream>
 
 #include <dgaplib/DgApParamList.h>
 
@@ -95,10 +98,27 @@ DgApParamList::loadParams (const std::string& fileName, bool fail)
 
 ////////////////////////////////////////////////////////////////////////////////
 void
+DgApParamList::writeMetafile (std::ostream& stream) const
+{
+   for (const DgApAssoc* param : parameters) {
+      if (!param->isUsed() || !param->isValid()) continue;
+
+      std::string value = param->valToStr();
+      if (const DgDoubleParam* number = dynamic_cast<const DgDoubleParam*>(param)) {
+         std::ostringstream formatted;
+         formatted << std::setprecision(std::numeric_limits<long double>::max_digits10)
+                   << number->value();
+         value = formatted.str();
+      }
+      // An empty string is represented by the parameter's default on replay.
+      if (!value.empty()) stream << param->name() << ' ' << value << '\n';
+   }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+void
 DgApParamList::setParam (const std::string& nameIn, const std::string& strValIn, bool fail)
 {
-   if (toLower(strValIn) == std::string("invalid")) return;
-
    DgApAssoc* existing = getParam(nameIn, false);
    if (!existing) { // if not fail then just skip
       if (fail)

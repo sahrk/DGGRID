@@ -248,7 +248,9 @@ SubOpIn::makeNewInFile (const DgRFBase& rfIn, const std::string* fileNameIn,
      newFile = new DgInLocTextFile(rfIn, fileNameIn, failLevel);
 #ifdef USE_GDAL
    } else if (pointInputFileType == "GDAL") {
-      newFile = new DgInGdalFile (rfIn, fileNameIn, failLevel);
+      // GDAL point geometry is longitude/latitude, independent of the
+      // address type used for text records.
+      newFile = new DgInGdalFile (op.dggOp.inputDeg(), fileNameIn, failLevel);
 #endif
    } else {
       ::report("SubOpIn::makeNewInFile(): invalid point input file type " +
@@ -353,7 +355,8 @@ SubOpIn::executeOp (void) {
     if (inSeqNum) {
         pInRF = &dgg;
     } else if (!op.dggOp.isSuperfund) { // use input address type
-      inSeqNum = op.dggOp.addressTypeToRF(inAddType, inHierNdxSysType, inHierNdxFormType, &pInRF);
+      inSeqNum = op.dggOp.addressTypeToRF(inAddType, inHierNdxSysType, inHierNdxFormType, &pInRF,
+                                         nullptr, nullptr, nullptr, -1, SubOpDGG::GeographicBoundary::Input);
       if (!pInRF)
          ::report("SubOpIn::executeOp(): invalid input RF", DgBase::Fatal);
    }

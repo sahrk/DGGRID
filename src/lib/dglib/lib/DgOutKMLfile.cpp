@@ -30,9 +30,9 @@
 #include <dglib/DgPolygon.h>
 #include <dglib/DgLocation.h>
 #include <dglib/DgCell.h>
-#include <dglib/DgGeoSphRF.h>
+#include <dglib/DgGeoDegRF.h>
 
-DgOutKMLfile::DgOutKMLfile(const DgGeoSphDegRF& rf, const std::string& filename,
+DgOutKMLfile::DgOutKMLfile(const DgGeoDegRF& rf, const std::string& filename,
     int precision, bool isPointFile, const std::string& colorIn, int widthIn,
     const std::string& nameIn, const std::string& descIn, DgReportLevel failLevel)
    : DgOutLocTextFile (filename, rf, isPointFile, "kml", precision, failLevel)

@@ -33,10 +33,11 @@
 #include <dglib/DgLocation.h>
 #include <dglib/DgCell.h>
 #include <dglib/DgGeoSphRF.h>
+#include <dglib/DgWGS84RF.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-DgOutShapefile::DgOutShapefile (const DgGeoSphDegRF& rfIn,
+DgOutShapefile::DgOutShapefile (const DgGeoDegRF& rfIn,
             const std::string& fileNameIn, int precisionIn, bool isPointFileIn,
             int shapefileIdLen, DgReportLevel failLevelIn)
    : DgOutLocFile (fileNameIn, rfIn, isPointFileIn, failLevelIn),
@@ -114,9 +115,25 @@ DgOutShapefile::open (const std::string& fileName, DgReportLevel failLevel)
    else
       debug("DgOutShapefile::open() opened file " + prjFileName);
 
+   if (dynamic_cast<const DgWGS84RF*>(&geoRF_)) {
+      // ESRI-compatible WKT1 for EPSG:4326. Coordinates are written lon, lat.
+      prjFile << "GEOGCS[\"GCS_WGS_1984\",DATUM[\"D_WGS_1984\","
+                 "SPHEROID[\"WGS_1984\",6378137,298.257223563]],"
+                 "PRIMEM[\"Greenwich\",0],UNIT[\"Degree\",0.017453292519943295]]\n";
+      prjFile.close();
+      return (dbFile_ && shpFile_);
+   }
+
+   const DgGeoSphRF* sphericalRF = dynamic_cast<const DgGeoSphRF*>(&geoRF_);
+   if (!sphericalRF) {
+      report("DgOutShapefile::open() unsupported geographic datum " + geoRF_.name(),
+             failLevel);
+      return false;
+   }
+
    int precision = 0;
    std::string datumName;
-   long double earthRadiusM = geoRF_.earthRadiusKM() * 1000.0;
+   long double earthRadiusM = sphericalRF->earthRadiusKM() * 1000.0;
    if (geoRF_.name() == "WGS84_AUTHALIC_SPHERE")
    {
       datumName = "AuthalicSphereWGS84radius";

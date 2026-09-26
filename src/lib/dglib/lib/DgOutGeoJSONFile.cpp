@@ -30,9 +30,9 @@
 #include <dglib/DgPolygon.h>
 #include <dglib/DgLocation.h>
 #include <dglib/DgCell.h>
-#include <dglib/DgGeoSphRF.h>
+#include <dglib/DgGeoDegRF.h>
 
-DgOutGeoJSONFile::DgOutGeoJSONFile(const DgGeoSphDegRF& rf,
+DgOutGeoJSONFile::DgOutGeoJSONFile(const DgGeoDegRF& rf,
     const std::string& filename, int precision, bool isPointFile,
     DgReportLevel failLevel)
    : DgOutLocTextFile (filename, rf, isPointFile, "geojson", precision,

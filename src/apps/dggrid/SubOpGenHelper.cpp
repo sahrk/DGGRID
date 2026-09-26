@@ -326,7 +326,7 @@ SubOpGen::executeOp (void)
         if (clipRes < 0 || clipRes > op.dggOp.actualRes)
             ::report("genGrid(): invalid clipCellRes", DgBase::Fatal);
     }
-      op.inOp.inSeqNum = op.dggOp.addressTypeToRF(op.inOp.inAddType, op.inOp.inHierNdxSysType, op.inOp.inHierNdxFormType, &op.inOp.pInRF, &op.inOp.hierNdxSystem, &chdRF, &prtRF, clipRes);
+      op.inOp.inSeqNum = op.dggOp.addressTypeToRF(op.inOp.inAddType, op.inOp.inHierNdxSysType, op.inOp.inHierNdxFormType, &op.inOp.pInRF, &op.inOp.hierNdxSystem, &chdRF, &prtRF, clipRes, SubOpDGG::GeographicBoundary::Input);
 
    if (!op.inOp.pInRF)
       ::report("genGrid(): invalid input RF", DgBase::Fatal);
@@ -416,7 +416,7 @@ SubOpGen::executeOp (void)
 
       // read-in and bin the points
       for (unsigned long fc = 0; fc < regionFiles.size(); fc++) {
-         DgInLocFile* pRegionFile = new DgInAIGenFile(dgg.geoRF(), &regionFiles[fc]);
+         DgInLocFile* pRegionFile = new DgInAIGenFile(op.dggOp.inputGeoRF(), &regionFiles[fc]);
          DgInLocFile& regionFile = *pRegionFile;
 
          DgLocList points;
@@ -1151,12 +1151,12 @@ SubOpGen::createClipRegions (const DgIDGGBase& dgg,
          DgInLocFile* pRegionFile = NULL;
          DgInShapefileAtt* pAttributeFile = NULL;
          if (clipAIGen)
-            pRegionFile = new DgInAIGenFile(dgg.geoRF(), &regionFiles[fc]);
+            pRegionFile = new DgInAIGenFile(op.dggOp.inputGeoRF(), &regionFiles[fc]);
          else if (clipShape) {
             if (op.outOp.buildShapeFileAttributes) {
 
                pRegionFile = pAttributeFile =
-                     new DgInShapefileAtt(dgg.geoRF(), &regionFiles[fc]);
+                     new DgInShapefileAtt(op.dggOp.inputGeoRF(), &regionFiles[fc]);
 
                // add any new fields to the global list
                const std::set<DgDBFfield>& fields = pAttributeFile->fields();
@@ -1172,12 +1172,11 @@ SubOpGen::createClipRegions (const DgIDGGBase& dgg,
                             "of attribute field " + it->fieldName(), DgBase::Fatal);
                }
             } else {
-               pRegionFile = new DgInShapefile(dgg.geoRF(), &regionFiles[fc]);
+               pRegionFile = new DgInShapefile(op.dggOp.inputGeoRF(), &regionFiles[fc]);
             }
 #ifdef USE_GDAL
          } else if (clipGDAL) {
-               //pRegionFile = new DgInGdalFile(dgg.geoRF(), &regionFiles[fc]);
-               pRegionFile = new DgInGdalFile(op.dggOp.deg(), &regionFiles[fc]);
+               pRegionFile = new DgInGdalFile(op.dggOp.inputDeg(), &regionFiles[fc]);
 #endif
          } else {
                report("invalid clip file parameters.", DgBase::Fatal);

@@ -33,7 +33,7 @@
 
 class DgDVec2D;
 class DgPolygon;
-class DgGeoSphDegRF;
+class DgGeoDegRF;
 
 class DgOutKMLfile : public DgOutLocTextFile
 {
@@ -41,7 +41,7 @@ class DgOutKMLfile : public DgOutLocTextFile
 
    public:
 
-      DgOutKMLfile(const DgGeoSphDegRF& rf, const std::string& filename = "",
+      DgOutKMLfile(const DgGeoDegRF& rf, const std::string& filename = "",
                int precision = 7, bool isPointFile = false,
                const std::string& colorIn = defaultKMLColor, int widthIn = defaultKMLWidth,
                const std::string& nameIn = defaultKMLName, const std::string& descIn = defaultKMLDescription,

@@ -37,7 +37,7 @@
 
 class DgDVec2D;
 class DgPolygon;
-class DgGeoSphDegRF;
+class DgGeoDegRF;
 class DgIDGGBase;
 
 class DgOutGdalFile : public DgOutLocFile
@@ -49,7 +49,7 @@ class DgOutGdalFile : public DgOutLocFile
       static OGRLinearRing* createLinearRing (const DgPolygon& poly);
       static OGRPolygon*    createPolygon (const DgPolygon& poly);
 
-      DgOutGdalFile(const DgGeoSphDegRF& rf, const std::string& filename = "",
+      DgOutGdalFile(const DgGeoDegRF& rf, const std::string& filename = "",
                const std::string& gdalDriver = "GeoJSON",
                DgOutGdalFileMode mode = InvalidMode, int precision = 7,
                bool isPointFile = false, DgReportLevel failLevel = DgBase::Fatal);

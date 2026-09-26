@@ -205,9 +205,7 @@ SubOpBasicMulti::execute (bool force) {
       if (op.dggOp.numGrids > 1 || op.dggOp.placeRandom) {
          std::ofstream metaOutFile;
          metaOutFile.open(op.outOp.metaOutFileName.c_str());
-         metaOutFile.setf(std::ios::fixed, std::ios::floatfield);
-         metaOutFile.precision(12);
-         metaOutFile << pList();
+         pList().writeMetafile(metaOutFile);
          metaOutFile.close();
       }
 

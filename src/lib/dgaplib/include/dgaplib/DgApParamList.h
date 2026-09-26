@@ -134,6 +134,10 @@ class DgApParamList {
 
       void loadParams (const std::string& fileName, bool fail = true);
 
+      // Write used parameters in the same syntax accepted by loadParams.
+      // The diagnostic stream operator includes annotations and is not a metafile.
+      void writeMetafile (std::ostream& stream) const;
+
       void setParam (const std::string& nameIn, const std::string& strValIn, bool fail = true);
 
       void setPresetParam (const std::string& nameIn, const std::string& strValIn,
