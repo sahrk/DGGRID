@@ -13,8 +13,8 @@ The WGS 84 authalic latitude feature and its direct GDAL ISEA comparison are imp
 DGGRID's `TRANSFORM_POINTS` operation snaps input to cell addresses, so it cannot measure the continuous ISEA projection. `tests/reference/dggrid_isea_probe.cpp` calls DGGRID's `DgProjISEA` converters directly and accepts:
 
 ```text
-dggrid_isea_probe forward SPHERE|WGS84 lon lat
-dggrid_isea_probe inverse SPHERE|WGS84 face x y
+dggrid_isea_probe forward AUTHALIC_SPHERE|WGS84 lon lat
+dggrid_isea_probe inverse AUTHALIC_SPHERE|WGS84 face x y
 ```
 
 DGGRID returns face-local coordinates on a dimensionless unit-edge triangle. GDAL outputs coordinates in meters on an unfolded net. `tests/reference/compare_dggrid_gdal_isea.py` fits each face's rotation and translation from two interior anchors and reports differences at five separate points on each of the 20 faces. The fitted scale, about 7,674,457.948 meters per unit edge, agrees with the equal-area triangular edge scale implied by the authalic sphere within 0.001 meters.

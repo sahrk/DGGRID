@@ -28,20 +28,20 @@ Fuller still does not.
 
 ## Metafile contract
 
-Add two independent choice parameters, each defaulting to `SPHERE`:
+Add two independent choice parameters, each defaulting to `AUTHALIC_SPHERE`:
 
-| Parameter | `SPHERE` | `WGS84` |
+| Parameter | `AUTHALIC_SPHERE` | `WGS84` |
 |---|---|---|
-| `input_geographic_mode` | Interpret geographic input latitude on the projection sphere, as today. | Interpret geographic input as WGS 84 geodetic and convert `φ → β` before spherical projection. |
-| `output_geographic_mode` | Emit geographic output latitude on the projection sphere, as today. | Convert inverse-projected sphere latitude `β → φ` before geographic output. |
+| `input_datum` | Interpret geographic input latitude on the projection sphere, as today. | Interpret geographic input as WGS 84 geodetic and convert `φ → β` before spherical projection. |
+| `output_datum` | Emit geographic output latitude on the projection sphere, as today. | Convert inverse-projected sphere latitude `β → φ` before geographic output. |
 
 The modes are independent. Support and test all four combinations:
 
 | Input | Output | Meaning |
 |---|---|---|
-| `SPHERE` | `SPHERE` | Existing behavior; default. |
-| `WGS84` | `SPHERE` | Accept WGS 84 geodetic input; emit spherical coordinates. |
-| `SPHERE` | `WGS84` | Accept spherical input; emit WGS 84 geodetic coordinates. |
+| `AUTHALIC_SPHERE` | `AUTHALIC_SPHERE` | Existing behavior; default. |
+| `WGS84` | `AUTHALIC_SPHERE` | Accept WGS 84 geodetic input; emit spherical coordinates. |
+| `AUTHALIC_SPHERE` | `WGS84` | Accept spherical input; emit WGS 84 geodetic coordinates. |
 | `WGS84` | `WGS84` | Accept and emit WGS 84 geodetic coordinates. |
 
 Keep `proj_datum` and `proj_datum_radius` as the existing *internal projection
@@ -50,7 +50,7 @@ spherical projection remains unchanged. Because this task specifically maps
 the WGS 84 ellipsoid to the sphere with the WGS 84 authalic radius, require
 `proj_datum WGS84_AUTHALIC_SPHERE` whenever either new mode is `WGS84`.
 Reject `WGS84_MEAN_SPHERE` and `CUSTOM_SPHERE` in that case with a clear setup
-error. Both remain valid when the input and output modes are `SPHERE`.
+error. Both remain valid when the input and output modes are `AUTHALIC_SPHERE`.
 
 Apply the input mode only to longitude/latitude values: geographic point or
 polygon files; `GEO` addresses; geographic values supplied directly in the
@@ -122,7 +122,7 @@ Pay particular attention to orientation values, region-center placement,
 random placement, clipping and densification, antimeridian wrapping, output
 cell construction, child/parent output, and any values written into generated
 metafiles. Record whether an edge is currently treated as a spherical great
-circle; setting `input_geographic_mode WGS84` must not silently imply that
+circle; setting `input_datum WGS84` must not silently imply that
 edge densification now follows an ellipsoidal geodesic.
 
 Begin at these known entry points:
@@ -148,8 +148,8 @@ regression baseline.
 
 ### 2. Add both metafile parameters before changing coordinates
 
-Register `input_geographic_mode` and `output_geographic_mode` as choice
-parameters with values `SPHERE` and `WGS84`, both defaulting to `SPHERE`.
+Register `input_datum` and `output_datum` as choice
+parameters with values `AUTHALIC_SPHERE` and `WGS84`, both defaulting to `AUTHALIC_SPHERE`.
 Parse them into a small shared enum/typed configuration used by the
 application boundary selectors. Validate the WGS 84 authalic sphere radius
 requirement above during setup, including each asymmetric combination. Do
@@ -195,8 +195,8 @@ computed through that placeholder.
 Create the spherical frame as before. If either mode is `WGS84`, create the
 WGS 84 frame and register its converter pair with the sphere. Bind geographic
 input to the spherical degree adapter or WGS 84 degree adapter according to
-`input_geographic_mode`; bind geographic output independently according to
-`output_geographic_mode`. Keep the selected `dggs_proj` operating on the
+`input_datum`; bind geographic output independently according to
+`output_datum`. Keep the selected `dggs_proj` operating on the
 spherical frame in every case.
 
 Feed user-supplied metafile latitude/longitude inputs through the same
@@ -256,7 +256,7 @@ latitude and only the output mode changes emitted geographic latitude.
 Check two independent end-to-end invariants: the same physical location
 entered as WGS 84 latitude `φ` or its corresponding spherical latitude `β`
 must select the same cell when placed away from cell boundaries; and the same
-cell emitted in `SPHERE` or `WGS84`
+cell emitted in `AUTHALIC_SPHERE` or `WGS84`
 mode must have corresponding output latitudes `β` and `φ`. For a fixed cell
 index, changing only the input mode must not change its output geometry. For
 a fixed input point, changing only the output mode must not change its cell
@@ -269,7 +269,7 @@ conversion and round trips without making an equal-area claim.
 
 ### 8. Make output metadata reflect the output mode
 
-When `output_geographic_mode WGS84`, geographic results use WGS 84 geodetic
+When `output_datum WGS84`, geographic results use WGS 84 geodetic
 latitude. EPSG:4326 identifies the 2D geographic CRS, although its formal
 axis order is latitude, longitude. DGGRID coordinate sequences are generally
 longitude, latitude, so test the axis mapping in every writer:
@@ -283,7 +283,7 @@ longitude, latitude, so test the axis mapping in every writer:
 - Text/AIGen, generated metafiles, and reports: identify the output
   coordinate model where they declare one.
 
-When `output_geographic_mode SPHERE`, keep spherical metadata regardless of
+When `output_datum AUTHALIC_SPHERE`, keep spherical metadata regardless of
 the input mode. Review GeoJSON and KML format conventions explicitly: both
 normally imply WGS 84, while the legacy DGGRID output can contain spherical
 latitude. Preserve the existing default behavior and document that limitation
@@ -319,7 +319,7 @@ needed from the integration owner. Do not let two agents edit the same
 | G — integration contract | Start immediately | Own `SubOpDGG.h/.cpp`: register/parse the two parameters, validate `proj_datum`, define input/output selectors, create frames, register graph edges. Coordinate the degree-adapter interface with A. | Four-mode parser tests; graph path in both directions; unchanged default baseline. Publish API to C/D/E. |
 | A — core converter | Start alongside G after agreeing on frame names | Own `src/lib/dglib/include/dglib/` and `src/lib/dglib/lib/` WGS 84 frame/converter and degree-adapter code plus `src/lib/dglib/CMakeLists.txt`; verify the non-CMake wildcard build. First deliver no-op pair; after B's report, fill numeric bodies. | Direct forward/inverse and graph tests; versioned numeric vectors after math phase. |
 | B — reference comparison | Start immediately, independent of DGGRID code edits | Own a separate reference/test workspace and a written comparison report. Pin/build DGGAL, PROJ, and/or rHEALPix; run identical vectors and a high-precision oracle. | Reproducible commands, source versions/licenses, machine-readable results, discrepancies, selected algorithm and tolerance rationale. |
-| C — geographic input | Inventory can start immediately; code wiring after G/A publish the selector/converter APIs | Own `SubOpIn.*`, input reader classes, and input-side paths in `SubOpGenHelper.cpp`; route point/polygon files, `GEO` addresses, and clipping to the selected input frame. Specify the metafile/orientation cases for G to implement in `SubOpDGG`. | Input-side tests with `SPHERE` and `WGS84`; demonstrate conversion occurs once for points, orientation, and a clipping region. |
+| C — geographic input | Inventory can start immediately; code wiring after G/A publish the selector/converter APIs | Own `SubOpIn.*`, input reader classes, and input-side paths in `SubOpGenHelper.cpp`; route point/polygon files, `GEO` addresses, and clipping to the selected input frame. Specify the metafile/orientation cases for G to implement in `SubOpDGG`. | Input-side tests with `AUTHALIC_SPHERE` and `WGS84`; demonstrate conversion occurs once for points, orientation, and a clipping region. |
 | D — geographic output | Inventory can start immediately; code wiring after G/A publish APIs | Own `SubOpOut.*` and output geometry routing; cover `GEO` addresses, cell/point/collection/random-point calls, children/parents, generated orientation values, and helper calls that bypass `addressTypeToRF`. Coordinate any `SubOpDGG` change through G and writer API change through E. | Output-side tests in both modes; every geographic writer receives the selected output frame and no authalic latitude leaks in `WGS84` mode. |
 | E — writer interfaces and CRS metadata | Audit can start immediately; implementation after output-mode API is fixed | Own output writer classes and factory signatures, including `DgOutLocFile`, `DgOutShapefile`, `DgOutGdalFile`, GeoJSON/KML writers, and metadata tests. Coordinate the new writer API with D. | Independent inspection of WGS 84 `.prj`/GDAL SRS; sphere metadata preserved; GeoJSON/KML convention documented. |
 | F — regression and documentation | Baselines and test design can start immediately | Own `documentation/`, example metafiles, and end-to-end/CTest integration tests. Avoid A's core test files. | Default-output baseline, four-mode × ISEA/Fuller matrix, GDAL on/off runs, updated parameter reference and examples. |
@@ -360,7 +360,7 @@ converter.
 - The inverse numerical method, tolerance, convergence policy, source
   provenance, and cross-platform precision expectations.
 - Format-specific axis order and the behavior of GeoJSON/KML in legacy
-  `SPHERE` output mode.
+  `AUTHALIC_SPHERE` output mode.
 
 Resolve these in the shared frame contract and tests, rather than by adding
 projection-specific latitude code.

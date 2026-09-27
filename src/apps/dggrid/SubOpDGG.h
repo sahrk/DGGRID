@@ -45,7 +45,7 @@ struct OpBasic;
 ////////////////////////////////////////////////////////////////////////////////
 struct SubOpDGG : public SubOpBasic {
 
-   enum class GeographicMode { Sphere, WGS84 };
+   enum class DatumMode { AuthalicSphere, WGS84 };
    enum class GeographicBoundary { Input, Output };
 
    static const int MAX_DGG_RES;
@@ -61,15 +61,15 @@ struct SubOpDGG : public SubOpBasic {
    // Geographic boundary frames. The grid and its projection always use geoRF().
    // Input and output modes are independent; callers must select the direction.
    const DgGeoDegRF& inputDeg (void) const
-      { return inputGeographicMode == GeographicMode::WGS84 ? *_pWGS84Deg : *_pDeg; }
+      { return inputDatumMode == DatumMode::WGS84 ? *_pWGS84Deg : *_pDeg; }
    const DgGeoDegRF& outputDeg (void) const
-      { return outputGeographicMode == GeographicMode::WGS84 ? *_pWGS84Deg : *_pDeg; }
+      { return outputDatumMode == DatumMode::WGS84 ? *_pWGS84Deg : *_pDeg; }
    const DgEllipsoidRF& inputGeoRF (void) const
-      { return inputGeographicMode == GeographicMode::WGS84 ? static_cast<const DgEllipsoidRF&>(*_pWGS84RF) : static_cast<const DgEllipsoidRF&>(*_pGeoRF); }
+      { return inputDatumMode == DatumMode::WGS84 ? static_cast<const DgEllipsoidRF&>(*_pWGS84RF) : static_cast<const DgEllipsoidRF&>(*_pGeoRF); }
    const DgEllipsoidRF& outputGeoRF (void) const
-      { return outputGeographicMode == GeographicMode::WGS84 ? static_cast<const DgEllipsoidRF&>(*_pWGS84RF) : static_cast<const DgEllipsoidRF&>(*_pGeoRF); }
-   bool inputWGS84 (void) const { return inputGeographicMode == GeographicMode::WGS84; }
-   bool outputWGS84 (void) const { return outputGeographicMode == GeographicMode::WGS84; }
+      { return outputDatumMode == DatumMode::WGS84 ? static_cast<const DgEllipsoidRF&>(*_pWGS84RF) : static_cast<const DgEllipsoidRF&>(*_pGeoRF); }
+   bool inputWGS84 (void) const { return inputDatumMode == DatumMode::WGS84; }
+   bool outputWGS84 (void) const { return outputDatumMode == DatumMode::WGS84; }
    const DgIDGGBase&    chdDgg (void) { return *_pChdDgg; }
    const DgGeoSphDegRF& chdDeg (void) { return *_pChdDeg; }
    // note the indexing children use the same DGG as the spatial children
@@ -128,8 +128,8 @@ struct SubOpDGG : public SubOpBasic {
    long double azimuthDegs; // orientation azimuth
    long double earthRadius; // earth radius in km
    std::string datum;            // datum used to determine the earthRadius
-   GeographicMode inputGeographicMode = GeographicMode::Sphere;
-   GeographicMode outputGeographicMode = GeographicMode::Sphere;
+   DatumMode inputDatumMode = DatumMode::AuthalicSphere;
+   DatumMode outputDatumMode = DatumMode::AuthalicSphere;
    std::string apertureType; // "PURE", "MIXED43", "SUPERFUND", or "SEQUENCE"
    bool   isMixed43;       // are we using mixed43 aperture?
    int numAp4;          // # of leading ap 4 resolutions in a mixed grid

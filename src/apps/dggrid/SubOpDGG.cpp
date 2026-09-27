@@ -234,8 +234,8 @@ SubOpDGG::initializeOp (void)
                        {"WGS84_AUTHALIC_SPHERE", "WGS84_MEAN_SPHERE", "CUSTOM_SPHERE"});
 
    // Interpretation of geographic coordinates at the two application boundaries.
-   pList().insertParam("input_geographic_mode", "SPHERE", {"SPHERE", "WGS84"});
-   pList().insertParam("output_geographic_mode", "SPHERE", {"SPHERE", "WGS84"});
+   pList().insertParam("input_datum", "AUTHALIC_SPHERE", {"AUTHALIC_SPHERE", "WGS84"});
+   pList().insertParam("output_datum", "AUTHALIC_SPHERE", {"AUTHALIC_SPHERE", "WGS84"});
 
    // proj_datum_radius <long double: km> (1.0 <= v <= 10000.0)
    pList().insertParam(new DgDoubleParam("proj_datum_radius", DEFAULT_RADIUS_KM,
@@ -440,15 +440,15 @@ SubOpDGG::setupOp (void)
    getParamValue(pList(), "dggs_proj", projType, false);
    getParamValue(pList(), "dggs_vert0_azimuth", azimuthDegs, false);
 
-   std::string geographicMode;
-   getParamValue(pList(), "input_geographic_mode", geographicMode, false);
-   inputGeographicMode = geographicMode == "WGS84" ? GeographicMode::WGS84 : GeographicMode::Sphere;
-   getParamValue(pList(), "output_geographic_mode", geographicMode, false);
-   outputGeographicMode = geographicMode == "WGS84" ? GeographicMode::WGS84 : GeographicMode::Sphere;
+   std::string datumMode;
+   getParamValue(pList(), "input_datum", datumMode, false);
+   inputDatumMode = datumMode == "WGS84" ? DatumMode::WGS84 : DatumMode::AuthalicSphere;
+   getParamValue(pList(), "output_datum", datumMode, false);
+   outputDatumMode = datumMode == "WGS84" ? DatumMode::WGS84 : DatumMode::AuthalicSphere;
 
    getParamValue(pList(), "proj_datum", datum, false);
    if ((inputWGS84() || outputWGS84()) && datum != "WGS84_AUTHALIC_SPHERE")
-      ::report("input_geographic_mode/output_geographic_mode WGS84 requires "
+      ::report("input_datum/output_datum WGS84 requires "
                "proj_datum WGS84_AUTHALIC_SPHERE", DgBase::Fatal);
 
    long double lon0, lat0;
@@ -696,7 +696,7 @@ SubOpDGG::orientGrid (void)
       pList().setParam("dggs_vert0_lat", coordinateString(printedLat));
       // The generated placement is expressed in the output geographic model.
       // Make a generated metafile replay that same placement as input.
-      pList().setParam("input_geographic_mode", outputWGS84() ? "WGS84" : "SPHERE");
+      pList().setParam("input_datum", outputWGS84() ? "WGS84" : "AUTHALIC_SPHERE");
       pList().setParam("dggs_vert0_azimuth", coordinateString(azimuthDegs));
 
       dgcout << "Grid " << curGrid <<
