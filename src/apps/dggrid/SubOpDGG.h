@@ -70,6 +70,9 @@ struct SubOpDGG : public SubOpBasic {
       { return outputDatumMode == DatumMode::WGS84 ? static_cast<const DgEllipsoidRF&>(*_pWGS84RF) : static_cast<const DgEllipsoidRF&>(*_pGeoRF); }
    bool inputWGS84 (void) const { return inputDatumMode == DatumMode::WGS84; }
    bool outputWGS84 (void) const { return outputDatumMode == DatumMode::WGS84; }
+   // Datum used to interpret/emit orientation values (dggs_vert0_lon/lat,
+   // region_center_lon/lat), independent of input_datum/output_datum.
+   bool orientationWGS84 (void) const { return orientationDatumMode == DatumMode::WGS84; }
    const DgIDGGBase&    chdDgg (void) { return *_pChdDgg; }
    const DgGeoSphDegRF& chdDeg (void) { return *_pChdDeg; }
    // note the indexing children use the same DGG as the spatial children
@@ -130,6 +133,7 @@ struct SubOpDGG : public SubOpBasic {
    std::string datum;            // datum used to determine the earthRadius
    DatumMode inputDatumMode = DatumMode::AuthalicSphere;
    DatumMode outputDatumMode = DatumMode::AuthalicSphere;
+   DatumMode orientationDatumMode = DatumMode::AuthalicSphere;
    std::string apertureType; // "PURE", "MIXED43", "SUPERFUND", or "SEQUENCE"
    bool   isMixed43;       // are we using mixed43 aperture?
    int numAp4;          // # of leading ap 4 resolutions in a mixed grid

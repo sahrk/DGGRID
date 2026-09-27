@@ -237,6 +237,13 @@ SubOpDGG::initializeOp (void)
    pList().insertParam("input_datum", "AUTHALIC_SPHERE", {"AUTHALIC_SPHERE", "WGS84"});
    pList().insertParam("output_datum", "AUTHALIC_SPHERE", {"AUTHALIC_SPHERE", "WGS84"});
 
+   // Interpretation of orientation values (dggs_vert0_lon/lat, region_center_lon/lat),
+   // independent of input_datum/output_datum: internal orientation math (icosahedron
+   // placement) always operates on the authalic sphere, so a WGS84 orientation_datum
+   // is converted to authalic before use and back to WGS84 when echoed in a
+   // generated metafile.
+   pList().insertParam("orientation_datum", "AUTHALIC_SPHERE", {"AUTHALIC_SPHERE", "WGS84"});
+
    // proj_datum_radius <long double: km> (1.0 <= v <= 10000.0)
    pList().insertParam(new DgDoubleParam("proj_datum_radius", DEFAULT_RADIUS_KM,
                1.0, 10000.0));
@@ -316,6 +323,7 @@ SubOpDGG::setupOp (void)
       pList().setPresetParam("dggs_base_poly", "ICOSAHEDRON");
       pList().setPresetParam("dggs_orient_specify_type", "SPECIFIED");
       pList().setPresetParam("dggs_num_placements", "1");
+      pList().setPresetParam("orientation_datum", "AUTHALIC_SPHERE");
       pList().setPresetParam("dggs_vert0_lon", "11.25");
       // 21 significant digits round-trip an 80-bit long double
       pList().setPresetParam("dggs_vert0_lat",
@@ -445,19 +453,21 @@ SubOpDGG::setupOp (void)
    inputDatumMode = datumMode == "WGS84" ? DatumMode::WGS84 : DatumMode::AuthalicSphere;
    getParamValue(pList(), "output_datum", datumMode, false);
    outputDatumMode = datumMode == "WGS84" ? DatumMode::WGS84 : DatumMode::AuthalicSphere;
+   getParamValue(pList(), "orientation_datum", datumMode, false);
+   orientationDatumMode = datumMode == "WGS84" ? DatumMode::WGS84 : DatumMode::AuthalicSphere;
 
    getParamValue(pList(), "proj_datum", datum, false);
-   if ((inputWGS84() || outputWGS84()) && datum != "WGS84_AUTHALIC_SPHERE")
-      ::report("input_datum/output_datum WGS84 requires "
+   if ((inputWGS84() || outputWGS84() || orientationWGS84()) && datum != "WGS84_AUTHALIC_SPHERE")
+      ::report("input_datum/output_datum/orientation_datum WGS84 requires "
                "proj_datum WGS84_AUTHALIC_SPHERE", DgBase::Fatal);
 
    long double lon0, lat0;
    getParamValue(pList(), "dggs_vert0_lon", lon0, false);
    getParamValue(pList(), "dggs_vert0_lat", lat0, false);
    // A partially specified pair uses the other parameter's current default or
-   // preset, then the complete pair is interpreted in the selected input model.
-   // Built-in and preset placement is already spherical and stays untouched.
-   if (inputWGS84() && (pList().getParam("dggs_vert0_lon", false)->isUserSet() ||
+   // preset, then the complete pair is interpreted in the selected orientation
+   // model. Built-in and preset placement is already spherical and stays untouched.
+   if (orientationWGS84() && (pList().getParam("dggs_vert0_lon", false)->isUserSet() ||
                         pList().getParam("dggs_vert0_lat", false)->isUserSet()))
       lat0 = DgAuthalic::geodeticToAuthalicLatitude(lat0 * M_PI_180) * M_180_PI;
    vert0 = DgGeoCoord(lon0, lat0, false);
@@ -690,13 +700,13 @@ SubOpDGG::orientGrid (void)
       pList().setParam("dggs_orient_specify_type", "SPECIFIED");
       pList().setParam("dggs_num_placements", dgg::util::to_string(1));
       pList().setParam("dggs_vert0_lon", coordinateString(vert0.lonDegs()));
-      const long double printedLat = outputWGS84()
+      const long double printedLat = orientationWGS84()
           ? DgAuthalic::authalicToGeodeticLatitude(vert0.lat()) * M_180_PI
           : vert0.latDegs();
       pList().setParam("dggs_vert0_lat", coordinateString(printedLat));
-      // The generated placement is expressed in the output geographic model.
-      // Make a generated metafile replay that same placement as input.
-      pList().setParam("input_datum", outputWGS84() ? "WGS84" : "AUTHALIC_SPHERE");
+      // Print the placement in the selected orientation model so a generated
+      // metafile replays the same placement when read back in.
+      pList().setParam("orientation_datum", orientationWGS84() ? "WGS84" : "AUTHALIC_SPHERE");
       pList().setParam("dggs_vert0_azimuth", coordinateString(azimuthDegs));
 
       dgcout << "Grid " << curGrid <<
@@ -712,7 +722,7 @@ SubOpDGG::orientGrid (void)
       long double lonc = 0.0, latc = 0.0;
       getParamValue(pList(), "region_center_lon", lonc, false);
       getParamValue(pList(), "region_center_lat", latc, false);
-      if (inputWGS84())
+      if (orientationWGS84())
          latc = DgAuthalic::geodeticToAuthalicLatitude(latc * M_PI_180) * M_180_PI;
 
       const DgProjGnomonicRF& gnomc =
