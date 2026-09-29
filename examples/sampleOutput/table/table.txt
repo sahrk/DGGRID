@@ -1,5 +1,5 @@
-** executing DGGRID version 9.0b with GDAL version 3130100 **
-type sizes: big int: 64 bits / big double: 128 bits
+** executing DGGRID version 9.1b with GDAL **
+type sizes: big int: 64 bits / big double: 64 bits
 
 ** using meta file table.meta...
 * parameter values:
@@ -15,9 +15,13 @@ dggs_topology HEXAGON (user set)
 dggs_proj ISEA (user set)
 dggs_aperture_type MIXED43 (user set)
 dggs_num_aperture_4_res 5 (user set)
-proj_datum WGS84_AUTHALIC_SPHERE (default)
+sphere_radius_type AUTHALIC_SPHERE (user set)
+input_datum AUTHALIC_SPHERE (user set)
+output_datum AUTHALIC_SPHERE (user set)
+orientation_datum AUTHALIC_SPHERE (user set)
 dggs_orient_specify_type SPECIFIED (user set)
 dggs_num_placements 1 (user set)
+dggs_orient_preset ISEA (user set)
 dggs_vert0_lon 11.25 (user set)
 dggs_vert0_lat 58.2825 (user set)
 dggs_vert0_azimuth 0 (user set)
@@ -29,7 +33,7 @@ z3_invalid_digit 3 (default)
 Earth Radius: 6,371.0071809
 
 Res     # Cells        Area (km^2)      CLS (km)
-  0          12 51,006,562.1724089 8,199.5003701
+  0          12 51,006,562.1724088 8,199.5003701
   1          42 12,751,640.5431022 4,046.3595508
   2         162  3,187,910.1357756 2,016.7939273
   3         642    796,977.5339439 1,007.6071980

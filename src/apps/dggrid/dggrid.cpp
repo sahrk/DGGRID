@@ -98,7 +98,8 @@ int main (int argc, char* argv[])
    if (hFlag || (hFlag && vFlag)) { // output is currently redundant
       dgcout << "DGGRID version " << DGGRID_VERSION << " released " << DGGRID_RELEASE_DATE << std::endl;
 #ifdef USE_GDAL
-      dgcout << "built with GDAL version " << std::string(GDALVersionInfo("VERSION_NUM")) << std::endl;
+      //dgcout << "built with GDAL version " << std::string(GDALVersionInfo("VERSION_NUM")) << std::endl;
+      dgcout << "built with GDAL" << std::endl;
 #else
       dgcout << "built without GDAL" << std::endl;;
 #endif
@@ -135,7 +136,8 @@ int main (int argc, char* argv[])
 
    dgcout << "** executing DGGRID version " << DGGRID_VERSION;
 #ifdef USE_GDAL
-   dgcout << " with GDAL version " << std::string(GDALVersionInfo("VERSION_NUM"));
+   //dgcout << " with GDAL version " << std::string(GDALVersionInfo("VERSION_NUM"));
+   dgcout << " with GDAL";
 #else
    dgcout << " without GDAL";
 #endif

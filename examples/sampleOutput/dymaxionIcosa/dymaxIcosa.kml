@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://earth.google.com/kml/2.1">
+<Folder>
+   <name>Dymaxion Spherical Icosahedron</name>
+   <description>www.discreteglobalgrids.org</description>
+   <Style id="lineStyle1">
+      <LineStyle id="lineStyle2">
+         <color>ffff0000</color>
+         <width>6</width>
+      </LineStyle>
+   </Style>
+<Placemark>
+<name>1</name>
+      <styleUrl>#lineStyle1</styleUrl>
+      <LineString>
+         <tessellate>1</tessellate>
+         <coordinates>
+            10.5361915,64.7000010
+            -67.1323272,23.7179220
+            -143.4784869,50.1031992
+            10.5361915,64.7000010
+         </coordinates>
+      </LineString>
+</Placemark>
+<Placemark>
+<name>2</name>
+      <styleUrl>#lineStyle1</styleUrl>
+      <LineString>
+         <tessellate>1</tessellate>
+         <coordinates>
+            -5.2453906,2.3008820
+            -67.1323272,23.7179220
+            10.5361915,64.7000010
+            -5.2453906,2.3008820
+         </coordinates>
+      </LineString>
+</Placemark>
+<Placemark>
+<name>3</name>
+      <styleUrl>#lineStyle1</styleUrl>
+      <LineString>
+         <tessellate>1</tessellate>
+         <coordinates>
+            -67.1323272,23.7179220
+            -57.6999980,-39.1000030
+            -121.8422946,-10.4473484
+            -67.1323272,23.7179220
+         </coordinates>
+      </LineString>
+</Placemark>
+<Placemark>
+<name>4</name>
+      <styleUrl>#lineStyle1</styleUrl>
+      <LineString>
+         <tessellate>1</tessellate>
+         <coordinates>
+            -5.2453906,2.3008820
+            -57.6999980,-39.1000030
+            -67.1323272,23.7179220
+            -5.2453906,2.3008820
+         </coordinates>
+      </LineString>
+</Placemark>
+<Placemark>
+<name>5</name>
+      <styleUrl>#lineStyle1</styleUrl>
+      <LineString>
+         <tessellate>1</tessellate>
+         <coordinates>
+            -57.6999980,-39.1000030
+            36.5215131,-50.1031992
+            -169.4638085,-64.7000010
+            -57.6999980,-39.1000030
+         </coordinates>
+      </LineString>
+</Placemark>
+<Placemark>
+<name>6</name>
+      <styleUrl>#lineStyle1</styleUrl>
+      <LineString>
+         <tessellate>1</tessellate>
+         <coordinates>
+            -5.2453906,2.3008820
+            36.5215131,-50.1031992
+            -57.6999980,-39.1000030
+            -5.2453906,2.3008820
+         </coordinates>
+      </LineString>
+</Placemark>
+<Placemark>
+<name>7</name>
+      <styleUrl>#lineStyle1</styleUrl>
+      <LineString>
+         <tessellate>1</tessellate>
+         <coordinates>
+            36.5215131,-50.1031992
+            58.1577054,10.4473484
+            112.8676728,-23.7179220
+            36.5215131,-50.1031992
+         </coordinates>
+      </LineString>
+</Placemark>
+<Placemark>
+<name>8</name>
+      <styleUrl>#lineStyle1</styleUrl>
+      <LineString>
+         <tessellate>1</tessellate>
+         <coordinates>
+            -5.2453906,2.3008820
+            58.1577054,10.4473484
+            36.5215131,-50.1031992
+            -5.2453906,2.3008820
+         </coordinates>
+      </LineString>
+</Placemark>
+<Placemark>
+<name>9</name>
+      <styleUrl>#lineStyle1</styleUrl>
+      <LineString>
+         <tessellate>1</tessellate>
+         <coordinates>
+            58.1577054,10.4473484
+            10.5361915,64.7000010
+            122.3000020,39.1000030
+            58.1577054,10.4473484
+         </coordinates>
+      </LineString>
+</Placemark>
+<Placemark>
+<name>10</name>
+      <styleUrl>#lineStyle1</styleUrl>
+      <LineString>
+         <tessellate>1</tessellate>
+         <coordinates>
+            -5.2453906,2.3008820
+            10.5361915,64.7000010
+            58.1577054,10.4473484
+            -5.2453906,2.3008820
+         </coordinates>
+      </LineString>
+</Placemark>
+<Placemark>
+<name>11</name>
+      <styleUrl>#lineStyle1</styleUrl>
+      <LineString>
+         <tessellate>1</tessellate>
+         <coordinates>
+            -143.4784869,50.1031992
+            -121.8422946,-10.4473484
+            174.7546094,-2.3008820
+            -143.4784869,50.1031992
+         </coordinates>
+      </LineString>
+</Placemark>
+<Placemark>
+<name>12</name>
+      <styleUrl>#lineStyle1</styleUrl>
+      <LineString>
+         <tessellate>1</tessellate>
+         <coordinates>
+            -67.1323272,23.7179220
+            -121.8422946,-10.4473484
+            -143.4784869,50.1031992
+            -67.1323272,23.7179220
+         </coordinates>
+      </LineString>
+</Placemark>
+<Placemark>
+<name>13</name>
+      <styleUrl>#lineStyle1</styleUrl>
+      <LineString>
+         <tessellate>1</tessellate>
+         <coordinates>
+            -121.8422946,-10.4473484
+            -169.4638085,-64.7000010
+            174.7546094,-2.3008820
+            -121.8422946,-10.4473484
+         </coordinates>
+      </LineString>
+</Placemark>
+<Placemark>
+<name>14</name>
+      <styleUrl>#lineStyle1</styleUrl>
+      <LineString>
+         <tessellate>1</tessellate>
+         <coordinates>
+            -57.6999980,-39.1000030
+            -169.4638085,-64.7000010
+            -121.8422946,-10.4473484
+            -57.6999980,-39.1000030
+         </coordinates>
+      </LineString>
+</Placemark>
+<Placemark>
+<name>15</name>
+      <styleUrl>#lineStyle1</styleUrl>
+      <LineString>
+         <tessellate>1</tessellate>
+         <coordinates>
+            -169.4638085,-64.7000010
+            112.8676728,-23.7179220
+            174.7546094,-2.3008820
+            -169.4638085,-64.7000010
+         </coordinates>
+      </LineString>
+</Placemark>
+<Placemark>
+<name>16</name>
+      <styleUrl>#lineStyle1</styleUrl>
+      <LineString>
+         <tessellate>1</tessellate>
+         <coordinates>
+            36.5215131,-50.1031992
+            112.8676728,-23.7179220
+            -169.4638085,-64.7000010
+            36.5215131,-50.1031992
+         </coordinates>
+      </LineString>
+</Placemark>
+<Placemark>
+<name>17</name>
+      <styleUrl>#lineStyle1</styleUrl>
+      <LineString>
+         <tessellate>1</tessellate>
+         <coordinates>
+            112.8676728,-23.7179220
+            122.3000020,39.1000030
+            174.7546094,-2.3008820
+            112.8676728,-23.7179220
+         </coordinates>
+      </LineString>
+</Placemark>
+<Placemark>
+<name>18</name>
+      <styleUrl>#lineStyle1</styleUrl>
+      <LineString>
+         <tessellate>1</tessellate>
+         <coordinates>
+            58.1577054,10.4473484
+            122.3000020,39.1000030
+            112.8676728,-23.7179220
+            58.1577054,10.4473484
+         </coordinates>
+      </LineString>
+</Placemark>
+<Placemark>
+<name>19</name>
+      <styleUrl>#lineStyle1</styleUrl>
+      <LineString>
+         <tessellate>1</tessellate>
+         <coordinates>
+            122.3000020,39.1000030
+            -143.4784869,50.1031992
+            174.7546094,-2.3008820
+            122.3000020,39.1000030
+         </coordinates>
+      </LineString>
+</Placemark>
+<Placemark>
+<name>20</name>
+      <styleUrl>#lineStyle1</styleUrl>
+      <LineString>
+         <tessellate>1</tessellate>
+         <coordinates>
+            10.5361915,64.7000010
+            -143.4784869,50.1031992
+            122.3000020,39.1000030
+            10.5361915,64.7000010
+         </coordinates>
+      </LineString>
+</Placemark>
+</Folder>
+</kml>

@@ -1,4 +1,4 @@
-** executing DGGRID version 9.0b with GDAL version 3130300 **
+** executing DGGRID version 9.1b with GDAL **
 type sizes: big int: 64 bits / big double: 64 bits
 
 ** using meta file icosaISEAL.meta...
