@@ -45,7 +45,13 @@ class DgGeoSphRF : public DgEllipsoidRF {
          { return new DgGeoSphRF (networkIn, nameIn, earthRadiusKMin); }
 
       DgGeoSphRF& operator= (const DgGeoSphRF& rf)
-         { DgEllipsoidRF::operator=(rf); return *this; }
+         {
+            DgEllipsoidRF::operator=(rf);
+            earthRadiusKM_ = rf.earthRadiusKM_;
+            icosaEdgeKM_ = rf.icosaEdgeKM_;
+            totalAreaKM_ = rf.totalAreaKM_;
+            return *this;
+         }
 
       // distance between locations in radians
       virtual long double gcDist (const DgLocation& loc1, const DgLocation& loc2) const
@@ -65,11 +71,11 @@ class DgGeoSphRF : public DgEllipsoidRF {
       virtual long double dist (const DgGeoCoord& add1, const DgGeoCoord& add2) const
          { return earthRadiusKM() * DgGeoCoord::gcDist(add1, add2); }
 
-      static long double earthRadiusKM (void) { return earthRadiusKM_; }
-      static long double icosaEdgeKM   (void) { return icosaEdgeKM_; }
-      static long double icosaEdgeDegs (void) { return icosaEdgeDegs_; }
-      static long double icosaEdgeRads (void) { return icosaEdgeRads_; }
-      static long double totalAreaKM   (void) { return totalAreaKM_; }
+      long double earthRadiusKM (void) const { return earthRadiusKM_; }
+      long double icosaEdgeKM   (void) const { return icosaEdgeKM_; }
+      long double totalAreaKM   (void) const { return totalAreaKM_; }
+      static long double icosaEdgeRads (void) { return M_ATAN2; }
+      static long double icosaEdgeDegs (void) { return M_ATAN2 * M_180_PI; }
 
       // midpoint of great circle connecting two points
       static DgGeoCoord midPoint(const DgGeoCoord& p1, const DgGeoCoord& p2);
@@ -97,25 +103,21 @@ class DgGeoSphRF : public DgEllipsoidRF {
       DgGeoSphRF (DgRFNetwork& networkIn, const std::string& nameIn = "GeodeticSph",
                   long double earthRadiusKMin = DEFAULT_RADIUS_KM)
          : DgEllipsoidRF (networkIn, nameIn, earthRadiusKMin * 1000L,
-                earthRadiusKMin * 1000L)
-           {
-              earthRadiusKM_ = earthRadiusKMin;
-              icosaEdgeRads_ = M_ATAN2;
-              icosaEdgeDegs_ = icosaEdgeRads_ * M_180_PI;
-              icosaEdgeKM_ = icosaEdgeRads_ * earthRadiusKM_;
-              totalAreaKM_ = 4.0L * M_PI_L * earthRadiusKM_ * earthRadiusKM_;
-           }
+                earthRadiusKMin * 1000L),
+           earthRadiusKM_ (earthRadiusKMin),
+           icosaEdgeKM_ (icosaEdgeRads() * earthRadiusKMin),
+           totalAreaKM_ (4.0L * M_PI_L * earthRadiusKMin * earthRadiusKMin)
+           { }
 
       DgGeoSphRF (const DgGeoSphRF& rf)
-         : DgEllipsoidRF(rf) { /* earthRadius_ = rf.earthRadius(); */ }
+         : DgEllipsoidRF(rf), earthRadiusKM_ (rf.earthRadiusKM_),
+           icosaEdgeKM_ (rf.icosaEdgeKM_), totalAreaKM_ (rf.totalAreaKM_) { }
 
    private:
 
-      static long double earthRadiusKM_;  // earth radius in km
-      static long double icosaEdgeKM_;    // spherical icosahedron edge length
-      static long double icosaEdgeDegs_;  // spherical icosahedron edge length
-      static long double icosaEdgeRads_;  // spherical icosahedron edge length
-      static long double totalAreaKM_;    // spherical icosahedron edge length
+      long double earthRadiusKM_;  // sphere radius in km
+      long double icosaEdgeKM_;    // spherical icosahedron edge length in km
+      long double totalAreaKM_;    // sphere surface area in km^2
 };
 
 ////////////////////////////////////////////////////////////////////////////////

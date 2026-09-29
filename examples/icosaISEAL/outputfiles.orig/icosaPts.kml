@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://earth.google.com/kml/2.1">
 <Folder>
-   <name>ISEA Spherical Icosahedron</name>
+   <name>ISEAL Ellipsoidal Icosahedron</name>
    <description>www.discreteglobalgrids.org</description>
    <Style id="lineStyle1">
       <LineStyle id="lineStyle2">
@@ -13,7 +13,7 @@
       <name>1</name>
       <Point>
          <coordinates>
-            -123.7500000,35.2643897
+            -123.7500000,35.3854531
          </coordinates>
       </Point>
    </Placemark>
@@ -21,7 +21,7 @@
       <name>2</name>
       <Point>
          <coordinates>
-            -78.7500000,69.0948426
+            -78.7500000,69.1802101
          </coordinates>
       </Point>
    </Placemark>
@@ -29,7 +29,7 @@
       <name>3</name>
       <Point>
          <coordinates>
-            -57.8448426,-0.0000000
+            -57.8448426,0.0000000
          </coordinates>
       </Point>
    </Placemark>
@@ -37,7 +37,7 @@
       <name>4</name>
       <Point>
          <coordinates>
-            -33.7500000,35.2643897
+            -33.7500000,35.3854531
          </coordinates>
       </Point>
    </Placemark>
@@ -45,7 +45,7 @@
       <name>5</name>
       <Point>
          <coordinates>
-            11.2500000,-20.9051574
+            11.2500000,-20.9908533
          </coordinates>
       </Point>
    </Placemark>
@@ -53,7 +53,7 @@
       <name>6</name>
       <Point>
          <coordinates>
-            11.2500000,20.9051575
+            11.2500000,20.9908533
          </coordinates>
       </Point>
    </Placemark>
@@ -61,7 +61,7 @@
       <name>7</name>
       <Point>
          <coordinates>
-            80.3448426,-0.0000000
+            80.3448426,0.0000000
          </coordinates>
       </Point>
    </Placemark>
@@ -69,7 +69,7 @@
       <name>8</name>
       <Point>
          <coordinates>
-            56.2500000,35.2643897
+            56.2500000,35.3854531
          </coordinates>
       </Point>
    </Placemark>
@@ -77,7 +77,7 @@
       <name>9</name>
       <Point>
          <coordinates>
-            146.2500000,35.2643897
+            146.2500000,35.3854531
          </coordinates>
       </Point>
    </Placemark>
@@ -85,7 +85,7 @@
       <name>10</name>
       <Point>
          <coordinates>
-            101.2500000,69.0948426
+            101.2500000,69.1802101
          </coordinates>
       </Point>
    </Placemark>
@@ -93,7 +93,7 @@
       <name>11</name>
       <Point>
          <coordinates>
-            -123.7500000,-35.2643897
+            -123.7500000,-35.3854531
          </coordinates>
       </Point>
    </Placemark>
@@ -109,7 +109,7 @@
       <name>13</name>
       <Point>
          <coordinates>
-            -78.7500000,-69.0948425
+            -78.7500000,-69.1802101
          </coordinates>
       </Point>
    </Placemark>
@@ -117,7 +117,7 @@
       <name>14</name>
       <Point>
          <coordinates>
-            -33.7500000,-35.2643897
+            -33.7500000,-35.3854531
          </coordinates>
       </Point>
    </Placemark>
@@ -125,7 +125,7 @@
       <name>15</name>
       <Point>
          <coordinates>
-            101.2500000,-69.0948426
+            101.2500000,-69.1802101
          </coordinates>
       </Point>
    </Placemark>
@@ -133,7 +133,7 @@
       <name>16</name>
       <Point>
          <coordinates>
-            56.2500000,-35.2643897
+            56.2500000,-35.3854531
          </coordinates>
       </Point>
    </Placemark>
@@ -141,7 +141,7 @@
       <name>17</name>
       <Point>
          <coordinates>
-            146.2500000,-35.2643897
+            146.2500000,-35.3854531
          </coordinates>
       </Point>
    </Placemark>
@@ -157,7 +157,7 @@
       <name>19</name>
       <Point>
          <coordinates>
-            -168.7500000,-20.9051575
+            -168.7500000,-20.9908533
          </coordinates>
       </Point>
    </Placemark>
@@ -165,7 +165,7 @@
       <name>20</name>
       <Point>
          <coordinates>
-            -168.7500000,20.9051574
+            -168.7500000,20.9908533
          </coordinates>
       </Point>
    </Placemark>

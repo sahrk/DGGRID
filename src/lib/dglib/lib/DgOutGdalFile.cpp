@@ -111,17 +111,31 @@ DgOutGdalFile::init (bool outputPoint, bool outputRegion,
    }
 
    std::string baseName = dgg::util::baseName(fileNameOnly_);
-   OGRSpatialReference wgs84;
+   // WGS84 is EPSG:4326. A spherical datum has no EPSG code; it gets the same
+   // WKT as shapefile .prj files. Importing that WKT (rather than building it
+   // with SetGeogCS) keeps GDAL from identifying the WGS84 authalic sphere,
+   // whose name contains "WGS84", as EPSG:4326 when writing e.g. GPKG.
+   OGRSpatialReference srs;
    OGRSpatialReference* layerSRS = NULL;
    const DgGeoDegRF& degreeRF = static_cast<const DgGeoDegRF&>(rf());
-   if (dynamic_cast<const DgWGS84RF*>(&degreeRF.geoRF())) {
-      if (wgs84.importFromEPSG(4326) != OGRERR_NONE)
+   const DgEllipsoidRF& geoRF = degreeRF.geoRF();
+   if (dynamic_cast<const DgWGS84RF*>(&geoRF)) {
+      if (srs.importFromEPSG(4326) != OGRERR_NONE)
          ::report("Unable to initialize WGS 84 output spatial reference.", DgBase::Fatal);
-#if GDAL_VERSION_NUM >= 3000000
-      wgs84.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
-#endif
-      layerSRS = &wgs84;
+      layerSRS = &srs;
+   } else {
+      const std::string wkt = sphereDatumWKT(geoRF);
+      if (!wkt.empty()) {
+         if (srs.importFromWkt(wkt.c_str()) != OGRERR_NONE)
+            ::report("Unable to initialize spherical output spatial reference.",
+                     DgBase::Fatal);
+         layerSRS = &srs;
+      }
    }
+#if GDAL_VERSION_NUM >= 3000000
+   if (layerSRS)
+      layerSRS->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+#endif
    _oLayer = _dataset->CreateLayer(baseName.c_str(), layerSRS, geomType, NULL );
    if (_oLayer == NULL)
       ::report( "Layer creation failed.", DgBase::Fatal );

@@ -238,6 +238,7 @@ add_library(dglib
    include/dglib/DgRunningStats.h
    include/dglib/DgSeriesConverter.h
    include/dglib/DgSpatialDB.h
+   include/dglib/DgSphereConverter.h
    include/dglib/DgSqrD4Grid2D.h
    include/dglib/DgSqrD4Grid2DS.h
    include/dglib/DgSqrD8Grid2D.h

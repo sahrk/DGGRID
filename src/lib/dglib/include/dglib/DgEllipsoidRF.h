@@ -529,9 +529,6 @@ void sphTriInit (SphTri* tri); /* initialize with UNDEFVAL values */
 
 void planeTriInit (PlaneTri* tri); /* initialize with UNDEFVAL values */
 
-/* solve for three sides,three angles and area */
-void sphTriSolve (SphTri* tri);
-
 /* calculate the center point of a sphere triangle */
 GeoCoord sphTricenpoint(GeoCoord sp[3]);
 

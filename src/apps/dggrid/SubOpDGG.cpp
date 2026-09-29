@@ -37,6 +37,7 @@
 #include <dglib/DgZ3System.h>
 #include <dglib/DgHierNdxSystemRFSBase.h>
 #include <dglib/DgAuthalicConverter.h>
+#include <dglib/DgSphereConverter.h>
 
 #include <iomanip>
 #include <limits>
@@ -56,9 +57,48 @@ std::string coordinateString(long double coordinate)
         << coordinate;
    return text.str();
 }
+
+// the datum choice values, as used by input_datum, output_datum,
+// orientation_datum and sphere_radius_type
+const std::vector<std::string> datumChoices =
+   {"WGS84", "AUTHALIC_SPHERE", "CUSTOM_SPHERE"};
+
+SubOpDGG::DatumMode datumFromString(const std::string& datum)
+{
+   if (datum == "WGS84") return SubOpDGG::DatumMode::WGS84;
+   if (datum == "CUSTOM_SPHERE") return SubOpDGG::DatumMode::CustomSphere;
+   return SubOpDGG::DatumMode::AuthalicSphere;
+}
+
+const char* datumString(SubOpDGG::DatumMode datum)
+{
+   switch (datum) {
+      case SubOpDGG::DatumMode::WGS84: return "WGS84";
+      case SubOpDGG::DatumMode::CustomSphere: return "CUSTOM_SPHERE";
+      default: return "AUTHALIC_SPHERE";
+   }
+}
 }
 
 const int SubOpDGG::MAX_DGG_RES = 35;
+
+////////////////////////////////////////////////////////////////////////////////
+const DgEllipsoidRF&
+SubOpDGG::datumGeoRF (DatumMode datum) const
+{
+   if (datum == DatumMode::WGS84) return *_pWGS84RF;
+   if (datum == gridSphereDatum()) return *_pGeoRF;
+   return *_pOtherSphereRF;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+const DgGeoDegRF&
+SubOpDGG::datumDeg (DatumMode datum) const
+{
+   if (datum == DatumMode::WGS84) return *_pWGS84Deg;
+   if (datum == gridSphereDatum()) return *_pDeg;
+   return *_pOtherSphereDeg;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 SubOpDGG::SubOpDGG (OpBasic& op, bool _activate)
@@ -68,7 +108,8 @@ SubOpDGG::SubOpDGG (OpBasic& op, bool _activate)
      projType ("ISEA"), res (5), actualRes (5),
      placeRandom (false), orientCenter (false), orientRand (0),
      numGrids (1), curGrid (0), lastGrid (false), sampleCount(0), nSamplePts(0),
-     azimuthDegs (0.0), datum (""), apertureType (""),
+     azimuthDegs (0.0), earthRadius (DEFAULT_RADIUS_KM),
+     customSphereRadius (DEFAULT_RADIUS_KM), apertureType (""),
      isMixed43 (false), isSuperfund (false), isApSeq (false),
      hierNdxSysType (dgg::addtype::InvalidHierNdxSysType)
 {
@@ -118,16 +159,15 @@ SubOpDGG::addressTypeToRF (DgAddressType type, DgHierNdxSysType hierNdxSysType, 
          {
             // A geographic frame is resolution independent. Preserve the
             // existing child/parent spherical adapters for legacy callers.
-            const bool useWGS84 = boundary == GeographicBoundary::Input
-                                  ? inputWGS84() : outputWGS84();
-            const DgRFBase& geographicRF = boundary == GeographicBoundary::Input
-                                           ? static_cast<const DgRFBase&>(inputDeg())
-                                           : static_cast<const DgRFBase&>(outputDeg());
+            const DatumMode datum = boundary == GeographicBoundary::Input
+                                    ? inputDatumMode : outputDatumMode;
+            const bool useDatumFrame = datum != gridSphereDatum();
+            const DgRFBase& geographicRF = datumDeg(datum);
             if (rf) *rf = &geographicRF;
-            if (chdRF) *chdRF = useWGS84
+            if (chdRF) *chdRF = useDatumFrame
                  ? &geographicRF : static_cast<const DgRFBase*>(&chdDeg());
             if (prtRF) *prtRF = !prtDgg ? nullptr
-                 : useWGS84
+                 : useDatumFrame
                     ? &geographicRF
                     : static_cast<const DgRFBase*>(prtDeg());
             break;
@@ -192,14 +232,26 @@ SubOpDGG::addressTypeToRF (DgAddressType type, DgHierNdxSysType hierNdxSysType, 
 int
 SubOpDGG::initializeOp (void)
 {
-   // dggs_type <CUSTOM | SUPERFUND | PLANETRISK | IGEO7 |
+   // dggs_type <CUSTOM | SUPERFUND | PLANETRISK | IGEO7v1 | IGEO7v2 | IGEO7 |
+   //            ISEA3HS | ISEA4HS | ISEA7HS | ISEA43HS | ISEA4TS | ISEA4DS |
    //            ISEA3H | ISEA4H | ISEA7H | ISEA43H | ISEA4T | ISEA4D |
-   //            IVEA3H | IVEA4H | IVEA7H | IVEA43H | IVEA4T | IVEA4D |
+   //            IVEA3HS | IVEA4HS | IVEA7HS | IVEA43HS | IVEA4TS | IVEA4DS |
+   //            ISEA3HL | ISEA4HL | ISEA7HL | ISEA43HL | ISEA4TL | ISEA4DL |
+   //            IVEA3HL | IVEA4HL | IVEA7HL | IVEA43HL | IVEA4TL | IVEA4DL |
    //            FULLER3H | FULLER4H | FULLER7H | FULLER43H | FULLER4T | FULLER4D>
+   // A trailing S marks a spherical (authalic sphere) preset and a trailing L
+   // its ellipsoidal (WGS84) version. ISEA3H ... ISEA4D are aliases for
+   // ISEA3HS ... ISEA4DS, kept for backwards compatibility. IGEO7v1 is ISEA7HS
+   // with Z7 indexing (the IGEO7 of version 8.4), and IGEO7v2 is IVEA7HL with
+   // Z7 indexing. IGEO7 is an alias for IGEO7v1, kept for backwards
+   // compatibility.
    pList().insertParam("dggs_type", "CUSTOM",
-       {"CUSTOM", "SUPERFUND", "PLANETRISK", "IGEO7",
+       {"CUSTOM", "SUPERFUND", "PLANETRISK", "IGEO7v1", "IGEO7v2", "IGEO7",
+        "ISEA3HS", "ISEA4HS", "ISEA7HS", "ISEA43HS", "ISEA4TS", "ISEA4DS",
         "ISEA3H", "ISEA4H", "ISEA7H", "ISEA43H", "ISEA4T", "ISEA4D",
-        "IVEA3H", "IVEA4H", "IVEA7H", "IVEA43H", "IVEA4T", "IVEA4D",
+        "IVEA3HS", "IVEA4HS", "IVEA7HS", "IVEA43HS", "IVEA4TS", "IVEA4DS",
+        "ISEA3HL", "ISEA4HL", "ISEA7HL", "ISEA43HL", "ISEA4TL", "ISEA4DL",
+        "IVEA3HL", "IVEA4HL", "IVEA7HL", "IVEA43HL", "IVEA4TL", "IVEA4DL",
         "FULLER3H", "FULLER4H", "FULLER7H", "FULLER43H", "FULLER4T", "FULLER4D"});
 
    // dggs_base_poly <ICOSAHEDRON>
@@ -229,24 +281,29 @@ SubOpDGG::initializeOp (void)
    // dggs_num_aperture_4_res
    pList().insertParam(new DgIntParam("dggs_num_aperture_4_res", 0, 0, MAX_DGG_RES));
 
-   // proj_datum <WGS84_AUTHALIC_SPHERE WGS84_MEAN_SPHERE CUSTOM_SPHERE>
-   pList().insertParam("proj_datum", "WGS84_AUTHALIC_SPHERE",
-                       {"WGS84_AUTHALIC_SPHERE", "WGS84_MEAN_SPHERE", "CUSTOM_SPHERE"});
+   // The datums are WGS84 (the ellipsoid), AUTHALIC_SPHERE (the sphere with the
+   // WGS84 authalic radius), and CUSTOM_SPHERE (the sphere with radius
+   // custom_sphere_radius).
+
+   // sphere_radius_type <WGS84 | AUTHALIC_SPHERE | CUSTOM_SPHERE>
+   // the sphere the grid is built on; WGS84 uses its authalic sphere
+   pList().insertParam("sphere_radius_type", "AUTHALIC_SPHERE", datumChoices);
+
+   // custom_sphere_radius <long double: km> (1.0 <= v <= 10000.0)
+   pList().insertParam(new DgDoubleParam("custom_sphere_radius", DEFAULT_RADIUS_KM,
+               1.0, 10000.0));
 
    // Interpretation of geographic coordinates at the two application boundaries.
-   pList().insertParam("input_datum", "AUTHALIC_SPHERE", {"AUTHALIC_SPHERE", "WGS84"});
-   pList().insertParam("output_datum", "AUTHALIC_SPHERE", {"AUTHALIC_SPHERE", "WGS84"});
+   // input_datum, output_datum <WGS84 | AUTHALIC_SPHERE | CUSTOM_SPHERE>
+   pList().insertParam("input_datum", "AUTHALIC_SPHERE", datumChoices);
+   pList().insertParam("output_datum", "AUTHALIC_SPHERE", datumChoices);
 
    // Interpretation of orientation values (dggs_vert0_lon/lat, region_center_lon/lat),
-   // independent of input_datum/output_datum: internal orientation math (icosahedron
-   // placement) always operates on the authalic sphere, so a WGS84 orientation_datum
-   // is converted to authalic before use and back to WGS84 when echoed in a
-   // generated metafile.
-   pList().insertParam("orientation_datum", "AUTHALIC_SPHERE", {"AUTHALIC_SPHERE", "WGS84"});
-
-   // proj_datum_radius <long double: km> (1.0 <= v <= 10000.0)
-   pList().insertParam(new DgDoubleParam("proj_datum_radius", DEFAULT_RADIUS_KM,
-               1.0, 10000.0));
+   // independent of input_datum/output_datum: a WGS84 orientation_datum is converted
+   // to the grid sphere before use and back to WGS84 when echoed in a generated
+   // metafile.
+   // orientation_datum <WGS84 | AUTHALIC_SPHERE | CUSTOM_SPHERE>
+   pList().insertParam("orientation_datum", "AUTHALIC_SPHERE", datumChoices);
 
    //// specify the position and orientation
 
@@ -260,6 +317,11 @@ SubOpDGG::initializeOp (void)
    // dggs_orient_rand_seed <unsigned long int int>
    pList().insertParam(new DgULIntParam("dggs_orient_rand_seed", 77316727, 0,
                      ULONG_MAX, true));
+
+   // dggs_orient_preset <NONE | ISEA | ISEAL>
+   // a named orientation: sets dggs_vert0_lon, dggs_vert0_lat, dggs_vert0_azimuth
+   // and orientation_datum (explicitly set values still take precedence)
+   pList().insertParam("dggs_orient_preset", "NONE", {"NONE", "ISEA", "ISEAL"});
 
    // dggs_vert0_lon <long double: decimal degrees> (-180.0 <= v <= 180.0)
    pList().insertParam(new DgDoubleParam("dggs_vert0_lon", 11.25, -180.0, 180.0));
@@ -319,48 +381,56 @@ SubOpDGG::setupOp (void)
    getParamValue(pList(), "dggs_type", tmp, false);
    std::string tmplc = toLower(tmp);
    if (tmplc != "custom") {
+      // IGEO7v1 (and its alias IGEO7) and IGEO7v2 are the ISEA7HS and IVEA7HL
+      // presets with Z7 hierarchical indexing for all purposes
+      const bool isIGEO7 = tmplc == "igeo7v1" || tmplc == "igeo7" ||
+                           tmplc == "igeo7v2";
+      std::string gridName = tmplc;
+      if (tmplc == "igeo7v1" || tmplc == "igeo7")
+         gridName = "isea7hs";
+      else if (tmplc == "igeo7v2")
+         gridName = "ivea7hl";
+
+      // Spherical presets end in S (e.g. ISEA3HS) and ellipsoidal ones in L
+      // (e.g. ISEA3HL); strip the suffix to get the grid name. The legacy
+      // ISEA3H ... ISEA4D names have no suffix and are the spherical presets.
+      const bool ellipsoidal = gridName.back() == 'l';
+      if (ellipsoidal || gridName.back() == 's')
+         gridName.pop_back();
+
       // these params are common to all presets
       pList().setPresetParam("dggs_base_poly", "ICOSAHEDRON");
       pList().setPresetParam("dggs_orient_specify_type", "SPECIFIED");
       pList().setPresetParam("dggs_num_placements", "1");
-      pList().setPresetParam("orientation_datum", "AUTHALIC_SPHERE");
-      pList().setPresetParam("dggs_vert0_lon", "11.25");
-      // 21 significant digits round-trip an 80-bit long double
-      pList().setPresetParam("dggs_vert0_lat",
-                    dgg::util::to_string(M_ICOSA_VERT0_LAT_DEG, "%.21Lg"));
-      pList().setPresetParam("dggs_vert0_azimuth", "0.0");
+
+      // All presets are processed on the authalic sphere. The ellipsoidal
+      // presets use WGS84 geographic input and output and the ISEAL
+      // orientation; all others use the authalic sphere for input and output
+      // and the ISEA orientation.
+      const char* datum = ellipsoidal ? "WGS84" : "AUTHALIC_SPHERE";
+      pList().setPresetParam("sphere_radius_type", "AUTHALIC_SPHERE");
+      pList().setPresetParam("input_datum", datum);
+      pList().setPresetParam("output_datum", datum);
+      // also sets orientation_datum
+      pList().setPresetParam("dggs_orient_preset", ellipsoidal ? "ISEAL" : "ISEA");
       pList().setPresetParam("dggs_res_specify_type", "SPECIFIED");
       pList().setPresetParam("dggs_res_spec", "9");
 
-      if (tmplc == "superfund") {
+      if (gridName == "superfund") {
          pList().setPresetParam("dggs_topology", "HEXAGON");
          pList().setPresetParam("dggs_proj", "FULLER");
          pList().setPresetParam("dggs_num_aperture_4_res", "2");
          pList().setPresetParam("dggs_aperture_type", "MIXED43");
          pList().setPresetParam("output_cell_label_type", "SUPERFUND", true);
-      } else if (tmplc == "planetrisk") {
+      } else if (gridName == "planetrisk") {
          pList().setPresetParam("dggs_topology", "HEXAGON");
          pList().setPresetParam("dggs_proj", "ISEA");
          pList().setPresetParam("dggs_aperture_type", "SEQUENCE");
          pList().setPresetParam("dggs_aperture_sequence", "43334777777777777777777");
          pList().setPresetParam("dggs_res_spec", "11");
-      } else if (tmplc == "igeo7") {
-         pList().setPresetParam("dggs_topology", "HEXAGON");
-         pList().setPresetParam("dggs_proj", "ISEA");
-         pList().setPresetParam("dggs_aperture_type", "PURE");
-         pList().setPresetParam("dggs_aperture", "7");
-         pList().setPresetParam("dggs_res_spec", "9");
-         pList().setPresetParam("hier_indexing_system_type", "Z7");
-         pList().setPresetParam("input_address_type", "HIERNDX", true);
-         pList().setPresetParam("input_hier_ndx_system", "Z7", true);
-         pList().setPresetParam("input_hier_ndx_form", "INT64", true);
-         pList().setPresetParam("output_cell_label_type", "OUTPUT_ADDRESS_TYPE", true);
-         pList().setPresetParam("output_address_type", "HIERNDX", true);
-         pList().setPresetParam("output_hier_ndx_system", "Z7", true);
-         pList().setPresetParam("output_hier_ndx_form", "INT64", true);
       } else {
          // get the topology
-         char topo = tmplc[tmplc.length() - 1];
+         char topo = gridName[gridName.length() - 1];
          switch (topo) {
             case 'h':
                pList().setPresetParam("dggs_topology", "HEXAGON");
@@ -380,7 +450,7 @@ SubOpDGG::setupOp (void)
          int projLen = -1;
          for (const auto& pp : presetProjs) {
             const std::string prefix(pp.prefix);
-            if (!tmplc.compare(0, prefix.length(), prefix)) {
+            if (!gridName.compare(0, prefix.length(), prefix)) {
                pList().setPresetParam("dggs_proj", pp.proj);
                projLen = (int) prefix.length();
                break;
@@ -392,14 +462,62 @@ SubOpDGG::setupOp (void)
                      " has no known projection prefix", DgBase::Fatal);
 
          // get the aperture
-         tmplc = tmplc.substr(projLen, tmplc.length() - projLen - 1);
-         if (tmplc == "43") {
+         const std::string ap =
+               gridName.substr(projLen, gridName.length() - projLen - 1);
+         if (ap == "43") {
             pList().setPresetParam("dggs_aperture_type", "MIXED43");
          } else {
             pList().setPresetParam("dggs_aperture_type", "PURE");
-            pList().setPresetParam("dggs_aperture", tmplc);
+            pList().setPresetParam("dggs_aperture", ap);
          }
       }
+
+      if (isIGEO7) {
+         pList().setPresetParam("hier_indexing_system_type", "Z7");
+         pList().setPresetParam("input_address_type", "HIERNDX", true);
+         pList().setPresetParam("input_hier_ndx_system", "Z7", true);
+         pList().setPresetParam("input_hier_ndx_form", "INT64", true);
+         pList().setPresetParam("output_cell_label_type", "OUTPUT_ADDRESS_TYPE", true);
+         pList().setPresetParam("output_address_type", "HIERNDX", true);
+         pList().setPresetParam("output_hier_ndx_system", "Z7", true);
+         pList().setPresetParam("output_hier_ndx_form", "INT64", true);
+      }
+   }
+
+   // setup preset orientation (if any); applied after the dggs_type preset,
+   // which may choose one
+   std::string orientPreset;
+   getParamValue(pList(), "dggs_orient_preset", orientPreset, false);
+   const std::string orientPresetlc = toLower(orientPreset);
+   if (orientPresetlc != "none") {
+      // Both place vert0 at authalic latitude atan(phi), which puts the poles on
+      // icosahedron edge midpoints. ISEAL is the orientation PROJ and DGGAL use
+      // for their ellipsoidal ISEA and IVEA: on WGS84, vert0 at 11.25 E lands on
+      // the Swedish coast; 11.20 E puts it back in the ocean.
+      static const struct {
+         const char* name; const char* lon; const char* azimuth; const char* datum;
+      } orientPresets[] = {
+         { "isea",  "11.25", "0.0", "AUTHALIC_SPHERE" },
+         { "iseal", "11.20", "0.0", "AUTHALIC_SPHERE" }
+      };
+
+      bool found = false;
+      for (const auto& op : orientPresets) {
+         if (orientPresetlc == op.name) {
+            pList().setPresetParam("dggs_vert0_lon", op.lon);
+            // 21 significant digits round-trip an 80-bit long double
+            pList().setPresetParam("dggs_vert0_lat",
+                          dgg::util::to_string(M_ICOSA_VERT0_LAT_DEG, "%.21Lg"));
+            pList().setPresetParam("dggs_vert0_azimuth", op.azimuth);
+            pList().setPresetParam("orientation_datum", op.datum);
+            found = true;
+            break;
+         }
+      }
+
+      if (!found)
+         ::report("SubOpDGG::setupOp(): unknown dggs_orient_preset " + orientPreset,
+                  DgBase::Fatal);
    }
 
    std::string gridTopoStr = "";
@@ -448,18 +566,32 @@ SubOpDGG::setupOp (void)
    getParamValue(pList(), "dggs_proj", projType, false);
    getParamValue(pList(), "dggs_vert0_azimuth", azimuthDegs, false);
 
-   std::string datumMode;
-   getParamValue(pList(), "input_datum", datumMode, false);
-   inputDatumMode = datumMode == "WGS84" ? DatumMode::WGS84 : DatumMode::AuthalicSphere;
-   getParamValue(pList(), "output_datum", datumMode, false);
-   outputDatumMode = datumMode == "WGS84" ? DatumMode::WGS84 : DatumMode::AuthalicSphere;
-   getParamValue(pList(), "orientation_datum", datumMode, false);
-   orientationDatumMode = datumMode == "WGS84" ? DatumMode::WGS84 : DatumMode::AuthalicSphere;
+   std::string datumName;
+   getParamValue(pList(), "sphere_radius_type", datumName, false);
+   sphereRadiusType = datumFromString(datumName);
+   getParamValue(pList(), "input_datum", datumName, false);
+   inputDatumMode = datumFromString(datumName);
+   getParamValue(pList(), "output_datum", datumName, false);
+   outputDatumMode = datumFromString(datumName);
+   getParamValue(pList(), "orientation_datum", datumName, false);
+   orientationDatumMode = datumFromString(datumName);
+   for (DatumMode datum : {sphereRadiusType, inputDatumMode, outputDatumMode,
+                           orientationDatumMode}) {
+      if (datum == DatumMode::CustomSphere) {
+         getParamValue(pList(), "custom_sphere_radius", customSphereRadius, false);
+         break;
+      }
+   }
 
-   getParamValue(pList(), "proj_datum", datum, false);
-   if ((inputWGS84() || outputWGS84() || orientationWGS84()) && datum != "WGS84_AUTHALIC_SPHERE")
+   // WGS84 maps equal-area onto its authalic sphere, so the grid must be built
+   // on that sphere
+   if ((inputWGS84() || outputWGS84() || orientationWGS84()) &&
+         gridSphereDatum() != DatumMode::AuthalicSphere)
       ::report("input_datum/output_datum/orientation_datum WGS84 requires "
-               "proj_datum WGS84_AUTHALIC_SPHERE", DgBase::Fatal);
+               "sphere_radius_type WGS84 or AUTHALIC_SPHERE", DgBase::Fatal);
+
+   earthRadius = gridSphereDatum() == DatumMode::CustomSphere ?
+                 customSphereRadius : DgWGS84RF::canonicalAuthalicRadiusKM();
 
    long double lon0, lat0;
    getParamValue(pList(), "dggs_vert0_lon", lon0, false);
@@ -471,13 +603,6 @@ SubOpDGG::setupOp (void)
                         pList().getParam("dggs_vert0_lat", false)->isUserSet()))
       lat0 = DgAuthalic::geodeticToAuthalicLatitude(lat0 * M_PI_180) * M_180_PI;
    vert0 = DgGeoCoord(lon0, lat0, false);
-
-   if (datum == "WGS84_AUTHALIC_SPHERE")
-      earthRadius = DgWGS84RF::canonicalAuthalicRadiusKM();
-   else if (datum == "WGS84_MEAN_SPHERE")
-      earthRadius = WGS84_MEAN_RADIUS_KM;
-   else // datum must be CUSTOM_SPHERE
-      getParamValue(pList(), "proj_datum_radius", earthRadius, false);
 
    if (tmp == "SUPERFUND") {
       isSuperfund = true;
@@ -582,10 +707,27 @@ SubOpDGG::executeOp (void) {
 //cout << "ZZZ " << curGrid << " " << numGrids << " " << lastGrid << std::endl;
 
    if (curGrid == 1) {
-      _pGeoRF = DgGeoSphRF::makeRF(net0(), datum, earthRadius);
+      // each frame is named for its datum
+      _pGeoRF = DgGeoSphRF::makeRF(net0(), datumString(gridSphereDatum()),
+                                   earthRadius);
       if (inputWGS84() || outputWGS84()) {
          _pWGS84RF = DgWGS84RF::makeRF(net0());
          Dg2WayAuthalicConverter(*_pWGS84RF, *_pGeoRF);
+      }
+
+      // a boundary on the other sphere datum has its own frame; coordinates
+      // carry over unchanged between spheres
+      for (DatumMode datum : {inputDatumMode, outputDatumMode}) {
+         if (datum == DatumMode::WGS84 || datum == gridSphereDatum() ||
+             _pOtherSphereRF)
+            continue;
+
+         const long double radius = datum == DatumMode::CustomSphere ?
+               customSphereRadius : DgWGS84RF::canonicalAuthalicRadiusKM();
+         _pOtherSphereRF = DgGeoSphRF::makeRF(net0(), datumString(datum), radius);
+         Dg2WaySphereConverter(*_pOtherSphereRF, *_pGeoRF);
+         _pOtherSphereDeg = DgGeoSphDegRF::makeRF(*_pOtherSphereRF,
+                                    _pOtherSphereRF->name() + "Deg");
       }
    }
 
@@ -706,7 +848,7 @@ SubOpDGG::orientGrid (void)
       pList().setParam("dggs_vert0_lat", coordinateString(printedLat));
       // Print the placement in the selected orientation model so a generated
       // metafile replays the same placement when read back in.
-      pList().setParam("orientation_datum", orientationWGS84() ? "WGS84" : "AUTHALIC_SPHERE");
+      pList().setParam("orientation_datum", datumString(orientationDatumMode));
       pList().setParam("dggs_vert0_azimuth", coordinateString(azimuthDegs));
 
       dgcout << "Grid " << curGrid <<

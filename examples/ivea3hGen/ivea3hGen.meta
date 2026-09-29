@@ -18,7 +18,7 @@
 dggrid_operation GENERATE_GRID
 
 # specify the DGG
-dggs_type IVEA3H
+dggs_type IVEA3HS
 dggs_res_spec 4
 
 # control the generation

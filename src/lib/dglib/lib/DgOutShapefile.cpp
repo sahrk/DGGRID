@@ -32,7 +32,6 @@
 #include <dglib/DgPolygon.h>
 #include <dglib/DgLocation.h>
 #include <dglib/DgCell.h>
-#include <dglib/DgGeoSphRF.h>
 #include <dglib/DgWGS84RF.h>
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -124,40 +123,14 @@ DgOutShapefile::open (const std::string& fileName, DgReportLevel failLevel)
       return (dbFile_ && shpFile_);
    }
 
-   const DgGeoSphRF* sphericalRF = dynamic_cast<const DgGeoSphRF*>(&geoRF_);
-   if (!sphericalRF) {
+   const std::string wkt = sphereDatumWKT(geoRF_);
+   if (wkt.empty()) {
       report("DgOutShapefile::open() unsupported geographic datum " + geoRF_.name(),
              failLevel);
       return false;
    }
 
-   int precision = 0;
-   std::string datumName;
-   long double earthRadiusM = sphericalRF->earthRadiusKM() * 1000.0;
-   if (geoRF_.name() == "WGS84_AUTHALIC_SPHERE")
-   {
-      datumName = "AuthalicSphereWGS84radius";
-      precision = 12;
-   }
-   else if (geoRF_.name() == "WGS84_MEAN_SPHERE")
-   {
-      datumName = "SphereWGS84meanRadius";
-      precision = 7;
-   }
-   else if (geoRF_.name() == "CUSTOM_SPHERE")
-   {
-      datumName = "CustomSphere";
-      precision = 8;
-   }
-   else
-      report("DgOutShapefile::open() invalid datum " + geoRF_.name(),
-             failLevel);
-
-   prjFile << "GEOGCS[\"" << datumName;
-   prjFile << "\",DATUM[\"D_unknown\",SPHEROID[\"" << datumName << "\",";
-    prjFile << std::fixed << std::setprecision(precision) << earthRadiusM;
-   prjFile << ",0]],PRIMEM[\"Greenwich\",0],";
-   prjFile << "UNIT[\"Degree\",0.017453292519943295]]\n";
+   prjFile << wkt << "\n";
    prjFile.close();
 
    return (dbFile_ && shpFile_);

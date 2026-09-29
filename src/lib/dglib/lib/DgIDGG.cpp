@@ -148,18 +148,18 @@ DgIDGG::initialize (void)
    gridStats_.setPrecision(precision());
    gridStats_.setNCells(bndRF().size());
 
-   long double tmpLen = DgGeoSphRF::icosaEdgeKM();
+   long double tmpLen = geoRF().icosaEdgeKM();
    if (gridTopo() == Triangle) tmpLen /= M_SQRT3;
    gridStats_.setCellDistKM(tmpLen / pow(sqrtl((long double) aperture()), res()));
 
    if (gridTopo() == Diamond)
-      gridStats_.setCellAreaKM(DgGeoSphRF::totalAreaKM() / gridStats_.nCells());
+      gridStats_.setCellAreaKM(geoRF().totalAreaKM() / gridStats_.nCells());
    else if (gridTopo() == Triangle)
-      gridStats_.setCellAreaKM(DgGeoSphRF::totalAreaKM() / gridStats_.nCells());
+      gridStats_.setCellAreaKM(geoRF().totalAreaKM() / gridStats_.nCells());
 
-   gridStats_.setCLS(2.0L * 2.0L * DgGeoSphRF::earthRadiusKM() *
+   gridStats_.setCLS(2.0L * 2.0L * geoRF().earthRadiusKM() *
                      asinl(sqrtl(gridStats_.cellAreaKM() / M_PI) /
-                     (2.0L * DgGeoSphRF::earthRadiusKM())));
+                     (2.0L * geoRF().earthRadiusKM())));
 
 } // DgIDGG::initialize
 

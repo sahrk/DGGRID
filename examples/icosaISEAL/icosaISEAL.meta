@@ -1,0 +1,35 @@
+################################################################################
+#
+# icosaISEAL.meta - example of a DGGRID metafile that generates the
+#     ellipsoidal icosahedron (a resolution 0 triangle grid) in KML format,
+#     using the ISEA4TL grid preset: the ISEAL orientation preset with WGS84
+#     input and output datums, processed on the authalic sphere. The
+#     output_datum of WGS84 applies authalic latitude conversion to WGS84
+#     geodetic latitude/longitude.
+#
+# Kevin Sahr, 9/27/26
+#
+################################################################################
+
+# specify the operation
+dggrid_operation GENERATE_GRID
+
+# specify the DGG: the ISEA4TL (ellipsoidal) grid preset
+dggs_type ISEA4TL
+dggs_res_spec 0
+
+# control the generation
+clip_subset_type WHOLE_EARTH
+geodetic_densify 0.0
+
+# specify the output
+cell_output_type KML
+cell_output_file_name outputfiles/icosaISEAL
+point_output_type KML
+point_output_file_name outputfiles/icosaISEALpts
+kml_default_color ff0000ff
+kml_default_width 6
+kml_name ISEAL Ellipsoidal Icosahedron
+kml_description www.discreteglobalgrids.org
+kml_default_width 6
+densification 0

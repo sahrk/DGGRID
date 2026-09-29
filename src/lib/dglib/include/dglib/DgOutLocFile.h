@@ -38,6 +38,7 @@ class DgRFBase;
 class DgDVec2D;
 class DgIDGGBase;
 class DgDataList;
+class DgEllipsoidRF;
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgOutLocFile : public DgBase {
@@ -112,6 +113,10 @@ class DgOutLocFile : public DgBase {
                                 const DgLocation* cent = nullptr,
                                 const DgDataList* dataList = nullptr) = 0;
    protected:
+
+      // ESRI WKT1 for a spherical geographic datum frame (one named
+      // AUTHALIC_SPHERE or CUSTOM_SPHERE); empty if it is neither
+      static std::string sphereDatumWKT (const DgEllipsoidRF& geoRF);
 
       DgOutLocFile (const std::string& fileName,
                const DgRFBase& rf, bool isPointFile = false,

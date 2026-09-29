@@ -1,0 +1,27 @@
+################################################################################
+# wholeEarthIGEO7v2.meta - example of generating a whole earth IGEO7v2 DGG res 3.
+#     IGEO7v2 is the ellipsoidal version of IGEO7, using the IVEA projection
+#     with WGS84 geographic input and output.
+#
+################################################################################
+
+# specify the operation
+dggrid_operation GENERATE_GRID
+
+# specify the DGG
+dggs_type IGEO7v2
+dggs_res_spec 3
+
+# specify the output
+# IGEO7v2 DGGS preset has Z7 INT64 for input and output
+cell_output_type KML
+cell_output_file_name outputfiles/igeo7v2cells
+point_output_type KML
+point_output_file_name outputfiles/igeo7v2pts
+densification 0
+precision 6
+kml_default_color ffff0000
+kml_name IGEO7v2 Res 3
+kml_description www.discreteglobalgrids.org
+kml_default_width 3
+

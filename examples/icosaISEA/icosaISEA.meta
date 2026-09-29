@@ -1,17 +1,18 @@
 ################################################################################
 #
-# icosahedron.meta - example of a DGGRID metafile that generates a spherical
+# icosaISEA.meta - example of a DGGRID metafile that generates a spherical
 #     icosahedron (a resolution 0 triangle grid) with canoncial ISEA
-#     orientation in KML format. 
+#     orientation in KML format. Uses the ISEA4T grid preset, which uses the
+#     ISEA orientation preset and the authalic sphere for all datums.
 #
-# Kevin Sahr, 10/23/14
+# Kevin Sahr, 9/27/26
 #
 ################################################################################
 
 # specify the operation
 dggrid_operation GENERATE_GRID
 
-# specify the DGG
+# specify the DGG: the ISEA4T grid preset
 dggs_type ISEA4T
 dggs_res_spec 0
 
@@ -21,9 +22,9 @@ geodetic_densify 0.0
 
 # specify the output
 cell_output_type KML
-cell_output_file_name outputfiles/icosa
+cell_output_file_name outputfiles/icosaISEA
 point_output_type KML
-point_output_file_name outputfiles/icosaPts
+point_output_file_name outputfiles/icosaISEApts
 kml_default_color ffff0000
 kml_default_width 6
 kml_name ISEA Spherical Icosahedron

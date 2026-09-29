@@ -188,7 +188,7 @@ DgHexIDGG::initialize (void)
    gridStats_.setPrecision(precision());
    //gridStats_.setNCells(bndRF().size());
 
-   long double tmpLen = DgGeoSphRF::icosaEdgeKM();
+   long double tmpLen = geoRF().icosaEdgeKM();
 ////// NEEDS UPDATING
    gridStats_.setCellDistKM(tmpLen / pow(sqrt((long double) aperture()), res()));
 /*
@@ -210,12 +210,12 @@ DgHexIDGG::initialize (void)
 
       // a = globeArea / ((#cells - 12) + (12 * 5/6))
       //   = globeArea / (#cells - 2);
-      gridStats_.setCellAreaKM(DgGeoSphRF::totalAreaKM() /
+      gridStats_.setCellAreaKM(geoRF().totalAreaKM() /
                        (gridStats_.nCells() - 2));
 
-   gridStats_.setCLS(2.0L * 2.0L * DgGeoSphRF::earthRadiusKM() *
+   gridStats_.setCLS(2.0L * 2.0L * geoRF().earthRadiusKM() *
                      asinl(sqrt(gridStats_.cellAreaKM() / M_PI) /
-                     (2.0L * DgGeoSphRF::earthRadiusKM())));
+                     (2.0L * geoRF().earthRadiusKM())));
 
 } // DgHexIDGG::initialize
 

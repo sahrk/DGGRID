@@ -30,14 +30,6 @@
 #include <dglib/DgConstants.h>
 #include <dglib/DgPolygon.h>
 
-// these are initialized here but will get set again when the datum is created
-long double DgGeoSphRF::earthRadiusKM_ = DEFAULT_RADIUS_KM;
-long double DgGeoSphRF::icosaEdgeRads_ = M_ATAN2;
-long double DgGeoSphRF::icosaEdgeDegs_ = icosaEdgeRads_ * M_180_PI;
-long double DgGeoSphRF::icosaEdgeKM_ = icosaEdgeRads_ * earthRadiusKM_;
-long double DgGeoSphRF::totalAreaKM_ =
-                      4.0L * M_PI_L * earthRadiusKM_ * earthRadiusKM_;
-
 const std::string DgGeoSphRF::lonWrapModeStrings[] =
              { "Wrap", "UnwrapWest", "UnwrapEast", "InvalidLonWrapMode" };
 

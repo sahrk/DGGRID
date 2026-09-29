@@ -8,8 +8,8 @@ gridgenGeoJSON
 gridgenMixedSHP
 gridgenPureKML
 hiRes
-icosahedron
-igeo7WholeEarth
+icosaISEA
+icosaISEAL
 isea4d
 isea4t
 isea7hGen
@@ -22,6 +22,8 @@ seqnums
 superfundGrid
 table
 transform
+wholeEarthIGEO7v1
+wholeEarthIGEO7v2
 z3CellClip
 z3Nums
 z3Transform

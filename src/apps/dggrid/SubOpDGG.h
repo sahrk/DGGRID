@@ -45,7 +45,9 @@ struct OpBasic;
 ////////////////////////////////////////////////////////////////////////////////
 struct SubOpDGG : public SubOpBasic {
 
-   enum class DatumMode { AuthalicSphere, WGS84 };
+   // WGS84 is the ellipsoid; AuthalicSphere has the WGS84 authalic radius;
+   // CustomSphere has the radius given by custom_sphere_radius
+   enum class DatumMode { WGS84, AuthalicSphere, CustomSphere };
    enum class GeographicBoundary { Input, Output };
 
    static const int MAX_DGG_RES;
@@ -58,16 +60,21 @@ struct SubOpDGG : public SubOpBasic {
    const DgIDGGSBase&   dggs   (void) { return *_pDGGS; }
    const DgIDGGBase&    dgg    (void) { return *_pDGG; }
    const DgGeoSphDegRF& deg    (void) { return *_pDeg; }
-   // Geographic boundary frames. The grid and its projection always use geoRF().
-   // Input and output modes are independent; callers must select the direction.
-   const DgGeoDegRF& inputDeg (void) const
-      { return inputDatumMode == DatumMode::WGS84 ? *_pWGS84Deg : *_pDeg; }
-   const DgGeoDegRF& outputDeg (void) const
-      { return outputDatumMode == DatumMode::WGS84 ? *_pWGS84Deg : *_pDeg; }
+   // Geographic boundary frames. The grid and its projection always use geoRF(),
+   // the sphere selected by sphere_radius_type. Each boundary datum has its own
+   // frame; input and output are independent, so callers select the direction.
+   const DgGeoDegRF& inputDeg (void) const { return datumDeg(inputDatumMode); }
+   const DgGeoDegRF& outputDeg (void) const { return datumDeg(outputDatumMode); }
    const DgEllipsoidRF& inputGeoRF (void) const
-      { return inputDatumMode == DatumMode::WGS84 ? static_cast<const DgEllipsoidRF&>(*_pWGS84RF) : static_cast<const DgEllipsoidRF&>(*_pGeoRF); }
+      { return datumGeoRF(inputDatumMode); }
    const DgEllipsoidRF& outputGeoRF (void) const
-      { return outputDatumMode == DatumMode::WGS84 ? static_cast<const DgEllipsoidRF&>(*_pWGS84RF) : static_cast<const DgEllipsoidRF&>(*_pGeoRF); }
+      { return datumGeoRF(outputDatumMode); }
+   const DgEllipsoidRF& datumGeoRF (DatumMode datum) const;
+   const DgGeoDegRF& datumDeg (DatumMode datum) const;
+   // the sphere datum the grid is built on
+   DatumMode gridSphereDatum (void) const
+      { return sphereRadiusType == DatumMode::CustomSphere ?
+                  DatumMode::CustomSphere : DatumMode::AuthalicSphere; }
    bool inputWGS84 (void) const { return inputDatumMode == DatumMode::WGS84; }
    bool outputWGS84 (void) const { return outputDatumMode == DatumMode::WGS84; }
    // Datum used to interpret/emit orientation values (dggs_vert0_lon/lat,
@@ -103,6 +110,9 @@ struct SubOpDGG : public SubOpBasic {
    const DgGeoSphRF*    _pGeoRF  = nullptr;
    const DgWGS84RF*     _pWGS84RF = nullptr;
    const DgGeoDegRF*    _pWGS84Deg = nullptr;
+   // the sphere datum other than the grid sphere, when a boundary uses it
+   const DgGeoSphRF*    _pOtherSphereRF = nullptr;
+   const DgGeoSphDegRF* _pOtherSphereDeg = nullptr;
    const DgIDGGSBase*   _pDGGS   = nullptr;
    const DgIDGGBase*    _pDGG    = nullptr;
    const DgGeoSphDegRF* _pDeg    = nullptr;
@@ -129,8 +139,9 @@ struct SubOpDGG : public SubOpBasic {
    unsigned long long int nSamplePts;
    DgGeoCoord vert0;  // placement vert
    long double azimuthDegs; // orientation azimuth
-   long double earthRadius; // earth radius in km
-   std::string datum;            // datum used to determine the earthRadius
+   long double earthRadius; // grid sphere radius in km
+   long double customSphereRadius; // radius in km of the CUSTOM_SPHERE datum
+   DatumMode sphereRadiusType = DatumMode::AuthalicSphere;
    DatumMode inputDatumMode = DatumMode::AuthalicSphere;
    DatumMode outputDatumMode = DatumMode::AuthalicSphere;
    DatumMode orientationDatumMode = DatumMode::AuthalicSphere;

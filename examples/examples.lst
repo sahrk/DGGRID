@@ -15,8 +15,8 @@ gridgenMixedSHP
 gridgenPureKML
 hiRes
 holes
-icosahedron
-igeo7WholeEarth
+icosaISEA
+icosaISEAL
 isea4d
 isea4t
 isea7hGen
@@ -35,6 +35,8 @@ superfundGrid
 table
 transform
 transformV8
+wholeEarthIGEO7v1
+wholeEarthIGEO7v2
 z3CellClip
 z3Collection
 z3Nums

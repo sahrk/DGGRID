@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://earth.google.com/kml/2.1">
 <Folder>
-   <name>igeo7 Res 3</name>
+   <name>IGEO7v1 Res 3</name>
    <description>www.discreteglobalgrids.org</description>
    <Style id="lineStyle1">
       <LineStyle id="lineStyle2">
-         <color>ffff0000</color>
+         <color>ff00ff00</color>
          <width>3</width>
       </LineStyle>
    </Style>
@@ -3541,7 +3541,7 @@
       <name>089fffffffffffff</name>
       <Point>
          <coordinates>
-            -12.245558,43.513114
+            -12.245558,43.513113
          </coordinates>
       </Point>
    </Placemark>
@@ -4341,7 +4341,7 @@
       <name>2907ffffffffffff</name>
       <Point>
          <coordinates>
-            -69.745878,-0.000000
+            -69.745878,0.000000
          </coordinates>
       </Point>
    </Placemark>
@@ -4749,7 +4749,7 @@
       <name>3347ffffffffffff</name>
       <Point>
          <coordinates>
-            -52.597565,-0.000000
+            -52.597565,0.000000
          </coordinates>
       </Point>
    </Placemark>
@@ -5157,7 +5157,7 @@
       <name>3387ffffffffffff</name>
       <Point>
          <coordinates>
-            -36.744025,-0.000000
+            -36.744025,0.000000
          </coordinates>
       </Point>
    </Placemark>
@@ -5909,7 +5909,7 @@
       <name>3187ffffffffffff</name>
       <Point>
          <coordinates>
-            -11.680714,-0.000000
+            -11.680714,0.000000
          </coordinates>
       </Point>
    </Placemark>
@@ -6309,7 +6309,7 @@
       <name>3d47ffffffffffff</name>
       <Point>
          <coordinates>
-            -2.622727,-0.000000
+            -2.622727,0.000000
          </coordinates>
       </Point>
    </Placemark>
@@ -6709,7 +6709,7 @@
       <name>3d07ffffffffffff</name>
       <Point>
          <coordinates>
-            6.606270,-0.000000
+            6.606270,0.000000
          </coordinates>
       </Point>
    </Placemark>
@@ -7109,7 +7109,7 @@
       <name>42c7ffffffffffff</name>
       <Point>
          <coordinates>
-            15.893730,-0.000000
+            15.893730,0.000000
          </coordinates>
       </Point>
    </Placemark>
@@ -7509,7 +7509,7 @@
       <name>4287ffffffffffff</name>
       <Point>
          <coordinates>
-            25.122727,-0.000000
+            25.122727,0.000000
          </coordinates>
       </Point>
    </Placemark>
@@ -7909,7 +7909,7 @@
       <name>4047ffffffffffff</name>
       <Point>
          <coordinates>
-            34.180714,-0.000000
+            34.180714,0.000000
          </coordinates>
       </Point>
    </Placemark>
@@ -8253,7 +8253,7 @@
       <name>4007ffffffffffff</name>
       <Point>
          <coordinates>
-            42.967474,-0.000000
+            42.967474,0.000000
          </coordinates>
       </Point>
    </Placemark>
@@ -9045,7 +9045,7 @@
       <name>48c7ffffffffffff</name>
       <Point>
          <coordinates>
-            59.244025,-0.000000
+            59.244025,0.000000
          </coordinates>
       </Point>
    </Placemark>
@@ -9837,7 +9837,7 @@
       <name>4987ffffffffffff</name>
       <Point>
          <coordinates>
-            75.097565,-0.000000
+            75.097565,0.000000
          </coordinates>
       </Point>
    </Placemark>
@@ -10629,7 +10629,7 @@
       <name>9487ffffffffffff</name>
       <Point>
          <coordinates>
-            92.245878,-0.000000
+            92.245878,0.000000
          </coordinates>
       </Point>
    </Placemark>
@@ -10677,7 +10677,7 @@
       <name>94afffffffffffff</name>
       <Point>
          <coordinates>
-            93.501337,-3.349438
+            93.501337,-3.349437
          </coordinates>
       </Point>
    </Placemark>
@@ -10821,7 +10821,7 @@
       <name>5067ffffffffffff</name>
       <Point>
          <coordinates>
-            95.492427,27.037214
+            95.492427,27.037215
          </coordinates>
       </Point>
    </Placemark>
@@ -13741,7 +13741,7 @@
       <name>6007ffffffffffff</name>
       <Point>
          <coordinates>
-            -137.032526,-0.000000
+            -137.032526,0.000000
          </coordinates>
       </Point>
    </Placemark>
@@ -15757,7 +15757,7 @@
       <name>bccfffffffffffff</name>
       <Point>
          <coordinates>
-            -145.254442,-43.513114
+            -145.254442,-43.513113
          </coordinates>
       </Point>
    </Placemark>
@@ -16317,7 +16317,7 @@
       <name>b197ffffffffffff</name>
       <Point>
          <coordinates>
-            -150.284209,-55.910652
+            -150.284210,-55.910652
          </coordinates>
       </Point>
    </Placemark>
@@ -17997,7 +17997,7 @@
       <name>bd27ffffffffffff</name>
       <Point>
          <coordinates>
-            -111.099009,-57.248428
+            -111.099010,-57.248428
          </coordinates>
       </Point>
    </Placemark>
@@ -18389,7 +18389,7 @@
       <name>bd67ffffffffffff</name>
       <Point>
          <coordinates>
-            -127.621718,-61.135151
+            -127.621719,-61.135151
          </coordinates>
       </Point>
    </Placemark>
@@ -21133,7 +21133,7 @@
       <name>b86fffffffffffff</name>
       <Point>
          <coordinates>
-            178.128727,-78.416483
+            178.128726,-78.416483
          </coordinates>
       </Point>
    </Placemark>
@@ -21661,7 +21661,7 @@
       <name>932fffffffffffff</name>
       <Point>
          <coordinates>
-            116.175505,-56.329469
+            116.175505,-56.329468
          </coordinates>
       </Point>
    </Placemark>
@@ -22197,7 +22197,7 @@
       <name>919fffffffffffff</name>
       <Point>
          <coordinates>
-            107.007573,-27.037214
+            107.007573,-27.037215
          </coordinates>
       </Point>
    </Placemark>
@@ -22341,7 +22341,7 @@
       <name>5b57ffffffffffff</name>
       <Point>
          <coordinates>
-            108.998663,3.349438
+            108.998663,3.349437
          </coordinates>
       </Point>
    </Placemark>
@@ -25517,7 +25517,7 @@
       <name>ad47ffffffffffff</name>
       <Point>
          <coordinates>
-            177.377273,-0.000000
+            177.377273,0.000000
          </coordinates>
       </Point>
    </Placemark>
@@ -25917,7 +25917,7 @@
       <name>ad07ffffffffffff</name>
       <Point>
          <coordinates>
-            -173.393730,-0.000000
+            -173.393730,0.000000
          </coordinates>
       </Point>
    </Placemark>
@@ -26317,7 +26317,7 @@
       <name>62c7ffffffffffff</name>
       <Point>
          <coordinates>
-            -164.106270,-0.000000
+            -164.106270,0.000000
          </coordinates>
       </Point>
    </Placemark>
@@ -26717,7 +26717,7 @@
       <name>6287ffffffffffff</name>
       <Point>
          <coordinates>
-            -154.877273,-0.000000
+            -154.877273,0.000000
          </coordinates>
       </Point>
    </Placemark>
@@ -26789,7 +26789,7 @@
       <name>b7b7ffffffffffff</name>
       <Point>
          <coordinates>
-            -177.755473,-41.660311
+            -177.755474,-41.660311
          </coordinates>
       </Point>
    </Placemark>

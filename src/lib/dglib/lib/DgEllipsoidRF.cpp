@@ -447,22 +447,6 @@ long double vecDot (const Vec3D& A, const Vec3D& B)
 }  /*  long double vecDot */
 
 /******************************************************************************/
-long double sqrMetersToExcessD (long double area)
-{
-   return area * 360.0L / (4.0L * M_PI * DgGeoSphRF::earthRadiusKM() *
-          DgGeoSphRF::earthRadiusKM());
-
-} /* long double metersToExcessD */
-
-/******************************************************************************/
-long double metersToGCDegrees (long double meters)
-{
-   long double earthCircum = (2.0L * M_PI * DgGeoSphRF::earthRadiusKM());
-   return meters * 360.0L / earthCircum;
-
-} /* long double metersToGCDegrees */
-
-/******************************************************************************/
 long double maxval(long double val1, long double val2)
 /*
   return the maxmum of two variables
@@ -589,44 +573,6 @@ long double spheredist(const GeoCoord& ll1, const GeoCoord& ll2)
   if (sd<-1) sd=-1;
   return acosl(sd);
  }/* long double spheredist */
-
-/******************************************************************************/
-void sphTriSolve(SphTri* tri)
-/*
-   Input:  three vertices's lat and lon in radius.
-   Output: three edges, three angles, area.
-	   the unit for length is kilometer, the unit for angle is degree
-*/
- {
-  int i;
-  long double l1[2],l2[2],l3[2],p,mindist;
-
-  mindist=5;
-  l1[0]=tri->verts[0].lat; l1[1]=tri->verts[0].lon;
-  l2[0]=tri->verts[1].lat; l2[1]=tri->verts[1].lon;
-  l3[0]=tri->verts[2].lat; l3[1]=tri->verts[2].lon;
-  tri->edges[0]=acosl(cosl(M_PI_2-l2[0])*cosl(M_PI_2-l3[0])+
-               sinl(M_PI_2-l2[0])*sinl(M_PI_2-l3[0])*cosl(l2[1]-l3[1]));
-  tri->edges[1]=acosl(cosl(M_PI_2-l1[0])*cosl(M_PI_2-l3[0])+
-               sinl(M_PI_2-l1[0])*sinl(M_PI_2-l3[0])*cosl(l1[1]-l3[1]));
-  tri->edges[2]=acosl(cosl(M_PI_2-l2[0])*cosl(M_PI_2-l1[0])+
-               sinl(M_PI_2-l2[0])*sinl(M_PI_2-l1[0])*cosl(l2[1]-l1[1]));
-  tri->angles[0]=acosl((cosl(tri->edges[0])-cosl(tri->edges[1])*
-               cosl(tri->edges[2]))/(sinl(tri->edges[1])*sinl(tri->edges[2])));
-  tri->angles[1]=acosl((cosl(tri->edges[1])-cosl(tri->edges[0])*
-               cosl(tri->edges[2]))/(sinl(tri->edges[0])*sinl(tri->edges[2])));
-  tri->angles[2]=acosl((cosl(tri->edges[2])-cosl(tri->edges[0])*
-               cosl(tri->edges[1]))/(sinl(tri->edges[0])*sinl(tri->edges[1])));
-  for (i=0;i<3;i++) tri->edges[i]=tri->edges[i]*DgGeoSphRF::earthRadiusKM();
-  if (tri->edges[0]<mindist)
-   {
-    p=(tri->edges[0]+tri->edges[1]+tri->edges[2])/2;
-    tri->area=sqrtl(p*(p-tri->edges[0])*(p-tri->edges[1])*(p-tri->edges[2]));
-   }
-  else tri->area=(tri->angles[0]+tri->angles[1]+tri->angles[2]-M_PI)*
-              DgGeoSphRF::earthRadiusKM()*DgGeoSphRF::earthRadiusKM();
-
- } /* void sphTriSolve(SphTri* tri) */
 
 /******************************************************************************/
 GeoCoord GCmidpoint(const GeoCoord& pp1, const GeoCoord& pp2)
