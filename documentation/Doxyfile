@@ -1,17 +1,19 @@
 # Doxyfile for ReadTheDocs / Breathe integration
 #
 # This file is separate from src/Doxyfile (the CMake-based upstream build).
-# It is intentionally standalone with relative paths and produces only XML
-# output for consumption by Breathe/Sphinx. HTML generation is disabled.
+# It is intentionally standalone with relative paths and produces XML output
+# for Breathe/Sphinx plus browsable HTML. Run it from the repository root:
+#   doxygen documentation/Doxyfile
 
 PROJECT_NAME           = DGGRID
-PROJECT_NUMBER         = 8.423
 PROJECT_BRIEF          = "Discrete Global Grid System software"
 
-# Input: the core libraries (relative to this file's directory)
+# Input: the core libraries (paths relative to the repository root)
 INPUT                  = src/lib
 RECURSIVE              = YES
 FILE_PATTERNS          = *.h *.hpp *.cpp
+# third-party code and unused old sources
+EXCLUDE                = src/lib/shapelib src/lib/proj4lib src/lib/dglib/lib/OLDSYS
 
 # XML output for Breathe/Sphinx, HTML for GitHub Pages
 GENERATE_HTML          = YES
@@ -34,3 +36,8 @@ INTERACTIVE_SVG        = YES
 QUIET                  = YES
 WARNINGS               = YES
 WARN_IF_UNDOCUMENTED   = NO
+
+# Rewrites C++11 "friend X;" for Breathe, see doxygen_filter.py
+FILTER_PATTERNS        = "*.h=python3 documentation/doxygen_filter.py"
+# Anonymous namespaces (doxygen names them @N) crash Breathe 4.36 doxygenindex
+EXCLUDE_SYMBOLS        = @*

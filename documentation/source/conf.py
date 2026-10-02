@@ -24,16 +24,17 @@ version = '.'.join(release.split('.')[:2])
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-# should be in path
-# sys.path.append("/home/me/docproj/ext/breathe/")
-# sphinx.ext.imgmath s the successor of sphinx.ext.pngmath
 extensions = [
-    'sphinx.ext.imgmath',
     'sphinx.ext.todo',
     'breathe',
     'myst_parser']
 
 templates_path = ['_templates']
+
+# -- Options for MyST ----------------------------------------------------------
+# generate GitHub-style anchors (e.g. #1-introduction) for internal links
+
+myst_heading_anchors = 3
 exclude_patterns = [
     '_build',
     'convert',
