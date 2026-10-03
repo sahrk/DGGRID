@@ -1,4 +1,5 @@
-sphinx>=8
-sphinx-rtd-theme>=3
-myst-parser>=4
-breathe>=4.35
+sphinx>=8,<10
+sphinx-rtd-theme>=3,<4
+myst-parser>=4,<6
+# breathe 5.0 crashes on the DGGRID doxygen XML (AssertionError in handle_declaration)
+breathe>=4.35,<5

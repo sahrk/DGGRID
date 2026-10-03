@@ -1,4 +1,4 @@
-# User Documentation for DGGRID version 8.41
+# User Documentation for DGGRID
 
 ![dggridDoc60.pages.jpg](_static/image1.jpeg)
 
@@ -39,29 +39,29 @@ The original **DGGRID** specifications were developed by (in alphabetical order)
 
 The github source code distribution contains instructions on building **DGGRID**. The examples directory contains example **DGGRID** metafiles (with associated input files).
 
-**DGGRID** version 8.41 was released May 31, 2025
+**DGGRID** version 9.0b was released April 2, 2026
 
-**[www.discreteglobalgrids.org](www.discreteglobalgrids.org)**
+**[www.discreteglobalgrids.org](https://www.discreteglobalgrids.org)**
 
 **[https://github.com/sahrk/DGGRID](https://github.com/sahrk/DGGRID)**
 
 ## Table of Contents
 
-1. [Introduction](#introduction)
-2. [Metafile Format](#metafile-format)
-3. [General Parameters](#general-parameters)
-4. [Specifying the DGG](#specifying-the-dgg)
+1. [Introduction](#1-introduction)
+2. [Metafile Format](#2-metafile-format)
+3. [General Parameters](#3-general-parameters)
+4. [Specifying the DGG](#4-specifying-the-dgg)
    - [Background](#background)
    - [Preset DGG Types](#preset-dgg-types)
    - [Manually Setting DGG Parameters](#manually-setting-dgg-parameters)
-5. [Specifying Per-Cell Grid Output](#specifying-per-cell-grid-output)
-6. [Grid Generation: Whole Earth or Clipping Polygons](#grid-generation-whole-earth-or-clipping-polygons)
-7. [Specifying Point File Input](#specifying-point-file-input)
-8. [Grid Generation: Point Binning](#grid-generation-point-binning)
-9. [Binning Point Values](#binning-point-values)
-10. [Presence/Absence Binning](#presenceabsence-binning)
-11. [Performing Address Conversions](#performing-address-conversions)
-12. [Outputting Grid Statistics](#outputting-grid-statistics)
+5. [Specifying Per-Cell Grid Output](#5-specifying-per-cell-grid-output)
+6. [Grid Generation: Whole Earth or Clipping Polygons](#6-grid-generation-whole-earth-or-clipping-polygons)
+7. [Specifying Point File Input](#7-specifying-point-file-input)
+8. [Grid Generation: Point Binning](#8-grid-generation-point-binning)
+9. [Binning Point Values](#9-binning-point-values)
+10. [Presence/Absence Binning](#10-presenceabsence-binning)
+11. [Performing Address Conversions](#11-performing-address-conversions)
+12. [Outputting Grid Statistics](#12-outputting-grid-statistics)
 
 - [Appendix A. DGGRID Metafile Parameters](#appendix-a-dggrid-metafile-parameters)
 - [Appendix B. Default Values for Preset DGG Types](#appendix-b-default-values-for-preset-dgg-types)
@@ -270,7 +270,7 @@ WGS 84 output coordinates are written in longitude, latitude order. Shapefile an
 
 ## 5. Specifying Per-Cell Grid Output
 
-Any run of **DGGRID** which produces a set of grid cells (**choice** parameter dggrid_operation values GENERATE_GRID, GENERATE_GRID_FROM_POINTS, TRANSFORM_POINTS, BIN_POINT_VALS, or BIN_POINT_PRESENCE) can generate, for the specified cells, any of the following: cell boundaries, center points, topological neighbors, and/or spatial hierarchy children. Each type of data can be output to a separate file, each with its own file format, or some or all of the data for each cell can be combined in a single output file.
+Any run of **DGGRID** which produces a set of grid cells (**choice** parameter dggrid_operation values GENERATE_GRID, GENERATE_GRID_FROM_POINTS, TRANSFORM_POINTS, BIN_POINT_VALS, or BIN_POINT_PRESENCE) can generate, for the specified cells, any of the following: cell boundaries, center points, topological neighbors, spatial hierarchy children, and/or hierarchical indexing parents and children. Each type of data can be output to a separate file, each with its own file format, or some or all of the data for each cell can be combined in a single output file.
 
 All DGG cell boundaries and center points output from **DGGRID** are longitude/latitude coordinates in decimal degrees. Their datum is selected by `output_datum` (see **Section 4.6**).
 
@@ -326,6 +326,16 @@ with the neighborID's for each cell listed in counter-clockwise order about the 
 
 > cellID childID~1~ childID~2~ ... childID~n~
 
+In the case of hexagonal DGGS with a pure aperture the hierarchical indexing parent and/or children of the selected cells can be output based on a hierarchical indexing system specified in the **choice** parameter hier_indexing_system_type (see **Appendix C**).
+
+To output the indexing parent of each cell in the next coarser resolution using the selected indexing system, set the **choice** parameter indexing_parent_output_type to TEXT. Specify the name of the output parent file in the **string** parameter indexing_parent_output_file_name. For each selected cellID the output file will contain a single line of the form:
+
+> cellID parentID
+
+To output the indexing children of each cell in the next finer resolution using the selected indexing system, set the **choice** parameter indexing_children_output_type to TEXT. Specify the name of the output children file in the **string** parameter indexing_children_output_file_name. For each selected cellID the output file will contain a single line of the form:
+
+> cellID childID~1~ childID~2~ ... childID~n~
+
 So far we have discussed outputting each type of cell data to a different output file. One or more of the features associated with each cell may be output together in a single file by specifying the output type GDAL_COLLECTION for each such desired feature ( cell_output_type, point_output_type, neighbor_output_type, and/or children_output_type). The chosen features must include either the cell boundary, point, or both. The output file format for this single collection file is specified in the **string** parameter collection_output_gdal_format, as described above for the parameters cell_output_gdal_format and point_output_gdal_format. Note that some GDAL formats may not support the output of neighbors or children. The file name prefix to use for this collection file is specified using the **string** parameter collection_output_file_name.
 
 ## 6. Grid Generation: Whole Earth or Clipping Polygons
@@ -336,11 +346,13 @@ A subset of WHOLE_EARTH sequential cell IDs can be generated by specifying the f
 
 **DGGRID** provides three methods for generating a subset of the specified DGG. The portion of the grid to be generated can be specified by:
 
-- one or more files containing clipping polygons that indicate the regions to be generated (clip_subset_type values AIGEN, SHAPEFILE, or GDAL)
-- one or more text files containing the cell sequence numbers of the grid cells to be generated (clip_subset_type value SEQNUMS)
-- the cell sequence numbers of one or more coarser resolution cells to use as clipping polygons to indicate the regions to be generated (clip_subset_type values COARSE_CELLS)
+- **Clipping Polygons**: one or more files containing clipping polygons that indicate the regions to be generated (clip_subset_type values AIGEN, SHAPEFILE, or GDAL)
+- **Coarse Cells**: the addresses of one or more coarser resolution cells whose boundaries are to be used as clipping polygons to indicate the regions to be generated (clip_subset_type value COARSE_CELLS)
+- **Address List**: one or more text files containing the cell addresses of the grid cells to be generated (clip_subset_type value ADDRESS_FILES)
 
 Each of these methods is discussed below. Note that **DGGRID** must be built with GDAL to make use of GDAL file formats.
+
+**Clipping Polygons**
 
 A DGG that covers a portion of the earth's surface can be generated by specifying one or more files containing the clipping polygons which **DGGRID** will use to determine the portion of the grid to generate. **DGGRID** supports three types of clipping files: ARC/INFO Generate files, ESRI Shapefiles, and vector file formats readable by GDAL. To specify a clipping file format, set the parameter clip_subset_type to AIGEN, SHAPEFILE, or GDAL respectively.
 
@@ -352,9 +364,21 @@ The polygon intersection library uses an integer grid, the coarseness of this gr
 
 Intersections between the clipping polygons and the DGG cells are performed in the specified DGG projection space, with the great circle arcs between adjacent vertices in the original clipping polygons transformed into straight lines on the projection plane. If adjacent vertices in the original clipping polygons are too far apart this may result in an inaccurate representation of the region boundary in the clipping space. This effect can be minimized by introducing additional points into the great circle arcs before projection. Setting the double parameter geodetic_densify to some arc length (in decimal degrees) will cause **DGGRID** to introduce extra points into each edge arc so that no two vertices are more than the specified distance apart. Setting geodetic_densify to 0.0 (the default) indicates that no such densification is to be performed.
 
-Alternately, in hexagon (only) grids the clipping regions to be generated can be the cell boundaries of one or more cells in some coarser resolution of the current multi-resolution DGGS (see **Section 4**). This is indicated by setting the parameter clip_subset_type to COARSE_CELLS. The **integer** parameter clip_cell_res must be set to the desired coarser resolution. The resolution must be less than the resolution of the cells being generated (as specified in **Section 4**), and must be greater than zero (because resolution 0 cells do not meet the clipping polygon intersection algorithm requirements, as described above). One or more cell sequence numbers from this coarser resolution grid must be specified, space delimited, in the parameter clip_cell_seqnums. The boundaries of these cells are then used as the input clipping polygons, as described above, including possible edge densification based on the value of parameter geodetic_densify. Because that approach to densification can result in an unnecessary number of vertexes and impact performance, we recommend instead using the **integer** parameter clip_cell_densification, which specifies a number of additional points to introduce into each cell edge prior to projection. We recommend using a value of 1 (the default) for very coarse resolutions to avoid anomalous results. A value of 0 indicates that no densification of these coarse clipping cells should be performed.
+**Coarse Cells**
 
-The cells for a given set of cell sequence numbers can be generated by setting the parameter clip_subset_type to SEQNUMS (this is not supported for grids with a dggs_aperture_type of SEQUENCE). Then clip_region_files must be set to one or more text files containing the list of cell sequence numbers to be generated. A single cell will be generated at most once; duplicate sequence numbers in the input will be ignored.
+Alternately, in hexagon (only) grids the clipping polygons can be the cell boundaries of one or more cells in some coarser resolution of the current multi-resolution DGGS (see **Section 4**). This is indicated by setting the parameter clip_subset_type to COARSE_CELLS. The **integer** parameter clip_cell_res must be set to the desired coarser resolution. The resolution must be less than the resolution of the cells being generated (as specified in **Section 4**), and must be greater than zero (because resolution 0 cells do not meet the clipping polygon intersection algorithm requirements, as described above).
+
+One or more cell addresses from this coarser resolution grid must be specified, space delimited, in the **string** parameter clip_cell_addresses. Each address must be of the address type specified in parameter input_address_type. The components of multi-part address forms should be delimited using the character indicated within double quotes in the **string** parameter input_delimiter.
+
+The boundaries of these cells are then used as the input clipping polygons, as described above, including possible edge densification based on the value of parameter geodetic_densify. Because that approach to densification can result in an unnecessary number of vertexes and impact performance, we recommend instead using the **integer** parameter clip_cell_densification, which specifies a number of additional points to introduce into each cell edge prior to projection. We recommend using a value of 1 (the default) for very coarse resolutions to avoid anomalous results. A value of 0 indicates that no densification of these coarse clipping cells should be performed.
+
+**Address List**
+
+The cells to be generated can be specified as a list of addresses in one or more text files by setting the parameter clip_subset_type to ADDRESS_FILES. Then clip_region_files must be set to one or more text files containing the list of cell addresses to be generated. A single cell will be generated at most once; duplicate addresses in the input will be ignored.
+
+The input text files should consist of addresses, one per line, using the address type specified in parameter input_address_type. The components of multi-part address forms should be delimited using the character indicated within double quotes in the **string** parameter input_delimiter. All addresses must have the same resolution as the cells being generated (as specified in **Section 4**).
+
+**Miscellaneous**
 
 Note that a single execution of **DGGRID** can take several hours (or more!), depending on the resolution of the grid being generated and the number and complexity of the clipping polygons (we recommend reducing the number of vertices in clipping polygons whenever possible). You can control the frequency of feedback during grid generation by setting the integer parameter update_frequency. The value of this parameter specifies the number of cells that will be tested for inclusion before outputting a status update. The default value is 100000.
 
@@ -372,7 +396,7 @@ The operation TRANSFORM_POINTS currently only takes TEXT input; GDAL input files
 
 A single input file can be specified using the **string** parameter input_file_name. Multiple input files can be specified by setting the **string** parameter input_files to a space-delimited list of file names, in the specified format, containing points to use as input. If point_input_file_type is GDAL then the input file(s) must be in a GDAL-readable vector format (see [gdal.org](http://gdal.org)). The points must be specified using geodetic (latitude/longitude) coordinates.
 
-If the input locations cover a substantial portion of the earth's surface, then the choice parameter bin_coverage should be set to GLOBAL. If the locations covers only a relatively small portion of the earth's surface then bin_coverage should be set to PARTIAL. This allows **DGGRID** to make trade-offs between speed and memory usage. GLOBAL location sets are processed more quickly, but may fail at higher DGG resolutions due to memory restrictions. PARTIAL location sets are processed more slowly, but can enable the use of higher resolution DGGs (depending on the actual extent of the input locations).
+If the input locations cover a substantial portion of the earth's surface, then the choice parameter bin_coverage should be set to GLOBAL. If the locations cover only a relatively small portion of the earth's surface then bin_coverage should be set to PARTIAL. This allows **DGGRID** to make trade-offs between speed and memory usage. GLOBAL location sets are processed more quickly, but may fail at higher DGG resolutions due to memory restrictions. PARTIAL location sets are processed more slowly, but can enable the use of higher resolution DGGs (depending on the actual extent of the input locations).
 
 ## 8. Grid Generation: Point Binning
 
@@ -446,10 +470,10 @@ The **integer** parameter precision (default 7) specifies the number of digits t
 | **children_output_type** *(choice)* | Output cell spatial children? | NONE, TEXT, GDAL_COLLECTION | NONE | | |
 | **children_output_file_name** *(string)* | Spatial children output file name | any | "chd" | | children_output_type is TEXT |
 | **clip_cell_res** *(integer)* | Resolution of clipping cells | 0 < v < r, where r is the currently specified DGG resolution | 1 | | dggrid_operation is GENERATE_GRID and clip_subset_type is COARSE_CELLS |
+| **clip_cell_addresses** *(string)* | Addresses of coarse clipping cells in input_address_type | addNum1 addNum2 ... addNumN | | Cell resolution given by clip_cell_res | dggrid_operation is GENERATE_GRID and clip_subset_type is COARSE_CELLS |
 | **clip_cell_densification** *(integer)* | Number of points-per-edge densification for clipping cell boundaries | 0 ≤ v ≤ 500 | 1 | v of 0 indicates no densification | dggrid_operation is GENERATE_GRID and clip_subset_type is COARSE_CELLS |
-| **clip_cell_seqnums** *(string)* | Sequence number(s) of coarse clipping cells | seqNum1 seqNum2 ... seqNumN | | Cell resolution given by clip_cell_res | dggrid_operation is GENERATE_GRID and clip_subset_type is COARSE_CELLS |
-| **clip_region_files** *(string)* | Space delimited list of files that specify grid clipping | any | "test.gen" | | dggrid_operation is GENERATE_GRID |
-| **clip_subset_type** *(choice)* | Specifies how portion of DGG to generate will be determined | WHOLE_EARTH, AIGEN, SHAPEFILE, GDAL, SEQNUMS, COARSE_CELLS | WHOLE_EARTH | SEQNUMS is not supported if dggs_aperture_type is SEQUENCE; COARSE_CELLS is only supported for hexagon grids | dggrid_operation is GENERATE_GRID |
+| **clip_region_files** *(string)* | Space delimited list of files that specify grid clipping | any | "test.gen" | | dggrid_operation is GENERATE_GRID and clip_subset_type is AIGEN, GDAL, SHAPEFILE, or ADDRESS_FILES |
+| **clip_subset_type** *(choice)* | Specifies how portion of DGG to generate will be determined | WHOLE_EARTH, AIGEN, SHAPEFILE, GDAL, ADDRESS_FILES, COARSE_CELLS | WHOLE_EARTH | COARSE_CELLS is only supported for hexagon grids | dggrid_operation is GENERATE_GRID |
 | **clip_type** *(choice)* | Method for determining whether a cell is included by a clipping polygon | POLY_INTERSECT | POLY_INTERSECT | | dggrid_operation is GENERATE_GRID |
 | **clipper_scale_factor** *(integer)* | Number of cell inclusion tests to perform between outputting status updates | 1 ≤ v | 1000000 | | dggrid_operation is GENERATE_GRID |
 | **clip_using_holes** *(boolean)* | Handle holes in input polygons? | TRUE, FALSE | 0 | | dggrid_operation is GENERATE_GRID; clip_subset_type is GDAL |
@@ -479,8 +503,13 @@ The **integer** parameter precision (default 7) specifies the number of digits t
 | **dggs_vert0_lat** *(double)* | Latitude of icosahedron vertex 0 (degrees) | -90.0 ≤ v ≤ 90.0 | 58.282525588538995 (atan φ) | | dggs_orient_specify_type is SPECIFIED |
 | **dggs_vert0_lon** *(double)* | Longitude of icosahedron vertex 0 (degrees) | -180.0 ≤ v ≤ 180.0 | 11.25 | | dggs_orient_specify_type is SPECIFIED |
 | **geodetic_densify** *(double)* | Maximum degrees of arc for a clipping polygon line segment | 0.0 ≤ v ≤ 360.0 | 0 | 0.0 indicates no densification | dggrid_operation is GENERATE_GRID |
+| **hier_indexing_system_type** *(choice)* | Hierarchical indexing system used for indexing parents/children | ZORDER, Z3, Z7, NONE | NONE | See **Appendix C** | |
+| **indexing_children_output_type** *(choice)* | Output cell hierarchical indexing children? | NONE, TEXT, GDAL_COLLECTION | NONE | | |
+| **indexing_children_output_file_name** *(string)* | Hierarchical indexing children output file name | any | "ndxChld" | | indexing_children_output_type is TEXT |
+| **indexing_parent_output_type** *(choice)* | Output cell hierarchical indexing parent? | NONE, TEXT, GDAL_COLLECTION | NONE | | |
+| **indexing_parent_output_file_name** *(string)* | Hierarchical indexing parents output file name | any | "ndxPrt" | | indexing_parent_output_type is TEXT |
 | **input_datum** *(choice)* | Datum of geographic input | WGS84, AUTHALIC_SPHERE, CUSTOM_SPHERE | AUTHALIC_SPHERE | WGS84 requires sphere_radius_type WGS84 or AUTHALIC_SPHERE; see **Section 4.6** | Geographic input files and `GEO` addresses |
-| **input_address_type** *(choice)* | Cell address form in input file(s) | GEO, Q2DI, SEQNUM, Q2DD, PROJTRI, VERTEX2DD, HIERNDX, *deprecated:* ZORDER, ZORDER_STRING, Z3, Z3_STRING, Z7, Z7_STRING | GEO | See **Appendix C**; SEQNUM is not allowed if dggs_aperture_type is SEQUENCE | dggrid_operation is TRANSFORM_POINTS |
+| **input_address_type** *(choice)* | Cell address form in input file(s) | GEO, Q2DI, SEQNUM, Q2DD, PROJTRI, VERTEX2DD, HIERNDX | GEO | See **Appendix C**; SEQNUM is not allowed if dggs_aperture_type is SEQUENCE | dggrid_operation is TRANSFORM_POINTS |
 | **input_delimiter** *(string)* | Character that delimits address components and additional data in the input files | v is any single character in double quotes | " " (a single space) | | dggrid_operation is TRANSFORM_POINTS, BIN_POINT_VALS, or BIN_POINT_PRESENCE |
 | **input_file_name** *(string)* | Name of file containing input addresses | fileName | valsin.txt | | dggrid_operation is TRANSFORM_POINTS, BIN_POINT_VALS, or BIN_POINT_PRESENCE |
 | **input_files** *(string)* | Name(s) of files containing lon/lat locations with associated values | fileName1 fileName2 ... fileNameN | vals.txt | | dggrid_operation is GENERATE_GRID_FROM_POINTS TRANSFORM_POINTS, BIN_POINT_VALS, or BIN_POINT_PRESENCE |
@@ -496,7 +525,7 @@ The **integer** parameter precision (default 7) specifies the number of digits t
 | **neighbor_output_type** *(choice)* | Output cell neighbors? | NONE, TEXT, GDAL_COLLECTION | NONE | Triangle grids not supported | |
 | **neighbor_output_file_name** *(string)* | Neighbors output file name | any | "nbr" | Triangle grids not supported | neighbor_output_type is TEXT |
 | **orientation_datum** *(choice)* | Datum of user supplied orientation positions | WGS84, AUTHALIC_SPHERE, CUSTOM_SPHERE | AUTHALIC_SPHERE | WGS84 requires sphere_radius_type WGS84 or AUTHALIC_SPHERE; see **Section 4.6** | dggs_vert0_lon/lat and region_center_lon/lat |
-| **output_address_type** *(choice)* | Address form to use in output | GEO, Q2DI, SEQNUM, PLANE, Q2DD, PROJTRI, VERTEX2DD, AIGEN, HIERNDX, *deprecated:* ZORDER, ZORDER_STRING, Z3, Z3_STRING, Z7, Z7_STRING | SEQNUM | See **Appendix C** | dggrid_operation is TRANSFORM_POINTS, BIN_POINT_VALS, or BIN_POINT_PRESENCE |
+| **output_address_type** *(choice)* | Address form to use in output | GEO, Q2DI, SEQNUM, PLANE, Q2DD, PROJTRI, VERTEX2DD, AIGEN, HIERNDX | SEQNUM | See **Appendix C** | dggrid_operation is TRANSFORM_POINTS, BIN_POINT_VALS, or BIN_POINT_PRESENCE |
 | **output_cell_label_type** *(choice)* | Output form for generated cell indexes | GLOBAL_SEQUENCE, ENUMERATION, SUPERFUND | GLOBAL_SEQUENCE | | |
 | **output_count** *(boolean)* | Output the count of classes which are present between the cell address and the presence vector | TRUE, FALSE | 0 | | dggrid_operation is GENERATE_GRID_FROM_POINT, BIN_POINT_VALS or BIN_POINT_PRESENCE |
 | **output_count_field_name** *(string)* | Field name containing count of contained points | | count | | dggrid_operation is GENERATE_GRID_FROM_POINTS BIN_POINT_VALS, or BIN_POINT_PRESENCE |
@@ -536,7 +565,7 @@ The **integer** parameter precision (default 7) specifies the number of digits t
 | **wrap_points** *(boolean)* | Output point longitudes using longitude_wrap_mode? | TRUE, FALSE | 1 | | |
 | **update_frequency** *(integer)* | Number of cell inclusion tests to perform between outputting status updates | 0 ≤ v | 100000 | | dggrid_operation is GENERATE_GRID |
 | **verbosity** *(integer)* | Amount of debugging output to display | 0 ≤ v ≤ 3 | 0 | | |
-| **z3_invalid_digit** *(choice)* | Padding digit for unused resolutions in Z3 INT64 indexes | 0, 1, 2, 3 | 0 (will switch to 3 in version 9.0) | See **Appendix C** | |
+| **z3_invalid_digit** *(choice)* | Padding digit for unused resolutions in Z3 INT64 indexes | 0, 1, 2, 3 | 3 | See **Appendix C** | |
 
 
 ## Appendix B. Default Values for Preset DGG Types
@@ -585,6 +614,7 @@ The table below gives the values of other parameters that are set by each preset
 The preset type IGEO7 sets the additional parameters:
 
 ```
+hier_indexing_system_type: Z7
 input_address_type: HIERNDX
 input_hier_ndx_system: Z7
 input_hier_ndx_form: INT64
@@ -620,20 +650,13 @@ in decimal degrees. The parameters input_address_type and output_address_type re
 
 - `VERTEX2DD` - Vertex number, triangle number, and (x, y) coordinates on ISEA plane
 
-- `HIERNDX` Address specified as hierarchical index
-
-> **Warning:** The following values are deprecated and will be removed in version 9.0. The same address forms can be specified using `HIERNDX`:
-
-- `ZORDER`
-- `ZORDER_STRING`
-- `Z3`
-- `Z3_STRING`
-- `Z7`
-- `Z7_STRING`
+- `HIERNDX` - Address specified as described below
 
 If input_address_type or output_address_type has the value `HIERNDX`, then the specific address type is specified using `input_hier_ndx_system`/`output_hier_ndx_system` and `input_hier_ndx_form`/`output_hier_ndx_form` respectively.
 
-`input_hier_ndx_system` or `output_hier_ndx_system` specifies the hierarchical indexing system to use for input or output respectively. It takes the following values:
+`input_hier_ndx_system` or `output_hier_ndx_system` specifies the hierarchical indexing system to use for input or output respectively. `hier_indexing_system_type` specifies the hierarchical indexing system used to determine the indexing parents and children of cells. Note that the systems specified for input, output, and indexing hierarchy are independent and need not be the same system.
+
+`input_hier_ndx_system`, `output_hier_ndx_system`, and `hier_indexing_system_type` take the following values:
 
 - `ZORDER` - quad number and digit-interleaved Q2DI coordinates, only available for hexagonal aperture 3 and 4 grids (not supported for aperture 7)
 - `Z3` - base 3 Central Place Indexing (CPI) hierarchical index \[Sahr 2019\], only available for hexagonal aperture 3 grids
@@ -641,8 +664,8 @@ If input_address_type or output_address_type has the value `HIERNDX`, then the s
 
 `input_hier_ndx_form` or `output_hier_ndx_form` specifies the index representation for input or output respectively. It takes the following values:
 
-- `INT64` - the index is packed into a hexadecimal 64 bit integer, the digit used to fill unused resolutions in Z3 INT64 indexes is specified by the parameter `z3_invalid_digit`. The default value is 0 for **DGGRID** version 8.x, but will switch to 3 beginning with version 9.0.
-- `DIGIT_STRING` - consists of 2 characters representing the quad number followed by 1 character per hierarchical digit
+- `INT64` - the index is packed into a hexadecimal 64 bit integer, the digit used to fill unused resolutions in Z3 INT64 indexes is specified by the parameter `z3_invalid_digit`. The default value is 3.
+- `DIGIT_STRING` - consists of 2 characters representing the quad number followed by 1 character per hierarchical digit.
 
 ## Appendix D. Statistics for Some Preset ISEA DGGs
 
