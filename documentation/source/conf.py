@@ -6,8 +6,10 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
+import os
 import re
-import sys
+import shutil
+import subprocess
 from pathlib import Path
 
 def _read_cmake_version():
@@ -26,7 +28,6 @@ version = '.'.join(release.split('.')[:2])
 
 extensions = [
     'sphinx.ext.todo',
-    'breathe',
     'myst_parser']
 
 templates_path = ['_templates']
@@ -42,12 +43,29 @@ exclude_patterns = [
     '.DS_Store'
     ]
 
-# -- Options for breathe -----------------------------------------------------
-# https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-breathe
-# expand conf.py directory and add subdirectory src/docs/xml
+# -- Doxygen C++ API reference -----------------------------------------------
+# Runs doxygen (documentation/Doxyfile) from the repository root. Its HTML
+# output (documentation/build/doxygen/api) is copied into the Sphinx output
+# as /api/ via html_extra_path, see cpp.rst. Skipped with a warning if doxygen
+# is not installed; set DGGRID_SKIP_DOXYGEN=1 to skip it for quick builds.
 
-breathe_projects = {"DGGRID": "../build/doxygen/xml"}
-breathe_default_project = "DGGRID"
+_repo_root = Path(__file__).resolve().parents[2]
+_doxygen_out = _repo_root / 'documentation' / 'build' / 'doxygen'
+
+if os.environ.get('DGGRID_SKIP_DOXYGEN') != '1':
+    if shutil.which('doxygen'):
+        shutil.rmtree(_doxygen_out, ignore_errors=True)
+        _doxygen_out.mkdir(parents=True)
+        subprocess.run(['doxygen', 'documentation/Doxyfile'], cwd=_repo_root,
+                       env={**os.environ, 'DGGRID_VERSION': release},
+                       check=True)
+        # drop doxygen's intermediate graph files, not needed in the output
+        for _f in (_doxygen_out / 'api').glob('*.md5'):
+            _f.unlink()
+        for _f in (_doxygen_out / 'api').glob('*.map'):
+            _f.unlink()
+    else:
+        print('WARNING: doxygen not found, C++ API reference not built')
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
@@ -57,4 +75,5 @@ breathe_default_project = "DGGRID"
 
 html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
+html_extra_path = [str(_doxygen_out)] if (_doxygen_out / 'api').is_dir() else []
 

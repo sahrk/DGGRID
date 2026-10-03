@@ -1,11 +1,14 @@
-# Doxyfile for ReadTheDocs / Breathe integration
+# Doxyfile for the C++ API reference on ReadTheDocs
 #
 # This file is separate from src/Doxyfile (the CMake-based upstream build).
-# It is intentionally standalone with relative paths and produces XML output
-# for Breathe/Sphinx plus browsable HTML. Run it from the repository root:
+# It is run automatically by documentation/source/conf.py at the start of
+# every Sphinx build; the HTML output is published as /api/ next to the
+# manual. To run it by hand, from the repository root:
 #   doxygen documentation/Doxyfile
+# Keep it compatible with doxygen 1.9.1 (ReadTheDocs ubuntu-22.04).
 
 PROJECT_NAME           = DGGRID
+PROJECT_NUMBER         = $(DGGRID_VERSION)
 PROJECT_BRIEF          = "Discrete Global Grid System software"
 
 # Input: the core libraries (paths relative to the repository root)
@@ -15,19 +18,25 @@ FILE_PATTERNS          = *.h *.hpp *.cpp
 # third-party code and unused old sources
 EXCLUDE                = src/lib/shapelib src/lib/proj4lib src/lib/dglib/lib/OLDSYS
 
-# XML output for Breathe/Sphinx, HTML for GitHub Pages
+# list all classes and members, also those without doc comments
+EXTRACT_ALL            = YES
+
+# HTML only, published by Sphinx (html_extra_path) as /api/
 GENERATE_HTML          = YES
 GENERATE_LATEX         = NO
-GENERATE_XML           = YES
+GENERATE_XML           = NO
 OUTPUT_DIRECTORY       = documentation/build/doxygen
-XML_OUTPUT             = xml
-HTML_OUTPUT            = html
+HTML_OUTPUT            = api
+GENERATE_TREEVIEW      = YES
+SEARCHENGINE           = YES
 
 # Class and collaboration diagrams via Graphviz
+# (include graphs off: they would double the output size, ~25 MB)
 HAVE_DOT               = YES
 CLASS_GRAPH            = YES
 COLLABORATION_GRAPH    = YES
-INCLUDE_GRAPH          = YES
+INCLUDE_GRAPH          = NO
+INCLUDED_BY_GRAPH      = NO
 CALLER_GRAPH           = NO
 DOT_IMAGE_FORMAT       = svg
 INTERACTIVE_SVG        = YES
@@ -36,8 +45,3 @@ INTERACTIVE_SVG        = YES
 QUIET                  = YES
 WARNINGS               = YES
 WARN_IF_UNDOCUMENTED   = NO
-
-# Rewrites C++11 "friend X;" for Breathe, see doxygen_filter.py
-FILTER_PATTERNS        = "*.h=python3 documentation/doxygen_filter.py"
-# Anonymous namespaces (doxygen names them @N) crash Breathe 4.36 doxygenindex
-EXCLUDE_SYMBOLS        = @*

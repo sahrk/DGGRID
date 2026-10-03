@@ -4,6 +4,8 @@ sphinx:
   configuration: documentation/source/conf.py
   fail_on_warning: false
 
+# doxygen + graphviz for the C++ API reference (/api/), which is generated
+# by documentation/source/conf.py at the start of the Sphinx build
 build:
   os: "ubuntu-22.04"
   tools:
@@ -11,11 +13,17 @@ build:
   apt_packages:
     - doxygen
     - graphviz
-  jobs:
-    pre_build:
-      - mkdir -p documentation/build/doxygen
-      - doxygen documentation/Doxyfile
 
 python:
   install:
     - requirements: documentation/requirements.txt
+
+# keep the doxygen pages out of the ReadTheDocs search (they have their own)
+search:
+  ignore:
+    - api/*
+    # defaults
+    - search.html
+    - search/index.html
+    - 404.html
+    - 404/index.html
