@@ -10,7 +10,7 @@ Welcome to DGGRID's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-   dggrid_man_V841
+   dggrid_man_V91
    cpp
 
 
