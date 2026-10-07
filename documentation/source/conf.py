@@ -88,6 +88,7 @@ latex_elements = {
 \DeclareUnicodeCharacter{2264}{\ensuremath{\leq}}
 \DeclareUnicodeCharacter{2265}{\ensuremath{\geq}}
 \DeclareUnicodeCharacter{03C6}{\ensuremath{\varphi}}
+\DeclareUnicodeCharacter{03C0}{\ensuremath{\pi}}
 \DeclareUnicodeCharacter{221A}{\ensuremath{\surd}}
 ''',
 }
