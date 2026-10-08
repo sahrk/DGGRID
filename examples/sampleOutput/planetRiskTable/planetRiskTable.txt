@@ -1,4 +1,4 @@
-** executing DGGRID version 9.1b with GDAL **
+** executing DGGRID version 9.1 with GDAL **
 type sizes: big int: 64 bits / big double: 64 bits
 
 ** using meta file planetRiskTable.meta...
