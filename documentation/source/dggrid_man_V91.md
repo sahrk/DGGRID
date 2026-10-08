@@ -65,11 +65,11 @@ The original **DGGRID** specifications were developed by (in alphabetical order)
 
 **DGGRID** uses the following third-party libraries (included with the **DGGRID** source code):
 
--  Angus Johnson's Clipper library; see [http://www.angusj.com](http://www.angusj.com).
+- Angus Johnson's Clipper library; see [http://www.angusj.com](http://www.angusj.com).
 - George Marsaglia's multiply-with-carry "Mother-of-all-RNGs" pseudo-random number generation function.
 - The gnomonic projection code is adapted from Gerald Evenden's PROJ.4 library
 - Frank Warmerdam's Shapelib library
-- The slice-and-dice equal area projection code used for the IVEA projection is adapted from the PROJ library (MIT license; itself derived from the A5 library, Apache License 2.0, and from DGGAL) and from the DGGAL library (BSD 3-Clause license, Copyright (c) 2014-2025 Ecere Corporation); the upstream copyright notices are retained in the **DGGRID** source code
+- The slice-and-dice equal area projection code used for the IVEA projection is adapted from the PROJ library (MIT license; itself derived from the A5 library, Apache License 2.0, and from DGGAL) and from the DGGAL library (BSD 3-Clause license, Copyright (c) 2014-2025 Ecere Corporation).
 
 The github source code distribution contains instructions on building **DGGRID**. The examples directory contains example **DGGRID** metafiles (with associated input files).
 
@@ -135,7 +135,7 @@ The github source code distribution contains instructions on building **DGGRID**
 
 dggrid *metaFileName.meta*
 
-**DGGRID** also accepts the flags `-v` and `-h` (which may be given with or without a metafile name). The flag `-v` prints the **DGGRID** version number and release date and whether **DGGRID** was built with GDAL (and, if so, the GDAL version number); `-h` prints the version number and release date and whether **DGGRID** was built with GDAL (without the GDAL version number), along with brief usage and license information. If no metafile name is given **DGGRID** exits after printing the requested information.
+**DGGRID** also accepts the flags `-v` and `-h` (which may be given with or without a metafile name). The flag `-v` prints the **DGGRID** version number and release date and whether **DGGRID** was built with GDAL (and, if so, the GDAL version number); `-h` prints the version number and release date and whether **DGGRID** was built with GDAL, along with brief usage and license information. If no metafile name is given **DGGRID** exits after printing the requested information.
 
 The metafile consists of a series of key-value pairs that tell **DGGRID** how to proceed. The format of this metafile is described in the next section. The rest of the sections in this documentation give more detail on setting up metafile parameters to control the execution of **DGGRID**.
 

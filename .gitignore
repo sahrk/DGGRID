@@ -47,6 +47,11 @@ src/apps/oglhierdgg/oglhierdgg
 examples*/*/outputfiles/*
 !examples*/*/outputfiles/.keep
 
+# local example scratch (files or directories; case-insensitive)
+examples/[Tt][Ee][Ss][Tt]*
+examples/[Jj][Uu][Nn][Kk]*
+examples/[Tt][Mm][Pp]*
+
 # miscellaneous
 g
 gg
