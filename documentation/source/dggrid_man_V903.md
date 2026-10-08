@@ -72,11 +72,21 @@ The original **DGGRID** specifications were developed by (in alphabetical order)
 
 The github source code distribution contains instructions on building **DGGRID**. The examples directory contains example **DGGRID** metafiles (with associated input files).
 
+```{raw} latex
+\begin{center}
+```
+
+````{container} center-text
 **DGGRID** version 9.03b was released July 19, 2026
 
 **[www.discreteglobalgrids.org](https://www.discreteglobalgrids.org)**
 
 **[https://github.com/sahrk/DGGRID](https://github.com/sahrk/DGGRID)**
+````
+
+```{raw} latex
+\end{center}
+```
 
 ## Table of Contents
 
