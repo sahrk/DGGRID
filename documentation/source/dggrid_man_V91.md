@@ -1,4 +1,4 @@
-# User Documentation for DGGRID v9.03b
+# User Documentation for DGGRID v9.1
 
 ```{image} _static/image1.jpeg
 :alt: dggridDoc60.pages.jpg
@@ -69,6 +69,7 @@ The original **DGGRID** specifications were developed by (in alphabetical order)
 - George Marsaglia's multiply-with-carry "Mother-of-all-RNGs" pseudo-random number generation function.
 - The gnomonic projection code is adapted from Gerald Evenden's PROJ.4 library
 - Frank Warmerdam's Shapelib library
+- The slice-and-dice equal area projection code used for the IVEA projection is adapted from the PROJ library (MIT license; itself derived from the A5 library, Apache License 2.0, and from DGGAL) and from the DGGAL library (BSD 3-Clause license, Copyright (c) 2014-2025 Ecere Corporation); the upstream copyright notices are retained in the **DGGRID** source code
 
 The github source code distribution contains instructions on building **DGGRID**. The examples directory contains example **DGGRID** metafiles (with associated input files).
 
@@ -77,7 +78,7 @@ The github source code distribution contains instructions on building **DGGRID**
 ```
 
 ````{container} center-text
-**DGGRID** version 9.03b was released July 19, 2026
+**DGGRID** version 9.1 was released October 10, 2026
 
 **[www.discreteglobalgrids.org](https://www.discreteglobalgrids.org)**
 
@@ -109,7 +110,7 @@ The github source code distribution contains instructions on building **DGGRID**
 - [Appendix A. DGGRID Metafile Parameters](#appendix-a-dggrid-metafile-parameters)
 - [Appendix B. Default Values for Preset DGG Types](#appendix-b-default-values-for-preset-dgg-types)
 - [Appendix C. DGG Address Forms](#appendix-c-dgg-address-forms)
-- [Appendix D. Statistics for Some Preset ISEA DGGs](#appendix-d-statistics-for-some-preset-isea-dggs)
+- [Appendix D. Statistics for Some Preset ISEA and IVEA DGGs](#appendix-d-statistics-for-some-preset-isea-and-ivea-dggs)
   - [Aperture 3: ISEA3H](#aperture-3-isea3h)
   - [Aperture 4: ISEA4H](#aperture-4-isea4h)
   - [PlanetRisk Grid](#planetrisk-grid)
@@ -134,7 +135,7 @@ The github source code distribution contains instructions on building **DGGRID**
 
 dggrid *metaFileName.meta*
 
-**DGGRID** also accepts the flags `-v` and `-h` (which may be given with or without a metafile name). The flag `-v` prints the **DGGRID** version number and release date and whether **DGGRID** was built with GDAL (and, if so, the GDAL version); `-h` prints that information along with brief usage and license information. If no metafile name is given **DGGRID** exits after printing the requested information.
+**DGGRID** also accepts the flags `-v` and `-h` (which may be given with or without a metafile name). The flag `-v` prints the **DGGRID** version number and release date and whether **DGGRID** was built with GDAL (and, if so, the GDAL version number); `-h` prints the version number and release date and whether **DGGRID** was built with GDAL (without the GDAL version number), along with brief usage and license information. If no metafile name is given **DGGRID** exits after printing the requested information.
 
 The metafile consists of a series of key-value pairs that tell **DGGRID** how to proceed. The format of this metafile is described in the next section. The rest of the sections in this documentation give more detail on setting up metafile parameters to control the execution of **DGGRID**.
 
@@ -176,7 +177,7 @@ The table below shows which parameters are accepted by each operation; a paramet
 | Text output: output_file_*, output_address_type, output_hier_ndx_*, output_delimiter | x | x | x | x | x | |
 | Per-cell output (**Section 5**), including random points and dggs_orient_output_file_name | x | x | x | x | x | |
 
-\* For GENERATE_GRID the point input parameters apply only to clip_subset_type values ADDRESS_FILES and COARSE_CELLS, where input_address_type, input_hier_ndx_* and input_delimiter describe the cell addresses. The parameter update_frequency is accepted by every operation but only has an effect for GENERATE_GRID. The parameters output_first_seqnum and output_last_seqnum only have an effect for GENERATE_GRID with clip_subset_type WHOLE_EARTH.
+\* For GENERATE_GRID the point input parameters apply only to clip_subset_type values ADDRESS_FILES and COARSE_CELLS, where input_address_type, input_hier_ndx_* and input_delimiter describe the cell addresses. The parameter update_frequency is accepted by every operation but only has an effect for GENERATE_GRID. The parameters output_first_seqnum and output_last_seqnum only have an effect for GENERATE_GRID with clip_subset_type WHOLE_EARTH. The parameters that select the datums (**Section 4**) are accepted by every operation.
 
 ## 3. General Parameters
 
@@ -212,9 +213,9 @@ As described in \[Sahr et al., 2003\], a DGG system can be specified by a set of
 3. The transformation between each face and the corresponding spherical surface.
 4. The resolution (or degree of recursive partitioning).
 
-The current version of **DGGRID** supports DGGs that use either the Icosahedral Snyder Equal Area (ISEA) projection \[Snyder, 1992\] or the icosahedral projection of R. Buckminster Fuller \[1975\] (as developed analytically by Robert Gray \[1995\] and John Crider \[2008\]). **DGGRID** can generate grids with cells that are triangles, diamonds, or hexagons. Grids with a triangle or diamond topology must use an aperture of 4, while hexagon grids can use an aperture of 3, 4, 7, or an arbitrary mixed sequence of those apertures. **DGGRID** also supports specifically designed "preset" DGGs, including the mixed aperture hexagonal US EPA **Superfund_500m** DGG (see **Appendix E**) and the PlanetRisk DGG (see **Appendix F**).
+The current version of **DGGRID** supports DGGs that use the Icosahedral Snyder Equal Area (ISEA) projection \[Snyder, 1992\], the Icosahedral Vertex-oriented great-circle Equal Area (IVEA) projection \[van Leeuwen and Strebe, 2006\], or the icosahedral projection of R. Buckminster Fuller \[1975\] (as developed analytically by Robert Gray \[1995\] and John Crider \[2008\]). **DGGRID** can generate grids with cells that are triangles, diamonds, or hexagons. Grids with a triangle or diamond topology must use an aperture of 4, while hexagon grids can use an aperture of 3, 4, 7, or an arbitrary mixed sequence of those apertures. **DGGRID** also supports specifically designed "preset" DGGs, including the mixed aperture hexagonal US EPA **Superfund_500m** DGG (see **Appendix E**) and the PlanetRisk DGG (see **Appendix F**).
 
-Detailed information about the parameters that specify each of the DGG design choices are given below, along with a discussion on specifying the spherical earth radius.
+Detailed information about the parameters that specify each of the DGG design choices are given below, along with a discussion of the datums and of the sphere on which the grid is built.
 
 ### Preset DGG Types
 
@@ -223,23 +224,19 @@ Detailed information about the parameters that specify each of the DGG design ch
 - `CUSTOM` (default) - indicates that the grid parameters will be specified manually (see below)
 - `SUPERFUND` - the **Superfund_500m** grid (see **Appendix E**)
 - `PLANETRISK` - the **PlanetRisk** grid (see **Appendix F**)
-- `IGEO7` - ISEA projection with hexagon cells and an aperture of 7, with Z7 hierarchical indexing (see **Appendix B**)
-- `ISEA4T` - ISEA projection with triangle cells and an aperture of 4
-- `ISEA4D` - ISEA projection with diamond cells and an aperture of 4
-- `ISEA3H` - ISEA projection with hexagon cells and an aperture of 3
-- `ISEA4H` - ISEA projection with hexagon cells and an aperture of 4
-- `ISEA7H` - ISEA projection with hexagon cells and an aperture of 7
-- `ISEA43H` - ISEA projection with hexagon cells and a mixed sequence of aperture 4 resolutions followed by aperture 3 resolutions
-- `FULLER4T` - FULLER projection with triangle cells and an aperture of 4
-- `FULLER4D` - FULLER projection with diamond cells and an aperture of 4
-- `FULLER3H` - FULLER projection with hexagon cells and an aperture of 3
-- `FULLER4H` - FULLER projection with hexagon cells and an aperture of 4
-- `FULLER7H` - FULLER projection with hexagon cells and an aperture of 7
-- `FULLER43H` - FULLER projection with hexagon cells and a mixed sequence of aperture 4 resolutions followed by aperture 3 resolutions
+- `IGEO7v1` - ISEA projection with hexagon cells and an aperture of 7, with Z7 hierarchical indexing (see **Appendix B**)
+- `IGEO7v2` - IVEA projection with hexagon cells and an aperture of 7, with Z7 hierarchical indexing, using the ellipsoidal (WGS84) form described below
+- `IGEO7` - an alias for `IGEO7v1`, retained for backward compatibility
+- ISEA presets: `ISEA3HS`, `ISEA4HS`, `ISEA7HS`, `ISEA43HS`, `ISEA4TS`, `ISEA4DS` (spherical) and `ISEA3HL`, `ISEA4HL`, `ISEA7HL`, `ISEA43HL`, `ISEA4TL`, `ISEA4DL` (ellipsoidal)
+- IVEA presets: `IVEA3HS`, `IVEA4HS`, `IVEA7HS`, `IVEA43HS`, `IVEA4TS`, `IVEA4DS` (spherical) and `IVEA3HL`, `IVEA4HL`, `IVEA7HL`, `IVEA43HL`, `IVEA4TL`, `IVEA4DL` (ellipsoidal)
+- `ISEA3H`, `ISEA4H`, `ISEA7H`, `ISEA43H`, `ISEA4T`, `ISEA4D` - aliases for the corresponding spherical `S` presets, retained for backward compatibility
+- FULLER presets: `FULLER3H`, `FULLER4H`, `FULLER7H`, `FULLER43H`, `FULLER4T`, `FULLER4D`
 
-Each preset grid type sets appropriate values for all of the parameters that specify a DGG. The default values for each preset grid type are given in **Appendix B**. These default preset values can be overridden by explicitly setting the desired individual parameters in your metafile as described below; an explicitly set parameter always overrides the preset value, regardless of where it appears in the metafile relative to dggs_type. The exception is the SUPERFUND preset, which requires dggs_aperture_type MIXED43, dggs_num_aperture_4_res 2, dggs_res_specify_type SPECIFIED, and output_cell_label_type SUPERFUND; any other values cause an error. In particular, note that all preset grid types have a default resolution; your desired DGG resolution should be specified using the parameter dggs_res_spec (see below).
+The name of each ISEA, IVEA and FULLER preset consists of the projection (ISEA, IVEA, or FULLER), the aperture (3, 4, 7, or 43), the cell topology (`H` for hexagon, `T` for triangle, `D` for diamond), and, for ISEA and IVEA, a final letter `S` or `L`. The aperture 43 is a mixed sequence of aperture 4 resolutions followed by aperture 3 resolutions. A preset ending in `S` is a spherical preset: geographic input and output use the sphere (datum `AUTHALIC_SPHERE`, see item 6 below). A preset ending in `L` is an ellipsoidal preset: geographic input and output use the WGS 84 ellipsoid (datum `WGS84`) and the ISEAL orientation (see item 1 below). There are no unsuffixed IVEA presets and no `S` or `L` forms of the FULLER presets. See **Appendix B** for the parameter values set by each preset.
 
-**Appendix D** gives some statistics on the individual resolutions of the hexagonal ISEA preset DGGs.
+Each preset grid type sets appropriate values for all of the parameters that specify a DGG, including its datums and orientation. The default values for each preset grid type are given in **Appendix B**. These default preset values can be overridden by explicitly setting the desired individual parameters in your metafile as described below; an explicitly set parameter always overrides the preset value, regardless of where it appears in the metafile relative to dggs_type. The exception is the SUPERFUND preset, which requires dggs_aperture_type MIXED43, dggs_num_aperture_4_res 2, dggs_res_specify_type SPECIFIED, and output_cell_label_type SUPERFUND; any other values cause an error. In particular, note that all preset grid types have a default resolution; your desired DGG resolution should be specified using the parameter dggs_res_spec (see below).
+
+**Appendix D** gives some statistics on the individual resolutions of the hexagonal ISEA preset DGGs; the same cell counts and cell areas apply to the corresponding IVEA presets.
 
 ### Manually Setting DGG Parameters
 
@@ -251,11 +248,17 @@ If dggs_orient_specify_type is set to SPECIFIED the DGG orientation is determine
 
 ```
 dggs_vert0_lon 11.25
-dggs_vert0_lat 58.28252559
+dggs_vert0_lat 58.282525588538995
 dggs_vert0_azimuth 0.0
 ```
 
-If dggs_orient_specify_type is set to RANDOM the orientation of the DGG is randomly determined. All parameter values (including the randomly generated values for a vertex location and azimuth used to orient the grid) will be output for your information to the file specified by the **string** parameter dggs_orient_output_file_name (this file is written whenever dggs_orient_specify_type is RANDOM, or dggs_num_placements is greater than 1). Some control over the random specification of the grid orientation is afforded by the **choice** parameter rng_type and the **integer** parameter dggs_orient_rand_seed. The **choice** parameter rng_type indicates which pseudo-random number generator to use. A value of RAND (the default) indicates that the C standard library rand/srand functions should be used. A value of MOTHER indicates that George Marsaglia's "Mother-of-all-RNGs" function should be used. The seed value for **DGGRID** to use to initialize the pseudo-random number sequence can be set using the **integer** parameter dggs_orient_rand_seed.
+The default vertex 0 latitude is atan(φ) = 58.28252558853899...°, where φ = (1 + √5)/2 is the golden ratio. With this latitude and an azimuth of 0.0 the north and south poles fall exactly on the midpoints of icosahedron edges, which makes the grid symmetrical about the equator. (Earlier versions used the rounded value 58.28252559.)
+
+Instead of setting these parameters individually, a named orientation can be selected with the **choice** parameter dggs_orient_preset, which sets dggs_vert0_lon, dggs_vert0_lat, dggs_vert0_azimuth and orientation_datum. A value of ISEA gives the default placement above. A value of ISEAL gives the orientation that PROJ and DGGAL use for their ellipsoidal ISEA and IVEA projections: vertex 0 at the same authalic latitude atan(φ), but at longitude 11.20°, which keeps vertex 0 in the ocean when grid coordinates are output on the WGS 84 ellipsoid (output_datum WGS84). Parameters set explicitly in the metafile take precedence over the preset, including an explicit dggs_orient_preset NONE, which applies no orientation preset and is the default value. Every dggs_type preset selects dggs_orient_preset ISEA, except the ellipsoidal (`L`) presets and IGEO7v2, which select ISEAL, unless dggs_orient_preset is set explicitly.
+
+The datum of the values given for dggs_vert0_lon, dggs_vert0_lat, region_center_lon and region_center_lat is selected by the **choice** parameter orientation_datum (see item 6 below).
+
+If dggs_orient_specify_type is set to RANDOM the orientation of the DGG is randomly determined. All parameter values (including the randomly generated values for a vertex location and azimuth used to orient the grid) will be output for your information to the file specified by the **string** parameter dggs_orient_output_file_name (this file is written whenever dggs_orient_specify_type is RANDOM, or dggs_num_placements is greater than 1). Each generated orientation file is a **DGGRID** metafile that lists the parameters used in the run for one placement, and it can be used as input to reproduce that placement. Its vertex coordinates are written in the datum given by orientation_datum, and the file sets orientation_datum to that value so the orientation is read back correctly. Keep any relative input file names referenced by the file valid when replaying it. Some control over the random specification of the grid orientation is afforded by the **choice** parameter rng_type and the **integer** parameter dggs_orient_rand_seed. The **choice** parameter rng_type indicates which pseudo-random number generator to use. A value of RAND (the default) indicates that the C standard library rand/srand functions should be used. A value of MOTHER indicates that George Marsaglia's "Mother-of-all-RNGs" function should be used. The seed value for **DGGRID** to use to initialize the pseudo-random number sequence can be set using the **integer** parameter dggs_orient_rand_seed.
 
 If the current operation involves only a small region on the earth's surface it is often convenient to orient the grid so that no icosahedron vertices occur in the region of interest. Such an orientation can be specified by setting dggs_orient_specify_type to REGION_CENTER and then specifying the center point of the region using the **double** parameters region_center_lon and region_center_lat (both in decimal degrees).
 
@@ -271,7 +274,9 @@ If a MIXED43 aperture type is specified then the parameter dggs_aperture is igno
 
 If a SEQUENCE aperture type is specified then the parameter dggs_aperture is ignored. Instead, the aperture sequence for the DGGS must be specified as a string of 3's, 4's, and/or 7's in the **string** parameter dggs_aperture_sequence (default "333333333333").
 
-**3. Specifying the projection:** The regular polygon boundaries and points associated with DGG cells are initially created on the planar faces of an icosahedron; they must then be inversely projected to the sphere. The desired projection to use for this is specified by the **choice** parameter dggs_proj. The valid values are ISEA, which specifies the Icosahedral Snyder Equal Area projection \[Snyder, 1992\], or FULLER, which specifies the icosahedral Dymaxion projection of R. Buckminster Fuller \[1975\] (as developed analytically by Robert Gray \[1995\] and John Crider \[2008\]). The ISEA projection creates equal area cells on the sphere at the expense of relatively high shape distortion, while the Fuller projection strikes a balance between area and shape distortion. See Gregory et al. \[2008\] for a more detailed discussion of these trade-offs.
+**3. Specifying the projection:** The regular polygon boundaries and points associated with DGG cells are initially created on the planar faces of an icosahedron; they must then be inversely projected to the sphere. The desired projection to use for this is specified by the **choice** parameter dggs_proj. The valid values are ISEA, which specifies the Icosahedral Snyder Equal Area projection \[Snyder, 1992\], IVEA, which specifies the Icosahedral Vertex-oriented great-circle Equal Area projection \[van Leeuwen and Strebe, 2006\], or FULLER, which specifies the icosahedral Dymaxion projection of R. Buckminster Fuller \[1975\] (as developed analytically by Robert Gray \[1995\] and John Crider \[2008\]). The ISEA and IVEA projections create equal area cells on the sphere at the expense of relatively high shape distortion, while the Fuller projection strikes a balance between area and shape distortion. See Gregory et al. \[2008\] for a more detailed discussion of these trade-offs.
+
+ISEA and IVEA are two members of one family of equal area polyhedral projections. Each face of the icosahedron is divided into six right triangles, each with one corner at a face vertex, one at the midpoint of an adjacent edge, and one at the face center; over the 20 faces these are the 120 triangles of the icosahedral symmetry group. Each spherical triangle is mapped onto the corresponding planar triangle by the "slice-and-dice" construction of van Leeuwen and Strebe \[2006\], which preserves area and maps every great circle through one chosen corner, the radial vertex, to a straight line. ISEA uses the face center as the radial vertex \[Snyder, 1992\]; IVEA uses the icosahedron vertex, so that great circles through the icosahedron vertices (including the icosahedron edges and the face medians through the vertices) are straight lines on the icosahedron faces. For a given triangle and radial vertex the map is unique. **DGGRID** evaluates IVEA with the vector form of the equations given by Recht \[2021\]. IVEA grids have the same planar cell geometry, cell addresses, neighbors, children and hierarchical indices as the ISEA grids with the same parameters; only the geographic coordinates differ. IVEA uses the same default icosahedron orientation as ISEA (see **Subsection 1** above). As with ISEA, the projection is spherical; geographic coordinates are on the grid sphere described in item 5 below.
 
 **4. Specifying the resolution:** The desired DGG resolution can be specified using one of three methods chosen using the **choice** parameter dggs_res_specify_type with one of the following values:
 
@@ -287,19 +292,39 @@ In general, **DGGRID** will attempt to generate grids up to a maximum resolution
 
 However, the maximum resolution which can actually be successfully generated by **DGGRID** is a function of the specified grid topology, projection, the size of data types on the machine on which **DGGRID** is compiled and executed, and the location of the generated grid region relative to the faces of the underlying icosahedron. When generating very high resolution grids the user should be aware that, even if **DGGRID** reports success, the indexes and output cell geometries should be validated to make sure that they are not degenerate.
 
-**5. Specifying the earth radius:** The **choice** parameter proj_datum specifies a datum that **DGGRID** will use to determine the spherical radius of the earth. The legal values for this parameter are given below, along with the earth radius that they indicate:
+**5. Datums and the grid sphere:** **DGGRID** recognizes three geographic datums:
 
-- `WGS84_AUTHALIC_SPHERE` (default): 6371.007180918475 km
-- `WGS84_MEAN_SPHERE`: 6371.0087714 km
-- `CUSTOM_SPHERE`: the earth radius (in kilometers) will be read from the **double** parameter proj_datum_radius
+- `WGS84`: the WGS 84 ellipsoid, with geodetic latitude
+- `AUTHALIC_SPHERE`: the sphere with the WGS 84 authalic radius, 6371.007180918474 km, which has the same surface area as the WGS 84 ellipsoid
+- `CUSTOM_SPHERE`: the sphere whose radius (in kilometers) is given by the **double** parameter custom_sphere_radius. There is one custom sphere per run; every parameter set to `CUSTOM_SPHERE` uses that radius. The default radius is the WGS 84 authalic radius.
 
-Note that the earth radius is not used in the process of generating grid geometries in geodetic coordinates; such generation is performed on a unit sphere. The radius is only used in determining the grid resolution (when dggs_res_specify_type is not SPECIFIED) and in generating grid statistics in kilometers.
+The grid is always generated on a sphere, selected by the **choice** parameter sphere_radius_type (`WGS84`, `AUTHALIC_SPHERE`, or `CUSTOM_SPHERE`; default `AUTHALIC_SPHERE`). `WGS84` selects the WGS 84 authalic sphere, onto which the ellipsoid maps with equal area. Earlier versions specified the sphere with the parameters proj_datum and proj_datum_radius. These are deprecated: they are still accepted, with a warning, and are mapped to sphere_radius_type and custom_sphere_radius, but they will be removed in a future version. (The old value `WGS84_MEAN_SPHERE` is mapped to `CUSTOM_SPHERE` with a radius of 6371.00877141506 km.) The grid sphere's radius is *not* used in generating grid geometries in geographic coordinates; that generation is performed on a unit sphere. The radius is only used in determining the grid resolution (when dggs_res_specify_type is not SPECIFIED) and in generating grid statistics in kilometers.
+
+**6. Choosing the datums of geographic input, output and orientation:** The **choice** parameters input_datum, output_datum and orientation_datum independently select the datum of the longitude/latitude coordinates at each boundary. Each takes one of the datum values above and defaults to `AUTHALIC_SPHERE`.
+
+A point has the same longitude and latitude on every sphere, so coordinates on `AUTHALIC_SPHERE` or `CUSTOM_SPHERE` pass to and from the grid sphere unchanged. `WGS84` interprets latitude as geodetic latitude on the WGS 84 ellipsoid: at input **DGGRID** converts it to authalic latitude on the WGS 84 authalic sphere, and at output it converts authalic latitude back to geodetic latitude. Longitude is unchanged. Because this conversion is defined onto the WGS 84 authalic sphere, any datum set to `WGS84` requires sphere_radius_type `WGS84` or `AUTHALIC_SPHERE`; otherwise **DGGRID** stops with an error. The authalic conversion preserves area between the WGS 84 ellipsoid and its authalic sphere, so ISEA and IVEA remain equal area on the ellipsoid. Fuller does not become equal area.
+
+The input datum applies to geographic point and polygon files and to `GEO` addresses given as input. The orientation datum applies to user supplied orientation positions: dggs_vert0_lon and dggs_vert0_lat, and region_center_lon and region_center_lat. If either dggs_vert0_lon or dggs_vert0_lat is set by the user, the complete longitude/latitude pair is interpreted in the orientation datum; the component that is not set takes its current default or preset value. Built in and preset orientations are already on the grid sphere and are not converted. Random placement is generated on the grid sphere. Azimuths, projected coordinates, grid addresses, and radius values are not latitude values and are not converted.
+
+Geographic clipping vertices use the input datum. Subsequent clipping and edge densification operate on the grid sphere; selecting `WGS84` does not make polygon edges follow WGS 84 ellipsoidal geodesics. The output datum applies to `GEO` addresses and to generated geographic cell centers, boundaries, random points, and other geographic geometries.
+
+For example, these settings read WGS 84 input points but write spherical geographic coordinates:
+
+```text
+sphere_radius_type AUTHALIC_SPHERE
+input_datum WGS84
+output_datum AUTHALIC_SPHERE
+```
+
+To read spherical coordinates and write WGS 84 coordinates, exchange the two datum values. A fixed cell address is independent of the input datum; only the output datum controls its geographic geometry. Conversely, when converting a geographic point to a cell address, only the input datum affects its cell assignment.
+
+The output datum also determines the datum declared in output metadata, independently of the grid sphere. For example, a grid built with sphere_radius_type `CUSTOM_SPHERE` and written with output_datum `AUTHALIC_SPHERE` has the same coordinates as one written with output_datum `CUSTOM_SPHERE`, but its metadata declare the WGS 84 authalic sphere. WGS 84 output coordinates are written in longitude, latitude order. For `WGS84`, Shapefile output has a `.prj` file for the WGS 84 geographic CRS, and GDAL output declares EPSG:4326 (with traditional GIS coordinate order). For the spherical datums, Shapefile output has a `.prj` file and GDAL output declares a named sphere with the corresponding radius, which is not EPSG:4326. The non-GDAL GeoJSON and KML, text and AIGen outputs have no embedded CRS declaration; GeoJSON and KML readers normally assume WGS 84 longitude, latitude, so files written with a spherical output datum should be interpreted with that setting in mind.
 
 ## 5. Specifying Per-Cell Grid Output
 
 Any run of **DGGRID** which produces a set of grid cells (**choice** parameter dggrid_operation values GENERATE_GRID, GENERATE_GRID_FROM_POINTS, TRANSFORM_POINTS, BIN_POINT_VALS, or BIN_POINT_PRESENCE) can generate, for the specified cells, any of the following: cell boundaries, center points, topological neighbors, spatial hierarchy children, and/or hierarchical indexing parents and children. Each type of data can be output to a separate file, each with its own file format, or some or all of the data for each cell can be combined in a single output file.
 
-All DGG cell boundaries and center points output from **DGGRID** are given in geodetic (longitude/latitude) coordinates in decimal degrees.
+All DGG cell boundaries and center points output from **DGGRID** are given in geodetic (longitude/latitude) coordinates in decimal degrees. Their datum is selected by output_datum (see **Section 4.6**).
 
 The **choice** parameters cell_output_type and point_output_type specify the desired output file format for cell boundaries and cell points respectively. Each of these parameters may have the following values:
 
@@ -334,7 +359,7 @@ OUTPUT_ADDRESS_TYPE - the identifier is output in the form indicated by the **ch
 
 SUPERFUND (preset default when dggs_type is SUPERFUND) - the identifier is a condensed Superfund_500m index (see **Appendix E**). This value must be (and can only be) used when dggs_type is SUPERFUND.
 
-Note that the default value of output_cell_label_type is OUTPUT_ADDRESS_TYPE when dggrid_operation is TRANSFORM_POINTS or dggs_type is IGEO7.
+Note that the default value of output_cell_label_type is OUTPUT_ADDRESS_TYPE when dggrid_operation is TRANSFORM_POINTS or dggs_type is IGEO7, IGEO7v1, or IGEO7v2.
 
 Note that DGGRID provides two ways to generate output in either ESRI Shapefile format or KML:
 
@@ -369,7 +394,7 @@ To output the indexing children of each cell in the next finer resolution using 
 
 So far we have discussed outputting each type of cell data to a different output file. One or more of the features associated with each cell may be output together in a single file by specifying the output type GDAL_COLLECTION for each such desired feature ( cell_output_type, point_output_type, neighbor_output_type, and/or children_output_type). The chosen features must include either the cell boundary, point, or both. The output file format for this single collection file is specified in the **string** parameter collection_output_gdal_format, as described above for the parameters cell_output_gdal_format and point_output_gdal_format. Note that some GDAL formats may not support the output of neighbors or children. The file name prefix to use for this collection file is specified using the **string** parameter collection_output_file_name.
 
-**DGGRID** can also generate random points within each of the output cells. Set the **choice** parameter randpts_output_type to the desired output file format (NONE, AIGEN, KML, SHAPEFILE, GEOJSON, or TEXT; the default is NONE) and the **integer** parameter randpts_num_per_cell to the number of points to generate in each cell (the default, 0, generates no points). The points are uniformly distributed within each cell in the projection space. The file name prefix of the random points output file is specified using the **string** parameter randpts_output_file_name (default "randPts"). The pseudo-random number generator is selected by the parameter rng_type (see **Section 4**) and is initialized using the **integer** parameter randpts_seed (default 77316727). If more than one DGG placement is requested using dggs_num_placements, the **boolean** parameter randpts_concatenate_output (default TRUE) controls whether the random points for all placements are written to a single file or to a separate file for each placement. In TEXT format each output line contains the overall point number, the placement number, the label of the cell containing the point, the number of the point within the placement, and the longitude and latitude of the point; shapefile output uses the same field widths as for cells (see shapefile_id_field_length).
+**DGGRID** can also generate random points within each of the output cells. Set the **choice** parameter randpts_output_type to the desired output file format (NONE, AIGEN, KML, SHAPEFILE, GEOJSON, or TEXT; the default is NONE) and the **integer** parameter randpts_num_per_cell to the number of points to generate in each cell (the default, 0, generates no points). The points are uniformly distributed within each cell in the projection space. The file name prefix of the random points output file is specified using the **string** parameter randpts_output_file_name (default "randPts"). The pseudo-random number generator is selected by the parameter rng_type (see **Section 4**) and is initialized using the **integer** parameter randpts_seed (default 77316727). If more than one DGG placement is requested using dggs_num_placements, the **boolean** parameter randpts_concatenate_output (default TRUE) controls whether the random points for all placements are written to a single file or to a separate file for each placement. In TEXT format each output line contains the overall point number, the placement number, the label of the cell containing the point, the number of the point within the placement, and the longitude and latitude of the point (in the datum given by output_datum); shapefile output uses the same field widths as for cells (see shapefile_id_field_length).
 
 ## 6. Grid Generation: Whole Earth or Clipping Polygons
 
@@ -389,7 +414,7 @@ Each of these methods is discussed below. Note that **DGGRID** must be built wit
 
 A DGG that covers a portion of the earth's surface can be generated by specifying one or more files containing the clipping polygons which **DGGRID** will use to determine the portion of the grid to generate. **DGGRID** supports three types of clipping files: ARC/INFO Generate files, ESRI Shapefiles, and vector file formats readable by GDAL. To specify a clipping file format, set the parameter clip_subset_type to AIGEN, SHAPEFILE, or GDAL respectively.
 
-If clip_subset_type is set to AIGEN, SHAPEFILE, or GDAL then the string parameter clip_region_files should be set to a space-delimited list of file names, in the specified format, containing polygons to use for clipping. If clip_subset_type is GDAL then the files must be in a GDAL-readable vector format (see [gdal.org](http://gdal.org)). The polygons must be specified using geodetic (latitude/longitude) coordinates. Limitations in **DGGRID** require that each clipping polygon be no more than approximately 60° of great circle arc in extent in any direction. The exact limitation is determined by the relationship between each polygon and the underlying icosahedron; **DGGRID** will let you know if a polygon is too large for the grid generation you are attempting. In that event you must break the polygon into smaller polygons before using it in a clipping file.
+If clip_subset_type is set to AIGEN, SHAPEFILE, or GDAL then the string parameter clip_region_files should be set to a space-delimited list of file names, in the specified format, containing polygons to use for clipping. If clip_subset_type is GDAL then the files must be in a GDAL-readable vector format (see [gdal.org](http://gdal.org)). The polygons must be specified using geodetic (latitude/longitude) coordinates, interpreted in the datum given by input_datum (see **Section 4.6**). Limitations in **DGGRID** require that each clipping polygon be no more than approximately 60° of great circle arc in extent in any direction. The exact limitation is determined by the relationship between each polygon and the underlying icosahedron; **DGGRID** will let you know if a polygon is too large for the grid generation you are attempting. In that event you must break the polygon into smaller polygons before using it in a clipping file.
 
 When clip_subset_type is set to GDAL **DGGRID** will correctly handle holes in the clipping polygons if the **boolean** parameter clip_using_holes is set to TRUE (the default value is FALSE). Cells that intersect a polygon but are entirely contained in one of that polygon's holes will not be chosen. Note that **DGGRID** will interpret holes as regular polygons in non-GDAL input files.
 
@@ -427,7 +452,7 @@ The specific format for TEXT file input for each operation is described in the s
 
 The operation TRANSFORM_POINTS also accepts GDAL input when **DGGRID** is built with GDAL; in that case the point geometry supplies the location, so use an input_address_type of GEO.
 
-A single input file can be specified using the **string** parameter input_file_name; if this parameter is set it overrides any value of input_files. Multiple input files can be specified by setting the **string** parameter input_files to a space-delimited list of file names, in the specified format, containing points to use as input. If point_input_file_type is GDAL then the input file(s) must be in a GDAL-readable vector format (see [gdal.org](http://gdal.org)). The points must be specified using geodetic (latitude/longitude) coordinates.
+A single input file can be specified using the **string** parameter input_file_name; if this parameter is set it overrides any value of input_files. Multiple input files can be specified by setting the **string** parameter input_files to a space-delimited list of file names, in the specified format, containing points to use as input. If point_input_file_type is GDAL then the input file(s) must be in a GDAL-readable vector format (see [gdal.org](http://gdal.org)). The points must be specified using geodetic (latitude/longitude) coordinates, interpreted in the datum given by input_datum (see **Section 4.6**).
 
 If the input locations cover a substantial portion of the earth's surface, then the choice parameter bin_coverage should be set to GLOBAL. If the locations cover only a relatively small portion of the earth's surface then bin_coverage should be set to PARTIAL. This allows **DGGRID** to make trade-offs between speed and memory usage. GLOBAL location sets are processed more quickly, but may fail at higher DGG resolutions due to memory restrictions. PARTIAL location sets are processed more slowly, but can enable the use of higher resolution DGGs (depending on the actual extent of the input locations).
 
@@ -441,7 +466,7 @@ By default (the **choice** parameter cell_output_control has the default value O
 
 ## 9. Binning Point Values
 
-Setting the choice parameter dggrid_operation to BIN_POINT_VALS tells **DGGRID** to bin a set of floating-point data values associated with geodetic coordinates into the cells of a DGG(s) specified as per **Section 4**. The binning is performed by assigning to each DGG cell the arithmetic mean of the values associated with the input points that are contained in that cell. The input file(s) containing the points to be binned are specified as described in **Section 7**.
+Setting the choice parameter dggrid_operation to BIN_POINT_VALS tells **DGGRID** to bin a set of floating-point data values associated with geodetic coordinates (in the datum given by input_datum) into the cells of a DGG(s) specified as per **Section 4**. The binning is performed by assigning to each DGG cell the arithmetic mean of the values associated with the input points that are contained in that cell. The input file(s) containing the points to be binned are specified as described in **Section 7**.
 
 If the input files are in GDAL format (**choice** parameter point_input_file_type has value GDAL), then the value for each input point is taken from the field named as specified in the **string** parameter input_value_field_name (default "value").
 
@@ -481,7 +506,7 @@ Setting the **choice** parameter dggrid_operation to TRANSFORM_POINTS tells **DG
 
 Each line in each input file should consist of an address followed by optional arbitrary text. The components of the address (if any) must be delimited by the character indicated within double quotes in the **string** parameter input_delimiter, and if there is text following the address it must also be separated from the address by that character. The address must be a valid address under the address form indicated in the **choice** parameter input_address_type (see **Appendix C**). Address types other than GEO are interpreted as addresses in a DGG specified as per **Section 4**.
 
-Each input address is transformed to an address of the form indicated by the **choice** parameter output_address_type (see **Appendix C**), and the resulting cells are output. This applies as long as output_cell_label_type is OUTPUT_ADDRESS_TYPE (the default for this operation); an explicit value of GLOBAL_SEQUENCE or ENUMERATION causes both the text file and the cell label to contain a number instead. The transformed cell address is output in a field named "name" (GDAL formats) or "global_id" (Shapefile). The output_address_type GEO is not allowed for this operation.
+Each input address is transformed to an address of the form indicated by the **choice** parameter output_address_type (see **Appendix C**), and the resulting cells are output. This applies as long as output_cell_label_type is OUTPUT_ADDRESS_TYPE (the default for this operation); an explicit value of GLOBAL_SEQUENCE or ENUMERATION causes both the text file and the cell label to contain a number instead. The transformed cell address is output in a field named "name" (GDAL formats) or "global_id" (Shapefile). The output_address_type GEO is allowed for this operation; the output is then the longitude and latitude of the center point of the cell that contains the input location, in the datum given by output_datum, so a GEO input location is moved to the center of its cell.
 
 In addition to the standard per-cell output described in **Section 5**, **DGGRID** can output the cells in a text file format by setting the choice parameter output_file_type to TEXT (the default for this operation; set to NONE for no text output), and the **string** parameter output_file_name (default "valsout.txt") to the desired text output file name. **DGGRID** will output each transformed address, one cell per line, into the text file using the value of output_delimiter to separate any address components. If there was additional text on the input line following the address, then an output delimiter followed by that text is appended to the output line.
 
@@ -504,36 +529,68 @@ A preset grid type can be specified using the choice parameter dggs_type. All pr
 dggs_base_poly: ICOSAHEDRON
 dggs_orient_specify_type: SPECIFIED
 dggs_num_placements: 1
-dggs_vert0_lon: 11.25
-dggs_vert0_lat: 58.28252559
-dggs_vert0_azimuth: 0.0
+sphere_radius_type: AUTHALIC_SPHERE
 dggs_res_specify_type: SPECIFIED
 ```
 
-The table below gives the values of other parameters that are set by each preset DGG type. Note that any preset parameter value can be overridden by explicitly specifying a different value for that parameter in the metafile (the position of the parameter relative to dggs_type does not matter).
+The datum and orientation parameters are set by the preset according to its kind. All presets other than the ellipsoidal presets (names ending in `L`) and IGEO7v2 set:
+
+```
+input_datum: AUTHALIC_SPHERE
+output_datum: AUTHALIC_SPHERE
+dggs_orient_preset: ISEA
+```
+
+The ellipsoidal presets (names ending in `L`) and IGEO7v2 set:
+
+```
+input_datum: WGS84
+output_datum: WGS84
+dggs_orient_preset: ISEAL
+```
+
+The orientation preset in turn sets the following (see **Section 4**):
+
+| **dggs_orient_preset** | **dggs_vert0_lon** | **dggs_vert0_lat**              | **dggs_vert0_azimuth** | **orientation_datum** |
+|------------------------|--------------------|---------------------------------|------------------------|-----------------------|
+| **ISEA**               | 11.25              | 58.282525588538995 (atan φ)     | 0.0                    | AUTHALIC_SPHERE       |
+| **ISEAL**              | 11.20              | 58.282525588538995 (atan φ)     | 0.0                    | AUTHALIC_SPHERE       |
+
+The table below gives the values of other parameters that are set by each preset DGG type that is not one of the ISEA, IVEA, or FULLER base grids. Note that any preset parameter value can be overridden by explicitly specifying a different value for that parameter in the metafile (the position of the parameter relative to dggs_type does not matter).
 
 | **dggs_type** | **dggs_topology** | **dggs_proj** | **dggs_res_spec** | **dggs_aperture_type** | **dggs_aperture** | **dggs_num_aperture_4_res** | **dggs_aperture_sequence** |
 |---------------|-------------------|---------------|-------------------|------------------------|-------------------|-----------------------------|-----------------------------|
 | **CUSTOM**    | HEXAGON           | ISEA          | 9                 | PURE                   | 4                 | N/A                         | N/A                         |
 | **SUPERFUND** | HEXAGON           | FULLER        | 9                 | MIXED43                | N/A               | 2                           | N/A                         |
 | **PLANETRISK**| HEXAGON           | ISEA          | 11                | SEQUENCE               | N/A               | N/A                         | 43334777777777777777777     |
+| **IGEO7v1**   | HEXAGON           | ISEA          | 9                 | PURE                   | 7                 | N/A                         | N/A                         |
+| **IGEO7v2**   | HEXAGON           | IVEA          | 9                 | PURE                   | 7                 | N/A                         | N/A                         |
 | **IGEO7**     | HEXAGON           | ISEA          | 9                 | PURE                   | 7                 | N/A                         | N/A                         |
-| **ISEA3H**    | HEXAGON           | ISEA          | 9                 | PURE                   | 3                 | N/A                         | N/A                         |
-| **ISEA4H**    | HEXAGON           | ISEA          | 9                 | PURE                   | 4                 | N/A                         | N/A                         |
-| **ISEA7H**    | HEXAGON           | ISEA          | 9                 | PURE                   | 7                 | N/A                         | N/A                         |
-| **ISEA43H**   | HEXAGON           | ISEA          | 9                 | MIXED43                | N/A               | 0                           | N/A                         |
-| **ISEA4T**    | TRIANGLE          | ISEA          | 9                 | PURE                   | 4                 | N/A                         | N/A                         |
-| **ISEA4D**    | DIAMOND           | ISEA          | 9                 | PURE                   | 4                 | N/A                         | N/A                         |
-| **FULLER3H**  | HEXAGON           | FULLER        | 9                 | PURE                   | 3                 | N/A                         | N/A                         |
-| **FULLER4H**  | HEXAGON           | FULLER        | 9                 | PURE                   | 4                 | N/A                         | N/A                         |
-| **FULLER7H**  | HEXAGON           | FULLER        | 9                 | PURE                   | 7                 | N/A                         | N/A                         |
-| **FULLER43H** | HEXAGON           | FULLER        | 9                 | MIXED43                | N/A               | 0                           | N/A                         |
-| **FULLER4T**  | TRIANGLE          | FULLER        | 9                 | PURE                   | 4                 | N/A                         | N/A                         |
-| **FULLER4D**  | DIAMOND           | FULLER        | 9                 | PURE                   | 4                 | N/A                         | N/A                         |
 
 > **Note:** In addition to the listed parameters, the preset type **SUPERFUND** also sets the value of the parameter `output_cell_label_type` to `SUPERFUND`.
 
-The preset type IGEO7 sets the additional parameters:
+The ISEA, IVEA and FULLER presets are formed from the projection and a base grid. The base grid sets the following parameters:
+
+| **Base grid** | **dggs_topology** | **dggs_res_spec** | **dggs_aperture_type** | **dggs_aperture** | **dggs_num_aperture_4_res** | **dggs_aperture_sequence** |
+|---------------|-------------------|-------------------|------------------------|-------------------|-----------------------------|-----------------------------|
+| **3H**        | HEXAGON           | 9                 | PURE                   | 3                 | N/A                         | N/A                         |
+| **4H**        | HEXAGON           | 9                 | PURE                   | 4                 | N/A                         | N/A                         |
+| **7H**        | HEXAGON           | 9                 | PURE                   | 7                 | N/A                         | N/A                         |
+| **43H**       | HEXAGON           | 9                 | MIXED43                | N/A               | 0                           | N/A                         |
+| **4T**        | TRIANGLE          | 9                 | PURE                   | 4                 | N/A                         | N/A                         |
+| **4D**        | DIAMOND           | 9                 | PURE                   | 4                 | N/A                         | N/A                         |
+
+The projection and the datum settings (`S` or `L` suffix) then give the preset names in the table below. In each row, *base* stands for any of the six base grids above.
+
+| **Projection** | **dggs_proj** | **Spherical preset name** (AUTHALIC_SPHERE input and output, ISEA orientation) | **Ellipsoidal preset name** (WGS84 input and output, ISEAL orientation) | **Other names** |
+|----------------|---------------|-------------------------------|-------------------------------|-----------------|
+| **ISEA**       | ISEA          | ISEA*base*S, for example ISEA3HS | ISEA*base*L, for example ISEA3HL | ISEA*base* (an alias for ISEA*base*S), for example ISEA3H |
+| **IVEA**       | IVEA          | IVEA*base*S, for example IVEA3HS | IVEA*base*L, for example IVEA3HL | none |
+| **FULLER**     | FULLER        | FULLER*base*, for example FULLER3H | none | none |
+
+The FULLER presets use AUTHALIC_SPHERE input and output and the ISEA orientation.
+
+The preset types IGEO7, IGEO7v1 and IGEO7v2 set the additional parameters:
 
 ```
 hier_indexing_system_type: Z7
@@ -552,7 +609,7 @@ In **DGGRID** geographic coordinates are always expressed as:
 
 *longitude latitude*
 
-in decimal degrees. The parameters input_address_type and output_address_type refer to this address form as GEO.
+in decimal degrees. The parameters input_address_type and output_address_type refer to this address form as GEO. The latitude is on the sphere or on the WGS 84 ellipsoid according to the datum selected by input_datum for input and output_datum for output (see **Section 4.6**). As output for the operation TRANSFORM_POINTS, GEO gives the center point of the cell.
 
 **DGGRID** supports a number of address forms for specifying a particular cell in a DGG. These address forms are listed below according to their designation in the input_address_type and output_address_type parameters:
 
@@ -588,19 +645,19 @@ input_hier_ndx_form or output_hier_ndx_form specifies the index representation f
 - `INT64` - the index is packed into a hexadecimal 64 bit integer, the digit used to fill unused resolutions in Z3 INT64 indexes is specified by the parameter `z3_invalid_digit`. The default value is 3.
 - `DIGIT_STRING` - consists of 2 characters representing the quad number followed by 1 character per hierarchical digit.
 
-## Appendix D. Statistics for Some Preset ISEA DGGs
+## Appendix D. Statistics for Some Preset ISEA and IVEA DGGs
 
-This appendix gives a table of characteristics for some hexagonal DGGs based on the ISEA projection that can be specified as preset DGG types using **DGGRID** (by setting metafile parameter dggs_type as specified).
+This appendix gives a table of characteristics for some hexagonal DGGs based on the ISEA projection that can be specified as preset DGG types using **DGGRID** (by setting metafile parameter dggs_type as specified). The corresponding IVEA presets (for example IVEA3HS for ISEA3HS) have exactly the same number of cells and the same hexagon area at every resolution, so the table headings name both. The intercell spacing statistics in these tables were calculated for the ISEA grids only; they have not been calculated for the IVEA grids.
 
 The intercell spacing statistics given in these tables were calculated empirically on a symmetrical subset of the grid cells at each resolution. They will differ from the intercell spacing values used by **DGGRID**, which are calculated on the plane (and are therefore only approximate).
 
-All measurements assume a spherical earth with a radius of 6,371.007180918475 km (WGS84 authalic sphere radius).
+All measurements assume a spherical earth with a radius of 6,371.007180918474 km (WGS84 authalic sphere radius), except for the PlanetRisk Grid table (see the note there).
 
 For footnotes refer to the **Notes** section following all tables.
 
 ### Aperture 3: ISEA3H
 
-dggs_type ISEA3H
+dggs_type ISEA3H, ISEA3HS or IVEA3HS
 
 | **res** | **Number of Cells*** | **Hex Area** (km²) | **Intercell Spacing (km)** |          |          |          |
 |---------|---------------------|--------------------|-----------------------------|----------|----------|----------|
@@ -628,7 +685,7 @@ dggs_type ISEA3H
 
 ### Aperture 4: ISEA4H
 
-dggs_type ISEA4H
+dggs_type ISEA4H, ISEA4HS or IVEA4HS
 
 | **res** | **Number of Cells*** | **Hex Area** (km²) | **Intercell Spacing (km)** |          |          |          |
 |---------|---------------------|--------------------|-----------------------------|----------|----------|----------|
@@ -654,7 +711,7 @@ dggs_type ISEA4H
 
 dggs_type PLANETRISK
 
-See **Appendix F** for a complete description of this grid system. The table below gives the first 12 resolutions, though higher resolutions can be generated (subsequent resolutions are aperture 7).
+See **Appendix F** for a complete description of this grid system. The table below gives the first 12 resolutions, though higher resolutions can be generated (subsequent resolutions are aperture 7). Note that the hex area values in this table, and in Table 1 of **Appendix F**, were calculated using the WGS 84 mean sphere radius, 6371.0087714 km, rather than the authalic radius used in the other tables; with the default authalic radius **DGGRID** gives slightly smaller areas (for example, 12,751,640.54 km² at resolution 1). The areas in this table can be reproduced by setting sphere_radius_type to CUSTOM_SPHERE and custom_sphere_radius to 6371.0087714.
 
 | **res** | **Number of Cells*** | **Hex Area** (km²) | **Intercell Spacing (km)** |          |          |          |
 |---------|---------------------|--------------------|-----------------------------|----------|----------|----------|
@@ -674,7 +731,7 @@ See **Appendix F** for a complete description of this grid system. The table bel
 
 ### Mixed Aperture 4 and 3: ISEA43H
 
-dggs_type ISEA43H
+dggs_type ISEA43H, ISEA43HS or IVEA43HS
 
 Note that this table is sorted by increasing cell size. In an ISEA43H grid the cell size is determined by the combination of values specified in the metafile for parameters dggs_num_aperture_4\_res (the first column below) and dggs_res_spec (the second column).
 
@@ -1008,7 +1065,7 @@ We have now completed the design choices needed to specify our DGGS. Table 1 giv
 | **11**  | 7            | 508,243,682| 1.0036            | 0.9919     | 1.2494     | 1.0828     | 0.0656 |
 | **12**  | 7            | 3,557,705,762| 0.1434          | 0.3514     | 0.4667     | 0.4092     | 0.0256 |
 
-**Table 1.** The first 12 resolutions of the PlanetRisk DGGS.
+**Table 1.** The first 12 resolutions of the PlanetRisk DGGS. The hex areas were calculated using the WGS 84 mean sphere radius, 6371.0087714 km (see **Appendix D**).
 
 **Conclusions**
 
@@ -1040,6 +1097,8 @@ Kanth, K. V. R. and A. K. Singh. 1999. Optimal dynamic range searching in non-re
 
 Kimerling AJ, Sahr K, White D, Song L. 1999. Comparing geometrical properties of discrete global grids. *Cartography and Geographic Information Science* 26(4):271-287.
 
+Recht BRS. 2021. Snyder equal-area projection, in vector form. https://brsr.github.io/2021/08/31/snyder-equal-area.html
+
 Sahr K, White D, Kimerling AJ. 2003. Geodesic discrete global grid systems. *Cartography and Geographic Information Science* 30(2):121-134.
 
 Sahr K. 2008. Location coding on icosahedral aperture 3 hexagon discrete global grids. *Computers, Environment and Urban Systems* 32(3):174-187.
@@ -1049,5 +1108,7 @@ Sahr, K. 2011. Hexagonal discrete global grid systems for geospatial computing. 
 Sahr, K. 2019. Central Place Indexing: Hierarchical Linear Indexing Systems for Mixed-Aperture Hexagonal Discrete Global Grid Systems. *Cartographica: The International Journal for Geographic Information and Geovisualization*, 54(1):16-29.
 
 Snyder, J. P. 1992. An equal-area map projection for polyhedral globes. *Cartographica* 29(1): 10-21.
+
+van Leeuwen D, Strebe D. 2006. A "slice-and-dice" approach to area equivalence in polyhedral map projections. *Cartography and Geographic Information Science* 33(4):269-286. doi:10.1559/152304006779500687.
 
 White D, Kimerling AJ, Overton WS. 1992. Cartographic and geometric components of a global sampling design for environmental monitoring. *Cartography and Geographic Information Systems* 19(1):5-22.

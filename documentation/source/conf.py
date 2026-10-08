@@ -18,7 +18,7 @@ def _read_cmake_version():
     return m.group(1) if m else 'unknown'
 
 project = 'DGGRID'
-copyright = '2025, Kevin Sahr & DGGRID contributors'
+copyright = '2026, Kevin Sahr & DGGRID contributors'
 author = 'Kevin Sahr & DGGRID contributors'
 release = _read_cmake_version()
 version = '.'.join(release.split('.')[:2])
