@@ -2,7 +2,7 @@
 
 ## General Information
 
-__DGGRID__ version 9.1b released October 1, 2026
+__DGGRID__ version 9.1 released October 10, 2026
 https://github.com/sahrk/DGGRID
 
 __Southern Terra Cognita Laboratory__  
@@ -25,7 +25,7 @@ Three directories should be included herein:
 
 - `dockerfiles`: contains a __DGGRID__ dockerfile and instructions for use
 
-User documentation for __DGGRID__ is in `dggridManualV90b.pdf`.
+User documentation for __DGGRID__ is in `dggridManualV90b.pdf` or [online](https://dggrid.readthedocs.io/v91docs/dggrid_man_V91.html).
 
 ## Terms of Use
 

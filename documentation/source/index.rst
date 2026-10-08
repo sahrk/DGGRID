@@ -1,3 +1,6 @@
+.. meta::
+   :http-equiv=refresh: 0; url=dggrid_man_V91.html
+
 .. DGGRID documentation master file, created by
    sphinx-quickstart on Sun Oct 29 17:25:20 2023.
    You can adapt this file completely to your liking, but it should at least

@@ -92,8 +92,12 @@ metafiles.
 Documentation
 ------------------
 
-If you have doxygen installed, the source code documentation can be built in PDF and HTML formats using
+If you have doxygen installed, the CMake C++ API docs can be built using
 
     make docs
 
 and can be found at `DGGRID/build/docs`.
+
+The user manual (HTML and PDF) is a separate Sphinx project. See
+[documentation/README.md](documentation/README.md). Read the Docs builds the
+HTML site from git; you do not need to build HTML locally for that.

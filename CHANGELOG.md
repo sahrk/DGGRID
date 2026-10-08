@@ -5,6 +5,7 @@ All changes are by Kevin Sahr, unless otherwise noted.
 
 ## [Unreleased]
 ### Added
+- link in README to readthedocs online documentation
 - IVEA projection (Icosahedral Vertex-oriented great-circle Equal Area): new dggs_proj value IVEA and dggs_type presets IVEA3H, IVEA4H, IVEA7H, IVEA43H, IVEA4T and IVEA4D. IVEA applies the slice-and-dice equal-area construction of van Leeuwen & Strebe (2006, doi:10.1559/152304006779500687) to the 120 fundamental triangles of the icosahedron with the icosahedron vertex as the radial vertex, so great circles through the icosahedron vertices map to straight lines. It uses the same default orientation as ISEA. IVEA grids have the same planar cells, addresses, neighbors, children and hierarchical indices as the corresponding ISEA grids; only the geographic coordinates differ. On the sphere it agrees with PROJ's ivea and DGGAL's IVEA projection to about 1e-14 rad.
 - new dglib class DgIcosaSliceDice: the slice-and-dice kernel (vector form after Recht 2021; parts ported from PROJ, MIT/Apache-2.0, and DGGAL, BSD-3, with their notices retained) and the 120-triangle tables, owned by DgSphIcosa and parameterized by the radial vertex (face centre = ISEA, vertex = IVEA, edge midpoint = RTEA; only IVEA is exposed).
 - new examples ivea3hGen (IVEA3H resolution 4 whole-earth grid, GeoJSON cells and points, neighbors and children) and ivea7hGen (IVEA7H resolution 3 whole-earth grid, KML cells, GeoJSON points).

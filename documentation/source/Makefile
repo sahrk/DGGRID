@@ -4,7 +4,9 @@
 # You can set these variables from the command line, and also
 # from the environment for the first two.
 SPHINXOPTS    ?=
-SPHINXBUILD   ?= sphinx-build
+# use the repository's .venv if it exists, otherwise sphinx-build from the PATH
+VENV_SPHINX   := $(wildcard $(CURDIR)/../../.venv/bin/sphinx-build)
+SPHINXBUILD   ?= $(if $(VENV_SPHINX),$(VENV_SPHINX),sphinx-build)
 SOURCEDIR     = .
 BUILDDIR      = _build
 

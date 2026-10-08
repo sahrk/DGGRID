@@ -37,6 +37,7 @@ templates_path = ['_templates']
 
 myst_heading_anchors = 3
 exclude_patterns = [
+    'appendix_a.md',  # included into the manual
     '_build',
     'convert',
     'Thumbs.db',
@@ -75,5 +76,20 @@ if os.environ.get('DGGRID_SKIP_DOXYGEN') != '1':
 
 html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
+html_css_files = ['custom.css']
 html_extra_path = [str(_doxygen_out)] if (_doxygen_out / 'api').is_dir() else []
+
+# -- Options for LaTeX/PDF output --------------------------------------------
+# Appendix A wraps its parameter table in a pdflscape landscape environment.
+
+latex_elements = {
+    'preamble': r'''
+\usepackage{pdflscape}
+\DeclareUnicodeCharacter{2264}{\ensuremath{\leq}}
+\DeclareUnicodeCharacter{2265}{\ensuremath{\geq}}
+\DeclareUnicodeCharacter{03C6}{\ensuremath{\varphi}}
+\DeclareUnicodeCharacter{03C0}{\ensuremath{\pi}}
+\DeclareUnicodeCharacter{221A}{\ensuremath{\surd}}
+''',
+}
 
