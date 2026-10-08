@@ -66,7 +66,9 @@ SubOpIn::initializeOp (void)
       // determines the index from the input point geometry
       // note this differs from having a geo point in a (text)
       // field (that is the intent when fully implemented)
+/* not yet used
       pList().insertParam("input_address_field_type", "GEO_POINT", {"GEO_POINT"});
+*/
 /*
       // input_address_field_name <fieldName>
       // used when input_address_field_type is NAMED_FIELD

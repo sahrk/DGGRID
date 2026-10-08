@@ -27,6 +27,7 @@
 #include <fstream>
 #include <iomanip>
 #include <limits>
+#include <set>
 #include <sstream>
 
 #include <dgaplib/DgApParamList.h>
@@ -116,11 +117,56 @@ DgApParamList::writeMetafile (std::ostream& stream) const
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+// Deprecated parameters that are still accepted, and mapped onto their
+// replacements. Returns true if nameIn is a deprecated parameter. The warning
+// is only issued in the strict (fail) pass, and only once per parameter.
+bool
+DgApParamList::setDeprecatedParam (const std::string& nameIn,
+                                   const std::string& strValIn, bool fail)
+{
+   static std::set<std::string> warned;
+
+   const std::string name = toLower(nameIn);
+   if (name != "proj_datum" && name != "proj_datum_radius") return false;
+
+   if (fail && warned.insert(name).second) {
+      std::string replacement = (name == "proj_datum") ?
+          "sphere_radius_type" : "custom_sphere_radius";
+      report("parameter " + name + " is deprecated and will be removed in a "
+             "future version; use " + replacement + " instead", DgBase::Warning);
+   }
+
+   if (name == "proj_datum_radius") {
+      setParam("custom_sphere_radius", strValIn, fail);
+   } else {
+      const std::string val = toLower(strValIn);
+      if (val == "wgs84_authalic_sphere") {
+         setParam("sphere_radius_type", "AUTHALIC_SPHERE", fail);
+      } else if (val == "custom_sphere") {
+         setParam("sphere_radius_type", "CUSTOM_SPHERE", fail);
+      } else if (val == "wgs84_mean_sphere") {
+         // no longer a named datum; use a custom sphere of the WGS84 mean
+         // radius unless custom_sphere_radius is set explicitly
+         setParam("sphere_radius_type", "CUSTOM_SPHERE", fail);
+         setPresetParam("custom_sphere_radius", "6371.00877141505983", true);
+      } else if (fail) {
+         report("invalid value " + strValIn + " for deprecated parameter "
+                "proj_datum", DgBase::Fatal);
+      }
+   }
+
+   return true;
+
+} // bool DgApParamList::setDeprecatedParam
+
+////////////////////////////////////////////////////////////////////////////////
 void
 DgApParamList::setParam (const std::string& nameIn, const std::string& strValIn, bool fail)
 {
    DgApAssoc* existing = getParam(nameIn, false);
    if (!existing) { // if not fail then just skip
+      if (setDeprecatedParam(nameIn, strValIn, fail)) return;
+
       if (fail)
          report(std::string("DgApParamList::setParam() unknown parameter ")
              + nameIn, DgBase::Fatal);

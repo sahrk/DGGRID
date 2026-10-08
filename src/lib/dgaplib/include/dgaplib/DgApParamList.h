@@ -140,6 +140,10 @@ class DgApParamList {
 
       void setParam (const std::string& nameIn, const std::string& strValIn, bool fail = true);
 
+      // handles deprecated parameter names; returns true if nameIn was one
+      bool setDeprecatedParam (const std::string& nameIn,
+                               const std::string& strValIn, bool fail);
+
       void setPresetParam (const std::string& nameIn, const std::string& strValIn,
                  bool failSilent = false);
 
