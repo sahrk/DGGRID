@@ -1,0 +1,32 @@
+/* Wide tables (Appendix A parameter reference). The table is part of the
+   manual page, so it is widened locally (it may extend past the text column)
+   rather than widening the whole page, and printed on a landscape page. */
+.landscape-appendix {
+    width: max(100%, calc(100vw - 340px));
+    overflow-x: auto;
+    page: landscape-appendix;
+}
+
+.landscape-appendix table {
+    font-size: 90%;
+}
+
+@page landscape-appendix {
+    size: landscape;
+}
+
+/* Centered title page elements (User Documentation) */
+section#user-documentation-for-dggrid-v9-03b > h1,
+.center-text {
+    text-align: center;
+}
+
+/* blank line above the subtitle on the front page */
+.title-gap {
+    margin-top: 1.5em;
+}
+
+/* blank line above Terms of Use on the front page */
+section#terms-of-use > h2 {
+    margin-top: 2em;
+}
