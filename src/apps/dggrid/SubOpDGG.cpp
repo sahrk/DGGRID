@@ -285,9 +285,10 @@ SubOpDGG::initializeOp (void)
    // WGS84 authalic radius), and CUSTOM_SPHERE (the sphere with radius
    // custom_sphere_radius).
 
-   // sphere_radius_type <WGS84 | AUTHALIC_SPHERE | CUSTOM_SPHERE>
-   // the sphere the grid is built on; WGS84 uses its authalic sphere
-   pList().insertParam("sphere_radius_type", "AUTHALIC_SPHERE", datumChoices);
+   // sphere_radius_type <AUTHALIC_SPHERE | CUSTOM_SPHERE>
+   // the sphere the grid is built on (never the WGS84 ellipsoid itself)
+   pList().insertParam("sphere_radius_type", "AUTHALIC_SPHERE",
+                       {"AUTHALIC_SPHERE", "CUSTOM_SPHERE"});
 
    // custom_sphere_radius <long double: km> (1.0 <= v <= 10000.0)
    pList().insertParam(new DgDoubleParam("custom_sphere_radius", DEFAULT_RADIUS_KM,
@@ -318,10 +319,10 @@ SubOpDGG::initializeOp (void)
    pList().insertParam(new DgULIntParam("dggs_orient_rand_seed", 77316727, 0,
                      ULONG_MAX, true));
 
-   // dggs_orient_preset <NONE | ISEA | ISEAL>
+   // dggs_orient_preset <NONE | ISEA | ISEAL | DYMAXION>
    // a named orientation: sets dggs_vert0_lon, dggs_vert0_lat, dggs_vert0_azimuth
    // and orientation_datum (explicitly set values still take precedence)
-   pList().insertParam("dggs_orient_preset", "NONE", {"NONE", "ISEA", "ISEAL"});
+   pList().insertParam("dggs_orient_preset", "NONE", {"NONE", "ISEA", "ISEAL", "DYMAXION"});
 
    // dggs_vert0_lon <long double: decimal degrees> (-180.0 <= v <= 180.0)
    pList().insertParam(new DgDoubleParam("dggs_vert0_lon", 11.25, -180.0, 180.0));
@@ -405,14 +406,17 @@ SubOpDGG::setupOp (void)
 
       // All presets are processed on the authalic sphere. The ellipsoidal
       // presets use WGS84 geographic input and output and the ISEAL
-      // orientation; all others use the authalic sphere for input and output
-      // and the ISEA orientation.
+      // orientation; all others use the authalic sphere for input and output.
+      // The FULLER presets use the DYMAXION orientation and all other
+      // non-ellipsoidal presets use the ISEA orientation.
       const char* datum = ellipsoidal ? "WGS84" : "AUTHALIC_SPHERE";
       pList().setPresetParam("sphere_radius_type", "AUTHALIC_SPHERE");
       pList().setPresetParam("input_datum", datum);
       pList().setPresetParam("output_datum", datum);
       // also sets orientation_datum
-      pList().setPresetParam("dggs_orient_preset", ellipsoidal ? "ISEAL" : "ISEA");
+      const bool fuller = !gridName.compare(0, 6, "fuller");
+      pList().setPresetParam("dggs_orient_preset",
+                  ellipsoidal ? "ISEAL" : (fuller ? "DYMAXION" : "ISEA"));
       pList().setPresetParam("dggs_res_specify_type", "SPECIFIED");
       pList().setPresetParam("dggs_res_spec", "9");
 
@@ -490,15 +494,19 @@ SubOpDGG::setupOp (void)
    getParamValue(pList(), "dggs_orient_preset", orientPreset, false);
    const std::string orientPresetlc = toLower(orientPreset);
    if (orientPresetlc != "none") {
-      // Both place vert0 at authalic latitude atan(phi), which puts the poles on
-      // icosahedron edge midpoints. ISEAL is the orientation PROJ and DGGAL use
+      // ISEA and ISEAL place vert0 at authalic latitude atan(phi), which puts
+      // the poles on icosahedron edge midpoints. DYMAXION is Fuller's
+      // orientation: vert0 in the Atlantic off Liberia, with azimuth toward the
+      // adjacent vertex near Norway (Gray 1995). ISEAL is the orientation PROJ and DGGAL use
       // for their ellipsoidal ISEA and IVEA: on WGS84, vert0 at 11.25 E lands on
       // the Swedish coast; 11.20 E puts it back in the ocean.
       static const struct {
-         const char* name; const char* lon; const char* azimuth; const char* datum;
+         const char* name; const char* lon; const char* lat; const char* azimuth;
+         const char* datum;
       } orientPresets[] = {
-         { "isea",  "11.25", "0.0", "AUTHALIC_SPHERE" },
-         { "iseal", "11.20", "0.0", "AUTHALIC_SPHERE" }
+         { "isea",  "11.25", nullptr, "0.0", "AUTHALIC_SPHERE" },
+         { "iseal", "11.20", nullptr, "0.0", "AUTHALIC_SPHERE" },
+         { "dymaxion", "-5.24539058", "2.300882", "7.46658", "AUTHALIC_SPHERE" }
       };
 
       bool found = false;
@@ -506,7 +514,7 @@ SubOpDGG::setupOp (void)
          if (orientPresetlc == op.name) {
             pList().setPresetParam("dggs_vert0_lon", op.lon);
             // 21 significant digits round-trip an 80-bit long double
-            pList().setPresetParam("dggs_vert0_lat",
+            pList().setPresetParam("dggs_vert0_lat", op.lat ? op.lat :
                           dgg::util::to_string(M_ICOSA_VERT0_LAT_DEG, "%.21Lg"));
             pList().setPresetParam("dggs_vert0_azimuth", op.azimuth);
             pList().setPresetParam("orientation_datum", op.datum);
@@ -588,7 +596,7 @@ SubOpDGG::setupOp (void)
    if ((inputWGS84() || outputWGS84() || orientationWGS84()) &&
          gridSphereDatum() != DatumMode::AuthalicSphere)
       ::report("input_datum/output_datum/orientation_datum WGS84 requires "
-               "sphere_radius_type WGS84 or AUTHALIC_SPHERE", DgBase::Fatal);
+               "sphere_radius_type AUTHALIC_SPHERE", DgBase::Fatal);
 
    earthRadius = gridSphereDatum() == DatumMode::CustomSphere ?
                  customSphereRadius : DgWGS84RF::canonicalAuthalicRadiusKM();

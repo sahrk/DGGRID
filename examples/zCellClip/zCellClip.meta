@@ -1,8 +1,10 @@
 ################################################################################
 #
 # zCellClip.meta - example of generating part of an ISEA3H grid using
-#      coarser resolution cells specified as ZORDER indexes as the 
-#      clipping polygons 
+#      coarser resolution cells specified as ZORDER indexes as the
+#      clipping polygons
+#
+# Kevin Sahr, 09/03/2019
 #
 ################################################################################
 

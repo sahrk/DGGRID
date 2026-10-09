@@ -1,11 +1,12 @@
 ################################################################################
-################################################################################
 #
-# binpresV8.meta - example of a dggrid meta-file which performs point 
+# binpresV8.meta - example of a DGGRID metafile which performs point
 #                presence/absence binning with GDAL input and output files
 #
 # Determine the presence/absence of Oregon cities with various population sizes
 # in the cells of resolution 7 of an ISEA3H DGGS.
+#
+# Kevin Sahr, 09/22/2023
 #
 ################################################################################
 
@@ -40,10 +41,9 @@ output_count_field_name numCities
 output_num_classes TRUE
 output_num_classes_field_name numClass
 
-# version 7 style text output parameters
-# for backwards compatibility the text file is output by default. 
+# version 7 style text output (on by default for backwards compatibility)
 output_file_name outputfiles/popclass3h7.txt
-# Set to NONE for no text output.
+# use NONE for no text output
 output_file_type TEXT
 
 # specify the per-cell output using GDAL-supported file formats

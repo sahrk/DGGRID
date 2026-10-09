@@ -1,16 +1,18 @@
 ################################################################################
 #
-# z3Transform.meta - example of a dggrid meta-file which performs address
-#                   conversion from GEO to Z3 indexes
+# z3Transform.meta - example of a DGGRID metafile which performs address
+#                   conversion from SEQNUM to Z3 indexes
 #
 # Note that the inputfiles directory contains GEO, Z3, Z3_STRING, and
-# SEQNUM files, all describing the same set of cells. You can experiment with 
+# SEQNUM files, all describing the same set of cells. You can experiment with
 # transforming between these by changing the input_* and output_* parameters.
 #
 # The input file z3d0.txt gives z3 cells using a padding digit of 0 (as per
-# DGGRID version 8.x and earier). The input file z3d3.txt uses a padding digit
+# DGGRID version 8.x and earlier). The input file z3d3.txt uses a padding digit
 # of 3, which will be the default starting with DGGRID version 9.0. Use
 # parameter z3_invalid_digit to set the appropriate padding digit.
+#
+# Kevin Sahr, 09/03/2019
 #
 ################################################################################
 
@@ -21,13 +23,12 @@ dggrid_operation TRANSFORM_POINTS
 dggs_type ISEA3H
 dggs_res_spec 9
 
-# specify bin controls
+# specify the input
 input_address_type SEQNUM
 input_file_name inputfiles/seqNum.txt
 input_delimiter " "
 
 # specify the output
-z3_invalid_digit 3
 output_address_type HIERNDX
 output_hier_ndx_system Z3
 output_hier_ndx_form INT64

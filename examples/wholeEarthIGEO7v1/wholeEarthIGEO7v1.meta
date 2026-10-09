@@ -1,6 +1,9 @@
 ################################################################################
+#
 # wholeEarthIGEO7v1.meta - example of generating a whole earth IGEO7v1 DGG res 3.
 #     IGEO7v1 is the spherical ISEA IGEO7 of version 8.4.
+#
+# Kevin Sahr, 04/01/2023
 #
 ################################################################################
 
@@ -23,4 +26,3 @@ kml_default_color ff00ff00
 kml_name IGEO7v1 Res 3
 kml_description www.discreteglobalgrids.org
 kml_default_width 3
-

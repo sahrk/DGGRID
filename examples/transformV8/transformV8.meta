@@ -1,11 +1,12 @@
 ################################################################################
-################################################################################
 #
-# transformV8.meta - example of a dggrid meta-file which performs address
+# transformV8.meta - example of a DGGRID metafile which performs address
 #       conversion with GDAL cell geometry output
 #
-# Transformation from GEO to DGGS cells effectively determines the cell in which 
-# each of the input Oregon cities are located in a resolution 8 ISEA3H DGGS.
+# Transformation from GEO to DGGS cells effectively determines the cell in which
+# each of the input Oregon cities are located in a resolution 9 ISEA3H DGGS.
+#
+# Kevin Sahr, 09/22/2023
 #
 ################################################################################
 
@@ -16,7 +17,7 @@ dggrid_operation TRANSFORM_POINTS
 dggs_type ISEA3H
 dggs_res_spec 9
 
-# specify bin controls
+# specify the input
 input_files inputfiles/100k.txt inputfiles/200k.txt inputfiles/20k.txt inputfiles/50k.txt
 input_address_type GEO
 input_delimiter " "

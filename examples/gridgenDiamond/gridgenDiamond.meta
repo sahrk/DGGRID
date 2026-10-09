@@ -1,9 +1,9 @@
 ################################################################################
 #
 # gridgenDiamond.meta - example of a DGGRID metafile that generates resolution 3
-#     of a diamond grid in KML format. 
+#     of an ISEA4D diamond grid in KML format.
 #
-# Kevin Sahr, 03/15/21
+# Kevin Sahr, 03/15/2021
 #
 ################################################################################
 
@@ -22,7 +22,6 @@ geodetic_densify 0.0
 cell_output_type KML
 cell_output_file_name outputfiles/dmd
 kml_default_color ffff0000
-kml_default_width 6
 kml_name ISEA4D
 kml_description www.discreteglobalgrids.org
 kml_default_width 6

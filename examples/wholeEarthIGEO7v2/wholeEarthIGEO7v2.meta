@@ -1,7 +1,10 @@
 ################################################################################
+#
 # wholeEarthIGEO7v2.meta - example of generating a whole earth IGEO7v2 DGG res 3.
 #     IGEO7v2 is the ellipsoidal version of IGEO7, using the IVEA projection
 #     with WGS84 geographic input and output.
+#
+# Kevin Sahr, 04/01/2023
 #
 ################################################################################
 
@@ -24,4 +27,3 @@ kml_default_color ffff0000
 kml_name IGEO7v2 Res 3
 kml_description www.discreteglobalgrids.org
 kml_default_width 3
-

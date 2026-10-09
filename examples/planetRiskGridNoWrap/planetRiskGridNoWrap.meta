@@ -1,11 +1,11 @@
 ################################################################################
 #
 # planetRiskGridNoWrap.meta - example of generating a PlanetRisk grid with
-#      neighbors and children, where cell boundaries and their associated 
+#      neighbors and children, where cell boundaries and their associated
 #      points are "unwrapped" to facilitate 2D display (see the last two
 #      parameters at the bottom of this file).
 #
-# Kevin Sahr, 1/10/22
+# Kevin Sahr, 01/10/2022
 #
 ################################################################################
 
@@ -36,9 +36,8 @@ children_output_file_name outputfiles/children
 densification 0
 precision 6
 
-# force cells who straddle the anti-meridian to "unwrap" to the east 
+# force cells who straddle the anti-meridian to "unwrap" to the east
 # (i.e., all vertices output with a positive longitude)
 longitude_wrap_mode UNWRAP_EAST
 # force points to follow the associated cells when the cell is "unwrapped"
 unwrap_points TRUE
-

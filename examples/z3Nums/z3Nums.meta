@@ -1,14 +1,16 @@
 ################################################################################
 #
-# z3Nums.meta - example of a DGGRID metafile that generates kml cells for a 
+# z3Nums.meta - example of a DGGRID metafile that generates kml cells for a
 #     resolution 9 ISEA3H grid for Z3 indexes specified in text files.
+#
+# Kevin Sahr, 03/02/2022
 #
 ################################################################################
 
 # specify the operation
 dggrid_operation GENERATE_GRID
 
-# specify a ISEA3H; override the default resolution
+# specify the DGG
 dggs_type ISEA3H
 dggs_res_spec 9
 

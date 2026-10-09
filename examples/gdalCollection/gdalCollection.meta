@@ -1,10 +1,10 @@
 ################################################################################
 #
-# gdalCollection.meta - example of a DGGRID metafile that combines all data for
-#     each cell into a single file. The cells to generate are specified by
-#     SEQNUMs in a text file.
+# gdalCollection.meta - example of a DGGRID metafile that combines all output
+#     (cells, points, neighbors, children) into a single GeoJSON file. The
+#     cells to generate are specified by SEQNUMs in a text file.
 #
-# Kevin Sahr, 02/08/22
+# Kevin Sahr, 02/08/2022
 #
 ################################################################################
 

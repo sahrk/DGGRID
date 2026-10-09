@@ -1,13 +1,16 @@
 ################################################################################
-# z7Nums.meta - example of a DGGRID metafile that generates kml cells for a 
+#
+# z7Nums.meta - example of a DGGRID metafile that generates kml cells for a
 #     resolution 4 ISEA7H grid for Z7 indexes specified in text files.
+#
+# Kevin Sahr, 03/02/2022
 #
 ################################################################################
 
 # specify the operation
 dggrid_operation GENERATE_GRID
 
-# specify a ISEA7H; override the default resolution
+# specify the DGG
 dggs_type ISEA7H
 dggs_res_spec 4
 

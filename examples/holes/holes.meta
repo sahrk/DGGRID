@@ -1,9 +1,9 @@
 ################################################################################
 #
-# holes.meta - example of a DGGRID metafile that generates a ISEA3H
+# holes.meta - example of a DGGRID metafile that generates an ISEA3H
 #     resolution 17 grid using an input clipping polygon with holes.
 #
-# Kevin Sahr, 06/20/22
+# Kevin Sahr, 06/20/2022
 #
 ################################################################################
 
@@ -18,7 +18,7 @@ dggs_res_spec 17
 clip_subset_type GDAL
 clip_region_files ./inputfiles/holes00.geojson
 clip_using_holes TRUE
-geodetic_densify 0.01 
+geodetic_densify 0.01
 
 # specify the output
 cell_output_type KML

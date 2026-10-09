@@ -1,7 +1,9 @@
 ################################################################################
 #
-# z3WholeEarth.meta - example of generating a whole earth resolution 4 ISEA3H 
+# z3WholeEarth.meta - example of generating a whole earth resolution 4 ISEA3H
 #      grid with Z3 indexes.
+#
+# Kevin Sahr, 04/01/2023
 #
 ################################################################################
 

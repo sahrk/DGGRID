@@ -1,9 +1,9 @@
 ################################################################################
 #
 # table.meta - example of a DGGRID metafile that outputs a table of grid 
-#     characteristics for a mixed aperture DGG.
+#     characteristics for resolutions 0-15 of a mixed aperture ISEA43H DGG.
 #
-# Kevin Sahr, 01/14/13
+# Kevin Sahr, 01/14/2013
 #
 ################################################################################
 

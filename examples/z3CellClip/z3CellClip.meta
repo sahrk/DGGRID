@@ -2,7 +2,9 @@
 #
 # z3CellClip.meta - example of generating part of an ISEA3H grid using
 #      coarser resolution cells specified as Z3 INT64 indexes as the
-#      clipping polygons (must match sampleOutput clip_cell_addresses).
+#      clipping polygons.
+#
+# Kevin Sahr, 09/03/2019
 #
 ################################################################################
 

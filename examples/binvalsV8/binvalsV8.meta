@@ -1,11 +1,12 @@
 ################################################################################
-################################################################################
 #
-# binvalsV8.meta - example of a dggrid meta-file which performs point value
-#      binning that uses GDAL Shapefiles for input and output.
+# binvalsV8.meta - example of a DGGRID metafile which performs point value
+#      binning with GDAL (Shapefile) input and output.
 #
 # Determine the number of Oregon bridges and their total and mean lengths in the
 # cells of resolution 10 of an ISEA3H DGGS.
+#
+# Kevin Sahr, 09/22/2023
 #
 ################################################################################
 
@@ -13,12 +14,10 @@
 dggrid_operation BIN_POINT_VALS
 
 # specify the DGG
-
 dggs_type ISEA3H
 dggs_res_spec 10
 
 # specify bin controls
-
 # indicate that we're only using a small part of the globe
 # this helps DGGRID use memory more efficiently
 bin_coverage PARTIAL
@@ -49,15 +48,13 @@ cell_output_type GDAL
 cell_output_gdal_format "ESRI Shapefile"
 cell_output_file_name outputfiles/cells
 
-# output the points to a seperate file
+# output the points to a separate file
 point_output_type GDAL
 point_output_gdal_format "ESRI Shapefile"
 point_output_file_name outputfiles/points
 
-# version 7 style text output parameters
-# for backwards compatibility the text file is output by default. 
+# version 7 style text output (on by default for backwards compatibility)
 output_file_name outputfiles/textOutput.txt
-# Set to NONE for no text output.
+# use NONE for no text output
 output_file_type TEXT
 output_delimiter ","
-

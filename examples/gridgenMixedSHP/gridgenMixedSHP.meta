@@ -1,10 +1,10 @@
 ################################################################################
 #
-# gridgenMixedSHP.meta - example of a DGGRID metafile that generates a 
-#     resolution 10 mixed aperture grid using the Fuller projection and clipped 
-#     to Benton County, Oregon. The output grid is in ShapeFile format.
+# gridgenMixedSHP.meta - example of a DGGRID metafile that generates a
+#     resolution 10 mixed aperture grid using the Fuller projection and clipped
+#     to Benton County, Oregon. The output grid is in Shapefile format.
 #
-# Kevin Sahr, 01/14/13
+# Kevin Sahr, 01/14/2013
 #
 ################################################################################
 
@@ -25,5 +25,5 @@ geodetic_densify 0.0
 # specify the output
 cell_output_type SHAPEFILE
 cell_output_file_name outputfiles/benton10
-shapefile_id_field_length 5
+shapefile_id_field_length 6
 densification 3

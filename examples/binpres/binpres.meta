@@ -1,16 +1,12 @@
 ################################################################################
-################################################################################
 #
-# binpres.meta - example of a dggrid meta-file which performs presence/absence
+# binpres.meta - example of a DGGRID metafile which performs presence/absence
 #                binning
 #
 # Determine the presence/absence of Oregon cities with various populations in
 # the cells of resolution 7 of an ISEA3H DGGS.
 #
-# Created by Kevin Sahr, November 11, 2001
-# Revised by Kevin Sahr, June 20, 2003
-# Revised by Kevin Sahr, October 20, 2014
-# Revised by Kevin Sahr, November 11, 2014
+# Kevin Sahr, 11/11/2001
 #
 ################################################################################
 
@@ -32,4 +28,3 @@ output_address_type SEQNUM
 output_delimiter ","
 output_num_classes TRUE
 cell_output_control OUTPUT_OCCUPIED
-

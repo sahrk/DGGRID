@@ -1,9 +1,11 @@
 ################################################################################
 #
-# multipleOrientations.meta - example of a DGGRID metafile that generates 
+# multipleOrientations.meta - example of a DGGRID metafile that generates
 #     multiple orientations of a resolution 2 ISEA aperture 3 grid. The whole
 #     earth is output in KML format. Each output file contains a maximum of
 #     50 cells.
+#
+# Kevin Sahr, 09/22/2023
 #
 ################################################################################
 

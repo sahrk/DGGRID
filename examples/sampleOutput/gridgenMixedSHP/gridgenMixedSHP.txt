@@ -21,10 +21,10 @@ output_datum AUTHALIC_SPHERE (user set)
 orientation_datum AUTHALIC_SPHERE (user set)
 dggs_orient_specify_type SPECIFIED (user set)
 dggs_num_placements 1 (user set)
-dggs_orient_preset ISEA (user set)
-dggs_vert0_lon 11.25 (user set)
-dggs_vert0_lat 58.2825 (user set)
-dggs_vert0_azimuth 0 (user set)
+dggs_orient_preset DYMAXION (user set)
+dggs_vert0_lon -5.24539 (user set)
+dggs_vert0_lat 2.30088 (user set)
+dggs_vert0_azimuth 7.46658 (user set)
 dggs_res_specify_type SPECIFIED (user set)
 dggs_res_spec 10 (user set)
 hier_indexing_system_type NONE (default)
@@ -57,7 +57,7 @@ point_output_file_name centers (default)
 randpts_output_file_name randPts (default)
 collection_output_file_name cells (default)
 dggs_orient_output_file_name grid.meta (default)
-shapefile_id_field_length 5 (user set)
+shapefile_id_field_length 6 (user set)
 kml_default_width 4 (default)
 kml_default_color ffffffff (default)
 kml_name  (default)
@@ -87,13 +87,13 @@ clipper_scale_factor 1000000 (default)
 * building clipping regions...
 
 * No intersections in quad 0.
-* Testing quad 1... 
-...quad 1 complete.
+* No intersections in quad 1.
 * No intersections in quad 2.
 * No intersections in quad 3.
 * No intersections in quad 4.
 * No intersections in quad 5.
-* No intersections in quad 6.
+* Testing quad 6... 
+...quad 6 complete.
 * No intersections in quad 7.
 * No intersections in quad 8.
 * No intersections in quad 9.
@@ -101,6 +101,6 @@ clipper_scale_factor 1000000 (default)
 * No intersections in quad 11.
 
 ** grid generation complete **
-accepted 12 cells / 27 tested
-acceptance rate is 44.4444%
+accepted 12 cells / 24 tested
+acceptance rate is 50%
 

@@ -1,11 +1,11 @@
 ################################################################################
 #
 # icosaISEA.meta - example of a DGGRID metafile that generates a spherical
-#     icosahedron (a resolution 0 triangle grid) with canoncial ISEA
+#     icosahedron (a resolution 0 triangle grid) with canonical ISEA
 #     orientation in KML format. Uses the ISEA4T grid preset, which uses the
 #     ISEA orientation preset and the authalic sphere for all datums.
 #
-# Kevin Sahr, 9/27/26
+# Kevin Sahr, 09/27/2026
 #
 ################################################################################
 
@@ -26,7 +26,6 @@ cell_output_file_name outputfiles/icosaISEA
 point_output_type KML
 point_output_file_name outputfiles/icosaISEApts
 kml_default_color ffff0000
-kml_default_width 6
 kml_name ISEA Spherical Icosahedron
 kml_description www.discreteglobalgrids.org
 kml_default_width 6

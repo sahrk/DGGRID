@@ -38,6 +38,7 @@ templates_path = ['_templates']
 myst_heading_anchors = 3
 exclude_patterns = [
     'appendix_a.md',  # included into the manual
+    'appendix_b.md',  # included into the manual
     '_build',
     'convert',
     'Thumbs.db',

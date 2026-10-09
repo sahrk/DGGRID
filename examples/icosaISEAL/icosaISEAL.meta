@@ -7,7 +7,7 @@
 #     output_datum of WGS84 applies authalic latitude conversion to WGS84
 #     geodetic latitude/longitude.
 #
-# Kevin Sahr, 9/27/26
+# Kevin Sahr, 09/27/2026
 #
 ################################################################################
 
@@ -28,7 +28,6 @@ cell_output_file_name outputfiles/icosaISEAL
 point_output_type KML
 point_output_file_name outputfiles/icosaISEALpts
 kml_default_color ff0000ff
-kml_default_width 6
 kml_name ISEAL Ellipsoidal Icosahedron
 kml_description www.discreteglobalgrids.org
 kml_default_width 6

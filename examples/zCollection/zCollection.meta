@@ -3,6 +3,8 @@
 # zCollection.meta - example of a DGGRID metafile that outputs to a GDAL
 #     collection file using ZOrder cell indexes.
 #
+# Kevin Sahr, 02/03/2022
+#
 ################################################################################
 
 # specify the operation

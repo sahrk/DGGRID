@@ -1,10 +1,10 @@
 ################################################################################
 #
-# gdalExample.meta - example of a DGGRID metafile that generates a resolution 
-#     9 ISEA7H grid. The clipping and output files all use GDAL-readable file 
+# gdalExample.meta - example of a DGGRID metafile that generates a resolution
+#     9 ISEA7H grid. The clipping and output files all use GDAL-readable file
 #     formats.
 #
-# Kevin Sahr, 08/29/19
+# Kevin Sahr, 08/29/2019
 #
 ################################################################################
 
@@ -17,7 +17,7 @@ dggs_res_spec 9
 
 # control grid generation
 clip_subset_type GDAL
-# gdal uses the file extension to determine the file format
+# GDAL determines the input file format automatically
 clip_region_files inputfiles/corvallis.shp
 
 # specify the output

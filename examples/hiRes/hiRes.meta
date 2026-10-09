@@ -1,16 +1,10 @@
 ################################################################################
 #
-# hiRes.meta - example of a DGGRID metafile that generates a very high 
-#     resolution grid (cell area of less than 3 square cm) using a mixed 
+# hiRes.meta - example of a DGGRID metafile that generates a very high
+#     resolution grid (cell area of about 0.02 m^2) using a mixed
 #     aperture ISEA projection and clipped to a small triangle in Ashland, Oregon.
 #
-# NOTES: 
-#
-#   - this metafile causes DGGRID to generate a warning indicating that the
-#     number of cells may cause an integer overflow for some operations; this 
-#     message should not stop DGGRID from generating portions of the grid
-#
-# Kevin Sahr, 09/01/18
+# Kevin Sahr, 09/01/2018
 #
 ################################################################################
 
@@ -30,7 +24,7 @@ clipper_scale_factor 1000000000
 
 # specify the output
 cell_output_type SHAPEFILE
-cell_output_file_name outputfiles/littleTri31
+cell_output_file_name outputfiles/littleTri27
 densification 3
 shapefile_id_field_length 21
 precision 12

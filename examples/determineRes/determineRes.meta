@@ -1,9 +1,10 @@
 ################################################################################
 #
-# gridgenMixed.meta - example of a DGGRID metafile that generates a grid for
-#     the entire earth with a cell area of approximately 120,000km^2.
+# determineRes.meta - example of a DGGRID metafile that chooses the resolution
+#     of a mixed aperture ISEA43H grid from a target cell area of 120,000 km^2
+#     and generates that grid for the whole earth.
 #
-# Kevin Sahr, 01/14/13
+# Kevin Sahr, 01/14/2013
 #
 ################################################################################
 
@@ -13,6 +14,7 @@ dggrid_operation GENERATE_GRID
 # specify the DGG
 dggs_type ISEA43H
 dggs_num_aperture_4_res 2
+# choose the resolution by cell area, rounding down to an available resolution
 dggs_res_specify_type CELL_AREA
 dggs_res_specify_area 120000.0
 dggs_res_specify_rnd_down TRUE
