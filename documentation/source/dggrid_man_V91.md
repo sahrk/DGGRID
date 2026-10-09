@@ -285,21 +285,11 @@ Internally the grid is always generated on a sphere, selected by the **choice** 
 
 **6. Choosing the datums of geographic input, output and orientation:** The **choice** parameters input_datum, output_datum and orientation_datum independently select the datum of the longitude/latitude coordinates at each boundary. Each takes one of the datum values above and defaults to `AUTHALIC_SPHERE`.
 
-A point has the same longitude and latitude on every sphere, so coordinates on `AUTHALIC_SPHERE` or `CUSTOM_SPHERE` pass to and from the grid sphere unchanged. `WGS84` interprets latitude as geodetic latitude on the WGS 84 ellipsoid: at input **DGGRID** converts it to authalic latitude on the WGS 84 authalic sphere, and at output it converts authalic latitude back to geodetic latitude. Longitude is unchanged. Because this conversion is defined onto the WGS 84 authalic sphere, any datum set to `WGS84` requires sphere_radius_type `AUTHALIC_SPHERE`; otherwise **DGGRID** stops with an error. The authalic conversion preserves area between the WGS 84 ellipsoid and its authalic sphere, so ISEA and IVEA remain equal area on the ellipsoid. Fuller does not become equal area.
+A point has the same longitude and latitude on every sphere, so coordinates on `AUTHALIC_SPHERE` or `CUSTOM_SPHERE` pass to and from the grid sphere unchanged. `WGS84` interprets latitude as geodetic latitude on the WGS 84 ellipsoid: at input **DGGRID** converts it to authalic latitude on the WGS 84 authalic sphere, and at output it converts authalic latitude back to geodetic latitude. Longitude is unchanged. Because this conversion is defined onto the WGS 84 authalic sphere, any datum set to `WGS84` requires sphere_radius_type `AUTHALIC_SPHERE`; otherwise **DGGRID** stops with an error. The authalic conversion preserves area between the WGS 84 ellipsoid and its authalic sphere, so ISEA and IVEA remain equal area on the ellipsoid.
 
-The input datum applies to geographic point and polygon files and to `GEO` addresses given as input. The orientation datum applies to user supplied orientation positions: dggs_vert0_lon and dggs_vert0_lat, and region_center_lon and region_center_lat. If either dggs_vert0_lon or dggs_vert0_lat is set by the user, the complete longitude/latitude pair is interpreted in the orientation datum; the component that is not set takes its current default or preset value. Built in and preset orientations are already on the grid sphere and are not converted. Random placement is generated on the grid sphere. Azimuths, projected coordinates, grid addresses, and radius values are not latitude values and are not converted.
+The input datum applies to geographic point and polygon files and to `GEO` addresses given as input. The orientation datum applies to user supplied orientation positions: dggs_vert0_lon and dggs_vert0_lat, and region_center_lon and region_center_lat. If either dggs_vert0_lon or dggs_vert0_lat is set by the user, the complete longitude/latitude pair is interpreted in the orientation datum; the component that is not set takes its current default or preset value. All internal processing occurs on the unit sphere, including the generation of random placements.
 
 Geographic clipping vertices use the input datum. Subsequent clipping and edge densification operate on the grid sphere; selecting `WGS84` does not make polygon edges follow WGS 84 ellipsoidal geodesics. The output datum applies to `GEO` addresses and to generated geographic cell centers, boundaries, random points, and other geographic geometries.
-
-For example, these settings read WGS 84 input points but write spherical geographic coordinates:
-
-```text
-sphere_radius_type AUTHALIC_SPHERE
-input_datum WGS84
-output_datum AUTHALIC_SPHERE
-```
-
-To read spherical coordinates and write WGS 84 coordinates, exchange the two datum values. A fixed cell address is independent of the input datum; only the output datum controls its geographic geometry. Conversely, when converting a geographic point to a cell address, only the input datum affects its cell assignment.
 
 The output datum also determines the datum declared in output metadata, independently of the grid sphere. For example, a grid built with sphere_radius_type `CUSTOM_SPHERE` and written with output_datum `AUTHALIC_SPHERE` has the same coordinates as one written with output_datum `CUSTOM_SPHERE`, but its metadata declare the WGS 84 authalic sphere. WGS 84 output coordinates are written in longitude, latitude order. For `WGS84`, Shapefile output has a `.prj` file for the WGS 84 geographic CRS, and GDAL output declares EPSG:4326 (with traditional GIS coordinate order). For the spherical datums, Shapefile output has a `.prj` file and GDAL output declares a named sphere with the corresponding radius, which is not EPSG:4326. The non-GDAL GeoJSON and KML, text and AIGen outputs have no embedded CRS declaration; GeoJSON and KML readers normally assume WGS 84 longitude, latitude, so files written with a spherical output datum should be interpreted with that setting in mind.
 
@@ -334,17 +324,17 @@ By default, each longitude value is output in the range -180.0 to 180.0 degrees.
 
 A unique integer cell identifier is output along with each cell boundary or point. The integer identifier type is specified using the **choice** parameter output_cell_label_type, which can have one of four values:
 
-GLOBAL_SEQUENCE (the default, except as noted below) - the identifier is the appropriate value in a linear sequence 1 to *n*, where *n* is the total number of cells in the whole earth DGG. For the operation GENERATE_GRID with clip_subset_type WHOLE_EARTH, the **integer** parameters output_first_seqnum and output_last_seqnum select the first and last sequence numbers to generate, and the identifiers of the generated cells are then those sequence numbers (see **Section 6**)
+GLOBAL_SEQUENCE (the default, except as noted below) - the identifier is the appropriate value in a linear sequence 1 to *n*, where *n* is the total number of cells in the whole earth DGG.
 
-ENUMERATION - the generated cells are numbered from 1 to *n*, where *n* is the total number of cells generated (the numbering always starts at 1, even if output_first_seqnum is set)
+ENUMERATION - the generated cells are numbered from 1 to *n*, where *n* is the total number of cells generated
 
 OUTPUT_ADDRESS_TYPE - the identifier is output in the form indicated by the **choice** parameter output_address_type (see [**Appendix D**](#appendix-d-dgg-address-forms)).
 
 SUPERFUND (preset default when dggs_type is SUPERFUND) - the identifier is a condensed Superfund_500m index (see [**Appendix F**](#appendix-f-the-epa-superfund_500m-dggs)). This value must be (and can only be) used when dggs_type is SUPERFUND.
 
-Note that the default value of output_cell_label_type is OUTPUT_ADDRESS_TYPE when dggrid_operation is TRANSFORM_POINTS or dggs_type is IGEO7, IGEO7v1, or IGEO7v2.
+Note that the default value of output_cell_label_type is OUTPUT_ADDRESS_TYPE when dggrid_operation is TRANSFORM_POINTS.
 
-Note that DGGRID provides two ways to generate output in either ESRI Shapefile format or KML:
+DGGRID provides two ways to generate output in either ESRI Shapefile format or KML:
 
 1. Set cell_output_type and/or point_output_type to SHAPEFILE or KML, or
 2. Set cell_output_type and/or point_output_type to GDAL and cell_output_gdal_format and/or point_output_gdal_format to SHAPEFILE or KML
@@ -357,13 +347,13 @@ The **string** parameters kml_name and kml_description set the contents of the n
 
 In addition to outputting the boundaries and center points of the selected cells, **DGGRID** can output the topological neighbors of each of the cells; i.e., the DGG cells that are adjacent to/share an edge with each cell. **DGGRID** currently only supports neighbors for hexagon and diamond grids (not triangle grids). To output cell neighbors, set the **choice** parameter neighbor_output_type to TEXT. Specify the name of the output neighbors file in the **string** parameter neighbor_output_file_name. For each selected cellID the output file will contain a single line of the form:
 
-> cellID neighborID~1~ neighborID~2~ ... neighborID~n~
+> cellID neighborID{sub}`1` neighborID{sub}`2` ... neighborID{sub}`n`
 
 with the neighborID's for each cell listed in counter-clockwise order about the central cellID cell.
 
 **DGGRID** can also output the spatial children of the selected cells. That is, for each of the selected cells, **DGGRID** will determine and output the cells in the next finer resolution of the DGGS which intersect or are contained within the selected cell. To output cell spatial children, set the **choice** parameter children_output_type to TEXT. Specify the name of the output children file in the **string** parameter children_output_file_name. For each selected cellID the output file will contain a single line of the form:
 
-> cellID childID~1~ childID~2~ ... childID~n~
+> cellID childID{sub}`1` childID{sub}`2` ... childID{sub}`n`
 
 In the case of hexagonal DGGS with a pure aperture the hierarchical indexing parent and/or children of the selected cells can be output based on a hierarchical indexing system specified in the **choice** parameter hier_indexing_system_type (see [**Appendix D**](#appendix-d-dgg-address-forms)); an error results if indexing parents or children are requested while hier_indexing_system_type is NONE (the default). Resolution 0 cells have no indexing parent.
 
@@ -373,7 +363,7 @@ To output the indexing parent of each cell in the next coarser resolution using 
 
 To output the indexing children of each cell in the next finer resolution using the selected indexing system, set the **choice** parameter indexing_children_output_type to TEXT. Specify the name of the output children file in the **string** parameter indexing_children_output_file_name. For each selected cellID the output file will contain a single line of the form:
 
-> cellID childID~1~ childID~2~ ... childID~n~
+> cellID childID{sub}`1` childID{sub}`2` ... childID{sub}`n`
 
 So far we have discussed outputting each type of cell data to a different output file. One or more of the features associated with each cell may be output together in a single file by specifying the output type GDAL_COLLECTION for each such desired feature ( cell_output_type, point_output_type, neighbor_output_type, and/or children_output_type). The chosen features must include either the cell boundary, point, or both. The output file format for this single collection file is specified in the **string** parameter collection_output_gdal_format, as described above for the parameters cell_output_gdal_format and point_output_gdal_format. Note that some GDAL formats may not support the output of neighbors or children. The file name prefix to use for this collection file is specified using the **string** parameter collection_output_file_name.
 
@@ -417,7 +407,7 @@ The boundaries of these cells are then used as the input clipping polygons, as d
 
 The cells to be generated can be specified as a list of addresses in one or more text files by setting the parameter clip_subset_type to ADDRESS_FILES. Then clip_region_files must be set to one or more text files containing the list of cell addresses to be generated. A single cell will be generated at most once; duplicate addresses in the input will be ignored.
 
-The input text files should consist of addresses, one per line, using the address type specified in parameter input_address_type. The components of multi-part address forms must be delimited using the character indicated within double quotes in the **string** parameter input_delimiter (the default is a space, so "1 6 2" is a valid Q2DI line); the delimiter used in the files must match input_delimiter or **DGGRID** will exit with an invalid-input error. All addresses must have the same resolution as the cells being generated (as specified in **Section 4**).
+The input text files should consist of addresses, one per line, using the address type specified in parameter input_address_type. The components of multi-part address forms must be delimited using the character indicated within double quotes in the **string** parameter input_delimiter (the default is a space); the delimiter used in the files must match input_delimiter or **DGGRID** will exit with an invalid-input error. All addresses must have the same resolution as the cells being generated (as specified in **Section 4**).
 
 **Miscellaneous**
 
@@ -489,7 +479,7 @@ Setting the **choice** parameter dggrid_operation to TRANSFORM_POINTS tells **DG
 
 Each line in each input file should consist of an address followed by optional arbitrary text. The components of the address (if any) must be delimited by the character indicated within double quotes in the **string** parameter input_delimiter, and if there is text following the address it must also be separated from the address by that character. The address must be a valid address under the address form indicated in the **choice** parameter input_address_type (see [**Appendix D**](#appendix-d-dgg-address-forms)). Address types other than GEO are interpreted as addresses in a DGG specified as per **Section 4**.
 
-Each input address is transformed to an address of the form indicated by the **choice** parameter output_address_type (see [**Appendix D**](#appendix-d-dgg-address-forms)), and the resulting cells are output. This applies as long as output_cell_label_type is OUTPUT_ADDRESS_TYPE (the default for this operation); an explicit value of GLOBAL_SEQUENCE or ENUMERATION causes both the text file and the cell label to contain a number instead. The transformed cell address is output in a field named "name" (GDAL formats) or "global_id" (Shapefile). The output_address_type GEO is allowed for this operation; the output is then the longitude and latitude of the center point of the cell that contains the input location, in the datum given by output_datum, so a GEO input location is moved to the center of its cell.
+The label output for each cell is determined by the choice parameter output_cell_label_type. If the value is OUTPUT_ADDRESS_TYPE (the default for this operation) then each input address is transformed to an address of the form indicated by the **choice** parameter output_address_type (see [**Appendix D**](#appendix-d-dgg-address-forms)), and the resulting cells are output. The transformed cell address is output in a field named "name" (GDAL formats) or "global_id" (Shapefile). The output_address_type GEO is allowed for this operation; the output is then the longitude and latitude of the center point of the cell that contains the input location, in the datum given by output_datum, so a GEO input location is moved to the center of its corresponding cell.
 
 In addition to the standard per-cell output described in **Section 5**, **DGGRID** can output the cells in a text file format by setting the choice parameter output_file_type to TEXT (the default for this operation; set to NONE for no text output), and the **string** parameter output_file_name (default "valsout.txt") to the desired text output file name. **DGGRID** will output each transformed address, one cell per line, into the text file using the value of output_delimiter to separate any address components. If there was additional text on the input line following the address, then an output delimiter followed by that text is appended to the output line.
 
@@ -898,19 +888,19 @@ The **Superfund_500m** cell identifiers are an instance of Central Place Indexin
 
 > **Table 1 Notes:**
 >
-> ^1^At every resolution 12 of the cells are pentagons and the remainder are hexagons.
+> {sup}`1`At every resolution 12 of the cells are pentagons and the remainder are hexagons.
 >
-> ^2^The 12 pentagons have an area exactly 5/6 the area of a hexagon.
+> {sup}`2`The 12 pentagons have an area exactly 5/6 the area of a hexagon.
 >
-> ^3^Measured in the plane of the Fuller projection space.
+> {sup}`3`Measured in the plane of the Fuller projection space.
 >
-> ^4^Characteristic Length Scale (CLS): the diameter of a spherical cap of the same area as a cell of the specified resolution. This metric was suggested by Ralph Kahn.
+> {sup}`4`Characteristic Length Scale (CLS): the diameter of a spherical cap of the same area as a cell of the specified resolution. This metric was suggested by Ralph Kahn.
 
 The **Superfund_500m** CPI system was designed to meet two design goals. First, the CPI approach allows the grid to have an intercell spacing of approximately 500 meters, which cannot be achieved with sufficient accuracy using a pure aperture grid system. Second, in order to take advantage of the pre-existing discrete global grid software tool **DGGRID** the cells needed to be hierarchically indexed in such a manner that the Christaller sets of each base cell are each restricted to a single **ij** coordinate system whose axes form two of the edges of a spherical quadrilateral formed by a pair of adjacent icosahedral faces.
 
 These design goals were met by constructing a grid with base cells of valence 5 (i.e., with pentagonal voronoi areas) centered on each of the 12 vertices of an icosahedron and then applying the following aperture sequence:
 
-4, 4, 3^ccw^, 3^cw^, 3^ccw^, 3^cw^, 3^ccw^, 3^cw^, 3^ccw^, 3^cw^, 3^ccw^, 3^cw^, 3^ccw^, 3^cw^, 3^ccw^, 3^cw^, 3^ccw^
+4, 4, 3{sup}`ccw`, 3{sup}`cw`, 3{sup}`ccw`, 3{sup}`cw`, 3{sup}`ccw`, 3{sup}`cw`, 3{sup}`ccw`, 3{sup}`cw`, 3{sup}`ccw`, 3{sup}`cw`, 3{sup}`ccw`, 3{sup}`cw`, 3{sup}`ccw`, 3{sup}`cw`, 3{sup}`ccw`
 
 To assign a unique hierarchical index to each cell, as well as to achieve the remaining grid design
 
@@ -1018,9 +1008,9 @@ The final design choice we must make is to choose a recursive method for constru
 
 apertures: (a) aperture 3, (b) aperture 4, and (c) aperture 7.
 
-In the case of an icosahedral/hexagonal DGGS the sequence begins with 12 fixed-size pentagons (forming a spherical dodecahedron), usually designated as resolution 0. A chosen sequence of apertures then determines the cell area and intercell-spacing at each coarser grid resolution. It would be desirable to have one grid resolution with cells as close as possible to 1 km^2^ in area, since that is both a generally familiar size as well as a reasonable base granularity for analysis. We evaluated all possible combinations of apertures 3, 4, and 7, and found that a sequence of eleven resolutions containing three aperture 3's, two aperture 4's, and six aperture 7's creates a grid of hexagons with an area of 1.002464 km^2^, the closest it is possible to achieve to 1 km^2^ in area with this approach.
+In the case of an icosahedral/hexagonal DGGS the sequence begins with 12 fixed-size pentagons (forming a spherical dodecahedron), usually designated as resolution 0. A chosen sequence of apertures then determines the cell area and intercell-spacing at each coarser grid resolution. It would be desirable to have one grid resolution with cells as close as possible to 1 km{sup}`2` in area, since that is both a generally familiar size as well as a reasonable base granularity for analysis. We evaluated all possible combinations of apertures 3, 4, and 7, and found that a sequence of eleven resolutions containing three aperture 3's, two aperture 4's, and six aperture 7's creates a grid of hexagons with an area of 1.002464 km{sup}`2`, the closest it is possible to achieve to 1 km{sup}`2` in area with this approach.
 
-Any sequence consisting of the required mix of apertures will achieve our 1 km^2^ cell area, but we want to arrange their ordering for optimal value. We chose to do an initial aperture 4 in order to center cells on the north and south pole, which lie on the mid-points of icosahedron edges in the Terra Cognita orientation (see Figure 3).
+Any sequence consisting of the required mix of apertures will achieve our 1 km{sup}`2` cell area, but we want to arrange their ordering for optimal value. We chose to do an initial aperture 4 in order to center cells on the north and south pole, which lie on the mid-points of icosahedron edges in the Terra Cognita orientation (see Figure 3).
 
 ![pasted-image.pdf](_static/image8.png)
 
@@ -1028,7 +1018,7 @@ Any sequence consisting of the required mix of apertures will achieve our 1 km^2
 
 Note the cell centered on the North Pole.
 
-We choose to order the remaining apertures from smallest to largest, minimizing the number of cells in the coarser resolution of the DGGS to enable efficient coarse filtering operations. We also specify that additional grid resolutions, beyond our 1 km^2^ resolution 11, should have an aperture of 7. Ordering the apertures as we do also has the effect of making the system geometrically a pure aperture 7 system at the finest resolutions; it should be noted that, of the three central place apertures, aperture 7 is geometrically the most efficient choice for sharding, since it forms unambiguous, balanced hierarchies that are optimally compact and "hexagon like" across resolutions.
+We choose to order the remaining apertures from smallest to largest, minimizing the number of cells in the coarser resolution of the DGGS to enable efficient coarse filtering operations. We also specify that additional grid resolutions, beyond our 1 km{sup}`2` resolution 11, should have an aperture of 7. Ordering the apertures as we do also has the effect of making the system geometrically a pure aperture 7 system at the finest resolutions; it should be noted that, of the three central place apertures, aperture 7 is geometrically the most efficient choice for sharding, since it forms unambiguous, balanced hierarchies that are optimally compact and "hexagon like" across resolutions.
 
 We have now completed the design choices needed to specify our DGGS. Table 1 gives some characteristics of the first 12 resolutions of the system, and Figure 4 illustrates the cell boundaries of one grid resolution.
 
