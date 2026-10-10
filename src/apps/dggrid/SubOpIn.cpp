@@ -162,7 +162,12 @@ SubOpIn::setupOp (void)
 
    // type of point input file
    getParamValue(pList(), "point_input_file_type", pointInputFileType, false);
-   isPointInput = (pointInputFileType != "NONE");
+   const bool operationUsesPointInput =
+       op.mainOp.operation == "GENERATE_GRID_FROM_POINTS" ||
+       op.mainOp.operation == "BIN_POINT_VALS" ||
+       op.mainOp.operation == "BIN_POINT_PRESENCE" ||
+       op.mainOp.operation == "TRANSFORM_POINTS";
+   isPointInput = operationUsesPointInput && pointInputFileType != "NONE";
 
 /*
 #ifdef USE_GDAL

@@ -50,7 +50,7 @@ SubOpMain::initializeOp (void)
    pList().insertParam("rng_type", "RAND", {"RAND", "MOTHER"});
 
    // precision <int> (0 <= v <= 30)
-   pList().insertParam(new DgIntParam("precision", DEFAULT_PRECISION, 0, INT_MAX));
+   pList().insertParam(new DgIntParam("precision", DEFAULT_PRECISION, 0, 30));
 
    //  verbosity <int> (0 <= v <= 3)
    pList().insertParam(new DgIntParam("verbosity", 0, 0, 3));

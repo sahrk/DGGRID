@@ -44,6 +44,9 @@ struct SubOpStats : public SubOpBasicMulti {
       op.outOp.active = false;
    }
 
+   virtual int execute (bool force = false)
+      { return DgApSubOperation::execute(force); }
+
    virtual int executeOp (void);
 
 };

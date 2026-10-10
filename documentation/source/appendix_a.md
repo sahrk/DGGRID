@@ -23,10 +23,10 @@
 | **children_output_file_name** *(string)* | Spatial children output file name | any | "chld" | | children_output_type is TEXT |
 | **children_output_type** *(choice)* | Output cell spatial children? | NONE, TEXT, GDAL_COLLECTION | NONE | |  |
 | **clip_cell_addresses** *(string)* | Addresses of coarse clipping cells in input_address_type | addNum1 addNum2 ... addNumN | | Cell resolution given by clip_cell_res | dggrid_operation is GENERATE_GRID and clip_subset_type is COARSE_CELLS |
-| **clip_cell_densification** *(integer)* | Number of points-per-edge densification for clipping cell boundaries | 0 ≤ v ≤ 500 | 1 | v of 0 indicates no densification | dggrid_operation is GENERATE_GRID and clip_subset_type is COARSE_CELLS |
-| **clip_cell_res** *(integer)* | Resolution of clipping cells | 0 < v < r, where r is the currently specified DGG resolution | 1 | | dggrid_operation is GENERATE_GRID and clip_subset_type is COARSE_CELLS |
-| **clip_region_files** *(string)* | Space delimited list of files that specify grid clipping | any | "test.gen" | | dggrid_operation is GENERATE_GRID and clip_subset_type is AIGEN, GDAL, SHAPEFILE, or ADDRESS_FILES |
-| **clip_subset_type** *(choice)* | Specifies how portion of DGG to generate will be determined | WHOLE_EARTH, AIGEN, SHAPEFILE, GDAL, ADDRESS_FILES, COARSE_CELLS | WHOLE_EARTH | COARSE_CELLS is only supported for hexagon grids | dggrid_operation is GENERATE_GRID |
+| **clip_cell_densification** *(integer)* | Number of points-per-edge densification for clipping cell boundaries | 0 ≤ v ≤ 500 | 1 | v of 0 indicates no densification | dggrid_operation is GENERATE_GRID and clip_subset_type is COARSE_CELLS or COARSE_CELL_FILES |
+| **clip_cell_res** *(integer)* | Resolution of clipping cells | 0 < v < r, where r is the currently specified DGG resolution | 1 | | dggrid_operation is GENERATE_GRID and clip_subset_type is COARSE_CELLS or COARSE_CELL_FILES |
+| **clip_region_files** *(string)* | Space delimited list of files that specify grid clipping | any | "test.gen" | | dggrid_operation is GENERATE_GRID and clip_subset_type is AIGEN, GDAL, SHAPEFILE, ADDRESS_FILES, or COARSE_CELL_FILES |
+| **clip_subset_type** *(choice)* | Specifies how portion of DGG to generate will be determined | WHOLE_EARTH, AIGEN, SHAPEFILE, GDAL, ADDRESS_FILES, COARSE_CELLS, COARSE_CELL_FILES | WHOLE_EARTH | COARSE_CELLS and COARSE_CELL_FILES are only supported for hexagon grids | dggrid_operation is GENERATE_GRID |
 | **clip_type** *(choice)* | Method for determining whether a cell is included by a clipping polygon | POLY_INTERSECT | POLY_INTERSECT | | dggrid_operation is GENERATE_GRID |
 | **clip_using_holes** *(boolean)* | Handle holes in input polygons? | TRUE, FALSE | FALSE | Requires a build with GDAL | dggrid_operation is GENERATE_GRID and clip_subset_type is GDAL |
 | **clipper_scale_factor** *(integer)* | Scale factor of the integer grid used by the polygon intersection library | 1 ≤ v | 1000000 | Increase if clipping gives incorrect results; a larger value may limit the extent of the region that can be clipped | dggrid_operation is GENERATE_GRID |
@@ -105,7 +105,7 @@
 | **point_output_file_name** *(string)* | Cell point output file name prefix | any | "centers" | | point_output_type is AIGEN, SHAPEFILE, KML, or TEXT |
 | **point_output_gdal_format** *(string)* | Point output file format | GDAL-compatible vector file format (see gdal.org) | GeoJSON | | point_output_type is GDAL |
 | **point_output_type** *(choice)* | Cell point output file format | NONE, AIGEN, KML, SHAPEFILE, TEXT, GEOJSON, GDAL, GDAL_COLLECTION | NONE | |  |
-| **precision** *(integer)* | Number of digits to right of decimal point when outputting floating point numbers | 0 ≤ v | 7 | |  |
+| **precision** *(integer)* | Number of digits to right of decimal point when outputting floating point numbers | 0 ≤ v ≤ 30 | 7 | |  |
 | **proj_datum** *(choice)* | **Deprecated**; use sphere_radius_type | WGS84_AUTHALIC_SPHERE, WGS84_MEAN_SPHERE, CUSTOM_SPHERE | | Still accepted with a warning, and will be removed in a future version. WGS84_AUTHALIC_SPHERE and CUSTOM_SPHERE map to sphere_radius_type AUTHALIC_SPHERE and CUSTOM_SPHERE; WGS84_MEAN_SPHERE maps to CUSTOM_SPHERE with radius 6371.00877141506 km | |
 | **proj_datum_radius** *(double)* | **Deprecated**; use custom_sphere_radius | 1.0 ≤ v ≤ 10,000.0 | | Still accepted with a warning, and will be removed in a future version | proj_datum is CUSTOM_SPHERE |
 | **randpts_concatenate_output** *(boolean)* | Put random points for multiple DGG placements in a single file? | TRUE, FALSE | TRUE | | randpts_output_type is AIGEN, KML, SHAPEFILE, or TEXT |

@@ -111,12 +111,13 @@ SubOpGen::initializeOp (void)
    // clip_subset_type <WHOLE_EARTH | AIGEN | SHAPEFILE | GDAL |
    //                   ADDRESSES | ADDRESS_FILES | COARSE_CELLS | COARSE_CELL_FILES >
 */
-   // KEVIN: currently no ADDRESSES or COARSE_CELL_FILES
+   // KEVIN: currently no ADDRESSES
    // clip_subset_type <WHOLE_EARTH | AIGEN | SHAPEFILE | GDAL |
-   //                   ADDRESS_FILES | COARSE_CELLS >
+   //                   ADDRESS_FILES | COARSE_CELLS | COARSE_CELL_FILES >
    {
       std::vector<std::string> ch = {"WHOLE_EARTH", "AIGEN", "SHAPEFILE",
-                                     "ADDRESS_FILES", "INPUT_ADDRESS_TYPE", "COARSE_CELLS"};
+                                     "ADDRESS_FILES", "INPUT_ADDRESS_TYPE", "COARSE_CELLS",
+                                     "COARSE_CELL_FILES"};
 #ifdef USE_GDAL
       ch.insert(ch.begin() + 3, "GDAL");
 #endif
@@ -202,7 +203,6 @@ SubOpGen::setupOp (void)
       addressGen = true;
       if (dummy == "ADDRESS_FILES")
           addressFiles = true;
-//KEVIN: currently no COARSE_CELL_FILES
    } else if (dummy == "COARSE_CELLS" || dummy == "COARSE_CELL_FILES") {
       coarseCellClip = true;
       if (dummy == "COARSE_CELL_FILES")

@@ -41,7 +41,7 @@ Notes:
 
 (b) For TRANSFORM_POINTS, input_datum applies only when input_address_type is GEO.
 
-(c) For GENERATE_GRID, the input address parameters and input_delimiter apply only to clip_subset_type values ADDRESS_FILES and COARSE_CELLS, where they describe the cell addresses. For GENERATE_GRID_FROM_POINTS, BIN_POINT_VALS, and BIN_POINT_PRESENCE the input address type must be GEO, so the input address form parameters have no effect.
+(c) For GENERATE_GRID, the input address parameters and input_delimiter apply only to clip_subset_type values ADDRESS_FILES, COARSE_CELLS, and COARSE_CELL_FILES, where they describe the cell addresses. For GENERATE_GRID_FROM_POINTS, BIN_POINT_VALS, and BIN_POINT_PRESENCE the input address type must be GEO, so the input address form parameters have no effect.
 
 (d) Only for clip_subset_type WHOLE_EARTH.
 
