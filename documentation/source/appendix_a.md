@@ -42,7 +42,7 @@
 | **dggs_num_aperture_4_res** *(integer)* | Number of aperture 4 resolutions in a mixed aperture sequence | 0 ≤ v ≤ 35 | 0 | | dggs_aperture_type is MIXED43 |
 | **dggs_num_placements** *(integer)* | Number of grid placements to use | 1 ≤ v | 1 | If dggs_orient_specify_type is not RANDOM all placements will be the same | |
 | **dggs_orient_output_file_name** *(string)* | Name of file for output of multiple DGGS placement parameter values | any | "grid.meta" | Each file is a metafile that can be used as input to reproduce that placement; see **Section 4.1** | dggs_orient_specify_type is RANDOM or dggs_num_placements > 1 |
-| **dggs_orient_preset** *(choice)* | Named orientation; sets dggs_vert0_lon, dggs_vert0_lat, dggs_vert0_azimuth and orientation_datum | NONE, ISEA, ISEAL | NONE (ISEA for dggs_type presets, ISEAL for the L presets and IGEO7v2) | Explicitly set parameters take precedence; see **Section 4.1** | dggs_orient_specify_type is SPECIFIED |
+| **dggs_orient_preset** *(choice)* | Named orientation; sets dggs_vert0_lon, dggs_vert0_lat, dggs_vert0_azimuth and orientation_datum | NONE, ISEA, ISEAL, DYMAXION | NONE | Explicitly set parameters take precedence; see **Section 4.1** | dggs_orient_specify_type is SPECIFIED |
 | **dggs_orient_rand_seed** *(integer)* | Seed for orientation random number generator | 0 ≤ v | 77316727 | | dggs_orient_specify_type is RANDOM |
 | **dggs_orient_specify_type** *(choice)* | How is the DGG orientation specified? | RANDOM, SPECIFIED, REGION_CENTER | SPECIFIED | |  |
 | **dggs_proj** *(choice)* | Projection used by the DGGS | ISEA, IVEA, FULLER | ISEA | |  |
@@ -57,18 +57,18 @@
 | **dggs_vert0_lat** *(double)* | Latitude of icosahedron vertex 0 (degrees) | -90.0 ≤ v ≤ 90.0 | 58.282525588538995 (atan φ) | | dggs_orient_specify_type is SPECIFIED |
 | **dggs_vert0_lon** *(double)* | Longitude of icosahedron vertex 0 (degrees) | -180.0 ≤ v ≤ 180.0 | 11.25 | | dggs_orient_specify_type is SPECIFIED |
 | **geodetic_densify** *(double)* | Maximum degrees of arc for a clipping polygon line segment | 0.0 ≤ v ≤ 360.0 | 0 | 0.0 indicates no densification | dggrid_operation is GENERATE_GRID |
-| **hier_indexing_system_type** *(choice)* | Hierarchical indexing system used for indexing parents/children | ZORDER, Z3, Z7, NONE | NONE | See [**Appendix D**](#appendix-d-dgg-address-forms) | |
+| **hier_indexing_system_type** *(choice)* | Hierarchical indexing system used for indexing parents/children | ZORDER, Z3, Z7, NONE | NONE | See [**Appendix E**](#appendix-e-dgg-address-forms) | |
 | **indexing_children_output_file_name** *(string)* | Hierarchical indexing children output file name | any | "ndxChld" | | indexing_children_output_type is TEXT |
 | **indexing_children_output_type** *(choice)* | Output cell hierarchical indexing children? | NONE, TEXT, GDAL_COLLECTION | NONE | |  |
 | **indexing_parent_output_file_name** *(string)* | Hierarchical indexing parents output file name | any | "ndxPrt" | | indexing_parent_output_type is TEXT |
 | **indexing_parent_output_type** *(choice)* | Output cell hierarchical indexing parent? | NONE, TEXT, GDAL_COLLECTION | NONE | |  |
-| **input_address_type** *(choice)* | Cell address form in input file(s) | GEO, Q2DI, SEQNUM, Q2DD, PROJTRI, VERTEX2DD, HIERNDX | GEO | See [**Appendix D**](#appendix-d-dgg-address-forms); SEQNUM is not allowed if dggs_aperture_type is SEQUENCE; BIN_POINT_VALS and BIN_POINT_PRESENCE require GEO | dggrid_operation is TRANSFORM_POINTS, or dggrid_operation is GENERATE_GRID and clip_subset_type is COARSE_CELLS or ADDRESS_FILES |
+| **input_address_type** *(choice)* | Cell address form in input file(s) | GEO, Q2DI, SEQNUM, Q2DD, PROJTRI, VERTEX2DD, HIERNDX | GEO | See [**Appendix E**](#appendix-e-dgg-address-forms); SEQNUM is not allowed if dggs_aperture_type is SEQUENCE; BIN_POINT_VALS and BIN_POINT_PRESENCE require GEO | dggrid_operation is TRANSFORM_POINTS, or dggrid_operation is GENERATE_GRID and clip_subset_type is COARSE_CELLS or ADDRESS_FILES |
 | **input_datum** *(choice)* | Datum of geographic input | WGS84, AUTHALIC_SPHERE, CUSTOM_SPHERE | AUTHALIC_SPHERE (WGS84 for the L presets and IGEO7v2) | WGS84 requires sphere_radius_type AUTHALIC_SPHERE; see **Section 4.6** | Geographic input files, clipping files, and GEO addresses |
 | **input_delimiter** *(string)* | Character that delimits address components and additional data in the input files | v is any single character in double quotes | " " (a single space) | | dggrid_operation is GENERATE_GRID_FROM_POINTS, TRANSFORM_POINTS, BIN_POINT_VALS, or BIN_POINT_PRESENCE; or clip_subset_type is COARSE_CELLS or ADDRESS_FILES |
 | **input_file_name** *(string)* | Name of file containing input points or addresses | fileName | valsin.txt | Overrides input_files if set | dggrid_operation is GENERATE_GRID_FROM_POINTS, TRANSFORM_POINTS, BIN_POINT_VALS, or BIN_POINT_PRESENCE |
 | **input_files** *(string)* | Name(s) of files containing lon/lat locations with associated values | fileName1 fileName2 ... fileNameN | vals.txt | | dggrid_operation is GENERATE_GRID_FROM_POINTS, TRANSFORM_POINTS, BIN_POINT_VALS, or BIN_POINT_PRESENCE |
-| **input_hier_ndx_form** *(choice)* | Index representation used in input file(s) | INT64, DIGIT_STRING | INT64 | See [**Appendix D**](#appendix-d-dgg-address-forms) | input_address_type is HIERNDX |
-| **input_hier_ndx_system** *(choice)* | Hierarchical indexing system used in input file(s) | ZORDER, Z3, Z7 | Z3 | See [**Appendix D**](#appendix-d-dgg-address-forms) | input_address_type is HIERNDX |
+| **input_hier_ndx_form** *(choice)* | Index representation used in input file(s) | INT64, DIGIT_STRING | INT64 | See [**Appendix E**](#appendix-e-dgg-address-forms) | input_address_type is HIERNDX |
+| **input_hier_ndx_system** *(choice)* | Hierarchical indexing system used in input file(s) | ZORDER, Z3, Z7 | Z3 | See [**Appendix E**](#appendix-e-dgg-address-forms) | input_address_type is HIERNDX |
 | **input_value_field_name** *(string)* | Field name containing value to bin | | value | | dggrid_operation is BIN_POINT_VALS |
 | **kml_default_color** *(string)* | Color of cell boundaries in KML output | any valid KML color | ffffffff | | cell_output_type is KML |
 | **kml_default_width** *(integer)* | Width of cell boundaries in KML output | 1 ≤ v ≤ 100 | 4 | | cell_output_type is KML |
@@ -79,7 +79,7 @@
 | **neighbor_output_file_name** *(string)* | Neighbors output file name | any | "nbr" | Triangle grids not supported | neighbor_output_type is TEXT |
 | **neighbor_output_type** *(choice)* | Output cell neighbors? | NONE, TEXT, GDAL_COLLECTION | NONE | Triangle grids not supported | |
 | **orientation_datum** *(choice)* | Datum of user supplied orientation positions | WGS84, AUTHALIC_SPHERE, CUSTOM_SPHERE | AUTHALIC_SPHERE | WGS84 requires sphere_radius_type AUTHALIC_SPHERE; see **Section 4.6** | dggs_vert0_lon, dggs_vert0_lat, region_center_lon, or region_center_lat is set |
-| **output_address_type** *(choice)* | Address form to use in output | GEO, Q2DI, SEQNUM, PLANE, Q2DD, PROJTRI, VERTEX2DD, HIERNDX | SEQNUM | See [**Appendix D**](#appendix-d-dgg-address-forms); only has an effect when output_cell_label_type is OUTPUT_ADDRESS_TYPE | dggrid_operation is TRANSFORM_POINTS, BIN_POINT_VALS, or BIN_POINT_PRESENCE, or output_cell_label_type is OUTPUT_ADDRESS_TYPE |
+| **output_address_type** *(choice)* | Address form to use in output | GEO, Q2DI, SEQNUM, PLANE, Q2DD, PROJTRI, VERTEX2DD, HIERNDX | SEQNUM | See [**Appendix E**](#appendix-e-dgg-address-forms); only has an effect when output_cell_label_type is OUTPUT_ADDRESS_TYPE | dggrid_operation is TRANSFORM_POINTS, BIN_POINT_VALS, or BIN_POINT_PRESENCE, or output_cell_label_type is OUTPUT_ADDRESS_TYPE |
 | **output_cell_label_type** *(choice)* | Output form for generated cell indexes | GLOBAL_SEQUENCE, ENUMERATION, OUTPUT_ADDRESS_TYPE, SUPERFUND | GLOBAL_SEQUENCE | Default is OUTPUT_ADDRESS_TYPE if dggrid_operation is TRANSFORM_POINTS or dggs_type is IGEO7, IGEO7v1, or IGEO7v2; SUPERFUND (required) if dggs_type is SUPERFUND | |
 | **output_count** *(boolean)* | Output the count of input points contained in each cell? | TRUE, FALSE | FALSE | | dggrid_operation is GENERATE_GRID_FROM_POINTS, BIN_POINT_VALS, or BIN_POINT_PRESENCE |
 | **output_count_field_name** *(string)* | Field name containing count of contained points | | count | | dggrid_operation is GENERATE_GRID_FROM_POINTS, BIN_POINT_VALS, or BIN_POINT_PRESENCE |
@@ -88,8 +88,8 @@
 | **output_file_name** *(string)* | Name of file to use for output | | valsout.txt | | dggrid_operation is TRANSFORM_POINTS, BIN_POINT_VALS, or BIN_POINT_PRESENCE |
 | **output_file_type** *(choice)* | Operation-specific text output? | NONE, TEXT | TEXT | | dggrid_operation is TRANSFORM_POINTS, BIN_POINT_VALS, or BIN_POINT_PRESENCE |
 | **output_first_seqnum** *(integer)* | Begin generating with this cell ID | 1 ≤ v | 1 | Cell numbering starts at 1; ignored if dggs_type is SUPERFUND | dggrid_operation is GENERATE_GRID and clip_subset_type is WHOLE_EARTH |
-| **output_hier_ndx_form** *(choice)* | Index representation used in output file(s) | INT64, DIGIT_STRING | INT64 | See [**Appendix D**](#appendix-d-dgg-address-forms) | output_address_type is HIERNDX |
-| **output_hier_ndx_system** *(choice)* | Hierarchical indexing system used in output file(s) | ZORDER, Z3, Z7 | Z3 | See [**Appendix D**](#appendix-d-dgg-address-forms) | output_address_type is HIERNDX |
+| **output_hier_ndx_form** *(choice)* | Index representation used in output file(s) | INT64, DIGIT_STRING | INT64 | See [**Appendix E**](#appendix-e-dgg-address-forms) | output_address_type is HIERNDX |
+| **output_hier_ndx_system** *(choice)* | Hierarchical indexing system used in output file(s) | ZORDER, Z3, Z7 | Z3 | See [**Appendix E**](#appendix-e-dgg-address-forms) | output_address_type is HIERNDX |
 | **output_last_seqnum** *(integer)* | Last cell ID to generate | 1 ≤ v | ULONG_MAX (no limit) | Ignored if dggs_type is SUPERFUND | dggrid_operation is GENERATE_GRID and clip_subset_type is WHOLE_EARTH |
 | **output_mean** *(boolean)* | Output the mean of contained point values? | TRUE, FALSE | TRUE | | dggrid_operation is BIN_POINT_VALS |
 | **output_mean_field_name** *(string)* | Field name containing mean of contained point values | | mean | | dggrid_operation is BIN_POINT_VALS |
@@ -121,7 +121,7 @@
 | **unwrap_points** *(boolean)* | Output cell center points unwrapped to follow their unwrapped cell? | TRUE, FALSE | TRUE | Only has an effect when longitude_wrap_mode is UNWRAP_EAST or UNWRAP_WEST | |
 | **update_frequency** *(integer)* | Number of cell inclusion tests to perform between outputting status updates | 0 ≤ v | 100000 | | dggrid_operation is GENERATE_GRID |
 | **verbosity** *(integer)* | Amount of debugging output to display | 0 ≤ v ≤ 3 | 0 | |  |
-| **z3_invalid_digit** *(choice)* | Padding digit for unused resolutions in Z3 INT64 indexes | 0, 1, 2, 3 | 3 | See [**Appendix D**](#appendix-d-dgg-address-forms) | |
+| **z3_invalid_digit** *(choice)* | Padding digit for unused resolutions in Z3 INT64 indexes | 0, 1, 2, 3 | 3 | See [**Appendix E**](#appendix-e-dgg-address-forms) | |
 
 ```
 

@@ -3,6 +3,7 @@ binpres
 binvals
 determineRes
 dymaxionIcosa
+gridgenCellClip
 gridgenDiamond
 gridgenGeoJSON
 gridgenMixedSHP
@@ -17,6 +18,7 @@ ivea3hGen
 ivea7hGen
 quads
 mixedAperture
+multipleOrientations
 planetRiskTable
 seqnums
 superfundGrid
