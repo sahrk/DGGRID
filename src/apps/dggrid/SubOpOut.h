@@ -68,7 +68,7 @@ struct SubOpOut : public SubOpBasic {
    void outputCellAdd2D (const DgLocation& add2D, const std::string* labelIn = nullptr,
                DgDataList* dataList = nullptr);
 
-   void resetFiles (void);
+   void resetFiles (bool resetRandPts = true);
 
    // the parameters
    const DgRFBase* pOutRF;     // RF for output addresses
@@ -150,6 +150,7 @@ struct SubOpOut : public SubOpBasic {
    bool concatPtOut;
    char formatStr[50];
    bool useEnumLbl;
+   unsigned long long int enumerationCount; // cell label within current grid
    unsigned long int nOutputFile; // # of current output file
    unsigned long long int nCellsOutputToFile; // cells output to current file
 

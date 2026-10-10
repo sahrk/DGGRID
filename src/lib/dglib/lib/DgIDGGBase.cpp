@@ -99,9 +99,16 @@ DgIDGGBase::str2add (DgQ2DICoord* add, const char* str, char delimiter) const
                ((tok) ? std::string(tok) : std::string("\"\"")), DgBase::Fatal);
    }
 
-   const char* tmp = &(str[strlen(tok) + 1]);
-   if (!tmp || strlen(tmp) == 0)
+   const char* tmp = strchr(str, delimiter);
+   if (tmp) {
+      do {
+         tmp++;
+      } while (*tmp == delimiter);
+   }
+   if (!tmp || strlen(tmp) == 0) {
       ::report("DgQ2DIRF::fromString() invalid input ", DgBase::Fatal);
+      return nullptr;
+   }
 
    DgIVec2D vec;
    tmp = vec.fromString(tmp, delimiter);

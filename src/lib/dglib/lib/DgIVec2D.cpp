@@ -44,7 +44,7 @@ DgIVec2D::fromString (const char* str, char delimiter)
    strcpy(tmpStr, str);
 
    // Get i and j:
-   char* tok;
+   char* tok = nullptr;
 
    long long int	iIn(0),
 	   		jIn(0);
@@ -52,21 +52,27 @@ DgIVec2D::fromString (const char* str, char delimiter)
    try
     {
    	tok = strtok(tmpStr, delimStr);
+	if (!tok) throw 0;
    	iIn = dgg::util::from_string<long long int>(tok);
 	
    	tok = strtok(NULL, delimStr);
+	if (!tok) throw 0;
    	jIn = dgg::util::from_string<long long int>(tok);
     }
    catch(...)
     {
-      ::report("DgIVec2D::fromString() invalid value in string " + std::string(tok),
+      const std::string value = tok ? std::string(tok) : std::string("\"\"");
+      delete [] tmpStr;
+      ::report("DgIVec2D::fromString() invalid value in string " + value,
                DgBase::Fatal);
+      return nullptr;
     }
 
    setI(iIn);
    setJ(jIn);
 
    unsigned long long int offset = (tok - tmpStr) + strlen(tok) + 1;
+   delete [] tmpStr;
    if (offset >= strlen(str))
     return 0;
 

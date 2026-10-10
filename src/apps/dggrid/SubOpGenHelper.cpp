@@ -1264,37 +1264,61 @@ SubOpGen::createClipRegions (const DgIDGGBase& dgg,
       // get the clipping cell dgg resolution
       const DgIDGGBase& clipDgg = dgg.dggs()->idggBase(clipCellRes);
 
-      // parse the input clipping cells
-      std::vector<std::string> clipCellAddressStrs;
-      dgg::util::ssplit(clipCellsStr, clipCellAddressStrs);
-
 //cout << "INRF: " << *op.inOp.pInRF << std::endl;
 //cout << "CLIPDGG: " << clipDgg << std::endl;
       // the coarse clipping cells
       // use a set to avoid duplicates
       std::set<unsigned long int> clipSeqNums;
-      // parse the clip cell sequence numbers
-      for (const auto &seqStr: clipCellAddressStrs) {
 
+      // Parse one clipping-cell address and add its sequence number. Return
+      // the first unconsumed character so multipart addresses can share the
+      // space delimiter with the address list.
+      auto addClipCell = [&](const char* address) -> const char* {
          unsigned long int sNum = 0;
          if (op.inOp.inSeqNum) {
-            if (sscanf(seqStr.c_str(), "%lu", &sNum) != 1)
+            if (sscanf(address, "%lu", &sNum) != 1)
                ::report("gridgen(): invalid cell sequence number in clip_cell_addresses" +
-                         std::string(seqStr), DgBase::Fatal);
+                         std::string(address), DgBase::Fatal);
          } else { // must be indexToPoly
             // parse the address
-            DgLocation* tmpLoc = NULL;
-            tmpLoc = new DgLocation(*op.inOp.pInRF);
-            tmpLoc->fromString(seqStr.c_str(), op.inOp.inputDelimiter);
-            clipDgg.convert(tmpLoc);
+            DgLocation tmpLoc(*op.inOp.pInRF);
+            const char* next = tmpLoc.fromString(address,
+                                                 op.inOp.inputDelimiter);
+            clipDgg.convert(&tmpLoc);
 
-            sNum = static_cast<const DgIDGGBase&>(clipDgg).bndRF().seqNum(*tmpLoc);
-            delete tmpLoc;
+            sNum = static_cast<const DgIDGGBase&>(clipDgg).bndRF().seqNum(tmpLoc);
+            clipSeqNums.insert(sNum);
+            return next;
          }
 
          clipSeqNums.insert(sNum);
-//cout << " sNum: " << sNum << std::endl;
+         return nullptr;
+      };
+
+      const bool multiPartSpaceDelimited =
+          op.inOp.inputDelimiter == ' ' &&
+          op.inOp.inAddType != dgg::addtype::SeqNum &&
+          op.inOp.inAddType != dgg::addtype::HierNdx;
+
+      if (multiPartSpaceDelimited) {
+         const char* next = clipCellsStr.c_str();
+         while (next && *next) {
+            while (*next == ' ') next++;
+            if (!*next) break;
+
+            const char* current = next;
+            next = addClipCell(current);
+            if (next && next <= current)
+               ::report("gridgen(): unable to parse clip_cell_addresses",
+                        DgBase::Fatal);
+         }
+      } else {
+         std::vector<std::string> clipCellAddressStrs;
+         dgg::util::ssplit(clipCellsStr, clipCellAddressStrs);
+         for (const auto& address: clipCellAddressStrs)
+            addClipCell(address.c_str());
       }
+//cout << " sNum: " << sNum << std::endl;
 
       // add the cell boundaries to the clip regions
       for (std::set<unsigned long int>::iterator i = clipSeqNums.begin();

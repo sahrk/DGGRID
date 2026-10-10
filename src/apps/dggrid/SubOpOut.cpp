@@ -253,7 +253,7 @@ SubOpOut::outputCellAdd2D (const DgLocation& add2D, const std::string* labelIn,
          unsigned long long int sn = op.dggOp.dgg().bndRF().seqNum(add2D);
          label = dgg::util::to_string(sn);
       } else if (useEnumLbl)
-         label = dgg::util::to_string(nCellsAccepted);
+         label = dgg::util::to_string(++enumerationCount);
       else {
          DgLocation tmpLoc(add2D);
          pOutRF->convert(&tmpLoc);
@@ -391,7 +391,7 @@ SubOpOut::outputCellAdd2D (const DgLocation& add2D, const std::string* labelIn,
    DgLocVector ndxChildren;
    if (ndxChildrenOutType != "NONE") {
        if (!hierNdxSystem) {
-           ::report("indexing parents require a hierarchical indexing system.", DgBase::Fatal);
+           ::report("indexing children require a hierarchical indexing system.", DgBase::Fatal);
        }
 
        hierNdxSystem->setNdxChildren(q2diR, ndxChildren);
@@ -433,7 +433,7 @@ SubOpOut::SubOpOut (OpBasic& op, bool _activate)
      cellOutShp (0), ptOutShp (0), prCellOut (0), nbrOut (0), chdOut (0),
      ndxChdOut(0), ndxPrtOut(0),
      concatPtOut (true), useEnumLbl (false),
-     nOutputFile (0), nCellsOutputToFile (0)
+     enumerationCount (0), nOutputFile (0), nCellsOutputToFile (0)
 { }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -847,7 +847,7 @@ SubOpOut::setupOp (void)
 
 ////////////////////////////////////////////////////////////////////////////////
 void
-SubOpOut::resetFiles (void) {
+SubOpOut::resetFiles (bool resetRandPts) {
 
    // reset the file names
    dataOutFileName = dataOutFileNameBase;
@@ -866,7 +866,10 @@ SubOpOut::resetFiles (void) {
    delete cellOut; cellOut = NULL;
    delete ptOut; ptOut = NULL;
    delete collectOut; collectOut = NULL;
-   delete randPtsOut; randPtsOut = NULL;
+   if (resetRandPts) {
+      delete randPtsOut;
+      randPtsOut = NULL;
+   }
    delete prCellOut; prCellOut = NULL;
    delete nbrOut; nbrOut = NULL;
    delete chdOut; chdOut = NULL;
@@ -901,11 +904,14 @@ SubOpOut::executeOp (void) {
    const DgIDGGBase& dgg = op.dggOp.dgg();
 
    // starting a new set of outputs
+   if (nOutputFile == 0)
+      enumerationCount = 0;
    nOutputFile++;
    nCellsOutputToFile = 0;
 
-   // delete all the old output files
-   resetFiles();
+   // Delete the old output files. A concatenated random-point stream stays
+   // open across output splits and grid placements.
+   resetFiles(!(doRandPts && concatPtOut && randPtsOut));
 
    // set-up the output reference frame
    if (outSeqNum || useEnumLbl)
@@ -915,6 +921,12 @@ SubOpOut::executeOp (void) {
       if (!pOutRF)
          ::report("SubOpOut::executeOp(): invalid output RF", DgBase::Fatal);
    }
+
+   // Address-to-text conversion uses the reference frame's format string.
+   // Output writers receive precision separately, so keep the label/text
+   // address path in sync with them here.
+   if (pOutRF)
+      const_cast<DgRFBase*>(pOutRF)->setPrecision(op.mainOp.precision);
 
    std::string suffix = std::string("");
    if (op.dggOp.numGrids > 1) {
@@ -930,9 +942,10 @@ SubOpOut::executeOp (void) {
       cellOutFileName += suffix;
       ptOutFileName += suffix;
       collectOutFileName += suffix;
-      randPtsOutFileName += suffix;
       neighborsOutFileName += suffix;
       childrenOutFileName += suffix;
+      ndxChildrenOutFileName += suffix;
+      ndxParentOutFileName += suffix;
 
       if (!concatPtOut)
          randPtsOutFileName += suffix;
@@ -992,10 +1005,9 @@ SubOpOut::executeOp (void) {
          ptOutShp->setDefDblAttribute(shapefileDefaultDouble);
          ptOutShp->setDefStrAttribute(shapefileDefaultString);
       }
+   }
 
-      if (doRandPts) {
-
-         if (op.dggOp.curGrid == 1 || !concatPtOut) {
+   if (doRandPts && !randPtsOut) {
          if (!randPtsOutType.compare("TEXT"))
             randPtsOut = new DgOutRandPtsText(op.dggOp.outputDeg(), randPtsOutFileName,
                       op.mainOp.precision);
@@ -1004,8 +1016,6 @@ SubOpOut::executeOp (void) {
                       randPtsOutFileName, gdalPointDriver, op.dggOp.outputDeg(), true, op.mainOp.precision,
                       DgOutLocFile::Point, shapefileIdLen,
                       kmlColor, kmlWidth, kmlName, kmlDescription);
-         }
-      }
    }
 
    ///// children/neighbor output files /////

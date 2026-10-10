@@ -218,6 +218,9 @@ SubOpBasicMulti::execute (bool force) {
 
       // create the dgg and output files for the next loop
       op.dggOp.execute(true);
+      // Refresh the input reference frame for the new grid and rewind all
+      // point input files before processing the next placement.
+      op.inOp.execute(true);
       op.outOp.nOutputFile = 0; // needs to be in SubOpOut
       op.outOp.execute(true);
    }

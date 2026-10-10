@@ -183,8 +183,13 @@ DgInGdalFile::extract (DgPolygon& poly)
       // Get the polygon stored in Geometry, with special handling for MultiPolygon
       //OGRGeometry* oGeometry = oFeature_->GetGeometryRef();
       oGeometry = oFeature_->GetGeometryRef();
-      OGRwkbGeometryType geomType = wkbFlatten((oGeometry->getGeometryType()));
-      if (oGeometry != NULL && geomType == wkbPolygon) {
+      if (oGeometry == nullptr) {
+          report("Feature has no geometry; expected Polygon or MultiPolygon",
+                 DgBase::Fatal);
+      }
+
+      OGRwkbGeometryType geomType = wkbFlatten(oGeometry->getGeometryType());
+      if (geomType == wkbPolygon) {
           oPolygon = (OGRPolygon*) oGeometry;
       } else if (geomType == wkbMultiPolygon || geomType == wkbGeometryCollection) {
           insideMultiPoly_ = true;
@@ -363,8 +368,12 @@ DgInGdalFile::extractPointGeometry (DgLocation& point) {
 
     // Get the point stored in Geometry
     oGeometry = oFeature_->GetGeometryRef();
-    OGRwkbGeometryType geomType = wkbFlatten((oGeometry->getGeometryType()));
-    if (oGeometry != nullptr && geomType == wkbPoint) {
+    if (oGeometry == nullptr) {
+       report("Feature has no geometry; expected Point", DgBase::Fatal);
+    }
+
+    OGRwkbGeometryType geomType = wkbFlatten(oGeometry->getGeometryType());
+    if (geomType == wkbPoint) {
        oPoint = (OGRPoint*) oGeometry;
     } else {
        dgcout << "WKBGeometryType: " << geomType << std::endl;
