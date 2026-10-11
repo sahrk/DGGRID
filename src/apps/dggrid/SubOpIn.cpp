@@ -92,11 +92,11 @@ SubOpIn::initializeOp (void)
 #endif
 */
 
-   // input_address_type < GEO | PLANE | PROJTRI | Q2DD | Q2DI |
+   // input_address_type < GEO | PROJTRI | Q2DD | Q2DI |
    //        SEQNUM | VERTEX2DD | HIERNDX >
    // KEVIN?? def = ((op.mainOp.operation != "TRANSFORM_POINTS") ? "GEO" : "SEQNUM");
    pList().insertParam("input_address_type", "GEO",
-                       dgg::addtype::addressTypeChoices());
+                       dgg::addtype::inputAddressTypeChoices());
 
     // input_hier_ndx_system < ZORDER | Z3 | Z7 >
     // used if input_address_type is HIERNDX
@@ -367,9 +367,6 @@ SubOpIn::executeOp (void) {
       if (!pInRF)
          ::report("SubOpIn::executeOp(): invalid input RF", DgBase::Fatal);
    }
-
-   if (op.dggOp.isApSeq && inSeqNum)
-        ::report("SubOpIn::executeOp(): sequence number input not supported for aperture sequence DGGS", DgBase::Fatal);
 
    // open first file
    resetInFile();

@@ -608,12 +608,9 @@ in decimal degrees. The parameters input_address_type and output_address_type re
 
 - `Q2DI` - Quad number and (i, j) coordinates on that quad
 - `SEQNUM` - Linear address (1 to size-of-DGG)
-
-> **Note:** Not supported for parameter input_address_type for point input (for example with TRANSFORM_POINTS) if dggs_aperture_type is SEQUENCE
-
 - `PLANE` - (x, y) coordinates on unfolded ISEA plane
 
-> **Note:** Only supported for parameter output_address_type; using it as input_address_type fails with an error
+> **Note:** PLANE is output-only and is rejected during parameter validation if used as input_address_type.
 
 - `Q2DD` - Quad number and (x, y) coordinates on that quad
 

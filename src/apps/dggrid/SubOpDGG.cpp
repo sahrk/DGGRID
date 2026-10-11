@@ -199,12 +199,6 @@ SubOpDGG::addressTypeToRF (DgAddressType type, DgHierNdxSysType hierNdxSysType, 
             break;
 
          case SeqNum:
-   /*
-            if (isInput && dgg->isApSeq)
-               ::report("input_address_type of SEQNUM not supported for dggs_aperture_type of SEQUENCE",
-                     DgBase::Fatal);
-   */
-
             seqNum = true;
             if (rf) *rf = dgg;
             if (chdRF) *chdRF = chdDgg;

@@ -60,6 +60,16 @@ inline std::vector<std::string> addressTypeChoices()
     return v;
 }
 
+/// Return address types that DGGRID can convert from (PLANE is output-only).
+inline std::vector<std::string> inputAddressTypeChoices()
+{
+    std::vector<std::string> v;
+    for (int i = 0; addTypeStrings[i] != "NONE"; ++i)
+        if (i != Plane)
+            v.push_back(addTypeStrings[i]);
+    return v;
+}
+
 /// Return the valid choices for hierarchical index systems (excludes "NONE").
 inline std::vector<std::string> hierNdxSysTypeChoices()
 {
