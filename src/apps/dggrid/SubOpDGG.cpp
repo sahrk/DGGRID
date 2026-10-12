@@ -236,9 +236,9 @@ SubOpDGG::initializeOp (void)
    // A trailing S marks a spherical (authalic sphere) preset and a trailing L
    // its ellipsoidal (WGS84) version. ISEA3H ... ISEA4D are aliases for
    // ISEA3HS ... ISEA4DS, kept for backwards compatibility. IGEO7v1 is ISEA7HS
-   // with Z7 indexing (the IGEO7 of version 8.4), and IGEO7v2 is IVEA7HL with
-   // Z7 indexing. IGEO7 is an alias for IGEO7v1, kept for backwards
-   // compatibility.
+   // with Z7 indexing (the IGEO7 of version 8.4), and IGEO7v2 is ISEA7HL with
+   // Z7 indexing; the two differ only in datum. IGEO7 is an alias for IGEO7v2
+   // (it was IGEO7v1 before version 9.1) and produces a warning.
    pList().insertParam("dggs_type", "CUSTOM",
        {"CUSTOM", "SUPERFUND", "PLANETRISK", "IGEO7v1", "IGEO7v2", "IGEO7",
         "ISEA3HS", "ISEA4HS", "ISEA7HS", "ISEA43HS", "ISEA4TS", "ISEA4DS",
@@ -376,15 +376,22 @@ SubOpDGG::setupOp (void)
    getParamValue(pList(), "dggs_type", tmp, false);
    std::string tmplc = toLower(tmp);
    if (tmplc != "custom") {
-      // IGEO7v1 (and its alias IGEO7) and IGEO7v2 are the ISEA7HS and IVEA7HL
+      // IGEO7v1 and IGEO7v2 (and its alias IGEO7) are the ISEA7HS and ISEA7HL
       // presets with Z7 hierarchical indexing for all purposes
-      const bool isIGEO7 = tmplc == "igeo7v1" || tmplc == "igeo7" ||
-                           tmplc == "igeo7v2";
+      const bool isIGEO7 = tmplc == "igeo7v1" || tmplc == "igeo7v2" ||
+                           tmplc == "igeo7";
       std::string gridName = tmplc;
-      if (tmplc == "igeo7v1" || tmplc == "igeo7")
+      if (tmplc == "igeo7v1")
          gridName = "isea7hs";
-      else if (tmplc == "igeo7v2")
-         gridName = "ivea7hl";
+      else if (tmplc == "igeo7v2" || tmplc == "igeo7")
+         gridName = "isea7hl";
+
+      if (tmplc == "igeo7")
+         ::report("dggs_type IGEO7 is now an alias for IGEO7v2 (ISEA projection "
+                  "on the WGS84 ellipsoid); before version 9.1 it was "
+                  "IGEO7v1 (ISEA projection on the authalic sphere). "
+                  "Use dggs_type IGEO7v1 to get the previous IGEO7 grid.",
+                  DgBase::Warning);
 
       // Spherical presets end in S (e.g. ISEA3HS) and ellipsoidal ones in L
       // (e.g. ISEA3HL); strip the suffix to get the grid name. The legacy

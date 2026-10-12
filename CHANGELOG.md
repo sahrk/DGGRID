@@ -8,7 +8,7 @@ All changes are by Kevin Sahr, unless otherwise noted.
 - manual updated to v9.1 (thanks to @allixender)
 - link in README to readthedocs online documentation
 - IVEA projection and spherical (S) and ellipsoidal (L) ISEA/IVEA presets; old ISEA names remain spherical aliases
-- IGEO7v1 and IGEO7v2 presets; IGEO7 remains an alias for IGEO7v1
+- IGEO7v1 (ISEA on the authalic sphere) and IGEO7v2 (ISEA on the WGS84 ellipsoid) presets
 - parameters sphere_radius_type, custom_sphere_radius, input_datum, output_datum and orientation_datum
 - parameter dggs_orient_preset with ISEA, ISEAL and DYMAXION orientations
 - GEO output addresses for TRANSFORM_POINTS
@@ -21,6 +21,7 @@ All changes are by Kevin Sahr, unless otherwise noted.
 - invalid parameter values now produce an error
 - deprecated proj_datum and proj_datum_radius in favor of sphere_radius_type and custom_sphere_radius
 - FULLER presets now use the DYMAXION orientation
+- IGEO7 is now an alias for IGEO7v2 (it was the spherical grid, now IGEO7v1) and produces a warning
 - use exact icosahedron, ISEA and WGS84 constants
 ### Fixed
 - incorrect cell boundaries across face edges in odd-resolution aperture 7 grids
