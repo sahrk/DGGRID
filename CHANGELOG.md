@@ -27,6 +27,7 @@ All changes are by Kevin Sahr, unless otherwise noted.
 - incorrect projection selection for non-ISEA dggs_type presets
 - loss of precision near rotated icosahedron vertices
 - incorrect ISEA rotation for points exactly on face medians
+- incorrect indexing children with Z3 and ZORDER indexing
 
 ## [9.03b] - 2026-07-19
 ### Added

@@ -189,26 +189,15 @@ DgZOrderSystem::setAddNdxChildren (const DgResAdd<DgHierNdx>& add,
               "index has invalid base cell number", DgBase::Fatal);
      }
 
-    std::string addStr = valStr.substr(2);
-
     // KEVIN: this should all be done with integers and c_str's
-    // assume no skip digit
-    int skipDigit = -1;
-    // check if current address is all zeros
-    size_t pos = addStr.find_first_not_of('0');
-    if (pos == std::string::npos) { // all digits are zero
-        skipDigit = (quadNum <= 5) ? 2 : 5;
-    }
+
+    // one child per digit, except that the single cell of quads 0 and 11
+    // has only the digit 0 child
+    int numDigits = (quadNum == 0 || quadNum == 11) ? 1 : (int) dggs().aperture();
 
     children.clearAddress();
     std::vector<DgAddressBase*>& v = children.addressVec();
-    for (int i = 0; i <= 6; i++) {
-        // KEVIN pentagon sub-sequence check
-
-        // skip pentagon sub-sequence digits as per above
-        if (i == skipDigit)
-            continue;
-
+    for (int i = 0; i < numDigits; i++) {
         // build the child address
         std::string chdStr = valStr + std::to_string(i);
         DgResAdd<DgHierNdx> chdAdd;
