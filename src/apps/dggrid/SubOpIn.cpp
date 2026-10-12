@@ -216,7 +216,13 @@ SubOpIn::setupOp (void)
 
     }
  */
-    if (inAddType == dgg::addtype::HierNdx && inHierNdxSysType == dgg::addtype::Z3) {
+    // not for a dggs_type preset (e.g. ISEA3HSZ) that supplies Z3 itself
+    const DgApAssoc* inAddTypeParam = pList().getParam("input_address_type", false);
+    const DgApAssoc* inSysParam = pList().getParam("input_hier_ndx_system", false);
+    const bool inZ3UserSet = (inAddTypeParam && inAddTypeParam->isUserSet()) ||
+                          (inSysParam && inSysParam->isUserSet());
+    if (inAddType == dgg::addtype::HierNdx && inHierNdxSysType == dgg::addtype::Z3 &&
+        inZ3UserSet) {
         ::report("in DGGRID version 9.0 the default padding digit for Z3 indexes has switched "
                  "from 0 to 3.\n"
                  "Set parameter z3_invalid_digit if you want a different digit used.",

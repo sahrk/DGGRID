@@ -232,13 +232,18 @@ SubOpDGG::initializeOp (void)
    //            IVEA3HS | IVEA4HS | IVEA7HS | IVEA43HS | IVEA4TS | IVEA4DS |
    //            ISEA3HL | ISEA4HL | ISEA7HL | ISEA43HL | ISEA4TL | ISEA4DL |
    //            IVEA3HL | IVEA4HL | IVEA7HL | IVEA43HL | IVEA4TL | IVEA4DL |
+   //            ISEA3HSZ | ISEA4HSZ | ISEA7HSZ | IVEA3HSZ | IVEA4HSZ | IVEA7HSZ |
+   //            ISEA3HLZ | ISEA4HLZ | ISEA7HLZ | IVEA3HLZ | IVEA4HLZ | IVEA7HLZ |
    //            FULLER3H | FULLER4H | FULLER7H | FULLER43H | FULLER4T | FULLER4D>
    // A trailing S marks a spherical (authalic sphere) preset and a trailing L
    // its ellipsoidal (WGS84) version. ISEA3H ... ISEA4D are aliases for
-   // ISEA3HS ... ISEA4DS, kept for backwards compatibility. IGEO7v1 is ISEA7HS
-   // with Z7 indexing (the IGEO7 of version 8.4), and IGEO7v2 is ISEA7HL with
-   // Z7 indexing; the two differ only in datum. IGEO7 is an alias for IGEO7v2
-   // (it was IGEO7v1 before version 9.1) and produces a warning.
+   // ISEA3HS ... ISEA4DS, kept for backwards compatibility. A final Z marks
+   // the hexagon S and L presets that use hierarchical indexing for input,
+   // output and internal processing: Z3 for aperture 3, ZORDER for aperture 4
+   // and Z7 for aperture 7. IGEO7v1 is another name for ISEA7HSZ (the IGEO7 of
+   // version 8.4), and IGEO7v2 is another name for ISEA7HLZ; the two differ
+   // only in datum. IGEO7 is an alias for IGEO7v2 (it was IGEO7v1 before
+   // version 9.1) and produces a warning.
    pList().insertParam("dggs_type", "CUSTOM",
        {"CUSTOM", "SUPERFUND", "PLANETRISK", "IGEO7v1", "IGEO7v2", "IGEO7",
         "ISEA3HS", "ISEA4HS", "ISEA7HS", "ISEA43HS", "ISEA4TS", "ISEA4DS",
@@ -246,6 +251,8 @@ SubOpDGG::initializeOp (void)
         "IVEA3HS", "IVEA4HS", "IVEA7HS", "IVEA43HS", "IVEA4TS", "IVEA4DS",
         "ISEA3HL", "ISEA4HL", "ISEA7HL", "ISEA43HL", "ISEA4TL", "ISEA4DL",
         "IVEA3HL", "IVEA4HL", "IVEA7HL", "IVEA43HL", "IVEA4TL", "IVEA4DL",
+        "ISEA3HSZ", "ISEA4HSZ", "ISEA7HSZ", "IVEA3HSZ", "IVEA4HSZ", "IVEA7HSZ",
+        "ISEA3HLZ", "ISEA4HLZ", "ISEA7HLZ", "IVEA3HLZ", "IVEA4HLZ", "IVEA7HLZ",
         "FULLER3H", "FULLER4H", "FULLER7H", "FULLER43H", "FULLER4T", "FULLER4D"});
 
    // dggs_base_poly <ICOSAHEDRON>
@@ -376,15 +383,13 @@ SubOpDGG::setupOp (void)
    getParamValue(pList(), "dggs_type", tmp, false);
    std::string tmplc = toLower(tmp);
    if (tmplc != "custom") {
-      // IGEO7v1 and IGEO7v2 (and its alias IGEO7) are the ISEA7HS and ISEA7HL
-      // presets with Z7 hierarchical indexing for all purposes
-      const bool isIGEO7 = tmplc == "igeo7v1" || tmplc == "igeo7v2" ||
-                           tmplc == "igeo7";
+      // IGEO7v1 and IGEO7v2 (and its alias IGEO7) are the ISEA7HSZ and ISEA7HLZ
+      // presets
       std::string gridName = tmplc;
       if (tmplc == "igeo7v1")
-         gridName = "isea7hs";
+         gridName = "isea7hsz";
       else if (tmplc == "igeo7v2" || tmplc == "igeo7")
-         gridName = "isea7hl";
+         gridName = "isea7hlz";
 
       if (tmplc == "igeo7")
          ::report("dggs_type IGEO7 is now an alias for IGEO7v2 (ISEA projection "
@@ -393,12 +398,22 @@ SubOpDGG::setupOp (void)
                   "Use dggs_type IGEO7v1 to get the previous IGEO7 grid.",
                   DgBase::Warning);
 
+      // A final Z (e.g. ISEA7HSZ) marks a preset with hierarchical indexing for
+      // all purposes: the grid's own hierarchical indexing system and HIERNDX
+      // input and output addresses. Strip it first.
+      const bool hierNdx = gridName.back() == 'z';
+      if (hierNdx)
+         gridName.pop_back();
+
       // Spherical presets end in S (e.g. ISEA3HS) and ellipsoidal ones in L
       // (e.g. ISEA3HL); strip the suffix to get the grid name. The legacy
       // ISEA3H ... ISEA4D names have no suffix and are the spherical presets.
       const bool ellipsoidal = gridName.back() == 'l';
       if (ellipsoidal || gridName.back() == 's')
          gridName.pop_back();
+
+      // the hierarchical indexing system of a Z preset, by aperture
+      std::string hierNdxSys;
 
       // these params are common to all presets
       pList().setPresetParam("dggs_base_poly", "ICOSAHEDRON");
@@ -474,17 +489,28 @@ SubOpDGG::setupOp (void)
          } else {
             pList().setPresetParam("dggs_aperture_type", "PURE");
             pList().setPresetParam("dggs_aperture", ap);
+
+            if (ap == "3")
+               hierNdxSys = "Z3";
+            else if (ap == "4")
+               hierNdxSys = "ZORDER";
+            else if (ap == "7")
+               hierNdxSys = "Z7";
          }
       }
 
-      if (isIGEO7) {
-         pList().setPresetParam("hier_indexing_system_type", "Z7");
+      if (hierNdx) {
+         if (hierNdxSys.empty())
+            ::report("SubOpDGG::setupOp(): dggs_type " + tmp +
+                     " has no hierarchical indexing system", DgBase::Fatal);
+
+         pList().setPresetParam("hier_indexing_system_type", hierNdxSys);
          pList().setPresetParam("input_address_type", "HIERNDX", true);
-         pList().setPresetParam("input_hier_ndx_system", "Z7", true);
+         pList().setPresetParam("input_hier_ndx_system", hierNdxSys, true);
          pList().setPresetParam("input_hier_ndx_form", "INT64", true);
          pList().setPresetParam("output_cell_label_type", "OUTPUT_ADDRESS_TYPE", true);
          pList().setPresetParam("output_address_type", "HIERNDX", true);
-         pList().setPresetParam("output_hier_ndx_system", "Z7", true);
+         pList().setPresetParam("output_hier_ndx_system", hierNdxSys, true);
          pList().setPresetParam("output_hier_ndx_form", "INT64", true);
       }
    }
