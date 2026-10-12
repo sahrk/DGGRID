@@ -210,9 +210,9 @@ Detailed information about the parameters that specify each of the DGG design ch
 - `CUSTOM` (default) - indicates that the grid parameters will be specified manually (see below)
 - `SUPERFUND` - the **Superfund_500m** grid (see [**Appendix G**](#appendix-g-the-epa-superfund_500m-dggs))
 - `PLANETRISK` - the **PlanetRisk** grid (see [**Appendix H**](#appendix-h-the-planetrisk-dggs))
-- `IGEO7v1` - ISEA projection with hexagon cells and an aperture of 7, with Z7 hierarchical indexing (see [**Appendix C**](#appendix-c-default-values-for-preset-dgg-types))
-- `IGEO7v2` - IVEA projection with hexagon cells and an aperture of 7, with Z7 hierarchical indexing, using the ellipsoidal (WGS84) form described below
-- `IGEO7` - an alias for `IGEO7v1`, retained for backward compatibility
+- `IGEO7v1` - ISEA projection with hexagon cells and an aperture of 7, with Z7 hierarchical indexing, on the authalic sphere (see [**Appendix C**](#appendix-c-default-values-for-preset-dgg-types))
+- `IGEO7v2` - ISEA projection with hexagon cells and an aperture of 7, with Z7 hierarchical indexing, using the ellipsoidal (WGS84) form described below; it differs from `IGEO7v1` only in its datum
+- `IGEO7` - an alias for `IGEO7v2`, retained for backward compatibility. Before version 9.1 `IGEO7` was the spherical grid that is now `IGEO7v1`; selecting `IGEO7` produces a warning that its meaning has changed. Specify `IGEO7v1` to reproduce grids generated with `IGEO7` in earlier versions.
 - ISEA presets: `ISEA3HS`, `ISEA4HS`, `ISEA7HS`, `ISEA43HS`, `ISEA4TS`, `ISEA4DS` (spherical) and `ISEA3HL`, `ISEA4HL`, `ISEA7HL`, `ISEA43HL`, `ISEA4TL`, `ISEA4DL` (ellipsoidal)
 - IVEA presets: `IVEA3HS`, `IVEA4HS`, `IVEA7HS`, `IVEA43HS`, `IVEA4TS`, `IVEA4DS` (spherical) and `IVEA3HL`, `IVEA4HL`, `IVEA7HL`, `IVEA43HL`, `IVEA4TL`, `IVEA4DL` (ellipsoidal)
 - `ISEA3H`, `ISEA4H`, `ISEA7H`, `ISEA43H`, `ISEA4T`, `ISEA4D` - aliases for the corresponding spherical `S` presets, retained for backward compatibility
@@ -242,7 +242,7 @@ orientation_datum AUTHALIC_SPHERE
 ```
 The default vertex 0 latitude is atan(φ) = 58.28252558853899...°, where φ = (1 + √5)/2 is the golden ratio. With this latitude and an azimuth of 0.0 the north and south poles fall exactly on the midpoints of icosahedron edges, which makes the grid symmetrical about the equator.
 
-Instead of setting these parameters individually, a named orientation preset can be selected with the **choice** parameter dggs_orient_preset, which sets dggs_vert0_lon, dggs_vert0_lat, dggs_vert0_azimuth and orientation_datum. A value of ISEA gives the default placement above. A value of ISEAL gives vertex 0 at the same authalic latitude atan(φ), but at longitude 11.20°, which keeps vertex 0 in the ocean when grid coordinates are output on the WGS 84 ellipsoid (output_datum WGS84). A value of DYMAXION gives the orientation of Fuller's Dymaxion map \[Fuller, 1975; Gray, 1995\]: vertex 0 at longitude -5.24539058° and latitude 2.300882°, with an azimuth of 7.46658° to the adjacent vertex. Parameters set explicitly in the metafile take precedence over the preset, including an explicit dggs_orient_preset NONE, which applies no orientation preset and is the default value. Every dggs_type preset also selects an orientation preset: ISEA for the spherical ISEA and IVEA presets, IGEO7v1, SUPERFUND and PLANETRISK; ISEAL for the ellipsoidal (`L`) presets and IGEO7v2; and DYMAXION for the FULLER presets (see **Appendix C**).
+Instead of setting these parameters individually, a named orientation preset can be selected with the **choice** parameter dggs_orient_preset, which sets dggs_vert0_lon, dggs_vert0_lat, dggs_vert0_azimuth and orientation_datum. A value of ISEA gives the default placement above. A value of ISEAL gives vertex 0 at the same authalic latitude atan(φ), but at longitude 11.20°, which keeps vertex 0 in the ocean when grid coordinates are output on the WGS 84 ellipsoid (output_datum WGS84). A value of DYMAXION gives the orientation of Fuller's Dymaxion map \[Fuller, 1975; Gray, 1995\]: vertex 0 at longitude -5.24539058° and latitude 2.300882°, with an azimuth of 7.46658° to the adjacent vertex. Parameters set explicitly in the metafile take precedence over the preset, including an explicit dggs_orient_preset NONE, which applies no orientation preset and is the default value. Every dggs_type preset also selects an orientation preset: ISEA for the spherical ISEA and IVEA presets, IGEO7v1, SUPERFUND and PLANETRISK; ISEAL for the ellipsoidal (`L`) presets, IGEO7v2 and IGEO7; and DYMAXION for the FULLER presets (see **Appendix C**).
 
 If dggs_orient_specify_type is set to RANDOM the orientation of the DGG is randomly determined. All parameter values (including the randomly generated values for a vertex location and azimuth used to orient the grid) will be output for your information to the file specified by the **string** parameter dggs_orient_output_file_name (this file is written whenever dggs_orient_specify_type is RANDOM, or dggs_num_placements is greater than 1). Each generated orientation file is a **DGGRID** metafile that lists the parameters used in the run for one placement, and it can be used as input to reproduce that placement. Its vertex coordinates are written in the datum given by orientation_datum, and the file sets orientation_datum to that value so the orientation is read back correctly. Keep any relative input file names referenced by the file valid when replaying it. Some control over the random specification of the grid orientation is afforded by the **choice** parameter rng_type and the **integer** parameter dggs_orient_rand_seed. The **choice** parameter rng_type indicates which pseudo-random number generator to use. A value of RAND (the default) indicates that the C standard library rand/srand functions should be used. A value of MOTHER indicates that George Marsaglia's "Mother-of-all-RNGs" function should be used. The seed value for **DGGRID** to use to initialize the pseudo-random number sequence can be set using the **integer** parameter dggs_orient_rand_seed.
 
@@ -514,7 +514,7 @@ sphere_radius_type: AUTHALIC_SPHERE
 dggs_res_specify_type: SPECIFIED
 ```
 
-The datum and orientation parameters are set by the preset according to its kind. All presets other than the ellipsoidal presets (names ending in `L`), IGEO7v2 and the FULLER presets set:
+The datum and orientation parameters are set by the preset according to its kind. All presets other than the ellipsoidal presets (names ending in `L`), IGEO7v2, IGEO7 and the FULLER presets set:
 
 ```
 input_datum: AUTHALIC_SPHERE
@@ -522,7 +522,7 @@ output_datum: AUTHALIC_SPHERE
 dggs_orient_preset: ISEA
 ```
 
-The ellipsoidal presets (names ending in `L`) and IGEO7v2 set:
+The ellipsoidal presets (names ending in `L`), IGEO7v2 and IGEO7 set:
 
 ```
 input_datum: WGS84
@@ -554,7 +554,7 @@ The table below gives the values of other parameters that are set by each preset
 | **SUPERFUND** | HEXAGON           | FULLER        | 9                 | MIXED43                | N/A               | 2                           | N/A                         |
 | **PLANETRISK**| HEXAGON           | ISEA          | 11                | SEQUENCE               | N/A               | N/A                         | 43334777777777777777777     |
 | **IGEO7v1**   | HEXAGON           | ISEA          | 9                 | PURE                   | 7                 | N/A                         | N/A                         |
-| **IGEO7v2**   | HEXAGON           | IVEA          | 9                 | PURE                   | 7                 | N/A                         | N/A                         |
+| **IGEO7v2**   | HEXAGON           | ISEA          | 9                 | PURE                   | 7                 | N/A                         | N/A                         |
 | **IGEO7**     | HEXAGON           | ISEA          | 9                 | PURE                   | 7                 | N/A                         | N/A                         |
 
 > **Note:** In addition to the listed parameters, the preset type **SUPERFUND** also sets the value of the parameter `output_cell_label_type` to `SUPERFUND`.
