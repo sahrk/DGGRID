@@ -3,9 +3,9 @@ All notable changes to this project will be documented in this file.
 
 All changes are by Kevin Sahr, unless otherwise noted.
 
-## [Unreleased]
+## [9.1] - 2026-10-10
 ### Added
-- manual updated to v9.1
+- manual updated to v9.1 (thanks to @allixender)
 - link in README to readthedocs online documentation
 - IVEA projection and spherical (S) and ellipsoidal (L) ISEA/IVEA presets; old ISEA names remain spherical aliases
 - IGEO7v1 and IGEO7v2 presets; IGEO7 remains an alias for IGEO7v1
@@ -14,7 +14,7 @@ All changes are by Kevin Sahr, unless otherwise noted.
 - GEO output addresses for TRANSFORM_POINTS
 - output datum spatial references for Shapefile and GDAL output
 - DgIcosaSliceDice projection kernel (derived in part from PROJ and DGGAL; license notices retained)
-- IVEA, ISEAL and renamed IGEO7 examples
+- new IVEA, ISEAL and renamed IGEO7 examples
 ### Changed
 - orientation output metafiles now reproduce placements when used as input
 - -h and -v report the GDAL version; normal runs report it when verbosity is greater than 0
@@ -29,6 +29,8 @@ All changes are by Kevin Sahr, unless otherwise noted.
 - incorrect ISEA rotation for points exactly on face medians
 
 ## [9.03b] - 2026-07-19
+### Added
+- readthedocs online manual version (thanks to @allixender)
 ### Fixed
 - insufficent null pointer guards for some addressing types
 
