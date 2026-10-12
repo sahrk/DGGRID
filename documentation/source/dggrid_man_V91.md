@@ -184,7 +184,7 @@ The **integer** parameter precision (0 to 30) specifies the number of digits to 
 
 The parameters verbosity, pause_on_startup, and pause_before_exit exist solely to support debugging and can be ignored by users. These parameters are described below.
 
-The **integer** parameter verbosity is used to control the amount of debugging information which is printed by **DGGRID**. Valid values are from 0 to 3. The default value, 0, gives minimal output, which includes the value of all active parameter settings. It is not recommended that you increase this value.
+The **integer** parameter verbosity is used to control the amount of debugging information which is printed by **DGGRID**. Valid values are from 0 to 3. The default value, 0, gives minimal output, which includes the value of all active parameter settings. When built with GDAL, the GDAL version is printed on a separate line after the metafile is parsed if verbosity is greater than 0. It is not recommended that you increase this value.
 
 Setting either of the **boolean** parameters pause_on_startup and/or pause_before_exit to TRUE causes **DGGRID** to pause execution either immediately after loading parameters, or just before program termination, respectively. The default value for both parameters is FALSE.
 

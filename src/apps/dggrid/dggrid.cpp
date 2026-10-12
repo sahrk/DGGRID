@@ -131,11 +131,9 @@ int main (int argc, char* argv[])
    if (!hasMetaFile)
       exit(0);
 
-   //// build and load the parameter list ////
-
    dgcout << "** executing DGGRID version " << DGGRID_VERSION;
 #ifdef USE_GDAL
-   dgcout << " with GDAL version " << std::string(GDALVersionInfo("VERSION_NUM"));
+   dgcout << " with GDAL";
 #else
    dgcout << " without GDAL";
 #endif
@@ -147,6 +145,11 @@ int main (int argc, char* argv[])
    // create the operation object using parameters in the meta file
    OpBasic theOperation(metaFileName);
    theOperation.initialize();
+
+#ifdef USE_GDAL
+   if (theOperation.mainOp.verbosity > 0)
+      dgcout << "GDAL version " << std::string(GDALVersionInfo("VERSION_NUM")) << std::endl;
+#endif
 
    // echo the parameter list
    dgcout << "* parameter values:\n";

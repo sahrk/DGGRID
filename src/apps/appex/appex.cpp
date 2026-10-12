@@ -57,8 +57,8 @@ int main (int, char**)
    const DgIDGG& dgg = idggs.idgg(7);
    cout << dgg.gridStats() << endl;
 
-   //DgZXSystem* rfx = new DgZXSystem(idggs, 7, "ZX");
-   DgZ7System* rfx = DgZ7System::makeSystem (idggs, true, "Z7");
+   DgZ7System* rfx = DgZ7System::makeSystem(idggs, true, "Z7");
+   (void) rfx; // retained for users extending this example
 
 /*
    //////// now use the DGG /////////
