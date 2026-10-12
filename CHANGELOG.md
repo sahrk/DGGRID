@@ -7,7 +7,7 @@ All changes are by Kevin Sahr, unless otherwise noted.
 ### Added
 - manual updated to v9.1 (thanks to @allixender)
 - link in README to readthedocs online documentation
-- IVEA projection and spherical (S) and ellipsoidal (L) ISEA/IVEA presets; old ISEA names remain spherical aliases
+- IVEA projection and spherical (S) and ellipsoidal (L) ISEA/IVEA presets, and hierarchically indexed (Z) hexagon presets (ISEA3HSZ, ISEA4HSZ, ISEA7HSZ, IVEA3HSZ, IVEA4HSZ, IVEA7HSZ, ISEA3HLZ, ISEA4HLZ, ISEA7HLZ, IVEA3HLZ, IVEA4HLZ, IVEA7HLZ); old ISEA names remain spherical aliases
 - IGEO7v1 (ISEA on the authalic sphere) and IGEO7v2 (ISEA on the WGS84 ellipsoid) presets
 - hierarchically indexed hexagon presets ISEA3HSZ, ISEA4HSZ, ISEA7HSZ, IVEA3HSZ, IVEA4HSZ, IVEA7HSZ and ISEA3HLZ, ISEA4HLZ, ISEA7HLZ, IVEA3HLZ, IVEA4HLZ, IVEA7HLZ: the S or L preset with Z3 (aperture 3), ZORDER (aperture 4) or Z7 (aperture 7) indexing for input, output and internal processing; ISEA7HSZ is IGEO7v1 and ISEA7HLZ is IGEO7v2 (and IGEO7)
 - parameters sphere_radius_type, custom_sphere_radius, input_datum, output_datum and orientation_datum

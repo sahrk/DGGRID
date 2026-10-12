@@ -210,15 +210,19 @@ Detailed information about the parameters that specify each of the DGG design ch
 - `CUSTOM` (default) - indicates that the grid parameters will be specified manually (see below)
 - `SUPERFUND` - the **Superfund_500m** grid (see [**Appendix G**](#appendix-g-the-epa-superfund_500m-dggs))
 - `PLANETRISK` - the **PlanetRisk** grid (see [**Appendix H**](#appendix-h-the-planetrisk-dggs))
-- `IGEO7v1` - ISEA projection with hexagon cells and an aperture of 7, with Z7 hierarchical indexing, on the authalic sphere (see [**Appendix C**](#appendix-c-default-values-for-preset-dgg-types))
-- `IGEO7v2` - ISEA projection with hexagon cells and an aperture of 7, with Z7 hierarchical indexing, using the ellipsoidal (WGS84) form described below; it differs from `IGEO7v1` only in its datum
+- `IGEO7v1` - ISEA projection with hexagon cells and an aperture of 7, with Z7 hierarchical indexing, on the authalic sphere; the same grid as `ISEA7HSZ` (see [**Appendix C**](#appendix-c-default-values-for-preset-dgg-types))
+- `IGEO7v2` - ISEA projection with hexagon cells and an aperture of 7, with Z7 hierarchical indexing, using the ellipsoidal (WGS84) form described below; the same grid as `ISEA7HLZ`, differing from `IGEO7v1` only in its datum
 - `IGEO7` - an alias for `IGEO7v2`, retained for backward compatibility. Before version 9.1 `IGEO7` was the spherical grid that is now `IGEO7v1`; selecting `IGEO7` produces a warning that its meaning has changed. Specify `IGEO7v1` to reproduce grids generated with `IGEO7` in earlier versions.
 - ISEA presets: `ISEA3HS`, `ISEA4HS`, `ISEA7HS`, `ISEA43HS`, `ISEA4TS`, `ISEA4DS` (spherical) and `ISEA3HL`, `ISEA4HL`, `ISEA7HL`, `ISEA43HL`, `ISEA4TL`, `ISEA4DL` (ellipsoidal)
 - IVEA presets: `IVEA3HS`, `IVEA4HS`, `IVEA7HS`, `IVEA43HS`, `IVEA4TS`, `IVEA4DS` (spherical) and `IVEA3HL`, `IVEA4HL`, `IVEA7HL`, `IVEA43HL`, `IVEA4TL`, `IVEA4DL` (ellipsoidal)
+- hierarchically indexed ISEA presets: `ISEA3HSZ`, `ISEA4HSZ`, `ISEA7HSZ` (spherical) and `ISEA3HLZ`, `ISEA4HLZ`, `ISEA7HLZ` (ellipsoidal)
+- hierarchically indexed IVEA presets: `IVEA3HSZ`, `IVEA4HSZ`, `IVEA7HSZ` (spherical) and `IVEA3HLZ`, `IVEA4HLZ`, `IVEA7HLZ` (ellipsoidal)
 - `ISEA3H`, `ISEA4H`, `ISEA7H`, `ISEA43H`, `ISEA4T`, `ISEA4D` - aliases for the corresponding spherical `S` presets, retained for backward compatibility
 - FULLER presets: `FULLER3H`, `FULLER4H`, `FULLER7H`, `FULLER43H`, `FULLER4T`, `FULLER4D`
 
 The name of each ISEA, IVEA and FULLER preset consists of the projection (ISEA, IVEA, or FULLER), the aperture (3, 4, 7, or 43), the cell topology (`H` for hexagon, `T` for triangle, `D` for diamond), and, for ISEA and IVEA, a final letter `S` or `L`. The aperture 43 is a mixed sequence of aperture 4 resolutions followed by aperture 3 resolutions. A preset ending in `S` is a spherical preset: geographic input and output use the sphere (datum `AUTHALIC_SPHERE`, see item 6 below). A preset ending in `L` is an ellipsoidal preset: geographic input and output use the WGS 84 ellipsoid (datum `WGS84`) and the ISEAL orientation (see item 1 below). The FULLER presets are only defined on the sphere, and they use the DYMAXION orientation (see item 1 below). The SUPERFUND preset also uses the Fuller projection, but with the ISEA orientation. 
+
+A hexagon ISEA or IVEA preset with an aperture of 3, 4, or 7 can also end in a final letter `Z` (after the `S` or `L`), for example `IVEA4HLZ`. A `Z` preset is the same grid as the corresponding `S` or `L` preset, with hierarchical indexing used for input, output, and internal processing: the hierarchical indexing system is `Z3` for aperture 3, `ZORDER` for aperture 4, and `Z7` for aperture 7 (see [**Appendix C**](#appendix-c-default-values-for-preset-dgg-types) for the parameters that are set). `ISEA7HSZ` is the same grid as `IGEO7v1`, and `ISEA7HLZ` is the same grid as `IGEO7v2` and `IGEO7`. There are no `Z` presets for aperture 43, triangle, diamond, or FULLER grids.
 
 Each preset grid type sets appropriate values for all of the parameters that specify a DGG, including its datums and orientation. The default values for each preset grid type are given in [**Appendix C**](#appendix-c-default-values-for-preset-dgg-types). These default preset values can be overridden by explicitly setting the desired individual parameters in your metafile as described below; an explicitly set parameter always overrides the preset value, regardless of where it appears in the metafile relative to dggs_type. The exception is the SUPERFUND preset, which requires dggs_aperture_type MIXED43, dggs_num_aperture_4_res 2, dggs_res_specify_type SPECIFIED, and output_cell_label_type SUPERFUND; any other values cause an error. In particular, note that all preset grid types have a default resolution; your desired DGG resolution should be specified using the parameter dggs_res_spec (see below).
 
@@ -514,7 +518,7 @@ sphere_radius_type: AUTHALIC_SPHERE
 dggs_res_specify_type: SPECIFIED
 ```
 
-The datum and orientation parameters are set by the preset according to its kind. All presets other than the ellipsoidal presets (names ending in `L`), IGEO7v2, IGEO7 and the FULLER presets set:
+The datum and orientation parameters are set by the preset according to its kind. All presets other than the ellipsoidal presets (names ending in `L` or `LZ`), IGEO7v2, IGEO7 and the FULLER presets set:
 
 ```
 input_datum: AUTHALIC_SPHERE
@@ -522,7 +526,7 @@ output_datum: AUTHALIC_SPHERE
 dggs_orient_preset: ISEA
 ```
 
-The ellipsoidal presets (names ending in `L`), IGEO7v2 and IGEO7 set:
+The ellipsoidal presets (names ending in `L` or `LZ`), IGEO7v2 and IGEO7 set:
 
 ```
 input_datum: WGS84
@@ -570,28 +574,36 @@ The ISEA, IVEA and FULLER presets are formed from the projection and a base grid
 | **4T**        | TRIANGLE          | 9                 | PURE                   | 4                 | N/A                         | N/A                         |
 | **4D**        | DIAMOND           | 9                 | PURE                   | 4                 | N/A                         | N/A                         |
 
-The projection and the datum settings (`S` or `L` suffix) then give the preset names in the table below. In each row, *base* stands for any of the six base grids above.
+The projection and the datum settings (`S` or `L` suffix) then give the preset names in the table below. In each row, *base* stands for any of the six base grids above; in the hierarchically indexed column, *base* stands for 3H, 4H, or 7H only.
 
-| **Projection** | **dggs_proj** | **Spherical preset name** (AUTHALIC_SPHERE input and output, ISEA orientation) | **Ellipsoidal preset name** (WGS84 input and output, ISEAL orientation) | **Other names** |
-|----------------|---------------|-------------------------------|-------------------------------|-----------------|
-| **ISEA**       | ISEA          | ISEA*base*S, for example ISEA3HS | ISEA*base*L, for example ISEA3HL | ISEA*base* (an alias for ISEA*base*S), for example ISEA3H |
-| **IVEA**       | IVEA          | IVEA*base*S, for example IVEA3HS | IVEA*base*L, for example IVEA3HL | none |
-| **FULLER**     | FULLER        | FULLER*base*, for example FULLER3H | none | none |
+| **Projection** | **dggs_proj** | **Spherical preset name** (AUTHALIC_SPHERE input and output, ISEA orientation) | **Ellipsoidal preset name** (WGS84 input and output, ISEAL orientation) | **Hierarchically indexed names** (spherical and ellipsoidal) | **Other names** |
+|----------------|---------------|-------------------------------|-------------------------------|-------------------------------|-----------------|
+| **ISEA**       | ISEA          | ISEA*base*S, for example ISEA3HS | ISEA*base*L, for example ISEA3HL | ISEA*base*SZ and ISEA*base*LZ, for example ISEA3HSZ and ISEA3HLZ | ISEA*base* (an alias for ISEA*base*S), for example ISEA3H; ISEA7HSZ is also IGEO7v1; ISEA7HLZ is also IGEO7v2 and IGEO7 |
+| **IVEA**       | IVEA          | IVEA*base*S, for example IVEA3HS | IVEA*base*L, for example IVEA3HL | IVEA*base*SZ and IVEA*base*LZ, for example IVEA3HSZ and IVEA3HLZ | none |
+| **FULLER**     | FULLER        | FULLER*base*, for example FULLER3H | none | none | none |
 
 The FULLER presets use AUTHALIC_SPHERE input and output and the DYMAXION orientation.
 
-The preset types IGEO7, IGEO7v1 and IGEO7v2 set the additional parameters:
+The hierarchically indexed presets (names ending in `Z`, and IGEO7, IGEO7v1 and IGEO7v2) set the additional parameters below, where *system* is the hierarchical indexing system for the aperture of the preset:
 
 ```
-hier_indexing_system_type: Z7
+hier_indexing_system_type: system
 input_address_type: HIERNDX
-input_hier_ndx_system: Z7
+input_hier_ndx_system: system
 input_hier_ndx_form: INT64
 output_cell_label_type: OUTPUT_ADDRESS_TYPE
 output_address_type: HIERNDX
-output_hier_ndx_system: Z7
+output_hier_ndx_system: system
 output_hier_ndx_form: INT64
 ```
+
+| **Base grid** | **system** |
+|---------------|------------|
+| **3H**        | Z3         |
+| **4H**        | ZORDER     |
+| **7H**        | Z7         |
+
+IGEO7v1 is the aperture 7 preset ISEA7HSZ, and IGEO7v2 and IGEO7 are ISEA7HLZ, so they use Z7. Because input_address_type is HIERNDX in these presets, a hierarchically indexed preset reads its input as indexes, for example the files of clip_region_files with clip_subset_type ADDRESS_FILES. Operations that read geographic points, such as BIN_POINT_VALS and BIN_POINT_PRESENCE, require input_address_type GEO, which must then be set explicitly. As for any preset, any of these parameters can be overridden by setting it explicitly.
 
 ```{include} appendix_d.md
 ```
