@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://earth.google.com/kml/2.1">
 <Folder>
-   <name>IGEO7v2 Res 3</name>
+   <name>IGEO7 Res 3</name>
    <description>www.discreteglobalgrids.org</description>
    <Style id="lineStyle1">
       <LineStyle id="lineStyle2">
