@@ -22,6 +22,7 @@ All changes are by Kevin Sahr, unless otherwise noted.
 - invalid parameter values now produce an error
 - deprecated proj_datum and proj_datum_radius in favor of sphere_radius_type and custom_sphere_radius
 - FULLER presets now use the DYMAXION orientation
+- DYMAXION vertex 0 and azimuth use Gray's more precise Cartesian vertex and the great-circle azimuth to Gray's adjacent vertex
 - IGEO7 is now an alias for the IGEO7v2 WGS84 datum grid; its use produces a warning about the change
 - use exact icosahedron, ISEA and WGS84 constants
 ### Fixed

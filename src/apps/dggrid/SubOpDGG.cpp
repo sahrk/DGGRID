@@ -523,17 +523,20 @@ SubOpDGG::setupOp (void)
    if (orientPresetlc != "none") {
       // ISEA and ISEAL place vert0 at authalic latitude atan(phi), which puts
       // the poles on icosahedron edge midpoints. DYMAXION is Fuller's
-      // orientation: vert0 in the Atlantic off Liberia, with azimuth toward the
-      // adjacent vertex near Norway (Gray 1995). ISEAL is the orientation PROJ and DGGAL use
-      // for their ellipsoidal ISEA and IVEA: on WGS84, vert0 at 11.25 E lands on
-      // the Swedish coast; 11.20 E puts it back in the ocean.
+      // orientation (Gray 1995): vert0 is his Cartesian vertex in the Atlantic
+      // off Liberia, and the azimuth is the great-circle bearing from that
+      // vertex to the adjacent vertex near Norway. The three values are given
+      // to 21 digits so they round-trip in long double. ISEAL is the orientation
+      // PROJ and DGGAL use for their ellipsoidal ISEA and IVEA: on WGS84, vert0
+      // at 11.25 E lands on the Swedish coast; 11.20 E puts it back in the ocean.
       static const struct {
          const char* name; const char* lon; const char* lat; const char* azimuth;
          const char* datum;
       } orientPresets[] = {
          { "isea",  "11.25", nullptr, "0.0", "AUTHALIC_SPHERE" },
          { "iseal", "11.20", nullptr, "0.0", "AUTHALIC_SPHERE" },
-         { "dymaxion", "-5.24539058", "2.300882", "7.46658", "AUTHALIC_SPHERE" }
+         { "dymaxion", "-5.24539029677732395211", "2.30088211162675256873",
+           "7.46658360242249796637", "AUTHALIC_SPHERE" }
       };
 
       bool found = false;

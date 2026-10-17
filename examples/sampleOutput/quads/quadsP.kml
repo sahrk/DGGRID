@@ -13,7 +13,7 @@
       <name>1</name>
       <Point>
          <coordinates>
-            -44.6097376,50.1597545
+            -44.6097342,50.1597568
          </coordinates>
       </Point>
    </Placemark>
@@ -21,7 +21,7 @@
       <name>2</name>
       <Point>
          <coordinates>
-            -62.8059392,-7.7166783
+            -62.8059393,-7.7166752
          </coordinates>
       </Point>
    </Placemark>
@@ -29,7 +29,7 @@
       <name>3</name>
       <Point>
          <coordinates>
-            -16.4278225,-55.2504461
+            -16.4278275,-55.2504453
          </coordinates>
       </Point>
    </Placemark>
@@ -37,7 +37,7 @@
       <name>4</name>
       <Point>
          <coordinates>
-            49.6429530,-20.1430502
+            49.6429523,-20.1430530
          </coordinates>
       </Point>
    </Placemark>
@@ -45,7 +45,7 @@
       <name>5</name>
       <Point>
          <coordinates>
-            44.2137488,39.6421467
+            44.2137510,39.6421440
          </coordinates>
       </Point>
    </Placemark>
@@ -53,7 +53,7 @@
       <name>6</name>
       <Point>
          <coordinates>
-            -130.3570470,20.1430502
+            -130.3570477,20.1430530
          </coordinates>
       </Point>
    </Placemark>
@@ -61,7 +61,7 @@
       <name>7</name>
       <Point>
          <coordinates>
-            -135.7862512,-39.6421467
+            -135.7862490,-39.6421440
          </coordinates>
       </Point>
    </Placemark>
@@ -69,7 +69,7 @@
       <name>8</name>
       <Point>
          <coordinates>
-            135.3902624,-50.1597545
+            135.3902658,-50.1597568
          </coordinates>
       </Point>
    </Placemark>
@@ -77,7 +77,7 @@
       <name>9</name>
       <Point>
          <coordinates>
-            117.1940608,7.7166783
+            117.1940607,7.7166752
          </coordinates>
       </Point>
    </Placemark>
@@ -85,7 +85,7 @@
       <name>10</name>
       <Point>
          <coordinates>
-            163.5721775,55.2504461
+            163.5721725,55.2504453
          </coordinates>
       </Point>
    </Placemark>
