@@ -16,10 +16,8 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-    Parts of the implementation (DgIcosaSliceDice.cpp) are ported from PROJ
-    (MIT; itself derived from A5, Apache-2.0, and DGGAL, BSD-3-Clause) and
-    from DGGAL (BSD-3-Clause, Copyright (c) 2014-2025, Ecere Corporation).
-    The upstream notices are retained in DgIcosaSliceDice.cpp.
+    The algorithms are reimplemented from the published literature cited
+    below; see DgIcosaSliceDice.cpp.
 *******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //

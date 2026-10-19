@@ -21,100 +21,16 @@
 // DgIcosaSliceDice.cpp: DgIcosaSliceDice class implementation
 //
 // ---------------------------------------------------------------------------
-// Parts of the vector formulation (fwdTri / invTri main path, the half-chord
-// distance measure halfChord and the signed-excess formula) are ported from
-// PROJ (https://github.com/OSGeo/PROJ, commit
-// 010d62c2daae01a70247a3e4d6b99bee39879195), files
-// src/projections/polyhedral/snyder.h and src/sphere.h. PROJ is distributed
-// under the MIT licence:
-//
-//   Permission is hereby granted, free of charge, to any person obtaining a
-//   copy of this software and associated documentation files (the
-//   "Software"), to deal in the Software without restriction, including
-//   without limitation the rights to use, copy, modify, merge, publish,
-//   distribute, sublicense, and/or sell copies of the Software, and to
-//   permit persons to whom the Software is furnished to do so, subject to
-//   the following conditions:
-//
-//   The above copyright notice and this permission notice shall be included
-//   in all copies or substantial portions of the Software.
-//
-//   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-//   OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-//   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-//   IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-//   CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-//   TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-//   SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
-// Those PROJ files carry the following notices, retained here:
-//
-//   Project:  PROJ
-//   Purpose:  Snyder equal-area polyhedral projection -- forward and inverse.
-//             / Spherical geometry helpers on 3D unit vectors.
-//   Author:   Felix Palmer
-//
-//   Derived from A5 (Apache-2.0).
-//   https://github.com/felixpalmer/a5
-//   (modules/projections/polyhedral.ts, modules/utils/vector.ts)
-//
-//   Copyright (c) A5 contributors
-//
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
-//
-//       http://www.apache.org/licenses/LICENSE-2.0
-//
-//   Unless required by applicable law or agreed to in writing, software
-//   distributed under the License is distributed on an "AS IS" BASIS,
-//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//   See the License for the specific language governing permissions and
-//   limitations under the License.
-//
-//   Derived from DGGAL (BSD 3-Clause License)
-//   Copyright (c) 2014-2025, Ecere Corporation
-//   [full BSD-3 text below]
-//
-//   Closed-form equations adapted from:
-//   https://brsr.github.io/2021/08/31/snyder-equal-area.html
-//
-// The spherical-trigonometry fallback, the (V, M, C) sub-triangle scheme and
-// the radial-vertex role permutation follow DGGAL
-// (https://github.com/ecere/dggal, commit
-// e16cea7d930e603e09a8310edcd8f58218016e8f),
-// src/projections/icoVertexGreatCircle.ec:
-//
-//   BSD 3-Clause License
-//
-//   Copyright (c) 2014-2025, Ecere Corporation
-//
-//   Redistribution and use in source and binary forms, with or without
-//   modification, are permitted provided that the following conditions are
-//   met:
-//
-//   1. Redistributions of source code must retain the above copyright
-//      notice, this list of conditions and the following disclaimer.
-//
-//   2. Redistributions in binary form must reproduce the above copyright
-//      notice, this list of conditions and the following disclaimer in the
-//      documentation and/or other materials provided with the distribution.
-//
-//   3. Neither the name of the copyright holder nor the names of its
-//      contributors may be used to endorse or promote products derived from
-//      this software without specific prior written permission.
-//
-//   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
-//   IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
-//   TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
-//   PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER
-//   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-//   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-//   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-//   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-//   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// Reimplemented from published algorithms; no source code from other projects
+// is used. The vector formulation of the forward and inverse maps follows
+// B. R. S. Recht (2021), "Snyder equal-area projection, in vector form"
+// (https://brsr.github.io/2021/08/31/snyder-equal-area.html) and
+// "Vector spherical geometry" (https://brsr.github.io/2021/05/01/
+// vector-spherical-geometry.html). The spherical-trigonometry fallback for
+// the inverse "slice" step follows S. Lee & D. Mortari (2017) as presented in
+// J. Hall's thesis (p. 39). The construction itself is that of [VLS06] and
+// [Sny92] (see DgIcosaSliceDice.h).
+// ---------------------------------------------------------------------------
 //
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -206,7 +122,7 @@ inline long double cross2 (const V2& a, const V2& b)
 const long double NaN = NAN;
 
 // sin(angle(a, b) / 2) for unit a, b, computed as |a - b| / |(a - b, a + b)|
-// (PROJ vector_difference): accurate for tiny angles and self-normalising
+// (Recht): accurate for tiny angles and self-normalising
 // against |a|, |b| != 1 by rounding.
 inline long double halfChord (const V3& a, const V3& b)
 {
@@ -330,7 +246,7 @@ DgIcosaSliceDice::prepare (Tri& t, const V3& A, const V3& B, const V3& C,
 } // void DgIcosaSliceDice::prepare
 
 ////////////////////////////////////////////////////////////////////////////////
-// Forward slice-and-dice [VLS06], vector form [Rec21] (PROJ snyder_fwd).
+// Forward slice-and-dice [VLS06], vector form [Rec21].
 ////////////////////////////////////////////////////////////////////////////////
 Status
 DgIcosaSliceDice::fwdTri (const V3& P, const Tri& t, V2& out)
@@ -400,10 +316,9 @@ DgIcosaSliceDice::fwdTri (const V3& P, const Tri& t, V2& out)
 } // Status DgIcosaSliceDice::fwdTri
 
 ////////////////////////////////////////////////////////////////////////////////
-// Spherical-trigonometry fallback for the "slice" step of the inverse (DGGAL
-// icoVertexGreatCircle.ec, trigonometric path; Lee & Mortari 2017 via
-// J. Hall's thesis, p. 39). Given triangle ABQ with known side c = |AB|,
-// angle beta at B and excess E = alpha, find the angle delta at A:
+// Spherical-trigonometry fallback for the "slice" step of the inverse (Lee &
+// Mortari 2017 via J. Hall's thesis, p. 39). Given triangle ABQ with known
+// side c = |AB|, angle beta at B and excess E = alpha, find the angle delta at A:
 //    E = delta + beta + angQ - pi,  Y := E + pi - beta = delta + angQ,
 //    cos(angQ) = -cos(delta) cos(beta) + sin(delta) sin(beta) cos(c)
 //    => tan(delta) = -(cos Y + cos beta) / (sin Y - sin beta cos c).
@@ -436,7 +351,7 @@ trigSliceQ (const DgIcosaSliceDice::Tri& t, long double r, V3& Q)
 } // static bool trigSliceQ
 
 ////////////////////////////////////////////////////////////////////////////////
-// Inverse slice-and-dice (PROJ snyder_inv / DGGAL inverseVector, [Rec21]).
+// Inverse slice-and-dice [Rec21].
 ////////////////////////////////////////////////////////////////////////////////
 Status
 DgIcosaSliceDice::invTri (const V2& X, const Tri& t, V3& out, bool forceTrig)

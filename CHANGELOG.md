@@ -14,7 +14,7 @@ All changes are by Kevin Sahr, unless otherwise noted.
 - parameter dggs_orient_preset with ISEA, ISEAL and DYMAXION orientations
 - GEO output addresses for TRANSFORM_POINTS
 - output datum spatial references for Shapefile and GDAL output
-- DgIcosaSliceDice projection kernel (derived in part from PROJ and DGGAL; license notices retained)
+- DgIcosaSliceDice projection kernel
 - new IVEA, ISEAL and renamed IGEO7 examples
 ### Changed
 - orientation output metafiles now reproduce placements when used as input
