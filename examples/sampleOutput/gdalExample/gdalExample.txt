@@ -102,6 +102,6 @@ Registering GDAL drivers...
 * No intersections in quad 11.
 
 ** grid generation complete **
-accepted 12 cells / 20 tested
-acceptance rate is 60%
+accepted 12 cells / 45 tested
+acceptance rate is 26.6667%
 
