@@ -27,6 +27,7 @@ All changes are by Kevin Sahr, unless otherwise noted.
 - use exact icosahedron, ISEA and WGS84 constants
 ### Fixed
 - incorrect cell boundaries across face edges in odd-resolution aperture 7 grids
+- missing cells along quad edges when clipping odd-resolution aperture 7 grids to polygons
 - incorrect projection selection for non-ISEA dggs_type presets
 - loss of precision near rotated icosahedron vertices
 - incorrect ISEA rotation for points exactly on face medians

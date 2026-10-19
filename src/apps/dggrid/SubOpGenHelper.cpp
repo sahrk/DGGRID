@@ -1361,7 +1361,15 @@ SubOpGen::createClipRegions (const DgIDGGBase& dgg,
 
    //// adjust the bounds for boundary buffers if needed ////
 
+   // Class III cells are large relative to the index grid (circumradius ~1.5
+   // index units), so a cell crossed by a polygon edge can have its center up
+   // to ~3.5 index units outside the box of the cells holding the polygon's
+   // vertices. Their centers also do not lie on the quad edges: cells owned
+   // by a neighboring quad lie up to quadOverRows index rows beyond any edge
+   // of a quad (see DgQ2DDtoIConverter).
+   const long long int quadOverRows = (dgg.isClassIII()) ? 2 : 0;
    int skipVal = (op.dggOp.aperture == 3) ? 3 : 1;
+   if (dgg.isClassIII()) skipVal = 4;
    for (int q = 1; q < 11; q++) {
       if (!clipRegions[q].isQuadUsed()) continue;
 
@@ -1380,8 +1388,15 @@ SubOpGen::createClipRegions (const DgIDGGBase& dgg,
          DgIVec2D newOff(clipRegions[q].offset().i() - skipVal,
                          clipRegions[q].offset().j() - skipVal);
 
-         if (newOff.i() < 0) newOff = DgIVec2D(0, newOff.j());
-         if (newOff.j() < 0) newOff = DgIVec2D(newOff.i(), 0);
+         if (newOff.i() < 0) {
+            if (quadOverRows) clipRegions[q].setUnderI(true);
+            newOff = DgIVec2D(0, newOff.j());
+         }
+
+         if (newOff.j() < 0) {
+            if (quadOverRows) clipRegions[q].setUnderJ(true);
+            newOff = DgIVec2D(newOff.i(), 0);
+         }
 
          // build the adjusted upper right; track for quad overage
 
@@ -1426,161 +1441,109 @@ SubOpGen::createClipRegions (const DgIDGGBase& dgg,
    const DgDiscRF2D& grid = dgg.grid2D();
 
    if (!dgg.isCongruent()) {
+
+      const long long int topEdgeI = dgg.maxI() + 1;
+      const long long int topEdgeJ = dgg.maxJ() + 1;
+
       for (int q = 1; q < 11; q++) {
-         if (!clipRegions[q].isQuadUsed()) continue;
+         DgQuadClipRegion& cr = clipRegions[q];
+         if (!cr.isQuadUsed()) continue;
 
          if (op.mainOp.verbosity > 0)
             dgcout << "Checking OVERAGE quad " << q << std::endl;
 
+         // the cells of this quad's clip region that lie beyond the quad's
+         // edges (and so are owned by a neighboring quad) are tested here
+         // against this quad's portion of the clipping polygons, and any
+         // hits are transferred to their owning quad
+         const long long int iLo = cr.underI() ? -quadOverRows : cr.offset().i();
+         const long long int jLo = cr.underJ() ? -quadOverRows : cr.offset().j();
+         const long long int iHi = cr.overI() ? topEdgeI + quadOverRows
+                                              : cr.upperRight().i();
+         const long long int jHi = cr.overJ() ? topEdgeJ + quadOverRows
+                                              : cr.upperRight().j();
+
+         auto testCell = [&](long long int i, long long int j) {
+            const DgIVec2D coord(i, j);
+
+            // cells beyond two edges belong to no quad except at the quad's
+            // far corner (see DgQ2DDtoIConverter)
+            const bool oI = i > dgg.maxI(), oJ = j > dgg.maxJ();
+            const int numOver = oI + oJ + (i < 0) + (j < 0);
+            if (numOver > 1 && !(oI && oJ)) return;
+
+            if (op.outOp.buildShapeFileAttributes)
+               op.outOp.curFields.clear();
+
+            if (evalCell(dgg, cc1, grid, cr, coord))
+               addQuadOverage(dgg, q, coord, overageSet, overageFields);
+         };
+
          // check for over J
-
-         if (clipRegions[q].overJ()) {
-            DgIVec2D lLeft(clipRegions[q].offset());
-            DgIVec2D uRight(clipRegions[q].upperRight());
-            lLeft = DgIVec2D(lLeft.i(), dgg.maxJ() + 1);
-            uRight = DgIVec2D(uRight.i(), dgg.maxJ() + 1);
-
-            if (op.mainOp.megaVerbose)
-               dgcout << "OVERJ in quad " << q << "-" << lLeft <<
-                    " " << uRight << std::endl;
-
-            DgIVec2D tCoord = lLeft;
-            while (true) {
-               DgIVec2D coord = tCoord;
-
-               if (op.outOp.buildShapeFileAttributes)
-                  op.outOp.curFields.clear();
-
-               bool accepted = evalCell(dgg, cc1, grid,
-                                  clipRegions[q], coord);
-
-               if (!accepted) {
-                  if (tCoord == uRight) break;
-                  tCoord.setI(tCoord.i() + 1);
-                  continue;
-               }
-
-               // transfer to correct quad
-
-               const DgQuadEdgeCells& ec = DgIDGGBase::edgeTable(q);
-               int newQ = q;
-               DgIVec2D newC(coord);
-               if (ec.isType0()) {
-                  if (coord.j() == (dgg.maxJ() + 1)) {
-                     if (coord.i() == 0) {
-                        newQ = ec.loneVert();
-                        newC = DgIVec2D(0, 0);
-                     } else {
-                        newQ = ec.upQuad();
-                        newC = DgIVec2D(0, (dgg.maxI() + 1) - coord.i());
-                     }
-                  } else { // i == (dgg.maxI() + 1)
-                     newQ = ec.rightQuad();
-                     newC.setI(0);
-                  }
-               } else {// type 1
-                  if (coord.i() == (dgg.maxI() + 1)) {
-                     if (coord.j() == 0) {
-                        newQ = ec.loneVert();
-                        newC = DgIVec2D(0, 0);
-                     } else {
-                        newQ = ec.rightQuad();
-                        newC = DgIVec2D((dgg.maxJ() + 1) - coord.j(), 0);
-                     }
-                  } else { // j == (dgg.maxJ() + 1)
-                     newQ = ec.upQuad();
-                     newC.setJ(0);
-                  }
-               }
-
-               // add to the overage set
-               overageSet[newQ].insert(newC);
-               if (op.outOp.buildShapeFileAttributes)
-                  overageFields[newQ].insert(
-                    std::pair<DgIVec2D, std::set<DgDBFfield> >(newC, op.outOp.curFields));
-
-               if (op.mainOp.megaVerbose)
-                  dgcout << "PUSH OVERAGE: " << q << ": " << coord <<
-                       " -> " << newQ << ": " << newC << std::endl;
-
-               if (tCoord == uRight) break;
-               tCoord.setI(tCoord.i() + 1);
-            }
+         if (cr.overJ()) {
+            for (long long int j = topEdgeJ; j <= jHi; j++)
+               for (long long int i = iLo; i <= cr.upperRight().i(); i++)
+                  testCell(i, j);
          }
 
          // check for over I
+         if (cr.overI()) {
+            for (long long int i = topEdgeI; i <= iHi; i++)
+               for (long long int j = jLo; j <= jHi; j++)
+                  testCell(i, j);
+         }
 
-         if (clipRegions[q].overI()) {
-            DgIVec2D lLeft(clipRegions[q].offset());
-            DgIVec2D uRight(clipRegions[q].upperRight());
-            lLeft = DgIVec2D(dgg.maxI() + 1, lLeft.j());
-            uRight = DgIVec2D(dgg.maxI() + 1, uRight.j());
+         // check for under J (Class III only)
+         if (cr.underJ()) {
+            for (long long int j = jLo; j < 0; j++)
+               for (long long int i = cr.offset().i(); i <= cr.upperRight().i(); i++)
+                  testCell(i, j);
+         }
 
-            if (uRight.j() == dgg.maxJ() && clipRegions[q].overJ())
-               uRight = DgIVec2D(uRight.i(), dgg.maxJ() + 1);
-
-            if (op.mainOp.megaVerbose)
-               dgcout << "OVERI in quad " << q << "-" << lLeft << " " << uRight << std::endl;
-
-            DgBoundedRF2D b1(grid, lLeft, uRight);
-            for (DgIVec2D tCoord = b1.lowerLeft(); tCoord != b1.invalidAdd();
-                    tCoord = b1.incrementAddress(tCoord)) {
-               DgIVec2D coord = tCoord;
-
-               if (op.outOp.buildShapeFileAttributes)
-                  op.outOp.curFields.clear();
-
-               bool accepted = evalCell(dgg, cc1, grid, clipRegions[q], coord);
-
-               if (!accepted) continue;
-
-               // transfer to correct quad
-
-               const DgQuadEdgeCells& ec = DgIDGGBase::edgeTable(q);
-               int newQ = q;
-               DgIVec2D newC(coord);
-               if (ec.isType0()) {
-                  if (coord.j() == (dgg.maxJ() + 1)) {
-                     if (coord.i() == 0) {
-                        newQ = ec.loneVert();
-                        newC = DgIVec2D(0, 0);
-                     } else {
-                        newQ = ec.upQuad();
-                        newC = DgIVec2D(0, (dgg.maxI() + 1) - coord.i());
-                     }
-                  } else { // i == (dgg.maxI() + 1)
-                     newQ = ec.rightQuad();
-                     newC.setI(0);
-                  }
-               } else { // type 1
-                  if (coord.i() == (dgg.maxI() + 1)) {
-                     if (coord.j() == 0) {
-                        newQ = ec.loneVert();
-                        newC = DgIVec2D(0, 0);
-                     } else {
-                        newQ = ec.rightQuad();
-                        newC = DgIVec2D((dgg.maxJ() + 1) - coord.j(), 0);
-                     }
-                  } else { // j == (dgg.maxJ() + 1)
-                     newQ = ec.upQuad();
-                     newC.setJ(0);
-                  }
-               }
-
-               // add to the overage set
-               overageSet[newQ].insert(newC);
-               if (op.outOp.buildShapeFileAttributes)
-                  overageFields[newQ].insert(
-                    std::pair<DgIVec2D, std::set<DgDBFfield> >(newC, op.outOp.curFields));
-
-               if (op.mainOp.megaVerbose)
-                  dgcout << "ADD OVERAGE: " << q << ": " << coord <<
-                          " -> " << newQ << ": " << newC << std::endl;
-            }
+         // check for under I (Class III only)
+         if (cr.underI()) {
+            for (long long int i = iLo; i < 0; i++)
+               for (long long int j = cr.offset().j(); j <= cr.upperRight().j(); j++)
+                  testCell(i, j);
          }
       }
    }
 
 } // void SubOpGen::createClipRegions
+
+////////////////////////////////////////////////////////////////////////////////
+void
+SubOpGen::addQuadOverage (const DgIDGGBase& dgg, int q, const DgIVec2D& coord,
+             std::set<DgIVec2D> overageSet[],
+             std::map<DgIVec2D, std::set<DgDBFfield> > overageFields[])
+//
+// coord is a cell on quad q's grid that lies beyond the quad's edges; add it
+// to the overage set of the quad that owns it, using the same mapping as
+// point binning (DgQ2DDtoIConverter)
+//
+{
+   DgLocation* loc = dgg.grid2D().makeLocation(coord);
+   dgg.ccFrame().convert(loc);
+   DgLocation* q2dd = dgg.q2ddRF().makeLocation(
+                        DgQ2DDCoord(q, *dgg.ccFrame().getAddress(*loc)));
+   delete loc;
+
+   dgg.convert(q2dd);
+   const DgQ2DICoord owner = *dgg.getAddress(*q2dd);
+   delete q2dd;
+
+   const int newQ = owner.quadNum();
+   const DgIVec2D& newC = owner.coord();
+
+   overageSet[newQ].insert(newC);
+   if (op.outOp.buildShapeFileAttributes)
+      overageFields[newQ].insert(
+        std::pair<DgIVec2D, std::set<DgDBFfield> >(newC, op.outOp.curFields));
+
+   if (op.mainOp.megaVerbose)
+      dgcout << "ADD OVERAGE: " << q << ": " << coord <<
+              " -> " << newQ << ": " << newC << std::endl;
+
+} // void SubOpGen::addQuadOverage
 
 ////////////////////////////////////////////////////////////////////////////////

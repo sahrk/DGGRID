@@ -84,7 +84,7 @@ class DgQuadClipRegion {
 
       DgQuadClipRegion (void)
            : isQuadUsed_ (false), gnomProj_ (0),
-	     overI_ (false), overJ_ (false),
+	     overI_ (false), overJ_ (false), underI_ (false), underJ_ (false),
     minx_ (std::numeric_limits<long double>::max()),
     miny_ (std::numeric_limits<long double>::max()),
     maxx_ (std::numeric_limits<long double>::min()),
@@ -134,6 +134,12 @@ class DgQuadClipRegion {
       void setOverI (const bool overIIn) { overI_ = overIIn; }
       void setOverJ (const bool overJIn) { overJ_ = overJIn; }
 
+      bool underI (void) const { return underI_; }
+      bool underJ (void) const { return underJ_; }
+
+      void setUnderI (const bool underIIn) { underI_ = underIIn; }
+      void setUnderJ (const bool underJIn) { underJ_ = underJIn; }
+
    private:
 
       int quadNum_;
@@ -158,6 +164,8 @@ class DgQuadClipRegion {
 
       bool overI_; // is our maxi > maxI (quad overage)
       bool overJ_; // is our maxj > maxJ (quad overage)
+      bool underI_; // is our mini < 0 (Class III quad underage)
+      bool underJ_; // is our minj < 0 (Class III quad underage)
 
       // bounding box boundaries
       long double minx_;
@@ -218,6 +226,9 @@ struct SubOpGen : public SubOpBasicMulti {
              DgQuadClipRegion clipRegions[], DgInShapefileAtt* pAttributeFile);
    void createClipRegions (const DgIDGGBase& dgg,
              DgQuadClipRegion clipRegions[], std::set<DgIVec2D> overageSet[],
+             std::map<DgIVec2D, std::set<DgDBFfield> > overageFields[]);
+   void addQuadOverage (const DgIDGGBase& dgg, int q, const DgIVec2D& coord,
+             std::set<DgIVec2D> overageSet[],
              std::map<DgIVec2D, std::set<DgDBFfield> > overageFields[]);
 
    // the parameters
