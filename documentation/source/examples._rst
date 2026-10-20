@@ -742,8 +742,7 @@ icosaISEAL
 
 icosaISEAL.meta - example of a DGGRID metafile that generates the
 ellipsoidal icosahedron (a resolution 0 triangle grid) in KML format, using
-the ISEAL orientation preset: the orientation PROJ and DGGAL use for their
-ellipsoidal ISEA and IVEA. Like ISEA it puts vertex 0 at authalic latitude
+the ISEAL orientation preset. Like ISEA it puts vertex 0 at authalic latitude
 atan(phi), but it shifts vertex 0's longitude so that it falls in the ocean
 on the WGS84 ellipsoid. The DGG itself (cell boundaries, addresses, area) is
 generated on the authalic sphere, as always; output_datum WGS84 converts the

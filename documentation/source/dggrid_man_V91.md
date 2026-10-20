@@ -69,7 +69,6 @@ The original **DGGRID** specifications were developed by (in alphabetical order)
 - George Marsaglia's multiply-with-carry "Mother-of-all-RNGs" pseudo-random number generation function.
 - The gnomonic projection code is adapted from Gerald Evenden's PROJ.4 library
 - Frank Warmerdam's Shapelib library
-- the implementation of van Leeuwen and Strebe's slice-and-dice equal area projection used for the IVEA projection is adapted from the PROJ ([https://proj.org](https://proj.org)) and DGGAL ([https://github.com/ecere/dggal](https://github.com/ecere/dggal)) libraries.
 
 The github source code distribution contains instructions on building **DGGRID**. The examples directory contains example **DGGRID** metafiles (with associated input files); they are listed in [**Appendix D**](#appendix-d-dggrid-examples).
 
