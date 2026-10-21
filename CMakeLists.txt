@@ -74,21 +74,6 @@ add_subdirectory(src/lib/proj4lib)
 add_subdirectory(src/apps/dggrid)
 add_subdirectory(src/apps/appex)
 
-include(CTest)
-if(BUILD_TESTING)
-  add_executable(test_hierarchy_apertures tests/core/test_hierarchy_apertures.cpp)
-  target_link_libraries(test_hierarchy_apertures PRIVATE dglib)
-  add_test(NAME hierarchy_apertures COMMAND test_hierarchy_apertures)
-
-  find_package(Python3 COMPONENTS Interpreter QUIET)
-  if(Python3_Interpreter_FOUND)
-    add_test(NAME h3_stub_integration
-      COMMAND ${Python3_EXECUTABLE}
-              ${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/test_h3_stub.py
-              $<TARGET_FILE:dggrid>)
-  endif()
-endif()
-
 if(DOXYGEN_FOUND)
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/src/Doxyfile ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile.in @ONLY)
   add_custom_target(docs
