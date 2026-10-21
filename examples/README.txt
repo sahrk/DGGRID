@@ -16,12 +16,14 @@ subdirectory using:
 
   dggrid theFileName.meta
 
-The two bash shell scripts below are provided for running the 
+The bash shell scripts below are provided for running the 
 examples. We recommend running cleanexamples.sh (see below)
 before each run of these scripts to avoid spurious error
 messages.
 
-  doexamples.sh - executes all examples and performs a
+  doexamples.sh - executes all examples (the list in examples.lst,
+    including the examples that need GDAL and the examples that
+    need the H3 library) and performs a
     diff of the output files with output that has been
     verified. Assumes that dggrid is in it's original
     build location. Note that rounding errors may result 
@@ -35,15 +37,31 @@ messages.
     "dggrid exit status N" to its standard output (not to the
     example's log file).
 
-  doexamplesNoGDAL.sh - works exactly like doexamples.sh
-    above except it does not execute the examples that
-    use GDAL input or output files. Use this if you
-    built DGGRID without GDAL.
+  doexamplesNoGDALorH3.sh - works exactly like doexamples.sh
+    above except it only executes the examples listed in
+    examplesNoGDALorH3.lst, which do not use GDAL input or
+    output files and do not need the H3 library. Use this if you
+    built DGGRID without GDAL or without H3.
+
+  doexamplesH3.sh - executes just the examples that need DGGRID
+    to be built with the H3 library (examplesH3.lst: h3Gen and
+    h3Transform) and diffs their output as above. Every metafile
+    in each of those examples is run (e.g. h3Gen.meta,
+    h3GenString.meta and h3GenCustom.meta), then it checks that
+    h3GenCustom.meta, which specifies the grid explicitly, gives
+    the same cells as h3Gen.meta, which uses dggs_type H3. The
+    examples are skipped if "dggrid -v" does not report that
+    DGGRID was built with H3. Set the environment variable
+    DGGRID to use a different dggrid executable.
+
+    (doexamples.sh only runs the metafile named for each example,
+    so it does not run h3GenString.meta, h3GenCustom.meta,
+    h3TransformGeo.meta or h3TransformQ2DI.meta.)
 
 The above assume that you built DGGRID using cmake. If
 you built DGGRID using the legacy Makefiles, then use
-doexamplesNoCMake.sh and doexamplesNoCMakeNoGDAL.sh
-resectively.
+doexamplesNoCmake.sh and doexamplesNoCmakeNoGDALorH3.sh
+respectively.
 
 The following bash shells scripts are used to help 
 maintain the examples directory:

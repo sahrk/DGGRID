@@ -53,6 +53,8 @@ __DGGRID__ will make use of the following external library, if available (not in
 
 - The Open Source Geospatial Foundation’s GDAL translator library for raster and vector geospatial data formats (see http://www.gdal.org)
 
+- Uber’s H3 library (version 4.4.1 or later; see https://h3geo.org), which provides H3 hierarchical indexing (`dggs_type H3` and the H3 index choices of the hierarchical indexing parameters). Without it __DGGRID__ builds without H3, and H3 is not offered as a choice of any parameter.
+
 __DGGRID__ uses the following external libraries (included with the __DGGRID__ source
 code):
 
@@ -61,5 +63,7 @@ code):
 - George Marsaglia’s multiply-with-carry “Mother-of-all-RNGs” pseudo-random number generation function.
 
 - The gnomonic projection code is adapted from Gerald Evenden’s PROJ.4 library.
+
+- The icosahedral GNOMONIC projection (`dggs_proj GNOMONIC`) and parts of the H3 index code are adapted from Uber’s H3 library (Apache License 2.0; see `LICENSE.H3`).
 
 - Frank Warmerdam’s Shapelib library

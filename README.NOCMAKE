@@ -15,7 +15,9 @@ building with GDAL you must set GDAL_HDR_DIR to the location of the gdal
 header files and GDAL_LIB to the gdal library file you want to link to
 DGGRID.
 
-The Makefile build checks for the H3 header and library automatically. Set
+The Makefile build checks for the H3 header and library automatically. H3 is
+used only if it is version 4.4.1 or later and its library exports the internal
+FaceIJK functions that DGGRID uses; otherwise DGGRID is built without H3. Set
 `BUILD_WITH_H3=FALSE` to disable H3, or `BUILD_WITH_H3=TRUE` to require it.
 For a nonstandard installation, set `H3_HDR_DIR` to the directory containing
 `h3api.h` and `H3_LIB` to the H3 library file or linker flag (default `-lh3`).
@@ -41,13 +43,18 @@ with pre-computed output. You can run these examples and automatically compare
 your output to the pre-computed output by going into DGGRID/examples and
 executing:
 
-   ./doexamples
+   ./doexamples.sh
+
+(use ./doexamplesNoCmake.sh for a Makefile build, or
+./doexamplesNoCmakeNoGDALorH3.sh if you built without GDAL or H3; see
+examples/README.txt).
 
 See the manual for more details on the parameters contained in the example
 metafiles.
 
-Note that some of the examples use GDAL; if you build DGGRID without GDAL
-those examples will fail to run successfully for you.
+Note that some of the examples use GDAL and some use H3; if you build DGGRID
+without GDAL or without H3 those examples will fail to run successfully for
+you, so use the NoGDALorH3 script above.
 
 **6. If you have doxygen installed you can build the source code documentation
 by going into DGGRID/src and executing:

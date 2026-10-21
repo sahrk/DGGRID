@@ -1,12 +1,13 @@
 #!/bin/bash
 #
-# doexamplesNoCmake.sh: executes the examples and diff's the output 
+# doexamplesNoCmakeNoGDALorH3.sh: executes the examples and diff's the output 
 #     against sample output, assuming DGGRID was built with the
-#     legacy Makefile system
+#     legacy Makefile system without GDAL or H3: only the examples in
+#     examplesNoGDALorH3.lst are run
 #
 # Kevin Sahr, 4/19/21
 #
-# usage: doexamplesNoCmakeNoGDAL.sh [referenceDir]
+# usage: doexamplesNoCmakeNoGDALorH3.sh [referenceDir]
 #   referenceDir defaults to sampleOutput (relative to this directory,
 #   or absolute). The dggrid exit status of each example is printed to
 #   stdout (not to the example log).
@@ -19,7 +20,7 @@ case "$refDir" in
    /*) refPath="$refDir" ;;
    *)  refPath="../$refDir" ;;
 esac
-examples=( `cat examplesNoGDAL.lst` )
+examples=( `cat examplesNoGDALorH3.lst` )
 
 for f in ${examples[@]}
 do

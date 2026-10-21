@@ -1,11 +1,12 @@
 #!/bin/bash
 #
-# doexamplesNoGDAL.sh: executes the examples and diff's the output 
-#     against sample output for a cmake build without GDAL
+# doexamplesNoGDALorH3.sh: executes the examples and diff's the output 
+#     against sample output for a cmake build without GDAL or H3: only the
+#     examples in examplesNoGDALorH3.lst are run
 #
 # Kevin Sahr, 4/9/13
 #
-# usage: doexamplesNoGDAL.sh [referenceDir]
+# usage: doexamplesNoGDALorH3.sh [referenceDir]
 #   referenceDir defaults to sampleOutput (relative to this directory,
 #   or absolute). The dggrid exit status of each example is printed to
 #   stdout (not to the example log).
@@ -17,7 +18,7 @@ case "$refDir" in
    /*) refPath="$refDir" ;;
    *)  refPath="../$refDir" ;;
 esac
-examples=( `cat examplesNoGDAL.lst` )
+examples=( `cat examplesNoGDALorH3.lst` )
 
 for f in ${examples[@]}
 do
