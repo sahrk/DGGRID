@@ -11,9 +11,17 @@ sub-directories. Edit this file if you want to add or remove build flags.
 
 In particular, the variable BUILD_WITH_GDAL indicates whether or not
 DGGRID should be built with the GDAL library (the default is TRUE). If
-building with GDAL you must set GDAL_HDR_LIB to the location of the gdal
+building with GDAL you must set GDAL_HDR_DIR to the location of the gdal
 header files and GDAL_LIB to the gdal library file you want to link to
 DGGRID.
+
+The Makefile build checks for the H3 header and library automatically. Set
+`BUILD_WITH_H3=FALSE` to disable H3, or `BUILD_WITH_H3=TRUE` to require it.
+For a nonstandard installation, set `H3_HDR_DIR` to the directory containing
+`h3api.h` and `H3_LIB` to the H3 library file or linker flag (default `-lh3`).
+These settings can be passed on the `make` command line.
+Run `make -f Makefile.noCMake clean` before switching H3 on or off in an
+existing Makefile build.
 
 **3. Build DGGRID by executing:
 

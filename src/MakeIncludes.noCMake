@@ -45,6 +45,28 @@ endif
 CCOMP = gcc 
 CPPCOMP = g++ 
 
+### Use H3 automatically when its header and library can be linked.
+### Set BUILD_WITH_H3 to TRUE to require it, or FALSE to disable it.
+BUILD_WITH_H3 ?= AUTO
+H3_HDR_DIR ?=
+H3_LIB ?= -lh3
+H3_ADD_INC = $(if $(H3_HDR_DIR),-I$(H3_HDR_DIR))
+
+ifeq ($(BUILD_WITH_H3),AUTO)
+   H3_AVAILABLE := $(shell printf '%s\n' '#include <h3api.h>' 'int main() { return 0; }' | $(CPPCOMP) $(H3_ADD_INC) -x c++ - -x none -o /dev/null $(H3_LIB) >/dev/null 2>&1 && printf TRUE)
+else
+   H3_AVAILABLE := $(BUILD_WITH_H3)
+endif
+
+ifeq ($(H3_AVAILABLE),TRUE)
+   H3_FLAG = -DUSE_H3
+   H3_ADD_LIB = $(H3_LIB)
+else
+   H3_FLAG =
+   H3_ADD_INC =
+   H3_ADD_LIB =
+endif
+
 # flags for debugging vs. production
 DEBUG_CC_FLAGS = -g -O0 -Wall -fno-inline -fno-eliminate-unused-debug-types -W
 DEBUG_VERBOSE_CC_FLAGS = -g -O0 -Wall -fno-inline -fno-eliminate-unused-debug-types -pedantic -Wimplicit-fallthrough -W -Wextra
@@ -59,13 +81,13 @@ ADD_CC_FLAGS = $(SHIP_CC_FLAGS)
 
 ### the variables below are used by the Makefiles ###
 # any extra C++ flags
-ADD_CPP_FLAGS = $(ADD_CC_FLAGS) $(GDAL_FLAG) -std=c++11
+ADD_CPP_FLAGS = $(ADD_CC_FLAGS) $(GDAL_FLAG) $(H3_FLAG) -std=c++11
 
 # external include search paths 
-ADD_INC_DIRS = $(GDAL_ADD_INC)
+ADD_INC_DIRS = $(GDAL_ADD_INC) $(H3_ADD_INC)
 
 # external libraries to link when linking a standard dglib executable
-ADD_LD_LIBS = $(GDAL_LIB) 
+ADD_LD_LIBS = $(GDAL_LIB) $(H3_ADD_LIB)
 #ADD_LD_LIBS = $(GDAL_LIB) $(MEMCHECK_CC_FLAGS)
 
 DOMAKE = $(MAKE) -f Makefile.noCMake

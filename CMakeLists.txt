@@ -26,10 +26,37 @@ endif()
 
 
 option(WITH_GDAL "Build with external GDAL" ON)
+option(WITH_H3 "Build with external H3 when available" ON)
 option(WITH_EXT_SHAPELIB "Build with external SHAPELIB" OFF)
 
 if(WITH_GDAL)
     find_package(GDAL)
+endif()
+
+set(H3_FOUND FALSE)
+if(WITH_H3)
+  find_package(h3 CONFIG QUIET)
+  if(TARGET h3::h3)
+    set(H3_FOUND TRUE)
+    set(H3_TARGET h3::h3)
+  else()
+    # Some H3 installations provide only the header and library.
+    find_path(H3_INCLUDE_DIR NAMES h3api.h)
+    find_library(H3_LIBRARY NAMES h3)
+    if(H3_INCLUDE_DIR AND H3_LIBRARY)
+      add_library(H3::H3 UNKNOWN IMPORTED)
+      set_target_properties(H3::H3 PROPERTIES
+        IMPORTED_LOCATION "${H3_LIBRARY}"
+        INTERFACE_INCLUDE_DIRECTORIES "${H3_INCLUDE_DIR}")
+      set(H3_FOUND TRUE)
+      set(H3_TARGET H3::H3)
+    endif()
+  endif()
+  if(H3_FOUND)
+    message(STATUS "Found H3: ${H3_TARGET}")
+  else()
+    message(STATUS "H3 not found; building without external H3")
+  endif()
 endif()
 
 if(WITH_EXT_SHAPELIB)

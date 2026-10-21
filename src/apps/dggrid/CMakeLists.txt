@@ -33,7 +33,10 @@ add_executable(dggrid
 if(GDAL_FOUND)
   target_compile_definitions(dggrid PRIVATE USE_GDAL)
 endif()
+if(H3_FOUND)
+  target_compile_definitions(dggrid PRIVATE USE_H3)
+endif()
 
 # If GDAL isn't present than ${GDAL_LIBRARIES} gives an empty std::string
-target_link_libraries(dggrid PRIVATE dglib dgaplib shapelib ${GDAL_LIBRARIES})
+target_link_libraries(dggrid PRIVATE dglib dgaplib shapelib ${GDAL_LIBRARIES} ${H3_TARGET})
 target_compile_features(dggrid PRIVATE cxx_std_11)

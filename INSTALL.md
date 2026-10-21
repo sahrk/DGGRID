@@ -37,6 +37,10 @@ and include them appropriately.
 
 By default cmake will search for `GDAL` and link __DGGRID__ with it if found. If `GDAL` is present on your system and you want to force a build of __DGGRID__ without `GDAL`, call cmake with `-DWITH_GDAL=OFF`.
 
+By default cmake also searches for the H3 library and links it when found.
+Pass `-DWITH_H3=OFF` to build without external H3. CMake accepts an H3
+installation prefix through `-DCMAKE_PREFIX_PATH=/path/to/h3`.
+
 By default cmake will use the `shapelib` library included with the source code.
 To build using an external system-provided version of `shapelib` execute `cmake`
 with `-DWITH_EXT_SHAPELIB=ON`. To specify a specific directory path to search for
