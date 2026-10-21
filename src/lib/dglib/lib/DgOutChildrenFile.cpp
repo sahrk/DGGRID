@@ -33,10 +33,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutChildrenFile::DgOutChildrenFile (const std::string& fileName,
-                    const DgIDGGBase& dgg, const DgIDGGBase& chdDgg,
-                    const DgRFBase* outRF, const DgRFBase* chdOutRF,
+                    const DgRFBase& outRF, const DgRFBase& chdOutRF,
                     const std::string& suffix, DgReportLevel failLevel)
-   : DgOutputStream (fileName, suffix, failLevel), dgg_ (dgg), chdDgg_ (chdDgg),
+   : DgOutputStream (fileName, suffix, failLevel),
                      outRF_ (outRF), chdOutRF_ (chdOutRF)
 {
 
@@ -44,29 +43,11 @@ DgOutChildrenFile::DgOutChildrenFile (const std::string& fileName,
 
 ////////////////////////////////////////////////////////////////////////////////
 DgOutChildrenFile&
-DgOutChildrenFile::insert (const DgLocation& center, DgLocVector& vec)
+DgOutChildrenFile::insert (const DgLocation& center, const DgLocVector& vec)
 {
-//cout << "@@@@@ DgOutChildrenFile::insert:" << std::endl;
-//cout << " dgg: " << dgg << std::endl;
-//cout << " center: " << center << std::endl;
-//cout << " vec: " << vec << std::endl;
-
-   if (!outRF_) { // indicates seqnum output
-      unsigned long long int sn = dgg_.bndRF().seqNum(center);
-      *this << sn;
-      for (int i = 0; i < vec.size(); i++) {
-         DgLocation tmpLoc(vec[i]);
-         chdDgg_.convert(&tmpLoc);
-         *this << " " << chdDgg_.bndRF().seqNum(tmpLoc);
-      }
-   } else {
-      DgLocation tmpLoc(center);
-      outRF_->convert(&tmpLoc);
-      *this << tmpLoc.asString(' ');
-      chdOutRF_->convert(&vec);
-      for (int i = 0; i < vec.size(); i++)
-         *this << " " << vec[i].asString(' ');
-   }
+   *this << outRF_.addressText(center, ' ');
+   for (int i = 0; i < vec.size(); i++)
+      *this << " " << chdOutRF_.addressText(vec[i], ' ');
 
    *this << std::endl;
 

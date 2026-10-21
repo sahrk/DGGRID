@@ -36,8 +36,6 @@ class DgPolygon;
 ////////////////////////////////////////////////////////////////////////////////
 class DgOutAIGenFile : public DgOutLocTextFile {
 
-   using DgOutLocFile::insert;
-
    public:
 
       DgOutAIGenFile (const DgRFBase& rfIn, const std::string& fileNameIn = "",
@@ -48,18 +46,21 @@ class DgOutAIGenFile : public DgOutLocTextFile {
 
       virtual void close (void) { *this << "END" << std::endl; std::ofstream::close(); }
 
-      virtual DgOutLocFile& insert (DgLocation& loc, const std::string* label = nullptr,
-                                const DgDataList* dataList = nullptr);
-
-      virtual DgOutLocFile& insert (DgLocVector& vec, const std::string* label = nullptr,
-                                const DgLocation* cent = nullptr,
-                                const DgDataList* dataList = nullptr);
-
-      virtual DgOutLocFile& insert (DgPolygon& poly, const std::string* label = nullptr,
-                                const DgLocation* cent = nullptr,
-                                const DgDataList* dataList = nullptr);
-
    protected:
+
+      virtual DgOutLocFile& writePoint (const DgLocation& loc,
+                                const std::string* label,
+                                const DgDataList* dataList);
+
+      virtual DgOutLocFile& writePolyline (const DgLocVector& vec,
+                                const std::string* label,
+                                const DgLocation* cent,
+                                const DgDataList* dataList);
+
+      virtual DgOutLocFile& writePolygon (const DgPolygon& poly,
+                                const std::string* label,
+                                const DgLocation* cent,
+                                const DgDataList* dataList);
 
       virtual void setFormatStr(void)
       {
@@ -73,7 +74,7 @@ class DgOutAIGenFile : public DgOutLocTextFile {
 
    private:
 
-      virtual DgOutLocFile& insert (const DgDVec2D& pt);
+      virtual DgOutLocFile& writeVec (const DgDVec2D& pt);
 };
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -51,11 +51,9 @@ DgOutGdalFile::DgOutGdalFile (const DgGeoDegRF& rf,
          fileNameOnly_("")
 {
    // test for override of vecAddress
-   DgAddressBase* dummy = rf.vecAddress(DgDVec2D(M_ZERO, M_ZERO));
-   if (!dummy)
+   if (!rf.hasVecAddress())
         ::report("DgOutGdalFile::DgOutGdalFile(): RF " + rf.name() +
              " must override the vecAddress() method", DgBase::Fatal);
-   delete dummy;
 
    _gdalDriver = gdalDriver;
 }
@@ -205,7 +203,7 @@ DgOutGdalFile::createFeature (const std::string& label) const
 
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutGdalFile::insert(const DgDVec2D&)
+DgOutGdalFile::writeVec (const DgDVec2D&)
 {
    //Probably isn't needed but keep in for safety
    return *this;
@@ -213,21 +211,13 @@ DgOutGdalFile::insert(const DgDVec2D&)
 
 ////////////////////////////////////////////////////////////////////////////////
 void
-DgOutGdalFile::createAddressProperty (const DgIDGGBase& dgg, OGRFeature* feature,
-           const char* fieldName, const DgLocation& loc, const DgRFBase* outRF)
+DgOutGdalFile::createAddressProperty (OGRFeature* feature,
+           const char* fieldName, const DgLocation& loc, const DgRFBase& outRF)
 {
-    DgLocation tmpLoc(loc);
-    dgg.convert(&tmpLoc);
-    std::string str;
-    if (!outRF) { // assumed seqnum
-        str = std::to_string(dgg.bndRF().seqNum(tmpLoc));
-    } else {
-        outRF->convert(&tmpLoc);
-        str = tmpLoc.asString(' ');
-    }
+   std::string str = outRF.addressText(loc, ' ');
 
-    char* cstr = new char[str.length() + 1];
-    strcpy(cstr, str.c_str());
+   char* cstr = new char[str.length() + 1];
+   strcpy(cstr, str.c_str());
 
    // add to the feature
    feature->SetField(fieldName, cstr);
@@ -238,23 +228,15 @@ DgOutGdalFile::createAddressProperty (const DgIDGGBase& dgg, OGRFeature* feature
 
 ////////////////////////////////////////////////////////////////////////////////
 void
-DgOutGdalFile::createAddressesProperty (const DgIDGGBase& dgg, OGRFeature* feature,
-           const char* fieldName, const DgLocVector& vec, const DgRFBase* outRF)
+DgOutGdalFile::createAddressesProperty (OGRFeature* feature,
+           const char* fieldName, const DgLocVector& vec, const DgRFBase& outRF)
 {
    // create the string list
    int n = vec.size();
    char** strArr = new char*[n + 1];
    strArr[n] = NULL; // null-terminate the array for OGRStringList
    for (int i = 0; i < n; i++) {
-      DgLocation tmpLoc(vec[i]);
-      dgg.convert(&tmpLoc);
-      std::string str;
-      if (!outRF) { // assumed seqnum
-         str = std::to_string(dgg.bndRF().seqNum(tmpLoc));
-      } else {
-         outRF->convert(&tmpLoc);
-         str = tmpLoc.asString(' ');
-      }
+      std::string str = outRF.addressText(vec[i], ' ');
 
       strArr[i] = new char[str.length() + 1];
       strcpy(strArr[i], str.c_str());
@@ -271,10 +253,9 @@ DgOutGdalFile::createAddressesProperty (const DgIDGGBase& dgg, OGRFeature* featu
 
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutGdalFile::insert (const DgIDGGBase& dgg, DgCell& cell,
-     bool outputPoint, bool outputRegion, const DgIDGGBase& chdDgg,
-     const DgIDGGBase* prtDgg, const DgRFBase* outRF,
-     const DgRFBase* chdOutRF, const DgRFBase* prtOutRF,
+DgOutGdalFile::insert (const DgCell& cell,
+     bool outputPoint, bool outputRegion,
+     const DgRFBase& outRF, const DgRFBase& chdOutRF, const DgRFBase* prtOutRF,
      const DgLocVector* neighbors, const DgLocVector* children,
      const DgLocation* ndxParent, const DgLocVector* ndxChildren)
 {
@@ -284,9 +265,17 @@ DgOutGdalFile::insert (const DgIDGGBase& dgg, DgCell& cell,
    if (!_oLayer)
       init(outputPoint, outputRegion, neighbors, children, ndxParent, ndxChildren, cell.dataList());
 
-   // first build the geometry
+   // build the geometry from copies of the node and region in this file's
+   // frame; the caller's cell is not changed
+   DgLocation node(cell.node());
+   rf().convert(&node);
 
-   rf().convert(&cell);
+   DgPolygon region;
+   if (cell.hasRegion()) {
+      region = cell.region();
+      rf().convert(region);
+   } else if (outputRegion)
+      ::report("No region in cell for GDAL collection feature.", DgBase::Fatal);
 
    // create the named feature
    OGRFeature *feature = createFeature(cell.label());
@@ -301,35 +290,32 @@ DgOutGdalFile::insert (const DgIDGGBase& dgg, DgCell& cell,
    // first check for multi
    if (outputPoint && outputRegion) {
 
-      OGRGeometryCollection* collect = createCollection(cell);
+      OGRGeometryCollection* collect = createCollection(node, region);
       feature->SetGeometry(collect);
 
    } else if (outputPoint) {
 
-      OGRPoint* pt = createPoint(cell.node());
+      OGRPoint* pt = createPoint(node);
       feature->SetGeometry(pt);
 
    } else if (outputRegion) {
 
-      OGRPolygon* poly = createPolygon(cell.region());
+      OGRPolygon* poly = createPolygon(region);
       feature->SetGeometry(poly);
    } else
       ::report( "No geometry specified for GDAL collection feature.", DgBase::Fatal );
 
-   if (children) {
-      createAddressesProperty (chdDgg, feature, "children", *children, chdOutRF);
-   }
+   if (children)
+      createAddressesProperty(feature, "children", *children, chdOutRF);
 
    if (neighbors)
-      createAddressesProperty(dgg, feature, "neighbors", *neighbors, outRF);
+      createAddressesProperty(feature, "neighbors", *neighbors, outRF);
 
-   if (ndxParent && prtDgg) {
-      createAddressProperty (*prtDgg, feature, "ndxParent", *ndxParent, prtOutRF);
-   }
+   if (ndxParent && prtOutRF)
+      createAddressProperty(feature, "ndxParent", *ndxParent, *prtOutRF);
 
-   if (ndxChildren) {
-      createAddressesProperty (chdDgg, feature, "ndxChildren", *ndxChildren, chdOutRF);
-   }
+   if (ndxChildren)
+      createAddressesProperty(feature, "ndxChildren", *ndxChildren, chdOutRF);
 
    addFeature(feature);
 
@@ -394,15 +380,16 @@ DgOutGdalFile::createPolygon (const DgPolygon& poly)
 
 ////////////////////////////////////////////////////////////////////////////////
 OGRGeometryCollection*
-DgOutGdalFile::createCollection (const DgCell& cell) const
+DgOutGdalFile::createCollection (const DgLocation& node,
+                                 const DgPolygon& region) const
 {
    OGRGeometryCollection* collection =
       (OGRGeometryCollection*) OGRGeometryFactory::createGeometry(wkbGeometryCollection);
 
-   OGRPoint* oPt = createPoint(cell.node());
+   OGRPoint* oPt = createPoint(node);
    collection->addGeometry(oPt);
 
-   OGRPolygon* poly = createPolygon(cell.region());
+   OGRPolygon* poly = createPolygon(region);
    collection->addGeometry(poly);
 
    return collection;
@@ -422,7 +409,7 @@ DgOutGdalFile::addFeature (OGRFeature *feature) {
 
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutGdalFile::insert (DgLocation& loc, const std::string* label,
+DgOutGdalFile::writePoint (const DgLocation& loc, const std::string* label,
                   const DgDataList* dataList)
 {
    if (_mode != Point)
@@ -449,7 +436,7 @@ DgOutGdalFile::insert (DgLocation& loc, const std::string* label,
 
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutGdalFile::insert (DgLocVector&, const std::string*, const DgLocation*,
+DgOutGdalFile::writePolyline (const DgLocVector&, const std::string*, const DgLocation*,
                   const DgDataList*)
 {
    ::report( "polyline output not supported for GDAL file output", DgBase::Fatal );
@@ -458,7 +445,7 @@ DgOutGdalFile::insert (DgLocVector&, const std::string*, const DgLocation*,
 
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutGdalFile::insert (DgPolygon& poly, const std::string* label,
+DgOutGdalFile::writePolygon (const DgPolygon& poly, const std::string* label,
                   const DgLocation* /* cent */,
                   const DgDataList* dataList)
 {

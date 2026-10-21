@@ -120,6 +120,8 @@ class DgGeoProjRF : public DgGeoDatumRF<DgDVec2D, long double> {
       // the following routines are "back-doors" included for speed;
       // use with care!
 
+      virtual bool hasVecAddress (void) const { return true; }
+
       virtual DgAddressBase* vecAddress (const DgDVec2D& v) const
                     { return new DgAddress<DgDVec2D>(v); }
 

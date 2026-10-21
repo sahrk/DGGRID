@@ -95,9 +95,6 @@ SubOpTransform::executeOp (void) {
    dgcout << "TRANSFORM BEFORE: " << *loc << std::endl;
 #endif
 
-      //op.outOp.pOutRF->convert(loc);
-      dgg.convert(loc);
-
       op.outOp.outputCellAdd2D(*loc, nullptr, loc->dataList());
 
 #if DGDEBUG

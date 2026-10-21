@@ -48,11 +48,9 @@ template<class A, class B, class DB> class DgBoundedRF
       virtual bool validLocation (const DgLocation& loc,
                                   bool convert = true) const;
 
-      virtual DgLocation& incrementLocation (DgLocation& loc,
-                                             bool convert = true) const;
+      virtual DgLocation& incrementLocation (DgLocation& loc) const;
 
-      virtual DgLocation& decrementLocation (DgLocation& loc,
-                                             bool convert = true) const;
+      virtual DgLocation& decrementLocation (DgLocation& loc) const;
 
       virtual unsigned long long int seqNum (const DgLocation& loc,
                                         bool convert = true) const;

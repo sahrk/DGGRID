@@ -44,11 +44,9 @@ DgOutShapefile::DgOutShapefile (const DgGeoDegRF& rfIn,
      numDigits_ (precisionIn), numFields_ (0), idLen_ (shapefileIdLen)
 {
    // test for override of vecAddress
-   DgAddressBase* dummy = rfIn.vecAddress(DgDVec2D(M_ZERO, M_ZERO));
-   if (!dummy)
+   if (!rfIn.hasVecAddress())
       report("DgOutShapefile::DgOutShapefile(): RF " + rfIn.name() +
              " must override the vecAddress() method", DgBase::Fatal);
-   delete dummy;
 
    if (!open(fileNameIn, failLevelIn))
       report("DgOutShapefile::DgOutShapefile() unable to open file " +
@@ -172,13 +170,13 @@ DgOutShapefile::addFields (const std::set<DgDBFfield>& fields)
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutShapefile::insert (const DgDVec2D&)
+DgOutShapefile::writeVec (const DgDVec2D&)
 //
 // Put the point pt.
 //
 ////////////////////////////////////////////////////////////////////////////////
 {
-   report("DgOutShapefile::insert() simple pt insertion not defined for "
+   report("DgOutShapefile::writeVec() simple pt insertion not defined for "
           "shapefiles.", failLevel());
 
    return *this;
@@ -253,15 +251,13 @@ DgOutShapefile::writeDbf (const std::string& id)
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutShapefile::insert (DgLocation& loc, const std::string* label,
+DgOutShapefile::writePoint (const DgLocation& loc, const std::string* label,
                   const DgDataList* /* dataList */)
 //
 // Put the point loc.
 //
 ////////////////////////////////////////////////////////////////////////////////
 {
-   rf().convert(&loc);
-
    std::string id;
    if (label)
      id = *label;
@@ -289,14 +285,14 @@ DgOutShapefile::insert (DgLocation& loc, const std::string* label,
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutShapefile::insert (DgLocVector&, const std::string*, const DgLocation*,
+DgOutShapefile::writePolyline (const DgLocVector&, const std::string*, const DgLocation*,
         const DgDataList*)
 //
 // Put the polyline vec.
 //
 ////////////////////////////////////////////////////////////////////////////////
 {
-   report("DgOutShapefile::insert() location vector insertion not defined for "
+   report("DgOutShapefile::writePolyline() location vector insertion not defined for "
           "shapefiles.", failLevel());
 
    return *this;
@@ -306,7 +302,7 @@ DgOutShapefile::insert (DgLocVector&, const std::string*, const DgLocation*,
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutShapefile::insert (DgPolygon& poly, const std::string* label,
+DgOutShapefile::writePolygon (const DgPolygon& poly, const std::string* label,
                      const DgLocation* /* cent */,
                   const DgDataList* /* dataList */)
 //
@@ -314,8 +310,6 @@ DgOutShapefile::insert (DgPolygon& poly, const std::string* label,
 //
 ////////////////////////////////////////////////////////////////////////////////
 {
-   rf().convert(poly);
-
    std::string id;
    if (label)
      id = *label;

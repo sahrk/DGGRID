@@ -40,10 +40,24 @@ DgCell::convertTo (const DgRFBase& rfIn)
    {
       rf_ = &rfIn;
       rfIn.convert(&node_);
-      if (hasRegion()) rfIn.convert(*region_);
+      if (hasRegion()) convertRegion(rfIn);
    }
 
 } // DgCell::convertTo
+
+////////////////////////////////////////////////////////////////////////////////
+void
+DgCell::convertRegion (const DgRFBase& rfIn)
+{
+   if (!rfIn.hasVecAddress()) {
+      ::report("DgCell: the region of a cell cannot be converted to frame " +
+               rfIn.name() + ", which has no 2-D coordinates", DgBase::Fatal);
+      return;
+   }
+
+   rfIn.convert(*region_);
+
+} // DgCell::convertRegion
 
 ////////////////////////////////////////////////////////////////////////////////
 std::string

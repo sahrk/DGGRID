@@ -43,6 +43,7 @@ add_library(dglib
    lib/DgHierNdxStringRF.cpp
    lib/DgHierNdxSystemRFBase.cpp
    lib/DgHierNdxSystemRFSBase.cpp
+   lib/DgSeqNumRF.cpp
    lib/DgIcosaMap.cpp
    lib/DgIcosaSliceDice.cpp
    lib/DgIDGG.cpp
@@ -69,6 +70,7 @@ add_library(dglib
    lib/DgLocBase.cpp
    lib/DgLocList.cpp
    lib/DgLocVector.cpp
+   lib/DgOutAddressFile.cpp
    lib/DgOutAIGenFile.cpp
    lib/DgOutChildrenFile.cpp
    lib/DgOutGdalFile.cpp
@@ -171,6 +173,7 @@ add_library(dglib
    include/dglib/DgHierNdx.h
    include/dglib/DgHierNdxIntRF.h
    include/dglib/DgHierNdxRF.h
+   include/dglib/DgSeqNumRF.h
    include/dglib/DgHierNdxStringRF.h
    include/dglib/DgHierNdxSystemRF.h
    include/dglib/DgHierNdxSystemRFBase.h
@@ -204,6 +207,7 @@ add_library(dglib
    include/dglib/DgLocBase.h
    include/dglib/DgLocList.h
    include/dglib/DgLocVector.h
+   include/dglib/DgOutAddressFile.h
    include/dglib/DgOutAIGenFile.h
    include/dglib/DgOutChildrenFile.h
    include/dglib/DgOutGdalFile.h

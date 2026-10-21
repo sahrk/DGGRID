@@ -31,6 +31,9 @@
 #include <dglib/DgIDGGutil.h>
 
 class DgIDGGSBase;
+class DgSeqNumRF;
+class DgCell;
+class DgDataList;
 //class DgZ3RF;
 //class DgZ3StringRF;
 //class DgZ7System;
@@ -93,6 +96,7 @@ class DgIDGGBase : public DgDiscTopoRF<DgQ2DICoord, DgGeoCoord, long double> {
       const DgQ2DDRF&       q2ddRF    (void) const { return *q2ddRF_; }
       const DgBoundedIDGG&  bndRF     (void) const { return *bndRF_; }
       const DgPlaneTriRF&   planeRF   (void) const { return *planeRF_; }
+      const DgSeqNumRF&     seqNumRF  (void) const { return *seqNumRF_; }
 
       const DgContCartRF&   ccFrame (void) const { return *ccFrame_; }
       const DgDiscRF2D&     grid2D  (void) const { return *grid2D_; }
@@ -121,6 +125,16 @@ class DgIDGGBase : public DgDiscTopoRF<DgQ2DICoord, DgGeoCoord, long double> {
 
       virtual void setVertices (const DgLocation& loc, DgPolygon& vec,
                                 int densify) const;
+
+      // Build the cell at loc (in any frame connected to this DGG; it is
+      // first converted to the DGG) for output. The cell is in geoRF() with
+      // its boundary densified and wrapped according to lonWrapMode; if the
+      // boundary had to be wrapped and unwrapPts is true the center is
+      // wrapped too. The caller owns the cell, which does not own dataList.
+      DgCell* makeCell (const DgLocation& loc, const std::string& label,
+                        int densify, DgGeoSphRF::DgLonWrapMode lonWrapMode,
+                        bool unwrapPts, DgDataList* dataList = nullptr,
+                        bool trace = false) const;
 
       virtual void setAddVertices (const DgQ2DICoord& add,
                                    DgPolygon& vec) const
@@ -212,6 +226,7 @@ class DgIDGGBase : public DgDiscTopoRF<DgQ2DICoord, DgGeoCoord, long double> {
       const DgQ2DDRF* q2ddRF_;
       const DgBoundedIDGG* bndRF_;
       const DgPlaneTriRF* planeRF_;
+      const DgSeqNumRF* seqNumRF_;
 
    friend class DgQ2DItoDConverter;
    friend class DgQ2DDtoIConverter;

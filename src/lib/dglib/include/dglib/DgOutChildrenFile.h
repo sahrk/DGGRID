@@ -41,22 +41,19 @@ class DgOutChildrenFile : public DgOutputStream {
 
    public:
 
+      // outRF and chdOutRF are the frames of the cell and child addresses
       DgOutChildrenFile (const std::string& fileName,
-                        const DgIDGGBase& dgg,
-                        const DgIDGGBase& chdDgg,
-                        const DgRFBase* outRF = NULL,
-                        const DgRFBase* chdOutRF = NULL,
+                        const DgRFBase& outRF,
+                        const DgRFBase& chdOutRF,
                         const std::string& suffix = std::string("chd"),
                         DgReportLevel failLevel = DgBase::Fatal);
 
-      virtual DgOutChildrenFile& insert (const DgLocation& center, DgLocVector& vec);
+      virtual DgOutChildrenFile& insert (const DgLocation& center, const DgLocVector& vec);
 
    private:
 
-      const DgIDGGBase& dgg_;    // primary res dgg
-      const DgIDGGBase& chdDgg_; // child res dgg
-      const DgRFBase* outRF_;    // primary res output RF (NULL indicates seqNum)
-      const DgRFBase* chdOutRF_; // child res output RF
+      const DgRFBase& outRF_;    // primary res output RF
+      const DgRFBase& chdOutRF_; // child res output RF
 
 };
 

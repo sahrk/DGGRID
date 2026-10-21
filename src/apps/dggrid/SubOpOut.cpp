@@ -28,6 +28,7 @@
 #endif
 
 #include <iostream>
+#include <memory>
 #include <set>
 #include <cstdlib>
 
@@ -47,6 +48,8 @@
 #include <dglib/DgOutChildrenFile.h>
 #include <dglib/DgOutNdxChildrenFile.h>
 #include <dglib/DgOutNdxParentFile.h>
+#include <dglib/DgOutAddressFile.h>
+#include <dglib/DgSeqNumRF.h>
 #include <dglib/DgHexIDGG.h>
 #include <dglib/DgHexIDGGS.h>
 #include <dglib/DgIDGGBase.h>
@@ -208,15 +211,9 @@ SubOpOut::genRandPts (const DgQ2DICoord& add2D, const std::string& label)
       }
    }
 
-   // convert
-
    if (op.mainOp.megaVerbose) dgcout << "rpts: " << rpts << newline;
 
-   deg.convert(rpts);
-
-   if (op.mainOp.megaVerbose) dgcout << "-> " << rpts << newline;
-
-   DgLocList pts;
+   // each cell converts its point to the output frame
    for (int i = 0; i < rpts.size(); i++) {
       op.dggOp.nSamplePts++;   // pt # in this grid
       op.dggOp.sampleCount++;  // pt # overall
@@ -239,27 +236,24 @@ SubOpOut::genRandPts (const DgQ2DICoord& add2D, const std::string& label)
 
 ////////////////////////////////////////////////////////////////////////////////
 void
-SubOpOut::outputCellAdd2D (const DgLocation& add2D, const std::string* labelIn,
+SubOpOut::outputCellAdd2D (const DgLocation& addIn, const std::string* labelIn,
                DgDataList* dataList)
 {
    const DgIDGGBase& dgg = op.dggOp.dgg();
+
+   // the cell address in the DGG, for the label, the cell and the
+   // relational outputs; a point is quantized to the cell that contains it
+   DgLocation add2D(addIn);
+   dgg.convert(&add2D);
 
    // create the output label
    std::string label;
    if (labelIn)
       label = *labelIn;
-   else {
-      if (outSeqNum) {
-         unsigned long long int sn = op.dggOp.dgg().bndRF().seqNum(add2D);
-         label = dgg::util::to_string(sn);
-      } else if (useEnumLbl)
-         label = dgg::util::to_string(++enumerationCount);
-      else {
-         DgLocation tmpLoc(add2D);
-         pOutRF->convert(&tmpLoc);
-         label = tmpLoc.asString(outputDelimiter);
-      }
-   }
+   else if (useEnumLbl)
+      label = dgg::util::to_string(++enumerationCount);
+   else
+      label = pOutRF->addressText(add2D, outputDelimiter);
 
    // start new files if needed
    if (maxCellsPerFile && nCellsOutputToFile >= maxCellsPerFile)
@@ -267,47 +261,16 @@ SubOpOut::outputCellAdd2D (const DgLocation& add2D, const std::string* labelIn,
 
    nCellsOutputToFile++;
 
-   DgLocation* tmpLoc = new DgLocation(add2D);
-
-   DgPolygon verts(dgg);
-   dgg.setVertices(add2D, verts, op.outOp.nDensify);
-
-   // unwrap the cell east/west if applicable
-   DgPolygon* unwrappedVerts = new DgPolygon(verts);
-   if (op.mainOp.megaVerbose) dgcout << "before unwrap: " << *unwrappedVerts << newline;
-   int wrapped = DgGeoSphRF::lonWrap(*unwrappedVerts, lonWrapMode);
-   if (op.mainOp.megaVerbose) dgcout << "unwrapped: " << *unwrappedVerts << newline;
-
-   // wrap the cell center point if the boundary was wrapped
-   if (unwrapPts && wrapped) {
-      dgg.geoRF().convert(tmpLoc);
-      DgGeoCoord g = *(dgg.geoRF().getAddress(*tmpLoc));
-      int testWrap = DgGeoSphRF::lonWrap(g, lonWrapMode);
-      if (testWrap) {
-         delete tmpLoc;
-         tmpLoc = dgg.geoRF().makeLocation(g);
-      }
-   }
-
-   // create the cell to output
-   DgCell cell(dgg.geoRF(), label, *tmpLoc, unwrappedVerts, dataList, false);
-
-   // output cell area
-//  dgg.geoRF().convert(tmpLoc);
-//  long double area =
-//        DgGeoCoord::geoPolyArea(verts, *dgg.geoRF().getAddress(*tmpLoc));
-//  dgcout << std::setprecision(15);
-//  dgcout << label << " " << area << " "
-//       << area * dgg.geoRF().earthRadiusKM() * dgg.geoRF().earthRadiusKM()
-//       << newline;
-
-   delete tmpLoc;
+   // create the cell to output; it is handed unchanged to every writer
+   std::unique_ptr<DgCell> pCell(dgg.makeCell(add2D, label, op.outOp.nDensify,
+                 lonWrapMode, unwrapPts, dataList, op.mainOp.megaVerbose));
+   const DgCell& cell = *pCell;
 
    if (op.mainOp.megaVerbose)
       dgcout << "accepted " << label << " " << add2D << newline;
 
    if (dataOut)
-      *dataOut << label << op.primarySubOp->dataToOutStr(dataList) << newline;
+      dataOut->insert(add2D, &label, dataList);
 
    const DgQ2DICoord& q2di = *dgg.getAddress(add2D);
    if (cellOut) {
@@ -401,13 +364,10 @@ SubOpOut::outputCellAdd2D (const DgLocation& add2D, const std::string* labelIn,
    }
 
    if (collectOut) {
-      collectOut->insert(dgg, cell,
+      collectOut->insert(cell,
             (pointOutType == "GDAL_COLLECTION"),
             (cellOutType == "GDAL_COLLECTION"),
-            op.dggOp.chdDgg(), op.dggOp.prtDgg(),
-            ((outSeqNum || useEnumLbl) ? NULL : pOutRF),
-            ((outSeqNum || useEnumLbl) ? NULL : pChdOutRF),
-            ((outSeqNum || useEnumLbl) ? NULL : pPrtOutRF),
+            *pOutRF, *pChdOutRF, pPrtOutRF,
             ((neighborsOutType == "GDAL_COLLECTION") ? &neighbors : nullptr),
             ((childrenOutType == "GDAL_COLLECTION") ? &children : nullptr),
             ((ndxParentOutType == "GDAL_COLLECTION") ? &ndxParent : nullptr),
@@ -919,13 +879,20 @@ SubOpOut::executeOp (void) {
    // open across output splits and grid placements.
    resetFiles(!(doRandPts && concatPtOut && randPtsOut));
 
-   // set-up the output reference frame
-   if (outSeqNum || useEnumLbl)
-      pOutRF = &dgg;
-   else if (!op.dggOp.isSuperfund) { // use input address type
+   // set-up the output reference frames
+   bool seqNumRFs = (outSeqNum || useEnumLbl || op.dggOp.isSuperfund);
+   if (!seqNumRFs) { // use input address type
       outSeqNum = op.dggOp.addressTypeToRF(outAddType, outHierNdxSysType, outHierNdxFormType, &pOutRF, &outHierNdxSys, &pChdOutRF, &pPrtOutRF, -1, SubOpDGG::GeographicBoundary::Output);
       if (!pOutRF)
          ::report("SubOpOut::executeOp(): invalid output RF", DgBase::Fatal);
+      seqNumRFs = outSeqNum;
+   }
+
+   // sequence numbers are written by a frame like any other address
+   if (seqNumRFs) {
+      pOutRF = &dgg.seqNumRF();
+      pChdOutRF = &op.dggOp.chdDgg().seqNumRF();
+      pPrtOutRF = (op.dggOp.prtDgg() ? &op.dggOp.prtDgg()->seqNumRF() : nullptr);
    }
 
    // Address-to-text conversion uses the reference frame's format string.
@@ -970,10 +937,8 @@ SubOpOut::executeOp (void) {
    // now create all the files
 
    if (dataOutType == "TEXT") {
-      dataOut = new std::ofstream();
-      dataOut->open(dataOutFileName.c_str());
-      dataOut->setf(std::ios::fixed, std::ios::floatfield);
-      dataOut->precision(op.mainOp.precision);
+      dataOut = new DgOutAddressFile(*pOutRF, dataOutFileName,
+                                     outputDelimiter, op.mainOp.precision);
    }
 
    if (makeCollectFile) {
@@ -1029,18 +994,15 @@ SubOpOut::executeOp (void) {
       if (op.dggOp.gridTopo == Triangle)
          ::report("Neighbors not implemented for Triangle grids", DgBase::Fatal);
 
-      nbrOut = new DgOutNeighborsFile(neighborsOutFileName, dgg,
-             ((outSeqNum || useEnumLbl) ? NULL : pOutRF), "nbr");
+      nbrOut = new DgOutNeighborsFile(neighborsOutFileName, *pOutRF, "nbr");
    }
 
    if (childrenOutType == "TEXT") {
-      chdOut = new DgOutChildrenFile(childrenOutFileName, dgg, op.dggOp.chdDgg(),
-               ((outSeqNum || useEnumLbl) ? NULL : pOutRF), pChdOutRF, "chd");
+      chdOut = new DgOutChildrenFile(childrenOutFileName, *pOutRF, *pChdOutRF, "chd");
    }
 
     if (ndxChildrenOutType == "TEXT") {
-       ndxChdOut = new DgOutNdxChildrenFile(ndxChildrenOutFileName, dgg, op.dggOp.chdDgg(),
-                ((outSeqNum || useEnumLbl) ? NULL : pOutRF), pChdOutRF, "ndxChd");
+       ndxChdOut = new DgOutNdxChildrenFile(ndxChildrenOutFileName, *pOutRF, *pChdOutRF, "ndxChd");
     }
 
     if (ndxParentOutType != "NONE") {
@@ -1049,8 +1011,7 @@ SubOpOut::executeOp (void) {
             ::report("resolution 0 cells do not have parents.", DgBase::Warning);
         else {
             if (ndxParentOutType == "TEXT") {
-                ndxPrtOut = new DgOutNdxParentFile(ndxParentOutFileName, dgg, *op.dggOp.prtDgg(),
-                        ((outSeqNum || useEnumLbl) ? NULL : pOutRF), pPrtOutRF, "ndxPrt");
+                ndxPrtOut = new DgOutNdxParentFile(ndxParentOutFileName, *pOutRF, *pPrtOutRF, "ndxPrt");
             }
         }
     }

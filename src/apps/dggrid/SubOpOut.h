@@ -46,6 +46,7 @@ class DgOutNeighborsFile;
 class DgOutChildrenFile;
 class DgOutNdxChildrenFile;
 class DgOutNdxParentFile;
+class DgOutAddressFile;
 class DgRandom;
 class DgDataList;
 
@@ -138,7 +139,7 @@ struct SubOpOut : public SubOpBasic {
    std::string kmlName;
    std::string kmlDescription;
 
-   std::ofstream* dataOut;    // text output with no geometry
+   DgOutAddressFile* dataOut; // text output with no geometry
    DgOutLocFile *cellOut, *ptOut, *collectOut, *randPtsOut;
    DgOutShapefile *cellOutShp, *ptOutShp;
    DgOutPRCellsFile *prCellOut;

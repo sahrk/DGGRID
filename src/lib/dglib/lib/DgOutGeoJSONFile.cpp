@@ -39,11 +39,9 @@ DgOutGeoJSONFile::DgOutGeoJSONFile(const DgGeoDegRF& rf,
         failLevel)
 {
    // test for override of vecAddress
-   DgAddressBase* dummy = rf.vecAddress(DgDVec2D(M_ZERO, M_ZERO));
-   if (!dummy)
+   if (!rf.hasVecAddress())
       DgOutputStream::report("DgOutGeoJSONFile::DgOutGeoJSONFile(): RF " + rf.name() +
              " must override the vecAddress() method", DgBase::Fatal);
-   delete dummy;
 
    setFormatStr();
    preamble();
@@ -76,7 +74,7 @@ void DgOutGeoJSONFile::postamble()
 }
 
 DgOutLocFile&
-DgOutGeoJSONFile::insert(const DgDVec2D& pt)
+DgOutGeoJSONFile::writeVec (const DgDVec2D& pt)
 {
    DgOutGeoJSONFile& o(*this);
 
@@ -94,12 +92,10 @@ DgOutGeoJSONFile::insert(const DgDVec2D& pt)
 }
 
 DgOutLocFile&
-DgOutGeoJSONFile::insert (DgLocation& loc, const std::string* label,
+DgOutGeoJSONFile::writePoint (const DgLocation& loc, const std::string* label,
                   const DgDataList* /* dataList */)
 {
    DgOutGeoJSONFile& o(*this);
-
-   rf().convert(&loc);
 
    o << "{\"type\":\"Feature\",";
    o << "\"properties\":{";
@@ -110,7 +106,7 @@ DgOutGeoJSONFile::insert (DgLocation& loc, const std::string* label,
    o << "\"type\":\"Point\",";
    o << "\"coordinates\":";
 
-   o.insert(rf().getVecLocation(loc));
+   o.writeVec(rf().getVecLocation(loc));
 
    o << "}},\n";
    o.flush();
@@ -119,13 +115,11 @@ DgOutGeoJSONFile::insert (DgLocation& loc, const std::string* label,
 }
 
 DgOutLocFile&
-DgOutGeoJSONFile::insert (DgLocVector& vec, const std::string* label,
+DgOutGeoJSONFile::writePolyline (const DgLocVector& vec, const std::string* label,
    const DgLocation* /* cent */,
                   const DgDataList* /* dataList */)
 {
    DgOutGeoJSONFile& o(*this);
-
-   rf().convert(vec);
 
    o << "{\"type\":\"Feature\",";
    o << "\"properties\":{";
@@ -136,15 +130,15 @@ DgOutGeoJSONFile::insert (DgLocVector& vec, const std::string* label,
    o << "\"type\":\"Polygon\",";
    o << "\"coordinates\":[[";
 
-   std::vector<DgAddressBase *>& v = vec.addressVec();
-   for(std::vector<DgAddressBase *>::iterator i = v.begin(); v.end() != i; ++i)
+   const std::vector<DgAddressBase *>& v = vec.addressVec();
+   for(std::vector<DgAddressBase *>::const_iterator i = v.begin(); v.end() != i; ++i)
    {
-         o.insert(rf().getVecAddress(*(*i)));
+         o.writeVec(rf().getVecAddress(*(*i)));
          o << ",";
    }
 
    // rewrite first vertex:
-   o.insert(rf().getVecAddress(*v[0]));
+   o.writeVec(rf().getVecAddress(*v[0]));
 
    o << "]]}},\n";
    o.flush();
@@ -153,13 +147,11 @@ DgOutGeoJSONFile::insert (DgLocVector& vec, const std::string* label,
 }
 
 DgOutLocFile&
-DgOutGeoJSONFile::insert (DgPolygon& poly, const std::string* label,
+DgOutGeoJSONFile::writePolygon (const DgPolygon& poly, const std::string* label,
    const DgLocation* /* cent */,
    const DgDataList* /* dataList */)
 {
    DgOutGeoJSONFile& o(*this);
-
-   rf().convert(poly);
 
    o << "{\"type\":\"Feature\",";
    o << "\"properties\":{";
@@ -170,15 +162,15 @@ DgOutGeoJSONFile::insert (DgPolygon& poly, const std::string* label,
    o << "\"type\":\"Polygon\",";
    o << "\"coordinates\":[[";
 
-   std::vector<DgAddressBase *>& v = poly.addressVec();
-   for(std::vector<DgAddressBase *>::iterator i = v.begin(); v.end() != i; ++i)
+   const std::vector<DgAddressBase *>& v = poly.addressVec();
+   for(std::vector<DgAddressBase *>::const_iterator i = v.begin(); v.end() != i; ++i)
    {
-         o.insert(rf().getVecAddress(*(*i)));
+         o.writeVec(rf().getVecAddress(*(*i)));
          o << ",";
    }
 
    // rewrite first vertex:
-   o.insert(rf().getVecAddress(*v[0]));
+   o.writeVec(rf().getVecAddress(*v[0]));
 
    o << "]]}},\n";
    o.flush();

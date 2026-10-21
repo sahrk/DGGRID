@@ -79,6 +79,17 @@ DgRFBase::convert (DgLocation* loc) const
 } // DgLocation* DgRFBase::convert
 
 ////////////////////////////////////////////////////////////////////////////////
+std::string
+DgRFBase::addressText (const DgLocation& loc, char delimiter) const
+{
+   DgLocation tmpLoc(loc);
+   convert(&tmpLoc);
+
+   return tmpLoc.asString(delimiter);
+
+} // std::string DgRFBase::addressText
+
+////////////////////////////////////////////////////////////////////////////////
 DgPolygon&
 DgRFBase::convert (DgPolygon& poly) const
 {

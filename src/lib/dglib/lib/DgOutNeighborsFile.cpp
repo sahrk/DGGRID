@@ -31,30 +31,20 @@
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutNeighborsFile::DgOutNeighborsFile (const std::string& fileName,
-         const DgIDGGBase& dgg, const DgRFBase* outRF, const std::string& suffix,
+         const DgRFBase& outRF, const std::string& suffix,
          DgReportLevel failLevel)
-   : DgOutputStream (fileName, suffix, failLevel), dgg_ (dgg), outRF_ (outRF)
+   : DgOutputStream (fileName, suffix, failLevel), outRF_ (outRF)
 {
 
 } // DgOutNeighborsFile::DgOutNeighborsFile
 
 ////////////////////////////////////////////////////////////////////////////////
 DgOutNeighborsFile&
-DgOutNeighborsFile::insert (const DgLocation& center, DgLocVector& vec)
+DgOutNeighborsFile::insert (const DgLocation& center, const DgLocVector& vec)
 {
-   if (!outRF_) { // indicates seqnum output
-      unsigned long long int sn = dgg_.bndRF().seqNum(center);
-      *this << sn;
-      for (int i = 0; i < vec.size(); i++)
-         *this << " " << dgg_.bndRF().seqNum(vec[i]);
-   } else {
-      DgLocation tmpLoc(center);
-      outRF_->convert(&tmpLoc);
-      *this << tmpLoc.asString(' ');
-      outRF_->convert(&vec);
-      for (int i = 0; i < vec.size(); i++)
-         *this << " " << vec[i].asString(' ');
-   }
+   *this << outRF_.addressText(center, ' ');
+   for (int i = 0; i < vec.size(); i++)
+      *this << " " << outRF_.addressText(vec[i], ' ');
 
    *this << std::endl;
 

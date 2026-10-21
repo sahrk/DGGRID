@@ -41,14 +41,15 @@ class DgOutNeighborsFile : public DgOutputStream {
 
    public:
 
+      // outRF is the frame of the addresses written; it must be able to
+      // convert from the DGG's frame
       DgOutNeighborsFile (const std::string& fileName,
-                        const DgIDGGBase& dgg,
-                        const DgRFBase* outRF = NULL,
+                        const DgRFBase& outRF,
                         const std::string& suffix = std::string("nbr"),
                         DgReportLevel failLevel = DgBase::Fatal);
 
       virtual DgOutNeighborsFile& insert (const DgLocation& center,
-                                          DgLocVector& vec);
+                                          const DgLocVector& vec);
 
       virtual bool open (const std::string& fileName,
                          DgReportLevel failLevel = DgBase::Fatal)
@@ -58,8 +59,7 @@ class DgOutNeighborsFile : public DgOutputStream {
 
    private:
 
-      const DgIDGGBase& dgg_;
-      const DgRFBase* outRF_;
+      const DgRFBase& outRF_;    // output frame of the cell addresses
 };
 
 inline DgOutNeighborsFile& operator<< (DgOutNeighborsFile& file, const char* str)

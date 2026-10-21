@@ -95,6 +95,32 @@ DgOutLocFile::makeOutLocFile (const std::string& type, const std::string& fileNa
                     const std::string& kmlName, const std::string& kmlDesc,
                     DgReportLevel failLevelIn)
 {
+   // no file requested
+   if (type == "NONE") return NULL;
+
+   const bool isGeoType = (type == "KML" || type == "GEOJSON" ||
+                           type == "SHAPEFILE"
+// USE_GDAL is set in MakeIncludes
+#ifdef USE_GDAL
+                           || type == "GDAL" || type == "GDAL_COLLECTION"
+#endif
+                          );
+
+   if (type != "AIGEN" && type != "TEXT" && !isGeoType) {
+      ::report("DgOutLocFile::makeOutLoc(): invalid file type " + type,
+                              failLevelIn);
+      return NULL;
+   }
+
+   // every writer needs a frame with 2-D coordinates; check before
+   // constructing anything, since a failed constructor leaves a
+   // half-built writer
+   if (!rf.hasVecAddress()) {
+      ::report("DgOutLocFile::makeOutLoc(): RF " + rf.name() +
+               " must override the vecAddress() method", failLevelIn);
+      return NULL;
+   }
+
    DgOutLocFile* file = NULL;
    if (type == "AIGEN")
       file = new DgOutAIGenFile(rf, fileName, precision, isPointFile,
@@ -104,8 +130,10 @@ DgOutLocFile::makeOutLocFile (const std::string& type, const std::string& fileNa
    else // must be KML, GEOJSON, SHAPEFILE, or GDAL
    {
       const DgGeoDegRF* geoRF = dynamic_cast<const DgGeoDegRF*>(&rf);
-      if (geoRF == NULL)
+      if (geoRF == NULL) {
          ::report("DgOutLocFile::makeOutLoc(): invalid RF type", failLevelIn);
+         return NULL;
+      }
 
       if (type == "KML")
          file = new DgOutKMLfile(*geoRF, fileName, precision, isPointFile,
@@ -116,14 +144,10 @@ DgOutLocFile::makeOutLocFile (const std::string& type, const std::string& fileNa
       else if (type == "SHAPEFILE")
          file = new DgOutShapefile(*geoRF, fileName, precision, isPointFile,
                                     shapefileIdLen, failLevelIn);
-// USE_GDAL is set in MakeIncludes
 #ifdef USE_GDAL
       else if (type == "GDAL" || type == "GDAL_COLLECTION")
          file = new DgOutGdalFile(*geoRF, fileName, gdalDriver, mode, precision, isPointFile, failLevelIn);
 #endif
-      else if (type != "NONE")
-         ::report("DgOutLocFile::makeOutLoc(): invalid file type " + type,
-                                 failLevelIn);
    }
 
    return file;
@@ -132,13 +156,74 @@ DgOutLocFile::makeOutLocFile (const std::string& type, const std::string& fileNa
 
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutLocFile::insert (DgLocList& dlist)
+DgOutLocFile::insert (const DgLocation& loc, const std::string* label,
+                      const DgDataList* dataList)
+//
+// Put a copy of the point loc, converted to this file's frame.
+//
+////////////////////////////////////////////////////////////////////////////////
+{
+   DgLocation tmpLoc(loc);
+   rf().convert(&tmpLoc);
+
+   return writePoint(tmpLoc, label, dataList);
+
+} // DgOutLocFile& DgOutLocFile::insert
+
+////////////////////////////////////////////////////////////////////////////////
+DgOutLocFile&
+DgOutLocFile::insert (const DgLocVector& vec, const std::string* label,
+                      const DgLocation* cent, const DgDataList* dataList)
+//
+// Put a copy of the polyline vec, converted to this file's frame.
+//
+////////////////////////////////////////////////////////////////////////////////
+{
+   DgLocVector tmpVec(vec);
+   rf().convert(tmpVec);
+
+   DgLocation tmpCent;
+   if (cent) {
+      tmpCent = *cent;
+      rf().convert(&tmpCent);
+   }
+
+   return writePolyline(tmpVec, label, (cent ? &tmpCent : nullptr), dataList);
+
+} // DgOutLocFile& DgOutLocFile::insert
+
+////////////////////////////////////////////////////////////////////////////////
+DgOutLocFile&
+DgOutLocFile::insert (const DgPolygon& poly, const std::string* label,
+                      const DgLocation* cent, const DgDataList* dataList)
+//
+// Put a copy of the polygon poly (holes included), converted to this
+// file's frame.
+//
+////////////////////////////////////////////////////////////////////////////////
+{
+   DgPolygon tmpPoly(poly);
+   rf().convert(tmpPoly);
+
+   DgLocation tmpCent;
+   if (cent) {
+      tmpCent = *cent;
+      rf().convert(&tmpCent);
+   }
+
+   return writePolygon(tmpPoly, label, (cent ? &tmpCent : nullptr), dataList);
+
+} // DgOutLocFile& DgOutLocFile::insert
+
+////////////////////////////////////////////////////////////////////////////////
+DgOutLocFile&
+DgOutLocFile::insert (const DgLocList& dlist)
 //
 // Output the drawlist dlist.
 //
 ////////////////////////////////////////////////////////////////////////////////
 {
-   std::list<DgLocBase*>::iterator it;
+   std::list<DgLocBase*>::const_iterator it;
    for (it = dlist.begin(); it != dlist.end(); it++) {
       if (DgLocList* d = dynamic_cast<DgLocList*>(*it)) {
          this->insert(*d);
@@ -155,28 +240,29 @@ DgOutLocFile::insert (DgLocList& dlist)
       }
    }
 
-   //this->flush();
-
    return *this;
 
 } // DgOutLocFile& DgOutLocFile::insert
 
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutLocFile::insert (DgCell& cell)
+DgOutLocFile::insert (const DgCell& cell)
 //
-// Put the cell.
+// Put the cell. Only the node and the region are copied (and converted);
+// the cell itself is not changed.
 //
 ////////////////////////////////////////////////////////////////////////////////
 {
-   rf().convert(&cell);
+   DgLocation node(cell.node());
+   rf().convert(&node);
 
-   if (!isPointFile() && cell.hasRegion())
-      this->insert(cell.region(), &(cell.label()), &(cell.node()), cell.dataList());
-   else
-      this->insert(cell.node(), &(cell.label()), cell.dataList());
+   if (!isPointFile() && cell.hasRegion()) {
+      DgPolygon region(cell.region());
+      rf().convert(region);
+      return writePolygon(region, &(cell.label()), &node, cell.dataList());
+   }
 
-   return *this;
+   return writePoint(node, &(cell.label()), cell.dataList());
 
 } // DgOutLocFile& DgOutLocFile::insert
 

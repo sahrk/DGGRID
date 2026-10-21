@@ -38,11 +38,9 @@ DgOutRandPtsText::DgOutRandPtsText (const DgRFBase& rfIn,
    : DgOutLocTextFile (fileNameIn, rfIn, true, "txt", precision, failLevel)
 {
    // test for override of vecAddress
-   DgAddressBase* dummy = rfIn.vecAddress(DgDVec2D(M_ZERO, M_ZERO));
-   if (!dummy)
+   if (!rfIn.hasVecAddress())
       DgOutputStream::report("DgOutRandPtsText::DgOutRandPtsText(): RF " + rfIn.name() +
              " must override the vecAddress() method", DgBase::Fatal);
-   delete dummy;
 
    setFormatStr();
 
@@ -51,7 +49,7 @@ DgOutRandPtsText::DgOutRandPtsText (const DgRFBase& rfIn,
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutRandPtsText::insert (const DgDVec2D& pt)
+DgOutRandPtsText::writeVec (const DgDVec2D& pt)
 //
 // Put the point pt.
 //
@@ -71,21 +69,19 @@ DgOutRandPtsText::insert (const DgDVec2D& pt)
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutRandPtsText::insert (DgLocation& loc, const std::string* label,
+DgOutRandPtsText::writePoint (const DgLocation& loc, const std::string* label,
                   const DgDataList* /* dataList */)
 //
 // Put the point loc.
 //
 ////////////////////////////////////////////////////////////////////////////////
 {
-   rf().convert(&loc);
-
    if (label)
      *this << *label << ",";
    else
      *this << "0,";
 
-   this->insert(rf().getVecLocation(loc));
+   this->writeVec(rf().getVecLocation(loc));
 
    return *this;
 
@@ -94,14 +90,14 @@ DgOutRandPtsText::insert (DgLocation& loc, const std::string* label,
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutRandPtsText::insert (DgLocVector&, const std::string*, const DgLocation*,
+DgOutRandPtsText::writePolyline (const DgLocVector&, const std::string*, const DgLocation*,
           const DgDataList*)
 //
 // Put the polyline vec.
 //
 ////////////////////////////////////////////////////////////////////////////////
 {
-   DgOutputStream::report("DgOutRandPtsText::insert(DgLocVector): not defined.", DgBase::Fatal);
+   DgOutputStream::report("DgOutRandPtsText::writePolyline(): not defined.", DgBase::Fatal);
    return *this;
 
 } // DgOutLocFile& DgOutRandPtsText::insert
@@ -109,14 +105,14 @@ DgOutRandPtsText::insert (DgLocVector&, const std::string*, const DgLocation*,
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutRandPtsText::insert (DgPolygon&, const std::string*, const DgLocation*,
+DgOutRandPtsText::writePolygon (const DgPolygon&, const std::string*, const DgLocation*,
           const DgDataList*)
 //
 // Put the polygon poly.
 //
 ////////////////////////////////////////////////////////////////////////////////
 {
-   DgOutputStream::report("DgOutRandPtsText::insert(DgPolygon): not defined.", DgBase::Fatal);
+   DgOutputStream::report("DgOutRandPtsText::writePolygon(): not defined.", DgBase::Fatal);
 
    return *this;
 

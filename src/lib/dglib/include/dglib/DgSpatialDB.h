@@ -48,11 +48,11 @@ template<class C> class DgSpatialDB {
                : DgLocation (it), db_ (&it.db()) { }
 
             iterator& operator++ (void)
-                { db().boundedRF().incrementLocation(*this, true);
+                { db().boundedRF().incrementLocation(*this);
                   return *this; }
 
             iterator& operator-- (void)
-                { db().boundedRF().decrementLocation(*this, true);
+                { db().boundedRF().decrementLocation(*this);
                   return *this; }
 
             C* operator* (void) const

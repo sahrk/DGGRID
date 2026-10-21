@@ -46,11 +46,9 @@ class DgBoundedRFBase0 {
       virtual bool validLocation (const DgLocation& loc,
                                   bool convert = true) const = 0;
 
-      virtual DgLocation& incrementLocation (DgLocation& loc,
-                                             bool convert = true) const = 0;
+      virtual DgLocation& incrementLocation (DgLocation& loc) const = 0;
 
-      virtual DgLocation& decrementLocation (DgLocation& loc,
-                                             bool convert = true) const = 0;
+      virtual DgLocation& decrementLocation (DgLocation& loc) const = 0;
 
       const DgLocation& first (void) const { return *first_; }
       const DgLocation& last  (void) const { return *last_; }

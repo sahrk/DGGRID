@@ -41,6 +41,7 @@ class DgDataList {
       virtual ~DgDataList (void);
 
       std::vector<DgDataFieldBase*>& list (void) { return list_; }
+      const std::vector<DgDataFieldBase*>& list (void) const { return list_; }
 
       void clearList (void);
 

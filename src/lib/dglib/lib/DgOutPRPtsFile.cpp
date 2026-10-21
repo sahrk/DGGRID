@@ -40,11 +40,9 @@ DgOutPRPtsFile::DgOutPRPtsFile (const DgRFBase& rfIn,
    : DgOutLocTextFile (fileNameIn, rfIn, true, "pts", precision, failLevel)
 {
    // test for override of vecAddress
-   DgAddressBase* dummy = rfIn.vecAddress(DgDVec2D(M_ZERO, M_ZERO));
-   if (!dummy)
+   if (!rfIn.hasVecAddress())
       DgOutputStream::report("DgOutPRPtsFile::DgOutPRPtsFile(): RF " + rfIn.name() +
              " must override the vecAddress() method", DgBase::Fatal);
-   delete dummy;
 
    setFormatStr();
 
@@ -53,7 +51,7 @@ DgOutPRPtsFile::DgOutPRPtsFile (const DgRFBase& rfIn,
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutPRPtsFile::insert (const DgDVec2D& pt)
+DgOutPRPtsFile::writeVec (const DgDVec2D& pt)
 //
 // Put the point pt.
 //
@@ -74,29 +72,43 @@ DgOutPRPtsFile::insert (const DgDVec2D& pt)
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutPRPtsFile::insert (DgLocation& loc, const std::string* label,
+DgOutPRPtsFile::writePoint (const DgLocation& loc, const std::string* label,
                   const DgDataList* /* dataList */)
 //
 // Put the point loc.
 //
 ////////////////////////////////////////////////////////////////////////////////
 {
-   return insert(loc, "H", label);
+   return writeTypedPoint(loc, "H", label);
 
-} // DgOutPRPtsFile::insert
+} // DgOutPRPtsFile::writePoint
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutPRPtsFile::insert (DgLocation& loc, const std::string& type,
+DgOutPRPtsFile::insert (const DgLocation& loc, const std::string& type,
                  const std::string* label)
 //
-// Put the point loc.
+// Put a copy of the point loc, converted to this file's frame.
 //
 ////////////////////////////////////////////////////////////////////////////////
 {
-   rf().convert(&loc);
+   DgLocation tmpLoc(loc);
+   rf().convert(&tmpLoc);
 
+   return writeTypedPoint(tmpLoc, type, label);
+
+} // DgOutLocFile& DgOutPRPtsFile::insert
+
+////////////////////////////////////////////////////////////////////////////////
+DgOutLocFile&
+DgOutPRPtsFile::writeTypedPoint (const DgLocation& loc, const std::string& type,
+                 const std::string* label)
+//
+// Put the point loc, which is already in this file's frame.
+//
+////////////////////////////////////////////////////////////////////////////////
+{
    if (label)
      *this << *label << " ";
    else
@@ -104,23 +116,23 @@ DgOutPRPtsFile::insert (DgLocation& loc, const std::string& type,
 
    *this << type << " ";
 
-   this->insert(rf().getVecLocation(loc));
+   this->writeVec(rf().getVecLocation(loc));
 
    return *this;
 
-} // DgOutLocFile& DgOutPRPtsFile::insert
+} // DgOutLocFile& DgOutPRPtsFile::writeTypedPoint
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutPRPtsFile::insert (DgLocVector&, const std::string*, const DgLocation*,
+DgOutPRPtsFile::writePolyline (const DgLocVector&, const std::string*, const DgLocation*,
             const DgDataList* /* dataList */)
 //
 // Put the polyline vec.
 //
 ////////////////////////////////////////////////////////////////////////////////
 {
-   DgOutputStream::report("DgOutPRPtsFile::insert(DgLocVector): not defined.", DgBase::Fatal);
+   DgOutputStream::report("DgOutPRPtsFile::writePolyline(): not defined.", DgBase::Fatal);
    return *this;
 
 } // DgOutLocFile& DgOutPRPtsFile::insert
@@ -128,14 +140,14 @@ DgOutPRPtsFile::insert (DgLocVector&, const std::string*, const DgLocation*,
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutPRPtsFile::insert (DgPolygon&, const std::string*, const DgLocation*,
+DgOutPRPtsFile::writePolygon (const DgPolygon&, const std::string*, const DgLocation*,
            const DgDataList*)
 //
 // Put the polygon poly.
 //
 ////////////////////////////////////////////////////////////////////////////////
 {
-   DgOutputStream::report("DgOutPRPtsFile::insert(DgPolygon): not defined.", DgBase::Fatal);
+   DgOutputStream::report("DgOutPRPtsFile::writePolygon(): not defined.", DgBase::Fatal);
 
    return *this;
 

@@ -64,6 +64,9 @@ class DgPolygon : public DgLocVector {
 
    protected:
 
+      // converts the holes along with the outer ring
+      virtual void convertTo (const DgRFBase& rf) { rf.convert(*this); }
+
       // takes ownership of holes' memory
       std::vector<DgPolygon*> holes_;
 

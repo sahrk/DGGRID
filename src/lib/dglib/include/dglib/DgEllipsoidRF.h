@@ -254,6 +254,8 @@ class DgEllipsoidRF : public DgGeoDatumRF<DgGeoCoord, long double> {
       // the following routines are "back-doors" included for speed;
       // use with care!
 
+      virtual bool hasVecAddress (void) const { return true; }
+
       virtual DgAddressBase* vecAddress (const DgDVec2D& v) const
                     { return new DgAddress<DgGeoCoord>(DgGeoCoord(v, false)); }
 

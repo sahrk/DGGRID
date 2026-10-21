@@ -74,6 +74,9 @@ class DgRFBase {
       void convert (DgLocBase* loc) const // converts in place
                 { loc->convertTo(*this); }
 
+      // the text of the address of loc in this frame; loc is not changed
+      std::string addressText (const DgLocation& loc, char delimiter) const;
+
       virtual DgDistanceBase* distance (const DgLocation& loc1,
                                         const DgLocation& loc2,
                                         bool convert = false) const = 0;
@@ -111,6 +114,10 @@ class DgRFBase {
 
       // the following routines are "back-doors" included for speed;
       // use with care!
+
+      // true if addresses in this RF are 2-D coordinates, i.e. the
+      // vecAddress methods below are overridden
+      virtual bool hasVecAddress (void) const { return false; }
 
       virtual DgAddressBase* vecAddress (const DgDVec2D&) const
                     { return 0; }

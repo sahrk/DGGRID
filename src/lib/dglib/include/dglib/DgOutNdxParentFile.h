@@ -39,23 +39,21 @@ class DgOutNdxParentFile : public DgOutputStream {
 
    public:
 
+      // outRF and ndxPrtOutRF are the frames of the cell and indexing parent
+      // addresses
       DgOutNdxParentFile (const std::string& fileName,
-                        const DgIDGGBase& dgg,
-                        const DgIDGGBase& ndxPrtDgg,
-                        const DgRFBase* outRF = NULL,
-                        const DgRFBase* ndxPrtOutRF = NULL,
+                        const DgRFBase& outRF,
+                        const DgRFBase& ndxPrtOutRF,
                         const std::string& suffix = std::string("ndxPrt"),
                         DgReportLevel failLevel = DgBase::Fatal);
 
       virtual DgOutNdxParentFile& insert
-                      (const DgLocation& center, DgLocation& parent);
+                      (const DgLocation& center, const DgLocation& parent);
 
    private:
 
-      const DgIDGGBase& dgg_;    // primary res dgg
-      const DgIDGGBase& ndxPrtDgg_; // indexing parent res dgg
-      const DgRFBase* outRF_;    // primary res output RF (NULL indicates seqNum)
-      const DgRFBase* ndxPrtOutRF_; // indexing parent res output RF
+      const DgRFBase& outRF_;    // primary res output RF
+      const DgRFBase& ndxPrtOutRF_; // indexing parent res output RF
 };
 
 inline DgOutNdxParentFile& operator<< (DgOutNdxParentFile& file, const char* str)

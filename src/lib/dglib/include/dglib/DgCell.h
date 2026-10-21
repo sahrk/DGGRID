@@ -44,7 +44,7 @@ class DgCell : public DgLocBase {
               DgDataList* dataListIn = nullptr, bool ownDataIn = true)
          : DgLocBase(rfIn), label_ (labelIn), node_ (nodeIn),
            region_ (regionIn), dataList_ (dataListIn), ownData_ (ownDataIn)
-      { rf().convert(&node_); if (hasRegion()) rf().convert(region_); }
+      { rf().convert(&node_); if (hasRegion()) convertRegion(rf()); }
 
      ~DgCell (void) { delete region_; if (ownData_) delete dataList_; }
 
@@ -73,7 +73,7 @@ class DgCell : public DgLocBase {
            {
               delete region_;
               region_ = regionIn;
-              if (hasRegion() && region_->rf() != rf()) rf().convert(region_);
+              if (hasRegion() && region_->rf() != rf()) convertRegion(rf());
            }
 
       DgCell& operator= (const DgCell& cell) // deep copy
@@ -120,6 +120,11 @@ class DgCell : public DgLocBase {
       virtual void convertTo (const DgRFBase& rf);
 
    private:
+
+      // A region needs a frame with 2-D coordinates; in any other frame
+      // (the DGG, for example) it would be a polygon of cell addresses, not
+      // of vertices. Reports an error and leaves the region as it is.
+      void convertRegion (const DgRFBase& rfIn);
 
       std::string label_;
       DgLocation node_;

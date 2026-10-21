@@ -46,11 +46,9 @@ template<class B, class DB> class DgBoundedRFBase : public DgBoundedRFBase0 {
       virtual bool validLocation (const DgLocation& loc,
                                   bool convert = true) const = 0;
 
-      virtual DgLocation& incrementLocation (DgLocation& loc,
-                                             bool convert = true) const = 0;
+      virtual DgLocation& incrementLocation (DgLocation& loc) const = 0;
 
-      virtual DgLocation& decrementLocation (DgLocation& loc,
-                                             bool convert = true) const = 0;
+      virtual DgLocation& decrementLocation (DgLocation& loc) const = 0;
 
       virtual unsigned long long int seqNum (const DgLocation& loc,
                                         bool convert = true) const = 0;

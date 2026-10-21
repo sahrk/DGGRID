@@ -79,40 +79,54 @@ class DgOutLocFile : public DgBase {
       void setIsPointFile(bool isPointFile = false)
               { isPointFile_ = isPointFile; }
 
-      virtual DgOutLocFile& insert (DgCell& cell);
-      virtual DgOutLocFile& insert (DgLocList& list);
+      // Public inserts: the caller hands over a geometry in any frame
+      // connected to rf(); a converted copy is given to the writer, so the
+      // argument is never changed.
+      DgOutLocFile& insert (const DgLocation& loc,
+                                const std::string* label = nullptr,
+                                const DgDataList* dataList = nullptr);
 
-      // collection output; does nothing by default
-      virtual DgOutLocFile& insert (const DgIDGGBase& dgg, DgCell& cell,
-           bool outputPoint, bool outputRegion, const DgIDGGBase& chdDgg,
-           const DgIDGGBase* prtDgg, const DgRFBase* outRF,
-           const DgRFBase* chdOutRF, const DgRFBase* prtOutRF,
+      DgOutLocFile& insert (const DgLocVector& vec,
+                                const std::string* label = nullptr,
+                                const DgLocation* cent = nullptr,
+                                const DgDataList* dataList = nullptr);
+
+      DgOutLocFile& insert (const DgPolygon& poly,
+                                const std::string* label = nullptr,
+                                const DgLocation* cent = nullptr,
+                                const DgDataList* dataList = nullptr);
+
+      DgOutLocFile& insert (const DgCell& cell);
+      DgOutLocFile& insert (const DgLocList& list);
+
+      // collection output; does nothing by default. The relational
+      // addresses are written in the given frames (prtOutRF is null if
+      // there is no parent resolution).
+      virtual DgOutLocFile& insert (const DgCell& cell,
+           bool outputPoint, bool outputRegion,
+           const DgRFBase& outRF, const DgRFBase& chdOutRF,
+           const DgRFBase* prtOutRF,
            const DgLocVector* neighbors, const DgLocVector* children,
            const DgLocation* ndxParent, const DgLocVector* ndxChildren)
         { return *this; }
 
-    virtual DgOutLocFile& foo (const DgIDGGBase& dgg, DgCell& cell,
-         bool outputPoint, bool outputRegion, const DgIDGGBase& chdDgg,
-         const DgIDGGBase* prtDgg, const DgRFBase* outRF,
-         const DgRFBase* chdOutRF, const DgRFBase* prtOutRF,
-         const DgLocVector* neighbors, const DgLocVector* children,
-         const DgLocation* ndxParent, const DgLocVector* ndxChildren)
-      { return *this; }
-
-
-      // abstract virtual methods
-      virtual DgOutLocFile& insert (DgLocation& loc,
-                                const std::string* label = nullptr,
-                                const DgDataList* dataList = nullptr) = 0;
-
-      virtual DgOutLocFile& insert (DgLocVector& vec, const std::string* label = nullptr,
-                                const DgLocation* cent = nullptr,
-                                const DgDataList* dataList = nullptr) = 0;
-
-      virtual DgOutLocFile& insert (DgPolygon& poly, const std::string* label = nullptr,
-                                const DgLocation* cent = nullptr,
-                                const DgDataList* dataList = nullptr) = 0;
    protected:
+
+      // Writer hooks: each receives a geometry already in rf() and only
+      // writes it.
+      virtual DgOutLocFile& writePoint (const DgLocation& loc,
+                                const std::string* label,
+                                const DgDataList* dataList) = 0;
+
+      virtual DgOutLocFile& writePolyline (const DgLocVector& vec,
+                                const std::string* label,
+                                const DgLocation* cent,
+                                const DgDataList* dataList) = 0;
+
+      virtual DgOutLocFile& writePolygon (const DgPolygon& poly,
+                                const std::string* label,
+                                const DgLocation* cent,
+                                const DgDataList* dataList) = 0;
 
       // ESRI WKT1 for a spherical geographic datum frame (one named
       // AUTHALIC_SPHERE or CUSTOM_SPHERE); empty if it is neither
@@ -139,19 +153,19 @@ class DgOutLocFile : public DgBase {
 //inline std::ostream& operator<< (std::ostream& output, const DgOutLocFile& f)
               //{ return output << f.name(); }
 
-inline DgOutLocFile& operator<< (DgOutLocFile& output, DgLocList& list)
+inline DgOutLocFile& operator<< (DgOutLocFile& output, const DgLocList& list)
               { return output.insert(list); }
 
-inline DgOutLocFile& operator<< (DgOutLocFile& output, DgLocVector& vec)
+inline DgOutLocFile& operator<< (DgOutLocFile& output, const DgLocVector& vec)
               { return output.insert(vec); }
 
-inline DgOutLocFile& operator<< (DgOutLocFile& output, DgPolygon& poly)
+inline DgOutLocFile& operator<< (DgOutLocFile& output, const DgPolygon& poly)
               { return output.insert(poly); }
 
-inline DgOutLocFile& operator<< (DgOutLocFile& output, DgLocation& loc)
+inline DgOutLocFile& operator<< (DgOutLocFile& output, const DgLocation& loc)
               { return output.insert(loc); }
 
-inline DgOutLocFile& operator<< (DgOutLocFile& output, DgCell& cell)
+inline DgOutLocFile& operator<< (DgOutLocFile& output, const DgCell& cell)
               { return output.insert(cell); }
 
 

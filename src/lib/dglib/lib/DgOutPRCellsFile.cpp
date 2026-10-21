@@ -40,11 +40,9 @@ DgOutPRCellsFile::DgOutPRCellsFile (const DgRFBase& rfIn,
    : DgOutLocTextFile (fileNameIn, rfIn, true, "cells", precision, failLevel)
 {
    // test for override of vecAddress
-   DgAddressBase* dummy = rfIn.vecAddress(DgDVec2D(M_ZERO, M_ZERO));
-   if (!dummy)
+   if (!rfIn.hasVecAddress())
       DgOutputStream::report("DgOutPRCellsFile::DgOutPRCellsFile(): RF " + rfIn.name() +
              " must override the vecAddress() method", DgBase::Fatal);
-   delete dummy;
 
    setFormatStr();
 
@@ -53,7 +51,7 @@ DgOutPRCellsFile::DgOutPRCellsFile (const DgRFBase& rfIn,
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutPRCellsFile::insert (const DgDVec2D& pt)
+DgOutPRCellsFile::writeVec (const DgDVec2D& pt)
 //
 // Put the point pt.
 //
@@ -74,14 +72,14 @@ DgOutPRCellsFile::insert (const DgDVec2D& pt)
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutPRCellsFile::insert (DgLocation&, const std::string*,
+DgOutPRCellsFile::writePoint (const DgLocation&, const std::string*,
                   const DgDataList* /* dataList */)
 //
 // Put the point loc.
 //
 ////////////////////////////////////////////////////////////////////////////////
 {
-   DgOutputStream::report("DgOutPRCellsFile::insert(DgLocation): not defined.", DgBase::Fatal);
+   DgOutputStream::report("DgOutPRCellsFile::writePoint(): not defined.", DgBase::Fatal);
    return *this;
 
 } // DgOutLocFile& DgOutPRCellsFile::insert
@@ -89,14 +87,14 @@ DgOutPRCellsFile::insert (DgLocation&, const std::string*,
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutPRCellsFile::insert (DgLocVector&, const std::string*, const DgLocation*,
+DgOutPRCellsFile::writePolyline (const DgLocVector&, const std::string*, const DgLocation*,
             const DgDataList*)
 //
 // Put the polyline vec.
 //
 ////////////////////////////////////////////////////////////////////////////////
 {
-   DgOutputStream::report("DgOutPRCellsFile::insert(DgLocVector): not defined.", DgBase::Fatal);
+   DgOutputStream::report("DgOutPRCellsFile::writePolyline(): not defined.", DgBase::Fatal);
    return *this;
 
 } // DgOutLocFile& DgOutPRCellsFile::insert
@@ -104,7 +102,7 @@ DgOutPRCellsFile::insert (DgLocVector&, const std::string*, const DgLocation*,
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutPRCellsFile::insert (DgPolygon& poly, const std::string* label,
+DgOutPRCellsFile::writePolygon (const DgPolygon& poly, const std::string* label,
                      const DgLocation* /* cent */,
                   const DgDataList* /* dataList */)
 //
@@ -112,8 +110,6 @@ DgOutPRCellsFile::insert (DgPolygon& poly, const std::string* label,
 //
 ////////////////////////////////////////////////////////////////////////////////
 {
-   rf().convert(poly);
-
    // output the header line
    if (label)
      *this << *label;
@@ -124,7 +120,7 @@ DgOutPRCellsFile::insert (DgPolygon& poly, const std::string* label,
    const std::vector<DgAddressBase*>& v = poly.addressVec();
    for (int i = 0; i < (int) v.size(); i++)
    {
-      this->insert(rf().getVecAddress(*v[i]));
+      this->writeVec(rf().getVecAddress(*v[i]));
    }
 
    *this << std::endl;

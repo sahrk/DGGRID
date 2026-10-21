@@ -39,8 +39,6 @@ class DgPolygon;
 ////////////////////////////////////////////////////////////////////////////////
 class DgOutShapefile : public DgOutLocFile {
 
-   using DgOutLocFile::insert;
-
    public:
 
       DgOutShapefile (const DgGeoDegRF& rfIn, const std::string& fileNameIn = "",
@@ -64,17 +62,6 @@ class DgOutShapefile : public DgOutLocFile {
 
       bool good (void) { return dbFile_ && shpFile_; }
 
-      virtual DgOutLocFile& insert (DgLocation& loc, const std::string* label = nullptr,
-                                const DgDataList* dataList = nullptr);
-
-      virtual DgOutLocFile& insert (DgLocVector& vec, const std::string* label = nullptr,
-                                const DgLocation* cent = nullptr,
-                                const DgDataList* dataList = nullptr);
-
-      virtual DgOutLocFile& insert (DgPolygon& poly, const std::string* label = nullptr,
-                                const DgLocation* cent = nullptr,
-                                const DgDataList* dataList = nullptr);
-
       void addFields (const std::set<DgDBFfield>& fields);
 
       void setCurFields (const std::set<DgDBFfield>& fields) { curFields_ = fields; }
@@ -90,6 +77,20 @@ class DgOutShapefile : public DgOutLocFile {
       void setDefStrAttribute (std::string val) { defStrAttribute_ = val; }
 
    protected:
+
+      virtual DgOutLocFile& writePoint (const DgLocation& loc,
+                                const std::string* label,
+                                const DgDataList* dataList);
+
+      virtual DgOutLocFile& writePolyline (const DgLocVector& vec,
+                                const std::string* label,
+                                const DgLocation* cent,
+                                const DgDataList* dataList);
+
+      virtual DgOutLocFile& writePolygon (const DgPolygon& poly,
+                                const std::string* label,
+                                const DgLocation* cent,
+                                const DgDataList* dataList);
 
       const DgEllipsoidRF& geoRF_;
 
@@ -111,7 +112,7 @@ class DgOutShapefile : public DgOutLocFile {
 
       std::set<DgDBFfield> curFields_; // non-null fields for current cell being written
 
-      virtual DgOutLocFile& insert (const DgDVec2D& pt);
+      virtual DgOutLocFile& writeVec (const DgDVec2D& pt);
 
       void writeDbf (const std::string& id);
 };

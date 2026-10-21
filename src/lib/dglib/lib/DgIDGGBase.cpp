@@ -32,6 +32,7 @@
 #include <string.h>
 
 #include <dglib/DgBoundedIDGG.h>
+#include <dglib/DgCell.h>
 #include <dglib/DgDmdD4Grid2DS.h>
 #include <dglib/DgHexGrid2DS.h>
 #include <dglib/DgIDGGBase.h>
@@ -41,6 +42,7 @@
 #include <dglib/DgProjISEA.h>
 #include <dglib/DgProjIVEA.h>
 #include <dglib/DgRadixString.h>
+#include <dglib/DgSeqNumRF.h>
 #include <dglib/DgSeriesConverter.h>
 #include <dglib/DgTriGrid2DS.h>
 #include <dglib/DgHierNdxSystemRFSBase.h>
@@ -129,7 +131,7 @@ DgIDGGBase::DgIDGGBase (const DgIDGGSBase* dggs, const DgGeoSphRF& geoRF,
           (geoRF.network(), geoRF, name, gridTopo, gridMetric),
      dggs_ (dggs), sphIcosa_(0), aperture_(aperture), res_(res),
      precision_(precision), grid2D_(0), grid2DS_(0), ccFrame_(0),
-     projTriRF_(0), vertexRF_(0), q2ddRF_(0), bndRF_(0), planeRF_(0)
+     projTriRF_(0), vertexRF_(0), q2ddRF_(0), bndRF_(0), planeRF_(0), seqNumRF_(0)
 {
    //initialize();
 
@@ -166,6 +168,9 @@ DgIDGGBase::createConverters (void)
 
    bndRF_ = new DgBoundedIDGG(*this);
    //cout << "== BNDRF:: " << std::string(*bndRF_) << std::endl;
+
+   // the sequence number frame is backed by the DGG and needs bndRF_
+   seqNumRF_ = DgSeqNumRF::makeRF(*this, name() + std::string("seqNum"));
 
    // create the intermediate RFs
 
@@ -356,6 +361,44 @@ DgIDGGBase::setVertices (const DgLocation& loc, DgPolygon& vec,
    setAddVertices(*getAddress(tLoc), vec, densify);
 
 } // void DgDiscRF::setVertices
+
+////////////////////////////////////////////////////////////////////////////////
+DgCell*
+DgIDGGBase::makeCell (const DgLocation& loc, const std::string& label,
+                  int densify, DgGeoSphRF::DgLonWrapMode lonWrapMode,
+                  bool unwrapPts, DgDataList* dataList, bool trace) const
+{
+   // the address of the cell, not a point within it
+   DgLocation* tmpLoc = new DgLocation(loc);
+   convert(tmpLoc);
+
+   DgPolygon verts(*this);
+   setVertices(*tmpLoc, verts, densify);
+
+   // unwrap the cell east/west if applicable
+   DgPolygon* unwrappedVerts = new DgPolygon(verts);
+   if (trace) dgcout << "before unwrap: " << *unwrappedVerts << "\n";
+   int wrapped = DgGeoSphRF::lonWrap(*unwrappedVerts, lonWrapMode);
+   if (trace) dgcout << "unwrapped: " << *unwrappedVerts << "\n";
+
+   // wrap the cell center point if the boundary was wrapped
+   if (unwrapPts && wrapped) {
+      geoRF().convert(tmpLoc);
+      DgGeoCoord g = *(geoRF().getAddress(*tmpLoc));
+      int testWrap = DgGeoSphRF::lonWrap(g, lonWrapMode);
+      if (testWrap) {
+         delete tmpLoc;
+         tmpLoc = geoRF().makeLocation(g);
+      }
+   }
+
+   DgCell* cell = new DgCell(geoRF(), label, *tmpLoc, unwrappedVerts,
+                             dataList, false);
+   delete tmpLoc;
+
+   return cell;
+
+} // DgCell* DgIDGGBase::makeCell
 
 ////////////////////////////////////////////////////////////////////////////////
 void

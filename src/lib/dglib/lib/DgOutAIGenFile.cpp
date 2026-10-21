@@ -40,11 +40,9 @@ DgOutAIGenFile::DgOutAIGenFile (const DgRFBase& rfIn, const std::string& fileNam
                        failLevel)
 {
    // test for override of vecAddress
-   DgAddressBase* dummy = rfIn.vecAddress(DgDVec2D(M_ZERO, M_ZERO));
-   if (!dummy)
+   if (!rfIn.hasVecAddress())
       DgOutputStream::report("DgOutAIGenFile::DgOutAIGenFile(): RF " + rfIn.name() +
              " must override the vecAddress() method", DgBase::Fatal);
-   delete dummy;
 
    setFormatStr();
 
@@ -53,7 +51,7 @@ DgOutAIGenFile::DgOutAIGenFile (const DgRFBase& rfIn, const std::string& fileNam
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutAIGenFile::insert (const DgDVec2D& pt)
+DgOutAIGenFile::writeVec (const DgDVec2D& pt)
 //
 // Put the point pt.
 //
@@ -68,35 +66,33 @@ DgOutAIGenFile::insert (const DgDVec2D& pt)
 
    return *this;
 
-} // DgOutLocFile& DgOutAIGenFile::insert
+} // DgOutLocFile& DgOutAIGenFile::write
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutAIGenFile::insert (DgLocation& loc, const std::string* label,
+DgOutAIGenFile::writePoint (const DgLocation& loc, const std::string* label,
                   const DgDataList* /* dataList */)
 //
 // Put the point loc.
 //
 ////////////////////////////////////////////////////////////////////////////////
 {
-   rf().convert(&loc);
-
    if (label)
      *this << *label << " ";
    else
      *this << "0 ";
 
-   this->insert(rf().getVecLocation(loc));
+   this->writeVec(rf().getVecLocation(loc));
 
    return *this;
 
-} // DgOutLocFile& DgOutAIGenFile::insert
+} // DgOutLocFile& DgOutAIGenFile::write
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutAIGenFile::insert (DgLocVector& vec, const std::string* label,
+DgOutAIGenFile::writePolyline (const DgLocVector& vec, const std::string* label,
                      const DgLocation* cent,
                   const DgDataList* /* dataList */)
 //
@@ -104,8 +100,6 @@ DgOutAIGenFile::insert (DgLocVector& vec, const std::string* label,
 //
 ////////////////////////////////////////////////////////////////////////////////
 {
-   rf().convert(vec);
-
    // output the header line
    if (label)
      *this << *label;
@@ -115,7 +109,7 @@ DgOutAIGenFile::insert (DgLocVector& vec, const std::string* label,
    if (cent)
    {
       *this << " ";
-      this->insert(rf().getVecLocation(*cent));
+      this->writeVec(rf().getVecLocation(*cent));
    }
    else
       *this << "\n";
@@ -123,18 +117,18 @@ DgOutAIGenFile::insert (DgLocVector& vec, const std::string* label,
    // output the vertices
    const std::vector<DgAddressBase*>& v = vec.addressVec();
    for (unsigned long i = 0; i < v.size(); i++)
-      this->insert(rf().getVecAddress(*v[i]));
+      this->writeVec(rf().getVecAddress(*v[i]));
 
    *this << "END" << std::endl;
 
    return *this;
 
-} // DgOutLocFile& DgOutAIGenFile::insert
+} // DgOutLocFile& DgOutAIGenFile::write
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutAIGenFile::insert (DgPolygon& poly, const std::string* label,
+DgOutAIGenFile::writePolygon (const DgPolygon& poly, const std::string* label,
                      const DgLocation* cent,
                      const DgDataList* /* dataList */)
 //
@@ -142,8 +136,6 @@ DgOutAIGenFile::insert (DgPolygon& poly, const std::string* label,
 //
 ////////////////////////////////////////////////////////////////////////////////
 {
-   rf().convert(poly);
-
    // output the header line
    if (label)
      *this << *label;
@@ -153,7 +145,7 @@ DgOutAIGenFile::insert (DgPolygon& poly, const std::string* label,
    if (cent)
    {
       *this << " ";
-      this->insert(rf().getVecLocation(*cent));
+      this->writeVec(rf().getVecLocation(*cent));
    }
    else
       *this << "\n";
@@ -161,16 +153,16 @@ DgOutAIGenFile::insert (DgPolygon& poly, const std::string* label,
    // output the vertices in reverse order (clockwise winding)
    const std::vector<DgAddressBase*>& v = poly.addressVec();
    for (int i = (int) (v.size() - 1); i >= 0; i--)
-      this->insert(rf().getVecAddress(*v[i]));
+      this->writeVec(rf().getVecAddress(*v[i]));
 
    // rewrite the first vertex
-   this->insert(rf().getVecAddress(*v[v.size() - 1]));
+   this->writeVec(rf().getVecAddress(*v[v.size() - 1]));
 
    *this << "END" << std::endl;
 
    return *this;
 
-} // DgOutLocFile& DgOutAIGenFile::insert
+} // DgOutLocFile& DgOutAIGenFile::write
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
