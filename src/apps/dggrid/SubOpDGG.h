@@ -103,6 +103,7 @@ struct SubOpDGG : public SubOpBasic {
 
    // internal helper methods
    void determineRes (void);
+   bool usesH3Index (void) const;
    void orientGrid   (void);
 
    // the created DGG
@@ -152,6 +153,7 @@ struct SubOpDGG : public SubOpBasic {
    bool   isApSeq;      // are we using an aperture sequence?
    DgApSeq apSeq;
    int   sfRes; // superfund digit resolution
+   bool  isH3Preset;  // dggs_type H3: dggs_res_spec is the H3 resolution
    DgHierNdxSysType hierNdxSysType;
    int z3invalidDigit;  // padding digit for all Z3 systems`k
 };

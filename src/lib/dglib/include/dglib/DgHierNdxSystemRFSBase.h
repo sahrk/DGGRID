@@ -52,6 +52,26 @@ class DgHierNdxSystemRFSBase :
       const DgIDGGSBase& dggs (void) const { return dggs_; }
       const DgIDGGBase& dgg (int res) const;
 
+      // DGGS resolutions [firstNdxRes(), lastNdxRes()] carry indexes. Other
+      // resolutions still exist in grids() (so grids()[r] stays aligned with
+      // the DGGS) but have no index; converting to or from them is fatal.
+      // Most systems index every resolution (0 to nRes() - 1); H3 starts at
+      // DGGS resolution 2 (H3 resolution 0, its base cells).
+      int  firstNdxRes (void) const { return firstNdxRes_; }
+      int  lastNdxRes  (void) const { return lastNdxRes_; }
+      bool isNdxRes    (int res) const
+                 { return res >= firstNdxRes_ && res <= lastNdxRes_; }
+
+      // the system's own resolution number for a DGGS resolution (H3: res - 2)
+      int  sysRes      (int dggsRes) const { return dggsRes - firstNdxRes_; }
+
+      // DGGS resolution of the indexing parent/child of a cell at res, or -1.
+      // A sparse system (e.g. Superfund: 1,2,4,...,16,17) would replace these
+      // two and the stored range with a resolution map; they are the only
+      // places that assume consecutive indexed resolutions.
+      int  ndxParentRes (int res) const;
+      int  ndxChildRes  (int res) const;
+
       // Resolution 0 has a base grid aperture, but no incoming step.
       unsigned int apertureAtResolution (int res) const;
       unsigned int parentStepAperture (int res) const;
@@ -92,8 +112,12 @@ class DgHierNdxSystemRFSBase :
 
    protected:
 
+     // lastNdxRes of -1 means nRes() - 1; it is clamped to nRes() - 1. These are
+     // constructor parameters (not virtuals) since they are needed while the
+     // per-resolution RFs are built, before the concrete system exists.
      DgHierNdxSystemRFSBase (const DgIDGGSBase& dggsIn, bool extModeIntIn = true,
-            const std::string& nameIn = "HierNdxSystemRFS");
+            const std::string& nameIn = "HierNdxSystemRFS",
+            int firstNdxResIn = 0, int lastNdxResIn = -1);
 
      // from above
      virtual const DgResAdd<DgHierNdx>& undefAddress (void) const;
@@ -118,6 +142,8 @@ class DgHierNdxSystemRFSBase :
      // state data
      const DgIDGGSBase& dggs_;
      bool extModeInt_;
+     int firstNdxRes_;
+     int lastNdxRes_;
 
      friend class DgHierNdxSystemRFBase;
 };

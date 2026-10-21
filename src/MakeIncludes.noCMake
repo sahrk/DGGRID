@@ -52,10 +52,38 @@ H3_HDR_DIR ?=
 H3_LIB ?= -lh3
 H3_ADD_INC = $(if $(H3_HDR_DIR),-I$(H3_HDR_DIR))
 
+# Earliest H3 that reports a version with the public API DgH3System needs
+# (H3_VERSION as MMmmpp). constructCell and getIndexDigit were added in 4.4.0,
+# but the 4.4.0 release identifies itself as 4.3.0 (fixed in 4.4.1).
+H3_MIN_VERSION = 4.4.1
+H3_MIN_VERSION_NUM = 40401
+
+# The probe checks the H3 version and that libh3 exports the internal FaceIJK
+# functions DgH3System uses (not declared in h3api.h), by compiling and linking
+# a program that calls them.
+H3_PROBE_SRC = '\#include <h3api.h>' \
+   '\#if (H3_VERSION_MAJOR*10000 + H3_VERSION_MINOR*100 + H3_VERSION_PATCH) < $(H3_MIN_VERSION_NUM)' \
+   '\#error H3 is older than $(H3_MIN_VERSION)' \
+   '\#endif' \
+   'extern "C" {' \
+   'typedef struct { int i; int j; int k; } CoordIJK;' \
+   'typedef struct { int face; CoordIJK coord; } FaceIJK;' \
+   'H3Index _faceIjkToH3 (const FaceIJK* fijk, int res);' \
+   'H3Error _h3ToFaceIjk (H3Index h, FaceIJK* fijk);' \
+   '}' \
+   'int main() { FaceIJK f = {0, {0, 0, 0}}; int d = 0; H3Index h = _faceIjkToH3(&f, 0);' \
+   'getIndexDigit(h, 1, &d); return (int) _h3ToFaceIjk(h, &f) + d; }'
+H3_PROBE_OK := $(shell printf '%s\n' $(H3_PROBE_SRC) | $(CPPCOMP) $(H3_ADD_INC) -x c++ - -x none -o /dev/null $(H3_LIB) >/dev/null 2>&1 && printf TRUE)
+
 ifeq ($(BUILD_WITH_H3),AUTO)
-   H3_AVAILABLE := $(shell printf '%s\n' '#include <h3api.h>' 'int main() { return 0; }' | $(CPPCOMP) $(H3_ADD_INC) -x c++ - -x none -o /dev/null $(H3_LIB) >/dev/null 2>&1 && printf TRUE)
+   H3_AVAILABLE := $(H3_PROBE_OK)
 else
    H3_AVAILABLE := $(BUILD_WITH_H3)
+   ifeq ($(H3_AVAILABLE),TRUE)
+      ifneq ($(H3_PROBE_OK),TRUE)
+         $(error BUILD_WITH_H3=TRUE but H3 $(H3_MIN_VERSION) or later with its internal FaceIJK symbols was not found; set H3_HDR_DIR/H3_LIB, or use BUILD_WITH_H3=FALSE)
+      endif
+   endif
 endif
 
 ifeq ($(H3_AVAILABLE),TRUE)

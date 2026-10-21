@@ -27,6 +27,7 @@
 #include <gdal.h>
 #endif
 
+#include <algorithm>
 #include <iostream>
 #include <memory>
 #include <set>
@@ -367,7 +368,7 @@ SubOpOut::outputCellAdd2D (const DgLocation& addIn, const std::string* labelIn,
       collectOut->insert(cell,
             (pointOutType == "GDAL_COLLECTION"),
             (cellOutType == "GDAL_COLLECTION"),
-            *pOutRF, *pChdOutRF, pPrtOutRF,
+            *pOutRF, pChdOutRF ? *pChdOutRF : *pOutRF, pPrtOutRF,
             ((neighborsOutType == "GDAL_COLLECTION") ? &neighbors : nullptr),
             ((childrenOutType == "GDAL_COLLECTION") ? &children : nullptr),
             ((ndxParentOutType == "GDAL_COLLECTION") ? &ndxParent : nullptr),
@@ -420,8 +421,13 @@ SubOpOut::initializeOp (void)
 
     // output_hier_ndx_system < ZORDER | Z3 | Z7 | H3 >
     // used if output_address_type is HIERNDX
-    pList().insertParam("output_hier_ndx_system", "Z3",
-                        dgg::addtype::hierNdxSysTypeChoices());
+    auto hierChoices = dgg::addtype::hierNdxSysTypeChoices();
+#ifndef USE_H3
+   // H3 is not a choice unless DGGRID is built with the H3 library
+   hierChoices.erase(std::remove(hierChoices.begin(), hierChoices.end(), "H3"),
+                     hierChoices.end());
+#endif
+    pList().insertParam("output_hier_ndx_system", "Z3", hierChoices);
 
     // output_hier_ndx_form < INT64 | DIGIT_STRING >
     // used if output_address_type is HIERNDX
@@ -998,17 +1004,28 @@ SubOpOut::executeOp (void) {
    }
 
    if (childrenOutType == "TEXT") {
+      // null if the output hierarchical index has no system at the child resolution
+      if (!pChdOutRF)
+         ::report("children output is not available at DGGS resolution " +
+                  dgg::util::to_string(dgg.res()) +
+                  ": the output index has no child resolution", DgBase::Fatal);
       chdOut = new DgOutChildrenFile(childrenOutFileName, *pOutRF, *pChdOutRF, "chd");
    }
 
     if (ndxChildrenOutType == "TEXT") {
-       ndxChdOut = new DgOutNdxChildrenFile(ndxChildrenOutFileName, *pOutRF, *pChdOutRF, "ndxChd");
+       // cells with no indexing children get an empty record, and the child
+       // frame is never used for one
+       ndxChdOut = new DgOutNdxChildrenFile(ndxChildrenOutFileName, *pOutRF,
+                                    pChdOutRF ? *pChdOutRF : *pOutRF, "ndxChd");
     }
 
     if (ndxParentOutType != "NONE") {
         ndxPrtOut = nullptr;
-        if (!op.dggOp.prtDgg())
-            ::report("resolution 0 cells do not have parents.", DgBase::Warning);
+        const DgHierNdxSystemRFSBase* ndxSys = op.dggOp.dggs().hierNdxSystem();
+        if (!op.dggOp.prtDgg() || !pPrtOutRF ||
+                  (ndxSys && ndxSys->ndxParentRes(dgg.res()) < 0))
+            ::report("cells at DGGS resolution " + dgg::util::to_string(dgg.res()) +
+                     " do not have indexing parents.", DgBase::Warning);
         else {
             if (ndxParentOutType == "TEXT") {
                 ndxPrtOut = new DgOutNdxParentFile(ndxParentOutFileName, *pOutRF, *pPrtOutRF, "ndxPrt");

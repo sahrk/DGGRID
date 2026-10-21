@@ -41,6 +41,7 @@
 #include <dglib/DgProjFuller.h>
 #include <dglib/DgProjISEA.h>
 #include <dglib/DgProjIVEA.h>
+#include <dglib/DgProjIcosaGnomonic.h>
 #include <dglib/DgRadixString.h>
 #include <dglib/DgSeqNumRF.h>
 #include <dglib/DgSeriesConverter.h>
@@ -188,6 +189,8 @@ DgIDGGBase::createConverters (void)
       icosaProj = new DgProjISEA(geoRF(), projTriRF());
    else if (projType() == "IVEA")
       icosaProj = new DgProjIVEA(geoRF(), projTriRF());
+   else if (projType() == "GNOMONIC")
+      icosaProj = new DgProjIcosaGnomonic(geoRF(), projTriRF());
    else if (projType() == "FULLER")
       icosaProj = new DgProjFuller(geoRF(), projTriRF());
    else

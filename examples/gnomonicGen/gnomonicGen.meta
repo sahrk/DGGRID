@@ -1,0 +1,39 @@
+################################################################################
+#
+# gnomonicGen.meta - example of a DGGRID metafile that generates a
+#     resolution 3 aperture 4 hexagon grid for the whole earth using the
+#     GNOMONIC icosahedral projection. Cell and point output is in GeoJSON
+#     format.
+#
+#     GNOMONIC is the face-centered gnomonic projection used by H3
+#     (h3geo.org): each point is projected from the center of the earth onto
+#     the plane tangent at the center of its nearest icosahedron face. It is
+#     not equal area. It works with every DGGRID topology, aperture and
+#     orientation, and does not require the H3 library.
+#
+# Kevin Sahr, 10/21/2026
+#
+################################################################################
+
+# specify the operation
+dggrid_operation GENERATE_GRID
+
+# specify the DGG
+dggs_type CUSTOM
+dggs_topology HEXAGON
+dggs_proj GNOMONIC
+dggs_aperture_type PURE
+dggs_aperture 4
+dggs_res_spec 3
+
+# control the generation
+clip_subset_type WHOLE_EARTH
+geodetic_densify 0.0
+
+# specify the output
+cell_output_type GEOJSON
+cell_output_file_name outputfiles/gnomonic4h3
+point_output_type GEOJSON
+point_output_file_name outputfiles/gnomonic4h3p
+densification 3
+precision 7

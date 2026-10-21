@@ -22,9 +22,9 @@ orientation_datum AUTHALIC_SPHERE (user set)
 dggs_orient_specify_type SPECIFIED (user set)
 dggs_num_placements 1 (user set)
 dggs_orient_preset DYMAXION (user set)
-dggs_vert0_lon -5.24539 (user set)
-dggs_vert0_lat 2.30088 (user set)
-dggs_vert0_azimuth 7.46658 (user set)
+dggs_vert0_lon 10.5362 (user set)
+dggs_vert0_lat 64.7 (user set)
+dggs_vert0_azimuth 125.688 (user set)
 dggs_res_specify_type SPECIFIED (user set)
 dggs_res_spec 10 (user set)
 hier_indexing_system_type NONE (default)
@@ -89,11 +89,11 @@ clipper_scale_factor 1000000 (default)
 * No intersections in quad 0.
 * No intersections in quad 1.
 * No intersections in quad 2.
-* No intersections in quad 3.
+* Testing quad 3... 
+...quad 3 complete.
 * No intersections in quad 4.
 * No intersections in quad 5.
-* Testing quad 6... 
-...quad 6 complete.
+* No intersections in quad 6.
 * No intersections in quad 7.
 * No intersections in quad 8.
 * No intersections in quad 9.
@@ -101,6 +101,6 @@ clipper_scale_factor 1000000 (default)
 * No intersections in quad 11.
 
 ** grid generation complete **
-accepted 12 cells / 24 tested
-acceptance rate is 50%
+accepted 12 cells / 27 tested
+acceptance rate is 44.4444%
 

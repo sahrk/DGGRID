@@ -1,0 +1,46 @@
+################################################################################
+#
+# h3GenCustom.meta - the same as h3Gen.meta (and it generates the same cells),
+#     except that the H3 grid is specified explicitly rather than by
+#     dggs_type H3. Note that dggs_res_spec is then DGGRID's resolution: H3
+#     resolution 3 is DGGRID resolution 5.
+#
+# Kevin Sahr, 10/21/2026
+#
+################################################################################
+
+dggrid_operation GENERATE_GRID
+
+# the H3 grid
+dggs_type CUSTOM
+dggs_topology HEXAGON
+dggs_proj GNOMONIC
+dggs_aperture_type SEQUENCE
+dggs_aperture_sequence 437777777777777777
+dggs_orient_preset DYMAXION
+dggs_res_spec 5
+hier_indexing_system_type H3
+
+clip_subset_type AIGEN
+clip_region_files inputfiles/region.gen
+geodetic_densify 0.0
+
+# H3 indexes in INT64 form for input and output
+input_address_type HIERNDX
+input_hier_ndx_system H3
+input_hier_ndx_form INT64
+output_cell_label_type OUTPUT_ADDRESS_TYPE
+output_address_type HIERNDX
+output_hier_ndx_system H3
+output_hier_ndx_form INT64
+
+cell_output_type GEOJSON
+cell_output_file_name outputfiles/h3res3custom
+point_output_type TEXT
+point_output_file_name outputfiles/h3res3customp
+indexing_parent_output_type TEXT
+indexing_parent_output_file_name outputfiles/h3res3custom
+indexing_children_output_type TEXT
+indexing_children_output_file_name outputfiles/h3res3custom
+densification 3
+precision 7

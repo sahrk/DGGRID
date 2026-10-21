@@ -39,12 +39,19 @@
 #include <dglib/DgAuthalicConverter.h>
 #include <dglib/DgSphereConverter.h>
 
+#include <algorithm>
 #include <iomanip>
 #include <limits>
 #include <sstream>
 
 #include "OpBasic.h"
 #include "SubOpDGG.h"
+
+// the DYMAXION orientation preset (see setupOp); H3's cells have the same
+// geometry as this orientation with the GNOMONIC projection
+static const char* const kDymaxionLon = "10.5361990754676369448";
+static const char* const kDymaxionLat = "64.7000001279348804496";
+static const char* const kDymaxionAzimuth = "125.687650893546277353";
 
 using namespace dgg::topo;
 using namespace dgg::addtype;
@@ -110,7 +117,7 @@ SubOpDGG::SubOpDGG (OpBasic& op, bool _activate)
      numGrids (1), curGrid (0), lastGrid (false), sampleCount(0), nSamplePts(0),
      azimuthDegs (0.0), earthRadius (DEFAULT_RADIUS_KM),
      customSphereRadius (DEFAULT_RADIUS_KM), apertureType (""),
-     isMixed43 (false), isSuperfund (false), isApSeq (false),
+     isMixed43 (false), isSuperfund (false), isApSeq (false), isH3Preset (false),
      hierNdxSysType (dgg::addtype::InvalidHierNdxSysType)
 {
 }
@@ -148,10 +155,24 @@ SubOpDGG::addressTypeToRF (DgAddressType type, DgHierNdxSysType hierNdxSysType, 
 
        if (hierNdxSys) {
           int r = (forceRes >= 0) ? forceRes : dgg->res();
+          if (!hierNdxSys->isNdxRes(r)) {
+             std::string msg = dgg::addtype::to_string(hierNdxSysType) +
+                " has no index at DGGS resolution " + dgg::util::to_string(r) +
+                "; indexed DGGS resolutions are " +
+                dgg::util::to_string(hierNdxSys->firstNdxRes()) + "-" +
+                dgg::util::to_string(hierNdxSys->lastNdxRes());
+             if (hierNdxSysType == dgg::addtype::H3)
+                msg += " (H3 resolutions 0-15 are DGGS resolutions 2-17)";
+             ::report(msg, DgBase::Fatal);
+             return seqNum;
+          }
+
           if (rf) *rf = &hierNdxSys->sysRF(r);
-          if (chdRF) *chdRF = &hierNdxSys->sysRF(r + 1);
-          if (prtRF && r > 0)
-                *prtRF = &hierNdxSys->sysRF(r - 1);
+          // null if the cell has no indexing child/parent system
+          if (chdRF && hierNdxSys->ndxChildRes(r) >= 0)
+             *chdRF = &hierNdxSys->sysRF(r + 1);
+          if (prtRF && hierNdxSys->ndxParentRes(r) >= 0)
+             *prtRF = &hierNdxSys->sysRF(r - 1);
        }
    } else {
       switch (type) {
@@ -223,10 +244,23 @@ SubOpDGG::addressTypeToRF (DgAddressType type, DgHierNdxSysType hierNdxSysType, 
 } // void SubOpDGG::addressTypeToRF
 
 ////////////////////////////////////////////////////////////////////////////////
+// is the H3 hierarchical indexing system used by the grid, or for input or
+// output addresses?
+bool
+SubOpDGG::usesH3Index (void) const
+{
+   using namespace dgg::addtype;
+
+   return hierNdxSysType == H3 ||
+      (op.inOp.inAddType == HierNdx && op.inOp.inHierNdxSysType == H3) ||
+      (op.outOp.outAddType == HierNdx && op.outOp.outHierNdxSysType == H3);
+}
+
+////////////////////////////////////////////////////////////////////////////////
 int
 SubOpDGG::initializeOp (void)
 {
-   // dggs_type <CUSTOM | SUPERFUND | PLANETRISK | IGEO7v1 | IGEO7v2 | IGEO7 |
+   // dggs_type <CUSTOM | SUPERFUND | PLANETRISK | H3 | IGEO7v1 | IGEO7v2 | IGEO7 |
    //            ISEA3HS | ISEA4HS | ISEA7HS | ISEA43HS | ISEA4TS | ISEA4DS |
    //            ISEA3H | ISEA4H | ISEA7H | ISEA43H | ISEA4T | ISEA4D |
    //            IVEA3HS | IVEA4HS | IVEA7HS | IVEA43HS | IVEA4TS | IVEA4DS |
@@ -243,9 +277,14 @@ SubOpDGG::initializeOp (void)
    // and Z7 for aperture 7. IGEO7v1 is another name for ISEA7HSZ (the IGEO7 of
    // version 8.4), and IGEO7v2 is another name for ISEA7HLZ; the two differ
    // only in datum. IGEO7 is an alias for IGEO7v2 (it was IGEO7v1 before
-   // version 9.1) and produces a warning.
-   pList().insertParam("dggs_type", "CUSTOM",
-       {"CUSTOM", "SUPERFUND", "PLANETRISK", "IGEO7v1", "IGEO7v2", "IGEO7",
+   // version 9.1) and produces a warning. H3 is the H3 grid (gnomonic projection,
+   // aperture sequence 4 3 7 7 ... and the DYMAXION orientation); for it
+   // dggs_res_spec is the H3 resolution (0 to 15, DGGS resolutions 2 to 17).
+   // H3 is only a choice (here, and for the hierarchical indexing system
+   // parameters) when DGGRID is built with the H3 library.
+   {
+      std::vector<std::string> ch = {"CUSTOM", "SUPERFUND", "PLANETRISK", "H3",
+        "IGEO7v1", "IGEO7v2", "IGEO7",
         "ISEA3HS", "ISEA4HS", "ISEA7HS", "ISEA43HS", "ISEA4TS", "ISEA4DS",
         "ISEA3H", "ISEA4H", "ISEA7H", "ISEA43H", "ISEA4T", "ISEA4D",
         "IVEA3HS", "IVEA4HS", "IVEA7HS", "IVEA43HS", "IVEA4TS", "IVEA4DS",
@@ -253,7 +292,14 @@ SubOpDGG::initializeOp (void)
         "IVEA3HL", "IVEA4HL", "IVEA7HL", "IVEA43HL", "IVEA4TL", "IVEA4DL",
         "ISEA3HSZ", "ISEA4HSZ", "ISEA7HSZ", "IVEA3HSZ", "IVEA4HSZ", "IVEA7HSZ",
         "ISEA3HLZ", "ISEA4HLZ", "ISEA7HLZ", "IVEA3HLZ", "IVEA4HLZ", "IVEA7HLZ",
-        "FULLER3H", "FULLER4H", "FULLER7H", "FULLER43H", "FULLER4T", "FULLER4D"});
+        "FULLER3H", "FULLER4H", "FULLER7H", "FULLER43H", "FULLER4T", "FULLER4D"};
+#ifndef USE_H3
+      // H3 is not a choice unless DGGRID is built with the H3 library
+      ch.erase(std::remove(ch.begin(), ch.end(), "H3"), ch.end());
+#endif
+      pList().insertParam("dggs_type", "CUSTOM", ch);
+   }
+
 
    // dggs_base_poly <ICOSAHEDRON>
    pList().insertParam("dggs_base_poly", "ICOSAHEDRON", {"ICOSAHEDRON"});
@@ -261,8 +307,8 @@ SubOpDGG::initializeOp (void)
    // dggs_topology <HEXAGON | TRIANGLE | DIAMOND>
    pList().insertParam("dggs_topology", "HEXAGON", {"HEXAGON", "TRIANGLE", "DIAMOND"});
 
-   // dggs_proj <ISEA | IVEA | FULLER>
-   pList().insertParam("dggs_proj", "ISEA", {"ISEA", "IVEA", "FULLER" /*, "GNOMONIC"*/ });
+   // dggs_proj <ISEA | IVEA | FULLER | GNOMONIC>
+   pList().insertParam("dggs_proj", "ISEA", {"ISEA", "IVEA", "FULLER", "GNOMONIC"});
 
    // dggs_aperture_type <PURE | MIXED43 | SEQUENCE>
    pList().insertParam("dggs_aperture_type", "PURE", {"PURE", "MIXED43", "SEQUENCE"});
@@ -363,6 +409,11 @@ SubOpDGG::initializeOp (void)
    // hier_indexing_system_type <ZORDER | Z3 | Z7 | H3 | NONE>
    auto hierChoices = dgg::addtype::hierNdxSysTypeChoices();
    hierChoices.push_back("NONE");
+#ifndef USE_H3
+   // H3 is not a choice unless DGGRID is built with the H3 library
+   hierChoices.erase(std::remove(hierChoices.begin(), hierChoices.end(), "H3"),
+                     hierChoices.end());
+#endif
    pList().insertParam("hier_indexing_system_type", "NONE", hierChoices);
 
    // z3_invalid_digit < 0 | 1 | 2 | 3 >
@@ -402,7 +453,7 @@ SubOpDGG::setupOp (void)
       // A final Z (e.g. ISEA7HSZ) marks a preset with hierarchical indexing for
       // all purposes: the grid's own hierarchical indexing system and HIERNDX
       // input and output addresses. Strip it first.
-      const bool hierNdx = gridName.back() == 'z';
+      bool hierNdx = gridName.back() == 'z';
       if (hierNdx)
          gridName.pop_back();
 
@@ -432,8 +483,10 @@ SubOpDGG::setupOp (void)
       pList().setPresetParam("output_datum", datum);
       // also sets orientation_datum
       const bool fuller = !gridName.compare(0, 6, "fuller");
+      isH3Preset = (gridName == "h3");
       pList().setPresetParam("dggs_orient_preset",
-                  ellipsoidal ? "ISEAL" : (fuller ? "DYMAXION" : "ISEA"));
+                  ellipsoidal ? "ISEAL" :
+                  ((fuller || isH3Preset) ? "DYMAXION" : "ISEA"));
       pList().setPresetParam("dggs_res_specify_type", "SPECIFIED");
       pList().setPresetParam("dggs_res_spec", "9");
 
@@ -443,6 +496,20 @@ SubOpDGG::setupOp (void)
          pList().setPresetParam("dggs_num_aperture_4_res", "2");
          pList().setPresetParam("dggs_aperture_type", "MIXED43");
          pList().setPresetParam("output_cell_label_type", "SUPERFUND", true);
+      } else if (isH3Preset) {
+         // H3 cell geometry: gnomonic projection, DYMAXION orientation and
+         // apertures 4, 3, then 7s: DGGS resolution 2 is H3 resolution 0
+         // (the 122 base cells). DGGS resolution 18 is the child grid of H3
+         // resolution 15.
+         pList().setPresetParam("dggs_topology", "HEXAGON");
+         pList().setPresetParam("dggs_proj", "GNOMONIC");
+         pList().setPresetParam("dggs_aperture_type", "SEQUENCE");
+         pList().setPresetParam("dggs_aperture_sequence", "437777777777777777");
+         // dggs_res_spec is the H3 resolution (see below)
+         pList().setPresetParam("dggs_res_spec", "9");
+         // (dggs_type H3 is only a choice when built with H3)
+         hierNdxSys = "H3";
+         hierNdx = true;
       } else if (gridName == "planetrisk") {
          pList().setPresetParam("dggs_topology", "HEXAGON");
          pList().setPresetParam("dggs_proj", "ISEA");
@@ -522,14 +589,23 @@ SubOpDGG::setupOp (void)
    getParamValue(pList(), "dggs_orient_preset", orientPreset, false);
    const std::string orientPresetlc = toLower(orientPreset);
    if (orientPresetlc != "none") {
+      // DYMAXION is Buckminster Fuller's Dymaxion icosahedron, placed with
+      // Robert W. Gray's high-precision vertex coordinates (graypr.c,
+      // http://www.rwgrayprojects.com/rbfnotes/maps/docs/graypr.c):
+      //   - vert0 is Gray's vertex 1 (in the Norwegian Sea);
+      //   - the azimuth is the great-circle bearing from it to Gray's vertex 3
+      //     (in the Arabian Sea);
+      // which numbers DGGRID's vertices, and therefore its faces, in the same
+      // order as H3: DGGRID vertex v is the H3 pentagon base cell
+      // { 4, 49, 24, 14, 38, 58, 83, 63, 72, 97, 107, 117 }[v].
       static const struct {
          const char* name; const char* lon; const char* lat; const char* azimuth;
          const char* datum;
       } orientPresets[] = {
          { "isea",  "11.25", nullptr, "0.0", "AUTHALIC_SPHERE" },
          { "iseal", "11.20", nullptr, "0.0", "AUTHALIC_SPHERE" },
-         { "dymaxion", "-5.24539029677732395211", "2.30088211162675256873",
-           "7.46658360242249796637", "AUTHALIC_SPHERE" }
+         { "dymaxion", kDymaxionLon, kDymaxionLat, kDymaxionAzimuth,
+           "AUTHALIC_SPHERE" }
       };
 
       bool found = false;
@@ -656,6 +732,23 @@ SubOpDGG::setupOp (void)
       getParamValue(pList(), "dggs_res_spec", res, false);
       sfRes = res;
       actualRes = res = sfRes2actualRes(sfRes);
+   } else if (isH3Preset) {
+      // for dggs_type H3 only, dggs_res_spec is the H3 resolution; DGGS
+      // resolution 2 is H3 resolution 0
+      std::string resType;
+      getParamValue(pList(), "dggs_res_specify_type", resType, false);
+      if (resType != std::string("SPECIFIED"))
+         ::report("SubOpDGG::setupOp() dggs_type H3 requires "
+             "dggs_res_specify_type of SPECIFIED", DgBase::Fatal);
+
+      int h3Res;
+      getParamValue(pList(), "dggs_res_spec", h3Res, false);
+      if (h3Res < 0 || h3Res > 15)
+         ::report("SubOpDGG::setupOp() dggs_type H3 requires dggs_res_spec "
+             "(the H3 resolution) from 0 to 15", DgBase::Fatal);
+
+      sfRes = 0;
+      actualRes = res = h3Res + 2;
    } else { // not superfund
       sfRes = 0;
       determineRes();
@@ -775,6 +868,38 @@ SubOpDGG::executeOp (void) {
              isMixed43, numAp4, isSuperfund, hierNdxSysType);
 
    _pDGG = &dggs().idggBase(actualRes);
+
+   // a hierarchical index may not cover every resolution
+   const DgHierNdxSystemRFSBase* ndxSys = dggs().hierNdxSystem();
+   if (ndxSys && !ndxSys->isNdxRes(actualRes)) {
+      std::string msg = "hier_indexing_system_type " +
+         dgg::addtype::to_string(hierNdxSysType) +
+         " has no index at DGGS resolution " + dgg::util::to_string(actualRes) +
+         "; indexed DGGS resolutions are " +
+         dgg::util::to_string(ndxSys->firstNdxRes()) + "-" +
+         dgg::util::to_string(ndxSys->lastNdxRes());
+      if (hierNdxSysType == dgg::addtype::H3)
+         msg += " (H3 resolutions 0-15 are DGGS resolutions 2-17)";
+      ::report(msg, DgBase::Fatal);
+   }
+
+   // H3 indexes are valid H3 cells whatever the grid, but the cells themselves
+   // are H3's only for the GNOMONIC projection and the DYMAXION orientation
+   static bool h3GeometryWarned = false;
+   if (!h3GeometryWarned && usesH3Index()) {
+      const long double tol = 1e-12L;
+      const bool h3Geometry = (projType == "GNOMONIC" &&
+         fabsl(vert0.lonDegs() - strtold(kDymaxionLon, nullptr)) < tol &&
+         fabsl(vert0.latDegs() - strtold(kDymaxionLat, nullptr)) < tol &&
+         fabsl(azimuthDegs - strtold(kDymaxionAzimuth, nullptr)) < tol);
+      if (!h3Geometry) {
+         h3GeometryWarned = true;
+         ::report("H3 indexes are topologically valid H3 cells, but cell "
+                  "geometry matches H3 only with dggs_proj GNOMONIC and "
+                  "dggs_orient_preset DYMAXION (dggs_type H3)",
+                  DgBase::Warning);
+      }
+   }
 
    // child dgg
    _pChdDgg = &dggs().idggBase(actualRes + 1);

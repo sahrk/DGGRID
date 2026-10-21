@@ -22,6 +22,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include <algorithm>
 #include <dglib/DgLocation.h>
 #include <dglib/DgInLocTextFile.h>
 #include <dglib/DgInGdalFile.h>
@@ -102,6 +103,11 @@ SubOpIn::initializeOp (void)
     // used if input_address_type is HIERNDX
    auto hierChoices = dgg::addtype::hierNdxSysTypeChoices();
    hierChoices.push_back("NONE");
+#ifndef USE_H3
+   // H3 is not a choice unless DGGRID is built with the H3 library
+   hierChoices.erase(std::remove(hierChoices.begin(), hierChoices.end(), "H3"),
+                     hierChoices.end());
+#endif
    pList().insertParam("input_hier_ndx_system", "Z3", hierChoices);
 
     // input_hier_ndx_form < INT64 | DIGIT_STRING | NONE >

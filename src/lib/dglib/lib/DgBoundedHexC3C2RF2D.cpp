@@ -70,4 +70,29 @@ DgBoundedHexC3C2RF2D::seqNumAddress (const DgIVec2D& add) const
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
+////////////////////////////////////////////////////////////////////////////////
+// The Class II/III cells are every third Class III cell, and seqNumAddress()
+// is the Class III sequence number divided by 3. Invert it by finding which of
+// the (at most) three Class III cells that map to sNum has the Class II/III
+// address pattern.
+DgIVec2D
+DgBoundedHexC3C2RF2D::addFromSeqNum (unsigned long long int sNum) const
+{
+   // seqNumAddress() divides the (possibly one-based) Class III sequence
+   // number by 3, so try the three Class III sequence numbers that divide
+   // down to sNum
+   for (unsigned long long int i = 0; i < 3; i++)
+   {
+      unsigned long long int c3Num = 3 * sNum + i;
+      if (!zeroBased() && !c3Num) continue;
 
+      DgIVec2D add = DgBoundedHexC3RF2D::addFromSeqNum(c3Num);
+      if (validAddress(add) && seqNumAddress(add) == sNum) return add;
+   }
+
+   return invalidAdd();
+
+} // DgIVec2D DgBoundedHexC3C2RF2D::addFromSeqNum
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////

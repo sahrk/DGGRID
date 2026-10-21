@@ -1,0 +1,46 @@
+################################################################################
+#
+# h3Gen.meta - example of a DGGRID metafile that generates the H3 grid at H3
+#     resolution 3 for a small region in the Norwegian Sea that contains an H3
+#     pentagon, with the cells labeled by their H3 indexes (INT64 form: the
+#     canonical hexadecimal H3 index), and with the indexing parent and
+#     indexing children of each cell.
+#
+#     Requires DGGRID to have been built with the H3 library (dggrid -v).
+#     dggs_type H3 sets the GNOMONIC projection, the DYMAXION orientation, the
+#     aperture sequence 4 3 7 7 ... and, when built with H3, H3 hierarchical
+#     indexing for the grid and for the HIERNDX input and output addresses. For
+#     dggs_type H3, dggs_res_spec is the H3 resolution (0 - 15); DGGRID's own
+#     resolution is two greater (H3 resolution 0 is DGGRID resolution 2).
+#
+#     See also h3GenString.meta (DIGIT_STRING form) and h3GenCustom.meta
+#     (all of the parameters specified explicitly).
+#
+# Kevin Sahr, 10/21/2026
+#
+################################################################################
+
+# specify the operation
+dggrid_operation GENERATE_GRID
+
+# specify the DGG
+dggs_type H3
+dggs_res_spec 3
+
+# control the generation
+clip_subset_type AIGEN
+clip_region_files inputfiles/region.gen
+geodetic_densify 0.0
+
+# specify the output
+# (the labels and addresses are H3 indexes in INT64 form by default)
+cell_output_type GEOJSON
+cell_output_file_name outputfiles/h3res3
+point_output_type TEXT
+point_output_file_name outputfiles/h3res3p
+indexing_parent_output_type TEXT
+indexing_parent_output_file_name outputfiles/h3res3
+indexing_children_output_type TEXT
+indexing_children_output_file_name outputfiles/h3res3
+densification 3
+precision 7

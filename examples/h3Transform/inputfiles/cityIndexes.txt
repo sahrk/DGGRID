@@ -1,0 +1,7 @@
+89283082803ffff San_Francisco
+892a1072893ffff New_York
+891fb466257ffff Paris
+892f5a375afffff Tokyo
+89be0e35cbbffff Sydney
+89099938667ffff Oslo
+89a8a06a0c7ffff Rio_de_Janeiro

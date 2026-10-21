@@ -44,10 +44,8 @@ class DgBoundedHexC3C2RF2D : public DgBoundedHexC3RF2D {
 
       virtual unsigned long long int seqNumAddress (const DgIVec2D& add) const;
 
-/*
       virtual DgIVec2D addFromSeqNum (unsigned long long int sNum) const;
 
-*/
       virtual operator std::string (void) const
       {
          std::string s = "=== DgBoundedHexC3C2RF2D: " + DgBoundedRF2D::operator std::string();

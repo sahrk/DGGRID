@@ -5,8 +5,18 @@ All changes are by Kevin Sahr, unless otherwise noted.
 
 ## Unreleased
 ### Added
-- H3 mixed-aperture hierarchy integration scaffold for the `43` plus fifteen `7` sequence, with explicit errors for index operations whose mathematics are still stubs. Existing Z3, Z7, and ZORDER formats are unchanged.
+- H3 hierarchical indexing (`hier_indexing_system_type`, `input_hier_ndx_system` and `output_hier_ndx_system` H3) using the H3 library, version 4.4.1 or later, for hexagon grids with the aperture sequence 4 3 7 7 ... H3 resolutions 0 through 15 are DGGS resolutions 2 through 17. INT64 text is H3's canonical hexadecimal index (e.g. `8a2a1072b59ffff`; the zero padded 16 digit form is also accepted as input). DIGIT_STRING is a three digit base cell number (000 - 121) followed by one digit (0 - 6) for each H3 resolution. Indexes are always valid H3 indexes; the cells are geometrically H3's cells only with `dggs_proj GNOMONIC` and `dggs_orient_preset DYMAXION` (i.e. `dggs_type H3`), otherwise a warning is issued. DGGRID builds without H3, and reports an error if H3 indexing is selected, when a suitable H3 library is not found; `dggrid -v` reports whether it was built with H3. H3's internal FaceIJK functions are used, so the CMake and no-CMake builds check that the H3 library has them.
+- `dggs_proj GNOMONIC`: the icosahedral face-centered gnomonic projection used by H3, built from code copied from H3 (see LICENSE.H3). It works with every topology, aperture and orientation, is not equal area (so cell area and distance statistics are averages), and does not require the H3 library.
+- `dggs_type H3`, available only when DGGRID is built with the H3 library: GNOMONIC projection, the DYMAXION orientation, the aperture sequence 4 3 7 7 ... (geometrically identical to the cells of H3) and H3 hierarchical indexing, with INT64 indexes for labels and for input and output addresses. For this type only, `dggs_res_spec` is the H3 resolution (0 - 15) and the default is 9. H3 is not a choice of any parameter (`dggs_type`, `hier_indexing_system_type`, `input_hier_ndx_system`, `output_hier_ndx_system`) in a build without H3; the same grid geometry is available there by specifying `dggs_proj GNOMONIC`, `dggs_orient_preset DYMAXION` and the aperture sequence explicitly.
+- indexing hierarchies need not start at DGGS resolution 0 (H3's start at resolution 2); the first indexed resolution has no indexing parent and the last no indexing children.
 - Per-resolution parent and child step aperture accessors for hierarchy systems.
+- examples gnomonicGen, h3Geom, h3Gen and h3Transform. The examples that need the H3 library are listed in examplesH3.lst and are run by doexamplesH3.sh.
+- cmake/h3-version-check, a developer tool that builds DGGRID against several versions of H3 to check the minimum supported version.
+### Changed
+- the DYMAXION orientation now uses Gray's vertex 1 as vertex 0 (10.5361990754676369448, 64.7000001279348804496) and the great-circle azimuth to Gray's vertex 3 (125.687650893546277353) so that DGGRID's vertex and face numbering match H3's: DGGRID vertex v is H3 pentagon base cell 4, 49, 24, 14, 38, 58, 83, 63, 72, 97, 107, 117 for v = 0 ... 11. The FULLER (and other DYMAXION) hexagon and triangle grids have the same cells as before, but their quad numbers, Q2DI addresses, sequence numbers and output order change. Diamond (FULLER4D) grids are anchored on vertices 0 and 11, so their ten diamonds are a different tiling of the icosahedron.
+- INT64 hierarchical indexes are written by the indexing system's own text form; the Z3, Z7 and ZORDER output is unchanged.
+### Fixed
+- a build without the H3 library failed to compile
 
 ## [9.1] - 2026-10-10
 ### Added

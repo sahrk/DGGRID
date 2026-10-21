@@ -1,0 +1,30 @@
+################################################################################
+#
+# h3TransformGeo.meta - example of a DGGRID metafile which performs address
+#     conversion from H3 indexes (INT64 form) to GEO (longitude, latitude), the
+#     center of each H3 resolution 9 cell. The input file is the output of
+#     h3Transform.meta. Requires DGGRID to have been built with the H3 library.
+#
+# Kevin Sahr, 10/21/2026
+#
+################################################################################
+
+# specify the operation
+dggrid_operation TRANSFORM_POINTS
+
+# specify the DGG
+dggs_type H3
+dggs_res_spec 9
+
+# specify the input
+input_file_name inputfiles/cityIndexes.txt
+input_address_type HIERNDX
+input_hier_ndx_system H3
+input_hier_ndx_form INT64
+input_delimiter " "
+
+# specify the output
+output_file_name outputfiles/cityCenters.txt
+output_address_type GEO
+output_delimiter " "
+precision 7

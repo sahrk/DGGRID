@@ -39,8 +39,10 @@ template <class TINT, class TSTR> class DgHierNdxSystemRFS :
    protected:
 
      DgHierNdxSystemRFS (const DgIDGGSBase& dggsIn, bool extModeIntIn = true,
-            const std::string& nameIn = "HierNdxIDGGS")
-        : DgHierNdxSystemRFSBase(dggsIn, extModeIntIn, nameIn)
+            const std::string& nameIn = "HierNdxIDGGS",
+            int firstNdxResIn = 0, int lastNdxResIn = -1)
+        : DgHierNdxSystemRFSBase(dggsIn, extModeIntIn, nameIn,
+                                 firstNdxResIn, lastNdxResIn)
      {
          // all the grids need to be created before we can set the parent/child grids
          // RFs are deallocated by the RFNetwork

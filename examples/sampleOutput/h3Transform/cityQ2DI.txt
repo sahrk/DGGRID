@@ -1,0 +1,7 @@
+3 38710 18767 San_Francisco
+3 65012 79045 New_York
+4 27765 99996 Paris
+2 28500 8331 Tokyo
+6 63383 32029 Sydney
+5 3046 93371 Oslo
+4 88601 26953 Rio_de_Janeiro

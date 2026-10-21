@@ -1,0 +1,35 @@
+################################################################################
+#
+# h3GenString.meta - the same as h3Gen.meta, except that the H3 indexes are in
+#     DIGIT_STRING form: a three digit base cell number (000 - 121) followed by
+#     one digit (0 - 6) for each H3 resolution. E.g. 004034 is the H3 resolution
+#     1 cell with base cell 4 and digit 3, then 4. As with the Z systems,
+#     the string is zero padded.
+#
+# Kevin Sahr, 10/21/2026
+#
+################################################################################
+
+dggrid_operation GENERATE_GRID
+
+dggs_type H3
+dggs_res_spec 3
+
+clip_subset_type AIGEN
+clip_region_files inputfiles/region.gen
+geodetic_densify 0.0
+
+# override the INT64 form set by dggs_type H3
+input_hier_ndx_form DIGIT_STRING
+output_hier_ndx_form DIGIT_STRING
+
+cell_output_type GEOJSON
+cell_output_file_name outputfiles/h3res3str
+point_output_type TEXT
+point_output_file_name outputfiles/h3res3strp
+indexing_parent_output_type TEXT
+indexing_parent_output_file_name outputfiles/h3res3str
+indexing_children_output_type TEXT
+indexing_children_output_file_name outputfiles/h3res3str
+densification 3
+precision 7

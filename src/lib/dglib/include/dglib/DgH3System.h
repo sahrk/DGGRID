@@ -27,11 +27,39 @@
 #include <dglib/DgHierNdxIntRF.h>
 #include <dglib/DgHierNdxStringRF.h>
 
-// H3 integration scaffold. A supported grid is hexagonal, non-pure, has at
-// most 18 resolutions (0 through 17), and its transition apertures are a
-// prefix of 43 followed by fifteen 7s. Both INT64 and DIGIT_STRING are
-// accepted. Invalid grids/forms fail during construction. The index math
-// methods below are deliberately stubs and fail explicitly when called.
+// H3 hierarchical indexing (https://h3geo.org), using the H3 library.
+//
+// Resolutions: H3 resolution 0 (the 122 base cells) is DGGS resolution 2, so
+// H3 resolutions 0 through 15 are DGGS resolutions 2 through 17 (DGGS
+// resolutions 0 and 1 have no index). The first indexed resolution has no
+// indexing parent, and the last no indexing children.
+//
+// Compatibility: a supported grid is hexagonal, non-pure, has at least
+// resolutions 0 through 2, and its transition apertures are 4, 3, then 7s
+// (the aperture sequence 4377...). Both INT64 and DIGIT_STRING are accepted.
+// Invalid grids/forms fail during construction.
+//
+// Text forms:
+//  - INT64 is H3's canonical form (h3ToString: lowercase hex without leading
+//    zeros, e.g. 8a2a1072b59ffff). Input also accepts the zero-padded 16 digit
+//    form.
+//  - DIGIT_STRING, as for the Z systems, is a zero-padded base cell field
+//    followed by exactly one digit (0-6) for each H3 resolution: three digits
+//    (000-121) for the 122 H3 base cells (Z7's field is two digits for its 12
+//    base cells). H3 resolution 0 is "042", H3 resolution 2 is "042" followed
+//    by two digits.
+//
+// Geometry: indexes are computed from the cell's topology on the DGGS's
+// icosahedral projection, whatever its projection and orientation, so they are
+// always valid H3 indexes. The cells are geometrically the same as Uber H3's
+// only for dggs_proj GNOMONIC with dggs_orient_preset DYMAXION and the
+// aperture sequence 4377..., which is what dggs_type H3 sets.
+//
+// Dependencies: this uses the H3 library's internal FaceIJK functions
+// (_faceIjkToH3 and _h3ToFaceIjk, exported by libh3 but not declared in
+// h3api.h; see DgH3Internal.h), and the public constructCell and
+// getIndexDigit functions added in H3 4.4.0 (so DGGRID requires H3 4.4.1 or
+// later: the 4.4.0 release identifies itself as 4.3.0).
 class DgH3IntRF : public DgHierNdxIntRF {
    public:
       DgH3IntRF (const DgHierNdxSystemRFBase& sys, int res,
@@ -42,6 +70,7 @@ class DgH3IntRF : public DgHierNdxIntRF {
       DgQ2DICoord invQuantify (const DgHierNdxIntCoord& add) const override;
       const char* str2add (DgHierNdxIntCoord* add, const char* str,
                            char delimiter) const override;
+      std::string add2str (const DgHierNdxIntCoord& add) const override;
 };
 
 class DgH3StringRF : public DgHierNdxStringRF {
@@ -58,6 +87,12 @@ class DgH3StringRF : public DgHierNdxStringRF {
 
 class DgH3System : public DgHierNdxSystemRFS<DgH3IntRF, DgH3StringRF> {
    public:
+      // With dggs_orient_preset DYMAXION, DGGRID vertex v is the H3 pentagon
+      // base cell vertToH3BaseCell[v]. For every orientation, since DGGRID's
+      // triangle numbering is topological, DGGRID ProjTri triangle t is H3
+      // face t, with DGGRID V0, V1, V2 the H3 i, j, k vertices of the face.
+      // Not needed at run time; here as documentation and for verification.
+      static const int vertToH3BaseCell[12];
       static void validateCompatibility (const DgIDGGSBase& dggs,
                                           DgHierNdxFormType form);
       static DgH3System* makeSystem (const DgIDGGSBase& dggs, bool extModeInt,

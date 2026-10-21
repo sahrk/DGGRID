@@ -71,8 +71,13 @@ DgHierNdxSystemRFSBase::makeSystem (const DgIDGGSBase& dggsIn,
          sys = DgZ3System::makeSystem(dggsIn, extModeInt, "Z3");
          break;
        case dgg::addtype::H3:
+#ifdef USE_H3
          DgH3System::validateCompatibility(dggsIn, form);
          sys = DgH3System::makeSystem(dggsIn, extModeInt, "H3");
+#else
+         ::report("H3 hierarchical indexing requires DGGRID built with the H3 "
+                  "library", DgBase::Fatal);
+#endif
          break;
        case dgg::addtype::InvalidHierNdxSysType: // shouldn't be possible
          ::report("DgHexIDGGS::makeRF() invalid hierarchical system type", DgBase::Fatal);
@@ -84,11 +89,16 @@ DgHierNdxSystemRFSBase::makeSystem (const DgIDGGSBase& dggsIn,
 
 ////////////////////////////////////////////////////////////////////////////////
 DgHierNdxSystemRFSBase::DgHierNdxSystemRFSBase (const DgIDGGSBase& dggsIn,
-         bool extModeIntIn, const std::string& nameIn)
+         bool extModeIntIn, const std::string& nameIn,
+         int firstNdxResIn, int lastNdxResIn)
    : DgDiscRFS<DgHierNdx, DgQ2DICoord, long long int>
                          (dggsIn.network(), dggsIn, dggsIn.nRes(), nameIn),
-     dggs_ (dggsIn), extModeInt_ (extModeIntIn)
+     dggs_ (dggsIn), extModeInt_ (extModeIntIn),
+     firstNdxRes_ (firstNdxResIn), lastNdxRes_ (lastNdxResIn)
 {
+   if (lastNdxRes_ < 0 || lastNdxRes_ > dggsIn.nRes() - 1)
+      lastNdxRes_ = dggsIn.nRes() - 1;
+
    //grids_ = new std::vector<const DgHierNdxSystemRFBase*>(nRes_, nullptr);
 }
 
@@ -111,6 +121,20 @@ const DgIDGGBase&
 DgHierNdxSystemRFSBase::dgg (int res) const
 {
     return dggs().idggBase(res);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+int
+DgHierNdxSystemRFSBase::ndxParentRes (int res) const
+{
+   return (isNdxRes(res) && isNdxRes(res - 1)) ? res - 1 : -1;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+int
+DgHierNdxSystemRFSBase::ndxChildRes (int res) const
+{
+   return (isNdxRes(res) && isNdxRes(res + 1)) ? res + 1 : -1;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -154,7 +178,7 @@ DgHierNdxSystemRFSBase::setNdxParent (int res, const DgLocation& loc,
    parent.clearAddress();
    convert(&parent);
 
-   if (res > 0 && res < nRes()) {
+   if (ndxParentRes(res) >= 0) {
       DgLocation tmpLoc(loc);
       grids()[res]->convert(&tmpLoc);
       convert(&tmpLoc);
@@ -179,7 +203,7 @@ DgHierNdxSystemRFSBase::setNdxParent (const DgResAdd<DgHierNdx>& add,
 {
   //add.clearAddress();
   convert(&parent);
-  if (add.res() > 0 && add.res() < nRes())
+  if (ndxParentRes(add.res()) >= 0)
 	         setAddNdxParent(add, parent);
 }
 
@@ -220,7 +244,7 @@ DgHierNdxSystemRFSBase::setNdxChildren (int res, const DgLocation& loc,
    children.clearAddress();
    convert(children);
 
-   if (res >= 0 && res < (nRes() - 1))
+   if (ndxChildRes(res) >= 0)
    {
       DgLocation tmpLoc(loc);
       grids()[res]->convert(&tmpLoc);
@@ -246,7 +270,7 @@ DgHierNdxSystemRFSBase::setNdxChildren (const DgResAdd<DgHierNdx>& add,
 {
   chld.clearAddress();
   convert(chld);
-  if (add.res() >= 0 && add.res() < (nRes() - 1)) {
+  if (ndxChildRes(add.res()) >= 0) {
      setAddNdxChildren(add, chld);
   }
   //std::cout << add << ": " << chld << std::endl;

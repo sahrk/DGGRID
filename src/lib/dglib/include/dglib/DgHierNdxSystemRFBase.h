@@ -159,6 +159,9 @@ class DgHierNdxSystemRFBase
       DgHierNdxSystemRFBase (const DgHierNdxSystemRFSBase& hierNdxRFSIn, int resIn,
             const std::string& nameIn = "HierNdxSysRFBase");
 
+      // fatal if this system's resolution carries no index
+      void checkNdxRes (void) const;
+
       int setSystemSet (DgSystemSet& set, std::vector<DgHierNdxSystemRFBase*>& rfGrids, int res);
       virtual void initialize (std::vector<DgHierNdxSystemRFBase*>& rfGrids);
 

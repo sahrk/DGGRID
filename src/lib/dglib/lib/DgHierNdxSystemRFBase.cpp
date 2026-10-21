@@ -87,6 +87,18 @@ DgHierNdxSystemRFBase::DgHierNdxSystemRFBase (
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+void
+DgHierNdxSystemRFBase::checkNdxRes (void) const
+{
+   if (!hierNdxRFS().isNdxRes(res())) {
+      ::report(name() + " has no index at DGGS resolution " +
+               dgg::util::to_string(res()) + "; indexed DGGS resolutions are " +
+               dgg::util::to_string(hierNdxRFS().firstNdxRes()) + "-" +
+               dgg::util::to_string(hierNdxRFS().lastNdxRes()), DgBase::Fatal);
+   }
+}
+
+////////////////////////////////////////////////////////////////////////////////
 unsigned int
 DgHierNdxSystemRFBase::apertureAtResolution (void) const
 {
@@ -111,20 +123,26 @@ DgHierNdxSystemRFBase::childStepAperture (void) const
 std::string
 DgHierNdxSystemRFBase::add2str (const DgHierNdx& add) const
 {
-    return std::string(add);
+    // go through the int/string RF so a system's own text form is used
+    if (extModeInt())
+       return intRF()->add2str(add.intNdx());
+    else
+       return strRF()->add2str(add.strNdx());
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 std::string
 DgHierNdxSystemRFBase::add2str (const DgHierNdx& add, char delimiter) const
 {
-    return std::string(add);
+    // indexes don't use delimiters
+    return add2str(add);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 const char*
 DgHierNdxSystemRFBase::str2add (DgHierNdx* ndx, const char* str, char delimiter) const
 {
+  checkNdxRes();
   const char* newS = str;
   if (extModeInt()) {
      DgHierNdxIntCoord intNdx;
@@ -176,7 +194,7 @@ DgHierNdxSystemRFBase::setSystemSet (DgSystemSet& set, std::vector<DgHierNdxSyst
    set.dgg_ = nullptr;
    set.intRF_ = nullptr;
    set.strRF_ = nullptr;
-   if (res < 0 || res >= hierNdxRFS_.nRes())
+   if (!hierNdxRFS_.isNdxRes(res))
       return 1;
 
    // if we're here res is valid
@@ -194,8 +212,11 @@ DgHierNdxSystemRFBase::initialize (std::vector<DgHierNdxSystemRFBase*>& rfGrids)
    // current res set in the sub-class constructor
    //setSystemSet(curRes_, res_);
 
-   setSystemSet(pRes_, rfGrids, res_ - 1);
-   setSystemSet(chRes_, rfGrids, res_ + 1);
+   // only indexed resolutions have a parent/child system
+   if (hierNdxRFS_.isNdxRes(res_)) {
+      setSystemSet(pRes_, rfGrids, res_ - 1);
+      setSystemSet(chRes_, rfGrids, res_ + 1);
+   }
 
 }
 
@@ -203,6 +224,7 @@ DgHierNdxSystemRFBase::initialize (std::vector<DgHierNdxSystemRFBase*>& rfGrids)
 DgHierNdx
 DgHierNdxSystemRFBase::quantify (const DgQ2DICoord& point) const
 {
+   checkNdxRes();
    DgHierNdx ndx(extModeInt());
 
    ndx.strNdx_ = strRF()->quantify(point);
@@ -217,6 +239,7 @@ DgHierNdxSystemRFBase::quantify (const DgQ2DICoord& point) const
 DgQ2DICoord
 DgHierNdxSystemRFBase::invQuantify (const DgHierNdx& ndx) const
 {
+   checkNdxRes();
    DgQ2DICoord point(strRF()->invQuantify(ndx.strNdx_));
    //std::cout << "KEVIN: " << ndx.strNdx_ << " " << point << std::endl;
    return point;

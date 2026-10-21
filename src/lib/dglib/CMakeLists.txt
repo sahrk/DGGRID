@@ -93,6 +93,7 @@ add_library(dglib
    lib/DgProjGnomonicRF.cpp
    lib/DgProjISEA.cpp
    lib/DgProjIVEA.cpp
+   lib/DgProjIcosaGnomonic.cpp
    lib/DgProjTriRF.cpp
    lib/DgRandom.cpp
    lib/DgRFBase.cpp
@@ -235,6 +236,7 @@ add_library(dglib
    include/dglib/DgProjGnomonicRF.h
    include/dglib/DgProjISEA.h
    include/dglib/DgProjIVEA.h
+   include/dglib/DgProjIcosaGnomonic.h
    include/dglib/DgProjTriRF.h
    include/dglib/DgRadixString.h
    include/dglib/DgRandom.h

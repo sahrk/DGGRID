@@ -34,8 +34,13 @@ if(WITH_GDAL)
 endif()
 
 set(H3_FOUND FALSE)
+# Earliest H3 that reports a version with the public API DgH3System needs
+# (constructCell and getIndexDigit, added in 4.4.0; but the 4.4.0 release
+# identifies itself as 4.3.0, fixed in 4.4.1)
+set(H3_MIN_VERSION 4.4.1)
+set(H3_MIN_VERSION_NUM 40401)
 if(WITH_H3)
-  find_package(h3 CONFIG QUIET)
+  find_package(h3 ${H3_MIN_VERSION} CONFIG QUIET)
   if(TARGET h3::h3)
     set(H3_FOUND TRUE)
     set(H3_TARGET h3::h3)
@@ -59,9 +64,50 @@ if(WITH_H3)
     endif()
   endif()
   if(H3_FOUND)
+    # DgH3System needs H3's internal FaceIJK functions (exported by libh3 but
+    # not declared in h3api.h) and the public constructCell/getIndexDigit
+    # (H3 4.4.0). Check the version and that the symbols link.
+    include(CheckCXXSourceCompiles)
+    set(CMAKE_REQUIRED_LIBRARIES ${H3_TARGET})
+    check_cxx_source_compiles("
+      #include <h3api.h>
+      #if (H3_VERSION_MAJOR*10000 + H3_VERSION_MINOR*100 + H3_VERSION_PATCH) < ${H3_MIN_VERSION_NUM}
+      #error H3 is older than ${H3_MIN_VERSION}
+      #endif
+      int main() { return 0; }" H3_VERSION_OK)
+    if(NOT H3_VERSION_OK)
+      message(STATUS "H3 found is older than ${H3_MIN_VERSION}; building without H3")
+      set(H3_FOUND FALSE)
+    else()
+      check_cxx_source_compiles("
+        #include <h3api.h>
+        extern \"C\" {
+        typedef struct { int i; int j; int k; } CoordIJK;
+        typedef struct { int face; CoordIJK coord; } FaceIJK;
+        H3Index _faceIjkToH3 (const FaceIJK* fijk, int res);
+        H3Error _h3ToFaceIjk (H3Index h, FaceIJK* fijk);
+        }
+        int main() {
+          FaceIJK f = {0, {0, 0, 0}};
+          H3Index h = _faceIjkToH3(&f, 0);
+          int d = 0;
+          getIndexDigit(h, 1, &d);
+          return (int) _h3ToFaceIjk(h, &f) + d;
+        }" H3_INTERNALS_OK)
+      if(NOT H3_INTERNALS_OK)
+        message(STATUS "H3 found but internal FaceIJK symbols are not exported; building without H3")
+        set(H3_FOUND FALSE)
+      endif()
+    endif()
+    unset(CMAKE_REQUIRED_LIBRARIES)
+    if(NOT H3_FOUND)
+      unset(H3_TARGET)
+    endif()
+  endif()
+  if(H3_FOUND)
     message(STATUS "Found H3: ${H3_TARGET}")
   else()
-    message(STATUS "H3 not found; building without external H3")
+    message(STATUS "Building without external H3")
   endif()
 endif()
 
