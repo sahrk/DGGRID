@@ -96,7 +96,7 @@ template <class C> class DgHierNdxRF :
       const DgIDGGBase& dgg  (void) const { return *sys_.dgg(); }
 
       int res      (void) const { return sys_.res(); }
-      int aperture (void) const { return sys_.aperture(); }
+      int aperture (void) const { return sys_.apertureAtResolution(); }
       int effRes   (void) const { return effRes_; }
       int effRadix (void) const { return effRadix_; }
 

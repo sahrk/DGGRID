@@ -118,7 +118,9 @@ class DgHierNdxSystemRFBase
       bool extModeInt (void) const;
 
       int res      (void) const { return res_; }
-      int aperture (void) const { return aperture_; }
+      unsigned int apertureAtResolution (void) const;
+      unsigned int parentStepAperture (void) const;
+      unsigned int childStepAperture (void) const;
 
       const DgIDGGBase*        dgg   (void) const { return curRes_.dgg_; }
       const DgHierNdxIntRF*    intRF (void) const { return curRes_.intRF_; }
@@ -163,7 +165,6 @@ class DgHierNdxSystemRFBase
       const DgHierNdxSystemRFSBase& hierNdxRFS_;
       const DgIDGGSBase& dggs_;
       int res_;
-      int aperture_;
 
       DgSystemSet pRes_;
       DgSystemSet curRes_;

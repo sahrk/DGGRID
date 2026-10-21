@@ -360,9 +360,10 @@ SubOpDGG::initializeOp (void)
    // dggs_res_spec <int> (0 <= v <= MAX_DGG_RES)
    pList().insertParam(new DgIntParam("dggs_res_spec", 9, 0, MAX_DGG_RES));
 
-   // hier_indexing_system_type <ZORDER | Z3 | Z7 | NONE>
-   pList().insertParam("hier_indexing_system_type", "NONE",
-                       {"Z7", "ZORDER", "Z3", "NONE"});
+   // hier_indexing_system_type <ZORDER | Z3 | Z7 | H3 | NONE>
+   auto hierChoices = dgg::addtype::hierNdxSysTypeChoices();
+   hierChoices.push_back("NONE");
+   pList().insertParam("hier_indexing_system_type", "NONE", hierChoices);
 
    // z3_invalid_digit < 0 | 1 | 2 | 3 >
    // default changed to "3" in version 9.0b
@@ -698,6 +699,11 @@ SubOpDGG::setupOp (void)
           if (apertureType != "PURE" || (aperture != 3 && aperture != 4))
               ::report("hier_indexing_system_type ZOrder "
                        "requires a pure aperture 3 or 4 DGGS", DgBase::Fatal);
+       } else if (hierNdxSysType == dgg::addtype::H3) {
+          if (gridTopo != Hexagon)
+             ::report("H3 requires HEXAGON topology", DgBase::Fatal);
+          // The library factory validates the constructed DGGS and its exact
+          // transition apertures, for both internal and on-demand systems.
        } else {
          ::report("SubOpDGG::setupOp() invalid hier_indexing_system_type", DgBase::Fatal);
       }

@@ -98,10 +98,11 @@ SubOpIn::initializeOp (void)
    pList().insertParam("input_address_type", "GEO",
                        dgg::addtype::inputAddressTypeChoices());
 
-    // input_hier_ndx_system < ZORDER | Z3 | Z7 >
+    // input_hier_ndx_system < ZORDER | Z3 | Z7 | H3 | NONE >
     // used if input_address_type is HIERNDX
-   pList().insertParam("input_hier_ndx_system", "Z3",
-                       {"Z7", "ZORDER", "Z3", "NONE"});
+   auto hierChoices = dgg::addtype::hierNdxSysTypeChoices();
+   hierChoices.push_back("NONE");
+   pList().insertParam("input_hier_ndx_system", "Z3", hierChoices);
 
     // input_hier_ndx_form < INT64 | DIGIT_STRING | NONE >
     // used if input_address_type is HIERNDX

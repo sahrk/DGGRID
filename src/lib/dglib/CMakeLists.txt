@@ -32,6 +32,7 @@ add_library(dglib
    lib/DgGeoDegRF.cpp
    lib/DgGeoSphRF.cpp
    lib/DgGridTopo.cpp
+   lib/DgH3System.cpp
    lib/DgHexC1Grid2D.cpp
    lib/DgHexC2Grid2D.cpp
    lib/DgHexC3Grid2D.cpp
@@ -162,6 +163,7 @@ add_library(dglib
    include/dglib/DgGeoProjRF.h
    include/dglib/DgGeoSphRF.h
    include/dglib/DgGridTopo.h
+   include/dglib/DgH3System.h
    include/dglib/DgHexC1Grid2D.h
    include/dglib/DgHexC2Grid2D.h
    include/dglib/DgHexC3Grid2D.h

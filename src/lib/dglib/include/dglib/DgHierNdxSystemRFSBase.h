@@ -52,6 +52,11 @@ class DgHierNdxSystemRFSBase :
       const DgIDGGSBase& dggs (void) const { return dggs_; }
       const DgIDGGBase& dgg (int res) const;
 
+      // Resolution 0 has a base grid aperture, but no incoming step.
+      unsigned int apertureAtResolution (int res) const;
+      unsigned int parentStepAperture (int res) const;
+      unsigned int childStepAperture (int res) const;
+
       virtual operator std::string (void) const
       {
          std::string s = "*** DgHierNdxSystemRFSBase";
