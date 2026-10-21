@@ -20,6 +20,9 @@
 #ifndef DGH3SYSTEM_H
 #define DGH3SYSTEM_H
 
+// USE_H3 is set in MakeIncludes / CMake
+#ifdef USE_H3
+
 #include <dglib/DgHierNdxSystemRFS.h>
 #include <dglib/DgHierNdxIntRF.h>
 #include <dglib/DgHierNdxStringRF.h>
@@ -73,5 +76,7 @@ class DgH3System : public DgHierNdxSystemRFS<DgH3IntRF, DgH3StringRF> {
       void setAddNdxChildren (const DgResAdd<DgHierNdx>& add,
                               DgLocVector& children) const override;
 };
+
+#endif // USE_H3
 
 #endif

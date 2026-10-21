@@ -17,6 +17,9 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 *******************************************************************************/
 
+// USE_H3 is set in MakeIncludes / CMake
+#ifdef USE_H3
+
 #include <dglib/DgH3System.h>
 
 namespace {
@@ -129,3 +132,5 @@ DgH3System::setAddNdxChildren (const DgResAdd<DgHierNdx>&, DgLocVector&) const
 {
    unimplemented("indexing children");
 }
+
+#endif // USE_H3
