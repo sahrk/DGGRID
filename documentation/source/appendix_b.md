@@ -22,7 +22,7 @@ The table below shows which parameters have an effect under each operation (**ch
 | Grid structure, resolution and sphere (**Section 4**): dggs_type, dggs_base_poly, dggs_topology, dggs_aperture\*, dggs_num_aperture_4_res, dggs_res_\*, sphere_radius_type, custom_sphere_radius, and the deprecated proj_datum, proj_datum_radius | x | x | x | x | x | x |
 | Projection, orientation, datums and indexing (**Section 4**): dggs_proj, dggs_orient_specify_type, dggs_orient_rand_seed, dggs_orient_preset, dggs_vert0_\*, region_center_\*, dggs_num_placements, rng_type, orientation_datum, output_datum, hier_indexing_system_type, z3_invalid_digit | x | x | x | x | x |  |
 | input_datum | x (a) | x | x | x | x (b) |  |
-| clip_\*, clipper_scale_factor, geodetic_densify | x |  |  |  |  |  |
+| clip_\*, polyclip_algo, clipper_scale_factor, geodetic_densify | x |  |  |  |  |  |
 | Point input files: input_files, input_file_name, point_input_file_type |  | x | x | x | x |  |
 | Input address form: input_address_type, input_hier_ndx_system, input_hier_ndx_form | x (c) |  |  |  | x |  |
 | input_delimiter | x (c) | x | x | x | x |  |

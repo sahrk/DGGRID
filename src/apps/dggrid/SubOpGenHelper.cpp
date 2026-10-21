@@ -31,6 +31,7 @@
 #include <set>
 #include <cstdlib>
 #include <cmath>
+#include <sstream>
 
 #include "clipper.hpp"
 #include <dglib/DgIVec2D.h>
@@ -72,6 +73,26 @@
 
 #include "OpBasic.h"
 #include "SubOpGen.h"
+
+#ifdef USE_GDAL
+// Intersection can also return lines and points where polygons only touch.
+static double polygonalArea(const OGRGeometry* geometry)
+{
+   if (!geometry) return 0.0;
+   const OGRwkbGeometryType type = wkbFlatten(geometry->getGeometryType());
+   if (type == wkbPolygon)
+      return static_cast<const OGRPolygon*>(geometry)->get_Area();
+   if (type == wkbMultiPolygon || type == wkbGeometryCollection) {
+      const OGRGeometryCollection* collection =
+          static_cast<const OGRGeometryCollection*>(geometry);
+      double area = 0.0;
+      for (int i = 0; i < collection->getNumGeometries(); ++i)
+         area += polygonalArea(collection->getGeometryRef(i));
+      return area;
+   }
+   return 0.0;
+}
+#endif
 
 ////////////////////////////////////////////////////////////////////////////////
 void
@@ -166,45 +187,91 @@ SubOpGen::evalCell (const DgIDGGBase& dgg, const DgContCartRF& cc1,
          accepted = false;
       } else {
          ClipperLib::Paths cellPoly(1);
-         for (int i = 0; i < verts.size(); i++)
-           cellPoly[0] <<
-              ClipperLib::IntPoint(clipperFactor * cc1.getAddress((verts)[i])->x(),
-                                   clipperFactor * cc1.getAddress((verts)[i])->y());
+         if (polyclipAlgo == CLIPPER1) {
+            for (int i = 0; i < verts.size(); i++)
+               cellPoly[0] << ClipperLib::IntPoint(
+                  clipperFactor * cc1.getAddress(verts[i])->x(),
+                  clipperFactor * cc1.getAddress(verts[i])->y());
+         }
+#ifdef USE_GDAL
+         OGRPolygon gdalCell;
+         if (polyclipAlgo == GDAL_POLYCLIP) {
+            OGRLinearRing ring;
+            for (int i = 0; i < verts.size(); i++) {
+               const DgDVec2D& p = *cc1.getAddress(verts[i]);
+               ring.addPoint(static_cast<double>(p.x()), static_cast<double>(p.y()));
+            }
+            ring.closeRings();
+            gdalCell.addRing(&ring);
+         }
+#endif
 
          for (unsigned int i = 0; i < clipRegion.clpPolys().size(); i++) {
 
-           ClipperLib::Clipper c;
-           c.AddPaths(cellPoly, ClipperLib::ptSubject, true);
-           c.AddPaths(clipRegion.clpPolys()[i].exterior, ClipperLib::ptClip, true);
+           bool intersects = false;
+           if (polyclipAlgo == CLIPPER1) {
+              ClipperLib::Clipper c;
+              c.AddPaths(cellPoly, ClipperLib::ptSubject, true);
+              c.AddPaths(clipRegion.clpPolys()[i].exterior, ClipperLib::ptClip, true);
 
-           ClipperLib::Paths solution;
-           c.Execute(ClipperLib::ctIntersection, solution, ClipperLib::pftNonZero,
-                     ClipperLib::pftNonZero);
+              ClipperLib::Paths solution;
+              c.Execute(ClipperLib::ctIntersection, solution, ClipperLib::pftNonZero,
+                        ClipperLib::pftNonZero);
 
-           // coarse clipping cell boundaries run along the fine grid's edges and
-           // vertices, so many fine cells only touch them; the integer clipper
-           // coordinates turn those touches into slivers less than a clipper unit
-           // wide, which appear or vanish with tiny numerical perturbations.
-           // treat any overlap thinner than half a clipper unit as touching
-           if (coarseCellClip && solution.size() != 0) {
-              long double solArea = 0.0L;
-              for (const auto& path: solution)
-                 solArea += std::fabs(ClipperLib::Area(path));
+              // Coarse clipping cell boundaries run along fine cell edges and
+              // vertices. Integer rounding can turn touches into thin slivers;
+              // treat overlaps thinner than half a Clipper unit as touching.
+              if (coarseCellClip && !solution.empty()) {
+                 long double solArea = 0.0L;
+                 for (const auto& path: solution)
+                    solArea += std::fabs(ClipperLib::Area(path));
 
-              long double perimeter = 0.0L;
-              const ClipperLib::Path& cp = cellPoly[0];
-              for (size_t j = 0; j < cp.size(); j++) {
-                 const ClipperLib::IntPoint& p1 = cp[j];
-                 const ClipperLib::IntPoint& p2 = cp[(j + 1) % cp.size()];
-                 perimeter += std::hypot((long double) (p2.X - p1.X),
-                                         (long double) (p2.Y - p1.Y));
+                 long double perimeter = 0.0L;
+                 const ClipperLib::Path& cp = cellPoly[0];
+                 for (size_t j = 0; j < cp.size(); j++) {
+                    const ClipperLib::IntPoint& p1 = cp[j];
+                    const ClipperLib::IntPoint& p2 = cp[(j + 1) % cp.size()];
+                    perimeter += std::hypot((long double) (p2.X - p1.X),
+                                            (long double) (p2.Y - p1.Y));
+                 }
+
+                 if (solArea < 0.5L * perimeter)
+                    solution.clear();
               }
-
-              if (solArea < 0.5L * perimeter)
-                 solution.clear();
+              intersects = !solution.empty();
            }
+#ifdef USE_GDAL
+           else {
+              OGRGeometry* intersection = gdalCell.Intersection(
+                  &clipRegion.clpPolys()[i].gdalExterior);
+              if (!intersection) {
+                 std::ostringstream message;
+                 message << "polyclip_algo GDAL intersection failed for quad "
+                         << clipRegion.quadNum() << ", cell " << add2D
+                         << ", clipping polygon " << i << ": "
+                         << CPLGetLastErrorMsg();
+                 ::report(message.str(), DgBase::Fatal);
+              }
+              double area = polygonalArea(intersection);
+              OGRGeometryFactory::destroyGeometry(intersection);
+              if (area > 0.0) {
+                 if (coarseCellClip) {
+                    // Clipper rejects area < 0.5 * cell perimeter in integer
+                    // coordinates. Converting that rule to Snyder units gives
+                    // area < 0.5 * perimeter / clipper_scale_factor.
+                    double perimeter = 0.0;
+                    const OGRLinearRing* ring = gdalCell.getExteriorRing();
+                    for (int j = 0; j + 1 < ring->getNumPoints(); ++j)
+                       perimeter += std::hypot(ring->getX(j + 1) - ring->getX(j),
+                                               ring->getY(j + 1) - ring->getY(j));
+                    intersects = area >= 0.5 * perimeter *
+                                       static_cast<double>(invClipperFactor);
+                 } else intersects = true;
+              }
+           }
+#endif
 
-           if (solution.size() != 0) {
+           if (intersects) {
               accepted = true; // a hole may make this false
 #ifdef USE_GDAL
               if (useHoles) {
@@ -867,6 +934,7 @@ SubOpGen::processOneClipPoly (DgPolygon& polyIn, const DgIDGGBase& dgg,
          if (op.mainOp.megaVerbose)
             dgcout << "no intersection in quad " << q << std::endl;
 
+         delete solution;
          continue;
       }
 
@@ -928,6 +996,19 @@ SubOpGen::processOneClipPoly (DgPolygon& polyIn, const DgIDGGBase& dgg,
          clipPoly.exterior = cfinVerts;
 
 #ifdef USE_GDAL
+         if (polyclipAlgo == GDAL_POLYCLIP) {
+            // Quad preparation always uses Clipper. Reuse those rounded
+            // Snyder-space boundaries, so clipper_scale_factor still affects
+            // either cell intersection algorithm.
+            OGRLinearRing ring;
+            for (const ClipperLib::IntPoint& point : cfinVerts[0])
+               ring.addPoint(static_cast<double>(point.X) *
+                                static_cast<double>(invClipperFactor),
+                             static_cast<double>(point.Y) *
+                                static_cast<double>(invClipperFactor));
+            ring.closeRings();
+            clipPoly.gdalExterior.addRing(&ring);
+         }
          if (useHoles) {
             // add the holes
             for (int h = 0; h < polyIn.holes().size(); h++) {

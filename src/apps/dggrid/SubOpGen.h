@@ -71,6 +71,8 @@ struct DgClippingPoly {
       ClipperLib::Paths exterior;
 
 #ifdef USE_GDAL
+      // Snyder-space exterior, using the same rounded vertices as Clipper.
+      OGRPolygon gdalExterior;
       // the holes for gdal containment
       std::vector<DgClippingHole> holes;
 #endif
@@ -253,6 +255,7 @@ struct SubOpGen : public SubOpBasicMulti {
 
    bool doPointInPoly;                // perform pt-in-poly intersection
    bool doPolyIntersect;              // perform poly intersection
+   enum PolyclipAlgo { CLIPPER1, GDAL_POLYCLIP } polyclipAlgo;
    unsigned long int clipperFactor;   // clipper scaling factor
    long double invClipperFactor;      // 1.0L / clipper scaling factor
    bool useHoles;                     // handle holes in clipping polygons
