@@ -27,7 +27,16 @@
 #include <dglib/DgConstants.h>
 #include <dglib/DgBase.h>
 
+#ifdef USE_H3
+#include <h3api.h>
+#endif
+
 #include "OpBasic.h"
+
+#ifdef USE_H3
+#define DGGRID_H3_VERSION_STRING std::to_string(H3_VERSION_MAJOR) + "." + \
+   std::to_string(H3_VERSION_MINOR) + "." + std::to_string(H3_VERSION_PATCH)
+#endif
 
 ////////////////////////////////////////////////////////////////////////////////
 void pause (const std::string& where)
@@ -100,7 +109,12 @@ int main (int argc, char* argv[])
 #ifdef USE_GDAL
       dgcout << "built with GDAL version " << std::string(GDALVersionInfo("VERSION_NUM")) << std::endl;
 #else
-      dgcout << "built without GDAL" << std::endl;;
+      dgcout << "built without GDAL" << std::endl;
+#endif
+#ifdef USE_H3
+      dgcout << "built with H3 version " << DGGRID_H3_VERSION_STRING << std::endl;
+#else
+      dgcout << "built without H3" << std::endl;
 #endif
       dgcout << "\nTo use:" << std::endl;
       dgcout << std::endl;
@@ -124,7 +138,12 @@ int main (int argc, char* argv[])
 #ifdef USE_GDAL
       dgcout << "built with GDAL version " << std::string(GDALVersionInfo("VERSION_NUM")) << std::endl;
 #else
-      dgcout << "built without GDAL" << std::endl;;
+      dgcout << "built without GDAL" << std::endl;
+#endif
+#ifdef USE_H3
+      dgcout << "built with H3 version " << DGGRID_H3_VERSION_STRING << std::endl;
+#else
+      dgcout << "built without H3" << std::endl;
 #endif
    }
 
@@ -136,6 +155,11 @@ int main (int argc, char* argv[])
    dgcout << " with GDAL";
 #else
    dgcout << " without GDAL";
+#endif
+#ifdef USE_H3
+   dgcout << " with H3";
+#else
+   dgcout << " without H3";
 #endif
    dgcout << " **\n";
    dgcout << "type sizes: big int: " << sizeof(long long int) * 8 << " bits / ";
@@ -149,6 +173,10 @@ int main (int argc, char* argv[])
 #ifdef USE_GDAL
    if (theOperation.mainOp.verbosity > 0)
       dgcout << "GDAL version " << std::string(GDALVersionInfo("VERSION_NUM")) << std::endl;
+#endif
+#ifdef USE_H3
+   if (theOperation.mainOp.verbosity > 0)
+      dgcout << "H3 version " << DGGRID_H3_VERSION_STRING << std::endl;
 #endif
 
    // echo the parameter list

@@ -35,7 +35,7 @@ DgZOrderStringRF::DgZOrderStringRF (const DgHierNdxSystemRFBase& sysIn, int resI
 {
     effRes_ = res();       // effective resolution
     effRadix_ = dgg().radix();   // effective radix
-    if (aperture() == 3) {
+    if (dggs().aperture() == 3) {
         effRadix_ = 3;
         // effRes_ is the number of Class I resolutions
         effRes_ = (res() + 1) / 2;
@@ -67,7 +67,7 @@ DgZOrderStringRF::quantify (const DgQ2DICoord& addIn) const
 
  //dgcout << "addstr " << addstr << std::endl;
     // trim last digit if Class II
-       if (aperture() == 3 && !dgg().isClassI() && addstr.length()) {
+       if (dggs().aperture() == 3 && !dgg().isClassI() && addstr.length()) {
           addstr.pop_back();
        }
  //dgcout << "trimmed " << addstr << std::endl;
@@ -100,7 +100,7 @@ DgZOrderStringRF::invQuantify (const DgHierNdxStringCoord& addIn) const
     std::string radStr1 = "";
     std::string radStr2 = "";
 
-    if (aperture() == 3) {
+    if (dggs().aperture() == 3) {
        bool isIdigit = true; // first char is an i digit
        int lastIdigit = 0;
        for (const char& digit: radStr) {

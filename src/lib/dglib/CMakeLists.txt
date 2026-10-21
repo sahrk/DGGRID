@@ -32,6 +32,7 @@ add_library(dglib
    lib/DgGeoDegRF.cpp
    lib/DgGeoSphRF.cpp
    lib/DgGridTopo.cpp
+   lib/DgH3System.cpp
    lib/DgHexC1Grid2D.cpp
    lib/DgHexC2Grid2D.cpp
    lib/DgHexC3Grid2D.cpp
@@ -164,6 +165,7 @@ add_library(dglib
    include/dglib/DgGeoProjRF.h
    include/dglib/DgGeoSphRF.h
    include/dglib/DgGridTopo.h
+   include/dglib/DgH3System.h
    include/dglib/DgHexC1Grid2D.h
    include/dglib/DgHexC2Grid2D.h
    include/dglib/DgHexC3Grid2D.h
@@ -268,9 +270,12 @@ add_library(dglib
 if(GDAL_FOUND)
   target_compile_definitions(dglib PRIVATE USE_GDAL)
 endif()
+if(H3_FOUND)
+  target_compile_definitions(dglib PRIVATE USE_H3)
+endif()
 
 # If GDAL isn't present than ${GDAL_INCLUDE_DIRS} and ${GDAL_LIBRARIES} give
 # empty strings
 target_include_directories(dglib PUBLIC include ${GDAL_INCLUDE_DIRS})
-target_link_libraries(dglib PRIVATE ${GDAL_LIBRARIES} shapelib proj4lib)
+target_link_libraries(dglib PRIVATE ${GDAL_LIBRARIES} ${H3_TARGET} shapelib proj4lib)
 target_compile_features(dglib PRIVATE cxx_std_11)

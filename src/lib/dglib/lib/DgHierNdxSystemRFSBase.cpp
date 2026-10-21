@@ -29,6 +29,7 @@
 #include <dglib/DgZ3System.h>
 #include <dglib/DgZ7System.h>
 #include <dglib/DgZOrderSystem.h>
+#include <dglib/DgH3System.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 DgHierNdxSystemRFSBase*
@@ -38,9 +39,14 @@ DgHierNdxSystemRFSBase::makeSystem (const DgIDGGSBase& dggsIn,
 {
    DgHierNdxSystemRFSBase* sys = nullptr;
 
-   // do some checks
-   if (sysType == InvalidHierNdxSysType || form == InvalidHierNdxFormType) {
-        ::report("DgHierNdxSystemRFSBase::makeSystem() invalid sytem type or form", DgBase::Fatal);
+   if (sysType == InvalidHierNdxSysType) {
+        ::report("DgHierNdxSystemRFSBase::makeSystem() invalid system type", DgBase::Fatal);
+        return sys;
+   }
+   if (form != Int64 && form != DigitString) {
+        ::report("DgHierNdxSystemRFSBase::makeSystem() " +
+                 dgg::addtype::to_string(sysType) +
+                 " requires INT64 or DIGIT_STRING form", DgBase::Fatal);
         return sys;
    }
 
@@ -63,6 +69,10 @@ DgHierNdxSystemRFSBase::makeSystem (const DgIDGGSBase& dggsIn,
             ::report("DgHexIDGGS::makeRF() Z3 only available for pure aperture 3 grids", DgBase::Fatal);
          }
          sys = DgZ3System::makeSystem(dggsIn, extModeInt, "Z3");
+         break;
+       case dgg::addtype::H3:
+         DgH3System::validateCompatibility(dggsIn, form);
+         sys = DgH3System::makeSystem(dggsIn, extModeInt, "H3");
          break;
        case dgg::addtype::InvalidHierNdxSysType: // shouldn't be possible
          ::report("DgHexIDGGS::makeRF() invalid hierarchical system type", DgBase::Fatal);
@@ -101,6 +111,39 @@ const DgIDGGBase&
 DgHierNdxSystemRFSBase::dgg (int res) const
 {
     return dggs().idggBase(res);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+unsigned int
+DgHierNdxSystemRFSBase::apertureAtResolution (int res) const
+{
+   if (res < 0 || res >= nRes()) {
+      ::report("DgHierNdxSystemRFSBase::apertureAtResolution() resolution out of range",
+               DgBase::Fatal);
+   }
+   return dgg(res).aperture();
+}
+
+////////////////////////////////////////////////////////////////////////////////
+unsigned int
+DgHierNdxSystemRFSBase::parentStepAperture (int res) const
+{
+   if (res <= 0 || res >= nRes()) {
+      ::report("DgHierNdxSystemRFSBase::parentStepAperture() no parent step at this resolution",
+               DgBase::Fatal);
+   }
+   return apertureAtResolution(res);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+unsigned int
+DgHierNdxSystemRFSBase::childStepAperture (int res) const
+{
+   if (res < 0 || res >= nRes() - 1) {
+      ::report("DgHierNdxSystemRFSBase::childStepAperture() no child step at this resolution",
+               DgBase::Fatal);
+   }
+   return apertureAtResolution(res + 1);
 }
 
 ////////////////////////////////////////////////////////////////////////////////

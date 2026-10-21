@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 All changes are by Kevin Sahr, unless otherwise noted.
 
+## Unreleased
+### Added
+- H3 mixed-aperture hierarchy integration scaffold for the `43` plus fifteen `7` sequence, with explicit errors for index operations whose mathematics are still stubs. Existing Z3, Z7, and ZORDER formats are unchanged.
+- Per-resolution parent and child step aperture accessors for hierarchy systems.
+
 ## [9.1] - 2026-10-10
 ### Added
 - manual updated to v9.1 (thanks to @allixender)

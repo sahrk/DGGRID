@@ -359,7 +359,7 @@ with the neighborID's for each cell listed in counter-clockwise order about the 
 
 > cellID childID{sub}`1` childID{sub}`2` ... childID{sub}`n`
 
-In the case of hexagonal DGGS with a pure aperture the hierarchical indexing parent and/or children of the selected cells can be output based on a hierarchical indexing system specified in the **choice** parameter hier_indexing_system_type (see [**Appendix E**](#appendix-e-dgg-address-forms)); an error results if indexing parents or children are requested while hier_indexing_system_type is NONE (the default). Resolution 0 cells have no indexing parent.
+For supported hexagonal DGGS, the hierarchical indexing parent and/or children of the selected cells can be output based on the **choice** parameter hier_indexing_system_type (see [**Appendix E**](#appendix-e-dgg-address-forms)); an error results if indexing parents or children are requested while hier_indexing_system_type is NONE (the default). Resolution 0 cells have no indexing parent. The H3 entry currently has indexing-operation stubs and reports an error if parent or child output is requested.
 
 To output the indexing parent of each cell in the next coarser resolution using the selected indexing system, set the **choice** parameter indexing_parent_output_type to TEXT. Specify the name of the output parent file in the **string** parameter indexing_parent_output_file_name. For each selected cellID the output file will contain a single line of the form:
 
@@ -640,11 +640,14 @@ input_hier_ndx_system, output_hier_ndx_system, and hier_indexing_system_type tak
 - `ZORDER` - quad number and digit-interleaved Q2DI coordinates, only available for hexagonal DGGS with a pure aperture of 3 or 4 (not supported for aperture 7, mixed, or sequence apertures)
 - `Z3` - base 3 Central Place Indexing (CPI) hierarchical index \[Sahr 2019\], only available for hexagonal DGGS with a pure aperture of 3
 - `Z7` - base 7 Central Place Indexing (CPI) hierarchical index \[Sahr 2019\], only available for hexagonal DGGS with a pure aperture of 7
+- `H3` - integration scaffold for a mixed hexagonal DGGS whose transition apertures are a prefix of `43777777777777777` (aperture 4 at resolution 1, 3 at resolution 2, then fifteen aperture 7 transitions). The hierarchy has resolutions 0 through 17; DGGRID allocates one extra child resolution, so the maximum selected `dggs_res_spec` is 16. This entry accepts `INT64` and `DIGIT_STRING` selections, but index conversion, packing, validation, and indexing parent/children are currently stubs that stop with an explicit error. It does not yet produce usable H3 labels.
 
 input_hier_ndx_form or output_hier_ndx_form specifies the index representation for input or output respectively. It takes the following values:
 
 - `INT64` - the index is packed into a hexadecimal 64 bit integer, the digit used to fill unused resolutions in Z3 INT64 indexes is specified by the parameter `z3_invalid_digit`. The default value is 3.
 - `DIGIT_STRING` - consists of 2 characters representing the quad number followed by 1 character per hierarchical digit.
+
+The `H3` scaffold can be selected independently for internal hierarchy, input, or output. Its index operations remain unavailable until the H3-specific mathematics are implemented. The runnable `examples/h3Stub/h3Stub.meta` shows a supported grid selecting the internal system while transforming GEO addresses to sequence numbers. Spatial children are determined by grid geometry; indexing children use the selected hierarchy system.
 
 ## Appendix F. Statistics for Some Preset ISEA and IVEA DGGs
 
