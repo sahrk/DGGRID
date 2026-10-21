@@ -217,22 +217,6 @@
       </LineString>
 </Placemark>
 <Placemark>
-<name>54</name>
-      <styleUrl>#lineStyle1</styleUrl>
-      <LineString>
-         <tessellate>1</tessellate>
-         <coordinates>
-            -24.285263,69.120644
-            -21.090702,71.637910
-            -24.977814,73.611270
-            -33.999177,72.963088
-            -35.745722,70.269627
-            -30.296885,68.412355
-            -24.285263,69.120644
-         </coordinates>
-      </LineString>
-</Placemark>
-<Placemark>
 <name>55</name>
       <styleUrl>#lineStyle1</styleUrl>
       <LineString>
@@ -277,22 +261,6 @@
             -28.248448,61.122971
             -24.808522,59.114325
             -20.241877,59.572233
-         </coordinates>
-      </LineString>
-</Placemark>
-<Placemark>
-<name>82</name>
-      <styleUrl>#lineStyle1</styleUrl>
-      <LineString>
-         <tessellate>1</tessellate>
-         <coordinates>
-            -28.248448,61.122971
-            -27.071569,63.758884
-            -31.236331,65.701470
-            -36.493201,64.807608
-            -36.940793,62.130687
-            -32.891792,60.373225
-            -28.248448,61.122971
          </coordinates>
       </LineString>
 </Placemark>
@@ -489,22 +457,6 @@
       </LineString>
 </Placemark>
 <Placemark>
-<name>297</name>
-      <styleUrl>#lineStyle1</styleUrl>
-      <LineString>
-         <tessellate>1</tessellate>
-         <coordinates>
-            -15.000364,47.897175
-            -17.702101,49.979245
-            -21.232541,49.738638
-            -22.266836,47.156944
-            -19.519529,45.172508
-            -15.780424,45.671910
-            -15.000364,47.897175
-         </coordinates>
-      </LineString>
-</Placemark>
-<Placemark>
 <name>298</name>
       <styleUrl>#lineStyle1</styleUrl>
       <LineString>
@@ -549,22 +501,6 @@
             -6.901472,42.066413
             -3.345521,42.179413
             -1.962727,44.327751
-         </coordinates>
-      </LineString>
-</Placemark>
-<Placemark>
-<name>325</name>
-      <styleUrl>#lineStyle1</styleUrl>
-      <LineString>
-         <tessellate>1</tessellate>
-         <coordinates>
-            -6.901472,42.066413
-            -9.335904,44.087125
-            -12.970424,43.801084
-            -13.905837,41.528675
-            -11.463572,39.588518
-            -8.070762,39.846510
-            -6.901472,42.066413
          </coordinates>
       </LineString>
 </Placemark>
@@ -761,22 +697,6 @@
       </LineString>
 </Placemark>
 <Placemark>
-<name>540</name>
-      <styleUrl>#lineStyle1</styleUrl>
-      <LineString>
-         <tessellate>1</tessellate>
-         <coordinates>
-            13.025878,39.627284
-            9.474122,39.627284
-            7.787232,37.755424
-            9.561731,35.495330
-            12.938269,35.495330
-            14.712768,37.755424
-            13.025878,39.627284
-         </coordinates>
-      </LineString>
-</Placemark>
-<Placemark>
 <name>541</name>
       <styleUrl>#lineStyle1</styleUrl>
       <LineString>
@@ -821,22 +741,6 @@
             23.652401,40.119801
             25.845521,42.179413
             24.462727,44.327751
-         </coordinates>
-      </LineString>
-</Placemark>
-<Placemark>
-<name>568</name>
-      <styleUrl>#lineStyle1</styleUrl>
-      <LineString>
-         <tessellate>1</tessellate>
-         <coordinates>
-            23.652401,40.119801
-            20.132561,40.119579
-            18.166733,37.975060
-            19.654915,35.920149
-            22.969419,35.905685
-            24.993486,37.969689
-            23.652401,40.119801
          </coordinates>
       </LineString>
 </Placemark>
@@ -1033,22 +937,6 @@
       </LineString>
 </Placemark>
 <Placemark>
-<name>783</name>
-      <styleUrl>#lineStyle1</styleUrl>
-      <LineString>
-         <tessellate>1</tessellate>
-         <coordinates>
-            40.202101,49.979245
-            37.500364,47.897175
-            38.280424,45.671910
-            42.019529,45.172508
-            44.766836,47.156944
-            43.732541,49.738638
-            40.202101,49.979245
-         </coordinates>
-      </LineString>
-</Placemark>
-<Placemark>
 <name>784</name>
       <styleUrl>#lineStyle1</styleUrl>
       <LineString>
@@ -1093,54 +981,6 @@
             48.370502,56.535817
             47.308522,59.114325
             42.741877,59.572233
-         </coordinates>
-      </LineString>
-</Placemark>
-<Placemark>
-<name>804</name>
-      <styleUrl>#lineStyle1</styleUrl>
-      <LineString>
-         <tessellate>1</tessellate>
-         <coordinates>
-            59.279661,2.722755
-            57.453812,1.358897
-            57.453812,-1.358897
-            59.279661,-2.722755
-            61.609194,-1.367709
-            61.609194,1.367709
-            59.279661,2.722755
-         </coordinates>
-      </LineString>
-</Placemark>
-<Placemark>
-<name>805</name>
-      <styleUrl>#lineStyle1</styleUrl>
-      <LineString>
-         <tessellate>1</tessellate>
-         <coordinates>
-            58.134049,10.762531
-            56.153730,9.410485
-            56.538602,6.746951
-            58.854043,5.423991
-            60.789430,6.781149
-            60.462243,9.453037
-            58.134049,10.762531
-         </coordinates>
-      </LineString>
-</Placemark>
-<Placemark>
-<name>811</name>
-      <styleUrl>#lineStyle1</styleUrl>
-      <LineString>
-         <tessellate>1</tessellate>
-         <coordinates>
-            48.370502,56.535817
-            45.319290,54.471709
-            46.358818,51.914084
-            50.089862,51.385882
-            53.168821,53.301639
-            52.510724,55.896135
-            48.370502,56.535817
          </coordinates>
       </LineString>
 </Placemark>
@@ -2729,22 +2569,6 @@
       </LineString>
 </Placemark>
 <Placemark>
-<name>1026</name>
-      <styleUrl>#lineStyle1</styleUrl>
-      <LineString>
-         <tessellate>1</tessellate>
-         <coordinates>
-            43.590702,71.637910
-            46.785263,69.120644
-            52.796885,68.412355
-            58.245722,70.269627
-            56.499177,72.963088
-            47.477814,73.611270
-            43.590702,71.637910
-         </coordinates>
-      </LineString>
-</Placemark>
-<Placemark>
 <name>1027</name>
       <styleUrl>#lineStyle1</styleUrl>
       <LineString>
@@ -2789,54 +2613,6 @@
             22.492601,77.731778
             11.250000,76.806364
             11.250000,74.433771
-         </coordinates>
-      </LineString>
-</Placemark>
-<Placemark>
-<name>1054</name>
-      <styleUrl>#lineStyle1</styleUrl>
-      <LineString>
-         <tessellate>1</tessellate>
-         <coordinates>
-            22.492601,77.731778
-            31.213127,75.910602
-            42.054994,75.949875
-            47.596105,77.970783
-            40.452275,80.297811
-            25.084968,80.068682
-            22.492601,77.731778
-         </coordinates>
-      </LineString>
-</Placemark>
-<Placemark>
-<name>1533</name>
-      <styleUrl>#lineStyle1</styleUrl>
-      <LineString>
-         <tessellate>1</tessellate>
-         <coordinates>
-            -74.682345,-47.957800
-            -76.786946,-46.187009
-            -80.713054,-46.187009
-            -82.817655,-47.957800
-            -80.893244,-50.339495
-            -76.606756,-50.339495
-            -74.682345,-47.957800
-         </coordinates>
-      </LineString>
-</Placemark>
-<Placemark>
-<name>1534</name>
-      <styleUrl>#lineStyle1</styleUrl>
-      <LineString>
-         <tessellate>1</tessellate>
-         <coordinates>
-            -63.208162,-45.818158
-            -65.580052,-44.140292
-            -69.204669,-44.889198
-            -70.734116,-47.323802
-            -68.366302,-49.071712
-            -64.451110,-48.318522
-            -63.208162,-45.818158
          </coordinates>
       </LineString>
 </Placemark>

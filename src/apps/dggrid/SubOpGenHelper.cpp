@@ -30,6 +30,7 @@
 #include <iostream>
 #include <set>
 #include <cstdlib>
+#include <cmath>
 
 #include "clipper.hpp"
 #include <dglib/DgIVec2D.h>
@@ -179,6 +180,29 @@ SubOpGen::evalCell (const DgIDGGBase& dgg, const DgContCartRF& cc1,
            ClipperLib::Paths solution;
            c.Execute(ClipperLib::ctIntersection, solution, ClipperLib::pftNonZero,
                      ClipperLib::pftNonZero);
+
+           // coarse clipping cell boundaries run along the fine grid's edges and
+           // vertices, so many fine cells only touch them; the integer clipper
+           // coordinates turn those touches into slivers less than a clipper unit
+           // wide, which appear or vanish with tiny numerical perturbations.
+           // treat any overlap thinner than half a clipper unit as touching
+           if (coarseCellClip && solution.size() != 0) {
+              long double solArea = 0.0L;
+              for (const auto& path: solution)
+                 solArea += std::fabs(ClipperLib::Area(path));
+
+              long double perimeter = 0.0L;
+              const ClipperLib::Path& cp = cellPoly[0];
+              for (size_t j = 0; j < cp.size(); j++) {
+                 const ClipperLib::IntPoint& p1 = cp[j];
+                 const ClipperLib::IntPoint& p2 = cp[(j + 1) % cp.size()];
+                 perimeter += std::hypot((long double) (p2.X - p1.X),
+                                         (long double) (p2.Y - p1.Y));
+              }
+
+              if (solArea < 0.5L * perimeter)
+                 solution.clear();
+           }
 
            if (solution.size() != 0) {
               accepted = true; // a hole may make this false

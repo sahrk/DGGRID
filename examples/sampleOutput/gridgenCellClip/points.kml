@@ -114,14 +114,6 @@
       </Point>
    </Placemark>
    <Placemark>
-      <name>54</name>
-      <Point>
-         <coordinates>
-            -29.539671,71.187339
-         </coordinates>
-      </Point>
-   </Placemark>
-   <Placemark>
       <name>55</name>
       <Point>
          <coordinates>
@@ -142,14 +134,6 @@
       <Point>
          <coordinates>
             -23.436724,61.709876
-         </coordinates>
-      </Point>
-   </Placemark>
-   <Placemark>
-      <name>82</name>
-      <Point>
-         <coordinates>
-            -32.120367,63.027198
          </coordinates>
       </Point>
    </Placemark>
@@ -250,14 +234,6 @@
       </Point>
    </Placemark>
    <Placemark>
-      <name>297</name>
-      <Point>
-         <coordinates>
-            -18.977739,47.384192
-         </coordinates>
-      </Point>
-   </Placemark>
-   <Placemark>
       <name>298</name>
       <Point>
          <coordinates>
@@ -278,14 +254,6 @@
       <Point>
          <coordinates>
             -5.663596,44.263336
-         </coordinates>
-      </Point>
-   </Placemark>
-   <Placemark>
-      <name>325</name>
-      <Point>
-         <coordinates>
-            -10.424347,41.848648
          </coordinates>
       </Point>
    </Placemark>
@@ -386,14 +354,6 @@
       </Point>
    </Placemark>
    <Placemark>
-      <name>540</name>
-      <Point>
-         <coordinates>
-            11.250000,37.279986
-         </coordinates>
-      </Point>
-   </Placemark>
-   <Placemark>
       <name>541</name>
       <Point>
          <coordinates>
@@ -414,14 +374,6 @@
       <Point>
          <coordinates>
             22.224793,42.238106
-         </coordinates>
-      </Point>
-   </Placemark>
-   <Placemark>
-      <name>568</name>
-      <Point>
-         <coordinates>
-            21.594476,38.032172
          </coordinates>
       </Point>
    </Placemark>
@@ -522,14 +474,6 @@
       </Point>
    </Placemark>
    <Placemark>
-      <name>783</name>
-      <Point>
-         <coordinates>
-            41.477739,47.384192
-         </coordinates>
-      </Point>
-   </Placemark>
-   <Placemark>
       <name>784</name>
       <Point>
          <coordinates>
@@ -550,30 +494,6 @@
       <Point>
          <coordinates>
             44.127142,57.024600
-         </coordinates>
-      </Point>
-   </Placemark>
-   <Placemark>
-      <name>804</name>
-      <Point>
-         <coordinates>
-            59.836592,0.000000
-         </coordinates>
-      </Point>
-   </Placemark>
-   <Placemark>
-      <name>805</name>
-      <Point>
-         <coordinates>
-            58.485120,8.102658
-         </coordinates>
-      </Point>
-   </Placemark>
-   <Placemark>
-      <name>811</name>
-      <Point>
-         <coordinates>
-            49.287589,53.959660
          </coordinates>
       </Point>
    </Placemark>
@@ -1370,14 +1290,6 @@
       </Point>
    </Placemark>
    <Placemark>
-      <name>1026</name>
-      <Point>
-         <coordinates>
-            52.039671,71.187339
-         </coordinates>
-      </Point>
-   </Placemark>
-   <Placemark>
       <name>1027</name>
       <Point>
          <coordinates>
@@ -1398,30 +1310,6 @@
       <Point>
          <coordinates>
             20.755979,75.390915
-         </coordinates>
-      </Point>
-   </Placemark>
-   <Placemark>
-      <name>1054</name>
-      <Point>
-         <coordinates>
-            34.942972,78.135141
-         </coordinates>
-      </Point>
-   </Placemark>
-   <Placemark>
-      <name>1533</name>
-      <Point>
-         <coordinates>
-            -78.750000,-48.586592
-         </coordinates>
-      </Point>
-   </Placemark>
-   <Placemark>
-      <name>1534</name>
-      <Point>
-         <coordinates>
-            -66.907986,-46.620237
          </coordinates>
       </Point>
    </Placemark>

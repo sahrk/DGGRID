@@ -109,6 +109,6 @@ clipper_scale_factor 1000000 (default)
 * No intersections in quad 11.
 
 ** grid generation complete **
-accepted 272 cells / 644 tested
-acceptance rate is 42.236%
+accepted 258 cells / 644 tested
+acceptance rate is 40.0621%
 
