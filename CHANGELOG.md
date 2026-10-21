@@ -32,6 +32,20 @@ All changes are by Kevin Sahr, unless otherwise noted.
 - loss of precision near rotated icosahedron vertices
 - incorrect ISEA rotation for points exactly on face medians
 - incorrect indexing children with Z3 and ZORDER indexing
+- segmentation fault on TRANSFORM_POINTS with GDAL point input that has no geometry
+- segmentation fault on COARSE_CELLS clip addresses with a space input delimiter
+- no points binned or transformed for placements after the first with multiple or random placements
+- ENUMERATION labels all 0 outside GENERATE_GRID
+- GEO text addresses and labels ignored precision
+- indexing parent and children output files not suffixed for multiple placements or split output
+- random points not output with GDAL_COLLECTION point output, and doubled file name suffixes
+- wrong error message for indexing children output without a hierarchical indexing system
+- input_address_type PLANE accepted and then failing; it is now rejected with a clear error
+- SEQNUM addresses rejected for point input with aperture sequence grids
+- clip_subset_type COARSE_CELL_FILES could not be selected
+- GENERATE_GRID tried to open the point input file when point_input_file_type was set
+- precision had no upper limit; it is now limited to 30
+- OUTPUT_STATS printed a statistics table for each placement
 
 ## [9.03b] - 2026-07-19
 ### Added
