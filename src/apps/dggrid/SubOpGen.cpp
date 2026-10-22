@@ -83,7 +83,7 @@ SubOpGen::SubOpGen (OpBasic& op, bool _activate)
      clipAIGen (false), clipGDAL(false), clipShape(false), clipCellRes (0),
      addressFiles(false),
      nClipCellDensify (1), nudge (0.001), doPointInPoly (true),
-     doPolyIntersect (false)
+     doPolyIntersect (false), polyclipAlgo (CLIPPER1)
 {
    // turn-on/off the available sub operations
    op.mainOp.active = true;
@@ -141,6 +141,15 @@ SubOpGen::initializeOp (void)
 
    // clipper_scale_factor <unsigned long int>
    pList().insertParam(new DgULIntParam("clipper_scale_factor", 1000000L, 1, ULONG_MAX, true));
+
+   // polyclip_algo <CLIPPER1 | GDAL (with GEOS)>
+   {
+      std::vector<std::string> choices = {"CLIPPER1"};
+#ifdef USE_GDAL
+      choices.push_back("GDAL");
+#endif
+      pList().insertParam(new DgStringChoiceParam("polyclip_algo", "CLIPPER1", choices));
+   }
 
    return 0;
 
@@ -243,6 +252,17 @@ SubOpGen::setupOp (void)
 
    getParamValue(pList(), "clipper_scale_factor", clipperFactor, false);
    invClipperFactor = 1.0L / clipperFactor;
+
+   getParamValue(pList(), "polyclip_algo", dummy, false);
+   polyclipAlgo = CLIPPER1;
+#ifdef USE_GDAL
+   if (dgg::util::toUpper(dummy) == "GDAL") {
+      if (!OGRGeometryFactory::haveGEOS())
+         ::report("polyclip_algo GDAL requires a GDAL library built with GEOS",
+                  DgBase::Fatal);
+      polyclipAlgo = GDAL_POLYCLIP;
+   }
+#endif
 
    return 0;
 
