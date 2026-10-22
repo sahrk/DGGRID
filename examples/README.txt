@@ -35,7 +35,9 @@ messages.
     to this directory or absolute). Examples with no reference
     output are run but not diffed. After each example it prints
     "dggrid exit status N" to its standard output (not to the
-    example's log file).
+    example's log file). If an example directory has more than
+    one metafile starting with the example's name (e.g. h3Gen.meta,
+    h3GenString.meta and h3GenCustom.meta), all of them are run.
 
   doexamplesNoGDALorH3.sh - works exactly like doexamples.sh
     above except it only executes the examples listed in
@@ -53,10 +55,6 @@ messages.
     examples are skipped if "dggrid -v" does not report that
     DGGRID was built with H3. Set the environment variable
     DGGRID to use a different dggrid executable.
-
-    (doexamples.sh only runs the metafile named for each example,
-    so it does not run h3GenString.meta, h3GenCustom.meta,
-    h3TransformGeo.meta or h3TransformQ2DI.meta.)
 
 The above assume that you built DGGRID using cmake. If
 you built DGGRID using the legacy Makefiles, then use

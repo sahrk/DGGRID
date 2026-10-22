@@ -24,8 +24,14 @@ do
    echo "############################################"
    echo "#### running example $f " 
    cd "$f" || { echo "MISSING EXAMPLE $f"; continue; }
-   $dggridExe ${f}.meta >& outputfiles/${f}.txt
-   echo "dggrid exit status $?"
+   # every metafile in the example's directory whose name starts with the
+   # example's name (usually just ${f}.meta)
+   for meta in ${f}*.meta
+   do
+      m=${meta%.meta}
+      $dggridExe ${meta} >& outputfiles/${m}.txt
+      echo "dggrid exit status $?"
+   done
    echo diffs\?
    if [ -d "$refPath/$f" ]; then
       diff -rwb outputfiles "$refPath/$f"
