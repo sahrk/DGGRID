@@ -1466,15 +1466,14 @@ SubOpGen::createClipRegions (const DgIDGGBase& dgg,
 
    //// adjust the bounds for boundary buffers if needed ////
 
-   // Class III cells are large relative to the index grid (circumradius ~1.5
-   // index units), so a cell crossed by a polygon edge can have its center up
-   // to ~3.5 index units outside the box of the cells holding the polygon's
-   // vertices. Their centers also do not lie on the quad edges: cells owned
-   // by a neighboring quad lie up to quadOverRows index rows beyond any edge
-   // of a quad (see DgQ2DDtoIConverter).
+   // Class III cell vertices extend two substrate index rows from a Class I
+   // center and three from a Class II center. A polygon edge can cross a cell
+   // even when both of its endpoints quantize to other cells, so its center
+   // can be as far as twice that reach beyond the endpoints' index bounds.
+   // Cells owned by a neighboring quad can lie two rows beyond its edge.
    const long long int quadOverRows = (dgg.isClassIII()) ? 2 : 0;
    int skipVal = (op.dggOp.aperture == 3) ? 3 : 1;
-   if (dgg.isClassIII()) skipVal = 4;
+   if (dgg.isClassIII()) skipVal = dgg.isClassI() ? 4 : 6;
    for (int q = 1; q < 11; q++) {
       if (!clipRegions[q].isQuadUsed()) continue;
 

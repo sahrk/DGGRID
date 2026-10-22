@@ -67,9 +67,11 @@ if(WITH_H3)
     # DgH3System needs H3's internal FaceIJK functions (exported by libh3 but
     # not declared in h3api.h) and the public constructCell/getIndexDigit
     # (H3 4.4.0). Check the version and that the symbols link.
-    include(CheckCXXSourceCompiles)
+    # H3 exports a C API, and its imported target may require C language
+    # features such as c_std_99. Probe it as C so try_compile enables them.
+    include(CheckCSourceCompiles)
     set(CMAKE_REQUIRED_LIBRARIES ${H3_TARGET})
-    check_cxx_source_compiles("
+    check_c_source_compiles("
       #include <h3api.h>
       #if (H3_VERSION_MAJOR*10000 + H3_VERSION_MINOR*100 + H3_VERSION_PATCH) < ${H3_MIN_VERSION_NUM}
       #error H3 is older than ${H3_MIN_VERSION}
@@ -79,14 +81,12 @@ if(WITH_H3)
       message(STATUS "H3 found is older than ${H3_MIN_VERSION}; building without H3")
       set(H3_FOUND FALSE)
     else()
-      check_cxx_source_compiles("
+      check_c_source_compiles("
         #include <h3api.h>
-        extern \"C\" {
         typedef struct { int i; int j; int k; } CoordIJK;
         typedef struct { int face; CoordIJK coord; } FaceIJK;
         H3Index _faceIjkToH3 (const FaceIJK* fijk, int res);
         H3Error _h3ToFaceIjk (H3Index h, FaceIJK* fijk);
-        }
         int main() {
           FaceIJK f = {0, {0, 0, 0}};
           H3Index h = _faceIjkToH3(&f, 0);

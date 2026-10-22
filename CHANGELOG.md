@@ -43,6 +43,8 @@ All changes are by Kevin Sahr, unless otherwise noted.
 ### Fixed
 - incorrect cell boundaries across face edges in odd-resolution aperture 7 grids
 - missing cells along quad edges when clipping odd-resolution aperture 7 grids to polygons
+- missing class II/III cells at quad edges when polygon vertices are more than four substrate rows from an intersected cell
+- H3 detection with CMake versions that reject C-only features in C++ compile probes
 - incorrect projection selection for non-ISEA dggs_type presets
 - loss of precision near rotated icosahedron vertices
 - incorrect ISEA rotation for points exactly on face medians
