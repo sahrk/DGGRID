@@ -33,13 +33,14 @@ All changes are by Kevin Sahr, unless otherwise noted.
 - IGEO7 is now an alias for the IGEO7v2 WGS84 datum grid (with a warning)
 - use exact icosahedron, ISEA and WGS84 constants
 - hierarchically indexed ISEA and IVEA presets set shapefile_id_field_length 16
-- DYMAXION orientation uses H3's more precise vertices, with vertex and face numbering matching H3. NOTE: this changes the FULLER4D diamond tiling.
+- DYMAXION orientation now precisely matches H3's, with matching vertex and face numbering. 
+NOTE: this changes the definition of FULLER4D. Set the vert0 parameters by hand to v9.0b (or earlier) 
+values if desired to match the original grid.
 - INT64 hierarchical indexes are written by each indexing system's own text form
 - temporarily removed pdf version of manual; it needs some work
 ### Fixed
 - incorrect cell boundaries across face edges in odd-resolution aperture 7 grids
 - missing cells along quad edges when clipping odd-resolution aperture 7 grids to polygons
-- missing class II/III cells at quad edges when polygon vertices are more than four substrate rows from an intersected cell
 - incorrect projection selection for non-ISEA dggs_type presets
 - loss of precision near rotated icosahedron vertices
 - incorrect ISEA rotation for points exactly on face medians

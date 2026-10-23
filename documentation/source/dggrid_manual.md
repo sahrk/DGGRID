@@ -69,7 +69,7 @@ The original **DGGRID** specifications were developed by (in alphabetical order)
 - Angus Johnson's Clipper library; see [http://www.angusj.com](http://www.angusj.com).
 - George Marsaglia's multiply-with-carry "Mother-of-all-RNGs" pseudo-random number generation function.
 - The gnomonic projection code is adapted from Gerald Evenden's PROJ.4 library
-- The icosahedral Gnomonic projection and parts of the H3 index code are adapted from Uber's H3 library
+- The icosahedral gnomonic projection and parts of the H3 index code are adapted from Uber's H3 library
 - Frank Warmerdam's Shapelib library
 
 The github source code distribution contains instructions on building **DGGRID**. The examples directory contains example **DGGRID** metafiles (with associated input files); they are listed in [**Appendix D**](#appendix-d-dggrid-examples).
