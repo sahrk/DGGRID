@@ -1317,7 +1317,7 @@
       <name>300fffffffffffff</name>
       <Point>
          <coordinates>
-            -20.467474,-0.000000
+            -20.467474,0.000000
          </coordinates>
       </Point>
    </Placemark>
@@ -1957,7 +1957,7 @@
       <name>355fffffffffffff</name>
       <Point>
          <coordinates>
-            36.159970,-0.000000
+            36.159970,0.000000
          </coordinates>
       </Point>
    </Placemark>
@@ -5853,7 +5853,7 @@
       <name>a00fffffffffffff</name>
       <Point>
          <coordinates>
-            159.532526,-0.000000
+            159.532526,0.000000
          </coordinates>
       </Point>
    </Placemark>

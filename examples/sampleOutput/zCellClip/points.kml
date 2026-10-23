@@ -1589,7 +1589,7 @@
       <name>2273</name>
       <Point>
          <coordinates>
-            -179.560022,-0.000000
+            -179.560022,0.000000
          </coordinates>
       </Point>
    </Placemark>
@@ -1933,7 +1933,7 @@
       <name>2357</name>
       <Point>
          <coordinates>
-            -157.939978,-0.000000
+            -157.939978,0.000000
          </coordinates>
       </Point>
    </Placemark>
