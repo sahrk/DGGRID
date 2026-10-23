@@ -241,6 +241,32 @@ static std::string to_string(const SourceT& source)
  return os.str();
 }
 
+// Remove the sign only when a fixed-point number displays as zero.
+inline std::string suppressNegativeZero(std::string output)
+{
+   for (size_t sign = 0; sign < output.size(); ++sign)
+   {
+      if (output[sign] != '-' || sign + 1 >= output.size() ||
+          output[sign + 1] != '0')
+         continue;
+
+      size_t end = sign + 1;
+      bool zero = true;
+      while (end < output.size() &&
+             ((output[end] >= '0' && output[end] <= '9') || output[end] == '.'))
+      {
+         if (output[end] >= '1' && output[end] <= '9')
+            zero = false;
+         ++end;
+      }
+
+      if (zero && (end == output.size() ||
+                   (output[end] != 'e' && output[end] != 'E')))
+         output.erase(sign, 1);
+   }
+   return output;
+}
+
 // JFW: We should tidy all of this up later:
 inline std::string to_string(long double val, const char *formatStr)
 {
@@ -249,7 +275,7 @@ inline std::string to_string(long double val, const char *formatStr)
 
    snprintf(buffer, maxBuffer, formatStr, val);
 
-   return std::string(buffer);
+   return suppressNegativeZero(buffer);
 }
 
 inline std::string to_string(int val, int padWidth)

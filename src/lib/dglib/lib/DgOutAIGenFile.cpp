@@ -57,10 +57,7 @@ DgOutAIGenFile::writeVec (const DgDVec2D& pt)
 //
 ////////////////////////////////////////////////////////////////////////////////
 {
-   const int maxBuffSize = 200;
-   char buff[maxBuffSize];
-
-   snprintf(buff, maxBuffSize, formatStr(), pt.x(), pt.y());
+   const std::string buff = formatVec(pt.x(), pt.y());
 
    *this << buff;
 

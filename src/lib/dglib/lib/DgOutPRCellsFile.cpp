@@ -57,11 +57,8 @@ DgOutPRCellsFile::writeVec (const DgDVec2D& pt)
 //
 ////////////////////////////////////////////////////////////////////////////////
 {
-   const int maxBuffSize = 200;
-   char buff[maxBuffSize];
-
    // switch to lat/lon order
-   snprintf(buff, maxBuffSize, formatStr(), pt.y(), pt.x());
+   const std::string buff = formatVec(pt.y(), pt.x());
 
    *this << buff;
 

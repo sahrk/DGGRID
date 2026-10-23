@@ -57,11 +57,8 @@ DgOutPRPtsFile::writeVec (const DgDVec2D& pt)
 //
 ////////////////////////////////////////////////////////////////////////////////
 {
-   const int maxBuffSize = 200;
-   char buff[maxBuffSize];
-
    // want latitude, longitude
-   snprintf(buff, maxBuffSize, formatStr(), pt.y(), pt.x());
+   const std::string buff = formatVec(pt.y(), pt.x());
 
    *this << buff;
 

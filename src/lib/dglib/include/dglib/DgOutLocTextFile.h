@@ -60,6 +60,8 @@ class DgOutLocTextFile : public DgOutputStream, public DgOutLocFile {
 
       virtual void setFormatStr(void) = 0;
 
+      std::string formatVec(long double first, long double second) const;
+
       std::string formatStr_;
 
    private:
