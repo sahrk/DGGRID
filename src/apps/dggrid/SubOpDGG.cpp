@@ -593,6 +593,10 @@ SubOpDGG::setupOp (void)
             ::report("SubOpDGG::setupOp(): dggs_type " + tmp +
                      " has no hierarchical indexing system", DgBase::Fatal);
 
+         // Z3, ZORDER and Z7 INT64 indexes are printed as 16 hex digits;
+         // H3's canonical indexes are 15 digits.
+         if (!isH3Preset)
+            pList().setPresetParam("shapefile_id_field_length", "16");
          pList().setPresetParam("hier_indexing_system_type", hierNdxSys);
          pList().setPresetParam("input_address_type", "HIERNDX", true);
          pList().setPresetParam("input_hier_ndx_system", hierNdxSys, true);

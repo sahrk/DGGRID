@@ -343,7 +343,7 @@ DGGRID provides two ways to generate output in either ESRI Shapefile format or K
 1. Set cell_output_type and/or point_output_type to SHAPEFILE or KML, or
 2. Set cell_output_type and/or point_output_type to GDAL and cell_output_gdal_format and/or point_output_gdal_format to SHAPEFILE or KML
 
-When output is to an ESRI Shapefile the cell identifier is stored in a global_id field. The ESRI Shapefile format limits integer fields to 32-bit integer size, which is not sufficient for storing the identifiers associated with high resolution DGGs. Therefore **DGGRID** creates the Shapefile field **global_id** as a fixed width string with a width specified by the **integer** parameter shapefile_id_field_length (default 11).
+When output is to an ESRI Shapefile the cell identifier is stored in a global_id field. The ESRI Shapefile format limits integer fields to 32-bit integer size, which is not sufficient for storing the identifiers associated with high resolution DGGs. Therefore **DGGRID** creates the Shapefile field **global_id** as a fixed width string with a width specified by the **integer** parameter shapefile_id_field_length (default 11, or 16 for hierarchically indexed ISEA and IVEA presets and their IGEO7 aliases). The H3 preset uses a width of 15.
 
 The color and width of KML output cell boundaries can be controlled using the **string** parameter kml_default_color (default ffffffff or opaque white) and the **integer** parameter kml_default_width (default 4) respectively. KML color values are expressed in 8 digit hexadecimal notation of the form *aabbggrr*, with two hexadecimal digits (00 to ff) each for the alpha, blue, green, and red components.
 
@@ -596,6 +596,7 @@ output_cell_label_type: OUTPUT_ADDRESS_TYPE
 output_address_type: HIERNDX
 output_hier_ndx_system: system
 output_hier_ndx_form: INT64
+shapefile_id_field_length: 16
 ```
 
 | **Base grid** | **system** |
