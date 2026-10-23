@@ -61,6 +61,7 @@ values if desired to match the original grid.
 - OUTPUT_STATS printed a statistics table for each placement
 - negative zero (e.g. -0.0000000) in output
 - SEQNUM input values above 32 bits misread on Windows
+- lower case choice parameter values (e.g. superfund, mixed43) not always recognized
 
 ## [9.03b] - 2026-07-19
 ### Added

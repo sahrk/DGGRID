@@ -674,15 +674,12 @@ class DgStringChoiceParam : public DgChoiceParam<std::string> {
 
       DgStringChoiceParam (const std::string& nameIn,
                            const std::vector<std::string*>* choicesIn = 0)
-          : DgChoiceParam<std::string> (nameIn, choicesIn)
-                { lowerChoices(); }
+          : DgChoiceParam<std::string> (nameIn, choicesIn) { }
 
       DgStringChoiceParam (const std::string& nameIn, const std::string& valIn,
                      const std::vector<std::string*>* choicesIn = 0, bool validIn = true)
           : DgChoiceParam<std::string> (nameIn, valIn, choicesIn, validIn)
                 {
-                   lowerChoices();
-
                    if (!validate()) {
                      report(
                        std::string("Invalid initialization data for parameter:\n")
@@ -693,16 +690,13 @@ class DgStringChoiceParam : public DgChoiceParam<std::string> {
 
       DgStringChoiceParam (const std::string& nameIn,
                            std::initializer_list<std::string> choicesIn)
-          : DgChoiceParam<std::string> (nameIn, choicesIn)
-                { lowerChoices(); }
+          : DgChoiceParam<std::string> (nameIn, choicesIn) { }
 
       DgStringChoiceParam (const std::string& nameIn, const std::string& valIn,
                            std::initializer_list<std::string> choicesIn,
                            bool validIn = true)
           : DgChoiceParam<std::string> (nameIn, valIn, choicesIn, validIn)
                 {
-                   lowerChoices();
-
                    if (!validate()) {
                      report(
                        std::string("Invalid initialization data for parameter:\n")
@@ -713,16 +707,13 @@ class DgStringChoiceParam : public DgChoiceParam<std::string> {
 
       DgStringChoiceParam (const std::string& nameIn,
                            const std::vector<std::string>& choicesIn)
-          : DgChoiceParam<std::string> (nameIn, choicesIn)
-                { lowerChoices(); }
+          : DgChoiceParam<std::string> (nameIn, choicesIn) { }
 
       DgStringChoiceParam (const std::string& nameIn, const std::string& valIn,
                            const std::vector<std::string>& choicesIn,
                            bool validIn = true)
           : DgChoiceParam<std::string> (nameIn, valIn, choicesIn, validIn)
                 {
-                   lowerChoices();
-
                    if (!validate()) {
                      report(
                        std::string("Invalid initialization data for parameter:\n")
@@ -732,22 +723,20 @@ class DgStringChoiceParam : public DgChoiceParam<std::string> {
                 }
 
    private:
-      void lowerChoices()
-            {
-               for (unsigned int i = 0; i < choices_.size(); i++) {
-                  *choices_[i] = toLower(*choices_[i]);
-               }
-            }
-
       virtual std::string valToStr (void) const { return value_; }
       virtual std::string strToVal (const std::string& strVal) const { return strVal; }
 
+      // matching is case-insensitive; a matching value is replaced by the
+      // choice as spelled when the parameter was declared, so that code can
+      // compare against that spelling
       virtual bool validate (void)
                 {
                   std::string lower = toLower(value());
                    for (unsigned int i = 0; i < choices_.size(); i++) {
-                      if (*choices_[i] == lower)
-		       return this->setIsValid(true);
+                      if (toLower(*choices_[i]) == lower) {
+                         value_ = *choices_[i];
+                         return this->setIsValid(true);
+                      }
                    }
 
                   std::string err(std::string("Value '") + value() +

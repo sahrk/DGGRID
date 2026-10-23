@@ -8,7 +8,7 @@
 
 ````{container} landscape-appendix
 
-A preset grid type can be specified using the choice parameter dggs_type. All preset grid types share the following default parameter values:
+A preset grid type can be specified using the choice parameter dggs_type. The default, CUSTOM, sets no parameters; its row in the table below gives the parameter defaults. All other preset grid types share the following default parameter values:
 
 ```
 dggs_base_poly: ICOSAHEDRON
@@ -50,7 +50,7 @@ The orientation preset in turn sets the following (see **Section 4**):
 | **ISEAL**              | 11.20              | 58.282525588538995 (atan φ)     | 0.0                    | AUTHALIC_SPHERE       |
 | **DYMAXION**           | 10.5361990754676369448 | 64.7000001279348804496    | 125.687650893546277353 | AUTHALIC_SPHERE       |
 
-The table below gives the values of other parameters that are set by each preset DGG type that is not one of the ISEA, IVEA, or FULLER base grids. Note that any preset parameter value can be overridden by explicitly specifying a different value for that parameter in the metafile (the position of the parameter relative to dggs_type does not matter).
+The table below gives the values of other parameters that are set by each preset DGG type that is not one of the ISEA, IVEA, or FULLER base grids. Note that any preset parameter value can be overridden by explicitly specifying a different value for that parameter in the metafile (the position of the parameter relative to dggs_type does not matter). The exceptions are SUPERFUND, which requires dggs_aperture_type MIXED43, dggs_num_aperture_4_res 2, dggs_res_specify_type SPECIFIED and output_cell_label_type SUPERFUND, and H3, which requires dggs_res_specify_type SPECIFIED.
 
 | **dggs_type** | **dggs_topology** | **dggs_proj** | **dggs_res_spec** | **dggs_aperture_type** | **dggs_aperture** | **dggs_num_aperture_4_res** | **dggs_aperture_sequence** |
 |---------------|-------------------|---------------|-------------------|------------------------|-------------------|-----------------------------|-----------------------------|
@@ -62,7 +62,7 @@ The table below gives the values of other parameters that are set by each preset
 | **IGEO7v2**   | HEXAGON           | ISEA          | 9                 | PURE                   | 7                 | N/A                         | N/A                         |
 | **IGEO7**     | HEXAGON           | ISEA          | 9                 | PURE                   | 7                 | N/A                         | N/A                         |
 
-> **Note:** In addition to the listed parameters, the preset type **SUPERFUND** also sets the value of the parameter `output_cell_label_type` to `SUPERFUND`, and the preset type **H3** sets `h3_boundary_def` to `H3` and `densification` and `clip_cell_densification` to `0`.
+> **Note:** In addition to the listed parameters, the preset type **SUPERFUND** also sets the value of the parameter `output_cell_label_type` to `SUPERFUND`, and the preset type **H3** sets `h3_boundary_def` to `H3` and `densification` and `clip_cell_densification` to `0`. **H3** is available only in a build with the H3 library; for it dggs_res_spec is the H3 resolution (0 to 15), and the DGGS resolution is two greater.
 
 The ISEA, IVEA and FULLER presets are formed from the projection and a base grid. The base grid sets the following parameters:
 
