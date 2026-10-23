@@ -39,6 +39,7 @@ myst_heading_anchors = 3
 exclude_patterns = [
     'appendix_a.md',  # included into the manual
     'appendix_b.md',  # included into the manual
+    'appendix_c.md',  # included into the manual
     'appendix_d.md',  # included into the manual
     '_build',
     'convert',
@@ -82,7 +83,7 @@ html_css_files = ['custom.css']
 html_extra_path = [str(_doxygen_out)] if (_doxygen_out / 'api').is_dir() else []
 
 # -- Options for LaTeX/PDF output --------------------------------------------
-# Appendix A wraps its parameter table in a pdflscape landscape environment.
+# Appendices A–D use pdflscape landscape environments.
 
 latex_elements = {
     'preamble': r'''

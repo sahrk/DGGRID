@@ -43,7 +43,7 @@ cd documentation
 make latexpdf
 ```
 
-The PDF is `documentation/source/_build/latex/dggrid.pdf`. Appendix A is
+The PDF is `documentation/source/_build/latex/dggrid.pdf`. Appendices A–D are
 typeset in landscape.
 
 To skip Doxygen:
