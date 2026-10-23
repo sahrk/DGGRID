@@ -2,7 +2,7 @@
 
 ## General Information
 
-__DGGRID__ version 9.1 released October 10, 2026
+__DGGRID__ version 9.1 released October 23, 2026
 https://github.com/sahrk/DGGRID
 
 __Southern Terra Cognita Laboratory__  

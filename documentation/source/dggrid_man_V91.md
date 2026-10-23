@@ -79,7 +79,7 @@ The github source code distribution contains instructions on building **DGGRID**
 ```
 
 ````{container} center-text
-**DGGRID** version 9.1 was released October 10, 2026
+**DGGRID** version 9.1 was released October 23, 2026
 
 **[www.discreteglobalgrids.org](https://www.discreteglobalgrids.org)**
 
