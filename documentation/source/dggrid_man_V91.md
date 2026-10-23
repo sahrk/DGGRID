@@ -69,7 +69,7 @@ The original **DGGRID** specifications were developed by (in alphabetical order)
 - Angus Johnson's Clipper library; see [http://www.angusj.com](http://www.angusj.com).
 - George Marsaglia's multiply-with-carry "Mother-of-all-RNGs" pseudo-random number generation function.
 - The gnomonic projection code is adapted from Gerald Evenden's PROJ.4 library
-- The icosahedral GNOMONIC projection and parts of the H3 index code are adapted from Uber's H3 library
+- The icosahedral Gnomonic projection and parts of the H3 index code are adapted from Uber's H3 library
 - Frank Warmerdam's Shapelib library
 
 The github source code distribution contains instructions on building **DGGRID**. The examples directory contains example **DGGRID** metafiles (with associated input files); they are listed in [**Appendix D**](#appendix-d-dggrid-examples).
@@ -211,7 +211,7 @@ Detailed information about the parameters that specify each of the DGG design ch
 - `CUSTOM` (default) - indicates that the grid parameters will be specified manually (see below)
 - `SUPERFUND` - the **Superfund_500m** grid (see [**Appendix G**](#appendix-g-the-epa-superfund_500m-dggs))
 - `PLANETRISK` - the **PlanetRisk** grid (see [**Appendix H**](#appendix-h-the-planetrisk-dggs))
-- `H3` - the H3 grid \[Sahr, 2019.\] with H3 hierarchical indexing; requires a build with H3 (see below)
+- `H3` - the H3 grid (see [h3geo.org](https://h3geo.org)) with H3 hierarchical indexing; requires a build with H3 (see below)
 - `IGEO7` - aperture 7 hex DGGS using ISEA projection on the WGS84 ellipsoid with Z7 hierarchical indexing; the same grid as `IGEO7v2` and `ISEA7HLZ`; prior to version 9.1 this grid used the authalic sphere as per `IGEO7v1`
 - ISEA presets: `ISEA3HS`, `ISEA4HS`, `ISEA7HS`, `ISEA43HS`, `ISEA4TS`, `ISEA4DS` (spherical) and `ISEA3HL`, `ISEA4HL`, `ISEA7HL`, `ISEA43HL`, `ISEA4TL`, `ISEA4DL` (ellipsoidal)
 - IVEA presets: `IVEA3HS`, `IVEA4HS`, `IVEA7HS`, `IVEA43HS`, `IVEA4TS`, `IVEA4DS` (spherical) and `IVEA3HL`, `IVEA4HL`, `IVEA7HL`, `IVEA43HL`, `IVEA4TL`, `IVEA4DL` (ellipsoidal)
