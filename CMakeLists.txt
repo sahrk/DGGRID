@@ -126,6 +126,52 @@ add_subdirectory(src/lib/proj4lib)
 add_subdirectory(src/apps/dggrid)
 add_subdirectory(src/apps/appex)
 
+# Optional tests/ directory: nothing is built or registered unless it exists.
+#  - If tests/CMakeLists.txt exists it takes over (full control).
+#  - Otherwise the contents are discovered at configure time:
+#      tests/*.cpp      -> an executable per file, linked against the libs
+#      tests/test_*.cpp -> also registered with CTest
+#      tests/test_*.py  -> registered with CTest (run with Python3, if found)
+#    CONFIGURE_DEPENDS re-runs the glob on build so added files are picked up.
+set(TESTS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/tests)
+if(IS_DIRECTORY ${TESTS_DIR})
+  enable_testing()
+  if(EXISTS ${TESTS_DIR}/CMakeLists.txt)
+    add_subdirectory(tests)
+  else()
+    file(GLOB _test_cpps CONFIGURE_DEPENDS ${TESTS_DIR}/*.cpp)
+    foreach(_src IN LISTS _test_cpps)
+      get_filename_component(_name ${_src} NAME_WE)
+      add_executable(${_name} ${_src})
+      target_link_libraries(${_name} PRIVATE dglib dgaplib shapelib ${GDAL_LIBRARIES} ${H3_TARGET})
+      target_compile_features(${_name} PRIVATE cxx_std_11)
+      if(GDAL_FOUND)
+        target_compile_definitions(${_name} PRIVATE USE_GDAL)
+      endif()
+      if(H3_FOUND)
+        target_compile_definitions(${_name} PRIVATE USE_H3)
+      endif()
+      if(_name MATCHES "^test_")
+        add_test(NAME ${_name} COMMAND ${_name})
+      endif()
+    endforeach()
+
+    file(GLOB _test_pys CONFIGURE_DEPENDS ${TESTS_DIR}/test_*.py)
+    if(_test_pys)
+      find_package(Python3 COMPONENTS Interpreter QUIET)
+    endif()
+    if(Python3_Interpreter_FOUND)
+      foreach(_src IN LISTS _test_pys)
+        get_filename_component(_name ${_src} NAME_WE)
+        add_test(NAME ${_name}
+                 COMMAND ${Python3_EXECUTABLE} ${_src} $<TARGET_FILE:dggrid>
+                 WORKING_DIRECTORY ${TESTS_DIR})
+      endforeach()
+    endif()
+  endif()
+  message(STATUS "Found tests/ directory; building and registering its tests")
+endif()
+
 if(DOXYGEN_FOUND)
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/src/Doxyfile ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile.in @ONLY)
   add_custom_target(docs

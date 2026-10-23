@@ -1440,6 +1440,20 @@ SubOpGen::createClipRegions (const DgIDGGBase& dgg,
       }
 //cout << " sNum: " << sNum << std::endl;
 
+      // h3_boundary_def H3 applies to the clip cells as well, where H3 has
+      // cells (DGGS resolutions 2-17)
+      bool clipH3Boundary = false;
+#ifdef USE_H3
+      if (op.outOp.useH3Boundary()) {
+         op.outOp.checkH3Boundary(dgg);
+         clipH3Boundary = (clipCellRes >= 2 && clipCellRes <= 17);
+         if (!clipH3Boundary)
+            ::report("h3_boundary_def H3: clip_cell_res " +
+                     dgg::util::to_string(clipCellRes) + " has no H3 cells; "
+                     "the clip cell boundaries are DGGRID's", DgBase::Warning);
+      }
+#endif
+
       // add the cell boundaries to the clip regions
       for (std::set<unsigned long int>::iterator i = clipSeqNums.begin();
              i != clipSeqNums.end(); i++){
@@ -1453,7 +1467,7 @@ SubOpGen::createClipRegions (const DgIDGGBase& dgg,
         }
 
         DgPolygon verts(clipDgg);
-        clipDgg.setVertices(*loc, verts, nClipCellDensify);
+        clipDgg.setVertices(*loc, verts, nClipCellDensify, clipH3Boundary);
 
         // add to the clipRegions
         processOneClipPoly(verts, dgg, clipRegions, NULL);

@@ -154,6 +154,8 @@ struct SubOpDGG : public SubOpBasic {
    DgApSeq apSeq;
    int   sfRes; // superfund digit resolution
    bool  isH3Preset;  // dggs_type H3: dggs_res_spec is the H3 resolution
+   bool  h3Geometry;  // are the cells geometrically H3's (GNOMONIC projection,
+                      // DYMAXION orientation)? set by setupOp
    DgHierNdxSysType hierNdxSysType;
    int z3invalidDigit;  // padding digit for all Z3 systems`k
 };

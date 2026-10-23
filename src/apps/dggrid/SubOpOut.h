@@ -69,6 +69,11 @@ struct SubOpOut : public SubOpBasic {
    void outputCellAdd2D (const DgLocation& add2D, const std::string* labelIn = nullptr,
                DgDataList* dataList = nullptr);
 
+#ifdef USE_H3
+   // fatal if h3_boundary_def H3 cannot apply to the DGGS dgg is in
+   void checkH3Boundary (const DgIDGGBase& dgg) const;
+#endif
+
    void resetFiles (bool resetRandPts = true);
 
    // the parameters
@@ -83,6 +88,16 @@ struct SubOpOut : public SubOpBasic {
    char outputDelimiter;
 
    int nDensify;          // number of points-per-edge of densification
+#ifdef USE_H3
+   bool h3Boundary;       // output cell boundaries from H3's cellToBoundary
+                          // (h3_boundary_def H3) rather than DGGRID's vertices
+#endif
+   bool useH3Boundary (void) const
+#ifdef USE_H3
+      { return h3Boundary; }
+#else
+      { return false; }
+#endif
 
    DgGeoSphRF::DgLonWrapMode lonWrapMode;
                // how to handle outputting cells that straddle the anti-meridian

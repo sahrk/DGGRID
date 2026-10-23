@@ -361,6 +361,64 @@ DgH3System::makeSystem (const DgIDGGSBase& dggs, bool extModeInt,
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+void
+DgH3System::setCellBoundary (const DgIDGGBase& dgg, const DgQ2DICoord& add,
+                             DgPolygon& verts, int densify)
+{
+   const int r = dgg.res() - kFirstNdxRes;
+   if (r < 0 || r > kMaxH3Res)
+      ::report("DgH3System::setCellBoundary(): DGGS resolution " +
+               dgg::util::to_string(dgg.res()) + " has no H3 cell; H3 "
+               "resolutions 0-15 are DGGS resolutions 2-17", DgBase::Fatal);
+
+   FaceIJK fijk = DgH3FaceMap::toFaceIjk(q2diToProjTri(dgg, add), r);
+   H3Index h = _faceIjkToH3(&fijk, r);
+   if (h == H3_NULL || !isValidCell(h))
+      ::report("DgH3System::setCellBoundary(): no valid H3 cell for " +
+               std::string(add) + " at H3 resolution " +
+               dgg::util::to_string(r), DgBase::Fatal);
+
+   CellBoundary cb;
+   checkH3(cellToBoundary(h, &cb), "boundary of cell " + std::to_string(h));
+
+   verts = DgPolygon(dgg.geoRF());
+   std::vector<DgAddressBase*>& v = verts.addressVec();
+   for (int i = 0; i < cb.numVerts; i++) {
+      const LatLng& p1 = cb.verts[i];
+      v.push_back(new DgAddress<DgGeoCoord>(DgGeoCoord(p1.lng, p1.lat)));
+
+      if (densify <= 0) continue;
+
+      // divide the great circle arc to the next vertex
+      const LatLng& p2 = cb.verts[(i + 1) % cb.numVerts];
+      const long double x1 = cosl(p1.lat) * cosl(p1.lng);
+      const long double y1 = cosl(p1.lat) * sinl(p1.lng);
+      const long double z1 = sinl(p1.lat);
+      const long double x2 = cosl(p2.lat) * cosl(p2.lng);
+      const long double y2 = cosl(p2.lat) * sinl(p2.lng);
+      const long double z2 = sinl(p2.lat);
+
+      long double dot = x1 * x2 + y1 * y2 + z1 * z2;
+      dot = std::max(-1.0L, std::min(1.0L, dot));
+      const long double ang = acosl(dot);
+      const long double sinAng = sinl(ang);
+      if (sinAng < 1e-15L) continue;
+
+      for (int j = 1; j <= densify; j++) {
+         const long double f = (long double) j / (densify + 1);
+         const long double a = sinl((1.0L - f) * ang) / sinAng;
+         const long double b = sinl(f * ang) / sinAng;
+         const long double x = a * x1 + b * x2;
+         const long double y = a * y1 + b * y2;
+         const long double z = a * z1 + b * z2;
+         v.push_back(new DgAddress<DgGeoCoord>(
+               DgGeoCoord(atan2l(y, x), atan2l(z, sqrtl(x * x + y * y)))));
+      }
+   }
+
+} // DgH3System::setCellBoundary
+
+////////////////////////////////////////////////////////////////////////////////
 DgH3System::DgH3System (const DgIDGGSBase& dggs, bool extModeInt,
                         const std::string& name)
    : DgHierNdxSystemRFS<DgH3IntRF, DgH3StringRF>(dggs, extModeInt, name,

@@ -126,15 +126,24 @@ class DgIDGGBase : public DgDiscTopoRF<DgQ2DICoord, DgGeoCoord, long double> {
       virtual void setVertices (const DgLocation& loc, DgPolygon& vec,
                                 int densify) const;
 
+      // As above, but the boundary is H3's cellToBoundary (see
+      // DgH3System::setCellBoundary), densified along great circle arcs, if
+      // h3Boundary is true. That requires an H3 build and an H3-compatible
+      // DGGS at a resolution with H3 cells (DGGS resolutions 2-17).
+      void setVertices (const DgLocation& loc, DgPolygon& vec, int densify,
+                        bool h3Boundary) const;
+
       // Build the cell at loc (in any frame connected to this DGG; it is
       // first converted to the DGG) for output. The cell is in geoRF() with
       // its boundary densified and wrapped according to lonWrapMode; if the
       // boundary had to be wrapped and unwrapPts is true the center is
       // wrapped too. The caller owns the cell, which does not own dataList.
+      // The boundary is DGGRID's (the cell vertices, densified in the plane)
+      // unless h3Boundary is true (see setVertices).
       DgCell* makeCell (const DgLocation& loc, const std::string& label,
                         int densify, DgGeoSphRF::DgLonWrapMode lonWrapMode,
                         bool unwrapPts, DgDataList* dataList = nullptr,
-                        bool trace = false) const;
+                        bool trace = false, bool h3Boundary = false) const;
 
       virtual void setAddVertices (const DgQ2DICoord& add,
                                    DgPolygon& vec) const
