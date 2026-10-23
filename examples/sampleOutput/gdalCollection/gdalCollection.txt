@@ -43,6 +43,7 @@ output_hier_ndx_system Z3 (default)
 output_hier_ndx_form INT64 (default)
 output_delimiter " " (default)
 densification 0 (default)
+h3_boundary_def DGGRID (default)
 longitude_wrap_mode UNWRAP_EAST (user set)
 unwrap_points true (user set)
 output_cell_label_type GLOBAL_SEQUENCE (default)
@@ -82,6 +83,7 @@ clip_cell_densification 1 (default)
 clip_region_files inputfiles/seqnums.txt (user set)
 clip_type POLY_INTERSECT (default)
 clipper_scale_factor 1000000 (default)
+polyclip_algo GDAL (default)
 
 
 ** grid generation complete **

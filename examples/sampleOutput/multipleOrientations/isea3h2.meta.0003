@@ -39,6 +39,7 @@ output_hier_ndx_system Z3
 output_hier_ndx_form INT64
 output_delimiter " "
 densification 0
+h3_boundary_def DGGRID
 longitude_wrap_mode WRAP
 unwrap_points true
 output_cell_label_type GLOBAL_SEQUENCE
@@ -76,3 +77,4 @@ clip_cell_densification 1
 clip_region_files test.gen
 clip_type POLY_INTERSECT
 clipper_scale_factor 1000000
+polyclip_algo GDAL
