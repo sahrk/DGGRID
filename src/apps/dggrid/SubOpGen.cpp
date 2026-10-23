@@ -142,13 +142,15 @@ SubOpGen::initializeOp (void)
    // clipper_scale_factor <unsigned long int>
    pList().insertParam(new DgULIntParam("clipper_scale_factor", 1000000L, 1, ULONG_MAX, true));
 
-   // polyclip_algo <CLIPPER1 | GDAL (with GEOS)>
+   // polyclip_algo <GDAL (with GEOS) | CLIPPER1>; GDAL is the default when
+   // built with GDAL
    {
-      std::vector<std::string> choices = {"CLIPPER1"};
 #ifdef USE_GDAL
-      choices.push_back("GDAL");
+      std::vector<std::string> choices = {"GDAL", "CLIPPER1"};
+#else
+      std::vector<std::string> choices = {"CLIPPER1"};
 #endif
-      pList().insertParam(new DgStringChoiceParam("polyclip_algo", "CLIPPER1", choices));
+      pList().insertParam(new DgStringChoiceParam("polyclip_algo", choices[0], choices));
    }
 
    return 0;
@@ -257,10 +259,14 @@ SubOpGen::setupOp (void)
    polyclipAlgo = CLIPPER1;
 #ifdef USE_GDAL
    if (dgg::util::toUpper(dummy) == "GDAL") {
-      if (!OGRGeometryFactory::haveGEOS())
+      if (OGRGeometryFactory::haveGEOS())
+         polyclipAlgo = GDAL_POLYCLIP;
+      else if (pList().getParam("polyclip_algo", false)->isUserSet())
          ::report("polyclip_algo GDAL requires a GDAL library built with GEOS",
                   DgBase::Fatal);
-      polyclipAlgo = GDAL_POLYCLIP;
+      else // GDAL is only the default; fall back to Clipper
+         ::report("GDAL library lacks GEOS; using polyclip_algo CLIPPER1",
+                  DgBase::Warning);
    }
 #endif
 
