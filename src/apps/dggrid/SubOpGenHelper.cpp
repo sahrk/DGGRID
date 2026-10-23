@@ -428,9 +428,6 @@ SubOpGen::executeOp (void)
 
    ////// do applicable clipping mode /////
 
-   char delimStr[2];
-   delimStr[0] = op.inOp.inputDelimiter;
-   delimStr[1] = '\0';
    const int maxLine = 1000;
    char buff[maxLine];
 
@@ -1013,7 +1010,7 @@ SubOpGen::processOneClipPoly (DgPolygon& polyIn, const DgIDGGBase& dgg,
          }
          if (useHoles) {
             // add the holes
-            for (int h = 0; h < polyIn.holes().size(); h++) {
+            for (size_t h = 0; h < polyIn.holes().size(); h++) {
 
                // check for vertices in this quad
                int numVertsInQuad = holeQuads[h][q];

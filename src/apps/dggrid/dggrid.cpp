@@ -43,7 +43,7 @@ void pause (const std::string& where)
 {
    dgcout << "*** execution paused: " << where << std::endl;
    dgcout << "*** press ENTER to continue: ";
-   scanf("%*c");
+   std::cin.get();
 }
 
 ////////////////////////////////////////////////////////////////////////////////

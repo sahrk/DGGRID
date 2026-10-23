@@ -1598,6 +1598,9 @@ SHPWriteObject(SHPHandle psSHP, int nShapeId, SHPObject * psObject )
     int     bAppendToLastRecord = FALSE;
     int     bAppendToFile = FALSE;
 
+    if( psObject->nParts < 0 || psObject->nVertices < 0 )
+        return -1;
+
     psSHP->bUpdated = TRUE;
 
 /* -------------------------------------------------------------------- */
@@ -1692,8 +1695,9 @@ SHPWriteObject(SHPHandle psSHP, int nShapeId, SHPObject * psObject )
          */
         if( psObject->nSHPType == SHPT_MULTIPATCH )
         {
-            memcpy( pabyRec + nRecordSize, psObject->panPartType,
-                    4*psObject->nParts );
+            if( psObject->nParts > 0 )
+                memcpy( pabyRec + nRecordSize, psObject->panPartType,
+                        sizeof(int32) * (size_t) psObject->nParts );
             for( i = 0; i < psObject->nParts; i++ )
             {
                 if( bBigEndian ) SwapWord( 4, pabyRec + nRecordSize );

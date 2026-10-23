@@ -299,9 +299,7 @@ template <class A, class B, class BG, class DB> class DgResAddConverter :
                         "from frame is not a DgDiscRFSGridsBase", DgBase::Fatal);
               }
 
-	      // JFW: second clause will never be > (int vs long):
-              if (res() < 0 ||
-                  static_cast<unsigned long>(res()) >= discRFS().nRes() + 1)
+              if (res() < 0 || res() > discRFS().nRes())
               {
                  report("DgResAddConverter<A, B, BG, DB>::DgResAddConverter() "
                         "invalid resolution", DgBase::Fatal);
@@ -362,9 +360,7 @@ template <class A, class B, class BG, class DB> class DgAddResConverter :
                         "from frame is not a DgDiscRFSGridsBase", DgBase::Fatal);
               }
 
-	      // JFW: second clause will never be > (int vs long):
-              if (res() < 0 ||
-                  static_cast<unsigned long>(res()) >= discRFS().nRes() + 1)
+              if (res() < 0 || res() > discRFS().nRes())
               {
                  report("DgAddResConverter<A, B, DB>::DgAddResConverter() "
                         "invalid resolution", DgBase::Fatal);

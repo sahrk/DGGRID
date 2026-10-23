@@ -181,9 +181,9 @@ template<class T> class DgParameter : public DgApAssoc {
 
    public:
 
-      DgParameter<T> (const std::string& nameIn) : DgApAssoc (nameIn) { }
+      DgParameter (const std::string& nameIn) : DgApAssoc (nameIn) { }
 
-      DgParameter<T> (const std::string& nameIn, const T& valIn, bool validIn = true)
+      DgParameter (const std::string& nameIn, const T& valIn, bool validIn = true)
         : DgApAssoc (nameIn), value_ (valIn) { DgApAssoc::setIsValid(validIn); }
 
       const T& value (void) const { return value_; }
