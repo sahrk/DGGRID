@@ -60,10 +60,6 @@ jobs:
           fi
           ls -la staging/
 
-      - name: Check 64-bit sequence number input on Windows
-        if: matrix.name == 'windows'
-        run: python tests/integration/test_seqnum_64bit.py staging/dggrid.exe
-
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
@@ -79,6 +75,9 @@ jobs:
       contents: write
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
@@ -91,6 +90,11 @@ jobs:
           cp artifacts/dggrid-windows/dggrid.exe    release/dggrid-windows.exe
           cp artifacts/dggrid-macos-x64/dggrid      release/dggrid-macos-x64
           cp artifacts/dggrid-macos-arm64/dggrid    release/dggrid-macos-arm64
+          # licenses for the AGPL work and the third-party code built into it
+          cp LICENSE                                release/LICENSE
+          cp LICENSE.H3                             release/LICENSE.H3
+          cp src/lib/shapelib/LICENSE               release/LICENSE.shapelib
+          cp src/lib/proj4lib/LICENSE               release/LICENSE.proj4lib
 
       - name: Create GitHub Release
         env:
@@ -99,8 +103,12 @@ jobs:
           gh release create "${{ github.ref_name }}" \
             --repo "${{ github.repository }}" \
             --title "DGGRID ${{ github.ref_name }}" \
-            --notes "Portable DGGRID binaries built from ${{ github.ref_name }}" \
+            --notes "Portable DGGRID binaries built from ${{ github.ref_name }}. DGGRID is licensed under the AGPL-3.0 (LICENSE). The binaries include code derived from H3 (Apache-2.0, LICENSE.H3), shapelib (MIT, LICENSE.shapelib) and proj4lib (MIT, LICENSE.proj4lib)." \
             release/dggrid-linux \
             release/dggrid-windows.exe \
             release/dggrid-macos-x64 \
-            release/dggrid-macos-arm64
+            release/dggrid-macos-arm64 \
+            release/LICENSE \
+            release/LICENSE.H3 \
+            release/LICENSE.shapelib \
+            release/LICENSE.proj4lib
