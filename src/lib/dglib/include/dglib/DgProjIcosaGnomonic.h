@@ -28,12 +28,6 @@
 // DGGRID icosahedron rather than from H3's tables, and nothing here depends on
 // the H3 library.
 //
-// Portions of the implementation are copied from H3 v4.5.0 (faceijk.c, vec3d.h,
-// latLng.c, vec2d.c and constants.h), Copyright 2016-2023, 2026 Uber
-// Technologies, Inc., licensed under the Apache License 2.0 (see LICENSE.H3).
-// Modified by DGGRID contributors; see the "DGGRID modification" comments in
-// DgProjIcosaGnomonic.cpp.
-//
 ////////////////////////////////////////////////////////////////////////////////
 
 #ifndef DGPROJ_ICOSA_GNOMONIC_H

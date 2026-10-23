@@ -20,10 +20,9 @@
 // USE_H3 is set in MakeIncludes / CMake
 #ifdef USE_H3
 
-// Portions copied from H3 v4.5.0 (src/h3lib/include/coordijk.h),
-// Copyright 2016-2018, 2020-2022, 2026 Uber Technologies, Inc., licensed under
-// the Apache License, Version 2.0 (see LICENSE.H3). Modified by DGGRID
-// contributors; each change is marked with a "DGGRID modification" comment.
+// Portions Copyright 2016-2018, 2020-2022, 2026 Uber Technologies, Inc.,
+// licensed under the Apache License, Version 2.0 (see LICENSE.H3); modified by
+// DGGRID contributors.
 
 #include <algorithm>
 #include <cmath>
@@ -62,7 +61,6 @@ const long double M_SQRT3_2_L = 0.8660254037844386467637231707529361834714L;
 const long double M_RSIN60_L = 1.1547005383792515290182975610039149112953L;
 const long double M_SQRT7_L = 2.6457513110645905905016157536392604257102L;
 
-// DGGRID modification: H3's double Vec2d is replaced by long double
 struct Vec2dL { long double x, y; };
 
 /**

@@ -20,12 +20,9 @@
 //
 // DgProjIcosaGnomonic.cpp: DgProjIcosaGnomonic class implementation
 //
-// Portions copied from H3 v4.5.0 (src/h3lib/lib/faceijk.c,
-// src/h3lib/include/vec3d.h, src/h3lib/lib/vec2d.c and
-// src/h3lib/include/constants.h), Copyright 2016-2023, 2026 Uber
-// Technologies, Inc., licensed under the Apache License, Version 2.0 (see
-// LICENSE.H3). Modified by DGGRID contributors; each change is marked with a
-// "DGGRID modification" comment.
+// Portions Copyright 2016-2023, 2026 Uber Technologies, Inc., licensed under
+// the Apache License, Version 2.0 (see LICENSE.H3); modified by DGGRID
+// contributors.
 //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -36,17 +33,13 @@
 
 namespace {
 
-// DGGRID modification: H3's double was replaced by long double throughout, to
-// match DGGRID's continuous reference frames.
-
-/** @brief 3D floating point vector (from H3 vec3d.h) */
+/** @brief 3D floating point vector */
 struct Vec3d {
     long double x;  /// towards 0deg lat, 0deg lon
     long double y;  /// towards 0deg lat, 90deg lon
     long double z;  /// towards north pole
 };
 
-// from H3 constants.h
 const long double EPSILON = 0.0000000000000001L;
 const long double RES0_U_GNOMONIC = 0.38196601125010500003L;
 const long double INV_RES0_U_GNOMONIC = 2.61803398874989588842L;
@@ -110,7 +103,6 @@ inline long double vec3DistSq(Vec3d v1, Vec3d v2) {
     return vec3NormSq(d);
 }
 
-// from H3 vec2d.c
 inline long double _v2dMag(const DgDVec2D& v) {
     return sqrtl(v.x() * v.x() + v.y() * v.y());
 }
@@ -130,8 +122,6 @@ inline Vec3d toVec3 (const long double a[3]) {
  * @param face Output: The icosahedral face containing the coordinates.
  * @param sqd Output: The squared euclidean distance to its face center.
  */
-// DGGRID modification: the face centres come from the DGGRID icosahedron
-// rather than from H3's faceCenterPoint table
 void _vec3ToClosestFace(const DgProjIcosaGnomonicFaces& faces, const Vec3d *v,
                         int *face, long double *sqd) {
     *face = 0;
@@ -158,11 +148,10 @@ void _vec3ToClosestFace(const DgProjIcosaGnomonicFaces& faces, const Vec3d *v,
  * @param v Output: The 2D hex coordinates (resolution 0, class II) of the
  *          point.
  */
-// DGGRID modification: resolution 0 only. The resolution scaling loop and the
-// class III rotation were removed (DGGRID's own lattices handle resolution),
-// and theta is measured counter-clockwise from the face's u axis using the
-// face basis instead of H3's north/east tangent basis, which fails when a
-// face centre is at a pole (DGGRID allows any icosahedron orientation).
+// Resolution 0 only (DGGRID's own lattices handle resolution). theta is
+// measured counter-clockwise from the face's u axis using the face basis; a
+// north/east tangent basis fails when a face centre is at a pole (DGGRID
+// allows any icosahedron orientation).
 void _vec3ToHex2d(const DgProjIcosaGnomonicFaces& faces, const Vec3d *p,
                   int *face, DgDVec2D *v) {
     // determine the icosahedron face
@@ -170,9 +159,8 @@ void _vec3ToHex2d(const DgProjIcosaGnomonicFaces& faces, const Vec3d *p,
     _vec3ToClosestFace(faces, p, face, &sqd);
 
     // cos(r) = 1 - 2 * sin^2(r/2) = 1 - 2 * (sqd / 4) = 1 - sqd/2
-    // DGGRID modification: use the identical but numerically stable
-    // r = 2 asin(sqrt(sqd) / 2); acos(1 - sqd/2) loses precision near the
-    // face centre.
+    // r = 2 asin(sqrt(sqd) / 2) is identical but numerically stable;
+    // acos(1 - sqd/2) loses precision near the face centre.
     long double r = 2.0L * asinl(sqrtl(sqd) / 2.0L);
 
     if (r < EPSILON) {
@@ -208,8 +196,7 @@ void _vec3ToHex2d(const DgProjIcosaGnomonicFaces& faces, const Vec3d *p,
  *             centered.
  * @param v3 Output: the 3D coordinates of the point
  */
-// DGGRID modification: resolution 0 only, and the face basis replaces the
-// north/east tangent basis (see _vec3ToHex2d)
+// Resolution 0 only, using the face basis (see _vec3ToHex2d)
 void _hex2dToVec3(const DgProjIcosaGnomonicFaces& faces, const DgDVec2D& v,
                   int face, Vec3d *v3) {
     // calculate (r, theta) in hex2d

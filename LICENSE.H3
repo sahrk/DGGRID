@@ -1,9 +1,3 @@
-This product includes code copied from H3 (https://github.com/uber/h3), v4.5.0,
-in src/lib/dglib/lib/DgProjIcosaGnomonic.cpp and src/lib/dglib/lib/DgH3System.cpp.
-H3 is licensed under the Apache License, Version 2.0, reproduced below. The
-copied code was modified by DGGRID contributors; the modifications are marked
-with 'DGGRID modification' comments in those files.
-
 ================================================================================
 H3 NOTICE
 ================================================================================
