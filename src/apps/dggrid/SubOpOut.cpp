@@ -217,6 +217,12 @@ SubOpOut::genRandPts (const DgQ2DICoord& add2D, const std::string& label)
 
    if (op.mainOp.megaVerbose) dgcout << "rpts: " << rpts << newline;
 
+   // convert to geographic coordinates here; a direct conversion from Q2DD
+   // to the output frame would quantize each point to its cell center
+   dgg.geoRF().convert(rpts);
+
+   if (op.mainOp.megaVerbose) dgcout << "-> " << rpts << newline;
+
    // each cell converts its point to the output frame
    for (int i = 0; i < rpts.size(); i++) {
       op.dggOp.nSamplePts++;   // pt # in this grid

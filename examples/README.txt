@@ -87,8 +87,8 @@ the output of the last run of doexamples.sh:
     shapefile/text syntax, no nan/inf, lon/lat in range, closed
     rings, whole-earth cell counts, 12 pentagons, neighbour and
     children references, and cell areas of whole-earth hexagon
-    grids (equal area). Prints PASS/FAIL per example; exits
-    non-zero on any FAIL. Pass the saved standard output of
+    grids (equal-area projections only). Prints PASS/FAIL per
+    example; exits non-zero on any FAIL. Pass the saved standard output of
     doexamples.sh to check the exit status:
 
       ./doexamples.sh > run.log 2>&1

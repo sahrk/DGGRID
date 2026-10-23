@@ -550,7 +550,9 @@ def check_example(ex, args, run_status):
                 res.fail("hexagon grid: %d pentagons, expected 12" % nc.get(5.0, 0))
             else:
                 res.note("12 pentagons OK")
-            if len(cells) == len(ids) and len(cells) > 12:
+            # GNOMONIC (and so H3) is not equal area
+            equal_area = PP.get("dggs_proj", "ISEA").upper() != "GNOMONIC"
+            if equal_area and len(cells) == len(ids) and len(cells) > 12:
                 area_check(res, cells, corners, prec, dens, pl)
 
         # neighbours and children

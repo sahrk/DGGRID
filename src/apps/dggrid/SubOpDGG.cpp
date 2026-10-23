@@ -522,14 +522,15 @@ SubOpDGG::setupOp (void)
          hierNdx = true;
 #ifdef USE_H3
          // cell boundaries as H3 generates them; H3's great circle edges need
-         // no densification
-         pList().setPresetParam("h3_boundary_def", "H3");
-         pList().setPresetParam("densification", "0");
+         // no densification. These output parameters do not exist for
+         // every operation (e.g. OUTPUT_STATS), so skip them if absent.
+         pList().setPresetParam("h3_boundary_def", "H3", true);
+         pList().setPresetParam("densification", "0", true);
          // clip cells likewise; clip_cell_densification belongs to
          // GENERATE_GRID only
          pList().setPresetParam("clip_cell_densification", "0", true);
          // an H3 index is 15 characters (the default field is 11)
-         pList().setPresetParam("shapefile_id_field_length", "15");
+         pList().setPresetParam("shapefile_id_field_length", "15", true);
 #endif
       } else if (gridName == "planetrisk") {
          pList().setPresetParam("dggs_topology", "HEXAGON");
@@ -596,7 +597,7 @@ SubOpDGG::setupOp (void)
          // Z3, ZORDER and Z7 INT64 indexes are printed as 16 hex digits;
          // H3's canonical indexes are 15 digits.
          if (!isH3Preset)
-            pList().setPresetParam("shapefile_id_field_length", "16");
+            pList().setPresetParam("shapefile_id_field_length", "16", true);
          pList().setPresetParam("hier_indexing_system_type", hierNdxSys);
          pList().setPresetParam("input_address_type", "HIERNDX", true);
          pList().setPresetParam("input_hier_ndx_system", hierNdxSys, true);
