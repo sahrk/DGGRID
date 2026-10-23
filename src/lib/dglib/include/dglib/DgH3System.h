@@ -98,6 +98,16 @@ class DgH3System : public DgHierNdxSystemRFS<DgH3IntRF, DgH3StringRF> {
       static DgH3System* makeSystem (const DgIDGGSBase& dggs, bool extModeInt,
                                      const std::string& name = "H3");
 
+      // Set verts (in dgg.geoRF()) to the boundary of the cell at add as
+      // H3's cellToBoundary reports it: the cell vertices plus the points
+      // where its edges cross icosahedron edges (and, for a pentagon, the
+      // distortion vertices), joined by great circle arcs. Each arc is then
+      // divided into densify + 1 equal parts. The cell is the H3 cell with
+      // the topology of the DGGRID cell, so this is the boundary of the
+      // DGGRID cell only if dgg has H3's geometry (see above).
+      static void setCellBoundary (const DgIDGGBase& dgg, const DgQ2DICoord& add,
+                                   DgPolygon& verts, int densify);
+
    protected:
       DgH3System (const DgIDGGSBase& dggs, bool extModeInt,
                   const std::string& name);

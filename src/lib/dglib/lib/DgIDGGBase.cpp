@@ -47,6 +47,9 @@
 #include <dglib/DgSeriesConverter.h>
 #include <dglib/DgTriGrid2DS.h>
 #include <dglib/DgHierNdxSystemRFSBase.h>
+#ifdef USE_H3
+#include <dglib/DgH3System.h>
+#endif
 
 ////////////////////////////////////////////////////////////////////////////////
 const DgGeoSphRF&  DgIDGGBase::geoRF      (void) const { return dggs()->geoRF(); }
@@ -366,17 +369,39 @@ DgIDGGBase::setVertices (const DgLocation& loc, DgPolygon& vec,
 } // void DgDiscRF::setVertices
 
 ////////////////////////////////////////////////////////////////////////////////
+void
+DgIDGGBase::setVertices (const DgLocation& loc, DgPolygon& vec,
+                     int densify, bool h3Boundary) const
+{
+   if (!h3Boundary) {
+      setVertices(loc, vec, densify);
+      return;
+   }
+
+#ifdef USE_H3
+   DgLocation tLoc(loc);
+   convert(&tLoc);
+   DgH3System::setCellBoundary(*this, *getAddress(tLoc), vec, densify);
+#else
+   report("DgIDGGBase::setVertices(): the H3 boundary requires DGGRID built "
+          "with the H3 library", DgBase::Fatal);
+#endif
+
+} // void DgIDGGBase::setVertices
+
+////////////////////////////////////////////////////////////////////////////////
 DgCell*
 DgIDGGBase::makeCell (const DgLocation& loc, const std::string& label,
                   int densify, DgGeoSphRF::DgLonWrapMode lonWrapMode,
-                  bool unwrapPts, DgDataList* dataList, bool trace) const
+                  bool unwrapPts, DgDataList* dataList, bool trace,
+                  bool h3Boundary) const
 {
    // the address of the cell, not a point within it
    DgLocation* tmpLoc = new DgLocation(loc);
    convert(tmpLoc);
 
    DgPolygon verts(*this);
-   setVertices(*tmpLoc, verts, densify);
+   setVertices(*tmpLoc, verts, densify, h3Boundary);
 
    // unwrap the cell east/west if applicable
    DgPolygon* unwrappedVerts = new DgPolygon(verts);

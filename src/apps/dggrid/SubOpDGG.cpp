@@ -117,7 +117,7 @@ SubOpDGG::SubOpDGG (OpBasic& op, bool _activate)
      numGrids (1), curGrid (0), lastGrid (false), sampleCount(0), nSamplePts(0),
      azimuthDegs (0.0), earthRadius (DEFAULT_RADIUS_KM),
      customSphereRadius (DEFAULT_RADIUS_KM), apertureType (""),
-     isMixed43 (false), isSuperfund (false), isApSeq (false), isH3Preset (false),
+     isMixed43 (false), isSuperfund (false), isApSeq (false), isH3Preset (false), h3Geometry (false),
      hierNdxSysType (dgg::addtype::InvalidHierNdxSysType)
 {
 }
@@ -434,6 +434,16 @@ SubOpDGG::setupOp (void)
    std::string tmp;
    getParamValue(pList(), "dggs_type", tmp, false);
    std::string tmplc = toLower(tmp);
+
+#ifdef USE_H3
+   // h3_boundary_def H3 is accepted only for dggs_type H3
+   {
+      std::string h3Bnd;
+      getParamValue(pList(), "h3_boundary_def", h3Bnd, false);
+      if (toLower(h3Bnd) == "h3" && tmplc != "h3")
+         ::report("h3_boundary_def H3 requires dggs_type H3", DgBase::Fatal);
+   }
+#endif
    if (tmplc != "custom") {
       // IGEO7v1 and IGEO7v2 (and its alias IGEO7) are the ISEA7HSZ and ISEA7HLZ
       // presets
@@ -510,6 +520,17 @@ SubOpDGG::setupOp (void)
          // (dggs_type H3 is only a choice when built with H3)
          hierNdxSys = "H3";
          hierNdx = true;
+#ifdef USE_H3
+         // cell boundaries as H3 generates them; H3's great circle edges need
+         // no densification
+         pList().setPresetParam("h3_boundary_def", "H3");
+         pList().setPresetParam("densification", "0");
+         // clip cells likewise; clip_cell_densification belongs to
+         // GENERATE_GRID only
+         pList().setPresetParam("clip_cell_densification", "0", true);
+         // an H3 index is 15 characters (the default field is 11)
+         pList().setPresetParam("shapefile_id_field_length", "15");
+#endif
       } else if (gridName == "planetrisk") {
          pList().setPresetParam("dggs_topology", "HEXAGON");
          pList().setPresetParam("dggs_proj", "ISEA");
@@ -886,12 +907,14 @@ SubOpDGG::executeOp (void) {
    // H3 indexes are valid H3 cells whatever the grid, but the cells themselves
    // are H3's only for the GNOMONIC projection and the DYMAXION orientation
    static bool h3GeometryWarned = false;
-   if (!h3GeometryWarned && usesH3Index()) {
+   {
       const long double tol = 1e-12L;
-      const bool h3Geometry = (projType == "GNOMONIC" &&
+      h3Geometry = (projType == "GNOMONIC" &&
          fabsl(vert0.lonDegs() - strtold(kDymaxionLon, nullptr)) < tol &&
          fabsl(vert0.latDegs() - strtold(kDymaxionLat, nullptr)) < tol &&
          fabsl(azimuthDegs - strtold(kDymaxionAzimuth, nullptr)) < tol);
+   }
+   if (!h3GeometryWarned && usesH3Index()) {
       if (!h3Geometry) {
          h3GeometryWarned = true;
          ::report("H3 indexes are topologically valid H3 cells, but cell "
