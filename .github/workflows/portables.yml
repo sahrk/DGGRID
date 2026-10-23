@@ -60,6 +60,10 @@ jobs:
           fi
           ls -la staging/
 
+      - name: Check 64-bit sequence number input on Windows
+        if: matrix.name == 'windows'
+        run: python tests/integration/test_seqnum_64bit.py staging/dggrid.exe
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:

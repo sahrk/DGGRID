@@ -22,6 +22,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#define __STDC_FORMAT_MACROS
+#include <inttypes.h>
 #include <cstring>
 
 #include <dglib/DgRandom.h>
@@ -58,8 +60,8 @@ DgLocationData* SubOpBasicMulti::inStrToPointLoc(const std::string& inStr) const
             ::report("inStrToPointLoc(): missing sequence number", DgBase::Fatal);
         }
 
-        unsigned long int sNum;
-        if (sscanf(snStr, "%lu", &sNum) != 1) {
+        uint64_t sNum;
+        if (sscanf(snStr, "%" SCNu64, &sNum) != 1) {
             ::report("inStrToPointLoc(): invalid SEQNUM " + std::string(snStr), DgBase::Fatal);
         }
 
@@ -119,8 +121,8 @@ SubOpBasicMulti::inStrToPointCell (const std::string& inStr) const {
    if (op.inOp.inSeqNum) {
       char* snStr;
       snStr = strtok(buff, delimStr);
-      unsigned long int sNum;
-      if (sscanf(snStr, "%lu", &sNum) != 1) {
+      uint64_t sNum;
+      if (sscanf(snStr, "%" SCNu64, &sNum) != 1) {
          ::report("doTransform(): invalid SEQNUM " + std::string(snStr),
                      DgBase::Fatal);
       }

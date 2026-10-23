@@ -27,6 +27,8 @@
 #include <gdal.h>
 #endif
 
+#define __STDC_FORMAT_MACROS
+#include <inttypes.h>
 #include <iostream>
 #include <set>
 #include <cstdlib>
@@ -436,7 +438,7 @@ SubOpGen::executeOp (void)
    // use a set to ensure each cell is printed only once
    // KEVIN currently only works for addresses in files, so not for coarse cells
    // KEVIN: coarse cell only on parameter line
-   std::set<unsigned long int> seqnums;
+   std::set<uint64_t> seqnums;
    //if (addressGen || coarseCellClip) {
    if (addressGen) {
 
@@ -457,9 +459,9 @@ SubOpGen::executeOp (void)
                fin.getline(buff, maxLine);
                if (fin.eof()) break;
 
-               unsigned long int sNum = 0;
+               uint64_t sNum = 0;
                if (op.inOp.inAddType == SeqNum) {
-                  if (sscanf(buff, "%lu", &sNum) != 1)
+                  if (sscanf(buff, "%" SCNu64, &sNum) != 1)
                      ::report("genGrid(): invalid SEQNUM " + std::string(buff), DgBase::Fatal);
                   } else { // must be some index
                      // parse the address
@@ -484,7 +486,7 @@ SubOpGen::executeOp (void)
 
    // generate the cells
    if (addressGen) {
-      for (std::set<unsigned long int>::iterator i=seqnums.begin();i!=seqnums.end();i++) {
+      for (std::set<uint64_t>::iterator i=seqnums.begin();i!=seqnums.end();i++) {
 
          DgLocation* loc = static_cast<const DgIDGG&>(dgg).bndRF().locFromSeqNum(*i);
          if (!dgg.bndRF().validLocation(*loc)) {
@@ -1373,15 +1375,15 @@ SubOpGen::createClipRegions (const DgIDGGBase& dgg,
 //cout << "CLIPDGG: " << clipDgg << std::endl;
       // the coarse clipping cells
       // use a set to avoid duplicates
-      std::set<unsigned long int> clipSeqNums;
+      std::set<uint64_t> clipSeqNums;
 
       // Parse one clipping-cell address and add its sequence number. Return
       // the first unconsumed character so multipart addresses can share the
       // space delimiter with the address list.
       auto addClipCell = [&](const char* address) -> const char* {
-         unsigned long int sNum = 0;
+         uint64_t sNum = 0;
          if (op.inOp.inSeqNum) {
-            if (sscanf(address, "%lu", &sNum) != 1)
+            if (sscanf(address, "%" SCNu64, &sNum) != 1)
                ::report("gridgen(): invalid coarse cell sequence number " +
                          std::string(address), DgBase::Fatal);
          } else { // must be indexToPoly
@@ -1455,7 +1457,7 @@ SubOpGen::createClipRegions (const DgIDGGBase& dgg,
 #endif
 
       // add the cell boundaries to the clip regions
-      for (std::set<unsigned long int>::iterator i = clipSeqNums.begin();
+      for (std::set<uint64_t>::iterator i = clipSeqNums.begin();
              i != clipSeqNums.end(); i++){
 
         DgLocation* loc = static_cast<const DgIDGG&>(clipDgg).bndRF().locFromSeqNum(*i);
