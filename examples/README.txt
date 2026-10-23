@@ -51,7 +51,8 @@ messages.
     in each of those examples is run (e.g. h3Gen.meta,
     h3GenString.meta and h3GenCustom.meta), then it checks that
     h3GenCustom.meta, which specifies the grid explicitly, gives
-    the same cells as h3Gen.meta, which uses dggs_type H3. The
+    the same cell indexes, centers, parents and children as
+    h3Gen.meta, which uses dggs_type H3. The
     examples are skipped if "dggrid -v" does not report that
     DGGRID was built with H3. Set the environment variable
     DGGRID to use a different dggrid executable.

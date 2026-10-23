@@ -51,9 +51,10 @@ do
 done
 
 # the explicitly specified H3 grid must give the same cells as dggs_type H3
+# (not the same boundaries: h3_boundary_def H3 requires dggs_type H3)
 echo "############################################"
 echo "#### h3Gen: dggs_type H3 vs explicitly specified parameters"
-for ext in geojson ndxChd ndxPrt; do
+for ext in ndxChd ndxPrt; do
    cmp h3Gen/outputfiles/h3res3.$ext h3Gen/outputfiles/h3res3custom.$ext
 done
 cmp h3Gen/outputfiles/h3res3p.txt h3Gen/outputfiles/h3res3customp.txt

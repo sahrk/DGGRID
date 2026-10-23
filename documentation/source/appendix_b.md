@@ -31,7 +31,7 @@ The table below shows which parameters have an effect under each operation (**ch
 | output_presence_vector\*, output_num_classes\* |  |  |  | x |  |  |
 | output_first_seqnum, output_last_seqnum | x (d) |  |  |  |  |  |
 | Text file output and cell labels (**Section 5**): output_file_name, output_file_type, output_cell_label_type, output_address_type, output_hier_ndx_\*, output_delimiter | x | x | x | x | x |  |
-| Per-cell output (**Section 5**): cell_output_type, cell_output_file_name, cell_output_gdal_format, point_output_\*, collection_output_\*, neighbor_\*, children_\*, indexing_\*, randpts_\*, kml_\*, shapefile_id_field_length, densification, longitude_wrap_mode, unwrap_points, max_cells_per_output_file, and dggs_orient_output_file_name (see (e)) | x | x | x | x | x |  |
+| Per-cell output (**Section 5**): cell_output_type, cell_output_file_name, cell_output_gdal_format, point_output_\*, collection_output_\*, neighbor_\*, children_\*, indexing_\*, randpts_\*, kml_\*, shapefile_id_field_length, densification, h3_boundary_def, longitude_wrap_mode, unwrap_points, max_cells_per_output_file, and dggs_orient_output_file_name (see (e)) | x | x | x | x | x |  |
 
 ```
 

@@ -12,7 +12,7 @@ www.discreteglobalgrids.org
 __DGGRID__ is a command-line application for generating and manipulating
 icosahedral discrete global grids (DGGs).
 
-Three directories should be included herein:
+Four directories should be included herein:
 
 - `src`: contains complete source code for __DGGRID__
 
@@ -22,6 +22,8 @@ Three directories should be included herein:
    (see the text file README.NOCMAKE for instructions).
 
 - `examples`: contains examples of using __DGGRID__ with pre-computed outputs.
+
+- `documentation`: contains the source of the user manual (see [documentation/README.md](documentation/README.md)).
 
 - `dockerfiles`: contains a __DGGRID__ dockerfile and instructions for use
 
@@ -49,11 +51,11 @@ __DGGRID__ was made possible in part by funding from the __US Environmental Prot
 
 ## Dependencies
 
-__DGGRID__ will make use of the following external library, if available (not included):
+__DGGRID__ will make use of the following external libraries, if available (not included):
 
 - The Open Source Geospatial Foundation’s GDAL translator library for raster and vector geospatial data formats (see http://www.gdal.org)
 
-- Uber’s H3 library (version 4.4.1 or later; see https://h3geo.org), which provides H3 hierarchical indexing (`dggs_type H3` and the H3 index choices of the hierarchical indexing parameters). Without it __DGGRID__ builds without H3, and H3 is not offered as a choice of any parameter.
+- Uber’s H3 library, version 4.4.1 or later, for H3 hierarchical indexing (see https://h3geo.org)
 
 __DGGRID__ uses the following external libraries (included with the __DGGRID__ source
 code):

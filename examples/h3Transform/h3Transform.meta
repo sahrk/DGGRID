@@ -1,14 +1,10 @@
 ################################################################################
 #
 # h3Transform.meta - example of a DGGRID metafile which performs address
-#     conversion from GEO (longitude, latitude) to H3 indexes (INT64 form, the
-#     canonical hexadecimal H3 index) for the H3 grid at H3 resolution 9.
+#     conversion from GEO to H3 INT64 indexes at H3 resolution 9. Requires
+#     DGGRID built with the H3 library.
 #
-#     Requires DGGRID to have been built with the H3 library (dggrid -v).
-#     For dggs_type H3, dggs_res_spec is the H3 resolution (0 - 15). The output
-#     indexes are the cells containing the input points, so they are the same as
-#     the indexes of the H3 library's latLngToCell. Run h3TransformGeo.meta and
-#     h3TransformQ2DI.meta next to convert the indexes back.
+# h3TransformGeo.meta and h3TransformQ2DI.meta convert the indexes back.
 #
 # Kevin Sahr, 10/21/2026
 #

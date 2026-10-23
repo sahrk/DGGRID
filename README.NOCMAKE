@@ -15,9 +15,10 @@ building with GDAL you must set GDAL_HDR_DIR to the location of the gdal
 header files and GDAL_LIB to the gdal library file you want to link to
 DGGRID.
 
-The Makefile build checks for the H3 header and library automatically. H3 is
-used only if it is version 4.4.1 or later and its library exports the internal
-FaceIJK functions that DGGRID uses; otherwise DGGRID is built without H3. Set
+The Makefile build also checks automatically for the H3 library, which is
+needed only for H3 hierarchical indexing. H3 is used only if it is version
+4.4.1 or later and its library exports the internal FaceIJK functions that
+DGGRID uses; otherwise DGGRID is built without H3. Set
 `BUILD_WITH_H3=FALSE` to disable H3, or `BUILD_WITH_H3=TRUE` to require it.
 For a nonstandard installation, set `H3_HDR_DIR` to the directory containing
 `h3api.h` and `H3_LIB` to the H3 library file or linker flag (default `-lh3`).

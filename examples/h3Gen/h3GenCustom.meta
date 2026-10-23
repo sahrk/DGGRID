@@ -1,9 +1,10 @@
 ################################################################################
 #
-# h3GenCustom.meta - the same as h3Gen.meta (and it generates the same cells),
-#     except that the H3 grid is specified explicitly rather than by
-#     dggs_type H3. Note that dggs_res_spec is then DGGRID's resolution: H3
-#     resolution 3 is DGGRID resolution 5.
+# h3GenCustom.meta - the same as h3Gen.meta, but with the H3 grid specified
+#     explicitly instead of by dggs_type H3. dggs_res_spec is then the DGGRID
+#     resolution (H3 resolution 3 is DGGRID resolution 5). The cells and
+#     indexes are those of h3Gen.meta, but the cell boundaries are DGGRID's
+#     (h3_boundary_def H3 requires dggs_type H3).
 #
 # Kevin Sahr, 10/21/2026
 #

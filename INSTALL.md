@@ -37,9 +37,7 @@ and include them appropriately.
 
 By default cmake will search for `GDAL` and link __DGGRID__ with it if found. If `GDAL` is present on your system and you want to force a build of __DGGRID__ without `GDAL`, call cmake with `-DWITH_GDAL=OFF`.
 
-By default cmake also searches for the H3 library and links it when found.
-Pass `-DWITH_H3=OFF` to build without external H3. CMake accepts an H3
-installation prefix through `-DCMAKE_PREFIX_PATH=/path/to/h3`.
+By default cmake will also search for the H3 library (version 4.4.1 or later) and link __DGGRID__ with it if found; H3 is needed only for H3 hierarchical indexing. An older H3, or one that does not export the internal FaceIJK functions __DGGRID__ uses, is ignored. If `H3` is present on your system and you want to force a build of __DGGRID__ without `H3`, call cmake with `-DWITH_H3=OFF`. To use an H3 installed in a nonstandard location, add `-DCMAKE_PREFIX_PATH=/path/to/h3`.
 
 By default cmake will use the `shapelib` library included with the source code.
 To build using an external system-provided version of `shapelib` execute `cmake`
@@ -70,6 +68,8 @@ and/or with either of the informational flags:
     dggrid -v
     dggrid -h
 
+Both flags report whether DGGRID was built with GDAL and with H3.
+
 See the DGGRID documentation and examples for details of metafile contents.
 
 Building also produces the sample application
@@ -88,8 +88,19 @@ executing:
 
     ./doexamples.sh
 
+Some of the examples use GDAL and some use H3; if you built DGGRID without
+GDAL or without H3 use `./doexamplesNoGDALorH3.sh` instead (see
+examples/README.txt).
+
 See the manual for more details on the parameters contained in the example
 metafiles.
+
+The developer tool `cmake/h3-version-check` builds DGGRID against several
+H3 releases to check the minimum supported version (needs network access,
+about 10 minutes):
+
+    cmake -S cmake/h3-version-check -B build-h3check
+    cmake --build build-h3check --target check
 
 
 

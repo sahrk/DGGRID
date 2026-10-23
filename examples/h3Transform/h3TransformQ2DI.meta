@@ -1,11 +1,8 @@
 ################################################################################
 #
 # h3TransformQ2DI.meta - example of a DGGRID metafile which performs address
-#     conversion from H3 indexes (INT64 form) to DGGRID's native Q2DI
-#     (quad number, i, j) addresses. Note that the i, j values of a Q2DI address
-#     in a class II or class III grid (odd resolutions of the H3 grid) refer
-#     to DGGRID's finer substrate grid and are not H3's IJK coordinates.
-#     Requires DGGRID to have been built with the H3 library.
+#     conversion from H3 INT64 indexes to Q2DI addresses at H3 resolution 9.
+#     Requires DGGRID built with the H3 library.
 #
 # Kevin Sahr, 10/21/2026
 #

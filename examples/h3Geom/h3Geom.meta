@@ -1,18 +1,10 @@
 ################################################################################
 #
-# h3Geom.meta - example of a DGGRID metafile that generates the cells of the
-#     H3 grid at H3 resolution 2 that intersect a region in the Norwegian Sea,
-#     which contains an H3 pentagon. Cell and point output is in GeoJSON
-#     format.
-#
-#     The cells are geometrically identical to H3's: the GNOMONIC projection,
-#     the DYMAXION orientation and the aperture sequence 4 3 7 7 ... are
-#     specified explicitly here (dggs_type H3 sets them, but is only available
-#     when DGGRID is built with the H3 library; see h3Gen.meta). DGGRID's
-#     resolution is two greater than H3's (H3 resolution 0 is DGGRID resolution
-#     2), so dggs_res_spec 4 is H3 resolution 2. This example does not use H3
-#     hierarchical indexing, so it does not require the H3 library: cells are
-#     labeled with sequence numbers.
+# h3Geom.meta - example of a DGGRID metafile that generates the H3 grid
+#     cells at H3 resolution 2 (DGGRID resolution 4) for a region in the
+#     Norwegian Sea that contains a pentagon. The grid is specified explicitly,
+#     so the H3 library is not required; cells are labeled with sequence
+#     numbers. Output is in GeoJSON format.
 #
 # Kevin Sahr, 10/21/2026
 #

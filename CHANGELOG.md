@@ -13,12 +13,15 @@ All changes are by Kevin Sahr, unless otherwise noted.
 - examples gnomonicGen, h3Geom, h3Gen and h3Transform. The examples that need the H3 library are listed in examplesH3.lst and are run by doexamplesH3.sh.
 - `h3_boundary_def` (DGGRID | H3, default DGGRID), available only when DGGRID is built with the H3 library: how the boundaries of output cells and of coarse clip cells (`clip_subset_type COARSE_CELLS`) are generated. DGGRID uses the cell vertices, densified in the projection plane by `densification` (`clip_cell_densification` for clip cells); H3 uses the H3 library's `cellToBoundary` (the cell vertices plus the points where its edges cross icosahedron edges, and the extra vertices of pentagons, joined by great circle arcs; the densification then divides each arc). The boundaries are identical to `cellToBoundary`'s. H3 is accepted only with `dggs_type H3` (an error otherwise, reported when the metafile is read), and `dggs_type H3` sets `h3_boundary_def H3`, `densification 0`, `clip_cell_densification 0` and `shapefile_id_field_length 15` (H3 indexes are 15 characters; each can still be overridden). A clip cell at a DGGS resolution below 2 has no H3 cell, so it keeps DGGRID's boundary (with a warning). Boundaries used internally for cell selection are not affected.
 - cmake/h3-version-check, a developer tool that builds DGGRID against several versions of H3 to check the minimum supported version.
+- `polyclip_algo` (GDAL | CLIPPER1): the algorithm used to intersect candidate cells with clipping polygons and coarse clip cells. GDAL (GEOS polygon intersection) is the default when DGGRID is built with GDAL; if the GDAL library lacks GEOS the default falls back to CLIPPER1 with a warning. CLIPPER1 is the previous algorithm and the only choice without GDAL. The two can differ on cells that only graze a clip boundary, so some polygon-clipped examples now select slightly different cells; a larger `clipper_scale_factor` makes them agree.
 ### Changed
 - Hierarchically indexed ISEA and IVEA presets and their IGEO7 aliases set `shapefile_id_field_length 16`, matching their zero-padded INT64 hexadecimal cell labels. The H3 preset remains at 15.
 - the DYMAXION orientation now uses Gray's vertex 1 as vertex 0 (10.5361990754676369448, 64.7000001279348804496) and the great-circle azimuth to Gray's vertex 3 (125.687650893546277353) so that DGGRID's vertex and face numbering match H3's: DGGRID vertex v is H3 pentagon base cell 4, 49, 24, 14, 38, 58, 83, 63, 72, 97, 107, 117 for v = 0 ... 11. The FULLER (and other DYMAXION) hexagon and triangle grids have the same cells as before, but their quad numbers, Q2DI addresses, sequence numbers and output order change. Diamond (FULLER4D) grids are anchored on vertices 0 and 11, so their ten diamonds are a different tiling of the icosahedron.
 - INT64 hierarchical indexes are written by the indexing system's own text form; the Z3, Z7 and ZORDER output is unchanged.
 ### Fixed
 - a build without the H3 library failed to compile
+- negative zero (e.g. -0.0000000) in text, AIGen, GeoJSON and KML output
+- SEQNUM input values above 32 bits misread on Windows
 
 ## [9.1] - 2026-10-10
 ### Added
