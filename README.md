@@ -27,7 +27,7 @@ Four directories should be included herein:
 
 - `dockerfiles`: contains a __DGGRID__ dockerfile and instructions for use
 
-User documentation for __DGGRID__ is in `dggridManualV91.pdf` or [online](https://dggrid.readthedocs.io/v91docs/dggrid_man_V91.html).
+User documentation for __DGGRID__ is [online](https://dggrid.readthedocs.io/v91docs/dggrid_man_V91.html).
 
 ## Terms of Use
 
@@ -66,6 +66,6 @@ code):
 
 - The gnomonic projection code is adapted from Gerald Evenden’s PROJ.4 library.
 
-- The icosahedral GNOMONIC projection (`dggs_proj GNOMONIC`) and parts of the H3 index code are adapted from Uber’s H3 library (Apache License 2.0; see `LICENSE.H3`).
+- The icosahedral gnomonic projection and parts of the H3 index code are adapted from Uber’s H3 library.
 
 - Frank Warmerdam’s Shapelib library

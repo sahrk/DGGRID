@@ -7,41 +7,39 @@ All changes are by Kevin Sahr, unless otherwise noted.
 ### Added
 - manual updated to v9.1 (thanks to @allixender)
 - link in README to readthedocs online documentation
-- IVEA projection and spherical (S) and ellipsoidal (L) ISEA/IVEA presets, and hierarchically indexed (Z) hexagon grid presets; old ISEA names remain spherical aliases
+- IVEA projection and spherical (S) and ellipsoidal (L) ISEA/IVEA presets; old ISEA names remain spherical aliases
 - IGEO7v1 (ISEA on the authalic sphere) and IGEO7v2 (ISEA on the WGS84 ellipsoid) presets
-- hierarchically indexed presets for all hexagon grids with an added Z suffix; aperture 3 grids use Z3, 4 use ZORDER, and 7 use Z7.
+- hierarchically indexed presets (Z suffix) for all hexagon grids
 - parameters sphere_radius_type, custom_sphere_radius, input_datum, output_datum and orientation_datum
 - parameter dggs_orient_preset with ISEA, ISEAL and DYMAXION orientations
 - GEO output addresses for TRANSFORM_POINTS
 - output datum spatial references for Shapefile and GDAL output
 - DgIcosaSliceDice projection kernel
 - new IVEA, ISEAL and renamed IGEO7 examples
-- H3 hierarchical indexing (`hier_indexing_system_type`, `input_hier_ndx_system` and `output_hier_ndx_system` H3) using the H3 library, version 4.4.1 or later, for hexagon grids with the aperture sequence 4 3 7 7 ... H3 resolutions 0 through 15 are DGGS resolutions 2 through 17. INT64 text is H3's canonical hexadecimal index (e.g. `8a2a1072b59ffff`; the zero padded 16 digit form is also accepted as input). DIGIT_STRING is a three digit base cell number (000 - 121) followed by one digit (0 - 6) for each H3 resolution. Indexes are always valid H3 indexes; the cells are geometrically H3's cells only with `dggs_proj GNOMONIC` and `dggs_orient_preset DYMAXION` (i.e. `dggs_type H3`), otherwise a warning is issued. DGGRID builds without H3, and reports an error if H3 indexing is selected, when a suitable H3 library is not found; `dggrid -v` reports whether it was built with H3. H3's internal FaceIJK functions are used, so the CMake and no-CMake builds check that the H3 library has them.
-- `dggs_proj GNOMONIC`: the icosahedral face-centered gnomonic projection used by H3, built from code copied from H3 (see LICENSE.H3). It works with every topology, aperture and orientation, is not equal area (so cell area and distance statistics are averages), and does not require the H3 library.
-- `dggs_type H3`, available only when DGGRID is built with the H3 library: GNOMONIC projection, the DYMAXION orientation, the aperture sequence 4 3 7 7 ... (geometrically identical to the cells of H3) and H3 hierarchical indexing, with INT64 indexes for labels and for input and output addresses. For this type only, `dggs_res_spec` is the H3 resolution (0 - 15) and the default is 9. H3 is not a choice of any parameter (`dggs_type`, `hier_indexing_system_type`, `input_hier_ndx_system`, `output_hier_ndx_system`) in a build without H3; the same grid geometry is available there by specifying `dggs_proj GNOMONIC`, `dggs_orient_preset DYMAXION` and the aperture sequence explicitly.
-- indexing hierarchies need not start at DGGS resolution 0 (H3's start at resolution 2); the first indexed resolution has no indexing parent and the last no indexing children.
-- Per-resolution parent and child step aperture accessors for hierarchy systems.
-- examples gnomonicGen, h3Geom, h3Gen and h3Transform. The examples that need the H3 library are listed in examplesH3.lst and are run by doexamplesH3.sh.
-- `h3_boundary_def` (DGGRID | H3, default DGGRID), available only when DGGRID is built with the H3 library: how the boundaries of output cells and of coarse clip cells (`clip_subset_type COARSE_CELLS`) are generated. DGGRID uses the cell vertices, densified in the projection plane by `densification` (`clip_cell_densification` for clip cells); H3 uses the H3 library's `cellToBoundary` (the cell vertices plus the points where its edges cross icosahedron edges, and the extra vertices of pentagons, joined by great circle arcs; the densification then divides each arc). The boundaries are identical to `cellToBoundary`'s. H3 is accepted only with `dggs_type H3` (an error otherwise, reported when the metafile is read), and `dggs_type H3` sets `h3_boundary_def H3`, `densification 0`, `clip_cell_densification 0` and `shapefile_id_field_length 15` (H3 indexes are 15 characters; each can still be overridden). A clip cell at a DGGS resolution below 2 has no H3 cell, so it keeps DGGRID's boundary (with a warning). Boundaries used internally for cell selection are not affected.
-- cmake/h3-version-check, a developer tool that builds DGGRID against several versions of H3 to check the minimum supported version.
-- `polyclip_algo` (GDAL | CLIPPER1): the algorithm used to intersect candidate cells with clipping polygons and coarse clip cells. GDAL (GEOS polygon intersection) is the default when DGGRID is built with GDAL; if the GDAL library lacks GEOS the default falls back to CLIPPER1 with a warning. CLIPPER1 is the previous algorithm and the only choice without GDAL. The two can differ on cells that only graze a clip boundary, so some polygon-clipped examples now select slightly different cells; a larger `clipper_scale_factor` makes them agree.
+- H3 hierarchical indexing (requires H3 library version 4.4.1 or later)
+- dggs_type H3 preset (requires H3 library)
+- icosahedral gnomonic projection (dggs_proj GNOMONIC)
+- indexing hierarchies may start above DGGS resolution 0
+- per-resolution parent and child aperture accessors for hierarchy systems
+- examples gnomonicGen, h3Geom, h3Gen and h3Transform
+- parameter h3_boundary_def to use H3 library cell boundaries with dggs_type H3
+- parameter polyclip_algo (GDAL or CLIPPER1); GDAL is the default when available.
 ### Changed
 - orientation output metafiles now reproduce placements when used as input
 - -h and -v report the GDAL version; normal runs report it when verbosity is greater than 0
 - invalid parameter values now produce an error
 - deprecated proj_datum and proj_datum_radius in favor of sphere_radius_type and custom_sphere_radius
 - FULLER presets now use the DYMAXION orientation
-- DYMAXION vertex 0 and azimuth use Gray's more precise Cartesian vertex and the great-circle azimuth to Gray's adjacent vertex
-- IGEO7 is now an alias for the IGEO7v2 WGS84 datum grid; its use produces a warning about the change
+- IGEO7 is now an alias for the IGEO7v2 WGS84 datum grid (with a warning)
 - use exact icosahedron, ISEA and WGS84 constants
-- Hierarchically indexed ISEA and IVEA presets and their IGEO7 aliases set `shapefile_id_field_length 16`, matching their zero-padded INT64 hexadecimal cell labels. The H3 preset remains at 15.
-- the DYMAXION orientation now uses Gray's vertex 1 as vertex 0 (10.5361990754676369448, 64.7000001279348804496) and the great-circle azimuth to Gray's vertex 3 (125.687650893546277353) so that DGGRID's vertex and face numbering match H3's: DGGRID vertex v is H3 pentagon base cell 4, 49, 24, 14, 38, 58, 83, 63, 72, 97, 107, 117 for v = 0 ... 11. The FULLER (and other DYMAXION) hexagon and triangle grids have the same cells as before, but their quad numbers, Q2DI addresses, sequence numbers and output order change. Diamond (FULLER4D) grids are anchored on vertices 0 and 11, so their ten diamonds are a different tiling of the icosahedron.
-- INT64 hierarchical indexes are written by the indexing system's own text form; the Z3, Z7 and ZORDER output is unchanged.
+- hierarchically indexed ISEA and IVEA presets set shapefile_id_field_length 16
+- DYMAXION orientation uses H3's more precise vertices, with vertex and face numbering matching H3. NOTE: this changes the FULLER4D diamond tiling.
+- INT64 hierarchical indexes are written by each indexing system's own text form
+- temporarily removed pdf version of manual; it needs some work
 ### Fixed
 - incorrect cell boundaries across face edges in odd-resolution aperture 7 grids
 - missing cells along quad edges when clipping odd-resolution aperture 7 grids to polygons
 - missing class II/III cells at quad edges when polygon vertices are more than four substrate rows from an intersected cell
-- H3 detection with CMake versions that reject C-only features in C++ compile probes
 - incorrect projection selection for non-ISEA dggs_type presets
 - loss of precision near rotated icosahedron vertices
 - incorrect ISEA rotation for points exactly on face medians
@@ -54,14 +52,13 @@ All changes are by Kevin Sahr, unless otherwise noted.
 - indexing parent and children output files not suffixed for multiple placements or split output
 - random points not output with GDAL_COLLECTION point output, and doubled file name suffixes
 - wrong error message for indexing children output without a hierarchical indexing system
-- input_address_type PLANE accepted and then failing; it is now rejected with a clear error
+- input_address_type PLANE accepted but unsupported
 - SEQNUM addresses rejected for point input with aperture sequence grids
 - clip_subset_type COARSE_CELL_FILES could not be selected
 - GENERATE_GRID tried to open the point input file when point_input_file_type was set
-- precision had no upper limit; it is now limited to 30
+- no upper limit on precision (now 30)
 - OUTPUT_STATS printed a statistics table for each placement
-- a build without the H3 library failed to compile
-- negative zero (e.g. -0.0000000) in text, AIGen, GeoJSON and KML output
+- negative zero (e.g. -0.0000000) in output
 - SEQNUM input values above 32 bits misread on Windows
 
 ## [9.03b] - 2026-07-19
