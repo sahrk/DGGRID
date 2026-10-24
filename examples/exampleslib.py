@@ -105,7 +105,10 @@ def aperture_sequence(p):
 
 
 def whole_earth_cell_count(p, r):
-    """Number of cells in a whole-earth grid at resolution r, or None."""
+    """Number of cells in a whole-earth grid at the specified resolution."""
+    if p.get("dggs_type", "").upper() == "H3":
+        # H3 resolution 0 is DGGRID resolution 2 (apertures 4, then 3).
+        r += 2
     ap = aperture_sequence(p)
     if ap is None:
         return None
