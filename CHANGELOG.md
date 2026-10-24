@@ -5,8 +5,6 @@ All changes are by Kevin Sahr, unless otherwise noted.
 
 ## [9.1] - 2026-10-23
 ### Added
-- manual updated to v9.1 (thanks to @allixender)
-- link in README to readthedocs online documentation
 - IVEA projection and spherical (S) and ellipsoidal (L) ISEA/IVEA presets; old ISEA names remain spherical aliases
 - IGEO7v1 (ISEA on the authalic sphere) and IGEO7v2 (ISEA on the WGS84 ellipsoid) presets
 - hierarchically indexed presets (Z suffix) for all hexagon grids
@@ -15,21 +13,23 @@ All changes are by Kevin Sahr, unless otherwise noted.
 - GEO output addresses for TRANSFORM_POINTS
 - output datum spatial references for Shapefile and GDAL output
 - DgIcosaSliceDice projection kernel
-- new IVEA, ISEAL and renamed IGEO7 examples
 - H3 hierarchical indexing (requires H3 library version 4.4.1 or later)
 - dggs_type H3 preset (requires H3 library)
 - icosahedral gnomonic projection (dggs_proj GNOMONIC)
-- indexing hierarchies may start above DGGS resolution 0
+- indexing hierarchies may start above DGGS resolution 0 (as in H3, where res 0 is DGGRID res 2)
 - per-resolution parent and child aperture accessors for hierarchy systems
-- examples gnomonicGen, h3Geom, h3Gen and h3Transform
+- new examples dymaxionIcosa, gnomonicGen, h3Gen, h3Geom, h3Kml, h3Transform, icosaISEAL, ivea3hGen and ivea7hGen
 - parameter h3_boundary_def to use H3 library cell boundaries with dggs_type H3
 - parameter polyclip_algo (GDAL or CLIPPER1); GDAL is the default when available.
+- manual updated to v9.1 (thanks to @allixender)
+- link in README to readthedocs online documentation
 ### Changed
 - orientation output metafiles now reproduce placements when used as input
 - -h and -v report the GDAL version; normal runs report it when verbosity is greater than 0
 - invalid parameter values now produce an error
 - deprecated proj_datum and proj_datum_radius in favor of sphere_radius_type and custom_sphere_radius
 - FULLER presets now use the DYMAXION orientation
+- examples icosahedron and igeo7WholeEarth renamed icosaISEA and wholeEarthIGEO7
 - IGEO7 is now an alias for the IGEO7v2 WGS84 datum grid (with a warning)
 - use exact icosahedron, ISEA and WGS84 constants
 - hierarchically indexed ISEA and IVEA presets set shapefile_id_field_length 16
