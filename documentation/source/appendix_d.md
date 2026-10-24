@@ -30,7 +30,7 @@ The table below lists the example metafiles distributed with **DGGRID** in the e
 | gridgenPureKML | No | No | ISEA3H | 5 | Res 5 aperture 3 hexagon grid, whole earth; KML. |
 | h3Gen | No | Yes | H3 | 3 | H3 cells around a pentagon in the Norwegian Sea (AIGEN clip), labeled with H3 indexes, with index parents and children; GeoJSON cells, text points. h3GenString uses DIGIT_STRING indexes; h3GenCustom specifies the grid explicitly. |
 | h3Geom | No | No | CUSTOM (H3 grid) | 4 | H3 resolution 2 cells around a pentagon in the Norwegian Sea, with the grid specified explicitly and SEQNUM labels; GeoJSON. |
-| h3Kml | No | Yes | H3 | 3 | H3 resolution 3 cells in the Norwegian Sea (AIGEN clip); cell boundaries and center points in separate KML files. |
+| h3Kml | No | Yes | H3 | 2 | Whole earth H3 resolution 2 cells; cell boundaries and center points in separate KML files. |
 | hiRes | No | No | ISEA43H | 27 | Very high resolution grid (cell area about 0.02 m^2) clipped to a small triangle in Ashland, Oregon; Shapefile. |
 | holes | Yes | No | ISEA3H | 17 | Clips with a polygon that has holes (clip_using_holes); KML. |
 | icosaISEA | No | No | ISEA4T | 0 | Res 0 triangles (the icosahedron) with the ISEA orientation; KML. |

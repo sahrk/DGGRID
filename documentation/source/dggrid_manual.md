@@ -325,7 +325,7 @@ A value of GDAL for parameter cell_output_type and/or point_output_type requires
 
 The file name prefix to use for the boundary or point output file is specified using the **string** parameter cell_output_file_name or point_output_file_name respectively. **DGGRID** will add the appropriate file suffix to the specified prefix name, depending on the chosen file format.
 
-For an H3 resolution 3 example that writes cell boundaries and center points to separate KML files, see `examples/h3Kml/h3Kml.meta` and its reference files in `examples/sampleOutput/h3Kml` (also listed in [**Appendix D**](#appendix-d-dggrid-examples)). It requires a build with H3.
+For a whole earth H3 resolution 2 example that writes cell boundaries and center points to separate KML files, see `examples/h3Kml/h3Kml.meta` and its reference files in `examples/sampleOutput/h3Kml` (also listed in [**Appendix D**](#appendix-d-dggrid-examples)). It requires a build with H3.
 
 DGG output files created by **DGGRID** can be quite large, depending on the size of the region being generated and the resolution of the grid. The generated cell boundaries and/or points can be output across multiple files by setting the **integer** parameter max_cells_per_output_file to the maximum number of cells to output to a single file. Setting the parameter to 0 (the default) will cause **DGGRID** to output all cells to a single file, no matter how large. If max_cells_per_output_file is greater than 0, output files are distinguished by appending a "\_1", "\_2", etc. to each output file name.
 
