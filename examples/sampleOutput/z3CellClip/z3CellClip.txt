@@ -1,5 +1,5 @@
 ** executing DGGRID version 9.1 with GDAL with H3 **
-type sizes: big int: 64 bits / big double: 64 bits
+type sizes: big int: 64 bits / big double: 128 bits
 
 ** using meta file z3CellClip.meta...
 WARNING: in DGGRID version 9.0 the default padding digit for Z3 indexes has switched from 0 to 3.

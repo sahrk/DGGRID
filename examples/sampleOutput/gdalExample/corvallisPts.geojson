@@ -2,17 +2,17 @@
 "type": "FeatureCollection",
 "name": "corvallisPts.geojson",
 "features": [
-{"type":"Feature","properties":{"name":"22090054"},"geometry":{"type":"Point","coordinates":[-123.294732597257891,44.577975946902285]}},
-{"type":"Feature","properties":{"name":"22094856"},"geometry":{"type":"Point","coordinates":[-123.279917425698741,44.57800400795967]}},
-{"type":"Feature","properties":{"name":"22097257"},"geometry":{"type":"Point","coordinates":[-123.288471106882795,44.568300857274608]}},
-{"type":"Feature","properties":{"name":"22099658"},"geometry":{"type":"Point","coordinates":[-123.297022063601872,44.558596787819248]}},
-{"type":"Feature","properties":{"name":"22099659"},"geometry":{"type":"Point","coordinates":[-123.265102320750813,44.578028943227778]}},
-{"type":"Feature","properties":{"name":"22102060"},"geometry":{"type":"Point","coordinates":[-123.273658331913708,44.568327545062729]}},
-{"type":"Feature","properties":{"name":"22104460"},"geometry":{"type":"Point","coordinates":[-123.282211618584199,44.558625230004104]}},
-{"type":"Feature","properties":{"name":"22106861"},"geometry":{"type":"Point","coordinates":[-123.290762182132028,44.548921996676356]}},
-{"type":"Feature","properties":{"name":"22106862"},"geometry":{"type":"Point","coordinates":[-123.258845625390464,44.568351107040748]}},
-{"type":"Feature","properties":{"name":"22109263"},"geometry":{"type":"Point","coordinates":[-123.267401239947247,44.558650543966095]}},
-{"type":"Feature","properties":{"name":"22111663"},"geometry":{"type":"Point","coordinates":[-123.275954131352478,44.548949064499745]}},
-{"type":"Feature","properties":{"name":"22116466"},"geometry":{"type":"Point","coordinates":[-123.261146148792648,44.548973004077062]}}
+{ "type": "Feature", "properties": { "name": "22090054" }, "geometry": { "type": "Point", "coordinates": [ -123.294732597257905, 44.577975946902271 ] } },
+{ "type": "Feature", "properties": { "name": "22094856" }, "geometry": { "type": "Point", "coordinates": [ -123.279917425698684, 44.578004007959635 ] } },
+{ "type": "Feature", "properties": { "name": "22097257" }, "geometry": { "type": "Point", "coordinates": [ -123.288471106882781, 44.568300857274586 ] } },
+{ "type": "Feature", "properties": { "name": "22099658" }, "geometry": { "type": "Point", "coordinates": [ -123.29702206360183, 44.558596787819212 ] } },
+{ "type": "Feature", "properties": { "name": "22099659" }, "geometry": { "type": "Point", "coordinates": [ -123.265102320750771, 44.57802894322775 ] } },
+{ "type": "Feature", "properties": { "name": "22102060" }, "geometry": { "type": "Point", "coordinates": [ -123.27365833191368, 44.568327545062715 ] } },
+{ "type": "Feature", "properties": { "name": "22104460" }, "geometry": { "type": "Point", "coordinates": [ -123.282211618584128, 44.558625230004068 ] } },
+{ "type": "Feature", "properties": { "name": "22106861" }, "geometry": { "type": "Point", "coordinates": [ -123.290762182131928, 44.548921996676306 ] } },
+{ "type": "Feature", "properties": { "name": "22106862" }, "geometry": { "type": "Point", "coordinates": [ -123.258845625390435, 44.568351107040712 ] } },
+{ "type": "Feature", "properties": { "name": "22109263" }, "geometry": { "type": "Point", "coordinates": [ -123.267401239947247, 44.558650543966074 ] } },
+{ "type": "Feature", "properties": { "name": "22111663" }, "geometry": { "type": "Point", "coordinates": [ -123.275954131352435, 44.548949064499709 ] } },
+{ "type": "Feature", "properties": { "name": "22116466" }, "geometry": { "type": "Point", "coordinates": [ -123.261146148792605, 44.548973004077027 ] } }
 ]
 }

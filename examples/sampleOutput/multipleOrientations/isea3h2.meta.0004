@@ -18,9 +18,9 @@ dggs_orient_specify_type SPECIFIED
 dggs_num_placements 1
 dggs_orient_rand_seed 1013
 dggs_orient_preset ISEA
-dggs_vert0_lon 123.80529170101755
-dggs_vert0_lat -1.4205655247762341
-dggs_vert0_azimuth 60.762565741670585
+dggs_vert0_lon 19.8878317698313858679
+dggs_vert0_lat 28.8590444225121126268
+dggs_vert0_azimuth 350.868502050111317203
 dggs_res_specify_type SPECIFIED
 dggs_res_spec 2
 hier_indexing_system_type NONE

@@ -1,5 +1,5 @@
 ** executing DGGRID version 9.1 with GDAL with H3 **
-type sizes: big int: 64 bits / big double: 64 bits
+type sizes: big int: 64 bits / big double: 128 bits
 
 ** using meta file wholeEarthIGEO7.meta...
 WARNING: dggs_type IGEO7 is now an alias for IGEO7v2 (ISEA projection on the WGS84 ellipsoid); before version 9.1 it was IGEO7v1 (ISEA projection on the authalic sphere). Use dggs_type IGEO7v1 to get the previous IGEO7 grid.
