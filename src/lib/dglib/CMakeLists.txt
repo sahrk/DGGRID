@@ -174,6 +174,7 @@ add_library(dglib
    include/dglib/DgHexIDGG.h
    include/dglib/DgHexIDGGS.h
    include/dglib/DgHierNdx.h
+   include/dglib/DgHierNdxCoord.h
    include/dglib/DgHierNdxIntRF.h
    include/dglib/DgHierNdxRF.h
    include/dglib/DgSeqNumRF.h

@@ -33,12 +33,12 @@
 #include <dglib/DgDiscRF.h>
 #include <dglib/DgIDGGS.h>
 #include <dglib/DgIDGG.h>
+#include <dglib/DgHierNdx.h>
 //#include <dglib/DgHierNdxIntRF.h>
 //#include <dglib/DgHierNdxStringRF.h>
 
 //class DgHierNdxSystemRFSBase;
 //class DgHierNdxRFS;
-class DgHierNdx;
 class DgHierNdxIntRF;
 class DgHierNdxStringCoord;
 class DgHierNdxIntCoord;

@@ -30,23 +30,6 @@
 
 #include <dglib/DgHierNdxRF.h>
 
-#define HIERNDX_INT_TYPE uint64_t
-
-////////////////////////////////////////////////////////////////////////////////
-class DgHierNdxIntCoord : public DgHierNdxCoord<HIERNDX_INT_TYPE> {
-
-   public:
-
-      DgHierNdxIntCoord (void);
-
-      DgHierNdxIntCoord (HIERNDX_INT_TYPE val)
-         : DgHierNdxCoord<HIERNDX_INT_TYPE>(val) { }
-
-      // define abstract method from above
-      // output as hexadecimal string
-      virtual std::string valString (void) const;
-};
-
 ////////////////////////////////////////////////////////////////////////////////
 class DgHierNdxIntRF : public DgHierNdxRF<DgHierNdxIntCoord> {
 

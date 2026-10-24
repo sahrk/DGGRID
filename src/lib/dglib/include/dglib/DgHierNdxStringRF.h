@@ -31,22 +31,6 @@
 #include <dglib/DgHierNdxRF.h>
 
 ////////////////////////////////////////////////////////////////////////////////
-class DgHierNdxStringCoord : public DgHierNdxCoord<std::string> {
-
-   public:
-
-      DgHierNdxStringCoord (void);
-
-      DgHierNdxStringCoord (std::string val)
-          : DgHierNdxCoord<std::string>(val) { }
-
-      // abstract method from above
-      virtual std::string valString (void) const {
-         return value();
-      }
-};
-
-////////////////////////////////////////////////////////////////////////////////
 class DgHierNdxStringRF : public DgHierNdxRF<DgHierNdxStringCoord> {
 
    public:

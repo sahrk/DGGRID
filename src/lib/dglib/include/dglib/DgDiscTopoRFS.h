@@ -54,7 +54,7 @@ template<class A, class B, class DB> class DgDiscTopoRFS
           {
              if (*this != rf)
              {
-                DgDiscRFSGrids<DgDiscTopoRF, A, B, DB, B>::operator=(rf);
+                DgDiscRFSGrids< ::DgDiscTopoRF, A, B, DB, B>::operator=(rf);
                 gridTopo_ = rf.gridTopo();
                 gridMetric_ = rf.gridMetric();
                 aperture_ = rf.aperture();
@@ -310,7 +310,9 @@ template<class A, class B, class DB> class DgDiscTopoRFS
                  unsigned int aperture = 3, bool isCongruent = true,
                  bool isAligned = false, const std::string& name = "DiscS")
         : DgDiscTopoRF<DgResAdd<A>, B, DB> (network, backFrame, name),
-          DgDiscRFSGrids<DgDiscTopoRF, A, B, DB, B> (backFrame, nResIn),
+          // ::DgDiscTopoRF names the template; inside this class MSVC takes
+          // the bare name to be the injected base class name
+          DgDiscRFSGrids< ::DgDiscTopoRF, A, B, DB, B> (backFrame, nResIn),
                //DgDiscRFSGrids<DgDiscTopoRF, A, B, DB> (backFrame, nResIn),
                gridTopo_ (gridTopo), gridMetric_ (gridMetric), aperture_ (aperture),
                isCongruent_ (isCongruent), isAligned_ (isAligned)
@@ -324,7 +326,7 @@ template<class A, class B, class DB> class DgDiscTopoRFS
 
       DgDiscTopoRFS (const DgDiscTopoRFS<A, B, DB>& rf) // uses dubious operator=
          : DgDiscTopoRF<DgResAdd<A>, B, DB> (rf.network(), rf.backFrame(), rf.name()),
-                 DgDiscRFSGrids<DgDiscTopoRF, A, B, DB, B> (rf.backFrame(), rf.nRes())
+                 DgDiscRFSGrids< ::DgDiscTopoRF, A, B, DB, B> (rf.backFrame(), rf.nRes())
         { *this = rf; }
 
       // use default RFS dist

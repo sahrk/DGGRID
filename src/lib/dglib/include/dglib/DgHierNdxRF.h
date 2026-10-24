@@ -31,53 +31,8 @@
 #include <dglib/DgDiscRF.h>
 #include <dglib/DgIDGGS.h>
 #include <dglib/DgIDGG.h>
+#include <dglib/DgHierNdxCoord.h>
 #include <dglib/DgHierNdxSystemRFBase.h>
-
-////////////////////////////////////////////////////////////////////////////////
-template <class T> class DgHierNdxCoord  {
-
-   public:
-
-      //static const DgHierNdxCoord<T> undefDgHierNdxCoord<T>;
-
-      DgHierNdxCoord (void) : value_ (0) { }
-
-      DgHierNdxCoord (T valIn) : value_ (valIn) { }
-
-      DgHierNdxCoord (const DgHierNdxCoord<T>& coord)
-              { value_ = coord.value(); }
-
-      void setValue (T value) { value_ = value; }
-
-      T value (void) const { return value_; }
-
-      operator std::string (void) const { return valString(); }
-
-      bool operator== (const DgHierNdxCoord<T>& c) const
-          { return value() == c.value(); }
-
-      bool operator!= (const DgHierNdxCoord<T>& c) const
-          { return !(*this == c); }
-
-      DgHierNdxCoord<T>& operator= (const DgHierNdxCoord<T>& add)
-          {
-             if (add != *this) setValue(add.value());
-
-             return *this;
-          }
-
-      // sub-classes must define
-      virtual std::string valString (void) const = 0;
-
-   private:
-
-      T value_;
-};
-
-////////////////////////////////////////////////////////////////////////////////
-template <class T> inline std::ostream&
-operator<< (std::ostream& stream, const DgHierNdxCoord<T>& coord)
-{ return stream << std::string(coord); }
 
 ////////////////////////////////////////////////////////////////////////////////
 // class C is a DgHierNdxCoord<T> for some T

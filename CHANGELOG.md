@@ -62,6 +62,7 @@ values if desired to match the original grid.
 - negative zero (e.g. -0.0000000) in output
 - SEQNUM input values above 32 bits misread on Windows
 - lower case choice parameter values (e.g. superfund, mixed43) not always recognized
+- Windows (MSVC) build failure
 
 ## [9.03b] - 2026-07-19
 ### Added

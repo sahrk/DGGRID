@@ -43,7 +43,7 @@ template<class A, class B, class DB> class DgDiscRFS
       DgDiscRFS (DgRFNetwork& network, const DgRF<DgResAdd<B>, DB>& backFrame,
                  int nResIn, const std::string& name = "DiscS")
         : DgDiscRF<DgResAdd<A>, DgResAdd<B>, DB> (network, backFrame, name),
-          DgDiscRFSGrids<DgDiscRF, A, DgResAdd<B>, DB, B> (backFrame, nResIn)
+          DgDiscRFSGrids< ::DgDiscRF, A, DgResAdd<B>, DB, B> (backFrame, nResIn)
         {
         }
 

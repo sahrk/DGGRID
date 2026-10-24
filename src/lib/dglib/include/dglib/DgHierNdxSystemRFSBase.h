@@ -29,9 +29,11 @@
 #include <dglib/DgDiscRFS.h>
 #include <dglib/DgHierNdx.h>
 #include <dglib/DgAddressType.h>
+#include <dglib/DgIDGGutil.h>
+
+using namespace dgg::addtype;
 
 class DgHierNdxSystemRFBase;
-class DgQ2DICoord;
 class DgIDGGSBase;
 class DgIDGGBase;
 
