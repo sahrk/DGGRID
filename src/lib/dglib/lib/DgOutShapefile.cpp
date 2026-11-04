@@ -265,8 +265,8 @@ DgOutShapefile::writePoint (const DgLocation& loc, const std::string* label,
      id = "0";
 
    DgDVec2D vec = rf().getVecLocation(loc);
-   double x = vec.x();
-   double y = vec.y();
+   double x = dgg::util::suppressNegativeZero(vec.x());
+   double y = dgg::util::suppressNegativeZero(vec.y());
 
    // now write to the files
    writeDbf(id.c_str());
@@ -327,8 +327,8 @@ DgOutShapefile::writePolygon (const DgPolygon& poly, const std::string* label,
    for (int newNdx = 0; newNdx < numVerts - 1; newNdx++)
    {
       DgDVec2D vec = rf().getVecAddress(*v[oldNdx]);
-      x[newNdx] = vec.x();
-      y[newNdx] = vec.y();
+      x[newNdx] = dgg::util::suppressNegativeZero(vec.x());
+      y[newNdx] = dgg::util::suppressNegativeZero(vec.y());
 
       oldNdx--;
    }

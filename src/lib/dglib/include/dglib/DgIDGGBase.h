@@ -126,31 +126,35 @@ class DgIDGGBase : public DgDiscTopoRF<DgQ2DICoord, DgGeoCoord, long double> {
       virtual void setVertices (const DgLocation& loc, DgPolygon& vec,
                                 int densify) const;
 
-      // As above, but the boundary is H3's cellToBoundary (see
-      // DgH3System::setCellBoundary), densified along great circle arcs, if
-      // h3Boundary is true. That requires an H3 build and an H3-compatible
-      // DGGS at a resolution with H3 cells (DGGS resolutions 2-17).
+      // As above, and if edgeCrossings is true the boundary also has the
+      // points where its edges cross onto another icosahedron face and bend
+      // there (see insertEdgeCrossings); each piece between them is then
+      // densified.
       void setVertices (const DgLocation& loc, DgPolygon& vec, int densify,
-                        bool h3Boundary) const;
+                        bool edgeCrossings) const;
 
       // Build the cell at loc (in any frame connected to this DGG; it is
       // first converted to the DGG) for output. The cell is in geoRF() with
       // its boundary densified and wrapped according to lonWrapMode; if the
       // boundary had to be wrapped and unwrapPts is true the center is
       // wrapped too. The caller owns the cell, which does not own dataList.
-      // The boundary is DGGRID's (the cell vertices, densified in the plane)
-      // unless h3Boundary is true (see setVertices).
+      // The boundary has the face edge crossings if edgeCrossings is true
+      // (see setVertices).
       DgCell* makeCell (const DgLocation& loc, const std::string& label,
                         int densify, DgGeoSphRF::DgLonWrapMode lonWrapMode,
                         bool unwrapPts, DgDataList* dataList = nullptr,
-                        bool trace = false, bool h3Boundary = false) const;
+                        bool trace = false, bool edgeCrossings = false) const;
 
       virtual void setAddVertices (const DgQ2DICoord& add,
                                    DgPolygon& vec) const
                   { setAddVertices(add, vec, 0); }
 
+      // The cell vertices (in geoRF(), without duplicate points), densified
+      // with densify points per edge; with the face edge crossings first if
+      // edgeCrossings is true.
       virtual void setAddVertices (const DgQ2DICoord& add,
-                                   DgPolygon& vec, int densify) const;
+                                   DgPolygon& vec, int densify,
+                                   bool edgeCrossings = false) const;
 
       // we'll give dummy definitions for these since some of our IDGG's may
       // not have defined these yet
@@ -221,6 +225,11 @@ class DgIDGGBase : public DgDiscTopoRF<DgQ2DICoord, DgGeoCoord, long double> {
       static const DgQuadEdgeCells edgeTable_[12];
 
       // local internal network
+
+      // Insert into each edge of vec (a cell boundary in the Q2DD plane of
+      // quad quadNum) the points, in order, where it crosses an icosahedron
+      // face edge and the boundary bends.
+      void insertEdgeCrossings (int quadNum, DgPolygon& vec) const;
 
       DgRFNetwork locNet_;
 

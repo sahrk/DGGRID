@@ -47,9 +47,56 @@
 #include <dglib/DgSeriesConverter.h>
 #include <dglib/DgTriGrid2DS.h>
 #include <dglib/DgHierNdxSystemRFSBase.h>
-#ifdef USE_H3
-#include <dglib/DgH3System.h>
-#endif
+#include <algorithm>
+#include <vector>
+
+namespace {
+
+////////////////////////////////////////////////////////////////////////////////
+// Drop the points of the boundary vec (in a geographic frame) that are within
+// dupTol radians of the previous point kept, including a last point that
+// repeats the first: duplicates add nothing to a ring, and some formats and
+// tools treat them as degenerate edges.
+void
+dropDuplicatePoints (DgPolygon& vec)
+{
+   const long double dupTol = 1.0e-12L;
+
+   std::vector<DgAddressBase*>& v = vec.addressVec();
+   if (v.size() < 2) return;
+
+   auto vecOf = [&](const DgAddressBase* a) {
+      const DgGeoCoord& g = dynamic_cast<const DgAddress<DgGeoCoord>&>(*a).address();
+      return DgDVec3D::fromLatLon(g.lat(), g.lon());
+   };
+
+   std::vector<DgAddressBase*> kept;
+   kept.push_back(v[0]);
+   DgDVec3D last = vecOf(v[0]);
+   for (unsigned long i = 1; i < v.size(); i++)
+   {
+      const DgDVec3D p = vecOf(v[i]);
+      if (DgDVec3D::angleBetween(p, last) < dupTol)
+         delete v[i];
+      else
+      {
+         kept.push_back(v[i]);
+         last = p;
+      }
+   }
+
+   while (kept.size() > 1 &&
+          DgDVec3D::angleBetween(vecOf(kept.back()), vecOf(kept[0])) < dupTol)
+   {
+      delete kept.back();
+      kept.pop_back();
+   }
+
+   v = kept;
+
+} // void dropDuplicatePoints
+
+} // anonymous namespace
 
 ////////////////////////////////////////////////////////////////////////////////
 const DgGeoSphRF&  DgIDGGBase::geoRF      (void) const { return dggs()->geoRF(); }
@@ -371,21 +418,15 @@ DgIDGGBase::setVertices (const DgLocation& loc, DgPolygon& vec,
 ////////////////////////////////////////////////////////////////////////////////
 void
 DgIDGGBase::setVertices (const DgLocation& loc, DgPolygon& vec,
-                     int densify, bool h3Boundary) const
+                     int densify, bool edgeCrossings) const
 {
-   if (!h3Boundary) {
-      setVertices(loc, vec, densify);
-      return;
-   }
+   vec.clearAddress();
+   backFrame().convert(vec);
 
-#ifdef USE_H3
    DgLocation tLoc(loc);
    convert(&tLoc);
-   DgH3System::setCellBoundary(*this, *getAddress(tLoc), vec, densify);
-#else
-   report("DgIDGGBase::setVertices(): the H3 boundary requires DGGRID built "
-          "with the H3 library", DgBase::Fatal);
-#endif
+
+   setAddVertices(*getAddress(tLoc), vec, densify, edgeCrossings);
 
 } // void DgIDGGBase::setVertices
 
@@ -394,14 +435,14 @@ DgCell*
 DgIDGGBase::makeCell (const DgLocation& loc, const std::string& label,
                   int densify, DgGeoSphRF::DgLonWrapMode lonWrapMode,
                   bool unwrapPts, DgDataList* dataList, bool trace,
-                  bool h3Boundary) const
+                  bool edgeCrossings) const
 {
    // the address of the cell, not a point within it
    DgLocation* tmpLoc = new DgLocation(loc);
    convert(tmpLoc);
 
    DgPolygon verts(*this);
-   setVertices(*tmpLoc, verts, densify, h3Boundary);
+   setVertices(*tmpLoc, verts, densify, edgeCrossings);
 
    // unwrap the cell east/west if applicable
    DgPolygon* unwrappedVerts = new DgPolygon(verts);
@@ -429,9 +470,129 @@ DgIDGGBase::makeCell (const DgLocation& loc, const std::string& label,
 } // DgCell* DgIDGGBase::makeCell
 
 ////////////////////////////////////////////////////////////////////////////////
+// The icosahedron face edges in the Q2DD plane of a quad (unit edge, origin
+// at the quad's vertex) are the three lines through the origin that bound
+// the six sub-triangles around it (see
+// DgQ2DDtoVertex2DDConverter::compute_subtriangle), out to the neighbouring
+// vertices at distance 1, and the quad's far edges a == 1 and b == 1, where
+// b = y / sin 60 and a = x + b / 2 (see q2ddFarEdgeRemap).
+//
+// A cell edge is straight in this plane but bends where it crosses onto
+// another face, so without the crossing point the boundary cuts the corner.
+// A crossing within crossTol (a fraction of the edge) of either end of an
+// edge is that vertex, and is skipped. So is a crossing where the boundary
+// does not bend, which lies on the great circle through the edge's ends
+// (within bendTol of the edge length): an edge that crosses a face edge
+// symmetrically, at right angles at its midpoint, with the gnomonic
+// projection. A crossing in a pentagon's missing sub-triangle is kept here
+// and dropped with that sub-triangle.
+void
+DgIDGGBase::insertEdgeCrossings (int quadNum, DgPolygon& vec) const
+{
+   const long double crossTol = 1.0e-9L;
+   const long double faceTol = 1.0e-12L;   // quad units
+   const long double bendTol = 1.0e-6L;
+
+   const DgContCartRF* cc = dynamic_cast<const DgContCartRF*>(&vec.rf());
+   if (cc == 0) report("DgIDGGBase::insertEdgeCrossings() with non-CCRF",
+                       DgBase::Fatal);
+
+   // directions of the three lines through the origin (0, 60 and 120 deg)
+   static const DgDVec2D dirs[3] = { DgDVec2D(M_ONE, M_ZERO),
+                                     DgDVec2D(M_HALF, M_SIN60),
+                                     DgDVec2D(-M_HALF, M_SIN60) };
+   auto bCoord = [](const DgDVec2D& p) { return p.y() / M_SIN60; };
+   auto aCoord = [&](const DgDVec2D& p) { return p.x() + bCoord(p) / 2.0L; };
+   auto opposite = [](long double s1, long double s2)
+         { return (s1 < M_ZERO && s2 > M_ZERO) || (s1 > M_ZERO && s2 < M_ZERO); };
+
+   // the unit vector of a point of the plane; false if the point is in a
+   // pentagon's missing sub-triangle, where it has no position
+   auto sphPt = [&](const DgDVec2D& p, DgDVec3D& out) {
+      DgLocation* loc = q2ddRF().makeLocation(DgQ2DDCoord(quadNum, p));
+      vertexRF().convert(loc);
+      const bool keep = vertexRF().getAddress(*loc)->keep();
+      if (keep) {
+         geoRF().convert(loc);
+         const DgGeoCoord& g = *geoRF().getAddress(*loc);
+         out = DgDVec3D::fromLatLon(g.lat(), g.lon());
+      }
+      delete loc;
+      return keep;
+   };
+
+   // does the boundary bend at q, between the edge's ends p1 and p2?
+   auto bends = [&](const DgDVec2D& p1, const DgDVec2D& p2,
+                    const DgDVec2D& q) {
+      DgDVec3D a, b, c;
+      if (!sphPt(p1, a) || !sphPt(p2, b) || !sphPt(q, c)) return true;
+      const DgDVec3D n = a.cross(b);
+      const long double nm = n.magnitude();
+      if (!(nm > M_ZERO)) return true;
+      return fabsl(c.dot(n)) / nm > bendTol * DgDVec3D::angleBetween(a, b);
+   };
+
+   DgPolygon out(*cc);
+   std::vector<DgAddressBase*>& v0 = vec.addressVec();
+   std::vector<DgAddressBase*>& v1 = out.addressVec();
+   for (unsigned long i = 0; i < v0.size(); i++)
+   {
+      const DgDVec2D p1 = dynamic_cast< DgAddress<DgDVec2D>& >(*v0[i]).address();
+      const DgDVec2D p2 = dynamic_cast< DgAddress<DgDVec2D>& >(
+                                    *v0[(i + 1) % v0.size()]).address();
+      v1.push_back(new DgAddress<DgDVec2D>(p1));
+
+      std::vector<long double> ts;
+
+      // the lines through the origin, as far as the neighbouring vertices
+      for (int k = 0; k < 3; k++)
+      {
+         const DgDVec2D& u = dirs[k];
+         const long double s1 = u.x() * p1.y() - u.y() * p1.x();
+         const long double s2 = u.x() * p2.y() - u.y() * p2.x();
+         if (!opposite(s1, s2)) continue;
+         const long double t = s1 / (s1 - s2);
+         if (DgDVec2D::fracPoint(p1, p2, t).magnitude() <= M_ONE + faceTol)
+            ts.push_back(t);
+      }
+
+      // the far edge a == 1, for 0 <= b <= 1
+      {
+         const long double s1 = aCoord(p1) - M_ONE, s2 = aCoord(p2) - M_ONE;
+         if (opposite(s1, s2)) {
+            const long double t = s1 / (s1 - s2);
+            const long double b = bCoord(DgDVec2D::fracPoint(p1, p2, t));
+            if (b >= -faceTol && b <= M_ONE + faceTol) ts.push_back(t);
+         }
+      }
+
+      // the far edge b == 1, for 0 <= a <= 1
+      {
+         const long double s1 = bCoord(p1) - M_ONE, s2 = bCoord(p2) - M_ONE;
+         if (opposite(s1, s2)) {
+            const long double t = s1 / (s1 - s2);
+            const long double a = aCoord(DgDVec2D::fracPoint(p1, p2, t));
+            if (a >= -faceTol && a <= M_ONE + faceTol) ts.push_back(t);
+         }
+      }
+
+      std::sort(ts.begin(), ts.end());
+      for (long double t : ts)
+      {
+         if (t <= crossTol || t >= M_ONE - crossTol) continue;
+         const DgDVec2D q = DgDVec2D::fracPoint(p1, p2, t);
+         if (bends(p1, p2, q)) v1.push_back(new DgAddress<DgDVec2D>(q));
+      }
+   }
+
+   vec = out;
+
+} // void DgIDGGBase::insertEdgeCrossings
+
+////////////////////////////////////////////////////////////////////////////////
 void
 DgIDGGBase::setAddVertices (const DgQ2DICoord& add, DgPolygon& vec,
-                        int densify) const
+                        int densify, bool edgeCrossings) const
 {
    DgLocation* tmpLoc = grid2D().makeLocation(add.coord());
 //cout << "a: " << *tmpLoc << std::endl;
@@ -443,6 +604,10 @@ DgIDGGBase::setAddVertices (const DgQ2DICoord& add, DgPolygon& vec,
 //cout << "A: " << vec << std::endl;
    ccFrame().convert(vec);
 //cout << "B: " << vec << std::endl;
+
+   // the points where the edges cross onto another face, so that each
+   // densified piece lies on one face
+   if (edgeCrossings) insertEdgeCrossings(add.quadNum(), vec);
 
    // densify
    vec.densify(densify);
@@ -493,6 +658,8 @@ DgIDGGBase::setAddVertices (const DgQ2DICoord& add, DgPolygon& vec,
 //cout << "F: " << vec << std::endl;
    geoRF().convert(&vec);
 //cout << "G: " << vec << std::endl;
+
+   dropDuplicatePoints(vec);
 
    // Release the Kraken... I mean, the vector's pointers:
    dgg::util::release(v);

@@ -87,8 +87,8 @@
 #include <cmath>
 
 #include <dglib/DgIcosaSliceDice.h>
+#include <dglib/DgProjTriRF.h>
 
-typedef DgIcosaSliceDice::V3 V3;
 typedef DgIcosaSliceDice::V2 V2;
 typedef DgIcosaSliceDice::Status Status;
 
@@ -96,22 +96,6 @@ typedef DgIcosaSliceDice::Status Status;
 // vector helpers
 ////////////////////////////////////////////////////////////////////////////////
 namespace {
-
-inline V3 add (const V3& a, const V3& b)
-   { return { a.x + b.x, a.y + b.y, a.z + b.z }; }
-inline V3 sub (const V3& a, const V3& b)
-   { return { a.x - b.x, a.y - b.y, a.z - b.z }; }
-inline V3 scale (const V3& a, long double s)
-   { return { a.x * s, a.y * s, a.z * s }; }
-inline long double dot (const V3& a, const V3& b)
-   { return a.x * b.x + a.y * b.y + a.z * b.z; }
-inline V3 cross (const V3& a, const V3& b)
-   { return { a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z,
-              a.x * b.y - a.y * b.x }; }
-inline long double norm (const V3& a) { return sqrtl(dot(a, a)); }
-inline V3 normalize (const V3& a) { return scale(a, M_ONE / norm(a)); }
-inline bool finite3 (const V3& a)
-   { return std::isfinite(a.x) && std::isfinite(a.y) && std::isfinite(a.z); }
 
 inline V2 add2 (const V2& a, const V2& b) { return { a.x + b.x, a.y + b.y }; }
 inline V2 sub2 (const V2& a, const V2& b) { return { a.x - b.x, a.y - b.y }; }
@@ -124,10 +108,10 @@ const long double NaN = NAN;
 // sin(angle(a, b) / 2) for unit a, b, computed as |a - b| / |(a - b, a + b)|
 // (Recht): accurate for tiny angles and self-normalising
 // against |a|, |b| != 1 by rounding.
-inline long double halfChord (const V3& a, const V3& b)
+inline long double halfChord (const DgDVec3D& a, const DgDVec3D& b)
 {
-   const long double D = norm(sub(a, b));
-   const long double S = norm(add(a, b));
+   const long double D = (a - b).magnitude();
+   const long double S = (a + b).magnitude();
    return D / hypotl(D, S);
 }
 
@@ -180,13 +164,6 @@ inline Status worse (Status a, Status b)
 } // anonymous namespace
 
 ////////////////////////////////////////////////////////////////////////////////
-long double
-DgIcosaSliceDice::angleBetween (const V3& a, const V3& b)
-{
-   return 2.0L * atan2l(norm(sub(a, b)), norm(add(a, b)));
-}
-
-////////////////////////////////////////////////////////////////////////////////
 // Signed spherical excess of (v1, v2, v3) [Rec21, "vector spherical geometry"]
 //   tan(E/2) = v1.(v2 x v3) / (1 + v1.v2 + v2.v3 + v3.v1)
 // E > 0 iff (v1, v2, v3) is counter-clockwise seen from outside the sphere.
@@ -194,54 +171,34 @@ DgIcosaSliceDice::angleBetween (const V3& a, const V3& b)
 // which is algebraically equal and loses no relative accuracy for small
 // triangles.
 long double
-DgIcosaSliceDice::sphTriArea (const V3& v1, const V3& v2, const V3& v3)
+DgIcosaSliceDice::sphTriArea (const DgDVec3D& v1, const DgDVec3D& v2, const DgDVec3D& v3)
 {
-   const long double num = dot(v1, cross(sub(v2, v1), sub(v3, v1)));
-   const long double den = M_ONE + dot(v1, v2) + dot(v2, v3) + dot(v3, v1);
+   const long double num = v1.dot((v2 - v1).cross(v3 - v1));
+   const long double den = M_ONE + v1.dot(v2) + v2.dot(v3) + v3.dot(v1);
    return 2.0L * atan2l(num, den);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-V3
-DgIcosaSliceDice::llToVec (const GeoCoord& ll)
-{
-   const long double cl = cosl(ll.lat);
-   return { cl * cosl(ll.lon), cl * sinl(ll.lon), sinl(ll.lat) };
-}
-
-////////////////////////////////////////////////////////////////////////////////
-GeoCoord
-DgIcosaSliceDice::vecToLL (const V3& v)
-{
-   GeoCoord ll;
-   const long double rxy = hypotl(v.x, v.y);
-   ll.lat = atan2l(v.z, rxy);
-   // at the poles longitude is undefined: report 0 (DGGRID convention)
-   ll.lon = (rxy == M_ZERO) ? M_ZERO : atan2l(v.y, v.x);
-   return ll;
-}
-
-////////////////////////////////////////////////////////////////////////////////
 void
-DgIcosaSliceDice::prepare (Tri& t, const V3& A, const V3& B, const V3& C,
+DgIcosaSliceDice::prepare (Tri& t, const DgDVec3D& A, const DgDVec3D& B, const DgDVec3D& C,
                            const V2& a, const V2& b, const V2& c)
 {
    t.A = A; t.B = B; t.C = C;
    t.a = a; t.b = b; t.c = c;
-   t.nBC = cross(B, C);
-   t.tp  = dot(A, t.nBC);
-   t.c01 = dot(A, B);
-   t.c12 = dot(B, C);
-   t.c20 = dot(C, A);
-   t.s12 = norm(t.nBC);
-   t.arcBC = angleBetween(B, C);
-   t.arcAB = angleBetween(A, B);
+   t.nBC = B.cross(C);
+   t.tp  = A.dot(t.nBC);
+   t.c01 = A.dot(B);
+   t.c12 = B.dot(C);
+   t.c20 = C.dot(A);
+   t.s12 = t.nBC.magnitude();
+   t.arcBC = DgDVec3D::angleBetween(B, C);
+   t.arcAB = DgDVec3D::angleBetween(A, B);
    t.area = sphTriArea(A, B, C);
    // unit tangent at B toward C: component of C orthogonal to B
-   t.uB = normalize(sub(C, scale(B, t.c12)));
+   t.uB = (C - B * t.c12).normalized();
    // interior angle at B between the arcs BA and BC
-   const V3 tBA = normalize(sub(A, scale(B, t.c01)));
-   t.angB = angleBetween(tBA, t.uB);
+   const DgDVec3D tBA = (A - B * t.c01).normalized();
+   t.angB = DgDVec3D::angleBetween(tBA, t.uB);
 
 } // void DgIcosaSliceDice::prepare
 
@@ -249,10 +206,10 @@ DgIcosaSliceDice::prepare (Tri& t, const V3& A, const V3& B, const V3& C,
 // Forward slice-and-dice [VLS06], vector form [Rec21].
 ////////////////////////////////////////////////////////////////////////////////
 Status
-DgIcosaSliceDice::fwdTri (const V3& P, const Tri& t, V2& out)
+DgIcosaSliceDice::fwdTri (const DgDVec3D& P, const Tri& t, V2& out)
 {
    out = { NaN, NaN };
-   if (!finite3(P)) return Status::Fail;
+   if (!P.isFinite()) return Status::Fail;
 
    // radial-vertex coincidence: the slice through A is undefined but every
    // slice gives h = 0, so P = A maps to a exactly.
@@ -267,20 +224,20 @@ DgIcosaSliceDice::fwdTri (const V3& P, const Tri& t, V2& out)
    // the windings of (A, P) and (B, C). The arc BC is < 180 deg and Q lies
    // on it, so the correct Q is the one on the same side as the midpoint
    // direction B + C: flip if Q . (B + C) < 0.
-   const V3 n1 = cross(t.A, sub(P, t.A));
-   V3 Q = cross(n1, t.nBC);
-   const long double qn = norm(Q);
+   const DgDVec3D n1 = t.A.cross(P - t.A);
+   DgDVec3D Q = n1.cross(t.nBC);
+   const long double qn = Q.magnitude();
    if (!std::isfinite(qn)) return Status::Fail;
    if (qn == M_ZERO)
    {
       // P - A parallel to A: P = +-A up to rounding. Near +A the slice is
       // undefined and irrelevant (h ~ 0): return a. Near -A (the antipode)
       // P is certainly outside the triangle: fail.
-      if (dot(P, t.A) > M_ZERO) { out = t.a; return Status::Clamped; }
+      if (P.dot(t.A) > M_ZERO) { out = t.a; return Status::Clamped; }
       return Status::Fail;
    }
-   Q = scale(Q, M_ONE / qn);
-   if (dot(Q, add(t.B, t.C)) < M_ZERO) Q = scale(Q, -M_ONE);
+   Q /= qn;
+   if (Q.dot(t.B + t.C) < M_ZERO) Q *= -M_ONE;
 
    // dice: chord ratio, see the derivation at the top of this file.
    // DIRECTION RULE: Q was chosen on BC's side, but P may lie on the other
@@ -288,14 +245,14 @@ DgIcosaSliceDice::fwdTri (const V3& P, const Tri& t, V2& out)
    // point opposite ways, and the true "h" is negative, which the
    // degenerate-input rule below rejects unless |h| is within rounding of 0.
    long double h = kAP / halfChord(t.A, Q);
-   if (dot(n1, cross(t.A, Q)) < M_ZERO) h = -h;
+   if (n1.dot(t.A.cross(Q)) < M_ZERO) h = -h;
 
    // slice: area fraction r = |ABQ| / |ABC| (both signed with the same
    // winding, so r >= 0 inside); B x (Q - B) form for accuracy near B.
    long double r;
    {
-      const long double num = dot(t.A, cross(t.B, sub(Q, t.B)));
-      const long double den = M_ONE + t.c01 + dot(t.B, Q) + dot(Q, t.A);
+      const long double num = t.A.dot(t.B.cross(Q - t.B));
+      const long double den = M_ONE + t.c01 + t.B.dot(Q) + Q.dot(t.A);
       r = 2.0L * atan2l(num, den) / t.area;
    }
 
@@ -329,7 +286,7 @@ DgIcosaSliceDice::fwdTri (const V3& P, const Tri& t, V2& out)
 // angle delta from AB toward AC (same hemisphere rule as the forward).
 ////////////////////////////////////////////////////////////////////////////////
 static bool
-trigSliceQ (const DgIcosaSliceDice::Tri& t, long double r, V3& Q)
+trigSliceQ (const DgIcosaSliceDice::Tri& t, long double r, DgDVec3D& Q)
 {
    const long double E = fabsl(r * t.area);
    const long double beta = t.angB;
@@ -337,16 +294,16 @@ trigSliceQ (const DgIcosaSliceDice::Tri& t, long double r, V3& Q)
          atan2l(2.0L * sinl(E / 2.0L) * sinl(beta - E / 2.0L),
                 sinl(beta - E) - sinl(beta) * cosl(t.arcAB));
    // orthonormal tangent frame at A: tB toward B, tP toward C's side
-   const V3 tB = normalize(sub(t.B, scale(t.A, t.c01)));
-   const V3 tC = sub(t.C, scale(t.A, t.c20));
-   const V3 tP = normalize(sub(tC, scale(tB, dot(tC, tB))));
-   const V3 d = add(scale(tB, cosl(delta)), scale(tP, sinl(delta)));
-   Q = cross(cross(t.A, d), t.nBC);
-   const long double qn = norm(Q);
+   const DgDVec3D tB = (t.B - t.A * t.c01).normalized();
+   const DgDVec3D tC = t.C - t.A * t.c20;
+   const DgDVec3D tP = (tC - tB * tC.dot(tB)).normalized();
+   const DgDVec3D d = tB * cosl(delta) + tP * sinl(delta);
+   Q = t.A.cross(d).cross(t.nBC);
+   const long double qn = Q.magnitude();
    if (!(qn > M_ZERO)) return false;
-   Q = scale(Q, M_ONE / qn);
-   if (dot(Q, add(t.B, t.C)) < M_ZERO) Q = scale(Q, -M_ONE);   // hemisphere
-   return finite3(Q);
+   Q /= qn;
+   if (Q.dot(t.B + t.C) < M_ZERO) Q *= -M_ONE;   // hemisphere
+   return Q.isFinite();
 
 } // static bool trigSliceQ
 
@@ -354,7 +311,7 @@ trigSliceQ (const DgIcosaSliceDice::Tri& t, long double r, V3& Q)
 // Inverse slice-and-dice [Rec21].
 ////////////////////////////////////////////////////////////////////////////////
 Status
-DgIcosaSliceDice::invTri (const V2& X, const Tri& t, V3& out, bool forceTrig)
+DgIcosaSliceDice::invTri (const V2& X, const Tri& t, DgDVec3D& out, bool forceTrig)
 {
    out = { NaN, NaN, NaN };
    if (!std::isfinite(X.x) || !std::isfinite(X.y)) return Status::Fail;
@@ -370,7 +327,7 @@ DgIcosaSliceDice::invTri (const V2& X, const Tri& t, V3& out, bool forceTrig)
    if (r > M_ONE) r = M_ONE;                       // rounding only (bc >= 0)
 
    // --- slice: Q on arc BC with |ABQ| = r |ABC| ---
-   V3 Q;
+   DgDVec3D Q;
    bool ok = false;
    if (!forceTrig)
    {
@@ -386,8 +343,8 @@ DgIcosaSliceDice::invTri (const V2& X, const Tri& t, V3& out, bool forceTrig)
       if (std::isfinite(f) && std::isfinite(g) && !(g == M_ZERO && f < M_ZERO))
       {
          const long double phi = 2.0L * atan2l(g, f);   // arc |BQ|
-         Q = add(scale(t.B, cosl(phi)), scale(t.uB, sinl(phi)));
-         ok = finite3(Q) && phi <= t.arcBC + clampTol;
+         Q = t.B * cosl(phi) + t.uB * sinl(phi);
+         ok = Q.isFinite() && phi <= t.arcBC + clampTol;
       }
    }
    if (!ok)
@@ -399,12 +356,12 @@ DgIcosaSliceDice::invTri (const V2& X, const Tri& t, V3& out, bool forceTrig)
    // --- dice: P on arc AQ with sin(|AP|/2) = h sin(|AQ|/2) ---
    const long double k = halfChord(t.A, Q);
    const long double theta = 2.0L * asinl(h * k);   // h k <= sin(|AQ|/2) < 1
-   const long double aq = dot(t.A, Q);
-   const V3 W = sub(Q, scale(t.A, aq));            // tangent at A toward Q
-   const long double wn = norm(W);
+   const long double aq = t.A.dot(Q);
+   const DgDVec3D W = Q - t.A * aq;                // tangent at A toward Q
+   const long double wn = W.magnitude();
    if (!(wn > M_ZERO)) return Status::Fail;        // Q = +-A: impossible
-   out = add(scale(t.A, cosl(theta)), scale(W, sinl(theta) / wn));
-   if (!finite3(out)) { out = { NaN, NaN, NaN }; return Status::Fail; }
+   out = t.A * cosl(theta) + W * (sinl(theta) / wn);
+   if (!out.isFinite()) { out = { NaN, NaN, NaN }; return Status::Fail; }
    return st;
 
 } // Status DgIcosaSliceDice::invTri
@@ -506,31 +463,33 @@ V2 DgIcosaSliceDice::subPlanar (int s, int vmc)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-DgIcosaSliceDice::DgIcosaSliceDice (RadialVertex rv, const SphIcosa& si)
-   : rv_ (rv)
+DgIcosaSliceDice::DgIcosaSliceDice (RadialVertex rv, const DgSphIcosa& dsi)
+   : rv_ (rv), dsi_ (&dsi)
 {
+   const SphIcosa& si = dsi.sphIcosa();
+
    // the 12 vertices, as unit vectors (renormalised: changes <= 1 ulp; the
    // kernel formulas assume unit vectors). DgSphIcosa computes icoverts with
    // an exact (atan2) rotation, so this is a regular icosahedron to a few ulp.
-   for (int i = 0; i < 12; i++) vert_[i] = normalize(llToVec(si.icoverts[i]));
+   for (int i = 0; i < 12; i++) vert_[i] = DgDVec3D::fromGeo(si.icoverts[i]).normalized();
 
    for (int f = 0; f < 20; f++)
    {
-      const V3& v0 = vert_[kFaceVerts[f][0]];
-      const V3& v1 = vert_[kFaceVerts[f][1]];
-      const V3& v2 = vert_[kFaceVerts[f][2]];
+      const DgDVec3D& v0 = vert_[kFaceVerts[f][0]];
+      const DgDVec3D& v1 = vert_[kFaceVerts[f][1]];
+      const DgDVec3D& v2 = vert_[kFaceVerts[f][2]];
 
       // centre: normalised vertex mean
-      cen_[f] = normalize(add(add(v0, v1), v2));
+      cen_[f] = (v0 + v1 + v2).normalized();
       for (int k = 0; k < 3; k++)
       {
-         const V3& vi = vert_[kFaceVerts[f][(k + 1) % 3]];
-         const V3& vj = vert_[kFaceVerts[f][(k + 2) % 3]];
-         mid_[f][k] = normalize(add(vi, vj));
+         const DgDVec3D& vi = vert_[kFaceVerts[f][(k + 1) % 3]];
+         const DgDVec3D& vj = vert_[kFaceVerts[f][(k + 2) % 3]];
+         mid_[f][k] = (vi + vj).normalized();
          // median plane through V_k, C_f, M_k: the perpendicular-bisector
          // plane of edge (V_i, V_j), normal V_i - V_j (|V_i| = |V_j|).
          // P . medN_[f][k] > 0  <=>  P is nearer V_i than V_j.
-         medN_[f][k] = sub(vi, vj);
+         medN_[f][k] = vi - vj;
       }
 
       // neighbour across the edge (V_i, V_j) opposite V_k, and the
@@ -583,25 +542,6 @@ DgIcosaSliceDice::DgIcosaSliceDice (RadialVertex rv, const SphIcosa& si)
 } // DgIcosaSliceDice::DgIcosaSliceDice
 
 ////////////////////////////////////////////////////////////////////////////////
-// Forward locator 1: face = nearest face centre (the equivalent of
-// DgSphIcosa::whichIcosaTri, by largest dot product). Ties (points exactly
-// on a face edge) go to the lowest face index; both faces give the same
-// point, since the map is continuous across face edges.
-////////////////////////////////////////////////////////////////////////////////
-int
-DgIcosaSliceDice::whichFace (const V3& p) const
-{
-   int best = 0;
-   long double bestDot = dot(cen_[0], p);
-   for (int f = 1; f < 20; f++)
-   {
-      const long double d = dot(cen_[f], p);
-      if (d > bestDot) { bestDot = d; best = f; }
-   }
-   return best;
-}
-
-////////////////////////////////////////////////////////////////////////////////
 // Ranking of the three face vertices from three signed "i nearer than j"
 // tests, sgn[k] for the pair (i, j) = (k+1, k+2) mod 3. Returns the
 // sub-triangle index. Ties (a value of exactly 0: a point on a median)
@@ -628,13 +568,13 @@ rankToSub (const long double sgn[3])
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-// Forward locator 2: sub-triangle from the signs of p against the 3 median
+// Forward locator: sub-triangle from the signs of p against the 3 median
 // great-circle planes of the face.
 int
-DgIcosaSliceDice::whichSubTriSph (int face, const V3& p) const
+DgIcosaSliceDice::whichSubTriSph (int face, const DgDVec3D& p) const
 {
    long double sgn[3];
-   for (int k = 0; k < 3; k++) sgn[k] = dot(p, medN_[face][k]);
+   for (int k = 0; k < 3; k++) sgn[k] = p.dot(medN_[face][k]);
    return rankToSub(sgn);
 }
 
@@ -654,16 +594,20 @@ DgIcosaSliceDice::whichSubTriPlanar (const V2& x)
 
 ////////////////////////////////////////////////////////////////////////////////
 Status
-DgIcosaSliceDice::forwardVec (const V3& p0, int& face, V2& xy,
+DgIcosaSliceDice::forwardVec (const DgDVec3D& p0, int& face, V2& xy,
                               int* subOut) const
 {
    face = -1;
    xy = { NaN, NaN };
-   if (!finite3(p0)) return Status::Fail;
-   const long double n = norm(p0);
+   if (!p0.isFinite()) return Status::Fail;
+   const long double n = p0.magnitude();
    if (!(n > M_ZERO)) return Status::Fail;
-   const V3 p = scale(p0, M_ONE / n);
-   face = whichFace(p);
+   DgDVec3D p = p0;
+   p /= n;
+   // face = nearest face centre. Ties (points exactly on a face edge) go to
+   // the lowest face index; both faces give the same point, since the map
+   // is continuous across face edges.
+   face = dsi_->whichIcosaTri(p);
    int s = whichSubTriSph(face, p);
    Status st = forwardInSub(p, face, s, xy);
    if (st == Status::Fail)
@@ -696,7 +640,7 @@ DgIcosaSliceDice::forward (const GeoCoord& ll, int& face, Vec2D& xy,
    face = -1;
    if (std::isfinite(ll.lon) && std::isfinite(ll.lat) &&
        fabsl(ll.lat) <= M_PI_2_L + clampTol)
-      st = forwardVec(llToVec(ll), face, v, subOut);
+      st = forwardVec(DgDVec3D::fromGeo(ll), face, v, subOut);
 
    xy.x = v.x;
    xy.y = v.y;
@@ -737,7 +681,7 @@ outsideDistance (const V2& xy, int& kWorst)
 
 ////////////////////////////////////////////////////////////////////////////////
 Status
-DgIcosaSliceDice::inverseVec (int face, const V2& xy0, V3& p,
+DgIcosaSliceDice::inverseVec (int face, const V2& xy0, DgDVec3D& p,
                               bool forceTrig) const
 {
    p = { NaN, NaN, NaN };
@@ -787,7 +731,7 @@ Status
 DgIcosaSliceDice::inverse (int face, const Vec2D& xy, GeoCoord& ll,
                            bool forceTrig) const
 {
-   V3 p;
+   DgDVec3D p;
    const V2 v = { xy.x, xy.y };
    const Status st = inverseVec(face, v, p, forceTrig);
    if (st == Status::Fail)
@@ -795,7 +739,7 @@ DgIcosaSliceDice::inverse (int face, const Vec2D& xy, GeoCoord& ll,
       ll.lat = ll.lon = NaN;
       return st;
    }
-   ll = vecToLL(p);
+   ll = p.toGeo();
    return st;
 
 } // Status DgIcosaSliceDice::inverse

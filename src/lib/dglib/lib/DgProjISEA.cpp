@@ -22,6 +22,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include <cfloat>
 #include <cmath>
 #include <climits>
 
@@ -309,7 +310,12 @@ GeoCoord snyderInv (const IcosaGridPt& icosaPt, SphIcosa& sphicosa)
     if (sinlat < -M_ONE) sinlat = -M_ONE;
     Geovect.lat = asinl(sinlat);
 
-    if (fabsl(fabsl(Geovect.lat) - M_PI_2_L) < M_EPSILON)
+    // asin is ill-conditioned at +-1: sinlat within a few units in the last
+    // place of +-1 (here 0.5 ulp gives 3e-10 radians) puts the point closer
+    // to the pole than this formula resolves, and the longitude computed
+    // below would be a ratio of rounding errors. Snap it to the pole.
+    if (fabsl(fabsl(Geovect.lat) - M_PI_2_L) < M_EPSILON ||
+        M_ONE - fabsl(sinlat) <= 4.0L * LDBL_EPSILON)
     {
        Geovect.lat = (Geovect.lat > M_ZERO) ? M_PI_2_L : -M_PI_2_L;
        Geovect.lon = M_ZERO;

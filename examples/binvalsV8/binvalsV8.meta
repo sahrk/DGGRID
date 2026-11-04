@@ -53,7 +53,7 @@ point_output_type GDAL
 point_output_gdal_format "ESRI Shapefile"
 point_output_file_name outputfiles/points
 
-# version 7 style text output (on by default for backwards compatibility)
+# version 7 style text output (explicitly enabled)
 output_file_name outputfiles/textOutput.txt
 # use NONE for no text output
 output_file_type TEXT

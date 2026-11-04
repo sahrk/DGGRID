@@ -43,7 +43,7 @@ const DgIcosaSliceDice&
 DgSphIcosa::sliceDice (DgIcosaSliceDice::RadialVertex rv)
 {
    std::unique_ptr<DgIcosaSliceDice>& sd = sliceDice_[(int) rv];
-   if (!sd) sd.reset(new DgIcosaSliceDice(rv, sphIcosa_));
+   if (!sd) sd.reset(new DgIcosaSliceDice(rv, *this));
 
    return *sd;
 
@@ -148,20 +148,33 @@ DgSphIcosa::whichIcosaTri (const GeoCoord& pt)
    Return the index of the icosahedron triangle in which pt occurs.
 */
 {
-   // start by assuming the first face is the minimum
-   int minFace = 0;
-   long double minDist = DgGeoCoord::gcDist(sphIcosa().triCen[0].pt, pt);
+   return whichIcosaTri(DgDVec3D::fromGeo(pt));
 
-   // compare against the rest of the faces
-   for (int i = 1; i < 20; i++)
+} /* int DgSphIcosa::whichIcosaTri */
+
+////////////////////////////////////////////////////////////////////////////////
+int
+DgSphIcosa::whichIcosaTri (const DgDVec3D& v, long double* sqd) const
+/*
+   Find the icosahedron face with the nearest centre. v is a unit vector.
+*/
+{
+   int minFace = 0;
+
+   // The distance between two farthest points is 2.0, therefore the square of
+   // the distance between two points should always be less or equal than 4.0 .
+   long double minSqd = 5.0L;
+   for (int i = 0; i < 20; i++)
    {
-      const DgGeoCoord& triCen = sphIcosa().triCen[i].pt;
-      long double dist = DgGeoCoord::gcDist(triCen, pt);
-      if (dist < minDist) {
-         minDist = dist;
+      const DgDVec3D dv = triCenVec_[i] - v;
+      const long double d = dv.dot(dv);
+      if (d < minSqd) {
+         minSqd = d;
          minFace = i;
       }
    }
+
+   if (sqd) *sqd = minSqd;
 
    return minFace;
 
@@ -176,7 +189,7 @@ DgSphIcosa::ico12verts (void)
 {
    GeoCoord newnpold, vertsnew[12];
    int i, j;
-   Vec3D ptri[3];
+   DgDVec3D ptri[3];
 
    static int verts[20][3] = {
 
@@ -262,6 +275,10 @@ for (i = 0; i < 12; i++)
       sphIcosa().triCen[i].cosLat = cosl(sphIcosa().triCen[i].pt.lat);
       sphIcosa().triCen[i].cosLon = cosl(sphIcosa().triCen[i].pt.lon);
 
+      /* the centre as a unit vector, for whichIcosaTri */
+
+      triCenVec_[i] = DgDVec3D::fromGeo(sphIcosa().triCen[i].pt);
+
       /* pre-calculate the dazh's */
 
       const GeoCoord* t = sphIcosa().icotri[i];
@@ -280,31 +297,31 @@ for (i = 0; i < 12; i++)
 
       /* pre-calculate the pt-in-triangle constants */
 
-      for (j = 0; j < 3; j++) ptri[j] = llxyz(sphIcosa().icotri[i][j]);
+      for (j = 0; j < 3; j++) ptri[j] = DgDVec3D::fromGeo(sphIcosa().icotri[i][j]);
 
-      sphIcosa().ptin[i].p0x0 = ptri[1].y * ptri[2].z - ptri[2].y * ptri[1].z;
-      sphIcosa().ptin[i].p0y0 = ptri[1].x * ptri[2].z - ptri[2].x * ptri[1].z;
-      sphIcosa().ptin[i].p0z0 = ptri[1].x * ptri[2].y - ptri[2].x * ptri[1].y;
+      sphIcosa().ptin[i].p0x0 = ptri[1].y() * ptri[2].z() - ptri[2].y() * ptri[1].z();
+      sphIcosa().ptin[i].p0y0 = ptri[1].x() * ptri[2].z() - ptri[2].x() * ptri[1].z();
+      sphIcosa().ptin[i].p0z0 = ptri[1].x() * ptri[2].y() - ptri[2].x() * ptri[1].y();
 
-      sphIcosa().ptin[i].t00 = ptri[0].x * sphIcosa().ptin[i].p0x0 -
-                              ptri[0].y * sphIcosa().ptin[i].p0y0 +
-                              ptri[0].z * sphIcosa().ptin[i].p0z0;
+      sphIcosa().ptin[i].t00 = ptri[0].x() * sphIcosa().ptin[i].p0x0 -
+                              ptri[0].y() * sphIcosa().ptin[i].p0y0 +
+                              ptri[0].z() * sphIcosa().ptin[i].p0z0;
 
-      sphIcosa().ptin[i].p0x1 = ptri[0].y * ptri[2].z - ptri[2].y * ptri[0].z;
-      sphIcosa().ptin[i].p0y1 = ptri[0].x * ptri[2].z - ptri[2].x * ptri[0].z;
-      sphIcosa().ptin[i].p0z1 = ptri[0].x * ptri[2].y - ptri[2].x * ptri[0].y;
+      sphIcosa().ptin[i].p0x1 = ptri[0].y() * ptri[2].z() - ptri[2].y() * ptri[0].z();
+      sphIcosa().ptin[i].p0y1 = ptri[0].x() * ptri[2].z() - ptri[2].x() * ptri[0].z();
+      sphIcosa().ptin[i].p0z1 = ptri[0].x() * ptri[2].y() - ptri[2].x() * ptri[0].y();
 
-      sphIcosa().ptin[i].t01 = ptri[1].x * sphIcosa().ptin[i].p0x1 -
-                              ptri[1].y * sphIcosa().ptin[i].p0y1 +
-                              ptri[1].z * sphIcosa().ptin[i].p0z1;
+      sphIcosa().ptin[i].t01 = ptri[1].x() * sphIcosa().ptin[i].p0x1 -
+                              ptri[1].y() * sphIcosa().ptin[i].p0y1 +
+                              ptri[1].z() * sphIcosa().ptin[i].p0z1;
 
-      sphIcosa().ptin[i].p0x2 = ptri[0].y * ptri[1].z - ptri[1].y * ptri[0].z;
-      sphIcosa().ptin[i].p0y2 = ptri[0].x * ptri[1].z - ptri[1].x * ptri[0].z;
-      sphIcosa().ptin[i].p0z2 = ptri[0].x * ptri[1].y - ptri[1].x * ptri[0].y;
+      sphIcosa().ptin[i].p0x2 = ptri[0].y() * ptri[1].z() - ptri[1].y() * ptri[0].z();
+      sphIcosa().ptin[i].p0y2 = ptri[0].x() * ptri[1].z() - ptri[1].x() * ptri[0].z();
+      sphIcosa().ptin[i].p0z2 = ptri[0].x() * ptri[1].y() - ptri[1].x() * ptri[0].y();
 
-      sphIcosa().ptin[i].t02 = ptri[2].x * sphIcosa().ptin[i].p0x2 -
-                              ptri[2].y * sphIcosa().ptin[i].p0y2 +
-                              ptri[2].z * sphIcosa().ptin[i].p0z2;
+      sphIcosa().ptin[i].t02 = ptri[2].x() * sphIcosa().ptin[i].p0x2 -
+                              ptri[2].y() * sphIcosa().ptin[i].p0y2 +
+                              ptri[2].z() * sphIcosa().ptin[i].p0z2;
 
    }
 

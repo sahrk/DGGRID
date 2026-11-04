@@ -30,6 +30,7 @@
 
 #include <dglib/DgConstants.h>
 #include <dglib/DgDVec2D.h>
+#include <dglib/DgDVec3D.h>
 #include <dglib/DgGeoDatumRF.h>
 //#include <dglib/DgDataList.h>
 
@@ -396,18 +397,6 @@ typedef struct Vec2D {
 
 } Vec2D;
 
-typedef struct Vec3D {
-
-   long double x;
-   long double y;
-   long double z;
-
-   Vec3D()
-    : x(0.0L), y(0.0L), z(0.0L)
-   {}
-
-} Vec3D;
-
 typedef struct SphTri {
 
    long long int code;
@@ -512,18 +501,8 @@ typedef struct IcosaGridPt {
 void   printVal      (long double val);  /* print val or 'UNDEFVAL' to stdout */
 void   printGeoCoord (const GeoCoord& p);  /* print p to stdout */
 void   printVec2D    (const Vec2D& p);     /* print p to stdout */
-void   printVec3D    (const Vec3D& p);     /* print p to stdout */
 void   printSphTri   (const SphTri& tri);  /* print tri to stdout */
 void   printPlaneTri (const PlaneTri& tri);/* print plane tri to stdout */
-
-/* Vec3D functions */
-
-Vec3D  vecAdd        (const Vec3D& A, const Vec3D& B); /* return A + B */
-Vec3D  vecSub        (const Vec3D& A, const Vec3D& B); /* return A - B */
-Vec3D  vecCross      (const Vec3D& A, const Vec3D& B); /* return A x B */
-long double vecDot        (const Vec3D& A, const Vec3D& B); /* return A . B */
-long double vecMag        (const Vec3D& V);          /* return |V| */
-Vec3D  vecNormalize  (const Vec3D& V);          /* return V as a unit vector */
 
 /* spherical triangle functions */
 
@@ -535,10 +514,6 @@ void planeTriInit (PlaneTri* tri); /* initialize with UNDEFVAL values */
 GeoCoord sphTricenpoint(GeoCoord sp[3]);
 
 /* sphere functions */
-
-GeoCoord xyzll(const Vec3D& v); /* transform a point from xyz to latlon */
-
-Vec3D llxyz(const GeoCoord& sv); /* transform a point from latlon to xyz */
 
 /* calculate the chord distance */
 long double chorddist(const GeoCoord& ll1,const GeoCoord& ll2);

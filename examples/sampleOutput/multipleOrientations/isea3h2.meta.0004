@@ -39,7 +39,7 @@ output_hier_ndx_system Z3
 output_hier_ndx_form INT64
 output_delimiter " "
 densification 0
-h3_boundary_def DGGRID
+insert_cell_bdry_edge_crossing false
 longitude_wrap_mode WRAP
 unwrap_points true
 output_cell_label_type GLOBAL_SEQUENCE

@@ -38,7 +38,7 @@ output_delimiter ","
 output_count TRUE
 output_count_field_name numAirports
 
-# version 7 style text output (on by default for backwards compatibility)
+# version 7 style text output (explicitly enabled)
 output_file_name outputfiles/textOutput.txt
 # use NONE for no text output
 output_file_type TEXT

@@ -49,7 +49,7 @@ foreach(ex IN LISTS examples)
        PATTERN outputfiles EXCLUDE)
   file(MAKE_DIRECTORY ${WORK}/${ex}/outputfiles)
 
-  file(GLOB metas RELATIVE ${WORK}/${ex} ${WORK}/${ex}/${ex}*.meta)
+  file(GLOB metas RELATIVE ${WORK}/${ex} ${WORK}/${ex}/*.meta)
   foreach(meta IN LISTS metas)
     get_filename_component(name ${meta} NAME_WE)
     execute_process(COMMAND ${DGGRID} ${meta}

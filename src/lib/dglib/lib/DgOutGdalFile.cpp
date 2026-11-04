@@ -329,8 +329,8 @@ DgOutGdalFile::createPoint (const DgLocation& loc) const
    DgDVec2D pt = rf().getVecLocation(loc);
    OGRPoint* oPt = (OGRPoint*) OGRGeometryFactory::createGeometry(wkbPoint);
 
-   oPt->setX(pt.x());
-   oPt->setY(pt.y());
+   oPt->setX(dgg::util::suppressNegativeZero(pt.x()));
+   oPt->setY(dgg::util::suppressNegativeZero(pt.y()));
 
    return oPt;
 }
@@ -348,12 +348,14 @@ DgOutGdalFile::createLinearRing (const DgPolygon& poly)
    const DgRFBase& rf = poly.rf();
    for (std::vector<DgAddressBase *>::const_iterator i = v.begin(); v.end() != i; ++i) {
      DgDVec2D pt = rf.getVecAddress(*(*i));
-     linearRing->addPoint(pt.x(), pt.y());
+     linearRing->addPoint(dgg::util::suppressNegativeZero(pt.x()),
+                          dgg::util::suppressNegativeZero(pt.y()));
    }
 
    // add the first point to the end
    DgDVec2D pt = rf.getVecAddress(*v[0]);
-   linearRing->addPoint(pt.x(), pt.y());
+   linearRing->addPoint(dgg::util::suppressNegativeZero(pt.x()),
+                        dgg::util::suppressNegativeZero(pt.y()));
 
    return linearRing;
 }

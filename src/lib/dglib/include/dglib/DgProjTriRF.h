@@ -46,13 +46,32 @@ class DgSphIcosa {
                                       DgGeoCoord(11.25L, M_ICOSA_VERT0_LAT_DEG, false),
                   long double azimuthDegs = M_ZERO);
 
+      // the slice-and-dice tables refer back to this object, so it is
+      // neither copied nor moved
+      DgSphIcosa (const DgSphIcosa&) = delete;
+      DgSphIcosa& operator= (const DgSphIcosa&) = delete;
+
       SphIcosa& sphIcosa (void) { return sphIcosa_; }
+      const SphIcosa& sphIcosa (void) const { return sphIcosa_; }
 
       /* give the start point and an azimuth, return 12 vertices
          of the icosahedron */
       void ico12verts(void);
 
+      /**
+       * Return the index of the icosahedron face whose centre is nearest pt
+       * (the face containing pt). Faces are compared by squared euclidean
+       * distance between unit vectors, as H3 does, which is monotonic in
+       * great circle distance. Ties go to the lowest face index.
+       */
       int whichIcosaTri (const GeoCoord& pt);
+
+      /**
+       * As above for a point already converted to a unit vector. If sqd is
+       * not null it receives the squared euclidean distance from v to the
+       * centre of the returned face.
+       */
+      int whichIcosaTri (const DgDVec3D& v, long double* sqd = nullptr) const;
 
       /**
        * The slice-and-dice kernel and 120 fundamental-triangle tables of
@@ -64,6 +83,9 @@ class DgSphIcosa {
    private:
 
       SphIcosa sphIcosa_;
+
+      // unit vectors of the face centres sphIcosa_.triCen, set by ico12verts
+      DgDVec3D triCenVec_[20];
 
       // lazily built slice-and-dice tables, indexed by RadialVertex
       std::unique_ptr<DgIcosaSliceDice> sliceDice_[3];

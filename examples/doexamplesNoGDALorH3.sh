@@ -25,9 +25,8 @@ do
    echo "############################################"
    echo "#### running example $f " 
    cd "$f" || { echo "MISSING EXAMPLE $f"; continue; }
-   # every metafile in the example's directory whose name starts with the
-   # example's name (usually just ${f}.meta)
-   for meta in ${f}*.meta
+   # every metafile in the example's directory (usually just ${f}.meta)
+   for meta in *.meta
    do
       m=${meta%.meta}
       $dggridExe ${meta} >& outputfiles/${m}.txt

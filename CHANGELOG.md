@@ -3,6 +3,18 @@ All notable changes to this project will be documented in this file.
 
 All changes are by Kevin Sahr, unless otherwise noted.
 
+## [9.15] - 2026-11-04
+### Changed
+- improved DgDVec3D class; incorporated fixes from H3
+- parameter h3_boundary_def replaced by insert_cell_bdry_edge_crossing, which inserts points into cell boundaries where they cross icosahedral edges. H3 preset now uses this parameter.
+- DgSphIcosa::whichIcosaTri now uses H3's approach; now used for all projections
+- great circle azimuth/distance calculation (GCdaz) now uses vectors
+- output_file_type now defaults to NONE for TRANSFORM_POINTS, BIN_POINT_VALS and BIN_POINT_PRESENCE (no more unwanted valsout.txt); setting output_file_name without output_file_type still enables TEXT
+### Fixed
+- GCdaz issues at and over the poles
+- ISEA inverse longitude noise for points within rounding of a pole
+- negative zero in GDAL and Shapefile coordinates and generated metafiles
+
 ## [9.1] - 2026-10-23
 ### Added
 - IVEA projection and spherical (S) and ellipsoidal (L) ISEA/IVEA presets; old ISEA names remain spherical aliases

@@ -51,9 +51,9 @@ struct DgProjIcosaGnomonicFaces {
    DgProjIcosaGnomonicFaces (void) { }
    explicit DgProjIcosaGnomonicFaces (const SphIcosa& si);
 
-   long double cen[20][3];  // c
-   long double uax[20][3];  // u
-   long double wax[20][3];  // w
+   DgDVec3D cen[20];  // c
+   DgDVec3D uax[20];  // u
+   DgDVec3D wax[20];  // w
 };
 
 ////////////////////////////////////////////////////////////////////////////////

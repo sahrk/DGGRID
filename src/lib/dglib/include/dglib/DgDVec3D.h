@@ -28,8 +28,11 @@
 #include <dglib/DgDVec2D.h>
 #include <dglib/DgString.h>
 
+#include <cfloat>
 #include <cmath>
 #include <iostream>
+
+struct GeoCoord;
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgDVec3D {
@@ -66,6 +69,54 @@ class DgDVec3D {
 
       long double magnitude (void) const
                { return sqrtl(x_ * x_ + y_ * y_ + z_ * z_); }
+
+      long double dot (const DgDVec3D& pt) const
+               { return x_ * pt.x_ + y_ * pt.y_ + z_ * pt.z_; }
+
+      DgDVec3D cross (const DgDVec3D& pt) const
+               { return DgDVec3D(y_ * pt.z_ - z_ * pt.y_,
+                                 z_ * pt.x_ - x_ * pt.z_,
+                                 x_ * pt.y_ - y_ * pt.x_); }
+
+      bool isFinite (void) const
+               { return std::isfinite(x_) && std::isfinite(y_) &&
+                        std::isfinite(z_); }
+
+      // Scale me to unit length (one square root; each component divided by
+      // the magnitude). A magnitude of zero (a zero vector, or squares that
+      // underflow) leaves the zero vector.
+      inline DgDVec3D& normalize (void);
+
+      DgDVec3D normalized (void) const
+               { DgDVec3D v(*this); return v.normalize(); }
+
+      // Angle in radians between a and b, as 2 atan2(|a - b|, |a + b|): for
+      // unit vectors it is accurate for tiny angles and near 180 degrees,
+      // where acos and asin of a dot product lose precision.
+      static long double angleBetween (const DgDVec3D& a, const DgDVec3D& b)
+               { return 2.0L * atan2l((a - b).magnitude(),
+                                      (a + b).magnitude()); }
+
+      // The point at latitude lat and longitude lon (radians) on the unit
+      // sphere.
+      static DgDVec3D fromLatLon (long double lat, long double lon)
+               { const long double cl = cosl(lat);
+                 return DgDVec3D(cl * cosl(lon), cl * sinl(lon), sinl(lat)); }
+
+      static DgDVec3D fromGeo (const GeoCoord& ll);
+
+      // Latitude and longitude in radians of my direction (I need not be a
+      // unit vector). atan2 keeps full precision at the poles. At a pole,
+      // or within rounding of one (distance from the axis at most a few
+      // units in the last place of |z|), the longitude is meaningless and is
+      // reported as 0.
+      long double lat (void) const { return atan2l(z_, hypotl(x_, y_)); }
+
+      long double lon (void) const
+               { return (hypotl(x_, y_) <= 4.0L * LDBL_EPSILON * fabsl(z_)) ?
+                        0.0L : atan2l(y_, x_); }
+
+      GeoCoord toGeo (void) const;
 
       inline DgDVec3D& scale (long double xScaleFactor, long double yScaleFactor,
                               long double zScaleFactor);
@@ -150,6 +201,24 @@ DgDVec3D::rotate (long double degrees)
 */
 
 ////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+inline DgDVec3D&
+DgDVec3D::normalize (void)
+{
+   const long double m = magnitude();
+   if (m > 0.0L)
+   {
+      x_ /= m;
+      y_ /= m;
+      z_ /= m;
+   }
+   else
+      x_ = y_ = z_ = 0.0L;
+
+   return *this;
+
+} // DgDVec3D& DgDVec3D::normalize
+
 ////////////////////////////////////////////////////////////////////////////////
 inline DgDVec3D::operator std::string (void) const
 {

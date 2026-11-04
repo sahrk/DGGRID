@@ -46,6 +46,8 @@
 #include <dglib/DgConstants.h>
 #include <dglib/DgEllipsoidRF.h>
 
+class DgSphIcosa;
+
 ////////////////////////////////////////////////////////////////////////////////
 /**
  * The slice-and-dice equal-area kernel [VLS06] on the 120 fundamental
@@ -70,7 +72,8 @@
  * at (1, 0).
  *
  * Everything is long double; the geometry is built from the icosahedron
- * vertices of a SphIcosa (see DgSphIcosa, which owns the instances).
+ * vertices of a DgSphIcosa, which owns the instances and supplies the face
+ * locator (DgSphIcosa::whichIcosaTri).
  */
 class DgIcosaSliceDice {
 
@@ -93,8 +96,7 @@ class DgIcosaSliceDice {
          Fail     = 3    ///< outside the tolerances, or invalid input
       };
 
-      /// 3D vector (unit sphere) and 2D point types used by the kernel.
-      struct V3 { long double x, y, z; };
+      /// 2D point type used by the kernel (3D vectors are DgDVec3D).
       struct V2 { long double x, y; };
 
       /**
@@ -140,37 +142,37 @@ class DgIcosaSliceDice {
        * winding; the formulas are winding-invariant.
        */
       struct Tri {
-         V3 A, B, C;              ///< spherical vertices (unit), A radial
+         DgDVec3D A, B, C;              ///< spherical vertices (unit), A radial
          V2 a, b, c;              ///< planar images of A, B, C
          long double area;        ///< signed spherical excess of ABC
          long double tp;          ///< triple product A . (B x C)
          long double c01, c12, c20; ///< A.B, B.C, C.A
          long double s12;         ///< |B x C| = sin|BC|
          long double arcBC;       ///< |BC| (rad)
-         V3 nBC;                  ///< B x C
-         V3 uB;                   ///< unit tangent at B toward C
+         DgDVec3D nBC;                  ///< B x C
+         DgDVec3D uB;                   ///< unit tangent at B toward C
          long double angB;        ///< interior angle at B (trig fallback)
          long double arcAB;       ///< |AB| (rad) (trig fallback)
       };
 
       /// Precompute a kernel triangle; A is radial.
-      static void prepare (Tri& t, const V3& A, const V3& B, const V3& C,
+      static void prepare (Tri& t, const DgDVec3D& A, const DgDVec3D& B, const DgDVec3D& C,
                            const V2& a, const V2& b, const V2& c);
 
       /// Forward slice-and-dice: unit vector P in ABC -> planar point in abc.
-      static Status fwdTri (const V3& P, const Tri& t, V2& out);
+      static Status fwdTri (const DgDVec3D& P, const Tri& t, V2& out);
 
       /// Inverse slice-and-dice: planar point X in abc -> unit vector in
       /// ABC. forceTrig selects the spherical-trigonometry path (testing).
-      static Status invTri (const V2& X, const Tri& t, V3& out,
+      static Status invTri (const V2& X, const Tri& t, DgDVec3D& out,
                             bool forceTrig = false);
 
       /**
-       * Build the 120 fundamental triangles of the icosahedron si (the
-       * vertices si.icoverts and faces si.icotri, as built by DgSphIcosa)
-       * for the given radial vertex.
+       * Build the 120 fundamental triangles of the icosahedron dsi (the
+       * vertices icoverts and faces icotri of dsi.sphIcosa()) for the given
+       * radial vertex. dsi must outlive this object.
        */
-      DgIcosaSliceDice (RadialVertex rv, const SphIcosa& si);
+      DgIcosaSliceDice (RadialVertex rv, const DgSphIcosa& dsi);
 
       RadialVertex radialVertex (void) const { return rv_; }
 
@@ -185,11 +187,11 @@ class DgIcosaSliceDice {
                       int* subOut = nullptr) const;
 
       /// Forward map of a (not necessarily unit) vector.
-      Status forwardVec (const V3& p, int& face, V2& xy,
+      Status forwardVec (const DgDVec3D& p, int& face, V2& xy,
                          int* subOut = nullptr) const;
 
       /// Forward map within a given face / sub-triangle (tests).
-      Status forwardInSub (const V3& p, int face, int sub, V2& xy) const
+      Status forwardInSub (const DgDVec3D& p, int face, int sub, V2& xy) const
                   { return fwdTri(p, tri_[face][sub], xy); }
 
       /**
@@ -201,15 +203,11 @@ class DgIcosaSliceDice {
                       bool forceTrig = false) const;
 
       /// Inverse map to a unit vector.
-      Status inverseVec (int face, const V2& xy, V3& p,
+      Status inverseVec (int face, const V2& xy, DgDVec3D& p,
                          bool forceTrig = false) const;
 
-      /// Face whose centre is nearest p (largest dot product; ties go to
-      /// the lower index).
-      int whichFace (const V3& p) const;
-
       /// Sub-triangle of face containing p, from the median planes.
-      int whichSubTriSph (int face, const V3& p) const;
+      int whichSubTriSph (int face, const DgDVec3D& p) const;
 
       /// Sub-triangle containing planar point x, from the planar medians.
       static int whichSubTriPlanar (const V2& x);
@@ -221,16 +219,16 @@ class DgIcosaSliceDice {
       V2 toNeighbourFrame (int f, int k, const V2& xy) const;
 
       /// Unit vector of icosahedron vertex i (0-11).
-      const V3& vertex (int i) const { return vert_[i]; }
+      const DgDVec3D& vertex (int i) const { return vert_[i]; }
 
       /// Unit vector of the centre of face f.
-      const V3& centre (int f) const { return cen_[f]; }
+      const DgDVec3D& centre (int f) const { return cen_[f]; }
 
       /// Unit vector of the midpoint of the edge of face f opposite vertex k.
-      const V3& midpoint (int f, int k) const { return mid_[f][k]; }
+      const DgDVec3D& midpoint (int f, int k) const { return mid_[f][k]; }
 
       /// Vertex vmc (0 = V, 1 = M, 2 = C) of sub-triangle s of face f.
-      const V3& subSph (int f, int s, int vmc) const { return sub_[f][s][vmc]; }
+      const DgDVec3D& subSph (int f, int s, int vmc) const { return sub_[f][s][vmc]; }
 
       /// Prepared kernel triangle s (0-5) of face f.
       const Tri& kernelTri (int f, int s) const { return tri_[f][s]; }
@@ -257,30 +255,22 @@ class DgIcosaSliceDice {
       /// indexed by RadialVertex.
       static const int kRoles[3][3];
 
-      /// Unit vector from lat/lon (radians).
-      static V3 llToVec (const GeoCoord& ll);
-
-      /// Lat/lon (radians) of a vector, from atan2 (accurate at the poles).
-      static GeoCoord vecToLL (const V3& v);
-
-      /// Angle between two unit vectors, 2 atan2(|a-b|, |a+b|).
-      static long double angleBetween (const V3& a, const V3& b);
-
       /// Signed spherical excess of the triangle (v1, v2, v3).
-      static long double sphTriArea (const V3& v1, const V3& v2, const V3& v3);
+      static long double sphTriArea (const DgDVec3D& v1, const DgDVec3D& v2, const DgDVec3D& v3);
 
    private:
 
       RadialVertex rv_;
-      V3 vert_[12];
-      V3 cen_[20];
-      V3 mid_[20][3];      // mid_[f][k]: midpoint of the edge opposite vertex k
-      V3 medN_[20][3];     // medN_[f][k] = V_i - V_j, (i, j, k) cyclic
+      const DgSphIcosa* dsi_;  // the owner; locates the face of a point
+      DgDVec3D vert_[12];
+      DgDVec3D cen_[20];
+      DgDVec3D mid_[20][3];      // mid_[f][k]: midpoint of the edge opposite vertex k
+      DgDVec3D medN_[20][3];     // medN_[f][k] = V_i - V_j, (i, j, k) cyclic
       int nbr_[20][3];     // neighbour across the edge opposite vertex k
       // similarity z -> (T0 + i T1) z + (T2 + i T3) from f's frame to the
       // frame of nbr_[f][k] (the net unfolding along the shared edge)
       long double nbrSim_[20][3][4];
-      V3 sub_[20][6][3];   // [f][s][V, M, C]
+      DgDVec3D sub_[20][6][3];   // [f][s][V, M, C]
       Tri tri_[20][6];     // role-permuted, prepared kernel triangles
 };
 

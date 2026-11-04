@@ -3,8 +3,8 @@
 # doexamplesH3.sh: executes the examples that require DGGRID to be built with
 #     the H3 library and diff's the output against sample output. Like
 #     doexamples.sh, but for the examples in examplesH3.lst; every metafile
-#     in an example's directory whose name starts with the example's name
-#     is run (e.g. h3Gen.meta, h3GenString.meta and h3GenCustom.meta).
+#     in an example's directory is run (e.g. h3Gen.meta, h3GenString.meta
+#     and h3GenCustom.meta).
 #
 # usage: doexamplesH3.sh [referenceDir]
 #   referenceDir defaults to sampleOutput (relative to this directory,
@@ -34,7 +34,7 @@ do
    echo "############################################"
    echo "#### running example $f "
    cd "$f" || { echo "MISSING EXAMPLE $f"; continue; }
-   for meta in ${f}*.meta
+   for meta in *.meta
    do
       m=${meta%.meta}
       $dggridExe ${meta} >& outputfiles/${m}.txt

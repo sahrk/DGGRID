@@ -293,16 +293,6 @@ void printVec2D (const Vec2D& p)
 } /* void printVec2D */
 
 /******************************************************************************/
-void printVec3D (const Vec3D& p)
-/*
-   Print p to stdout.
-*/
-{
-   dgcout << "(" << p.x << ", " << p.y << ", " << p.z << ")";
-
-} /* void printVec3D */
-
-/******************************************************************************/
 void printSphTri (const SphTri& tri)
 /*
    Print tri to stdout.
@@ -363,90 +353,6 @@ void printPlaneTri (const PlaneTri& tri)
 } /* void PlaneTri */
 
 /******************************************************************************/
-Vec3D vecAdd (const Vec3D& A, const Vec3D& B)
-/*
-   Calculate and return A + B.
-*/
-{
-   Vec3D C;
-
-   C.x = A.x + B.x;
-   C.y = A.y + B.y;
-   C.z = A.z + B.z;
-
-   return C;
-
-} /* Vec3D vecAdd */
-
-/******************************************************************************/
-Vec3D vecSub (const Vec3D& A, const Vec3D& B)
-/*
-   Calculate and return A - B.
-*/
-{
-   Vec3D C;
-
-   C.x = A.x - B.x;
-   C.y = A.y - B.y;
-   C.z = A.z - B.z;
-
-   return C;
-
-} /* Vec3D vecSub */
-
-/******************************************************************************/
-Vec3D vecCross (const Vec3D& A, const Vec3D& B)
-/*
-   Calculate and return A x B.
-*/
-{
-   Vec3D C;
-
-   C.x = A.y * B.z - A.z * B.y;
-   C.y = A.z * B.x - A.x * B.z;
-   C.z = A.x * B.y - A.y * B.x;
-
-   return C;
-
-} /* Vec3D vecCross */
-
-/******************************************************************************/
-long double vecMag (const Vec3D& V)
-/*
-   Calculate and return the magnitude of a vector V.
-*/
-{
-   return sqrtl(V.x * V.x + V.y * V.y + V.z * V.z);
-
-} /* long double vecMag */
-
-/******************************************************************************/
-Vec3D vecNormalize  (const Vec3D& V)
-/*
-   Return the normalized form of V.
-*/
-{
-   Vec3D C;
-
-   C.x = V.x/sqrtl(V.x * V.x + V.y * V.y + V.z * V.z);
-   C.y = V.y/sqrtl(V.x * V.x + V.y * V.y + V.z * V.z);
-   C.z = V.z/sqrtl(V.x * V.x + V.y * V.y + V.z * V.z);
-
-   return C;
-
-}  /* Vec3D vecNormalize */
-
-/******************************************************************************/
-long double vecDot (const Vec3D& A, const Vec3D& B)
-/*
-   Calculate and return the dot product of two vectors.
-*/
-{
-   return A.x * B.x + A.y * B.y + A.z * B.z;
-
-}  /*  long double vecDot */
-
-/******************************************************************************/
 long double maxval(long double val1, long double val2)
 /*
   return the maxmum of two variables
@@ -471,72 +377,16 @@ long double minval(long double val1, long double val2)
  } /* long double minval */
 
 /******************************************************************************/
-Vec3D llxyz(const GeoCoord& sv)
-/*
-  Transformation of a point on the sphere from xyz cordinates to latitude and longitude
-  Input unit is degree. Output unit regard the earth's radius as one unit.
-*/
- {
-  Vec3D v;
-  v.x=cosl(sv.lat)*cosl(sv.lon);
-  v.y=cosl(sv.lat)*sinl(sv.lon);
-  v.z=sinl(sv.lat);
-
-  const long double epsilon = 0.000000000000001L;
-  if (fabsl(v.x) < epsilon) v.x = 0.0L;
-  if (fabsl(v.y) < epsilon) v.y = 0.0L;
-  if (fabsl(v.z) < epsilon) v.z = 0.0L;
-
-  return v;
-
- } /* Vec3D llxyz */
-
-/******************************************************************************/
-GeoCoord xyzll(const Vec3D& v0)
-/*
-   Transformation of a point on the sphere from xyz cordinates to latitude and
-   longitude Input unit regard the earth's radius as one unit. Output unit is
-   degree.
-*/
- {
-  GeoCoord sv;
-  Vec3D v = v0;
-
-  if (fabsl(v.z)-1.0L < PRECISION)
-  {
-     if (v.z>1.0L) v.z = 1.0L;
-     if (v.z<-1.0L) v.z = -1.0L;
-     sv.lat=asinl(v.z);
-     if ((sv.lat== M_PI_2) || (sv.lat==-M_PI_2)) sv.lon=0.0L;
-     else sv.lon=atan2l(v.y,v.x);
-     return sv;
-  }
-  else
-  {
-     dgcerr << "Error: in function xyzll, asin domain error.\n";
-     return sv;
-  }
-
- } /* GeoCoord xyzll */
-
-/******************************************************************************/
 GeoCoord sphTricenpoint(GeoCoord sp[3])
 /*
    Calculate and return the center point of a sphere triangle
    Input and output unit is degree.
 */
  {
-  Vec3D p[3], cp, cpn;
-  GeoCoord cv;
-  int i;
-
-  for (i=0;i<3;i++) p[i]=llxyz(sp[i]);
-  cp.x=(p[0].x+p[1].x+p[2].x)/3;
-  cp.y=(p[0].y+p[1].y+p[2].y)/3;
-  cp.z=(p[0].z+p[1].z+p[2].z)/3;
-  cpn=vecNormalize(cp);
-  cv=xyzll(cpn);
-  return cv;
+  DgDVec3D cp = DgDVec3D::fromGeo(sp[0]) + DgDVec3D::fromGeo(sp[1]) +
+                DgDVec3D::fromGeo(sp[2]);
+  cp /= 3.0L;
+  return cp.normalized().toGeo();
  } /* GeoCoord sphTricenpoint */
 
 /******************************************************************************/
@@ -546,16 +396,7 @@ long double chorddist(const GeoCoord& ll1, const GeoCoord& ll2)
    Input unit is degree. Output unit regard the earth's radius as one unit.
 */
  {
-  //long double la1,lo1,la2,lo2;
-  Vec3D p1,p2;
-  p1.x=cosl(ll1.lat)*cosl(ll1.lon);
-  p1.y=cosl(ll1.lat)*sinl(ll1.lon);
-  p1.z=sinl(ll1.lat);
-  p2.x=cosl(ll2.lat)*cosl(ll2.lon);
-  p2.y=cosl(ll2.lat)*sinl(ll2.lon);
-  p2.z=sinl(ll2.lat);
-  return
-    sqrtl((p1.x-p2.x)*(p1.x-p2.x)+(p1.y-p2.y)*(p1.y-p2.y)+(p1.z-p2.z)*(p1.z-p2.z));
+  return DgDVec3D::fromGeo(ll1).distance(DgDVec3D::fromGeo(ll2));
 
  } /* long double chorddist */
 
@@ -577,16 +418,9 @@ long double spheredist(const GeoCoord& ll1, const GeoCoord& ll2)
 /******************************************************************************/
 GeoCoord GCmidpoint(const GeoCoord& pp1, const GeoCoord& pp2)
 {
-  Vec3D pt1,pt2,mpt;
-  GeoCoord mp;
-  pt1=llxyz(pp1);
-  pt2=llxyz(pp2);
-  mpt.x = (pt1.x+pt2.x)/2.0L;
-  mpt.y = (pt1.y+pt2.y)/2.0L;
-  mpt.z = (pt1.z+pt2.z)/2.0L;
-  mpt = vecNormalize(mpt);
-  mp = xyzll(mpt);
-  return mp;
+  DgDVec3D mpt = DgDVec3D::fromGeo(pp1) + DgDVec3D::fromGeo(pp2);
+  mpt /= 2.0L;
+  return mpt.normalized().toGeo();
 }
 
 /******************************************************************************/
@@ -615,72 +449,55 @@ GeoCoord GCintersect(const GeoCoord& sv11, const GeoCoord& sv12,
 */
  {
   GeoCoord pt;
-  Vec3D nn1,nn2,
-	p11,p12,
-	p21,p22,
-	pp,pp2;
   long double a,b,maxlon,minlon;
 
 /* calculate the intersect point of two great circle */
-  p11=llxyz(sv11);
-  p12=llxyz(sv12);
-  p21=llxyz(sv21);
-  p22=llxyz(sv22);
-  nn1.x=p11.y*p12.z-p12.y*p11.z;
-  nn1.y=-p11.x*p12.z+p12.x*p11.z;
-  nn1.z=p11.x*p12.y-p12.x*p11.y;
-  nn2.x=p21.y*p22.z-p22.y*p21.z;
-  nn2.y=-p21.x*p22.z+p22.x*p21.z;
-  nn2.z=p21.x*p22.y-p22.x*p21.y;
-  if ((nn2.z*nn1.y-nn1.z*nn2.y)!= 0.0L) {
-    b=(nn1.x*nn2.y-nn2.x*nn1.y)/(nn2.z*nn1.y-nn1.z*nn2.y);
-    a=(nn2.x*nn1.z-nn1.x*nn2.z)/(nn1.y*nn2.z-nn2.y*nn1.z);
-    pp.x=1/sqrtl(a*a+b*b+1);
-    pp.y=a*pp.x;
-    pp.z=b*pp.x;
-   } else if (((nn2.z*nn1.y-nn1.z*nn2.y)==0.0L) &&
-         ((nn1.x*nn2.y-nn2.x*nn1.y)==0.0L) && ((nn1.x*nn2.z-nn2.x*nn1.z)==0.0L)) {
+  const DgDVec3D nn1 = DgDVec3D::fromGeo(sv11).cross(DgDVec3D::fromGeo(sv12));
+  const DgDVec3D nn2 = DgDVec3D::fromGeo(sv21).cross(DgDVec3D::fromGeo(sv22));
+  long double ppx = 0.0L, ppy = 0.0L, ppz = 0.0L;
+  if ((nn2.z()*nn1.y()-nn1.z()*nn2.y())!= 0.0L) {
+    b=(nn1.x()*nn2.y()-nn2.x()*nn1.y())/(nn2.z()*nn1.y()-nn1.z()*nn2.y());
+    a=(nn2.x()*nn1.z()-nn1.x()*nn2.z())/(nn1.y()*nn2.z()-nn2.y()*nn1.z());
+    ppx=1/sqrtl(a*a+b*b+1);
+    ppy=a*ppx;
+    ppz=b*ppx;
+   } else if (((nn2.z()*nn1.y()-nn1.z()*nn2.y())==0.0L) &&
+         ((nn1.x()*nn2.y()-nn2.x()*nn1.y())==0.0L) && ((nn1.x()*nn2.z()-nn2.x()*nn1.z())==0.0L)) {
     report("Error in GCintersect: the two great circle planes are parallel.\n",
            DgBase::Fatal);
-   } else if (((nn2.z*nn1.y-nn1.z*nn2.y)==0.0L) && (nn1.z!=0.0L)) {
-    pp.x=0.0L;
-    pp.y=1.0L/sqrtl(1+nn1.y*nn1.y/nn1.z/nn1.z);
-    pp.z=-nn1.y/nn1.z*pp.y;
-   } else if (((nn2.z*nn1.y-nn1.z*nn2.y)==0.0L) && (nn2.z!=0.0L)) {
-    pp.x=0.0L;
-    pp.y=1.0L/sqrtl(1.0L+nn2.y*nn2.y/nn2.z/nn2.z);
-    pp.z=-nn2.y/nn2.z*pp.y;
-   } else if (((nn2.z*nn1.y-nn1.z*nn2.y)==0.0L) && (nn1.y!=0.0L)) {
-    pp.x=0.0L;
-    pp.z=1/sqrtl(1+nn1.z*nn1.z/nn1.y/nn1.y);
-    pp.y=-nn1.z/nn1.y*pp.z;
-   } else if (((nn2.z*nn1.y-nn1.z*nn2.y)==0.0L) && (nn2.y!=0.0L)) {
-    pp.x=0.0L;
-    pp.z=1.0L/sqrtl(1.0L+nn2.z*nn2.z/nn2.y/nn2.y);
-    pp.y=-nn2.z/nn2.y*pp.z;
+   } else if (((nn2.z()*nn1.y()-nn1.z()*nn2.y())==0.0L) && (nn1.z()!=0.0L)) {
+    ppx=0.0L;
+    ppy=1.0L/sqrtl(1+nn1.y()*nn1.y()/nn1.z()/nn1.z());
+    ppz=-nn1.y()/nn1.z()*ppy;
+   } else if (((nn2.z()*nn1.y()-nn1.z()*nn2.y())==0.0L) && (nn2.z()!=0.0L)) {
+    ppx=0.0L;
+    ppy=1.0L/sqrtl(1.0L+nn2.y()*nn2.y()/nn2.z()/nn2.z());
+    ppz=-nn2.y()/nn2.z()*ppy;
+   } else if (((nn2.z()*nn1.y()-nn1.z()*nn2.y())==0.0L) && (nn1.y()!=0.0L)) {
+    ppx=0.0L;
+    ppz=1/sqrtl(1+nn1.z()*nn1.z()/nn1.y()/nn1.y());
+    ppy=-nn1.z()/nn1.y()*ppz;
+   } else if (((nn2.z()*nn1.y()-nn1.z()*nn2.y())==0.0L) && (nn2.y()!=0.0L)) {
+    ppx=0.0L;
+    ppz=1.0L/sqrtl(1.0L+nn2.z()*nn2.z()/nn2.y()/nn2.y());
+    ppy=-nn2.z()/nn2.y()*ppz;
    }
+  DgDVec3D pp(ppx, ppy, ppz);
 
   if (sign==0) {
-    if (pp.z<0.0L) {
-      pp.x=0.0L-pp.x;
-      pp.y=-pp.y;
-      pp.z=-pp.z;
-    }
-    pt=xyzll(pp);
+    if (pp.z()<0.0L) pp *= -1.0L;
+    pt=pp.toGeo();
     return pt;
   } else {
    /* judge if the point is on the two great circle segment */
 
-  pt=xyzll(pp);
+  pt=pp.toGeo();
   maxlon=maxval(sv11.lon,sv12.lon);
   minlon=minval(sv11.lon,sv12.lon);
   if ((pt.lon<=maxlon) && (pt.lon>=minlon))
    return pt;
   else {
-    pp2.x=-pp.x;
-    pp2.y=-pp.y;
-    pp2.z=-pp.z;
-    pt=xyzll(pp2);
+    pt=(pp * -1.0L).toGeo();
     if ((pt.lon<=maxlon) && (pt.lat>=minlon))
      return pt;
     else {
@@ -699,18 +516,12 @@ long double GCptlat(long double lon, const GeoCoord& sv1, const GeoCoord& sv2)
 */
  {
   long double lat,a,b,c;
-  Vec3D p1,p2;
+  const DgDVec3D p1 = DgDVec3D::fromGeo(sv1);
+  const DgDVec3D p2 = DgDVec3D::fromGeo(sv2);
 
-  p1.x=cosl(sv1.lat)*cosl(sv1.lon);
-  p1.y=cosl(sv1.lat)*sinl(sv1.lon);
-  p1.z=sinl(sv1.lat);
-  p2.x=cosl(sv2.lat)*cosl(sv2.lon);
-  p2.y=cosl(sv2.lat)*sinl(sv2.lon);
-  p2.z=sinl(sv2.lat);
-
-  a=(p1.y*p2.z-p1.z*p2.y)*cosl(lon);
-  b=(p1.x*p2.z-p1.z*p2.x)*sinl(lon);
-  c=(p1.x*p2.y-p1.y*p2.x);
+  a=(p1.y()*p2.z()-p1.z()*p2.y())*cosl(lon);
+  b=(p1.x()*p2.z()-p1.z()*p2.x())*sinl(lon);
+  c=(p1.x()*p2.y()-p1.y()*p2.x());
   if (c!=0.0L) lat=atanl((b-a)/c);
   else {
      lat = UNDEFVAL;
@@ -726,51 +537,19 @@ int ptinsphtri(const GeoCoord& pt, GeoCoord sTri[3])
   return 1 if it is in and return 0 if not
 */
 {
-   int i;
-   long double p0, t0;
-   Vec3D pp, ptri[3];
+   // pt is on the same side as each vertex of the plane through the other
+   // two vertices (and the centre): compare the signs of the triple products
+   DgDVec3D ptri[3];
+   for (int i = 0; i < 3; i++) ptri[i] = DgDVec3D::fromGeo(sTri[i]);
+   const DgDVec3D pp = DgDVec3D::fromGeo(pt);
 
-   for (i = 0; i < 3; i++) ptri[i] = llxyz(sTri[i]);
-   pp = llxyz(pt);
-   p0 = pp.x * (ptri[1].y * ptri[2].z - ptri[2].y * ptri[1].z) -
-        pp.y * (ptri[1].x * ptri[2].z - ptri[2].x * ptri[1].z) +
-        pp.z * (ptri[1].x * ptri[2].y - ptri[2].x * ptri[1].y);
-
-   t0 = ptri[0].x * (ptri[1].y * ptri[2].z - ptri[2].y * ptri[1].z) -
-        ptri[0].y * (ptri[1].x * ptri[2].z - ptri[2].x * ptri[1].z) +
-        ptri[0].z * (ptri[1].x * ptri[2].y - ptri[2].x * ptri[1].y);
-
-   if (p0 * t0 < 0.0L)
+   for (int k = 0; k < 3; k++)
    {
-      return 0;
+      const DgDVec3D n = ptri[(k + 1) % 3].cross(ptri[(k + 2) % 3]);
+      if (pp.dot(n) * ptri[k].dot(n) < 0.0L) return 0;
    }
-   else
-   {
-      p0 = pp.x * (ptri[0].y * ptri[2].z - ptri[2].y * ptri[0].z) -
-           pp.y * (ptri[0].x * ptri[2].z - ptri[2].x * ptri[0].z) +
-           pp.z * (ptri[0].x * ptri[2].y - ptri[2].x * ptri[0].y);
 
-      t0 = ptri[1].x * (ptri[0].y * ptri[2].z - ptri[2].y * ptri[0].z) -
-           ptri[1].y * (ptri[0].x * ptri[2].z - ptri[2].x * ptri[0].z) +
-           ptri[1].z * (ptri[0].x * ptri[2].y - ptri[2].x * ptri[0].y);
-
-      if (p0 * t0 < 0.0L)
-      {
-         return 0;
-      }
-      else
-      {
-         p0 = pp.x * (ptri[0].y * ptri[1].z - ptri[1].y * ptri[0].z) -
-              pp.y * (ptri[0].x * ptri[1].z - ptri[1].x * ptri[0].z) +
-              pp.z * (ptri[0].x * ptri[1].y - ptri[1].x * ptri[0].y);
-
-         t0 = ptri[2].x * (ptri[0].y * ptri[1].z - ptri[1].y * ptri[0].z) -
-              ptri[2].y * (ptri[0].x * ptri[1].z - ptri[1].x * ptri[0].z) +
-              ptri[2].z * (ptri[0].x * ptri[1].y - ptri[1].x * ptri[0].y);
-
-         return (p0 * t0 >= 0.0L);
-      }
-   }
+   return 1;
 
 }  /* ptinsphtri */
 
@@ -779,51 +558,25 @@ GeoCoord GCdaz(const GeoCoord& pt, long double distance, long double az)
 /*
   compute and return the point whose azimuth (az) and distance
   (distance) relative to a known point (pt) are given.
-  input parameter distance and az are in radius, pt in degree.
+  all angles are in radians.
+
+  The point is p cos(distance) + (n cos(az) + e sin(az)) sin(distance), with
+  p the unit vector of pt and n, e the unit north and east tangents at p.
+  These stay defined at a pole (north is then along the meridian pt.lon), so
+  paths along a meridian, over a pole or from a pole need no special case.
 */
  {
-  GeoCoord pt2;
-  long double sinlat, sinlon, coslon;
+  const long double sinLat = sinl(pt.lat), cosLat = cosl(pt.lat);
+  const long double sinLon = sinl(pt.lon), cosLon = cosl(pt.lon);
 
-  if ((fabsl(az)<PRECISION) || (fabsl(fabsl(az)-M_PI)<PRECISION))
-  {
-     if (fabsl(az)<PRECISION) pt2.lat = pt.lat + distance;
-     else pt2.lat = pt.lat - distance;
-     pt2.lon = pt.lon;
-     if (fabsl(pt2.lat-M_PI_2)<PRECISION)
-     {
-        pt2.lat = M_PI_2;
-        pt2.lon = 0.0L;
-     }
-     if (fabsl(pt2.lat+M_PI_2)<PRECISION)
-     {
-        pt2.lat = -M_PI;
-        pt2.lon = 0.0L;
-     }
-  }
-  else
-  {
-     sinlat=sinl(pt.lat)*cosl(distance)+cosl(pt.lat)*sinl(distance)*cosl(az);
-     if (sinlat>1.0L) sinlat=1.0L;
-     if (sinlat<-1.0L) sinlat=-1.0L;
-     pt2.lat=asinl(sinlat);
-     if ((pt2.lat==M_PI_2) || (pt2.lat==-M_PI_2)) pt2.lon=0.0L;
-     else
-      {
-       sinlon=sinl(az)*sinl(distance)/cosl(pt2.lat);
-       coslon=(cosl(distance)-sinl(pt.lat)*sinl(pt2.lat))/
-	      cosl(pt.lat)/cosl(pt2.lat);
-       if (sinlon>1.0L) sinlon=1.0L;
-       if (sinlon<-1.0L) sinlon=-1.0L;
-       if (coslon>1.0L) coslon=1.0L;
-       if (coslon<-1.0L) coslon=-1.0L;
-       pt2.lon=pt.lon+atan2l(sinlon,coslon);
-      }
-     if (pt2.lon>M_PI+PRECISION) pt2.lon -=2.0L*M_PI;
-     if (pt2.lon<-M_PI-PRECISION) pt2.lon +=2.0L*M_PI;
-  }
+  const DgDVec3D p(cosLat * cosLon, cosLat * sinLon, sinLat);
+  const DgDVec3D n(-sinLat * cosLon, -sinLat * sinLon, cosLat);
+  const DgDVec3D e(-sinLon, cosLon, 0.0L);
 
-  return pt2;
+  const DgDVec3D q = p * cosl(distance) +
+                     (n * cosl(az) + e * sinl(az)) * sinl(distance);
+
+  return q.toGeo();
  } /* GeoCoord GCdaz */
 
 /******************************************************************************/

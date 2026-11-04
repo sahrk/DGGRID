@@ -36,8 +36,8 @@ messages.
     output are run but not diffed. After each example it prints
     "dggrid exit status N" to its standard output (not to the
     example's log file). If an example directory has more than
-    one metafile starting with the example's name (e.g. h3Gen.meta,
-    h3GenString.meta and h3GenCustom.meta), all of them are run.
+    one metafile (e.g. h3Gen.meta, h3GenString.meta and
+    h3GenCustom.meta), all of them are run.
 
   doexamplesNoGDALorH3.sh - works exactly like doexamples.sh
     above except it only executes the examples listed in
@@ -46,13 +46,14 @@ messages.
     built DGGRID without GDAL or without H3.
 
   doexamplesH3.sh - executes just the examples that need DGGRID
-    to be built with the H3 library (examplesH3.lst: h3Gen and
-    h3Transform) and diffs their output as above. Every metafile
-    in each of those examples is run (e.g. h3Gen.meta,
-    h3GenString.meta and h3GenCustom.meta), then it checks that
-    h3GenCustom.meta, which specifies the grid explicitly, gives
-    the same cell indexes, centers, parents and children as
-    h3Gen.meta, which uses dggs_type H3. The
+    to be built with the H3 library (examplesH3.lst: h3Gen,
+    h3Kml and h3Transform) and diffs
+    their output as above. Every metafile in each of those
+    examples is run (e.g. h3Gen.meta, h3GenString.meta and
+    h3GenCustom.meta), then it checks that h3GenCustom.meta,
+    which specifies the grid explicitly, gives the same cell
+    indexes, centers, parents and children as h3Gen.meta, which
+    uses dggs_type H3. The
     examples are skipped if "dggrid -v" does not report that
     DGGRID was built with H3. Set the environment variable
     DGGRID to use a different dggrid executable.

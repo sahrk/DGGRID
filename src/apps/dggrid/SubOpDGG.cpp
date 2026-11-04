@@ -62,7 +62,7 @@ std::string coordinateString(long double coordinate)
    std::ostringstream text;
    text << std::setprecision(std::numeric_limits<long double>::max_digits10)
         << coordinate;
-   return text.str();
+   return dgg::util::suppressNegativeZero(text.str());
 }
 
 // the datum choice values, as used by input_datum, output_datum,
@@ -117,7 +117,7 @@ SubOpDGG::SubOpDGG (OpBasic& op, bool _activate)
      numGrids (1), curGrid (0), lastGrid (false), sampleCount(0), nSamplePts(0),
      azimuthDegs (0.0), earthRadius (DEFAULT_RADIUS_KM),
      customSphereRadius (DEFAULT_RADIUS_KM), apertureType (""),
-     isMixed43 (false), isSuperfund (false), isApSeq (false), isH3Preset (false), h3Geometry (false),
+     isMixed43 (false), isSuperfund (false), isApSeq (false), isH3Preset (false),
      hierNdxSysType (dgg::addtype::InvalidHierNdxSysType)
 {
 }
@@ -435,15 +435,6 @@ SubOpDGG::setupOp (void)
    getParamValue(pList(), "dggs_type", tmp, false);
    std::string tmplc = toLower(tmp);
 
-#ifdef USE_H3
-   // h3_boundary_def H3 is accepted only for dggs_type H3
-   {
-      std::string h3Bnd;
-      getParamValue(pList(), "h3_boundary_def", h3Bnd, false);
-      if (toLower(h3Bnd) == "h3" && tmplc != "h3")
-         ::report("h3_boundary_def H3 requires dggs_type H3", DgBase::Fatal);
-   }
-#endif
    if (tmplc != "custom") {
       // IGEO7v1 and IGEO7v2 (and its alias IGEO7) are the ISEA7HSZ and ISEA7HLZ
       // presets
@@ -521,10 +512,11 @@ SubOpDGG::setupOp (void)
          hierNdxSys = "H3";
          hierNdx = true;
 #ifdef USE_H3
-         // cell boundaries as H3 generates them; H3's great circle edges need
-         // no densification. These output parameters do not exist for
-         // every operation (e.g. OUTPUT_STATS), so skip them if absent.
-         pList().setPresetParam("h3_boundary_def", "H3", true);
+         // cell boundaries as H3 generates them: the vertices and the points
+         // where the edges cross face edges, joined by great circle arcs, so
+         // no densification. These output parameters do not exist for every
+         // operation (e.g. OUTPUT_STATS), so skip them if absent.
+         pList().setPresetParam("insert_cell_bdry_edge_crossing", "TRUE", true);
          pList().setPresetParam("densification", "0", true);
          // clip cells likewise; clip_cell_densification belongs to
          // GENERATE_GRID only
@@ -760,7 +752,7 @@ SubOpDGG::setupOp (void)
       actualRes = res = sfRes2actualRes(sfRes);
    } else if (isH3Preset) {
       // for dggs_type H3 only, dggs_res_spec is the H3 resolution; DGGS
-      // resolution 2 is H3 resolution 0
+      // resolution 2 is resolution 0
       std::string resType;
       getParamValue(pList(), "dggs_res_specify_type", resType, false);
       if (resType != std::string("SPECIFIED"))
@@ -910,14 +902,15 @@ SubOpDGG::executeOp (void) {
    }
 
    // H3 indexes are valid H3 cells whatever the grid, but the cells themselves
-   // are H3's only for the GNOMONIC projection and the DYMAXION orientation
+   // are H3's only for the GNOMONIC projection and the DYMAXION orientation.
    static bool h3GeometryWarned = false;
+   bool h3Geometry;
    {
       const long double tol = 1e-12L;
-      h3Geometry = (projType == "GNOMONIC" &&
+      h3Geometry = projType == "GNOMONIC" &&
          fabsl(vert0.lonDegs() - strtold(kDymaxionLon, nullptr)) < tol &&
          fabsl(vert0.latDegs() - strtold(kDymaxionLat, nullptr)) < tol &&
-         fabsl(azimuthDegs - strtold(kDymaxionAzimuth, nullptr)) < tol);
+         fabsl(azimuthDegs - strtold(kDymaxionAzimuth, nullptr)) < tol;
    }
    if (!h3GeometryWarned && usesH3Index()) {
       if (!h3Geometry) {

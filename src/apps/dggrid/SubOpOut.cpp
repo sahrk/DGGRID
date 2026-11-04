@@ -274,7 +274,7 @@ SubOpOut::outputCellAdd2D (const DgLocation& addIn, const std::string* labelIn,
    // create the cell to output; it is handed unchanged to every writer
    std::unique_ptr<DgCell> pCell(dgg.makeCell(add2D, label, op.outOp.nDensify,
                  lonWrapMode, unwrapPts, dataList, op.mainOp.megaVerbose,
-                 useH3Boundary()));
+                 edgeCrossings));
    const DgCell& cell = *pCell;
 
    if (op.mainOp.megaVerbose)
@@ -397,9 +397,7 @@ SubOpOut::SubOpOut (OpBasic& op, bool _activate)
      outHierNdxSysType (dgg::addtype::InvalidHierNdxSysType),
      outHierNdxFormType(dgg::addtype::Int64),
      outSeqNum (false), outputDelimiter (' '), nDensify (1),
-#ifdef USE_H3
-     h3Boundary (false),
-#endif
+     edgeCrossings (false),
      lonWrapMode (DgGeoSphRF::Wrap), unwrapPts (true),
      doRandPts (true), ptsRand (0), nRandPts (0),
      nCellsTested(0), nCellsAccepted (0),
@@ -420,11 +418,9 @@ SubOpOut::initializeOp (void)
    pList().insertParam(new DgStringParam("output_file_name", "valsout.txt"));
 
    // output_file_type <NONE | TEXT >
-   def = ((op.mainOp.operation == "BIN_POINT_VALS" ||
-           op.mainOp.operation == "BIN_POINT_PRESENCE" ||
-           op.mainOp.operation == "TRANSFORM_POINTS") ? "TEXT" : "NONE");
-   //def = "NONE";
-   pList().insertParam("output_file_type", def, {"NONE", "TEXT"});
+   // Text output is opt-in, except that an explicitly supplied output_file_name
+   // continues to imply TEXT for compatibility with older metafiles.
+   pList().insertParam("output_file_type", "NONE", {"NONE", "TEXT"});
 
    // output_address_type < GEO | PLANE | PROJTRI | Q2DD | Q2DI |
    //        SEQNUM | VERTEX2DD | HIERNDX >
@@ -453,16 +449,12 @@ SubOpOut::initializeOp (void)
     // densification <int> (0 <= v <= 500)
     pList().insertParam(new DgIntParam("densification", 0, 0, 500));
 
-#ifdef USE_H3
-    // h3_boundary_def <DGGRID | H3>
-    // how the cell boundaries that are output are generated: DGGRID uses the
-    // cell vertices (densified in the projection plane); H3 uses the H3
-    // library's cellToBoundary (exact great circle arcs, with the points
-    // where the edges cross icosahedron edges). H3 is accepted only for
-    // dggs_type H3 (checked in SubOpDGG::setupOp), which also makes it the
-    // default. The parameter does not exist without the H3 library.
-    pList().insertParam("h3_boundary_def", "DGGRID", {"DGGRID", "H3"});
-#endif
+    // insert_cell_bdry_edge_crossing <TRUE | FALSE>
+    // insert into the output (and coarse clipping) cell boundaries the points
+    // where their edges cross icosahedron face edges, where the boundary
+    // bends; densification then divides each piece between them. FALSE by
+    // default; dggs_type H3 sets it TRUE.
+    pList().insertParam(new DgBoolParam("insert_cell_bdry_edge_crossing", false));
 
    // longitude_wrap_mode < WRAP | UNWRAP_WEST | UNWRAP_EAST >
    pList().insertParam("longitude_wrap_mode", "WRAP",
@@ -682,10 +674,7 @@ SubOpOut::setupOp (void)
 
    getParamValue(pList(), "densification", nDensify, false);
 
-#ifdef USE_H3
-   getParamValue(pList(), "h3_boundary_def", dummy, false);
-   h3Boundary = (dgg::util::toUpper(dummy) == "H3");
-#endif
+   getParamValue(pList(), "insert_cell_bdry_edge_crossing", edgeCrossings, false);
 
    getParamValue(pList(), "longitude_wrap_mode", dummy, false);
    dummy = dgg::util::toUpper(dummy);
@@ -702,6 +691,13 @@ SubOpOut::setupOp (void)
    getParamValue(pList(), "unwrap_points", unwrapPts, false);
 
    ///// output files
+
+   DgApAssoc* outputTypeParam = pList().getParam("output_file_type", false);
+   const DgApAssoc* outputNameParam = pList().getParam("output_file_name", false);
+   if (outputTypeParam && outputNameParam && !outputTypeParam->isUserSet() &&
+       outputNameParam->isUserSet()) {
+      outputTypeParam->setValStr("TEXT");
+   }
 
    getParamValue(pList(), "output_file_type", dataOutType, "NONE");
    getParamValue(pList(), "cell_output_type", cellOutType, "NONE");
@@ -898,37 +894,11 @@ SubOpOut::cleanupOp (void) {
 
 } // SubOpOut::cleanupOp
 
-#ifdef USE_H3
-////////////////////////////////////////////////////////////////////////////////
-// H3's cellToBoundary gives the boundary of an H3 cell, which is the DGGRID
-// cell only for H3's geometry. The resolution of the cells is checked where
-// they are made.
-void
-SubOpOut::checkH3Boundary (const DgIDGGBase& dgg) const
-{
-   if (!h3Boundary) return;
-
-   if (!op.dggOp.h3Geometry)
-      ::report("h3_boundary_def H3 requires H3's cell geometry: dggs_proj "
-               "GNOMONIC and dggs_orient_preset DYMAXION (dggs_type H3)",
-               DgBase::Fatal);
-   DgH3System::validateCompatibility(*dgg.dggs(), dgg::addtype::Int64);
-
-} // SubOpOut::checkH3Boundary
-#endif
-
 ////////////////////////////////////////////////////////////////////////////////
 int
 SubOpOut::executeOp (void) {
 
    const DgIDGGBase& dgg = op.dggOp.dgg();
-
-#ifdef USE_H3
-   checkH3Boundary(dgg);
-   if (h3Boundary && (dgg.res() < 2 || dgg.res() > 17))
-      ::report("h3_boundary_def H3 requires a DGGS resolution from 2 to 17 "
-               "(H3 resolutions 0-15)", DgBase::Fatal);
-#endif
 
    // starting a new set of outputs
    if (nOutputFile == 0)

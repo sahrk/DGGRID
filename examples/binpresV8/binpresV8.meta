@@ -41,7 +41,7 @@ output_count_field_name numCities
 output_num_classes TRUE
 output_num_classes_field_name numClass
 
-# version 7 style text output (on by default for backwards compatibility)
+# version 7 style text output (explicitly enabled)
 output_file_name outputfiles/popclass3h7.txt
 # use NONE for no text output
 output_file_type TEXT

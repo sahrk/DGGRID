@@ -62,7 +62,7 @@ The table below gives the values of other parameters that are set by each preset
 | **IGEO7v2**   | HEXAGON           | ISEA          | 9                 | PURE                   | 7                 | N/A                         | N/A                         |
 | **IGEO7**     | HEXAGON           | ISEA          | 9                 | PURE                   | 7                 | N/A                         | N/A                         |
 
-> **Note:** In addition to the listed parameters, the preset type **SUPERFUND** also sets the value of the parameter `output_cell_label_type` to `SUPERFUND`, and the preset type **H3** sets `h3_boundary_def` to `H3` and `densification` and `clip_cell_densification` to `0`. **H3** is available only in a build with the H3 library; for it dggs_res_spec is the H3 resolution (0 to 15), and the DGGS resolution is two greater.
+> **Note:** In addition to the listed parameters, the preset type **SUPERFUND** also sets the value of the parameter `output_cell_label_type` to `SUPERFUND`, and the preset type **H3** sets `insert_cell_bdry_edge_crossing` to `TRUE` and `densification` and `clip_cell_densification` to `0`. **H3** is available only in a build with the H3 library; for it dggs_res_spec is the H3 resolution (0 to 15), and the DGGS resolution is two greater.
 
 The ISEA, IVEA and FULLER presets are formed from the projection and a base grid. The base grid sets the following parameters:
 

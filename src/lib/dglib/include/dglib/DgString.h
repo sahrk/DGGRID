@@ -267,6 +267,16 @@ inline std::string suppressNegativeZero(std::string output)
    return output;
 }
 
+// val as written to a format whose display precision DGGRID does not
+// control (GDAL drivers, shapefiles): +0 if val is -0, or negative with a
+// magnitude below minResolution, which would display as "-0" (GDAL's GeoJSON
+// writes 15 decimal places, so the default covers it).
+inline long double suppressNegativeZero(long double val,
+                                        long double minResolution = 1e-15L)
+{
+   return (val <= 0.0L && val > -minResolution) ? 0.0L : val;
+}
+
 // JFW: We should tidy all of this up later:
 inline std::string to_string(long double val, const char *formatStr)
 {
