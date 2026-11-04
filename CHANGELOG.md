@@ -8,6 +8,7 @@ All changes are by Kevin Sahr, unless otherwise noted.
 - ellipsoid distance calculation in DgEllipsoidRF
 ### Fixed
 - incorrect processing of points near quad boundaries in triangle and diamond grids
+- potential seqnum overflow
 
 ## [9.15] - 2026-11-04
 ### Changed
