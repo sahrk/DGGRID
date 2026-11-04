@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 All changes are by Kevin Sahr, unless otherwise noted.
 
 ## [9.151] - 2026-11-04
+### Added
+- ellipsoid distance calculation in DgEllipsoidRF
 ### Fixed
 - incorrect processing of points near quad boundaries in triangle and diamond grids
 
