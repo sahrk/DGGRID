@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 All changes are by Kevin Sahr, unless otherwise noted.
 
+## [9.151] - 2026-11-04
+### Fixed
+- incorrect processing of points near quad boundaries in triangle and diamond grids
+
 ## [9.15] - 2026-11-04
 ### Changed
 - improved DgDVec3D class; incorporated fixes from H3
