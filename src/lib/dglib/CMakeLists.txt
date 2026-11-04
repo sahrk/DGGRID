@@ -116,7 +116,6 @@ add_library(dglib
    lib/DgZ7System.cpp
    lib/DgZOrderRF.cpp
    lib/DgZOrderStringRF.cpp
-   lib/DgWGS84RF.cpp
    lib/DgZOrderSystem.cpp
    include/dglib/Dg2WayConverter.h
    include/dglib/DgAuthalicConverter.h

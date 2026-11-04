@@ -273,10 +273,8 @@ class DgEllipsoidRF : public DgGeoDatumRF<DgGeoCoord, long double> {
                     { return DgDVec2D(getAddress(loc)->lonDegs(),
                                       getAddress(loc)->latDegs()); }
 
-      // distance in km; not currently defined (except for DgGeoSphRF)
-
-      virtual long double dist (const DgGeoCoord&, const DgGeoCoord&) const
-         { return 1.0L; }
+      // Shortest geodesic distance in km between geodetic coordinates.
+      virtual long double dist (const DgGeoCoord&, const DgGeoCoord&) const;
 
       virtual std::string add2str (const DgGeoCoord& add) const
                        { return std::string(add); }

@@ -25,9 +25,266 @@
 #include <dglib/DgEllipsoidRF.h>
 #include <dglib/DgGeoSphRF.h>
 #include <dglib/DgPolygon.h>
+#include <algorithm>
+#include <limits>
 
 const DgGeoCoord DgGeoCoord::undefGeoCoord(LDBL_MAX, LDBL_MAX);
 const long double DgGeoCoord::tolerance = 0.0000000005L;
+
+namespace {
+
+struct GeodesicState {
+   long double r[3], v[3];
+};
+
+// Arc-length form of the geodesic equation on x²/a² + y²/a² + z²/b² = 1.
+GeodesicState derivative(const GeodesicState& q, long double a, long double b)
+{
+   GeodesicState d;
+   const long double invA2 = 1.0L / (a * a);
+   const long double invB2 = 1.0L / (b * b);
+   const long double scale =
+      (invA2 * (q.v[0] * q.v[0] + q.v[1] * q.v[1]) +
+       invB2 * q.v[2] * q.v[2]) /
+      (invA2 * invA2 * (q.r[0] * q.r[0] + q.r[1] * q.r[1]) +
+       invB2 * invB2 * q.r[2] * q.r[2]);
+   for (int i = 0; i < 3; ++i) {
+      d.r[i] = q.v[i];
+      d.v[i] = -scale * q.r[i] * (i == 2 ? invB2 : invA2);
+   }
+   return d;
+}
+
+GeodesicState advance(const GeodesicState& q, const GeodesicState& d,
+                      long double step)
+{
+   GeodesicState result;
+   for (int i = 0; i < 3; ++i) {
+      result.r[i] = q.r[i] + step * d.r[i];
+      result.v[i] = q.v[i] + step * d.v[i];
+   }
+   return result;
+}
+
+GeodesicState endpoint(const GeodesicState& start, long double azimuth,
+                       long double length, long double a, long double b,
+                       const long double east[3], const long double north[3])
+{
+   GeodesicState q = start;
+   for (int i = 0; i < 3; ++i)
+      q.v[i] = sinl(azimuth) * east[i] + cosl(azimuth) * north[i];
+
+   const int count = static_cast<int>(ceill(length / 10000.0L)) + 1;
+   const long double step = length / count;
+   for (int j = 0; j < count; ++j) {
+      const GeodesicState k1 = derivative(q, a, b);
+      const GeodesicState k2 = derivative(advance(q, k1, step / 2.0L), a, b);
+      const GeodesicState k3 = derivative(advance(q, k2, step / 2.0L), a, b);
+      const GeodesicState k4 = derivative(advance(q, k3, step), a, b);
+      for (int i = 0; i < 3; ++i) {
+         q.r[i] += step / 6.0L *
+            (k1.r[i] + 2.0L * k2.r[i] + 2.0L * k3.r[i] + k4.r[i]);
+         q.v[i] += step / 6.0L *
+            (k1.v[i] + 2.0L * k2.v[i] + 2.0L * k3.v[i] + k4.v[i]);
+      }
+   }
+   return q;
+}
+
+void pointAndBasis(const DgGeoCoord& p, long double a, long double b,
+                   GeodesicState& point, long double east[3],
+                   long double north[3])
+{
+   const long double sl = sinl(p.lat()), cl = cosl(p.lat());
+   const long double so = sinl(p.lon()), co = cosl(p.lon());
+   const long double e2 = 1.0L - b * b / (a * a);
+   const long double N = a / sqrtl(1.0L - e2 * sl * sl);
+   point.r[0] = N * cl * co;
+   point.r[1] = N * cl * so;
+   point.r[2] = N * (1.0L - e2) * sl;
+   east[0] = -so; east[1] = co; east[2] = 0.0L;
+   north[0] = -sl * co; north[1] = -sl * so; north[2] = cl;
+}
+
+void residual(const GeodesicState& start, long double azimuth,
+              long double length, long double a, long double b,
+              const long double sourceEast[3], const long double sourceNorth[3],
+              const GeodesicState& target, const long double targetEast[3],
+              const long double targetNorth[3], long double error[3])
+{
+   const GeodesicState end = endpoint(start, azimuth, length, a, b,
+                                      sourceEast, sourceNorth);
+   error[0] = error[1] = error[2] = 0.0L;
+   for (int i = 0; i < 3; ++i) {
+      const long double difference = end.r[i] - target.r[i];
+      error[0] += difference * targetEast[i];
+      error[1] += difference * targetNorth[i];
+      error[2] += difference * difference;
+   }
+   error[2] = sqrtl(error[2]);
+}
+
+// Vincenty's fixed-point iteration may have no fixed point near antipodes.
+// Shoot geodesics on the ellipsoid and keep the shortest converged solution.
+long double antipodalDistance(const DgGeoCoord& p1, const DgGeoCoord& p2,
+                              long double a, long double b)
+{
+   GeodesicState start = {}, target = {};
+   long double sourceEast[3], sourceNorth[3], targetEast[3], targetNorth[3];
+   pointAndBasis(p1, a, b, start, sourceEast, sourceNorth);
+   pointAndBasis(p2, a, b, target, targetEast, targetNorth);
+   const long double dlon = remainderl(p2.lon() - p1.lon(), M_2PI);
+   const long double central = acosl(std::max(-1.0L, std::min(1.0L,
+      sinl(p1.lat()) * sinl(p2.lat()) +
+      cosl(p1.lat()) * cosl(p2.lat()) * cosl(dlon))));
+   const long double guessLength = (2.0L * a + b) / 3.0L * central;
+   const long double sphericalAzimuth = atan2l(
+      cosl(p2.lat()) * sinl(dlon),
+      cosl(p1.lat()) * sinl(p2.lat()) -
+      sinl(p1.lat()) * cosl(p2.lat()) * cosl(dlon));
+   const long double guesses[] = {sphericalAzimuth, 0.0L, M_PI,
+                                  M_PI_2, -M_PI_2};
+   long double best = std::numeric_limits<long double>::infinity();
+   for (long double guess : guesses) {
+      long double azimuth = guess, length = guessLength;
+      for (int iteration = 0; iteration < 30; ++iteration) {
+         long double error[3];
+         residual(start, azimuth, length, a, b, sourceEast, sourceNorth,
+                  target, targetEast, targetNorth, error);
+         const long double norm = error[2];
+         if (norm < 0.0001L) {
+            best = std::min(best, length);
+            break;
+         }
+         long double angleError[3], lengthError[3];
+         residual(start, azimuth + 1.0e-5L, length, a, b,
+                  sourceEast, sourceNorth, target, targetEast, targetNorth,
+                  angleError);
+         residual(start, azimuth, length + 10.0L, a, b,
+                  sourceEast, sourceNorth, target, targetEast, targetNorth,
+                  lengthError);
+         const long double j00 = (angleError[0] - error[0]) / 1.0e-5L;
+         const long double j10 = (angleError[1] - error[1]) / 1.0e-5L;
+         const long double j01 = (lengthError[0] - error[0]) / 10.0L;
+         const long double j11 = (lengthError[1] - error[1]) / 10.0L;
+         const long double determinant = j00 * j11 - j01 * j10;
+         if (fabsl(determinant) < 1.0e-8L) break;
+         const long double da = (-error[0] * j11 + error[1] * j01) /
+                                determinant;
+         const long double ds = (-j00 * error[1] + j10 * error[0]) /
+                                determinant;
+         bool improved = false;
+         for (long double fraction = 1.0L; fraction >= 1.0L / 128.0L;
+              fraction /= 2.0L) {
+            const long double candidateLength = length + fraction * ds;
+            if (candidateLength <= 0.0L || candidateLength > M_PI * a * 1.01L)
+               continue;
+            long double candidateError[3];
+            residual(start, azimuth + fraction * da, candidateLength, a, b,
+                     sourceEast, sourceNorth, target, targetEast, targetNorth,
+                     candidateError);
+            if (candidateError[2] < norm) {
+               azimuth += fraction * da;
+               length = candidateLength;
+               improved = true;
+               break;
+            }
+         }
+         if (!improved) break;
+      }
+   }
+   return best;
+}
+
+} // namespace
+
+long double
+DgEllipsoidRF::dist(const DgGeoCoord& p1, const DgGeoCoord& p2) const
+{
+   // Vincenty's inverse solution. Axes are meters, coordinates are radians,
+   // and the public distance unit for geographic reference frames is km.
+   if (!std::isfinite(p1.lat()) || !std::isfinite(p1.lon()) ||
+       !std::isfinite(p2.lat()) || !std::isfinite(p2.lon()) ||
+       fabsl(p1.lat()) > M_PI_2 + 1.0e-15L ||
+       fabsl(p2.lat()) > M_PI_2 + 1.0e-15L ||
+       !std::isfinite(a()) || !std::isfinite(b()) ||
+       !(a() > 0.0L) || !(b() > 0.0L) || b() > a()) {
+      report("DgEllipsoidRF::dist(): invalid ellipsoid or coordinate", DgBase::Fatal);
+      return 0.0L;
+   }
+
+   const long double deltaLon = remainderl(p2.lon() - p1.lon(), M_2PI);
+   if ((p1.lat() == p2.lat() && deltaLon == 0.0L) ||
+       (p1.lat() * p2.lat() > 0.0L &&
+        fabsl(fabsl(p1.lat()) - M_PI_2) < 1.0e-15L &&
+        fabsl(fabsl(p2.lat()) - M_PI_2) < 1.0e-15L))
+      return 0.0L;
+
+   const long double flattening = (a() - b()) / a();
+   if (flattening == 0.0L) {
+      const long double numerator = hypotl(
+         cosl(p2.lat()) * sinl(deltaLon),
+         cosl(p1.lat()) * sinl(p2.lat()) -
+         sinl(p1.lat()) * cosl(p2.lat()) * cosl(deltaLon));
+      const long double denominator = sinl(p1.lat()) * sinl(p2.lat()) +
+         cosl(p1.lat()) * cosl(p2.lat()) * cosl(deltaLon);
+      return a() * atan2l(numerator, denominator) / 1000.0L;
+   }
+
+   const long double U1 = atanl((1.0L - flattening) * tanl(p1.lat()));
+   const long double U2 = atanl((1.0L - flattening) * tanl(p2.lat()));
+   const long double sinU1 = sinl(U1), cosU1 = cosl(U1);
+   const long double sinU2 = sinl(U2), cosU2 = cosl(U2);
+   long double lambda = deltaLon;
+   long double sinSigma = 0.0L, cosSigma = 0.0L, sigma = 0.0L;
+   long double sinAlpha = 0.0L, cosSqAlpha = 0.0L, cos2SigmaM = 0.0L;
+   bool converged = false;
+
+   for (int i = 0; i < 200; ++i) {
+      const long double sinLambda = sinl(lambda), cosLambda = cosl(lambda);
+      sinSigma = hypotl(cosU2 * sinLambda,
+         cosU1 * sinU2 - sinU1 * cosU2 * cosLambda);
+      if (sinSigma == 0.0L) return 0.0L;
+      cosSigma = sinU1 * sinU2 + cosU1 * cosU2 * cosLambda;
+      sigma = atan2l(sinSigma, cosSigma);
+      sinAlpha = cosU1 * cosU2 * sinLambda / sinSigma;
+      cosSqAlpha = 1.0L - sinAlpha * sinAlpha;
+      cos2SigmaM = cosSqAlpha > 0.0L
+         ? cosSigma - 2.0L * sinU1 * sinU2 / cosSqAlpha : 0.0L;
+      const long double C = flattening / 16.0L * cosSqAlpha *
+         (4.0L + flattening * (4.0L - 3.0L * cosSqAlpha));
+      const long double next = deltaLon + (1.0L - C) * flattening *
+         sinAlpha * (sigma + C * sinSigma *
+         (cos2SigmaM + C * cosSigma *
+         (-1.0L + 2.0L * cos2SigmaM * cos2SigmaM)));
+      if (fabsl(next - lambda) < 1.0e-15L) {
+         converged = true;
+         break;
+      }
+      lambda = next;
+   }
+
+   if (!converged) {
+      const long double fallback = antipodalDistance(p1, p2, a(), b());
+      if (std::isfinite(fallback)) return fallback / 1000.0L;
+      report("DgEllipsoidRF::dist(): inverse geodesic did not converge",
+             DgBase::Fatal);
+      return 0.0L;
+   }
+
+   const long double uSq = cosSqAlpha * (a() * a() - b() * b()) /
+                            (b() * b());
+   const long double A = 1.0L + uSq / 16384.0L *
+      (4096.0L + uSq * (-768.0L + uSq * (320.0L - 175.0L * uSq)));
+   const long double B = uSq / 1024.0L *
+      (256.0L + uSq * (-128.0L + uSq * (74.0L - 47.0L * uSq)));
+   const long double deltaSigma = B * sinSigma *
+      (cos2SigmaM + B / 4.0L *
+      (cosSigma * (-1.0L + 2.0L * cos2SigmaM * cos2SigmaM) -
+       B / 6.0L * cos2SigmaM * (-3.0L + 4.0L * sinSigma * sinSigma) *
+       (-3.0L + 4.0L * cos2SigmaM * cos2SigmaM)));
+   return b() * A * (sigma - deltaSigma) / 1000.0L;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 long double

@@ -43,10 +43,6 @@ class DgWGS84RF : public DgEllipsoidRF {
       static constexpr long double canonicalAuthalicRadiusKM()
          { return WGS84_AUTHALIC_RADIUS_KM; }
 
-      // No ellipsoidal geodesic is supplied here. Fail if distance is requested
-      // rather than returning DgEllipsoidRF's placeholder value.
-      virtual long double dist(const DgGeoCoord&, const DgGeoCoord&) const;
-
    private:
       DgWGS84RF(DgRFNetwork& network, const std::string& name)
          : DgEllipsoidRF(network, name, semiMajorAxisMeters(),
