@@ -66,7 +66,10 @@ DgLocationData* SubOpBasicMulti::inStrToPointLoc(const std::string& inStr) const
         }
 
         // Retrieve location from sequence number
-        DgLocation* tmpLoc = static_cast<const DgIDGGBase&>(*op.inOp.pInRF).bndRF().locFromSeqNum(sNum);
+        const DgIDGGBase& inDgg = static_cast<const DgIDGGBase&>(*op.inOp.pInRF);
+        DgLocation* tmpLoc = inDgg.bndRF().locFromSeqNum(sNum);
+        if (!inDgg.bndRF().validLocation(*tmpLoc))
+            ::report("inStrToPointLoc(): invalid SEQNUM " + std::string(snStr), DgBase::Fatal);
         loc = new DgLocationData(*tmpLoc);
         delete tmpLoc;
 
@@ -127,7 +130,11 @@ SubOpBasicMulti::inStrToPointCell (const std::string& inStr) const {
                      DgBase::Fatal);
       }
 
-      loc = static_cast<const DgIDGGBase&>(*op.inOp.pInRF).bndRF().locFromSeqNum(sNum);
+      const DgIDGGBase& inDgg = static_cast<const DgIDGGBase&>(*op.inOp.pInRF);
+      loc = inDgg.bndRF().locFromSeqNum(sNum);
+      if (!inDgg.bndRF().validLocation(*loc))
+         ::report("doTransform(): invalid SEQNUM " + std::string(snStr),
+                     DgBase::Fatal);
       remainder = &(buff[strlen(snStr)]);
    } else {
       loc = new DgLocation(*op.inOp.pInRF);

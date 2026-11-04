@@ -413,7 +413,26 @@ dgcout << " ---> C. " << coord << std::endl;
    overJ = coord.j() > maxJ;
    int numOver = underI + underJ + overI + overJ; // works because bool is an int
 
-    if (numOver) {
+    if (numOver && IDGG().gridTopo() == Triangle) {
+        // Every triangle cell lies wholly inside one quad, so an overage can
+        // only be a point on (or round-off past) one of this quad's edges.
+        // The remapping below is for the hexagon/diamond (i, j) lattice;
+        // triangle j = 2 * row + t has twice as many values per quad. Take
+        // the triangle on this side of the edge instead: t = 0 is the
+        // triangle of the (i, row) rhombus touching the a = 1 edge, t = 1
+        // the one touching a = 0.
+        if (underI) {
+            coord.setI(0);
+            coord.setJ(coord.j() | 1LL);
+        } else if (overI) {
+            coord.setI(maxI);
+            coord.setJ(coord.j() - (coord.j() % 2));
+        }
+
+        if (underJ) coord.setJ(0);
+        else if (overJ) coord.setJ(maxJ);
+
+    } else if (numOver) {
         //if (overI || overJ) {
         const DgQuadEdgeCells& ec = IDGG().edgeTable(quadNum);
 
@@ -462,8 +481,13 @@ dgcout << " ---> C. " << coord << std::endl;
                 coord.setI(coord.i() - topEdgeI);
             } else { // TypeI
                 if (coord.j() == 0) {
-                    quadNum = ec.loneVert();
-                    coord = DgIVec2D(0, 0);
+                    // the icosahedron vertex; only hexagon grids have a
+                    // lone vertex cell there (quad 0/11)
+                    if (IDGG().gridTopo() == Hexagon) {
+                        quadNum = ec.loneVert();
+                        coord = DgIVec2D(0, 0);
+                    } else
+                        coord = DgIVec2D(maxI, 0);
                 } else {
                     quadNum = ec.rightQuad();
                     long long int iOverage = coord.i() - topEdgeI;
@@ -476,8 +500,13 @@ dgcout << " ---> C. " << coord << std::endl;
 #endif
             if (ec.isType0()) {
                 if (coord.i() == 0) {
-                    quadNum = ec.loneVert();
-                    coord = DgIVec2D(0, 0);
+                    // the icosahedron vertex; only hexagon grids have a
+                    // lone vertex cell there (quad 0/11)
+                    if (IDGG().gridTopo() == Hexagon) {
+                        quadNum = ec.loneVert();
+                        coord = DgIVec2D(0, 0);
+                    } else
+                        coord = DgIVec2D(0, maxJ);
                 } else {
                     quadNum = ec.upQuad();
                     long long int jOverage = coord.j() - topEdgeJ;
