@@ -25,6 +25,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include <algorithm>
 #include <cmath>
 #include <climits>
 #include <cfloat>
@@ -364,8 +365,12 @@ dgcout << " ---> B. " << coord << std::endl;
     std::cout << minBottomI << " " << minBottomJ << " " << maxTopOverageI << " " << maxTopOverageJ << std::endl;
 #endif
 
-   // if out of range check for possible round-off error
-   const long double nudge = 0.0000001L;
+   // if out of range check for possible round-off error; the nudge must stay
+   // well under one cell (about 1 / (maxI + 1) quad units): at fine
+   // resolutions a fixed 1e-7 moves a point more than a cell, so a point on
+   // one quad edge ends up past the opposite edge
+   const long double nudge =
+         std::min(0.0000001L, 0.25L / (std::max(maxI, maxJ) + 1));
    bool underI, underJ, overI, overJ;
    underI = coord.i() < minBottomI;
    underJ = coord.j() < minBottomJ;
