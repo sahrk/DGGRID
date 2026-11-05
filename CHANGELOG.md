@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 All changes are by Kevin Sahr, unless otherwise noted.
 
+## [9.2] - 2026-11-05
+### Fixed
+- adjust nudge value for round-off error handling (thanks @am2222)
+- nudge of points exceeding Q2DD bounds in both dimensions
+
 ## [9.151] - 2026-11-04
 ### Added
 - ellipsoid distance calculation in DgEllipsoidRF
