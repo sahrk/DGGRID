@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 All changes are by Kevin Sahr, unless otherwise noted.
 
 ## [9.2] - 2026-11-05
+### Added
+- link to DGGRID users page as documentation appendix I
 ### Fixed
 - adjust nudge value for round-off error handling (thanks @am2222)
 - nudge of points exceeding Q2DD bounds in both dimensions

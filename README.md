@@ -2,7 +2,7 @@
 
 ## General Information
 
-__DGGRID__ version 9.15 released November 4, 2026
+__DGGRID__ version 9.2 released November 5, 2026
 https://github.com/sahrk/DGGRID
 
 __Southern Terra Cognita Laboratory__  
@@ -17,8 +17,7 @@ Four directories should be included herein:
 - `src`: contains complete source code for __DGGRID__
 
    There are two ways that you can build __DGGRID__: you may use `cmake`
-   (see [INSTALL.md](INSTALL.md) for instructions),
-   or you can use the legacy build system from previous versions of __DGGRID__
+   (see [INSTALL.md](INSTALL.md) for instructions), or you can use the legacy build system from previous versions of __DGGRID__
    (see the text file README.NOCMAKE for instructions).
 
 - `examples`: contains examples of using __DGGRID__ with pre-computed outputs.

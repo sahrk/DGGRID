@@ -1,4 +1,4 @@
-# User Documentation for DGGRID v9.15
+# User Documentation for DGGRID v9.2
 
 ```{image} _static/image1.jpeg
 :alt: dggridDoc60.pages.jpg
@@ -79,7 +79,7 @@ The github source code distribution contains instructions on building **DGGRID**
 ```
 
 ````{container} center-text
-**DGGRID** version 9.15 was released November 4, 2026
+**DGGRID** version 9.2 was released November 5, 2026
 
 **[www.discreteglobalgrids.org](https://www.discreteglobalgrids.org)**
 
@@ -121,7 +121,8 @@ The github source code distribution contains instructions on building **DGGRID**
   - [Notes](#notes)
 - [Appendix G. The EPA Superfund_500m DGGS](#appendix-g-the-epa-superfund_500m-dggs)
 - [Appendix H. The PlanetRisk DGGS](#appendix-h-the-planetrisk-dggs)
-- [Appendix I. References](#appendix-i-references)
+- [Appendix I. Some DGGRID Users](https://discreteglobal.wpengine.com/dggrid-users/)
+- [Appendix J. References](#appendix-j-references)
 
 ## 1. Introduction
 
@@ -992,7 +993,11 @@ We have now completed the design choices needed to specify our DGGS. Table 1 giv
 
 In this paper we have developed a discrete location reference system for global geospatial big data analysis, optimized for efficient location-based sharding. We evaluated the most advanced design options available to us, making optimal choices at each step, to develop what we believe to be the most advanced such system currently known: the PlanetRisk Discrete Global Grid System (DGGS).
 
-## Appendix I. References
+## Appendix I. Some DGGRID Users
+
+[Some DGGRID Users](https://discreteglobal.wpengine.com/dggrid-users/)
+
+## Appendix J. References
 
 L. Arge, M. de Berg, H. J. Haverkort, and K. Yi. 2004. The priority R- tree: A practically efficient and worst-case optimal R-tree. In *Proceedings of ACM Management of Data (SIGMOD)*, pages 347-- 358.
 
