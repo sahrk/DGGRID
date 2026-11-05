@@ -402,6 +402,34 @@ dgcout << " ---> B. " << coord << std::endl;
       overI = coord.i() > maxTopOverageI;
       overJ = coord.j() > maxTopOverageJ;
 
+      // The nudge above moves the point diagonally, which cannot fix a point
+      // that is outside the quad in two directions at once (round-off near
+      // a quad corner that is an icosahedron vertex; for example a < 0 and
+      // b > 1). Try once more, pulling a and b inward independently, but
+      // only a coordinate that is within a nudge of a quad edge.
+      if (underI || underJ || overI || overJ) {
+         const long double b0 = addIn.coord().y() / M_SIN60;
+         const long double a0 = addIn.coord().x() + b0 / 2.0L;
+         long double a = a0, b = b0;
+         if (a > -nudge && a < nudge) a = nudge;
+         else if (a > 1.0L - nudge && a < 1.0L + nudge) a = 1.0L - nudge;
+         if (b > -nudge && b < nudge) b = nudge;
+         else if (b > 1.0L - nudge && b < 1.0L + nudge) b = 1.0L - nudge;
+
+         if (a != a0 || b != b0) {
+            tmp = DgDVec2D(a - b / 2.0L, b * M_SIN60);
+            loc = IDGG().ccFrame().makeLocation(tmp);
+            IDGG().grid2D().convert(loc);
+            coord = *IDGG().grid2D().getAddress(*loc);
+            delete loc;
+
+            underI = coord.i() < minBottomI;
+            underJ = coord.j() < minBottomJ;
+            overI = coord.i() > maxTopOverageI;
+            overJ = coord.j() > maxTopOverageJ;
+         }
+      }
+
       // are we good?
       if (underI || underJ || overI || overJ)
          report("DgQ2DDtoIConverter::convertTypedAddress(): "
