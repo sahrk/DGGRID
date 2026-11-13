@@ -406,7 +406,7 @@ SubOpDGG::initializeOp (void)
    // dggs_res_spec <int> (0 <= v <= MAX_DGG_RES)
    pList().insertParam(new DgIntParam("dggs_res_spec", 9, 0, MAX_DGG_RES));
 
-   // hier_indexing_system_type <ZORDER | Z3 | Z7 | H3 | NONE>
+   // hier_indexing_system_type <ZORDER | Z3 | Z7 | H3 | QUADTREE | NONE>
    auto hierChoices = dgg::addtype::hierNdxSysTypeChoices();
    hierChoices.push_back("NONE");
 #ifndef USE_H3
@@ -810,6 +810,10 @@ SubOpDGG::setupOp (void)
           if (apertureType != "PURE" || (aperture != 3 && aperture != 4))
               ::report("hier_indexing_system_type ZOrder "
                        "requires a pure aperture 3 or 4 DGGS", DgBase::Fatal);
+       } else if (hierNdxSysType == dgg::addtype::Quadtree) {
+          if (gridTopo != Triangle || apertureType != "PURE" || aperture != 4)
+             ::report("QUADTREE requires TRIANGLE topology with pure aperture 4",
+                      DgBase::Fatal);
        } else if (hierNdxSysType == dgg::addtype::H3) {
           if (gridTopo != Hexagon)
              ::report("H3 requires HEXAGON topology", DgBase::Fatal);
@@ -845,6 +849,16 @@ SubOpDGG::cleanupOp (void) {
 ////////////////////////////////////////////////////////////////////////////////
 int
 SubOpDGG::executeOp (void) {
+
+   // Triangle construction otherwise ignores mixed-aperture flags. Validate
+   // on-demand I/O hierarchies against the requested configuration too.
+   if (((op.inOp.inAddType == dgg::addtype::HierNdx &&
+         op.inOp.inHierNdxSysType == dgg::addtype::Quadtree) ||
+        (op.outOp.outAddType == dgg::addtype::HierNdx &&
+         op.outOp.outHierNdxSysType == dgg::addtype::Quadtree)) &&
+       (gridTopo != Triangle || apertureType != "PURE" || aperture != 4))
+      ::report("QUADTREE requires TRIANGLE topology with pure aperture 4",
+               DgBase::Fatal);
 
 //cout << "YYY " << curGrid << " " << numGrids << " " << lastGrid << std::endl;
 

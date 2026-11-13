@@ -44,6 +44,9 @@ DgIDGGS::makeRF (DgRFNetwork& network, const DgGeoSphRF& backFrame,
           const DgApSeq& apSeqIn, bool isMixed43In, int numAp4In, bool isSuperfundIn,
           DgHierNdxSysType hierNdxSysType)
 {
+   if (hierNdxSysType == Quadtree &&
+       (gridTopo != Triangle || apertureIn != 4 || isApSeqIn || isMixed43In))
+      report("QUADTREE requires TRIANGLE topology with pure aperture 4", DgBase::Fatal);
    if (isApSeqIn)
       report("DgIDGGS::makeRF(): isApSeq must be false", DgBase::Fatal);
 
@@ -92,7 +95,7 @@ DgIDGGS::makeRF (DgRFNetwork& network, const DgGeoSphRF& backFrame,
       if (apertureIn == 4) {
          if (defaultName) theName = projTypeIn + std::string("4T");
          dg0 = DgIDGGS4T::makeRF(network, backFrame, vert0, azDegs, nRes,
-                       theName, projTypeIn);
+                       theName, projTypeIn, hierNdxSysType);
       } else
             report(apErrStr, DgBase::Fatal);
    } else {

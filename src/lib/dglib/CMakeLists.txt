@@ -96,6 +96,9 @@ add_library(dglib
    lib/DgProjIcosaGnomonic.cpp
    lib/DgProjTriRF.cpp
    lib/DgRandom.cpp
+   lib/DgQuadtreeRF.cpp
+   lib/DgQuadtreeStringRF.cpp
+   lib/DgQuadtreeSystem.cpp
    lib/DgRFBase.cpp
    lib/DgRFNetwork.cpp
    lib/DgSeriesConverter.cpp
@@ -240,6 +243,9 @@ add_library(dglib
    include/dglib/DgProjTriRF.h
    include/dglib/DgRadixString.h
    include/dglib/DgRandom.h
+   include/dglib/DgQuadtreeRF.h
+   include/dglib/DgQuadtreeStringRF.h
+   include/dglib/DgQuadtreeSystem.h
    include/dglib/DgRF.h
    include/dglib/DgRFBase.h
    include/dglib/DgRFNetwork.h
