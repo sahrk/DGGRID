@@ -162,6 +162,11 @@ class DgRadixString {
          // padWidth of -1 indicates no padding
          //
          {
+            if (base() < 2) {
+               report("DgRadixString::convert(): base must be >= 2",
+                      DgBase::Fatal);
+            }
+
             int pval = abs(val);
 
             int nd = pval % base();

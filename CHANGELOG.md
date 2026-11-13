@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 All changes are by Kevin Sahr, unless otherwise noted.
 
+## [9.21] - 2026-11-12
+### Fixed
+- ZORDER indexes on diamond grids hung because radix was never set
+
 ## [9.2] - 2026-11-05
 ### Added
 - link to DGGRID users page as documentation appendix I

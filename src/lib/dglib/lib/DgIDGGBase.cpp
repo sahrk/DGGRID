@@ -181,7 +181,7 @@ DgIDGGBase::DgIDGGBase (const DgIDGGSBase* dggs, const DgGeoSphRF& geoRF,
    : DgDiscTopoRF<DgQ2DICoord, DgGeoCoord, long double>
           (geoRF.network(), geoRF, name, gridTopo, gridMetric),
      dggs_ (dggs), sphIcosa_(0), aperture_(aperture), res_(res),
-     precision_(precision), grid2D_(0), grid2DS_(0), ccFrame_(0),
+     radix_(0), precision_(precision), grid2D_(0), grid2DS_(0), ccFrame_(0),
      projTriRF_(0), vertexRF_(0), q2ddRF_(0), bndRF_(0), planeRF_(0), seqNumRF_(0)
 {
    //initialize();

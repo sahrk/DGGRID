@@ -555,7 +555,7 @@ input_hier_ndx_system or output_hier_ndx_system specifies the hierarchical index
 
 input_hier_ndx_system, output_hier_ndx_system, and hier_indexing_system_type take the following values:
 
-- `ZORDER` - quad number and digit-interleaved Q2DI coordinates, only available for hexagonal DGGS with a pure aperture of 3 or 4 (not supported for aperture 7, mixed, or sequence apertures)
+- `ZORDER` - quad number and digit-interleaved Q2DI coordinates, available for hexagonal DGGS with a pure aperture of 3 or 4 and for diamond DGGS with aperture 4 (not supported for aperture 7, mixed, or sequence apertures)
 - `Z3` - base 3 Central Place Indexing (CPI) hierarchical index \[Sahr 2019\], only available for hexagonal DGGS with a pure aperture of 3
 - `Z7` - base 7 Central Place Indexing (CPI) hierarchical index \[Sahr 2019\], only available for hexagonal DGGS with a pure aperture of 7
 - `H3` - the H3 index \[Sahr, 2019\], only available for hexagonal DGGS whose aperture sequence is `437777777777777777` or a prefix of it, and only if **DGGRID** was built with the H3 library. H3 resolutions 0 to 15 are DGGS resolutions 2 to 17. The indexes are always valid H3 indexes, but the cells are those of H3 only with dggs_proj GNOMONIC and dggs_orient_preset DYMAXION (as set by dggs_type H3); otherwise a warning is issued.

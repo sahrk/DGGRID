@@ -86,6 +86,8 @@ DgTriIDGG::initialize (void)
    setUndefLoc(makeLocation(undefAddress()));
    sphIcosa_ = new DgSphIcosa(vert0(), azDegs());
 
+   radix_ = (int) sqrt((long double) aperture());
+
    isAligned_ = true;
    isCongruent_ = false;
 
