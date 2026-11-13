@@ -3,11 +3,9 @@ All notable changes to this project will be documented in this file.
 
 All changes are by Kevin Sahr, unless otherwise noted.
 
-## [Unreleased]
-### Added
-- QUADTREE hierarchical indexing for pure aperture-4 triangle grids, with INT64 and DIGIT_STRING forms, exact Q2DI conversions, and indexing parents and children at resolutions 0 through 29. Child digits are center (0), apex (1), then counter-clockwise (2, 3).
-
 ## [9.21] - 2026-11-12
+### Added
+- QUADTREE hierarchical indexing for pure aperture-4 triangle grids
 ### Fixed
 - ZORDER indexes on diamond grids hung because radix was never set
 
