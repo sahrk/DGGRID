@@ -63,7 +63,9 @@ class DgGeoSphRF : public DgEllipsoidRF {
             return DgGeoCoord::gcDist(*getAddress(tmp1), *getAddress(tmp2));
          }
 
-      // distance in km
+      // Great-circle distance on this sphere, in km. A sphere does not use the
+      // ellipsoidal inverse in DgEllipsoidRF::dist. DgWGS84RF leaves that
+      // inverse in place, so a WGS 84 frame measures the geodesic.
 
       virtual long double dist (const DgLocation& loc1, const DgLocation& loc2) const
          { return earthRadiusKM() * gcDist(loc1, loc2); }

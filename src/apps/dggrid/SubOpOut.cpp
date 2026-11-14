@@ -325,8 +325,18 @@ SubOpOut::outputCellAdd2D (const DgLocation& addIn, const std::string* labelIn,
       if (nbrOut)
          nbrOut->insert(add2D, neighbors);
 
-      for (int i = 0; i < neighbors.size(); i++)
-         runStats.push(dgg.geoRF().dist(ctrGeo, neighbors[i]));
+      // Cell centers are generated on the grid sphere. Measure them in the
+      // output datum: the great-circle distance on that sphere, or the WGS 84
+      // geodesic after converting the centers to geodetic latitude.
+      const DgEllipsoidRF& datumRF = op.dggOp.outputGeoRF();
+      DgLocation ctrOnDatum(ctrGeo);
+      datumRF.convert(&ctrOnDatum);
+      const DgGeoCoord& ctrAdd = *datumRF.getAddress(ctrOnDatum);
+      for (int i = 0; i < neighbors.size(); i++) {
+         DgLocation nbrOnDatum(neighbors[i]);
+         datumRF.convert(&nbrOnDatum);
+         runStats.push(datumRF.dist(ctrAdd, *datumRF.getAddress(nbrOnDatum)));
+      }
    }
 
    // spatial children

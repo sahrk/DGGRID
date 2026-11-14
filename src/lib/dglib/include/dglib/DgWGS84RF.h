@@ -24,7 +24,9 @@
 #include <dglib/DgEllipsoidRF.h>
 
 // WGS 84 geographic coordinates: longitude and geodetic latitude in radians.
-// Grid geometry and distance statistics continue to use the projection sphere.
+// The grid is generated on the authalic sphere. Area and resolution
+// statistics stay on that sphere. Distance measured in this frame is the
+// WGS 84 geodesic between geodetic coordinates.
 class DgWGS84RF : public DgEllipsoidRF {
    public:
       static const DgWGS84RF* makeRF(DgRFNetwork& network,
