@@ -1,4 +1,4 @@
-# User Documentation for DGGRID v9.2
+# User Documentation for DGGRID v9.3
 
 ```{image} _static/image1.jpeg
 :alt: dggridDoc60.pages.jpg
@@ -79,7 +79,7 @@ The github source code distribution contains instructions on building **DGGRID**
 ```
 
 ````{container} center-text
-**DGGRID** version 9.2 was released November 5, 2026
+**DGGRID** version 9.3 was released November 15, 2026
 
 **[www.discreteglobalgrids.org](https://www.discreteglobalgrids.org)**
 

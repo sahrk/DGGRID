@@ -3,7 +3,7 @@ All notable changes to this project will be documented in this file.
 
 All changes are by Kevin Sahr, unless otherwise noted.
 
-## [9.21] - 2026-11-12
+## [9.3] - 2026-11-15
 ### Added
 - QUADTREE hierarchical indexing for pure aperture-4 triangle grids
 - FULLER3HS, FULLER4HS, FULLER7HS, FULLER43HS, FULLER4TS and FULLER4DS as spherical aliases of the original FULLER grids
