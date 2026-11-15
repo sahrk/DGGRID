@@ -3,9 +3,10 @@
 # z7Transform.meta - example of a DGGRID metafile which performs address
 #                   conversion from SEQNUM to Z7 DIGIT_STRING indexes
 #
-# Note that the inputfiles directory contains GEO, Z7, Z7_STRING, and
-# SEQNUM files, all describing the same set of cells. You can experiment with
-# transforming between these by changing the input_* and output_* parameters.
+# Note that the inputfiles directory contains GEO, Z7 INT64 (z7.txt),
+# Z7 DIGIT_STRING (z7str.txt), and SEQNUM files, all describing the same set
+# of cells. You can experiment with transforming between these by changing
+# the input_* and output_* parameters.
 #
 # Kevin Sahr, 09/03/2019
 #

@@ -3,9 +3,10 @@
 # zTransform.meta - example of a DGGRID metafile which performs address
 #                   conversion from GEO to ZORDER indexes
 #
-# Note that the inputfiles directory contains GEO, ZORDER, ZORDER_STRING, and
-# SEQNUM files, all describing the same set of cells. You can experiment with
-# transforming between these by changing the input_* and output_* parameters.
+# Note that the inputfiles directory contains GEO, ZORDER INT64 (zorder.txt),
+# ZORDER DIGIT_STRING (zorderStr.txt), and SEQNUM files, all describing the
+# same set of cells. You can experiment with transforming between these by
+# changing the input_* and output_* parameters.
 #
 # Kevin Sahr, 09/03/2019
 #

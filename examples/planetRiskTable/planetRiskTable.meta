@@ -1,7 +1,7 @@
 ################################################################################
 #
-# planetRiskTable.meta - example of outputting a table of statistics for the
-#      first 20 resolutions of the PlanetRisk grid.
+# planetRiskTable.meta - example of outputting a table of statistics for
+#      resolutions 0-20 of the PlanetRisk grid.
 #
 # Kevin Sahr, 07/14/2019
 #

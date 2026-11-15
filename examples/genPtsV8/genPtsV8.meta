@@ -1,8 +1,8 @@
 ################################################################################
 #
 # genPtsV8.meta - example of a DGGRID metafile which outputs all cells which
-#      contain one or more input points, using GDAL Shapefiles for input and
-#      output.
+#      contain one or more input points. Input is GeoJSON via GDAL; cell
+#      output is GeoJSON via GDAL.
 #
 # Determine the cells that contain Oregon airports in resolution 10 of the
 # ISEA3H DGGS.
@@ -34,7 +34,6 @@ output_address_type SEQNUM
 output_delimiter ","
 
 # output the number of input points in each cell
-# note Shapefile field names must be 10 characters or less
 output_count TRUE
 output_count_field_name numAirports
 

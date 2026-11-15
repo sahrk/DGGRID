@@ -4,7 +4,8 @@
 #     conversion from GEO to H3 INT64 indexes at H3 resolution 9. Requires
 #     DGGRID built with the H3 library.
 #
-# h3TransformGeo.meta and h3TransformQ2DI.meta convert the indexes back.
+# h3TransformGeo.meta converts those indexes to GEO cell centers, and
+# h3TransformQ2DI.meta converts them to Q2DI. Both read inputfiles/cityIndexes.txt.
 #
 # Kevin Sahr, 10/21/2026
 #

@@ -2,9 +2,12 @@
 #
 # h3Geom.meta - example of a DGGRID metafile that generates the H3 grid
 #     cells at H3 resolution 2 (DGGRID resolution 4) for a region in the
-#     Norwegian Sea that contains a pentagon. The grid is specified explicitly,
-#     so the H3 library is not required; cells are labeled with sequence
-#     numbers. Output is in GeoJSON format.
+#     Norwegian Sea that contains a pentagon. The grid is specified explicitly
+#     (GNOMONIC, DYMAXION, aperture sequence 437777777777777777), so the H3
+#     library is not required; cells are labeled with sequence numbers.
+#     Cell boundaries do not include the points where edges cross icosahedron
+#     faces: insert_cell_bdry_edge_crossing TRUE is set only by dggs_type H3.
+#     Output is in GeoJSON format.
 #
 # Kevin Sahr, 10/21/2026
 #

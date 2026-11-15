@@ -51,7 +51,9 @@ do
 done
 
 # the explicitly specified H3 grid must give the same cells as dggs_type H3
-# (not the same boundaries: h3_boundary_def H3 requires dggs_type H3)
+# (not the same boundaries: insert_cell_bdry_edge_crossing TRUE, which
+# inserts the points where edges cross icosahedron faces, is set only by
+# dggs_type H3)
 echo "############################################"
 echo "#### h3Gen: dggs_type H3 vs explicitly specified parameters"
 for ext in ndxChd ndxPrt; do

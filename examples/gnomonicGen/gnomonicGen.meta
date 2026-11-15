@@ -3,7 +3,9 @@
 # gnomonicGen.meta - example of a DGGRID metafile that generates a
 #     resolution 3 aperture 4 hexagon grid for the whole earth using the
 #     GNOMONIC projection (the icosahedral gnomonic projection used by H3).
-#     GNOMONIC is not equal area and does not require the H3 library.
+#     The orientation is the default ISEA placement, not DYMAXION, and the
+#     aperture is pure 4 rather than the H3 sequence, so these are not H3
+#     cells. GNOMONIC is not equal area and does not require the H3 library.
 #     Output is in GeoJSON format.
 #
 # Kevin Sahr, 10/21/2026

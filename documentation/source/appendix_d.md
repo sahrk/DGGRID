@@ -28,7 +28,6 @@ The table below lists the example metafiles distributed with **DGGRID** in the e
 | gridgenMixedSHP | No | No | FULLER43H | 10 | Mixed aperture grid with the Fuller projection clipped to Benton County, Oregon (AIGEN clip); Shapefile. |
 | gridgenPureKML | No | No | ISEA3H | 5 | Res 5 aperture 3 hexagon grid, whole earth; KML. |
 | h3Gen | No | Yes | H3 | 3 | H3 cells around a pentagon in the Norwegian Sea (AIGEN clip), labeled with H3 indexes, with index parents and children; GeoJSON cells, text points. h3GenString uses DIGIT_STRING indexes; h3GenCustom specifies the grid explicitly. |
-
 | h3Geom | No | No | CUSTOM (H3 grid) | 4 | H3 resolution 2 cells around a pentagon in the Norwegian Sea, with the grid specified explicitly and SEQNUM labels; GeoJSON. |
 | h3Kml | No | Yes | H3 | 2 | Whole earth H3 resolution 2 cells; cell boundaries and center points in separate KML files. |
 | hiRes | No | No | ISEA43H | 27 | Very high resolution grid (cell area about 0.02 m^2) clipped to a small triangle in Ashland, Oregon; Shapefile. |
@@ -54,14 +53,14 @@ The table below lists the example metafiles distributed with **DGGRID** in the e
 | wholeEarthISEA4DSZ | No | No | ISEA4DSZ | 3 | Whole-earth diamond grid with ZORDER INT64 labels; KML cells and center points. |
 | wholeEarthISEA4TSQ | No | No | ISEA4TSQ | 3 | Whole-earth triangle grid with QUADTREE INT64 labels; KML cells and center points. |
 | z3CellClip | No | No | ISEA3H | 5 | Clips using coarser resolution cells given as Z3 indexes; Z3 labels; KML. |
-| z3Collection | Yes | No | ISEA3H | 2 | Cells for SEQNUMs in a GDAL collection file, labeled with Z3 indexes; GeoJSON. |
+| z3Collection | Yes | No | ISEA3H | 2 | Cells, points, neighbors and children for cells listed by SEQNUM, labeled with Z3 INT64 indexes, combined in one GeoJSON GDAL collection file. |
 | z3Nums | No | No | ISEA3H | 9 | Generates the cells whose Z3 indexes are listed in text files; KML. |
 | z3WholeEarth | No | No | ISEA3H | 4 | Res 4 grid, whole earth, labeled with Z3 indexes; KML. |
 | z7CellClip | No | No | ISEA7H | 5 | Clips using coarser resolution cells given as Z7 indexes; also outputs index parents and children; KML. |
-| z7Collection | Yes | No | ISEA7H | 2 | Cells for SEQNUMs in a GDAL collection file, labeled with Z7 indexes, with index parents and children; GeoJSON. |
+| z7Collection | Yes | No | ISEA7H | 2 | Cells, points, neighbors, children, index parents and index children for cells listed by SEQNUM, labeled with Z7 DIGIT_STRING indexes, combined in one GeoJSON GDAL collection file. |
 | z7Nums | No | No | ISEA7H | 4 | Generates the cells whose Z7 indexes are listed in text files; KML. |
-| zCellClip | No | No | ISEA3H | 5 | Clips using coarser resolution cells given as ZORDER indexes; ZORDER labels; KML. |
-| zCollection | Yes | No | ISEA3H | 2 | Cells for SEQNUMs in a GDAL collection file, labeled with ZORDER indexes; GeoJSON. |
+| zCellClip | No | No | ISEA3H | 5 | Clips using coarser resolution cells given as ZORDER indexes; sequence number labels; KML. |
+| zCollection | Yes | No | ISEA3H | 2 | Cells, points, neighbors and children for cells listed by SEQNUM, labeled with ZORDER INT64 indexes, combined in one GeoJSON GDAL collection file. |
 | zNums | No | No | ISEA3H | 4 | Generates the cells whose ZORDER indexes are listed in text files; KML. |
 ```
 
