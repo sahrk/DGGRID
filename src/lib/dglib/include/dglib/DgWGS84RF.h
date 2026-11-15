@@ -56,6 +56,9 @@ class DgWGS84RF : public DgEllipsoidRF {
       DgWGS84RF(DgRFNetwork& network, const std::string& name)
          : DgEllipsoidRF(network, name, semiMajorAxisMeters(),
                          semiMinorAxisMeters()) { }
+
+      long double triangleAreaM2 (const DgGeoCoord& p, const DgGeoCoord& q,
+                                  const DgGeoCoord& r, int depth) const;
 };
 
 #endif

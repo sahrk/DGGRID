@@ -283,6 +283,17 @@ class DgEllipsoidRF : public DgGeoDatumRF<DgGeoCoord, long double> {
       virtual long double cellAreaKM (const DgLocation& center,
                                        const DgPolygon& boundary) const;
 
+      // Inverse geodesic: shortest distance in meters and forward azimuth in
+      // radians, clockwise from north. Azimuth at a pole uses the point's
+      // stored longitude as GeographicLib does. Returns false if the solve
+      // does not converge.
+      bool geodesicInverse (const DgGeoCoord& from, const DgGeoCoord& to,
+                            long double& distanceM, long double& azimuth) const;
+
+      // Point reached by travelling distanceM meters along azimuth from from.
+      DgGeoCoord geodesicDirect (const DgGeoCoord& from, long double azimuth,
+                                 long double distanceM) const;
+
       virtual std::string add2str (const DgGeoCoord& add) const
                        { return std::string(add); }
 
