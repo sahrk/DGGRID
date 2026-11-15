@@ -1,0 +1,24 @@
+################################################################################
+#
+# wholeEarthISEA4TSQ.meta - generates a whole-earth resolution 3
+#     triangle grid with QUADTREE INT64 cell labels. Cell boundaries and
+#     center points are written in KML format.
+#
+# Kevin Sahr, 11/14/2026
+#
+################################################################################
+
+# specify the operation
+dggrid_operation GENERATE_GRID
+
+# specify the DGG; the preset selects QUADTREE indexing for input, output
+# and the indexing hierarchy
+dggs_type ISEA4TSQ
+dggs_res_spec 3
+
+# specify the output; the preset supplies the index labels
+cell_output_type KML
+cell_output_file_name ./outputfiles/isea4tsq
+point_output_type KML
+point_output_file_name ./outputfiles/isea4tsqp
+densification 3
