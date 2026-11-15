@@ -438,7 +438,7 @@ SubOpOut::initializeOp (void)
    pList().insertParam("output_address_type", "SEQNUM",
                        dgg::addtype::addressTypeChoices());
 
-    // output_hier_ndx_system < ZORDER | Z3 | Z7 | H3 >
+    // output_hier_ndx_system < ZORDER | Z3 | Z7 | H3 | QUADTREE >
     // used if output_address_type is HIERNDX
     auto hierChoices = dgg::addtype::hierNdxSysTypeChoices();
 #ifndef USE_H3

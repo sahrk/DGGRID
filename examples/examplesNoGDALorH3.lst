@@ -2,13 +2,13 @@ aigenerate
 binpres
 binvals
 determineRes
-dymaxionIcosa
 gridgenCellClip
 gridgenDiamond
 gridgenGeoJSON
 gridgenMixedSHP
 gridgenPureKML
 hiRes
+icosaDymaxion
 icosaISEA
 icosaISEAL
 isea4d
@@ -25,6 +25,8 @@ superfundGrid
 table
 transform
 wholeEarthIGEO7
+wholeEarthISEA4DSZ
+wholeEarthISEA4TSQ
 z3CellClip
 z3Nums
 z3Transform

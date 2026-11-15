@@ -4,7 +4,6 @@ binpresV8
 binvals
 binvalsV8
 determineRes
-dymaxionIcosa
 gdalCollection
 gdalExample
 genPtsV8
@@ -15,6 +14,7 @@ gridgenMixedSHP
 gridgenPureKML
 hiRes
 holes
+icosaDymaxion
 icosaISEA
 icosaISEAL
 isea4d
@@ -36,6 +36,8 @@ table
 transform
 transformV8
 wholeEarthIGEO7
+wholeEarthISEA4DSZ
+wholeEarthISEA4TSQ
 z3CellClip
 z3Collection
 z3Nums

@@ -1,6 +1,6 @@
 ################################################################################
 #
-# dymaxionIcosa.meta - example of a DGGRID metafile that generates a spherical
+# icosaDymaxion.meta - example of a DGGRID metafile that generates a spherical
 #     icosahedron (a resolution 0 triangle grid) with the Dymaxion orientation
 #     in KML format.
 #
@@ -21,9 +21,9 @@ geodetic_densify 0.0
 
 # specify the output
 cell_output_type KML
-cell_output_file_name outputfiles/dymaxIcosa
+cell_output_file_name outputfiles/icosaDymaxion
 point_output_type KML
-point_output_file_name outputfiles/dymaxIcosaPts
+point_output_file_name outputfiles/icosaDymaxionPts
 kml_default_color ffff0000
 kml_name Dymaxion Spherical Icosahedron
 kml_description www.discreteglobalgrids.org

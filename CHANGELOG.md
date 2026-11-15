@@ -3,6 +3,16 @@ All notable changes to this project will be documented in this file.
 
 All changes are by Kevin Sahr, unless otherwise noted.
 
+## [9.21] - 2026-11-12
+### Added
+- QUADTREE hierarchical indexing for pure aperture-4 triangle grids
+- FULLER3HS, FULLER4HS, FULLER7HS, FULLER43HS, FULLER4TS and FULLER4DS as spherical aliases of the original FULLER grids
+- ISEA4TSQ, IVEA4TSQ, ISEA4TLQ, IVEA4TLQ and FULLER4TQ presets using QUADTREE indexing for input, output and the indexing hierarchy
+- ISEA4DSZ, IVEA4DSZ, IVEA4DLZ and FULLER4DZ presets using ZORDER indexing for input, output and the indexing hierarchy
+- wholeEarthISEA4DSZ and wholeEarthISEA4TSQ examples: whole-earth resolution 3 diamond and triangle grids with ZORDER and QUADTREE INT64 labels, KML cell and point output, and reference outputs; included in the main and no-GDAL/no-H3 example suites
+### Fixed
+- ZORDER indexes on diamond grids hung because radix was never set
+
 ## [9.2] - 2026-11-05
 ### Added
 - link to DGGRID users page as documentation appendix I
@@ -44,7 +54,7 @@ All changes are by Kevin Sahr, unless otherwise noted.
 - icosahedral gnomonic projection (dggs_proj GNOMONIC)
 - indexing hierarchies may start above DGGS resolution 0 (as in H3, where res 0 is DGGRID res 2)
 - per-resolution parent and child aperture accessors for hierarchy systems
-- new examples dymaxionIcosa, gnomonicGen, h3Gen, h3Geom, h3Kml, h3Transform, icosaISEAL, ivea3hGen and ivea7hGen
+- new examples icosaDymaxion, gnomonicGen, h3Gen, h3Geom, h3Kml, h3Transform, icosaISEAL, ivea3hGen and ivea7hGen
 - parameter h3_boundary_def to use H3 library cell boundaries with dggs_type H3
 - parameter polyclip_algo (GDAL or CLIPPER1); GDAL is the default when available.
 - manual updated to v9.1 (thanks to @allixender)

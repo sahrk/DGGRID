@@ -32,14 +32,17 @@
 #include <dglib/DgIDGGS4T.h>
 #include <dglib/DgTriGrid2D.h>
 #include <dglib/DgTriIDGG.h>
+#include <dglib/DgHierNdxSystemRFSBase.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgIDGGS4T::DgIDGGS4T (DgRFNetwork& network, const DgGeoSphRF& backFrame,
                const DgGeoCoord& vert0, long double azDegs, int nRes,
-               const std::string& name, const std::string& projType)
+               const std::string& name, const std::string& projType,
+               DgHierNdxSysType hierNdxSysType)
         : DgIDGGS (network, backFrame, vert0, azDegs, 4, nRes,
-                       Triangle, D3, name, projType)
+                       Triangle, D3, name, projType, false, DgApSeq::defaultApSeq,
+                       false, 0, false, hierNdxSysType)
 {
    const int aperture = 4;
 
@@ -60,6 +63,10 @@ DgIDGGS4T::DgIDGGS4T (DgRFNetwork& network, const DgGeoSphRF& backFrame,
 
    for (int r = 0; r < nRes; r++)
        Dg2WayTopoResAddConverter<DgQ2DICoord, DgGeoCoord, long double>(*this, *(grids()[r]), r);
+
+   // Hierarchical frames require all triangle resolutions and converters.
+   if (hierNdxSysType != InvalidHierNdxSysType)
+      hierNdxSystem_ = DgHierNdxSystemRFSBase::makeSystem(*this, hierNdxSysType, Int64);
 
 } // DgTriIDGGS::DgTriIDGGS
 

@@ -1,0 +1,24 @@
+################################################################################
+#
+# wholeEarthISEA4DSZ.meta - generates a whole-earth resolution 3
+#     diamond grid with ZORDER INT64 cell labels. Cell boundaries and
+#     center points are written in KML format.
+#
+# Kevin Sahr, 11/14/2026
+#
+################################################################################
+
+# specify the operation
+dggrid_operation GENERATE_GRID
+
+# specify the DGG; the preset selects ZORDER indexing for input, output
+# and the indexing hierarchy
+dggs_type ISEA4DSZ
+dggs_res_spec 3
+
+# specify the output; the preset supplies the index labels
+cell_output_type KML
+cell_output_file_name ./outputfiles/isea4dsz
+point_output_type KML
+point_output_file_name ./outputfiles/isea4dszp
+densification 3

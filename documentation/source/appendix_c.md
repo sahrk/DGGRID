@@ -18,7 +18,7 @@ sphere_radius_type: AUTHALIC_SPHERE
 dggs_res_specify_type: SPECIFIED
 ```
 
-The datum and orientation parameters are set by the preset according to its kind. All presets other than the ellipsoidal presets (names ending in `L` or `LZ`), IGEO7v2, IGEO7, H3 and the FULLER presets set:
+The datum and orientation parameters are set by the preset according to its kind. All presets other than the ellipsoidal presets (names ending in `L`, `LZ` or `LQ`), IGEO7v2, IGEO7, H3 and the FULLER presets set:
 
 ```
 input_datum: AUTHALIC_SPHERE
@@ -26,7 +26,7 @@ output_datum: AUTHALIC_SPHERE
 dggs_orient_preset: ISEA
 ```
 
-The ellipsoidal presets (names ending in `L` or `LZ`), IGEO7v2 and IGEO7 set:
+The ellipsoidal presets (names ending in `L`, `LZ` or `LQ`), IGEO7v2 and IGEO7 set:
 
 ```
 input_datum: WGS84
@@ -77,15 +77,31 @@ The ISEA, IVEA and FULLER presets are formed from the projection and a base grid
 
 The projection and the datum settings (`S` or `L` suffix) then give the preset names in the table below. In each row, *base* stands for any of the six base grids above; in the hierarchically indexed column, *base* stands for 3H, 4H, or 7H only.
 
-| **Projection** | **dggs_proj** | **Spherical preset name** (AUTHALIC_SPHERE input and output, ISEA orientation) | **Ellipsoidal preset name** (WGS84 input and output, ISEAL orientation) | **Hierarchically indexed names** (spherical and ellipsoidal) | **Other names** |
+| **Projection** | **dggs_proj** | **Spherical preset name** (AUTHALIC_SPHERE input and output) | **Ellipsoidal preset name** (WGS84 input and output, ISEAL orientation) | **Hierarchically indexed names** (spherical and ellipsoidal) | **Other names** |
 |----------------|---------------|-------------------------------|-------------------------------|-------------------------------|-----------------|
 | **ISEA**       | ISEA          | ISEA*base*S, for example ISEA3HS | ISEA*base*L, for example ISEA3HL | ISEA*base*SZ and ISEA*base*LZ, for example ISEA3HSZ and ISEA3HLZ | ISEA*base* (an alias for ISEA*base*S), for example ISEA3H; ISEA7HSZ is also IGEO7v1; ISEA7HLZ is also IGEO7v2 and IGEO7 |
 | **IVEA**       | IVEA          | IVEA*base*S, for example IVEA3HS | IVEA*base*L, for example IVEA3HL | IVEA*base*SZ and IVEA*base*LZ, for example IVEA3HSZ and IVEA3HLZ | none |
-| **FULLER**     | FULLER        | FULLER*base*, for example FULLER3H | none | none | none |
+| **FULLER**     | FULLER        | FULLER*base*S, for example FULLER3HS | none | FULLER4DZ and FULLER4TQ (see below) | FULLER*base* aliases FULLER*base*S, for example FULLER3H |
 
 The FULLER presets use AUTHALIC_SPHERE input and output and the DYMAXION orientation.
 
-The hierarchically indexed presets (names ending in `Z`, and IGEO7, IGEO7v1, IGEO7v2 and H3) set the additional parameters below, where *system* is the hierarchical indexing system for the aperture of the preset (H3 for the H3 preset, which sets shapefile_id_field_length to 15):
+The additional indexed diamond and triangle presets below retain the geometry, datum and orientation settings of their base presets. The diamond names shown are the supported diamond `Z` presets; the triangle names shown are the supported `Q` presets.
+
+| **Indexed preset** | **Base preset** | **system** |
+|--------------------|-----------------|------------|
+| **ISEA4DSZ** | ISEA4DS | ZORDER |
+| **IVEA4DSZ** | IVEA4DS | ZORDER |
+| **IVEA4DLZ** | IVEA4DL | ZORDER |
+| **FULLER4DZ** | FULLER4D | ZORDER |
+| **ISEA4TSQ** | ISEA4TS | QUADTREE |
+| **IVEA4TSQ** | IVEA4TS | QUADTREE |
+| **ISEA4TLQ** | ISEA4TL | QUADTREE |
+| **IVEA4TLQ** | IVEA4TL | QUADTREE |
+| **FULLER4TQ** | FULLER4T | QUADTREE |
+
+QUADTREE indexes are available at DGGS resolutions 0 through 29 in both forms.
+
+The hierarchically indexed presets (names ending in `Z` or `Q`, and IGEO7, IGEO7v1, IGEO7v2 and H3) set the additional parameters below, where *system* is the hierarchical indexing system for the topology and aperture of the preset (H3 for the H3 preset, which sets shapefile_id_field_length to 15):
 
 ```
 hier_indexing_system_type: system
@@ -104,6 +120,8 @@ shapefile_id_field_length: 16
 | **3H**        | Z3         |
 | **4H**        | ZORDER     |
 | **7H**        | Z7         |
+| **4D** (Z presets) | ZORDER |
+| **4T** (Q presets) | QUADTREE |
 
 IGEO7v1 is the aperture 7 preset ISEA7HSZ, and IGEO7v2 and IGEO7 are ISEA7HLZ, so they use Z7. Because input_address_type is HIERNDX in these presets, a hierarchically indexed preset reads its input as indexes, for example the files of clip_region_files with clip_subset_type ADDRESS_FILES. Operations that read geographic points, such as BIN_POINT_VALS and BIN_POINT_PRESENCE, require input_address_type GEO, which must then be set explicitly. As for any preset, any of these parameters can be overridden by setting it explicitly.
 

@@ -268,13 +268,18 @@ SubOpDGG::initializeOp (void)
    //            IVEA3HL | IVEA4HL | IVEA7HL | IVEA43HL | IVEA4TL | IVEA4DL |
    //            ISEA3HSZ | ISEA4HSZ | ISEA7HSZ | IVEA3HSZ | IVEA4HSZ | IVEA7HSZ |
    //            ISEA3HLZ | ISEA4HLZ | ISEA7HLZ | IVEA3HLZ | IVEA4HLZ | IVEA7HLZ |
+   //            ISEA4DSZ | IVEA4DSZ | IVEA4DLZ | FULLER4DZ |
+   //            ISEA4TSQ | IVEA4TSQ | ISEA4TLQ | IVEA4TLQ | FULLER4TQ |
+   //            FULLER3HS | FULLER4HS | FULLER7HS | FULLER43HS | FULLER4TS | FULLER4DS |
    //            FULLER3H | FULLER4H | FULLER7H | FULLER43H | FULLER4T | FULLER4D>
    // A trailing S marks a spherical (authalic sphere) preset and a trailing L
-   // its ellipsoidal (WGS84) version. ISEA3H ... ISEA4D are aliases for
-   // ISEA3HS ... ISEA4DS, kept for backwards compatibility. A final Z marks
-   // the hexagon S and L presets that use hierarchical indexing for input,
+   // its ellipsoidal (WGS84) version. The original ISEA3H ... ISEA4D and
+   // FULLER3H ... FULLER4D names alias their S versions for compatibility.
+   // A final Z marks
+   // hexagon and diamond presets that use hierarchical indexing for input,
    // output and internal processing: Z3 for aperture 3, ZORDER for aperture 4
-   // and Z7 for aperture 7. IGEO7v1 is another name for ISEA7HSZ (the IGEO7 of
+   // and Z7 for aperture 7. A final Q marks triangle presets using QUADTREE
+   // indexing for the same purposes. IGEO7v1 is another name for ISEA7HSZ (the IGEO7 of
    // version 8.4), and IGEO7v2 is another name for ISEA7HLZ; the two differ
    // only in datum. IGEO7 is an alias for IGEO7v2 (it was IGEO7v1 before
    // version 9.1) and produces a warning. H3 is the H3 grid (gnomonic projection,
@@ -292,6 +297,9 @@ SubOpDGG::initializeOp (void)
         "IVEA3HL", "IVEA4HL", "IVEA7HL", "IVEA43HL", "IVEA4TL", "IVEA4DL",
         "ISEA3HSZ", "ISEA4HSZ", "ISEA7HSZ", "IVEA3HSZ", "IVEA4HSZ", "IVEA7HSZ",
         "ISEA3HLZ", "ISEA4HLZ", "ISEA7HLZ", "IVEA3HLZ", "IVEA4HLZ", "IVEA7HLZ",
+        "ISEA4DSZ", "IVEA4DSZ", "IVEA4DLZ", "FULLER4DZ",
+        "ISEA4TSQ", "IVEA4TSQ", "ISEA4TLQ", "IVEA4TLQ", "FULLER4TQ",
+        "FULLER3HS", "FULLER4HS", "FULLER7HS", "FULLER43HS", "FULLER4TS", "FULLER4DS",
         "FULLER3H", "FULLER4H", "FULLER7H", "FULLER43H", "FULLER4T", "FULLER4D"};
 #ifndef USE_H3
       // H3 is not a choice unless DGGRID is built with the H3 library
@@ -406,7 +414,7 @@ SubOpDGG::initializeOp (void)
    // dggs_res_spec <int> (0 <= v <= MAX_DGG_RES)
    pList().insertParam(new DgIntParam("dggs_res_spec", 9, 0, MAX_DGG_RES));
 
-   // hier_indexing_system_type <ZORDER | Z3 | Z7 | H3 | NONE>
+   // hier_indexing_system_type <ZORDER | Z3 | Z7 | H3 | QUADTREE | NONE>
    auto hierChoices = dgg::addtype::hierNdxSysTypeChoices();
    hierChoices.push_back("NONE");
 #ifndef USE_H3
@@ -451,16 +459,18 @@ SubOpDGG::setupOp (void)
                   "Use dggs_type IGEO7v1 to get the previous IGEO7 grid.",
                   DgBase::Warning);
 
-      // A final Z (e.g. ISEA7HSZ) marks a preset with hierarchical indexing for
-      // all purposes: the grid's own hierarchical indexing system and HIERNDX
-      // input and output addresses. Strip it first.
-      bool hierNdx = gridName.back() == 'z';
+      // A final Z (e.g. ISEA7HSZ) or Q (e.g. ISEA4TSQ) selects hierarchical
+      // indexing for the grid and HIERNDX input/output. Q uses QUADTREE;
+      // Z selects its system by aperture. Strip the indexing suffix first.
+      const bool quadtree = gridName.back() == 'q';
+      bool hierNdx = quadtree || gridName.back() == 'z';
       if (hierNdx)
          gridName.pop_back();
 
       // Spherical presets end in S (e.g. ISEA3HS) and ellipsoidal ones in L
       // (e.g. ISEA3HL); strip the suffix to get the grid name. The legacy
-      // ISEA3H ... ISEA4D names have no suffix and are the spherical presets.
+      // ISEA3H ... ISEA4D and FULLER3H ... FULLER4D names have no suffix and
+      // are the same spherical presets.
       const bool ellipsoidal = gridName.back() == 'l';
       if (ellipsoidal || gridName.back() == 's')
          gridName.pop_back();
@@ -582,11 +592,13 @@ SubOpDGG::setupOp (void)
       }
 
       if (hierNdx) {
+         if (quadtree)
+            hierNdxSys = "QUADTREE";
          if (hierNdxSys.empty())
             ::report("SubOpDGG::setupOp(): dggs_type " + tmp +
                      " has no hierarchical indexing system", DgBase::Fatal);
 
-         // Z3, ZORDER and Z7 INT64 indexes are printed as 16 hex digits;
+         // Z3, ZORDER, Z7 and QUADTREE INT64 indexes use 16 hex digits;
          // H3's canonical indexes are 15 digits.
          if (!isH3Preset)
             pList().setPresetParam("shapefile_id_field_length", "16", true);
@@ -810,6 +822,10 @@ SubOpDGG::setupOp (void)
           if (apertureType != "PURE" || (aperture != 3 && aperture != 4))
               ::report("hier_indexing_system_type ZOrder "
                        "requires a pure aperture 3 or 4 DGGS", DgBase::Fatal);
+       } else if (hierNdxSysType == dgg::addtype::Quadtree) {
+          if (gridTopo != Triangle || apertureType != "PURE" || aperture != 4)
+             ::report("QUADTREE requires TRIANGLE topology with pure aperture 4",
+                      DgBase::Fatal);
        } else if (hierNdxSysType == dgg::addtype::H3) {
           if (gridTopo != Hexagon)
              ::report("H3 requires HEXAGON topology", DgBase::Fatal);
@@ -845,6 +861,16 @@ SubOpDGG::cleanupOp (void) {
 ////////////////////////////////////////////////////////////////////////////////
 int
 SubOpDGG::executeOp (void) {
+
+   // Triangle construction otherwise ignores mixed-aperture flags. Validate
+   // on-demand I/O hierarchies against the requested configuration too.
+   if (((op.inOp.inAddType == dgg::addtype::HierNdx &&
+         op.inOp.inHierNdxSysType == dgg::addtype::Quadtree) ||
+        (op.outOp.outAddType == dgg::addtype::HierNdx &&
+         op.outOp.outHierNdxSysType == dgg::addtype::Quadtree)) &&
+       (gridTopo != Triangle || apertureType != "PURE" || aperture != 4))
+      ::report("QUADTREE requires TRIANGLE topology with pure aperture 4",
+               DgBase::Fatal);
 
 //cout << "YYY " << curGrid << " " << numGrids << " " << lastGrid << std::endl;
 

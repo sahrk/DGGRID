@@ -19,7 +19,6 @@ The table below lists the example metafiles distributed with **DGGRID** in the e
 |---|---|---|---|---|---|
 | aigenerate | No | No | ISEA3H | 6 | Resolution 6 grid clipped to Oregon plus a 100 mile buffer (Shapefile clip); cells and points in ArcInfo Generate format. |
 | determineRes | No | No | ISEA43H | from cell area | Chooses the resolution from a target cell area (120,000 km^2); whole earth, KML. |
-| dymaxionIcosa | No | No | FULLER4T | 0 | Res 0 triangles (the icosahedron) with the Dymaxion orientation; KML. |
 | gdalCollection | Yes | No | ISEA3H | 2 | Cells, points, neighbors and children for cells listed by SEQNUM, combined in one GeoJSON GDAL collection file. |
 | gdalExample | Yes | No | ISEA7H | 9 | GDAL-readable clip file; cells and points output as GeoJSON via GDAL. |
 | gnomonicGen | No | No | CUSTOM (GNOMONIC hexagons) | 3 | Res 3 aperture 4 hexagon grid on the GNOMONIC projection, whole earth; GeoJSON. |
@@ -34,6 +33,7 @@ The table below lists the example metafiles distributed with **DGGRID** in the e
 | h3Kml | No | Yes | H3 | 2 | Whole earth H3 resolution 2 cells; cell boundaries and center points in separate KML files. |
 | hiRes | No | No | ISEA43H | 27 | Very high resolution grid (cell area about 0.02 m^2) clipped to a small triangle in Ashland, Oregon; Shapefile. |
 | holes | Yes | No | ISEA3H | 17 | Clips with a polygon that has holes (clip_using_holes); KML. |
+| icosaDymaxion | No | No | FULLER4T | 0 | Res 0 triangles (the icosahedron) with the Dymaxion orientation; KML. |
 | icosaISEA | No | No | ISEA4T | 0 | Res 0 triangles (the icosahedron) with the ISEA orientation; KML. |
 | icosaISEAL | No | No | ISEA4TL | 0 | Res 0 triangles with the ISEAL orientation and WGS84 input/output datums; KML. |
 | isea4d | No | No | ISEA4D | 7 | Res 7 diamond grid clipped to Oregon plus a 100 mile buffer; KML. |
@@ -51,6 +51,8 @@ The table below lists the example metafiles distributed with **DGGRID** in the e
 | seqnums | No | No | ISEA7H | 5 | Generates the cells whose SEQNUMs are listed in text files; KML. |
 | superfundGrid | No | No | SUPERFUND | 5 | Res 5 grid clipped to Oregon plus a 100 mile buffer; Shapefile output split into multiple files. |
 | wholeEarthIGEO7 | No | No | IGEO7 | 3 | Res 3 ellipsoidal grid, whole earth, with Z7 indexes; KML. |
+| wholeEarthISEA4DSZ | No | No | ISEA4DSZ | 3 | Whole-earth diamond grid with ZORDER INT64 labels; KML cells and center points. |
+| wholeEarthISEA4TSQ | No | No | ISEA4TSQ | 3 | Whole-earth triangle grid with QUADTREE INT64 labels; KML cells and center points. |
 | z3CellClip | No | No | ISEA3H | 5 | Clips using coarser resolution cells given as Z3 indexes; Z3 labels; KML. |
 | z3Collection | Yes | No | ISEA3H | 2 | Cells for SEQNUMs in a GDAL collection file, labeled with Z3 indexes; GeoJSON. |
 | z3Nums | No | No | ISEA3H | 9 | Generates the cells whose Z3 indexes are listed in text files; KML. |

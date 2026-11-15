@@ -29,6 +29,7 @@
 #include <dglib/DgZ3System.h>
 #include <dglib/DgZ7System.h>
 #include <dglib/DgZOrderSystem.h>
+#include <dglib/DgQuadtreeSystem.h>
 #include <dglib/DgH3System.h>
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -69,6 +70,9 @@ DgHierNdxSystemRFSBase::makeSystem (const DgIDGGSBase& dggsIn,
             ::report("DgHexIDGGS::makeRF() Z3 only available for pure aperture 3 grids", DgBase::Fatal);
          }
          sys = DgZ3System::makeSystem(dggsIn, extModeInt, "Z3");
+         break;
+       case dgg::addtype::Quadtree:
+         sys = DgQuadtreeSystem::makeSystem(dggsIn, extModeInt, "Quadtree");
          break;
        case dgg::addtype::H3:
 #ifdef USE_H3
