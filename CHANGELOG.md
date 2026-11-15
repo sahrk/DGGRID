@@ -6,13 +6,12 @@ All changes are by Kevin Sahr, unless otherwise noted.
 ## [9.3] - 2026-11-15
 ### Added
 - QUADTREE hierarchical indexing for pure aperture-4 triangle grids
-- FULLER3HS, FULLER4HS, FULLER7HS, FULLER43HS, FULLER4TS and FULLER4DS as spherical aliases of the original FULLER grids
-- ISEA4TSQ, IVEA4TSQ, ISEA4TLQ, IVEA4TLQ and FULLER4TQ presets using QUADTREE indexing for input, output and the indexing hierarchy
+- new presets FULLER3HS, FULLER4HS, FULLER7HS, FULLER43HS, FULLER4TS and FULLER4DS as spherical aliases of the original FULLER grids
+- new presets ISEA4TSQ, IVEA4TSQ, ISEA4TLQ, IVEA4TLQ and FULLER4TQ presets using QUADTREE indexing for input, output and the indexing hierarchy
 - ISEA4DSZ, IVEA4DSZ, IVEA4DLZ and FULLER4DZ presets using ZORDER indexing for input, output and the indexing hierarchy
 - wholeEarthISEA4DSZ and wholeEarthISEA4TSQ examples: whole-earth resolution 3 diamond and triangle grids with ZORDER and QUADTREE INT64 labels, KML cell and point output, and reference outputs; included in the main and no-GDAL/no-H3 example suites
-- cell area of one cell on the grid sphere (spherical excess), and geodesic cell area of that cell in the WGS 84 frame. Printed grid areas and resolution statistics remain the equal-area values on the grid sphere
-### Changed
-- distance in the WGS 84 frame is the geodesic between geodetic coordinates. Neighbor-center distances taken while neighbor output is written are measured in the output datum
+- cell area function with geodesic edges on sphere and WGS 84. Output statistics still use an equal area sphere.
+- ellipsoid geodesic distance in WGS84 datum. Neighbor-center distances taken while neighbor output is written are measured in the output datum
 ### Fixed
 - ZORDER indexes on diamond grids hung because radix was never set
 
