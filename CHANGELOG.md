@@ -10,6 +10,9 @@ All changes are by Kevin Sahr, unless otherwise noted.
 - ISEA4TSQ, IVEA4TSQ, ISEA4TLQ, IVEA4TLQ and FULLER4TQ presets using QUADTREE indexing for input, output and the indexing hierarchy
 - ISEA4DSZ, IVEA4DSZ, IVEA4DLZ and FULLER4DZ presets using ZORDER indexing for input, output and the indexing hierarchy
 - wholeEarthISEA4DSZ and wholeEarthISEA4TSQ examples: whole-earth resolution 3 diamond and triangle grids with ZORDER and QUADTREE INT64 labels, KML cell and point output, and reference outputs; included in the main and no-GDAL/no-H3 example suites
+- cell area of one cell on the grid sphere (spherical excess), and geodesic cell area of that cell in the WGS 84 frame. Printed grid areas and resolution statistics remain the equal-area values on the grid sphere
+### Changed
+- distance in the WGS 84 frame is the geodesic between geodetic coordinates. Neighbor-center distances taken while neighbor output is written are measured in the output datum
 ### Fixed
 - ZORDER indexes on diamond grids hung because radix was never set
 
