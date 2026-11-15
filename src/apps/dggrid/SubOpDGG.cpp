@@ -268,10 +268,12 @@ SubOpDGG::initializeOp (void)
    //            IVEA3HL | IVEA4HL | IVEA7HL | IVEA43HL | IVEA4TL | IVEA4DL |
    //            ISEA3HSZ | ISEA4HSZ | ISEA7HSZ | IVEA3HSZ | IVEA4HSZ | IVEA7HSZ |
    //            ISEA3HLZ | ISEA4HLZ | ISEA7HLZ | IVEA3HLZ | IVEA4HLZ | IVEA7HLZ |
+   //            FULLER3HS | FULLER4HS | FULLER7HS | FULLER43HS | FULLER4TS | FULLER4DS |
    //            FULLER3H | FULLER4H | FULLER7H | FULLER43H | FULLER4T | FULLER4D>
    // A trailing S marks a spherical (authalic sphere) preset and a trailing L
-   // its ellipsoidal (WGS84) version. ISEA3H ... ISEA4D are aliases for
-   // ISEA3HS ... ISEA4DS, kept for backwards compatibility. A final Z marks
+   // its ellipsoidal (WGS84) version. The original ISEA3H ... ISEA4D and
+   // FULLER3H ... FULLER4D names alias their S versions for compatibility.
+   // A final Z marks
    // the hexagon S and L presets that use hierarchical indexing for input,
    // output and internal processing: Z3 for aperture 3, ZORDER for aperture 4
    // and Z7 for aperture 7. IGEO7v1 is another name for ISEA7HSZ (the IGEO7 of
@@ -292,6 +294,7 @@ SubOpDGG::initializeOp (void)
         "IVEA3HL", "IVEA4HL", "IVEA7HL", "IVEA43HL", "IVEA4TL", "IVEA4DL",
         "ISEA3HSZ", "ISEA4HSZ", "ISEA7HSZ", "IVEA3HSZ", "IVEA4HSZ", "IVEA7HSZ",
         "ISEA3HLZ", "ISEA4HLZ", "ISEA7HLZ", "IVEA3HLZ", "IVEA4HLZ", "IVEA7HLZ",
+        "FULLER3HS", "FULLER4HS", "FULLER7HS", "FULLER43HS", "FULLER4TS", "FULLER4DS",
         "FULLER3H", "FULLER4H", "FULLER7H", "FULLER43H", "FULLER4T", "FULLER4D"};
 #ifndef USE_H3
       // H3 is not a choice unless DGGRID is built with the H3 library
@@ -460,7 +463,8 @@ SubOpDGG::setupOp (void)
 
       // Spherical presets end in S (e.g. ISEA3HS) and ellipsoidal ones in L
       // (e.g. ISEA3HL); strip the suffix to get the grid name. The legacy
-      // ISEA3H ... ISEA4D names have no suffix and are the spherical presets.
+      // ISEA3H ... ISEA4D and FULLER3H ... FULLER4D names have no suffix and
+      // are the same spherical presets.
       const bool ellipsoidal = gridName.back() == 'l';
       if (ellipsoidal || gridName.back() == 's')
          gridName.pop_back();

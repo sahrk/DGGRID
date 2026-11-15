@@ -6,6 +6,7 @@ All changes are by Kevin Sahr, unless otherwise noted.
 ## [9.21] - 2026-11-12
 ### Added
 - QUADTREE hierarchical indexing for pure aperture-4 triangle grids
+- FULLER3HS, FULLER4HS, FULLER7HS, FULLER43HS, FULLER4TS and FULLER4DS as spherical aliases of the original FULLER grids
 ### Fixed
 - ZORDER indexes on diamond grids hung because radix was never set
 
@@ -50,7 +51,7 @@ All changes are by Kevin Sahr, unless otherwise noted.
 - icosahedral gnomonic projection (dggs_proj GNOMONIC)
 - indexing hierarchies may start above DGGS resolution 0 (as in H3, where res 0 is DGGRID res 2)
 - per-resolution parent and child aperture accessors for hierarchy systems
-- new examples dymaxionIcosa, gnomonicGen, h3Gen, h3Geom, h3Kml, h3Transform, icosaISEAL, ivea3hGen and ivea7hGen
+- new examples icosaDymaxion, gnomonicGen, h3Gen, h3Geom, h3Kml, h3Transform, icosaISEAL, ivea3hGen and ivea7hGen
 - parameter h3_boundary_def to use H3 library cell boundaries with dggs_type H3
 - parameter polyclip_algo (GDAL or CLIPPER1); GDAL is the default when available.
 - manual updated to v9.1 (thanks to @allixender)

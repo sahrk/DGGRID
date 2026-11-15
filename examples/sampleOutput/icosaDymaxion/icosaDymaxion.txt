@@ -1,7 +1,7 @@
 ** executing DGGRID version 9.2 with GDAL with H3 **
 type sizes: big int: 64 bits / big double: 128 bits
 
-** using meta file dymaxionIcosa.meta...
+** using meta file icosaDymaxion.meta...
 * parameter values:
 dggrid_operation GENERATE_GRID (user set)
 rng_type RAND (default)
@@ -53,8 +53,8 @@ randpts_output_type NONE (default)
 cell_output_gdal_format GeoJSON (default)
 point_output_gdal_format GeoJSON (default)
 collection_output_gdal_format GeoJSON (default)
-cell_output_file_name outputfiles/dymaxIcosa (user set)
-point_output_file_name outputfiles/dymaxIcosaPts (user set)
+cell_output_file_name outputfiles/icosaDymaxion (user set)
+point_output_file_name outputfiles/icosaDymaxionPts (user set)
 randpts_output_file_name randPts (default)
 collection_output_file_name cells (default)
 dggs_orient_output_file_name grid.meta (default)

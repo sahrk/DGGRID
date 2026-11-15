@@ -2,13 +2,13 @@ aigenerate
 binpres
 binvals
 determineRes
-dymaxionIcosa
 gridgenCellClip
 gridgenDiamond
 gridgenGeoJSON
 gridgenMixedSHP
 gridgenPureKML
 hiRes
+icosaDymaxion
 icosaISEA
 icosaISEAL
 isea4d
