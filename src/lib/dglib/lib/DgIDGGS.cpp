@@ -90,7 +90,7 @@ DgIDGGS::makeRF (DgRFNetwork& network, const DgGeoSphRF& backFrame,
 
       if (defaultName) theName = projTypeIn + nameSuffix;
       dg0 = DgIDGGS4D::makeRF(network, backFrame, vert0, azDegs, nRes,
-                       theName, projTypeIn, gridMetric);
+                       theName, projTypeIn, gridMetric, hierNdxSysType);
    } else if (gridTopo == Triangle) {
       if (apertureIn == 4) {
          if (defaultName) theName = projTypeIn + std::string("4T");

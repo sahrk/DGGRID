@@ -268,15 +268,18 @@ SubOpDGG::initializeOp (void)
    //            IVEA3HL | IVEA4HL | IVEA7HL | IVEA43HL | IVEA4TL | IVEA4DL |
    //            ISEA3HSZ | ISEA4HSZ | ISEA7HSZ | IVEA3HSZ | IVEA4HSZ | IVEA7HSZ |
    //            ISEA3HLZ | ISEA4HLZ | ISEA7HLZ | IVEA3HLZ | IVEA4HLZ | IVEA7HLZ |
+   //            ISEA4DSZ | IVEA4DSZ | IVEA4DLZ | FULLER4DZ |
+   //            ISEA4TSQ | IVEA4TSQ | ISEA4TLQ | IVEA4TLQ | FULLER4TQ |
    //            FULLER3HS | FULLER4HS | FULLER7HS | FULLER43HS | FULLER4TS | FULLER4DS |
    //            FULLER3H | FULLER4H | FULLER7H | FULLER43H | FULLER4T | FULLER4D>
    // A trailing S marks a spherical (authalic sphere) preset and a trailing L
    // its ellipsoidal (WGS84) version. The original ISEA3H ... ISEA4D and
    // FULLER3H ... FULLER4D names alias their S versions for compatibility.
    // A final Z marks
-   // the hexagon S and L presets that use hierarchical indexing for input,
+   // hexagon and diamond presets that use hierarchical indexing for input,
    // output and internal processing: Z3 for aperture 3, ZORDER for aperture 4
-   // and Z7 for aperture 7. IGEO7v1 is another name for ISEA7HSZ (the IGEO7 of
+   // and Z7 for aperture 7. A final Q marks triangle presets using QUADTREE
+   // indexing for the same purposes. IGEO7v1 is another name for ISEA7HSZ (the IGEO7 of
    // version 8.4), and IGEO7v2 is another name for ISEA7HLZ; the two differ
    // only in datum. IGEO7 is an alias for IGEO7v2 (it was IGEO7v1 before
    // version 9.1) and produces a warning. H3 is the H3 grid (gnomonic projection,
@@ -294,6 +297,8 @@ SubOpDGG::initializeOp (void)
         "IVEA3HL", "IVEA4HL", "IVEA7HL", "IVEA43HL", "IVEA4TL", "IVEA4DL",
         "ISEA3HSZ", "ISEA4HSZ", "ISEA7HSZ", "IVEA3HSZ", "IVEA4HSZ", "IVEA7HSZ",
         "ISEA3HLZ", "ISEA4HLZ", "ISEA7HLZ", "IVEA3HLZ", "IVEA4HLZ", "IVEA7HLZ",
+        "ISEA4DSZ", "IVEA4DSZ", "IVEA4DLZ", "FULLER4DZ",
+        "ISEA4TSQ", "IVEA4TSQ", "ISEA4TLQ", "IVEA4TLQ", "FULLER4TQ",
         "FULLER3HS", "FULLER4HS", "FULLER7HS", "FULLER43HS", "FULLER4TS", "FULLER4DS",
         "FULLER3H", "FULLER4H", "FULLER7H", "FULLER43H", "FULLER4T", "FULLER4D"};
 #ifndef USE_H3
@@ -454,10 +459,11 @@ SubOpDGG::setupOp (void)
                   "Use dggs_type IGEO7v1 to get the previous IGEO7 grid.",
                   DgBase::Warning);
 
-      // A final Z (e.g. ISEA7HSZ) marks a preset with hierarchical indexing for
-      // all purposes: the grid's own hierarchical indexing system and HIERNDX
-      // input and output addresses. Strip it first.
-      bool hierNdx = gridName.back() == 'z';
+      // A final Z (e.g. ISEA7HSZ) or Q (e.g. ISEA4TSQ) selects hierarchical
+      // indexing for the grid and HIERNDX input/output. Q uses QUADTREE;
+      // Z selects its system by aperture. Strip the indexing suffix first.
+      const bool quadtree = gridName.back() == 'q';
+      bool hierNdx = quadtree || gridName.back() == 'z';
       if (hierNdx)
          gridName.pop_back();
 
@@ -586,11 +592,13 @@ SubOpDGG::setupOp (void)
       }
 
       if (hierNdx) {
+         if (quadtree)
+            hierNdxSys = "QUADTREE";
          if (hierNdxSys.empty())
             ::report("SubOpDGG::setupOp(): dggs_type " + tmp +
                      " has no hierarchical indexing system", DgBase::Fatal);
 
-         // Z3, ZORDER and Z7 INT64 indexes are printed as 16 hex digits;
+         // Z3, ZORDER, Z7 and QUADTREE INT64 indexes use 16 hex digits;
          // H3's canonical indexes are 15 digits.
          if (!isH3Preset)
             pList().setPresetParam("shapefile_id_field_length", "16", true);

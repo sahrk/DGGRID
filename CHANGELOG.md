@@ -7,6 +7,8 @@ All changes are by Kevin Sahr, unless otherwise noted.
 ### Added
 - QUADTREE hierarchical indexing for pure aperture-4 triangle grids
 - FULLER3HS, FULLER4HS, FULLER7HS, FULLER43HS, FULLER4TS and FULLER4DS as spherical aliases of the original FULLER grids
+- ISEA4TSQ, IVEA4TSQ, ISEA4TLQ, IVEA4TLQ and FULLER4TQ presets using QUADTREE indexing for input, output and the indexing hierarchy
+- ISEA4DSZ, IVEA4DSZ, IVEA4DLZ and FULLER4DZ presets using ZORDER indexing for input, output and the indexing hierarchy
 ### Fixed
 - ZORDER indexes on diamond grids hung because radix was never set
 

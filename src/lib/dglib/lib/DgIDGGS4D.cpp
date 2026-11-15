@@ -33,14 +33,17 @@
 #include <dglib/DgDmdD8Grid2D.h>
 #include <dglib/DgDmdIDGG.h>
 #include <dglib/DgIDGGS4D.h>
+#include <dglib/DgHierNdxSystemRFSBase.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgIDGGS4D::DgIDGGS4D (DgRFNetwork& network, const DgGeoSphRF& backFrame,
                const DgGeoCoord& vert0, long double azDegs, int nRes,
-               const std::string& name, const std::string& projType, DgGridMetric gridMetric)
+               const std::string& name, const std::string& projType, DgGridMetric gridMetric,
+               DgHierNdxSysType hierNdxSysType)
         : DgIDGGS (network, backFrame, vert0, azDegs, 4, nRes,
-                       Diamond, gridMetric, name, projType)
+                       Diamond, gridMetric, name, projType, false, DgApSeq::defaultApSeq,
+                       false, 0, false, hierNdxSysType)
 {
    const int aperture = 4;
 
@@ -61,6 +64,10 @@ DgIDGGS4D::DgIDGGS4D (DgRFNetwork& network, const DgGeoSphRF& backFrame,
 
    for (int r = 0; r < nRes; r++)
        Dg2WayTopoResAddConverter<DgQ2DICoord, DgGeoCoord, long double>(*this, *(grids()[r]), r);
+
+   // Hierarchical frames require all diamond resolutions and converters.
+   if (hierNdxSysType != InvalidHierNdxSysType)
+      hierNdxSystem_ = DgHierNdxSystemRFSBase::makeSystem(*this, hierNdxSysType, Int64);
 
 } // DgDmdIDGGS::DgDmdIDGGS
 

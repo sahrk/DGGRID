@@ -40,9 +40,10 @@ class DgIDGGS4D : public DgIDGGS {
       static const DgIDGGS4D* makeRF (DgRFNetwork& networkIn, const DgGeoSphRF& backFrameIn,
                const DgGeoCoord& vert0, long double azDegs, int nResIn = 1,
                const std::string& nameIn = "ISEA4D", const std::string& projType = "ISEA",
-               DgGridMetric gridMetric = D4)
+               DgGridMetric gridMetric = D4,
+               DgHierNdxSysType hierNdxSysType = InvalidHierNdxSysType)
          { return new DgIDGGS4D (networkIn, backFrameIn, vert0, azDegs, nResIn,
-               nameIn, projType, gridMetric); }
+               nameIn, projType, gridMetric, hierNdxSysType); }
 
      ~DgIDGGS4D (void);
 
@@ -57,7 +58,8 @@ class DgIDGGS4D : public DgIDGGS {
       DgIDGGS4D (DgRFNetwork& networkIn, const DgGeoSphRF& backFrameIn,
                const DgGeoCoord& vert0, long double azDegs, int nResIn = 1,
                const std::string& nameIn = "ISEA4D", const std::string& projType = "ISEA",
-               DgGridMetric gridMetric = D4);
+               DgGridMetric gridMetric = D4,
+               DgHierNdxSysType hierNdxSysType = InvalidHierNdxSysType);
 
       DgIDGGS4D (const DgIDGGS4D& rf);
 

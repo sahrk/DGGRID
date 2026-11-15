@@ -1,7 +1,7 @@
 ################################################################################
 #
 # isea4d.meta - example of a DGGRID metafile that generates a resolution
-#     4 ISEA4DZ diamond grid.
+#     4 ISEA4DSZ diamond grid.
 #
 # Kevin Sahr, 11/13/2026
 #
@@ -11,7 +11,7 @@
 dggrid_operation GENERATE_GRID
 
 # specify the DGG
-dggs_type ISEA4DZ
+dggs_type ISEA4DSZ
 dggs_res_spec 4
 
 # specify the output
