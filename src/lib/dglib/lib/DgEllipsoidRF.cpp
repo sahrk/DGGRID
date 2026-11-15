@@ -836,4 +836,13 @@ GeoCoord GCdaz(const GeoCoord& pt, long double distance, long double az)
   return q.toGeo();
  } /* GeoCoord GCdaz */
 
+////////////////////////////////////////////////////////////////////////////////
+long double
+DgEllipsoidRF::cellAreaKM (const DgLocation&, const DgPolygon&) const
+{
+   report("DgEllipsoidRF::cellAreaKM() is defined for a sphere and for WGS 84",
+          DgBase::Fatal);
+   return 0.0L;
+}
+
 /******************************************************************************/

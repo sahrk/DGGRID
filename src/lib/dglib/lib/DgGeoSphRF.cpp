@@ -28,7 +28,22 @@
 #include <dglib/DgGeoSphRF.h>
 #include <dglib/DgIDGG.h>
 #include <dglib/DgConstants.h>
+#include <dglib/DgDVec3D.h>
 #include <dglib/DgPolygon.h>
+
+namespace {
+
+// Signed solid angle of the unit-sphere triangle abc, stable for small
+// triangles. Positive when a, b, c are counterclockwise seen from outside.
+long double sphericalExcess (const DgDVec3D& a, const DgDVec3D& b,
+                             const DgDVec3D& c)
+{
+   const long double triple = a.dot(b.cross(c));
+   const long double denom = 1.0L + a.dot(b) + b.dot(c) + c.dot(a);
+   return 2.0L * atan2l(triple, denom);
+}
+
+} // namespace
 
 const std::string DgGeoSphRF::lonWrapModeStrings[] =
              { "Wrap", "UnwrapWest", "UnwrapEast", "InvalidLonWrapMode" };
@@ -237,6 +252,34 @@ DgGeoSphRF::travelGC (const DgGeoCoord& p0, long double distance, long double az
    return DgGeoCoord(ans.lon, ans.lat);
 
 } // long double DgGeoSphRF::azimuth
+
+////////////////////////////////////////////////////////////////////////////////
+long double
+DgGeoSphRF::cellAreaKM (const DgLocation& center,
+                         const DgPolygon& boundary) const
+{
+   DgLocation cLoc(center);
+   convert(&cLoc);
+   DgPolygon ring(boundary);
+   convert(ring);
+   if (ring.size() < 3)
+      report("DgGeoSphRF::cellAreaKM(): boundary has fewer than 3 vertices",
+             DgBase::Fatal);
+
+   const DgGeoCoord c = *getAddress(cLoc);
+   const DgDVec3D cv = DgDVec3D::fromLatLon(c.lat(), c.lon());
+   long double excess = 0.0L;
+   for (int i = 0; i < ring.size(); ++i) {
+      const DgGeoCoord v1 = *getAddress(ring[i]);
+      const DgGeoCoord v2 = *getAddress(ring[(i + 1) % ring.size()]);
+      excess += sphericalExcess(cv,
+         DgDVec3D::fromLatLon(v1.lat(), v1.lon()),
+         DgDVec3D::fromLatLon(v2.lat(), v2.lon()));
+   }
+
+   const long double radius = earthRadiusKM();
+   return fabsl(excess) * radius * radius;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 DgGeoSphDegRF::DgGeoSphDegRF (const DgGeoSphRF& geoRFin, const std::string& nameIn)

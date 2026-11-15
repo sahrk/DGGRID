@@ -32,6 +32,7 @@
 #include <string.h>
 
 #include <dglib/DgBoundedIDGG.h>
+#include <dglib/DgDVec3D.h>
 #include <dglib/DgCell.h>
 #include <dglib/DgDmdD4Grid2DS.h>
 #include <dglib/DgHexGrid2DS.h>

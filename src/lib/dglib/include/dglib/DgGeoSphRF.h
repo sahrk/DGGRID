@@ -73,6 +73,11 @@ class DgGeoSphRF : public DgEllipsoidRF {
       virtual long double dist (const DgGeoCoord& add1, const DgGeoCoord& add2) const
          { return earthRadiusKM() * DgGeoCoord::gcDist(add1, add2); }
 
+      // Great-circle fan on this sphere. center and boundary are converted
+      // into this frame first.
+      virtual long double cellAreaKM (const DgLocation& center,
+                                       const DgPolygon& boundary) const;
+
       long double earthRadiusKM (void) const { return earthRadiusKM_; }
       long double icosaEdgeKM   (void) const { return icosaEdgeKM_; }
       long double totalAreaKM   (void) const { return totalAreaKM_; }

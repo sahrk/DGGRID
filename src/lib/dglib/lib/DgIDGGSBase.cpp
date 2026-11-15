@@ -28,6 +28,7 @@
 #include <dglib/DgIDGGS.h>
 #include <dglib/DgHexIDGGS.h>
 #include <dglib/DgApSeq.h>
+#include <dglib/DgPolygon.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 const DgIDGGSBase*
@@ -52,5 +53,34 @@ DgIDGGSBase::makeRF (DgRFNetwork& network, const DgGeoSphRF& backFrame,
    return dg0;
 
 } // DgIDGGSBase::makeRF
+
+////////////////////////////////////////////////////////////////////////////////
+long double
+DgIDGGSBase::cellAreaKM (const DgResAdd<DgQ2DICoord>& add, int densify,
+                          const DgEllipsoidRF& datum) const
+{
+   const DgIDGGBase& grid = idggBase(add.res());
+
+   DgLocation center(grid.geoRF());
+   grid.setPoint(add.address(), center);
+
+   DgPolygon boundary(grid.geoRF());
+   grid.setAddVertices(add.address(), boundary, densify, true);
+
+   return datum.cellAreaKM(center, boundary);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+long double
+DgIDGGSBase::equalAreaCellAreaKM (unsigned long long int nCells) const
+{
+   const long double total = geoRF().totalAreaKM();
+
+   // total = (nCells - 12) * hex + 12 * (5/6) * hex = (nCells - 2) * hex
+   if (gridTopo() == Hexagon)
+      return total / (nCells - 2);
+
+   return total / nCells;
+}
 
 ////////////////////////////////////////////////////////////////////////////////

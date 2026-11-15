@@ -277,6 +277,12 @@ class DgEllipsoidRF : public DgGeoDatumRF<DgGeoCoord, long double> {
       // Shortest geodesic distance in km between geodetic coordinates.
       virtual long double dist (const DgGeoCoord&, const DgGeoCoord&) const;
 
+      // Area in km² of the triangle fan from center to boundary. center lies
+      // inside the ring. Both are converted into this frame before measuring.
+      // Defined for a sphere (DgGeoSphRF) and for WGS 84 (DgWGS84RF).
+      virtual long double cellAreaKM (const DgLocation& center,
+                                       const DgPolygon& boundary) const;
+
       virtual std::string add2str (const DgGeoCoord& add) const
                        { return std::string(add); }
 

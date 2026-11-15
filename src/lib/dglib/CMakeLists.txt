@@ -31,6 +31,7 @@ add_library(dglib
    lib/DgEllipsoidRF.cpp
    lib/DgGeoDegRF.cpp
    lib/DgGeoSphRF.cpp
+   lib/DgWGS84RF.cpp
    lib/DgGridTopo.cpp
    lib/DgH3System.cpp
    lib/DgHexC1Grid2D.cpp

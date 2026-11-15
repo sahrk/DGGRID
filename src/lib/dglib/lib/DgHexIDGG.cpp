@@ -208,10 +208,8 @@ DgHexIDGG::initialize (void)
    }
 */
 
-      // a = globeArea / ((#cells - 12) + (12 * 5/6))
-      //   = globeArea / (#cells - 2);
-      gridStats_.setCellAreaKM(geoRF().totalAreaKM() /
-                       (gridStats_.nCells() - 2));
+      gridStats_.setCellAreaKM(
+                       dggs()->equalAreaCellAreaKM(gridStats_.nCells()));
 
    gridStats_.setCLS(2.0L * 2.0L * geoRF().earthRadiusKM() *
                      asinl(sqrt(gridStats_.cellAreaKM() / M_PI) /

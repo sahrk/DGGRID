@@ -141,8 +141,8 @@ DgTriIDGG::initialize (void)
 ////// NEEDS UPDATING
    gridStats_.setCellDistKM(tmpLen / pow(sqrt((long double) aperture()), res()));
 
-   // a = globeArea / #cells
-   gridStats_.setCellAreaKM(geoRF().totalAreaKM() / gridStats_.nCells());
+   gridStats_.setCellAreaKM(
+                    dggs()->equalAreaCellAreaKM(gridStats_.nCells()));
 
    gridStats_.setCLS(2.0L * 2.0L * geoRF().earthRadiusKM() *
                      asinl(sqrt(gridStats_.cellAreaKM() / M_PI) /

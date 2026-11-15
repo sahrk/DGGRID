@@ -76,6 +76,22 @@ class DgIDGGSBase : public DgDiscTopoRFS<DgQ2DICoord, DgGeoCoord, long double> {
       const std::string& projType    (void) const { return projType_; }
 
       const DgHierNdxSystemRFSBase* hierNdxSystem (void) const { return hierNdxSystem_; }
+
+      // Area in km² of the cell at add. The center comes from setPoint and the
+      // boundary from setAddVertices: face-edge crossings are inserted, then
+      // each planar edge receives densify extra points. That geometry is
+      // measured by datum, a sphere or the WGS 84 frame.
+      long double cellAreaKM (const DgResAdd<DgQ2DICoord>& add, int densify,
+                              const DgEllipsoidRF& datum) const;
+
+      // Cell area in km² on an equal-area projection (ISEA or IVEA). Every
+      // hex has this area. The 12 pentagons are each 5/6 of a hex, so
+      // totalArea / (nCells - 2). Diamond and triangle cells are
+      // totalArea / nCells. res must already be built.
+      long double equalAreaCellAreaKM (int res) const
+         { return equalAreaCellAreaKM(idggBase(res).gridStats().nCells()); }
+
+      long double equalAreaCellAreaKM (unsigned long long int nCells) const;
 /*
       DgGridTopology    gridTopo    (void) const { return gridTopo_; }
       DgGridMetric      gridMetric  (void) const { return gridMetric_; }

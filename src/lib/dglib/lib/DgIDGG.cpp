@@ -152,10 +152,9 @@ DgIDGG::initialize (void)
    if (gridTopo() == Triangle) tmpLen /= M_SQRT3;
    gridStats_.setCellDistKM(tmpLen / pow(sqrtl((long double) aperture()), res()));
 
-   if (gridTopo() == Diamond)
-      gridStats_.setCellAreaKM(geoRF().totalAreaKM() / gridStats_.nCells());
-   else if (gridTopo() == Triangle)
-      gridStats_.setCellAreaKM(geoRF().totalAreaKM() / gridStats_.nCells());
+   if (gridTopo() == Diamond || gridTopo() == Triangle)
+      gridStats_.setCellAreaKM(
+                       dggs()->equalAreaCellAreaKM(gridStats_.nCells()));
 
    gridStats_.setCLS(2.0L * 2.0L * geoRF().earthRadiusKM() *
                      asinl(sqrtl(gridStats_.cellAreaKM() / M_PI) /
