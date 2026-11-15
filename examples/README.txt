@@ -16,6 +16,14 @@ subdirectory using:
 
   dggrid theFileName.meta
 
+The wholeEarthISEA4DSZ and wholeEarthISEA4TSQ examples generate
+whole-earth resolution 3 diamond and triangle grids respectively.
+Their cell and point KML files use ZORDER INT64 labels for diamonds
+and QUADTREE INT64 labels for triangles. Both are included in the
+main and no-GDAL/no-H3 lists, so all four run scripts execute them;
+cleanexamples.sh, copyexamples.sh and the Python checks use the
+same lists. Neither example needs GDAL or the H3 library.
+
 The bash shell scripts below are provided for running the 
 examples. We recommend running cleanexamples.sh (see below)
 before each run of these scripts to avoid spurious error

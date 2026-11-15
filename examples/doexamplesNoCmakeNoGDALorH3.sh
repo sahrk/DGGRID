@@ -20,6 +20,8 @@ case "$refDir" in
    /*) refPath="$refDir" ;;
    *)  refPath="../$refDir" ;;
 esac
+# The shared list includes wholeEarthISEA4DSZ (ZORDER diamonds) and
+# wholeEarthISEA4TSQ (QUADTREE triangles); neither needs GDAL or H3.
 examples=( `cat examplesNoGDALorH3.lst` )
 
 for f in ${examples[@]}

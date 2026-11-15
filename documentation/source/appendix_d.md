@@ -51,6 +51,8 @@ The table below lists the example metafiles distributed with **DGGRID** in the e
 | seqnums | No | No | ISEA7H | 5 | Generates the cells whose SEQNUMs are listed in text files; KML. |
 | superfundGrid | No | No | SUPERFUND | 5 | Res 5 grid clipped to Oregon plus a 100 mile buffer; Shapefile output split into multiple files. |
 | wholeEarthIGEO7 | No | No | IGEO7 | 3 | Res 3 ellipsoidal grid, whole earth, with Z7 indexes; KML. |
+| wholeEarthISEA4DSZ | No | No | ISEA4DSZ | 3 | Whole-earth diamond grid with ZORDER INT64 labels; KML cells and center points. |
+| wholeEarthISEA4TSQ | No | No | ISEA4TSQ | 3 | Whole-earth triangle grid with QUADTREE INT64 labels; KML cells and center points. |
 | z3CellClip | No | No | ISEA3H | 5 | Clips using coarser resolution cells given as Z3 indexes; Z3 labels; KML. |
 | z3Collection | Yes | No | ISEA3H | 2 | Cells for SEQNUMs in a GDAL collection file, labeled with Z3 indexes; GeoJSON. |
 | z3Nums | No | No | ISEA3H | 9 | Generates the cells whose Z3 indexes are listed in text files; KML. |
