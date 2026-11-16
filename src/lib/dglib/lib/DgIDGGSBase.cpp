@@ -61,8 +61,16 @@ DgIDGGSBase::cellAreaKM (const DgResAdd<DgQ2DICoord>& add, int densify,
 {
    const DgIDGGBase& grid = idggBase(add.res());
 
-   DgLocation center(grid.geoRF());
-   grid.setPoint(add.address(), center);
+   // The cell center, by converting the cell itself to the grid sphere.
+   // grid.setPoint() cannot be used: it relies on invQuantify(), which
+   // DgIDGGBase stubs out because its conversions go through the converter
+   // network, so it leaves the point at (0, 0). A fan drawn from there still
+   // sums to the right area on a sphere, but on WGS 84 its triangles are
+   // thousands of km long, which is slow and loses accuracy.
+   DgLocation* cell = grid.makeLocation(add.address());
+   grid.geoRF().convert(cell);
+   const DgLocation center(*cell);
+   delete cell;
 
    DgPolygon boundary(grid.geoRF());
    grid.setAddVertices(add.address(), boundary, densify, true);

@@ -77,10 +77,12 @@ class DgIDGGSBase : public DgDiscTopoRFS<DgQ2DICoord, DgGeoCoord, long double> {
 
       const DgHierNdxSystemRFSBase* hierNdxSystem (void) const { return hierNdxSystem_; }
 
-      // Area in km² of the cell at add. The center comes from setPoint and the
-      // boundary from setAddVertices: face-edge crossings are inserted, then
-      // each planar edge receives densify extra points. That geometry is
-      // measured by datum, a sphere or the WGS 84 frame.
+      // Area in km² of the cell at add. The center is the cell location
+      // converted to the grid sphere. setPoint cannot be used: DgIDGGBase
+      // stubs invQuantify, so it returns (0, 0). The boundary comes from
+      // setAddVertices: face-edge crossings are inserted, then each planar
+      // edge receives densify extra points. That geometry is measured by
+      // datum, a sphere or the WGS 84 frame.
       long double cellAreaKM (const DgResAdd<DgQ2DICoord>& add, int densify,
                               const DgEllipsoidRF& datum) const;
 
