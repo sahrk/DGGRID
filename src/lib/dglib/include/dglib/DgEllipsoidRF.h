@@ -277,20 +277,24 @@ class DgEllipsoidRF : public DgGeoDatumRF<DgGeoCoord, long double> {
       // Shortest geodesic distance in km between geodetic coordinates.
       virtual long double dist (const DgGeoCoord&, const DgGeoCoord&) const;
 
-      // Area in km² of the triangle fan from center to boundary. center lies
-      // inside the ring. Both are converted into this frame before measuring.
-      // Defined for a sphere (DgGeoSphRF) and for WGS 84 (DgWGS84RF).
+      // Area in km² of the polygon on this ellipsoid whose edges are the
+      // geodesics between consecutive vertices of boundary. center is a
+      // point inside the ring. Both are converted into this frame before
+      // measuring. The boundary must be smaller than a hemisphere. See
+      // DgGeodesic::polygonArea.
       virtual long double cellAreaKM (const DgLocation& center,
                                        const DgPolygon& boundary) const;
 
       // Inverse geodesic: shortest distance in meters and forward azimuth in
-      // radians, clockwise from north. Azimuth at a pole uses the point's
-      // stored longitude as GeographicLib does. Returns false if the solve
-      // does not converge.
+      // radians, clockwise from north (0 for coincident points). Azimuth at
+      // a pole is relative to the meridian of the point's stored longitude.
+      // Returns false for an invalid ellipsoid (the axes must be finite with
+      // a >= b > 0) or coordinate. See DgGeodesic.
       bool geodesicInverse (const DgGeoCoord& from, const DgGeoCoord& to,
                             long double& distanceM, long double& azimuth) const;
 
-      // Point reached by travelling distanceM meters along azimuth from from.
+      // Point reached by travelling distanceM meters (negative for the
+      // opposite direction) along azimuth from from.
       DgGeoCoord geodesicDirect (const DgGeoCoord& from, long double azimuth,
                                  long double distanceM) const;
 

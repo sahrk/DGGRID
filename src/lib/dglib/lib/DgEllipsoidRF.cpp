@@ -25,428 +25,113 @@
 #include <dglib/DgConstants.h>
 #include <dglib/DgEllipsoidRF.h>
 #include <dglib/DgGeoSphRF.h>
+#include <dglib/DgGeodesic.h>
 #include <dglib/DgPolygon.h>
-#include <algorithm>
 #include <cmath>
-#include <limits>
+#include <vector>
 
 const DgGeoCoord DgGeoCoord::undefGeoCoord(LDBL_MAX, LDBL_MAX);
 const long double DgGeoCoord::tolerance = 0.0000000005L;
 
 namespace {
 
-const long double kPoleLatTol = 1.0e-14L;
-
-bool validGeodetic(const DgGeoCoord& p)
+// finite, with the latitude within rounding of [-pi/2, pi/2]
+bool validGeodetic (const DgGeoCoord& p)
 {
    return std::isfinite(p.lat()) && std::isfinite(p.lon()) &&
           fabsl(p.lat()) <= M_PI_2_L + 1.0e-15L;
 }
 
-void reducedLatitude(long double lat, long double f,
-                     long double& sinU, long double& cosU)
-{
-   const long double sinLat = sinl(lat);
-   const long double cosLat = cosl(lat);
-   const long double norm = hypotl((1.0L - f) * sinLat, cosLat);
-   if (norm == 0.0L) {
-      sinU = copysignl(1.0L, sinLat);
-      cosU = 0.0L;
-      return;
-   }
-   sinU = (1.0L - f) * sinLat / norm;
-   cosU = cosLat / norm;
-}
-
-void vincentySeries(long double uSq, long double& A, long double& B)
-{
-   A = 1.0L + uSq / 16384.0L *
-      (4096.0L + uSq * (-768.0L + uSq * (320.0L - 175.0L * uSq)));
-   B = uSq / 1024.0L *
-      (256.0L + uSq * (-128.0L + uSq * (74.0L - 47.0L * uSq)));
-}
-
-long double vincentyDeltaSigma(long double B, long double sinSigma,
-                               long double cosSigma, long double cos2SigmaM)
-{
-   return B * sinSigma * (cos2SigmaM + B / 4.0L *
-      (cosSigma * (-1.0L + 2.0L * cos2SigmaM * cos2SigmaM) -
-       B / 6.0L * cos2SigmaM * (-3.0L + 4.0L * sinSigma * sinSigma) *
-       (-3.0L + 4.0L * cos2SigmaM * cos2SigmaM)));
-}
-
-struct GeodesicState {
-   long double r[3], v[3];
-};
-
-void projectOntoEllipsoid(GeodesicState& q, long double a, long double b)
-{
-   const long double invA2 = 1.0L / (a * a);
-   const long double invB2 = 1.0L / (b * b);
-   const long double s2 =
-      invA2 * (q.r[0] * q.r[0] + q.r[1] * q.r[1]) + invB2 * q.r[2] * q.r[2];
-   if (s2 > 0.0L) {
-      const long double s = 1.0L / sqrtl(s2);
-      for (int i = 0; i < 3; ++i) q.r[i] *= s;
-   }
-   const long double g[3] = {invA2 * q.r[0], invA2 * q.r[1], invB2 * q.r[2]};
-   const long double gv = g[0] * q.v[0] + g[1] * q.v[1] + g[2] * q.v[2];
-   const long double gg = g[0] * g[0] + g[1] * g[1] + g[2] * g[2];
-   if (gg > 0.0L) {
-      for (int i = 0; i < 3; ++i) q.v[i] -= gv / gg * g[i];
-   }
-   const long double vn =
-      sqrtl(q.v[0] * q.v[0] + q.v[1] * q.v[1] + q.v[2] * q.v[2]);
-   if (vn > 0.0L) {
-      for (int i = 0; i < 3; ++i) q.v[i] /= vn;
-   }
-}
-
-// Arc-length form of the geodesic equation on x²/a² + y²/a² + z²/b² = 1.
-GeodesicState derivative(const GeodesicState& q, long double a, long double b)
-{
-   GeodesicState d;
-   const long double invA2 = 1.0L / (a * a);
-   const long double invB2 = 1.0L / (b * b);
-   const long double scale =
-      (invA2 * (q.v[0] * q.v[0] + q.v[1] * q.v[1]) +
-       invB2 * q.v[2] * q.v[2]) /
-      (invA2 * invA2 * (q.r[0] * q.r[0] + q.r[1] * q.r[1]) +
-       invB2 * invB2 * q.r[2] * q.r[2]);
-   for (int i = 0; i < 3; ++i) {
-      d.r[i] = q.v[i];
-      d.v[i] = -scale * q.r[i] * (i == 2 ? invB2 : invA2);
-   }
-   return d;
-}
-
-GeodesicState advance(const GeodesicState& q, const GeodesicState& d,
-                      long double step)
-{
-   GeodesicState result;
-   for (int i = 0; i < 3; ++i) {
-      result.r[i] = q.r[i] + step * d.r[i];
-      result.v[i] = q.v[i] + step * d.v[i];
-   }
-   return result;
-}
-
-GeodesicState endpoint(const GeodesicState& start, long double azimuth,
-                       long double length, long double a, long double b,
-                       const long double east[3], const long double north[3])
-{
-   GeodesicState q = start;
-   for (int i = 0; i < 3; ++i)
-      q.v[i] = sinl(azimuth) * east[i] + cosl(azimuth) * north[i];
-
-   const int count = static_cast<int>(ceill(length / 5000.0L)) + 1;
-   const long double step = length / count;
-   for (int j = 0; j < count; ++j) {
-      const GeodesicState k1 = derivative(q, a, b);
-      const GeodesicState k2 = derivative(advance(q, k1, step / 2.0L), a, b);
-      const GeodesicState k3 = derivative(advance(q, k2, step / 2.0L), a, b);
-      const GeodesicState k4 = derivative(advance(q, k3, step), a, b);
-      for (int i = 0; i < 3; ++i) {
-         q.r[i] += step / 6.0L *
-            (k1.r[i] + 2.0L * k2.r[i] + 2.0L * k3.r[i] + k4.r[i]);
-         q.v[i] += step / 6.0L *
-            (k1.v[i] + 2.0L * k2.v[i] + 2.0L * k3.v[i] + k4.v[i]);
-      }
-      projectOntoEllipsoid(q, a, b);
-   }
-   return q;
-}
-
-void pointAndBasis(const DgGeoCoord& p, long double a, long double b,
-                   GeodesicState& point, long double east[3],
-                   long double north[3])
-{
-   const long double sl = sinl(p.lat()), cl = cosl(p.lat());
-   const long double so = sinl(p.lon()), co = cosl(p.lon());
-   const long double e2 = 1.0L - b * b / (a * a);
-   const long double N = a / sqrtl(1.0L - e2 * sl * sl);
-   point.r[0] = N * cl * co;
-   point.r[1] = N * cl * so;
-   point.r[2] = N * (1.0L - e2) * sl;
-   east[0] = -so; east[1] = co; east[2] = 0.0L;
-   north[0] = -sl * co; north[1] = -sl * so; north[2] = cl;
-}
-
-void residual(const GeodesicState& start, long double azimuth,
-              long double length, long double a, long double b,
-              const long double sourceEast[3], const long double sourceNorth[3],
-              const GeodesicState& target, const long double targetEast[3],
-              const long double targetNorth[3], long double error[3])
-{
-   const GeodesicState end = endpoint(start, azimuth, length, a, b,
-                                      sourceEast, sourceNorth);
-   error[0] = error[1] = error[2] = 0.0L;
-   for (int i = 0; i < 3; ++i) {
-      const long double difference = end.r[i] - target.r[i];
-      error[0] += difference * targetEast[i];
-      error[1] += difference * targetNorth[i];
-      error[2] += difference * difference;
-   }
-   error[2] = sqrtl(error[2]);
-}
-
-// Vincenty's fixed-point iteration has no fixed point near some antipodes.
-// Shoot geodesics on the ellipsoid and keep the shortest converged solution.
-bool shootGeodesic(const DgGeoCoord& p1, const DgGeoCoord& p2,
-                   long double a, long double b,
-                   long double& distanceM, long double& azimuth)
-{
-   GeodesicState start = {}, target = {};
-   long double sourceEast[3], sourceNorth[3], targetEast[3], targetNorth[3];
-   pointAndBasis(p1, a, b, start, sourceEast, sourceNorth);
-   pointAndBasis(p2, a, b, target, targetEast, targetNorth);
-   const long double dlon = remainderl(p2.lon() - p1.lon(), M_2PI);
-   const long double central = acosl(std::max(-1.0L, std::min(1.0L,
-      sinl(p1.lat()) * sinl(p2.lat()) +
-      cosl(p1.lat()) * cosl(p2.lat()) * cosl(dlon))));
-   const long double guessLength = (2.0L * a + b) / 3.0L * central;
-   const long double sphericalAzimuth = atan2l(
-      cosl(p2.lat()) * sinl(dlon),
-      cosl(p1.lat()) * sinl(p2.lat()) -
-      sinl(p1.lat()) * cosl(p2.lat()) * cosl(dlon));
-   const long double guesses[] = {
-      sphericalAzimuth, sphericalAzimuth + M_PI_L, 0.0L, M_PI_L,
-      M_PI_2_L, -M_PI_2_L, M_PI_L / 4.0L, -M_PI_L / 4.0L,
-      3.0L * M_PI_L / 4.0L, -3.0L * M_PI_L / 4.0L
-   };
-   long double best = std::numeric_limits<long double>::infinity();
-   long double bestAz = sphericalAzimuth;
-   for (long double guess : guesses) {
-      long double az = guess, length = guessLength;
-      for (int iteration = 0; iteration < 40; ++iteration) {
-         long double error[3];
-         residual(start, az, length, a, b, sourceEast, sourceNorth,
-                  target, targetEast, targetNorth, error);
-         const long double norm = error[2];
-         if (norm < 0.001L) {
-            if (length < best) {
-               best = length;
-               bestAz = az;
-            }
-            break;
-         }
-         long double angleError[3], lengthError[3];
-         residual(start, az + 1.0e-6L, length, a, b,
-                  sourceEast, sourceNorth, target, targetEast, targetNorth,
-                  angleError);
-         residual(start, az, length + 1.0L, a, b,
-                  sourceEast, sourceNorth, target, targetEast, targetNorth,
-                  lengthError);
-         const long double j00 = (angleError[0] - error[0]) / 1.0e-6L;
-         const long double j10 = (angleError[1] - error[1]) / 1.0e-6L;
-         const long double j01 = (lengthError[0] - error[0]) / 1.0L;
-         const long double j11 = (lengthError[1] - error[1]) / 1.0L;
-         const long double determinant = j00 * j11 - j01 * j10;
-         if (fabsl(determinant) < 1.0e-12L) break;
-         const long double da = (-error[0] * j11 + error[1] * j01) /
-                                determinant;
-         const long double ds = (-j00 * error[1] + j10 * error[0]) /
-                                determinant;
-         bool improved = false;
-         for (long double fraction = 1.0L; fraction >= 1.0L / 256.0L;
-              fraction /= 2.0L) {
-            const long double candidateLength = length + fraction * ds;
-            if (candidateLength <= 0.0L || candidateLength > M_PI_L * a * 1.01L)
-               continue;
-            long double candidateError[3];
-            residual(start, az + fraction * da, candidateLength, a, b,
-                     sourceEast, sourceNorth, target, targetEast, targetNorth,
-                     candidateError);
-            if (candidateError[2] < norm) {
-               az += fraction * da;
-               length = candidateLength;
-               improved = true;
-               break;
-            }
-         }
-         if (!improved) break;
-      }
-   }
-   if (!std::isfinite(best)) return false;
-   distanceM = best;
-   azimuth = remainderl(bestAz, M_2PI);
-   return true;
-}
-
-bool vincentyInverse(const DgGeoCoord& from, const DgGeoCoord& to,
-                     long double a, long double b,
-                     long double& distanceM, long double& azimuth)
-{
-   const long double f = (a - b) / a;
-   const long double deltaLon = remainderl(to.lon() - from.lon(), M_2PI);
-   if ((from.lat() == to.lat() && deltaLon == 0.0L) ||
-       (from.lat() * to.lat() > 0.0L &&
-        fabsl(fabsl(from.lat()) - M_PI_2_L) < kPoleLatTol &&
-        fabsl(fabsl(to.lat()) - M_PI_2_L) < kPoleLatTol)) {
-      distanceM = 0.0L;
-      azimuth = 0.0L;
-      return true;
-   }
-
-   if (f == 0.0L) {
-      const long double numerator = hypotl(
-         cosl(to.lat()) * sinl(deltaLon),
-         cosl(from.lat()) * sinl(to.lat()) -
-         sinl(from.lat()) * cosl(to.lat()) * cosl(deltaLon));
-      const long double denominator = sinl(from.lat()) * sinl(to.lat()) +
-         cosl(from.lat()) * cosl(to.lat()) * cosl(deltaLon);
-      distanceM = a * atan2l(numerator, denominator);
-      azimuth = atan2l(cosl(to.lat()) * sinl(deltaLon),
-         cosl(from.lat()) * sinl(to.lat()) -
-         sinl(from.lat()) * cosl(to.lat()) * cosl(deltaLon));
-      return true;
-   }
-
-   long double sinU1, cosU1, sinU2, cosU2;
-   reducedLatitude(from.lat(), f, sinU1, cosU1);
-   reducedLatitude(to.lat(), f, sinU2, cosU2);
-   long double lambda = deltaLon;
-   long double sinSigma = 0.0L, cosSigma = 0.0L, sigma = 0.0L;
-   long double sinAlpha = 0.0L, cosSqAlpha = 0.0L, cos2SigmaM = 0.0L;
-   bool converged = false;
-   bool antipodal = false;
-
-   for (int i = 0; i < 200; ++i) {
-      const long double sinLambda = sinl(lambda), cosLambda = cosl(lambda);
-      sinSigma = hypotl(cosU2 * sinLambda,
-         cosU1 * sinU2 - sinU1 * cosU2 * cosLambda);
-      cosSigma = sinU1 * sinU2 + cosU1 * cosU2 * cosLambda;
-      if (sinSigma == 0.0L) {
-         if (cosSigma >= 0.0L) {
-            distanceM = 0.0L;
-            azimuth = 0.0L;
-            return true;
-         }
-         antipodal = true;
-         break;
-      }
-      sigma = atan2l(sinSigma, cosSigma);
-      sinAlpha = cosU1 * cosU2 * sinLambda / sinSigma;
-      cosSqAlpha = 1.0L - sinAlpha * sinAlpha;
-      cos2SigmaM = cosSqAlpha > 0.0L
-         ? cosSigma - 2.0L * sinU1 * sinU2 / cosSqAlpha : 0.0L;
-      const long double C = f / 16.0L * cosSqAlpha *
-         (4.0L + f * (4.0L - 3.0L * cosSqAlpha));
-      const long double next = deltaLon + (1.0L - C) * f * sinAlpha *
-         (sigma + C * sinSigma * (cos2SigmaM + C * cosSigma *
-          (-1.0L + 2.0L * cos2SigmaM * cos2SigmaM)));
-      if (fabsl(next - lambda) < 1.0e-15L) {
-         converged = true;
-         break;
-      }
-      lambda = next;
-   }
-
-   if (!converged || antipodal)
-      return shootGeodesic(from, to, a, b, distanceM, azimuth);
-
-   const long double uSq = cosSqAlpha * (a * a - b * b) / (b * b);
-   long double A, B;
-   vincentySeries(uSq, A, B);
-   distanceM = b * A * (sigma - vincentyDeltaSigma(B, sinSigma, cosSigma,
-                                                   cos2SigmaM));
-   azimuth = atan2l(cosU2 * sinl(lambda),
-      cosU1 * sinU2 - sinU1 * cosU2 * cosl(lambda));
-   return std::isfinite(distanceM);
-}
-
-DgGeoCoord vincentyDirect(const DgGeoCoord& from, long double azimuth,
-                          long double distanceM, long double a, long double b)
-{
-   if (distanceM == 0.0L) return from;
-   const long double f = (a - b) / a;
-   if (f == 0.0L) {
-      const long double ang = distanceM / a;
-      const long double sl = sinl(from.lat()), cl = cosl(from.lat());
-      const long double lat2 = asinl(sl * cosl(ang) + cl * sinl(ang) * cosl(azimuth));
-      const long double lon2 = from.lon() + atan2l(
-         sinl(azimuth) * sinl(ang) * cl,
-         cosl(ang) - sl * sinl(lat2));
-      return DgGeoCoord(remainderl(lon2, M_2PI), lat2);
-   }
-
-   long double sinU1, cosU1;
-   reducedLatitude(from.lat(), f, sinU1, cosU1);
-   const long double sigma1 = atan2l(sinU1, cosU1 * cosl(azimuth));
-   const long double sinAlpha = cosU1 * sinl(azimuth);
-   const long double cos2Alpha = 1.0L - sinAlpha * sinAlpha;
-   const long double u2 = cos2Alpha * (a * a - b * b) / (b * b);
-   long double A, Bcoef;
-   vincentySeries(u2, A, Bcoef);
-   long double sigma = distanceM / (b * A);
-   for (int i = 0; i < 30; ++i) {
-      const long double twoSigmaM = 2.0L * sigma1 + sigma;
-      const long double cos2SigmaM = cosl(twoSigmaM);
-      const long double sinSigma = sinl(sigma);
-      const long double cosSigma = cosl(sigma);
-      const long double deltaSigma =
-         vincentyDeltaSigma(Bcoef, sinSigma, cosSigma, cos2SigmaM);
-      const long double next = distanceM / (b * A) + deltaSigma;
-      if (fabsl(next - sigma) < 1.0e-15L) {
-         sigma = next;
-         break;
-      }
-      sigma = next;
-   }
-   const long double sinSigma = sinl(sigma);
-   const long double cosSigma = cosl(sigma);
-   const long double cos2SigmaM = cosl(2.0L * sigma1 + sigma);
-   const long double lat2 = atan2l(
-      sinU1 * cosSigma + cosU1 * sinSigma * cosl(azimuth),
-      (1.0L - f) * hypotl(sinAlpha,
-         sinU1 * sinSigma - cosU1 * cosSigma * cosl(azimuth)));
-   const long double lambda = atan2l(sinSigma * sinl(azimuth),
-      cosU1 * cosSigma - sinU1 * sinSigma * cosl(azimuth));
-   const long double C = f / 16.0L * cos2Alpha *
-      (4.0L + f * (4.0L - 3.0L * cos2Alpha));
-   const long double L = lambda - (1.0L - C) * f * sinAlpha *
-      (sigma + C * sinSigma * (cos2SigmaM + C * cosSigma *
-       (-1.0L + 2.0L * cos2SigmaM * cos2SigmaM)));
-   return DgGeoCoord(remainderl(from.lon() + L, M_2PI), lat2);
-}
-
 } // namespace
 
+////////////////////////////////////////////////////////////////////////////////
 bool
 DgEllipsoidRF::geodesicInverse (const DgGeoCoord& from, const DgGeoCoord& to,
                                 long double& distanceM, long double& azimuth) const
 {
    distanceM = 0.0L;
    azimuth = 0.0L;
-   if (!validGeodetic(from) || !validGeodetic(to) ||
-       !std::isfinite(a()) || !std::isfinite(b()) ||
-       !(a() > 0.0L) || !(b() > 0.0L) || b() > a())
+   if (!validGeodetic(from) || !validGeodetic(to)) return false;
+
+   const DgGeodesic geodesic(a(), b());
+   DgGeodesic::Arc arc;
+   if (!geodesic.valid() ||
+       !geodesic.inverse(from.lat(), from.lon(), to.lat(), to.lon(), arc))
       return false;
-   return vincentyInverse(from, to, a(), b(), distanceM, azimuth);
+
+   distanceM = arc.s12;
+   if (arc.s12 > 0.0L) azimuth = atan2l(arc.sinAzimuth1, arc.cosAzimuth1);
+   return true;
 }
 
+////////////////////////////////////////////////////////////////////////////////
 DgGeoCoord
 DgEllipsoidRF::geodesicDirect (const DgGeoCoord& from, long double azimuth,
                                long double distanceM) const
 {
-   if (!validGeodetic(from) || !std::isfinite(azimuth) ||
-       !std::isfinite(distanceM) || distanceM < 0.0L)
-      return from;
-   return vincentyDirect(from, azimuth, distanceM, a(), b());
+   const DgGeodesic geodesic(a(), b());
+   if (!geodesic.valid() || !validGeodetic(from) || !std::isfinite(azimuth) ||
+       !std::isfinite(distanceM)) {
+      report("DgEllipsoidRF::geodesicDirect(): invalid ellipsoid, coordinate, "
+             "azimuth or distance", DgBase::Fatal);
+      return undefAddress();
+   }
+
+   long double lat2 = 0.0L, lon2 = 0.0L, azimuth2 = 0.0L;
+   geodesic.direct(from.lat(), from.lon(), azimuth, distanceM, lat2, lon2,
+                   azimuth2);
+   return DgGeoCoord(lon2, lat2);
 }
 
+////////////////////////////////////////////////////////////////////////////////
 long double
-DgEllipsoidRF::dist(const DgGeoCoord& p1, const DgGeoCoord& p2) const
+DgEllipsoidRF::dist (const DgGeoCoord& p1, const DgGeoCoord& p2) const
 {
    // Axes are meters, coordinates are radians, and the public distance
    // unit for geographic reference frames is km.
    long double distanceM = 0.0L, azimuth = 0.0L;
    if (!geodesicInverse(p1, p2, distanceM, azimuth)) {
-      report("DgEllipsoidRF::dist(): invalid ellipsoid or coordinate, "
-             "or inverse geodesic did not converge", DgBase::Fatal);
+      report("DgEllipsoidRF::dist(): invalid ellipsoid or coordinate",
+             DgBase::Fatal);
       return 0.0L;
    }
    return distanceM / 1000.0L;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+long double
+DgEllipsoidRF::cellAreaKM (const DgLocation& center,
+                           const DgPolygon& boundary) const
+{
+   DgLocation cLoc(center);
+   convert(&cLoc);
+   DgPolygon ring(boundary);
+   convert(ring);
+   if (ring.size() < 3)
+      report("DgEllipsoidRF::cellAreaKM(): boundary has fewer than 3 vertices",
+             DgBase::Fatal);
+
+   const DgGeoCoord c = *getAddress(cLoc);
+   bool valid = validGeodetic(c);
+   std::vector<long double> lat(ring.size()), lon(ring.size());
+   for (int i = 0; i < ring.size(); ++i) {
+      const DgGeoCoord v = *getAddress(ring[i]);
+      valid = valid && validGeodetic(v);
+      lat[i] = v.lat();
+      lon[i] = v.lon();
+   }
+
+   const DgGeodesic geodesic(a(), b());
+   long double areaM2 = 0.0L;
+   if (!valid || !geodesic.valid() ||
+       !geodesic.polygonArea(lat, lon, c.lat(), c.lon(), areaM2)) {
+      report("DgEllipsoidRF::cellAreaKM(): invalid ellipsoid or coordinate, "
+             "or a boundary that is not smaller than a hemisphere",
+             DgBase::Fatal);
+      return 0.0L;
+   }
+
+   return areaM2 / 1.0e6L;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -456,37 +141,23 @@ DgGeoCoord::gcDist (const DgGeoCoord& g1, const DgGeoCoord& g2,
 /*
    return great circle distance in radians between g1 and g2.
 
-   CRC Math, 1991, pp. 129-130.
-
-   Kevin Sahr, 3/10/99
+   The angle is taken as the atan2 of its sine and cosine, which is accurate
+   for every separation; the arccosine of the law of cosines loses half of
+   the digits for nearby and for nearly antipodal points. Both are written
+   with sin(dLat) and sin^2(dLon / 2) so that nearby points do not cancel.
 */
 {
-   // use spherical triangle with g1 at A, g2 at B, and north pole at C
+   const long double dLat = g2.lat() - g1.lat();
+   const long double dLon = remainderl(g2.lon() - g1.lon(), M_2PI);
+   const long double sinHalf = sinl(dLon / 2.0L);
+   const long double hav2 = 2.0L * sinHalf * sinHalf; // 1 - cos(dLon)
+   const long double cosLat1 = cosl(g1.lat()), cosLat2 = cosl(g2.lat());
 
-   long double bigC = fabsl(g2.lon() - g1.lon());
+   const long double y = hypotl(cosLat2 * sinl(dLon),
+      sinl(dLat) + sinl(g1.lat()) * cosLat2 * hav2);
+   const long double x = cosl(dLat) - cosLat1 * cosLat2 * hav2;
 
-   if (bigC > M_PI) // assume we want the complement
-   {
-      // note that in this case they can't both be negative
-
-      long double lon1 = g1.lon();
-      if (lon1 < 0.0L) lon1 += 2.0L * M_PI;
-      long double lon2 = g2.lon();
-      if (lon2 < 0.0L) lon2 += 2.0L * M_PI;
-
-      bigC = fabsl(lon2 - lon1);
-   }
-
-   long double b = M_PI_2 - g1.lat();
-   long double a = M_PI_2 - g2.lat();
-
-   // use law of cosines to find c
-
-   long double cosc = cosl(a) * cosl(b) + sinl(a) * sinl(b) * cosl(bigC);
-   if (cosc > 1.0L) cosc = 1.0L;
-   if (cosc < -1.0L) cosc = -1.0L;
-
-   long double retVal = acosl(cosc);
+   long double retVal = atan2l(y, x);
 
    if (!rads) retVal *= M_180_PI;
 
@@ -522,48 +193,14 @@ long double
 DgGeoCoord::geoTriArea (const DgGeoCoord& g1, const DgGeoCoord& g2,
                         const DgGeoCoord& g3)
 /*
-   return area in radians.
-
-   CRC Math, 1991, pp. 129-130.
-
-   Kevin Sahr, 3/10/99
+   return the area (spherical excess) of the triangle in steradians; never
+   negative. A degenerate triangle has area 0.
 */
 {
-   // determine the edges
-
-   long double a = DgGeoCoord::gcDist(g2, g3);
-   long double b = DgGeoCoord::gcDist(g1, g3);
-   long double c = DgGeoCoord::gcDist(g1, g2);
-
-   // determine the angles using half-angle formulas
-
-   long double s = (a + b + c) / 2.0L;
-
-   long double sinsa = sinl(s - a);
-   long double sinsb = sinl(s - b);
-   long double sinsc = sinl(s - c);
-
-   long double k = sqrtl(sinsa * sinsb * sinsc / sinl(s));
-
-   long double bigA = 2.0L * atanl(k / sinsa);
-   long double bigB = 2.0L * atanl(k / sinsb);
-   long double bigC = 2.0L * atanl(k / sinsc);
-
-   long double E = bigA + bigB + bigC - M_PI;
-
-/*
-   std::cout << "geoTriArea: " << g1 << " " << g2 << " " << g3 << std::endl
-        << " a: " << a
-        << " b: " << b
-        << " c: " << c << std::endl
-        << " A: " << bigA
-        << " B: " << bigB
-        << " C: " << bigC << std::endl
-        << " E: " << E << " "
-        << E / (4.0L * M_PI) << std::endl;
-*/
-
-   return E;
+   return fabsl(DgDVec3D::sphericalExcess(
+      DgDVec3D::fromLatLon(g1.lat(), g1.lon()),
+      DgDVec3D::fromLatLon(g2.lat(), g2.lon()),
+      DgDVec3D::fromLatLon(g3.lat(), g3.lon())));
 
 } // long double DgGeoCoord::geoTriArea
 
@@ -571,30 +208,34 @@ DgGeoCoord::geoTriArea (const DgGeoCoord& g1, const DgGeoCoord& g2,
 long double
 DgGeoCoord::geoPolyArea (const DgPolygon& poly, const DgGeoCoord center)
 //
-// returns area of spherical polygon in radians;
+// returns area of spherical polygon in steradians;
 //
 // assumes DgAddressBase for poly is DgGeoCoord
 //
-// Assumes poly is a "reasonably" convex polygon (i.e. a cell bouncary) and
-// that center is an interior point.
+// The triangles of the fan from center are summed with their signs, so the
+// polygon need not be convex; center should be an interior point and the
+// polygon smaller than a hemisphere.
 //
 {
-   long double totArea = 0.0L;
-
    const DgGeoSphRF* geoRF = dynamic_cast<const DgGeoSphRF*>(&poly.rf());
-   if (geoRF == 0)
+   if (geoRF == 0) {
       report("DgGeoCoord::geoPolyArea() non-geo polygon", DgBase::Fatal);
+      return 0.0L;
+   }
 
-   // do each sub-triangle
+   const DgDVec3D c = DgDVec3D::fromLatLon(center.lat(), center.lon());
+   long double totArea = 0.0L;
    for (int i = 0; i < poly.size(); i++)
    {
       const DgGeoCoord& v1 = *geoRF->getAddress(poly[i]);
       const DgGeoCoord& v2 = *geoRF->getAddress(poly[(i + 1) % poly.size()]);
 
-      totArea += DgGeoCoord::geoTriArea(center, v1, v2);
+      totArea += DgDVec3D::sphericalExcess(c,
+         DgDVec3D::fromLatLon(v1.lat(), v1.lon()),
+         DgDVec3D::fromLatLon(v2.lat(), v2.lon()));
    }
 
-   return totArea;
+   return fabsl(totArea);
 
 } // long double DgGeoCoord::geoPolyArea
 
@@ -827,12 +468,7 @@ long double spheredist(const GeoCoord& ll1, const GeoCoord& ll2)
    Input and Output unit is in radius.
 */
  {
-  long double sd;
-  sd=cosl(M_PI_2-ll1.lat)*cosl(M_PI_2-ll2.lat)+
-     sinl(M_PI_2-ll1.lat)*sinl(M_PI_2-ll2.lat)*cosl(ll1.lon-ll2.lon);
-  if (sd>1) sd=1;
-  if (sd<-1) sd=-1;
-  return acosl(sd);
+  return DgGeoCoord::gcDist(DgGeoCoord(ll1), DgGeoCoord(ll2));
  }/* long double spheredist */
 
 /******************************************************************************/
@@ -998,14 +634,5 @@ GeoCoord GCdaz(const GeoCoord& pt, long double distance, long double az)
 
   return q.toGeo();
  } /* GeoCoord GCdaz */
-
-////////////////////////////////////////////////////////////////////////////////
-long double
-DgEllipsoidRF::cellAreaKM (const DgLocation&, const DgPolygon&) const
-{
-   report("DgEllipsoidRF::cellAreaKM() is defined for a sphere and for WGS 84",
-          DgBase::Fatal);
-   return 0.0L;
-}
 
 /******************************************************************************/

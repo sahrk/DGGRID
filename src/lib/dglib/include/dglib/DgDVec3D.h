@@ -97,6 +97,16 @@ class DgDVec3D {
                { return 2.0L * atan2l((a - b).magnitude(),
                                       (a + b).magnitude()); }
 
+      // Signed spherical excess (solid angle in steradians) of the triangle
+      // of unit vectors a, b, c: positive when they run counterclockwise
+      // seen from outside the sphere. tan(E / 2) is the triple product over
+      // 1 + a.b + b.c + c.a; taking the triple product from the edge vectors
+      // keeps it accurate for small triangles.
+      static long double sphericalExcess (const DgDVec3D& a, const DgDVec3D& b,
+                                          const DgDVec3D& c)
+               { return 2.0L * atan2l(a.dot((b - a).cross(c - a)),
+                                      1.0L + a.dot(b) + b.dot(c) + c.dot(a)); }
+
       // The point at latitude lat and longitude lon (radians) on the unit
       // sphere.
       static DgDVec3D fromLatLon (long double lat, long double lon)

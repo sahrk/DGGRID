@@ -31,20 +31,6 @@
 #include <dglib/DgDVec3D.h>
 #include <dglib/DgPolygon.h>
 
-namespace {
-
-// Signed solid angle of the unit-sphere triangle abc, stable for small
-// triangles. Positive when a, b, c are counterclockwise seen from outside.
-long double sphericalExcess (const DgDVec3D& a, const DgDVec3D& b,
-                             const DgDVec3D& c)
-{
-   const long double triple = a.dot(b.cross(c));
-   const long double denom = 1.0L + a.dot(b) + b.dot(c) + c.dot(a);
-   return 2.0L * atan2l(triple, denom);
-}
-
-} // namespace
-
 const std::string DgGeoSphRF::lonWrapModeStrings[] =
              { "Wrap", "UnwrapWest", "UnwrapEast", "InvalidLonWrapMode" };
 
@@ -266,16 +252,30 @@ DgGeoSphRF::cellAreaKM (const DgLocation& center,
       report("DgGeoSphRF::cellAreaKM(): boundary has fewer than 3 vertices",
              DgBase::Fatal);
 
+   // the triangles of the fan from the center, summed with their signs
    const DgGeoCoord c = *getAddress(cLoc);
    const DgDVec3D cv = DgDVec3D::fromLatLon(c.lat(), c.lon());
    long double excess = 0.0L;
+   bool centered = true;
+   DgGeoCoord v1 = *getAddress(ring[ring.size() - 1]);
+   DgDVec3D p1 = DgDVec3D::fromLatLon(v1.lat(), v1.lon());
    for (int i = 0; i < ring.size(); ++i) {
-      const DgGeoCoord v1 = *getAddress(ring[i]);
-      const DgGeoCoord v2 = *getAddress(ring[(i + 1) % ring.size()]);
-      excess += sphericalExcess(cv,
-         DgDVec3D::fromLatLon(v1.lat(), v1.lon()),
-         DgDVec3D::fromLatLon(v2.lat(), v2.lon()));
+      const DgGeoCoord v2 = *getAddress(ring[i]);
+      const DgDVec3D p2 = DgDVec3D::fromLatLon(v2.lat(), v2.lon());
+      excess += DgDVec3D::sphericalExcess(cv, p1, p2);
+      centered = centered && cv.dot(p2) > 0.0L;
+      p1 = p2;
    }
+
+   // The fan is only sure to be right when every vertex is within 90 degrees
+   // of the center. A center that is not (it is not in the ring) would make
+   // the fan measure the rest of the sphere; the geodesic polygon area does
+   // not depend on the center, and on a sphere its edges are the same great
+   // circles.
+   if (!centered) return DgEllipsoidRF::cellAreaKM(center, boundary);
+
+   if (!std::isfinite(excess))
+      report("DgGeoSphRF::cellAreaKM(): invalid coordinate", DgBase::Fatal);
 
    const long double radius = earthRadiusKM();
    return fabsl(excess) * radius * radius;

@@ -82,7 +82,8 @@ class DgIDGGSBase : public DgDiscTopoRFS<DgQ2DICoord, DgGeoCoord, long double> {
       // stubs invQuantify, so it returns (0, 0). The boundary comes from
       // setAddVertices: face-edge crossings are inserted, then each planar
       // edge receives densify extra points. That geometry is measured by
-      // datum, a sphere or the WGS 84 frame.
+      // datum, a sphere or the WGS 84 frame, with great-circle or geodesic
+      // edges between the points.
       long double cellAreaKM (const DgResAdd<DgQ2DICoord>& add, int densify,
                               const DgEllipsoidRF& datum) const;
 

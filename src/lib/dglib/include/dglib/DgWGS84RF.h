@@ -27,7 +27,9 @@
 // The grid is generated on the authalic sphere. Area and resolution
 // statistics stay on that sphere. Distance measured in this frame is the
 // WGS 84 geodesic between geodetic coordinates. Cell area measured in this
-// frame is the geodesic area of the cell.
+// frame is the geodesic area of the cell. Both come from DgEllipsoidRF: a
+// cell or point from the WGS 84 authalic sphere is first converted into this
+// frame, which changes authalic latitude to geodetic latitude.
 class DgWGS84RF : public DgEllipsoidRF {
    public:
       static const DgWGS84RF* makeRF(DgRFNetwork& network,
@@ -46,19 +48,10 @@ class DgWGS84RF : public DgEllipsoidRF {
       static constexpr long double canonicalAuthalicRadiusKM()
          { return WGS84_AUTHALIC_RADIUS_KM; }
 
-      // Geodesic fan on WGS 84. center and boundary are converted into this
-      // frame first, which changes authalic latitude to geodetic latitude
-      // when they come from the WGS 84 authalic sphere.
-      virtual long double cellAreaKM (const DgLocation& center,
-                                       const DgPolygon& boundary) const override;
-
    private:
       DgWGS84RF(DgRFNetwork& network, const std::string& name)
          : DgEllipsoidRF(network, name, semiMajorAxisMeters(),
                          semiMinorAxisMeters()) { }
-
-      long double triangleAreaM2 (const DgGeoCoord& p, const DgGeoCoord& q,
-                                  const DgGeoCoord& r, int depth) const;
 };
 
 #endif

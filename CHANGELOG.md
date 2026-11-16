@@ -14,6 +14,11 @@ All changes are by Kevin Sahr, unless otherwise noted.
 - ellipsoid geodesic distance in WGS84 datum. Neighbor-center distances taken while neighbor output is written are measured in the output datum
 ### Fixed
 - ZORDER indexes on diamond grids hung because radix was never set
+- ellipsoidal geodesic distance returned a path that was not the shortest (off by up to ~13 km) and was very slow for nearly antipodal points; the geodesic inverse and direct problems are now solved in the new class DgGeodesic, accurate to rounding for all point pairs
+- great circle distance (DgGeoCoord::gcDist) lost precision for nearby and nearly antipodal points
+- DgGeoCoord::geoTriArea returned NaN for degenerate triangles and lost precision for small ones
+- WGS 84 cell area is now the area of the geodesic polygon to rounding (was accurate to about 6e-8 and took up to half a second for a large cell), and is defined for any oblate ellipsoid
+- DgIDGGSBase::cellAreaKM passed lon 0, lat 0 as the center of every cell, which gave the area of the rest of the sphere for cells on the far side
 
 ## [9.2] - 2026-11-05
 ### Added
