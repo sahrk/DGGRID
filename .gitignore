@@ -67,6 +67,7 @@ docs
 documentation/source/_build
 
 .idea/
+.claude/
 cmake-build-debug/
 .venv/
 documentation/build/
