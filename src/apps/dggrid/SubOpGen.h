@@ -25,6 +25,7 @@
 #ifndef SUBOPGEN_H
 #define SUBOPGEN_H
 
+#include <array>
 #include <set>
 #include <map>
 #include <limits>
@@ -34,6 +35,7 @@
 #include <ogrsf_frmts.h>
 #endif
 #include "clipper.hpp"
+#include <dglib/DgDVec3D.h>
 #include <dglib/DgIVec2D.h>
 #include <dglib/DgProjGnomonicRF.h>
 #include <dglib/DgInShapefileAtt.h>
@@ -118,6 +120,8 @@ class DgQuadClipRegion {
                                   { gnomProj_ = gnomProjIn; }
 
       ClipperLib::Paths& gnomBndry (void) { return gnomBndry_; }
+      const std::array<DgDVec3D, 4>& edgeNormals (void) const { return edgeNormals_; }
+      void setEdgeNormals (const std::array<DgDVec3D, 4>& normals) { edgeNormals_ = normals; }
 
       // bounding box boundaries
       long double minx (void) const { return minx_; }
@@ -160,6 +164,7 @@ class DgQuadClipRegion {
       const DgProjGnomonicRF* gnomProj_; // gnomonic proj centered on this quad
 
       ClipperLib::Paths gnomBndry_; // quad boundary in gnomonic
+      std::array<DgDVec3D, 4> edgeNormals_; // inward normals of the same spherical boundary
 
       DgIVec2D offset_; // offset of min (i, j)
       DgIVec2D upperRight_; // (maxi, maxj) relative to offset

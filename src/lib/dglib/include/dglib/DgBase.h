@@ -29,8 +29,8 @@
 #include <string>
 
 #define DGDEBUG             0
-#define DGGRID_VERSION      "9.31"
-#define DGGRID_RELEASE_DATE "November 16, 2026"
+#define DGGRID_VERSION      "9.32"
+#define DGGRID_RELEASE_DATE "November 26, 2026"
 
 // adapted from stackoverflow user Pierre
 #define WHERE fprintf(stderr,"[LOG]%s:%s#%d\n",__PRETTY_FUNCTION__,__FILE__,__LINE__);

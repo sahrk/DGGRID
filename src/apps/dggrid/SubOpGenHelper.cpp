@@ -29,11 +29,13 @@
 
 #define __STDC_FORMAT_MACROS
 #include <inttypes.h>
+#include <algorithm>
 #include <iostream>
 #include <set>
 #include <cstdlib>
 #include <cmath>
 #include <sstream>
+#include <utility>
 
 #include "clipper.hpp"
 #include <dglib/DgIVec2D.h>
@@ -793,7 +795,7 @@ SubOpGen::intersectPolyWithQuad (const DgPolygon& v, DgQuadClipRegion& clipRegio
 //
 {
    //// create a local copy and project to gnomonic
-   DgPolygon polyVec(v);
+   DgLocVector polyVec(v);
    if (op.mainOp.megaVerbose) dgcout << "input polyVec(v): " << polyVec << std::endl;
    clipRegion.gnomProj().convert(polyVec);
    if (op.mainOp.megaVerbose) dgcout << " -> input: " << polyVec << std::endl;
@@ -823,6 +825,82 @@ SubOpGen::intersectPolyWithQuad (const DgPolygon& v, DgQuadClipRegion& clipRegio
    return solution;
 } // ClipperLib::Paths* SubOpGen::intersectPolyWithQuad
 
+static DgDVec3D unitVector(const DgGeoCoord& point)
+{
+   return DgDVec3D::fromLatLon(point.lat(), point.lon());
+}
+
+static std::vector<DgDVec3D> sphericalRing(const DgPolygon& ring, const DgGeoSphRF& geo)
+{
+   std::vector<DgDVec3D> vertices;
+   vertices.reserve(ring.size());
+   for (int i = 0; i < ring.size(); ++i)
+      vertices.push_back(unitVector(*geo.getAddress(ring[i])));
+   return vertices;
+}
+
+// The directions along the chord trace the minor great-circle arc. Clip the
+// chord parameter to the four inward half-spaces of the spherical quad.
+static bool arcMeetsQuad(const DgDVec3D& a, const DgDVec3D& b,
+                         const std::array<DgDVec3D, 4>& normals)
+{
+   long double enter = 0.0L, leave = 1.0L;
+   for (const DgDVec3D& normal : normals) {
+      const long double da = normal.dot(a), db = normal.dot(b);
+      if (da < 0 && db < 0) return false;
+      if (da < 0) enter = std::max(enter, da / (da - db));
+      if (db < 0) leave = std::min(leave, da / (da - db));
+      if (enter > leave) return false;
+   }
+   return true;
+}
+
+// The gnomonic clipper supports rings in an open hemisphere. The antipode
+// of a ring vertex is therefore outside. Count signed boundary crossings
+// from the query to that antipode, using a half-open test at ring vertices.
+static bool ringContains(const std::vector<DgDVec3D>& ring, const DgDVec3D& query)
+{
+   const DgDVec3D outside = -1.0L * ring.front();
+   const DgDVec3D normal = query.cross(outside);
+   const DgDVec3D fromQuery = normal.cross(query);
+   const DgDVec3D toOutside = outside.cross(normal);
+   int winding = 0;
+   DgDVec3D prev = ring.back();
+   long double prevSide = normal.dot(prev);
+   for (const DgDVec3D& vertex : ring) {
+      const long double side = normal.dot(vertex);
+      if ((prevSide > 0) != (side > 0)) {
+         const long double fraction = prevSide / (prevSide - side);
+         const DgDVec3D crossing = DgDVec3D::fracPoint(prev, vertex, fraction);
+         if (fromQuery.dot(crossing) >= 0 && toOutside.dot(crossing) >= 0)
+            winding += side > 0 ? 1 : -1;
+      }
+      prev = vertex;
+      prevSide = side;
+   }
+   return winding != 0;
+}
+
+static bool ringMeetsQuad(const std::vector<DgDVec3D>& ring, const DgQuadClipRegion& quad)
+{
+   if (ring.size() < 3) return false;
+   const auto& normals = quad.edgeNormals();
+   // Most quads can be excluded by a single separating edge plane.
+   for (const DgDVec3D& normal : normals) {
+      if (std::none_of(ring.begin(), ring.end(), [&](const DgDVec3D& vertex) {
+             return normal.dot(vertex) >= 0;
+          }))
+         return false;
+   }
+   DgDVec3D prev = ring.back();
+   for (const DgDVec3D& vertex : ring) {
+      if (arcMeetsQuad(prev, vertex, normals)) return true;
+      prev = vertex;
+   }
+   // With no boundary arc in the quad, the ring covers all of it or none.
+   return ringContains(ring, unitVector(quad.gnomProj().proj0()));
+}
+
 //////////////////////////////////////////////////////////////////////////////
 void
 SubOpGen::processOneClipPoly (DgPolygon& polyIn, const DgIDGGBase& dgg,
@@ -837,90 +915,45 @@ SubOpGen::processOneClipPoly (DgPolygon& polyIn, const DgIDGGBase& dgg,
 
    if (op.mainOp.megaVerbose) dgcout << "densified: " << polyIn << std::endl;
 
-   // create a copy to test for intersected quads
+   const auto exterior = sphericalRing(polyIn, dgg.geoRF());
 
-   DgPolygon quadVec(polyIn);
-
-   if (op.mainOp.megaVerbose) dgcout << "quadVec(polyIn): " << quadVec << std::endl;
-
-   dgg.q2ddRF().convert(quadVec);
-
-   if (op.mainOp.megaVerbose) dgcout << "->: " << quadVec << std::endl;
-
-   // set up to track which quads are intersected
-   bool quadInt[12]; // which quads are intersected?
-   for (int q = 0; q < 12; q++)
-      quadInt[q] = false;
-
-   // test in which quads vertices fall
-   for (int i = 0; i < quadVec.size(); i++) {
-      const DgQ2DDCoord& qc = *dgg.q2ddRF().getAddress(quadVec[i]);
-      quadInt[qc.quadNum()] = true;
-   }
-
-   // test for vertices over 90' from an intersected
-   // quad center point, which will make the gnomonic fail
-
-   DgPolygon quadVec2(polyIn);
-   for (int q = 1; q < 11; q++) {
-      if (quadInt[q]) {
-         const DgGeoCoord& cp = clipRegions[q].gnomProj().proj0();
-         bool allGood = true;
-         for (int i = 0; i < quadVec2.size(); i++) {
-            if (DgGeoCoord::gcDist(
-              *dgg.geoRF().getAddress(quadVec2[i]), cp, false) > 90.0) {
-
-               dgcerr << "ERROR: polygon intersects quad #"
-                 << dgg::util::to_string(q) << " but a vertex of that polygon is "
-                 << "more than 90' from the quad center." << std::endl;
-               dgcerr << "polygon is: " << std::endl;
-               dgcerr << polyIn << std::endl;
-               report("break-up polygon or reorient grid",
-                       DgBase::Fatal);
-               allGood = false;
-
+#ifdef USE_GDAL
+   // Keep the Snyder-space path for holes whose vertices share an owner.
+   struct HoleRing {
+      int owner;
+      std::vector<DgDVec3D> vertices; // needed for multi-quad holes
+   };
+   std::vector<HoleRing> holeRings;
+   if (useHoles) {
+      for (const DgPolygon* hole : polyIn.holes()) {
+         DgLocVector vertices(*hole);
+         dgg.q2ddRF().convert(vertices);
+         HoleRing ring = {-1, {}};
+         if (vertices.size()) ring.owner = dgg.q2ddRF().getAddress(vertices[0])->quadNum();
+         for (int i = 1; i < vertices.size(); ++i) {
+            if (dgg.q2ddRF().getAddress(vertices[i])->quadNum() != ring.owner) {
+               ring.owner = -1;
+               ring.vertices = sphericalRing(*hole, dgg.geoRF());
                break;
             }
          }
-
-         if (allGood)
-            if (op.mainOp.megaVerbose) dgcout << "intersects quad " << q << std::endl;
-      }
-   }
-
-#ifdef USE_GDAL
-   int numHoles = 0;
-   int** holeQuads = NULL;
-   if (useHoles) {
-      //// determine which holes have vertices on which quads
-      numHoles = (int) polyIn.holes().size();
-      holeQuads = new int*[numHoles];
-      for (int h = 0; h < numHoles; h++) {
-
-         // initialize the counts
-         holeQuads[h] = new int[12];
-         for (int q = 0; q < 12; q++)
-            holeQuads[h][q] = 0;
-
-         DgPolygon quadVec(*polyIn.holes()[h]);
-         dgg.q2ddRF().convert(quadVec);
-
-         // count the quads vertices fall in
-         for (int i = 0; i < quadVec.size(); i++) {
-            const DgQ2DDCoord& qc = *dgg.q2ddRF().getAddress(quadVec[i]);
-            ++holeQuads[h][qc.quadNum()];
-         }
+         holeRings.push_back(std::move(ring));
       }
    }
 #endif
 
-   // now perform the intersection for each quad intersected
-   //int nQuadsInt = 0;
    for (int q = 1; q < 11; q++) {
+      if (!ringMeetsQuad(exterior, clipRegions[q])) continue;
 
-      if (op.mainOp.megaVerbose) dgcout << "intersecting with quads..." << std::endl;
-
-      if (!quadInt[q]) continue;
+      const DgGeoCoord& center = clipRegions[q].gnomProj().proj0();
+      for (int i = 0; i < polyIn.size(); ++i) {
+         if (DgGeoCoord::gcDist(*dgg.geoRF().getAddress(polyIn[i]), center, false) >= 90.0L) {
+            dgcerr << "ERROR: polygon intersects quad #" << q
+                   << " but a vertex is at least 90 degrees from the quad center."
+                   << std::endl << polyIn << std::endl;
+            report("break-up polygon or reorient grid", DgBase::Fatal);
+         }
+      }
 
       if (op.mainOp.megaVerbose) dgcout << "INTERSECTING quad " << q << std::endl;
 
@@ -941,11 +974,17 @@ SubOpGen::processOneClipPoly (DgPolygon& polyIn, const DgIDGGBase& dgg,
       if (op.mainOp.megaVerbose)
          dgcout << solution->size() << " intersections FOUND in quad " << q << std::endl;
 
-      //nQuadsInt++;
       clipRegions[q].setIsQuadUsed(true);
 
       ////// now convert back to Snyder and add to the clipRegions
       DgQuadClipRegion& cr = clipRegions[q];
+#ifdef USE_GDAL
+      std::vector<size_t> quadHoles;
+      for (size_t h = 0; h < holeRings.size(); ++h) {
+         if (holeRings[h].owner == q || ringMeetsQuad(holeRings[h].vertices, cr))
+            quadHoles.push_back(h);
+      }
+#endif
       for (size_t i = 0; i < solution->size(); i++) {
 
          DgPolygon locv(cr.gnomProj());
@@ -1008,51 +1047,35 @@ SubOpGen::processOneClipPoly (DgPolygon& polyIn, const DgIDGGBase& dgg,
             ring.closeRings();
             clipPoly.gdalExterior.addRing(&ring);
          }
-         if (useHoles) {
-            // add the holes
-            for (size_t h = 0; h < polyIn.holes().size(); h++) {
+         for (size_t h : quadHoles) {
+            DgPolygon theHole(*polyIn.holes()[h]);
+            DgClippingHole clipHole;
 
-               // check for vertices in this quad
-               int numVertsInQuad = holeQuads[h][q];
-               if (numVertsInQuad > 0) {
-                  DgPolygon theHole(*polyIn.holes()[h]);
-                  DgClippingHole clipHole;
+            if (holeRings[h].owner == q) {
+               clipHole.isGnomonic = false; // use snyder
+               dgg.q2ddRF().convert(theHole);
 
-                  // check if all vertices are on this quad
-                  //const DgRFBase* rf = NULL;
-                  if (numVertsInQuad == theHole.size()) {
-                     clipHole.isGnomonic = false; // use snyder
-                     dgg.q2ddRF().convert(theHole);
-                       // note that we've already done this above
-
-                     DgPolygon ccHole(dgg.ccFrame());
-                     for (int i = 0; i < theHole.size(); i++) {
-                        const DgQ2DDCoord& q2v = *dgg.q2ddRF().getAddress(theHole[i]);
-                        DgLocation* tloc = dgg.ccFrame().makeLocation(q2v.coord());
-                        ccHole.push_back(*tloc);
-                        delete tloc;
-                     }
-
-                     theHole = ccHole;
-
-                  } else {
-                     clipHole.isGnomonic = true; // use gnomonic
-                     cr.gnomProj().convert(theHole);
-                     //rf = &cr.gnomProj();
-                  }
-
-                  OGRPolygon* ogrPoly = DgOutGdalFile::createPolygon(theHole);
-/*
-char* clpStr = ogrPoly->exportToJson();
-printf("ogrPoly:\n%s\n", clpStr);
-*/
-
-                  clipHole.hole = *ogrPoly;
-                  delete ogrPoly;
-
-                  clipPoly.holes.push_back(clipHole);
+               DgPolygon ccHole(dgg.ccFrame());
+               for (int i = 0; i < theHole.size(); i++) {
+                  const DgQ2DDCoord& q2v = *dgg.q2ddRF().getAddress(theHole[i]);
+                  DgLocation* tloc = dgg.ccFrame().makeLocation(q2v.coord());
+                  ccHole.push_back(*tloc);
+                  delete tloc;
                }
+
+               theHole = ccHole;
+
+            } else {
+               clipHole.isGnomonic = true; // use gnomonic
+               cr.gnomProj().convert(theHole);
             }
+
+            OGRPolygon* ogrPoly = DgOutGdalFile::createPolygon(theHole);
+
+            clipHole.hole = *ogrPoly;
+            delete ogrPoly;
+
+            clipPoly.holes.push_back(clipHole);
          }
 #endif
          // store the clipping poly definition
@@ -1096,14 +1119,6 @@ printf("ogrPoly:\n%s\n", clpStr);
 
       delete solution;
    }
-
-#ifdef USE_GDAL
-      if (useHoles) {
-         for (int h = 0; h < numHoles; h++)
-            delete [] holeQuads[h];
-         delete [] holeQuads;
-      }
-#endif
 
 } // void SubOpGen::processOneClipPoly
 
@@ -1231,6 +1246,16 @@ SubOpGen::createClipRegions (const DgIDGGBase& dgg,
       if (op.mainOp.megaVerbose)
 	  dgcout << " -> " << v0 << std::endl;
 
+      // The great circles through these nudged corners are straight lines
+      // in the quad's gnomonic plane, just like the edges used by Clipper.
+      const auto corners = sphericalRing(v0, dgg.geoRF());
+      const DgDVec3D center = unitVector(clipRegions[q].gnomProj().proj0());
+      std::array<DgDVec3D, 4> normals;
+      for (size_t i = 0; i < normals.size(); ++i) {
+         normals[i] = corners[i].cross(corners[(i + 1) % normals.size()]);
+         if (normals[i].dot(center) < 0) normals[i] *= -1.0L;
+      }
+      clipRegions[q].setEdgeNormals(normals);
       clipRegions[q].gnomProj().convert(v0);
 
       if (op.mainOp.megaVerbose)

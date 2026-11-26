@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 All changes are by Kevin Sahr, unless otherwise noted.
 
+## [9.32] - 2026-11-26
+### Fixed
+- polygon clipping bug where arcs that crossed quads without a contained vertex were dropped
+
 ## [9.31] - 2026-11-16
 ### Fixed
 - ellipsoidal geodesic distance and area failure cases; moved functions to new class DgGeodesic
